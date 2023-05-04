@@ -26,6 +26,7 @@ import {
 } from '../../../../sections/@dashboard/e-commerce/details';
 import CartWidget from '../../../../sections/@dashboard/e-commerce/CartWidget';
 import {fNumber} from "../../../../utils/formatNumber";
+import {useAuthContext} from "../../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -56,6 +57,8 @@ EcommerceProductDetailsPage.getLayout = (page) => <DashboardLayout>{page}</Dashb
 export default function EcommerceProductDetailsPage() {
   const { themeStretch } = useSettingsContext();
 
+  const { user } = useAuthContext();
+
   const {
     query: { name },
   } = useRouter();
@@ -76,9 +79,9 @@ export default function EcommerceProductDetailsPage() {
   useEffect(() => {
     if (name) {
 
-      dispatch(getPriceListProduct(name));
+      dispatch(getPriceListProduct(name, user.ID));
     }
-  }, [dispatch, name]);
+  }, [dispatch, name, user.ID]);
 
   const handleAddCart = (newProduct) => {
     dispatch(addToCart(newProduct));

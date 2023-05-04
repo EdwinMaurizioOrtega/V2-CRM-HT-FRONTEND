@@ -229,12 +229,12 @@ export function getProduct(name) {
 
 // ----------------------------------------------------------------------
 
-export function getPriceListProduct(name) {
+export function getPriceListProduct(name, idUser) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.get('/hanadb/api/products/price_list_product', {
-        params: { name },
+        params: { name, idUser },
       });
       dispatch(slice.actions.getPriceListProductSuccess(response.data.data));
     } catch (error) {
