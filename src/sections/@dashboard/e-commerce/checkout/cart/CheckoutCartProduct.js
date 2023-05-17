@@ -63,7 +63,7 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
           />
 
           <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-            available: 100
+              disponible: ...
           </Typography>
         </Box>
       </TableCell>

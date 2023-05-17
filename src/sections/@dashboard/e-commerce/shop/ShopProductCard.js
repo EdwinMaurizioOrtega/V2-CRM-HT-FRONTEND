@@ -131,26 +131,26 @@ export default function ShopProductCard({product}) {
                 </Label>
 
 
-                <Fab
-                    color="warning"
-                    size="medium"
-                    className="add-cart-btn"
-                    onClick={handleAddCart}
-                    sx={{
-                        right: 16,
-                        bottom: 16,
-                        zIndex: 9,
-                        opacity: 0,
-                        position: 'absolute',
-                        transition: (theme) =>
-                            theme.transitions.create('all', {
-                                easing: theme.transitions.easing.easeInOut,
-                                duration: theme.transitions.duration.shorter,
-                            }),
-                    }}
-                >
-                    <Iconify icon="ic:round-add-shopping-cart"/>
-                </Fab>
+                {/* <Fab */}
+                {/*     color="warning" */}
+                {/*     size="medium" */}
+                {/*     className="add-cart-btn" */}
+                {/*     onClick={handleAddCart} */}
+                {/*     sx={{ */}
+                {/*         right: 16, */}
+                {/*         bottom: 16, */}
+                {/*         zIndex: 9, */}
+                {/*         opacity: 0, */}
+                {/*         position: 'absolute', */}
+                {/*         transition: (theme) => */}
+                {/*             theme.transitions.create('all', { */}
+                {/*                 easing: theme.transitions.easing.easeInOut, */}
+                {/*                 duration: theme.transitions.duration.shorter, */}
+                {/*             }), */}
+                {/*     }} */}
+                {/* > */}
+                {/*     <Iconify icon="ic:round-add-shopping-cart"/> */}
+                {/* </Fab> */}
 
                 <Image alt={NOMBRE} src={jsonArrayImages?.map((img) => img.URL)} ratio="1/1" sx={{borderRadius: 1.5}}/>
             </Box>

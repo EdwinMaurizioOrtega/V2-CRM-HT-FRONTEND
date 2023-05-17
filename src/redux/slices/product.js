@@ -113,6 +113,7 @@ const slice = createSlice({
       state.checkout.discount = 0;
       state.checkout.shipping = 0;
       state.checkout.totalItems = 0;
+      state.checkout.warehouse = 0;
     },
 
     backStep(state) {
@@ -174,6 +175,9 @@ const slice = createSlice({
       state.checkout.shipping = shipping;
       state.checkout.total = state.checkout.subtotal - state.checkout.discount + shipping;
     },
+    applyWarehouse(state, action) {
+      state.checkout.warehouse = action.payload;
+    },
   },
 });
 
@@ -191,6 +195,7 @@ export const {
   deleteCart,
   createBilling,
   applyShipping,
+  applyWarehouse,
   applyDiscount,
   increaseQuantity,
   decreaseQuantity,

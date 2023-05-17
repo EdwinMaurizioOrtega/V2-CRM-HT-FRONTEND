@@ -19,6 +19,7 @@ import {
   deleteCart,
   createBilling,
   applyShipping,
+    applyWarehouse,
   applyDiscount,
   increaseQuantity,
   decreaseQuantity,
@@ -37,7 +38,7 @@ import {
 
 // ----------------------------------------------------------------------
 
-const STEPS = ['Cart', 'Billing & address', 'Payment'];
+const STEPS = ['Mi carrito', 'Facturación & cliente', 'Pago'];
 
 // ----------------------------------------------------------------------
 
@@ -107,6 +108,11 @@ export default function EcommerceCheckoutPage() {
     dispatch(applyShipping(value));
   };
 
+// Bodegas
+  const handleApplyWarehouse = (value) => {
+    dispatch(applyWarehouse(value));
+  };
+
   const handleReset = () => {
     if (completed) {
       dispatch(resetCart());
@@ -167,6 +173,7 @@ export default function EcommerceCheckoutPage() {
                 onBackStep={handleBackStep}
                 onGotoStep={handleGotoStep}
                 onApplyShipping={handleApplyShipping}
+                onApplyWarehouse={handleApplyWarehouse}
                 onReset={handleReset}
               />
             )}

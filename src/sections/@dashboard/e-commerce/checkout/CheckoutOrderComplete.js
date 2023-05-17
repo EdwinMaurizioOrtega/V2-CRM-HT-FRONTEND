@@ -67,7 +67,7 @@ export default function CheckoutOrderComplete({ open, onReset, onDownloadPDF }) 
             onClick={onReset}
             startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
           >
-            Continue Shopping
+            Seguir comprando
           </Button>
 
           <Button

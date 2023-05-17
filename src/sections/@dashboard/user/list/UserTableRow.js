@@ -29,7 +29,7 @@ UserTableRow.propTypes = {
 };
 
 export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
-  const { name, avatarUrl, company, role, isVerified, status } = row;
+  const { ID, DISPLAYNAME, PHOTOURL, EMAIL, PASSWORD, ROLE, ISPUBLIC } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -58,30 +58,32 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
+        <TableCell align="left">{ID}</TableCell>
+
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar alt={name} src={avatarUrl} />
+            <Avatar alt={DISPLAYNAME} src={PHOTOURL} />
 
             <Typography variant="subtitle2" noWrap>
-              {name}
+              {DISPLAYNAME}
             </Typography>
           </Stack>
         </TableCell>
 
-        <TableCell align="left">{company}</TableCell>
+        <TableCell align="left">{EMAIL}</TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {role}
+          {ROLE}
         </TableCell>
 
         <TableCell align="center">
           <Iconify
-            icon={isVerified ? 'eva:checkmark-circle-fill' : 'eva:clock-outline'}
+            icon={ISPUBLIC ? 'eva:checkmark-circle-fill' : 'eva:clock-outline'}
             sx={{
               width: 20,
               height: 20,
               color: 'success.main',
-              ...(!isVerified && { color: 'warning.main' }),
+              ...(!ISPUBLIC && { color: 'warning.main' }),
             }}
           />
         </TableCell>
@@ -89,10 +91,10 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
         <TableCell align="left">
           <Label
             variant="soft"
-            color={(status === 'banned' && 'error') || 'success'}
+            color={(PASSWORD === 'banned' && 'error') || 'success'}
             sx={{ textTransform: 'capitalize' }}
           >
-            {status}
+            {PASSWORD}
           </Label>
         </TableCell>
 
@@ -134,8 +136,8 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
-        title="Delete"
-        content="Are you sure want to delete?"
+        title="Borrar"
+        content="¿Estás seguro de que quieres eliminar?"
         action={
           <Button variant="contained" color="error" onClick={onDeleteRow}>
             Delete

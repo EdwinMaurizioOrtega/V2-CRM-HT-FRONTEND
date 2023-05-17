@@ -23,14 +23,14 @@ export default function SearchNotFound({ query, sx, ...other }) {
       </Typography>
 
       <Typography variant="body2">
-        No results found for &nbsp;
+          No se encontraron resultados parar &nbsp;
         <strong>&quot;{query}&quot;</strong>.
-        <br /> Try checking for typos or using complete words.
+        <br /> Intente verificar errores tipográficos o usar palabras completas.
       </Typography>
     </Paper>
   ) : (
     <Typography variant="body2" sx={sx}>
-      Please enter keywords
+        Por favor ingrese una palabras clave
     </Typography>
   );
 }

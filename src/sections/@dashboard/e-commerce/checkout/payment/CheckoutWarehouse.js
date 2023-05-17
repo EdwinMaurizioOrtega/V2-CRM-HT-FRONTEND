@@ -18,21 +18,21 @@ import Iconify from '../../../../../components/iconify';
 
 // ----------------------------------------------------------------------
 
-CheckoutDelivery.propTypes = {
-  onApplyShipping: PropTypes.func,
-  deliveryOptions: PropTypes.array,
+CheckoutWarehouse.propTypes = {
+  onApplyWarehouse: PropTypes.func,
+  warehouseOptions: PropTypes.array,
 };
 
-export default function CheckoutDelivery({ deliveryOptions, onApplyShipping, ...other }) {
+export default function CheckoutWarehouse({ warehouseOptions, onApplyWarehouse, ...other }) {
   const { control } = useFormContext();
 
   return (
     <Card {...other}>
-      <CardHeader title="Opciones de entrega" />
+      <CardHeader title="Opciones Bodegas" />
 
       <CardContent>
         <Controller
-          name="delivery"
+          name="store"
           control={control}
           render={({ field }) => (
             <RadioGroup
@@ -40,7 +40,7 @@ export default function CheckoutDelivery({ deliveryOptions, onApplyShipping, ...
               onChange={(event) => {
                 const { value } = event.target;
                 field.onChange(Number(value));
-                onApplyShipping(Number(value));
+                onApplyWarehouse(Number(value));
               }}
             >
               <Box
@@ -51,8 +51,8 @@ export default function CheckoutDelivery({ deliveryOptions, onApplyShipping, ...
                   sm: 'repeat(2, 1fr)',
                 }}
               >
-                {deliveryOptions.map((option) => (
-                  <DeliveryOption
+                {warehouseOptions.map((option) => (
+                  <WarehouseOption
                     key={option.value}
                     option={option}
                     isSelected={field.value === option.value}
@@ -69,12 +69,12 @@ export default function CheckoutDelivery({ deliveryOptions, onApplyShipping, ...
 
 // ----------------------------------------------------------------------
 
-DeliveryOption.propTypes = {
+WarehouseOption.propTypes = {
   option: PropTypes.object,
   isSelected: PropTypes.bool,
 };
 
-function DeliveryOption({ option, isSelected }) {
+function WarehouseOption({ option, isSelected }) {
   const { value, title, description } = option;
 
   return (

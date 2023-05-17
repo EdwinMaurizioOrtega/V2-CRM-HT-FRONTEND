@@ -210,7 +210,7 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
                         size="small"
                         helperText={
                             <Link underline="always" color="inherit">
-                                Size Chart
+                                Precio
                             </Link>
                         }
                         sx={{
@@ -232,7 +232,7 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
 
                 <Stack direction="row" justifyContent="space-between">
                     <Typography variant="subtitle2" sx={{ height: 36, lineHeight: '36px' }}>
-                      Quantity
+                        Cantidad
                     </Typography>
 
                     <Stack spacing={1}>
@@ -250,7 +250,7 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
                           component="div"
                           sx={{ textAlign: 'right', color: 'text.secondary' }}
                         >
-                          Available: 100
+                            Disponible: ...
                         </Typography>
                     </Stack>
                 </Stack>
@@ -268,11 +268,11 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
                       onClick={handleAddCart}
                       sx={{ whiteSpace: 'nowrap' }}
                     >
-                      Add to Cart
+                        Agregar al carrito
                     </Button>
 
                     <Button fullWidth size="large" type="submit" variant="contained">
-                        Buy Now
+                        Comprar
                     </Button>
                 </Stack>
 

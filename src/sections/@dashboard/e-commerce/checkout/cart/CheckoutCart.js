@@ -45,7 +45,7 @@ export default function CheckoutCart({
           <CardHeader
             title={
               <Typography variant="h6">
-                Cart
+                Mi carrito
                 <Typography component="span" sx={{ color: 'text.secondary' }}>
                   &nbsp;({totalItems} item)
                 </Typography>
@@ -76,7 +76,7 @@ export default function CheckoutCart({
           color="inherit"
           startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
         >
-          Continue Shopping
+          Seguir comprando
         </Button>
       </Grid>
 
@@ -96,7 +96,7 @@ export default function CheckoutCart({
           disabled={!cart.length}
           onClick={onNextStep}
         >
-          Check Out
+          Finalizar compra
         </Button>
       </Grid>
     </Grid>

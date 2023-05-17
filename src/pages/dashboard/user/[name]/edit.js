@@ -1,20 +1,23 @@
-import { paramCase } from 'change-case';
+import {paramCase} from 'change-case';
 // next
 import Head from 'next/head';
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 // @mui
-import { Container } from '@mui/material';
+import {Container} from '@mui/material';
 // routes
-import { PATH_DASHBOARD } from '../../../../routes/paths';
+import {useEffect} from "react";
+import {PATH_DASHBOARD} from '../../../../routes/paths';
 // _mock_
-import { _userList } from '../../../../_mock/arrays';
+import {_userList} from '../../../../_mock/arrays';
 // layouts
 import DashboardLayout from '../../../../layouts/dashboard';
 // components
-import { useSettingsContext } from '../../../../components/settings';
+import {useSettingsContext} from '../../../../components/settings';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 // sections
 import UserNewEditForm from '../../../../sections/@dashboard/user/UserNewEditForm';
+import {useDispatch, useSelector} from "../../../../redux/store";
+import {getUsers} from "../../../../redux/slices/user";
 
 // ----------------------------------------------------------------------
 
@@ -23,38 +26,46 @@ UserEditPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 // ----------------------------------------------------------------------
 
 export default function UserEditPage() {
-  const { themeStretch } = useSettingsContext();
+    const {themeStretch} = useSettingsContext();
 
-  const {
-    query: { name },
-  } = useRouter();
+    const dispatch = useDispatch();
 
-  const currentUser = _userList.find((user) => paramCase(user.name) === name);
+    const {
+        query: {name},
+    } = useRouter();
 
-  return (
-    <>
-      <Head>
-        <title> User: Edit user | Minimal UI</title>
-      </Head>
+    const currentUser = useSelector((state) =>
+        state.user_hana.users.find((user) => user.ID == name)
+    );
 
-      <Container maxWidth={themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
-          heading="Edit user"
-          links={[
-            {
-              name: 'Dashboard',
-              href: PATH_DASHBOARD.root,
-            },
-            {
-              name: 'User',
-              href: PATH_DASHBOARD.user.list,
-            },
-            { name: currentUser?.name },
-          ]}
-        />
+    useEffect(() => {
+        dispatch(getUsers());
+    }, [dispatch]);
 
-        <UserNewEditForm isEdit currentUser={currentUser} />
-      </Container>
-    </>
-  );
+    return (
+        <>
+            <Head>
+                <title> Usuario: Editar usuario | Lidenar S.A.</title>
+            </Head>
+
+            <Container maxWidth={themeStretch ? false : 'lg'}>
+                <CustomBreadcrumbs
+                    heading="Editar usuario"
+                    links={[
+                        {
+                            name: 'Dashboard',
+                            href: PATH_DASHBOARD.root,
+                        },
+                        {
+                            name: 'User',
+                            href: PATH_DASHBOARD.user.list,
+                        },
+                        {name: currentUser?.DISPLAYNAME},
+                    ]}
+                />
+
+                <UserNewEditForm isEdit currentUser={currentUser} />
+            </Container>
+        </>
+    );
 }

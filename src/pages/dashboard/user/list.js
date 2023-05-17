@@ -1,5 +1,5 @@
 import { paramCase } from 'change-case';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 // next
 import Head from 'next/head';
 import NextLink from 'next/link';
@@ -42,6 +42,10 @@ import {
 } from '../../../components/table';
 // sections
 import { UserTableToolbar, UserTableRow } from '../../../sections/@dashboard/user/list';
+import {getUsers} from "../../../redux/slices/user";
+import {useDispatch, useSelector} from "../../../redux/store";
+import axios from "../../../utils/axios";
+
 
 // ----------------------------------------------------------------------
 
@@ -61,11 +65,12 @@ const ROLE_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', align: 'left' },
-  { id: 'company', label: 'Company', align: 'left' },
-  { id: 'role', label: 'Role', align: 'left' },
-  { id: 'isVerified', label: 'Verified', align: 'center' },
-  { id: 'status', label: 'Status', align: 'left' },
+  { id: 'id', label: 'ID', align: 'left' },
+  { id: 'name', label: 'NOMBRE', align: 'left' },
+  { id: 'company', label: 'EMAIL', align: 'left' },
+  { id: 'role', label: 'ROL', align: 'left' },
+  { id: 'isVerified', label: 'VERIFICADO', align: 'center' },
+  { id: 'status', label: 'CONTRASEÑA', align: 'left' },
   { id: '' },
 ];
 
@@ -95,11 +100,14 @@ export default function UserListPage() {
     onChangeRowsPerPage,
   } = useTable();
 
+  const dispatch = useDispatch();
+  const { users, isLoading } = useSelector((state) => state.user_hana);
+
   const { themeStretch } = useSettingsContext();
 
   const { push } = useRouter();
 
-  const [tableData, setTableData] = useState(_userList);
+  const [tableData, setTableData] = useState([]);
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -108,6 +116,16 @@ export default function UserListPage() {
   const [filterRole, setFilterRole] = useState('all');
 
   const [filterStatus, setFilterStatus] = useState('all');
+
+  useEffect(() => {
+    dispatch(getUsers());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (users.length) {
+      setTableData(users);
+    }
+  }, [users])
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -152,9 +170,15 @@ export default function UserListPage() {
   };
 
   const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
+    const deleteRow = tableData.filter((row) => row.ID !== id);
     setSelected([]);
     setTableData(deleteRow);
+
+    // Eliminar un usuario.
+    axios.delete('/hanadb/api/users/user', {
+       params: { id }
+    });
+
 
     if (page > 0) {
       if (dataInPage.length < 2) {
@@ -181,7 +205,9 @@ export default function UserListPage() {
   };
 
   const handleEditRow = (id) => {
-    push(PATH_DASHBOARD.user.edit(paramCase(id)));
+    // push(PATH_DASHBOARD.user.edit(paramCase(id)));
+    push(PATH_DASHBOARD.user.edit(id));
+
   };
 
   const handleResetFilter = () => {
@@ -198,7 +224,7 @@ export default function UserListPage() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="User List"
+          heading="Lista de usuarios"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             { name: 'User', href: PATH_DASHBOARD.user.root },
@@ -284,12 +310,12 @@ export default function UserListPage() {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => (
                       <UserTableRow
-                        key={row.id}
+                        key={row.ID}
                         row={row}
-                        selected={selected.includes(row.id)}
-                        onSelectRow={() => onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.name)}
+                        selected={selected.includes(row.ID)}
+                        onSelectRow={() => onSelectRow(row.ID)}
+                        onDeleteRow={() => handleDeleteRow(row.ID)}
+                        onEditRow={() => handleEditRow(row.ID)}
                       />
                     ))}
 
