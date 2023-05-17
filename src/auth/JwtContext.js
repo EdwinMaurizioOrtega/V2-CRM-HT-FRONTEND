@@ -5,7 +5,6 @@ import axios from '../utils/axios';
 import localStorageAvailable from '../utils/localStorageAvailable';
 //
 import {isValidToken, setSession} from './utils';
-import {upperCase} from "lodash";
 
 // ----------------------------------------------------------------------
 
