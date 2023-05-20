@@ -36,20 +36,20 @@ export default function CheckoutOrderComplete({ open, onReset, onDownloadPDF }) 
           px: { xs: 2, sm: 0 },
         }}
       >
-        <Typography variant="h4">Thank you for your purchase!</Typography>
+        <Typography variant="h4">Gracias por su compra!</Typography>
 
         <OrderCompleteIllustration sx={{ height: 260 }} />
 
         <Typography>
-          Thanks for placing order
+          Gracias por hacer el pedido
           <br />
           <br />
           <Link>01dc1370-3df6-11eb-b378-0242ac130002</Link>
           <br />
           <br />
-          We will send you a notification within 5 days when it ships.
-          <br /> If you have any question or queries then fell to get in contact us. <br /> <br />
-          All the best,
+          Le enviaremos una notificación dentro de los 5 días posteriores al envío.
+          <br /> Si tiene alguna pregunta o consulta, no dude en ponerse en contacto con nosotros. <br /> <br />
+          Mis mejores deseos,
         </Typography>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
@@ -77,7 +77,7 @@ export default function CheckoutOrderComplete({ open, onReset, onDownloadPDF }) 
             startIcon={<Iconify icon="ant-design:file-pdf-filled" />}
             onClick={onDownloadPDF}
           >
-            Download as PDF
+            Mis pedidos
           </Button>
         </Stack>
       </Stack>

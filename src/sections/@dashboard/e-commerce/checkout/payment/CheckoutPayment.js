@@ -148,10 +148,11 @@ CheckoutPayment.propTypes = {
     onNextStep: PropTypes.func,
     onApplyShipping: PropTypes.func,
     onApplyWarehouse: PropTypes.func,
+    onApplyMethod: PropTypes.func,
 };
 
-export default function CheckoutPayment({checkout, onReset, onNextStep, onBackStep, onGotoStep, onApplyShipping, onApplyWarehouse, }) {
-    const {total, discount, subtotal, shipping, warehouse, billing} = checkout;
+export default function CheckoutPayment({checkout, onReset, onNextStep, onBackStep, onGotoStep, onApplyShipping, onApplyWarehouse, onApplyMethod, }) {
+    const {total, discount, subtotal, iva, shipping, warehouse, method, billing} = checkout;
 
     const PaymentSchema = Yup.object().shape({
         payment: Yup.string().required('¡Se requiere forma de pago!'),
@@ -160,7 +161,7 @@ export default function CheckoutPayment({checkout, onReset, onNextStep, onBackSt
     const defaultValues = {
         delivery: shipping,
         store: warehouse,
-        payment: '',
+        payment: method,
     };
 
     const methods = useForm({
@@ -190,8 +191,7 @@ export default function CheckoutPayment({checkout, onReset, onNextStep, onBackSt
 
                     <CheckoutWarehouse onApplyWarehouse={onApplyWarehouse} warehouseOptions={WAREHOUSE_OPTIONS}/>
 
-                    <CheckoutPaymentMethods
-                        paymentOptions={PAYMENT_OPTIONS}
+                    <CheckoutPaymentMethods onApplyMethod={onApplyMethod} paymentOptions={PAYMENT_OPTIONS}
                         sx={{my: 3}}
                     />
 
@@ -212,6 +212,7 @@ export default function CheckoutPayment({checkout, onReset, onNextStep, onBackSt
                         enableEdit
                         total={total}
                         subtotal={subtotal}
+                        iva={iva}
                         discount={discount}
                         shipping={shipping}
                         onEdit={() => onGotoStep(0)}

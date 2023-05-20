@@ -27,7 +27,7 @@ CheckoutBillingAddress.propTypes = {
 };
 
 export default function CheckoutBillingAddress({checkout, onBackStep, onCreateBilling}) {
-    const {total, discount, subtotal} = checkout;
+    const {total, discount, subtotal, iva } = checkout;
 
     const [open, setOpen] = useState(false);
 
@@ -176,7 +176,7 @@ export default function CheckoutBillingAddress({checkout, onBackStep, onCreateBi
                 </Grid>
 
                 <Grid item xs={12} md={4}>
-                    <CheckoutSummary subtotal={subtotal} total={total} discount={discount}/>
+                    <CheckoutSummary subtotal={subtotal} iva={iva} total={total} discount={discount}/>
                 </Grid>
             </Grid>
 

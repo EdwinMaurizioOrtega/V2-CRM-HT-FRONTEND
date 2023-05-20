@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 // @mui
 import { Grid, Container } from '@mui/material';
 // routes
+import {format} from "date-fns";
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
@@ -19,7 +20,8 @@ import {
   deleteCart,
   createBilling,
   applyShipping,
-    applyWarehouse,
+  applyWarehouse,
+  applyMethod,
   applyDiscount,
   increaseQuantity,
   decreaseQuantity,
@@ -35,6 +37,9 @@ import {
   CheckoutOrderComplete,
   CheckoutBillingAddress,
 } from '../../../sections/@dashboard/e-commerce/checkout';
+// utils
+import axios from "../../../utils/axios";
+import {useAuthContext} from "../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -48,6 +53,8 @@ EcommerceCheckoutPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLa
 
 export default function EcommerceCheckoutPage() {
   const { replace } = useRouter();
+
+    const { user } = useAuthContext();
 
   const { themeStretch } = useSettingsContext();
 
@@ -112,11 +119,81 @@ export default function EcommerceCheckoutPage() {
   const handleApplyWarehouse = (value) => {
     dispatch(applyWarehouse(value));
   };
+  // Formas de pago
+  const handleApplyMethod = (value) => {
+    dispatch(applyMethod(value));
+  };
 
-  const handleReset = () => {
+  const fechaCreacion = format(new Date(), 'dd-MM-yyyy HH:mm:ss');
+
+    const handleReset = async () => {
     if (completed) {
-      dispatch(resetCart());
-      replace(PATH_DASHBOARD.eCommerce.shop);
+
+        console.log('DATA', checkout);
+
+      // Crear un cliente.
+      const response = await axios.post('/hanadb/api/orders/order', {
+
+          checkoutData: checkout
+
+          // CLIENTEID: checkout.billing.ID,
+          // ESTADO: 6,
+          // FECHA: "aaa",
+          // FECHAACTUALIZACION: "aaa",
+          // FECHACREACION: fechaCreacion,
+          // FORMADEPAGO: checkout.method,
+          // GUARDADO: 0,
+          // HORA: "aaa",
+          // LATITUD: 0.00,
+          // LONGITUD: 0.00,
+          // OBSERVACIONES: "",
+          // ONLINE: false,
+          // SUBTOTAL: 0.00,
+          // TOTAL: 0.00,
+          // TOTALIVA: 0.00,
+          // USUARIOAACTUALIZACION: "aaa",
+          // VENDEDOR: user.DISPLAYNAME,
+          // ENDEDORID: user.ID,
+          // LOCALCLIENTE_ID: checkout.billing.ID,
+          // EMPRESA: "aaa",
+          // FECHAFACTURACION: "aaa",
+          // NUMEROFACTURAE4: "aaa",
+          // NUMEROFACTURAHIPERTRONICS: "aaa",
+          // NUMEROFACTURALIDENAR: "aaa",
+          // NUMEROGUIA: "aaa",
+          // OBSERVACIONESB: "aaa",
+          // NOTACLIENTE: "aaa",
+          // USUARIOAPROBO: "aaa",
+          // PLANPAGOSTOMEBAMBA_ID: 0,
+          // APLICACIONORIGEN: "aaa",
+          // COMENTARIOENTREGA: "aaa",
+          // FECHAENTREGA: "aaa",
+          // NOMBREUSUARIOENTREGA: "aaa",
+          // USUARIOENTREGA_ID: 0,
+          // FECHAENTREGASOLICITADA: "aaa",
+          // IDUSUARIOENTREGARA: 0,
+          // NOMBREUSUARIOENTREGARA: "aaa",
+          // COURIER: "aaa",
+          // USUARIOENTREGABODEGA_ID: 0,
+          // BODEGA: checkout.warehouse,
+          // PEDIDOCATEGORIAPROPIA: 0,
+          // IMAGENA: "aaa",
+          // IMAGENB: "aaa",
+          // IMAGEN: "aaa",
+          // IMAGENGUIA: "aaa",
+          // FECHAAPROBO: "aaa",
+          // DOCNUM: 0
+
+      });
+
+      if (response.status === 200) {
+        // La solicitud PUT se realizó correctamente
+      } else {
+        // La solicitud PUT no se realizó correctamente
+      }
+
+      // dispatch(resetCart());
+      // replace(PATH_DASHBOARD.eCommerce.shop);
     }
   };
 
@@ -174,6 +251,7 @@ export default function EcommerceCheckoutPage() {
                 onGotoStep={handleGotoStep}
                 onApplyShipping={handleApplyShipping}
                 onApplyWarehouse={handleApplyWarehouse}
+                onApplyMethod={handleApplyMethod}
                 onReset={handleReset}
               />
             )}

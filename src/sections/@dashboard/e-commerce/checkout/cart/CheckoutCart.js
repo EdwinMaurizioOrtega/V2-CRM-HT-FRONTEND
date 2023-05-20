@@ -32,7 +32,7 @@ export default function CheckoutCart({
   onIncreaseQuantity,
   onDecreaseQuantity,
 }) {
-  const { cart, total, discount, subtotal } = checkout;
+  const { cart, total, discount, subtotal, iva } = checkout;
 
   const totalItems = sum(cart.map((item) => item.quantity));
 
@@ -86,6 +86,7 @@ export default function CheckoutCart({
           total={total}
           discount={discount}
           subtotal={subtotal}
+          iva={iva}
           onApplyDiscount={onApplyDiscount}
         />
         <Button

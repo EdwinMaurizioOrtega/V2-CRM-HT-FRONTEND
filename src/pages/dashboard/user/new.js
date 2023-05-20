@@ -29,7 +29,7 @@ export default function UserCreatePage() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Crear un nuevo usuario"
+          heading="Crear un nuevo usuario."
           links={[
             {
               name: 'Dashboard',

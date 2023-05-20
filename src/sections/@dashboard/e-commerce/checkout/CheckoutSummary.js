@@ -24,6 +24,7 @@ CheckoutSummary.propTypes = {
   total: PropTypes.number,
   discount: PropTypes.number,
   subtotal: PropTypes.number,
+  iva: PropTypes.number,
   shipping: PropTypes.number,
   enableEdit: PropTypes.bool,
   enableDiscount: PropTypes.bool,
@@ -35,6 +36,7 @@ export default function CheckoutSummary({
   onEdit,
   discount,
   subtotal,
+  iva,
   shipping,
   onApplyDiscount,
   enableEdit = false,
@@ -66,6 +68,13 @@ export default function CheckoutSummary({
 
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              IVA
+            </Typography>
+            <Typography variant="subtitle2">{fCurrency(iva)}</Typography>
+          </Stack>
+
+          <Stack direction="row" justifyContent="space-between">
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               Descuento
             </Typography>
             <Typography variant="subtitle2">{discount ? fCurrency(-discount) : '-'}</Typography>
@@ -73,7 +82,7 @@ export default function CheckoutSummary({
 
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              Envío
+              Envío (incl. IVA)
             </Typography>
             <Typography variant="subtitle2">
               {shipping ? fCurrency(shipping) : displayShipping}
@@ -89,7 +98,7 @@ export default function CheckoutSummary({
                 {fCurrency(total)}
               </Typography>
               <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
-                (IVA no incluido.)
+                (IVA incluido.)
               </Typography>
             </Box>
           </Stack>
