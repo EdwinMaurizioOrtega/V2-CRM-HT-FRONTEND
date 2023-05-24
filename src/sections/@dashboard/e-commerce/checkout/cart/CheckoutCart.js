@@ -63,8 +63,8 @@ export default function CheckoutCart({
             />
           ) : (
             <EmptyContent
-              title="Cart is empty"
-              description="Look like you have no items in your shopping cart."
+              title="El carrito esta vacío.y"
+              description="Parece que no tiene artículos en su carrito de compras."
               img="/assets/illustrations/illustration_empty_cart.svg"
             />
           )}

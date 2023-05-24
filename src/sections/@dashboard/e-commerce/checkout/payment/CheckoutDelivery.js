@@ -3,27 +3,32 @@ import PropTypes from 'prop-types';
 import { Controller, useFormContext } from 'react-hook-form';
 // @mui
 import {
-  Box,
-  Card,
-  Radio,
-  Paper,
-  Typography,
-  RadioGroup,
-  CardHeader,
-  CardContent,
-  FormControlLabel,
+    Box,
+    Card,
+    Radio,
+    Paper,
+    Typography,
+    RadioGroup,
+    CardHeader,
+    CardContent,
+    FormControlLabel, Stack,
 } from '@mui/material';
 // components
 import Iconify from '../../../../../components/iconify';
+import {RHFTextField} from "../../../../../components/hook-form";
 
 // ----------------------------------------------------------------------
 
 CheckoutDelivery.propTypes = {
   onApplyShipping: PropTypes.func,
   deliveryOptions: PropTypes.array,
+    onApplyComment: PropTypes.func,
 };
 
-export default function CheckoutDelivery({ deliveryOptions, onApplyShipping, ...other }) {
+
+
+
+export default function CheckoutDelivery({ deliveryOptions, onApplyShipping, onApplyComment, ...other }) {
   const { control } = useFormContext();
 
   return (
@@ -62,6 +67,29 @@ export default function CheckoutDelivery({ deliveryOptions, onApplyShipping, ...
             </RadioGroup>
           )}
         />
+
+          <Stack direction="row" justifyContent="space-evenly">
+              <Typography variant="subtitle2" sx={{ height: 36, lineHeight: '36px' }}>
+                  Comentario
+              </Typography>
+
+              <Stack spacing={1}>
+                  <RHFTextField
+                      name="commentEnvio"
+                      onKeyUp={(event) => {
+                          const { value } = event.target;
+                          onApplyComment(value);
+                      }}
+                  />
+                  <Typography
+                      variant="caption"
+                      component="div"
+                      sx={{ textAlign: 'right', color: 'text.secondary' }}
+                  >
+                      Observación por el vendedor.
+                  </Typography>
+              </Stack>
+          </Stack>
       </CardContent>
     </Card>
   );

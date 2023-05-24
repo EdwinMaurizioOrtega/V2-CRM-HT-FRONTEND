@@ -19,6 +19,7 @@ import {
     gotoStep,
     deleteCart,
     createBilling,
+    applyComment,
     applyShipping,
     applyWarehouse,
     applyMethod,
@@ -110,6 +111,10 @@ export default function EcommerceCheckoutPage() {
         dispatch(createBilling(address));
         dispatch(nextStep());
     };
+// Comentario envío.
+    const handleApplyComment = (value) => {
+        dispatch(applyComment(value));
+    };
 
     const handleApplyShipping = (value) => {
         dispatch(applyShipping(value));
@@ -139,8 +144,8 @@ export default function EcommerceCheckoutPage() {
 
             });
 
-            // dispatch(resetCart());
-            // replace(PATH_DASHBOARD.eCommerce.shop);
+            dispatch(resetCart());
+            replace(PATH_DASHBOARD.eCommerce.shop);
 
         }
     };
@@ -198,6 +203,7 @@ export default function EcommerceCheckoutPage() {
                                 onNextStep={handleNextStep}
                                 onBackStep={handleBackStep}
                                 onGotoStep={handleGotoStep}
+                                onApplyComment={handleApplyComment}
                                 onApplyShipping={handleApplyShipping}
                                 onApplyWarehouse={handleApplyWarehouse}
                                 onApplyMethod={handleApplyMethod}

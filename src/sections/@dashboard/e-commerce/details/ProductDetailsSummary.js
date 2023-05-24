@@ -28,7 +28,8 @@ import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
 import {IncrementerButton} from '../../../../components/custom-input';
 import {ColorSinglePicker} from '../../../../components/color-utils';
-import FormProvider, {RHFSelect} from '../../../../components/hook-form';
+import FormProvider, {RHFSelect, RHFTextField} from '../../../../components/hook-form';
+import CustomTextField from "../../../../components/custom-input/CustomTextField";
 
 // ----------------------------------------------------------------------
 
@@ -107,7 +108,8 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
         MARCA,
         TOTAL,
         quantity: 1,
-        price: pricelistproduct[1]
+        price: pricelistproduct[1],
+        comment: 'Ninguno.'
 
     };
 
@@ -251,6 +253,27 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
                           sx={{ textAlign: 'right', color: 'text.secondary' }}
                         >
                             Disponible: ...
+                        </Typography>
+                    </Stack>
+                </Stack>
+
+                <Stack direction="row" justifyContent="space-between">
+                    <Typography variant="subtitle2" sx={{ height: 36, lineHeight: '36px' }}>
+                        Comentario
+                    </Typography>
+
+                    <Stack spacing={1}>
+                        <RHFTextField
+                            name="comment"
+                            onChange={(event) => setValue('comment', event.target.value)}
+                        />
+
+                        <Typography
+                            variant="caption"
+                            component="div"
+                            sx={{ textAlign: 'right', color: 'text.secondary' }}
+                        >
+                            Observación por el vendedor.
                         </Typography>
                     </Stack>
                 </Stack>

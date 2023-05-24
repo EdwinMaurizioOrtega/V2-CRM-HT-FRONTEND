@@ -20,6 +20,7 @@ const initialState = {
         total: 0,
         discount: 0,
         shipping: 0,
+        comment: 'Ninguno.',
         billing: null,
         totalItems: 0,
     },
@@ -69,6 +70,7 @@ const slice = createSlice({
             state.checkout.discount = state.checkout.discount || 0;
             state.checkout.shipping = state.checkout.shipping || 0;
             state.checkout.billing = state.checkout.billing || null;
+            state.checkout.billing = state.checkout.warehouse || 0;
             state.checkout.subtotal = subtotal;
             state.checkout.iva = iva;
             state.checkout.total = subtotal - state.checkout.discount + iva;
@@ -116,6 +118,7 @@ const slice = createSlice({
             state.checkout.shipping = 0;
             state.checkout.totalItems = 0;
             state.checkout.warehouse = 0;
+            state.checkout.comment= 'Ninguno.';
             state.checkout.method = 0;
             state.checkout.iva = 0;
         },
@@ -185,6 +188,9 @@ const slice = createSlice({
         applyMethod(state, action) {
             state.checkout.method = action.payload;
         },
+        applyComment(state, action) {
+            state.checkout.comment = action.payload;
+        },
     },
 });
 
@@ -204,6 +210,7 @@ export const {
     applyShipping,
     applyWarehouse,
     applyMethod,
+    applyComment,
     applyDiscount,
     increaseQuantity,
     decreaseQuantity,

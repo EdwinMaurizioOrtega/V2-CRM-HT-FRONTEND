@@ -146,19 +146,21 @@ CheckoutPayment.propTypes = {
     onBackStep: PropTypes.func,
     onGotoStep: PropTypes.func,
     onNextStep: PropTypes.func,
+    onApplyComment: PropTypes.func,
     onApplyShipping: PropTypes.func,
     onApplyWarehouse: PropTypes.func,
     onApplyMethod: PropTypes.func,
 };
 
-export default function CheckoutPayment({checkout, onReset, onNextStep, onBackStep, onGotoStep, onApplyShipping, onApplyWarehouse, onApplyMethod, }) {
-    const {total, discount, subtotal, iva, shipping, warehouse, method, billing} = checkout;
+export default function CheckoutPayment({checkout, onReset, onNextStep, onBackStep, onGotoStep, onApplyComment, onApplyShipping, onApplyWarehouse, onApplyMethod, }) {
+    const {total, discount, subtotal, iva, comment, shipping, warehouse, method, billing} = checkout;
 
     const PaymentSchema = Yup.object().shape({
         payment: Yup.string().required('¡Se requiere forma de pago!'),
     });
 
     const defaultValues = {
+        commentEnvio: comment,
         delivery: shipping,
         store: warehouse,
         payment: method,
@@ -187,7 +189,7 @@ export default function CheckoutPayment({checkout, onReset, onNextStep, onBackSt
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={8}>
-                    <CheckoutDelivery onApplyShipping={onApplyShipping} deliveryOptions={DELIVERY_OPTIONS}/>
+                    <CheckoutDelivery onApplyComment={onApplyComment} onApplyShipping={onApplyShipping} deliveryOptions={DELIVERY_OPTIONS}/>
 
                     <CheckoutWarehouse onApplyWarehouse={onApplyWarehouse} warehouseOptions={WAREHOUSE_OPTIONS}/>
 
