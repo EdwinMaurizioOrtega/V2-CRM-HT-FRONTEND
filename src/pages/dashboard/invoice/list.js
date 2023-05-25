@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import sumBy from 'lodash/sumBy';
 // next
 import Head from 'next/head';
@@ -48,6 +48,9 @@ import {
 // sections
 import InvoiceAnalytic from '../../../sections/@dashboard/invoice/InvoiceAnalytic';
 import { InvoiceTableRow, InvoiceTableToolbar } from '../../../sections/@dashboard/invoice/list';
+import {getUsers} from "../../../redux/slices/user";
+import {useDispatch, useSelector} from "../../../redux/store";
+import {getOrders} from "../../../redux/slices/order";
 
 // ----------------------------------------------------------------------
 
@@ -61,12 +64,17 @@ const SERVICE_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
-  { id: 'invoiceNumber', label: 'Client', align: 'left' },
-  { id: 'createDate', label: 'Create', align: 'left' },
-  { id: 'dueDate', label: 'Due', align: 'left' },
-  { id: 'price', label: 'Amount', align: 'center', width: 140 },
-  { id: 'sent', label: 'Sent', align: 'center', width: 140 },
-  { id: 'status', label: 'Status', align: 'left' },
+  { id: 'invoiceNumber', label: 'Orden', align: 'left' },
+  { id: 'createDate', label: 'Fecha', align: 'left' },
+  { id: 'dueDate', label: 'CI/RUC', align: 'left' },
+  { id: 'price', label: 'R.Social', align: 'center', width: 140 },
+  { id: 'sent', label: 'Celular', align: 'center', width: 140 },
+  { id: 'status', label: 'Tipo Cliente', align: 'left' },
+  { id: 'status', label: 'Ciudad Cliente', align: 'left' },
+  { id: 'status', label: 'Estado', align: 'left' },
+  { id: 'status', label: 'Vendedor', align: 'left' },
+  { id: 'status', label: 'Ciudad Vendedor', align: 'left' },
+  { id: 'status', label: 'Detalle', align: 'left' },
   { id: '' },
 ];
 
@@ -78,6 +86,11 @@ InvoiceListPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function InvoiceListPage() {
   const theme = useTheme();
+
+  const dispatch = useDispatch();
+
+  const { orders, isLoading } = useSelector((state) => state.orders_status);
+
 
   const { themeStretch } = useSettingsContext();
 
@@ -102,7 +115,7 @@ export default function InvoiceListPage() {
     onChangeRowsPerPage,
   } = useTable({ defaultOrderBy: 'createDate' });
 
-  const [tableData, setTableData] = useState(_invoices);
+  const [tableData, setTableData] = useState([]);
 
   const [filterName, setFilterName] = useState('');
 
@@ -115,6 +128,17 @@ export default function InvoiceListPage() {
   const [filterEndDate, setFilterEndDate] = useState(null);
 
   const [filterStartDate, setFilterStartDate] = useState(null);
+
+
+  useEffect(() => {
+    dispatch(getOrders());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (orders.length) {
+      setTableData(orders);
+    }
+  }, [orders])
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -423,13 +447,13 @@ export default function InvoiceListPage() {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => (
                       <InvoiceTableRow
-                        key={row.id}
+                        key={row.ID}
                         row={row}
-                        selected={selected.includes(row.id)}
-                        onSelectRow={() => onSelectRow(row.id)}
-                        onViewRow={() => handleViewRow(row.id)}
-                        onEditRow={() => handleEditRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
+                        selected={selected.includes(row.ID)}
+                        onSelectRow={() => onSelectRow(row.ID)}
+                        onViewRow={() => handleViewRow(row.ID)}
+                        onEditRow={() => handleEditRow(row.ID)}
+                        onDeleteRow={() => handleDeleteRow(row.ID)}
                       />
                     ))}
 

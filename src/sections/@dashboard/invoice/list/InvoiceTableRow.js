@@ -42,7 +42,7 @@ export default function InvoiceTableRow({
   onEditRow,
   onDeleteRow,
 }) {
-  const { sent, invoiceNumber, createDate, dueDate, status, invoiceTo, totalPrice } = row;
+  const { ID, ESTADO, FECHACREACION, CLIENTEID, Nombres, Cliente, Ciudad, Celular, Tipo, VENDEDOR, CITY, sent, invoiceNumber, createDate, dueDate, status, invoiceTo, totalPrice } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -73,11 +73,11 @@ export default function InvoiceTableRow({
 
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <CustomAvatar name={invoiceTo.name} />
+            {/* <CustomAvatar name={ID} /> */}
 
             <div>
               <Typography variant="subtitle2" noWrap>
-                {invoiceTo.name}
+                {VENDEDOR}
               </Typography>
 
               <Link
@@ -86,34 +86,51 @@ export default function InvoiceTableRow({
                 onClick={onViewRow}
                 sx={{ color: 'text.disabled', cursor: 'pointer' }}
               >
-                {`INV-${invoiceNumber}`}
+                {`INV-${ID}`}
               </Link>
             </div>
           </Stack>
         </TableCell>
 
-        <TableCell align="left">{fDate(createDate)}</TableCell>
+        <TableCell align="left">{FECHACREACION}</TableCell>
 
-        <TableCell align="left">{fDate(dueDate)}</TableCell>
+        <TableCell align="left">{CLIENTEID}</TableCell>
 
-        <TableCell align="center">{fCurrency(totalPrice)}</TableCell>
+        <TableCell align="center">{Cliente}</TableCell>
 
         <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {sent}
+          {Celular}
+        </TableCell>
+        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
+          {Tipo}
+        </TableCell>
+        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
+          {Ciudad}
         </TableCell>
 
         <TableCell align="left">
           <Label
             variant="soft"
             color={
-              (status === 'paid' && 'success') ||
-              (status === 'unpaid' && 'warning') ||
-              (status === 'overdue' && 'error') ||
+              (ESTADO === 6 && 'success') ||
+              (ESTADO === 0 && 'warning') ||
+              (ESTADO === 1 && 'error') ||
               'default'
             }
           >
-            {status}
+            {
+              (ESTADO === 6 ? 'Pendiende de aprobar': '') ||
+              (ESTADO === 0 ? 'Por Facturar': '') ||
+              (ESTADO === 1 ? 'Facturado': '') ||
+                'default'
+            }
           </Label>
+        </TableCell>
+        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
+          {VENDEDOR}
+        </TableCell>
+        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
+          {CITY}
         </TableCell>
 
         <TableCell align="right">
