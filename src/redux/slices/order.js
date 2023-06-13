@@ -6,6 +6,7 @@ const initialState = {
     isLoading: false,
     error: null,
     orders: [],
+    currentInvoice: [],
 };
 
 const slice = createSlice({
@@ -29,7 +30,7 @@ const slice = createSlice({
 
         getDetailOrderSuccess(state, action) {
             state.isLoading = false;
-            state.orders.detailOrderSeleccted = action.payload;
+            state.currentInvoice = action.payload;
         },
 
 
@@ -57,10 +58,10 @@ export function getDetailOrder(id) {
     return async (dispatch) => {
         dispatch(slice.actions.startLoading());
         try {
-            const response = await axios.get('/hanadb/api/products/product', {
+            const response = await axios.get('/hanadb/api/orders/order/detail', {
                 params: {id},
             });
-            dispatch(slice.actions.getDetailOrderSuccess(response.data.orders.detailOrderSeleccted));
+            dispatch(slice.actions.getDetailOrderSuccess(response.data.data));
         } catch (error) {
             console.error(error);
             dispatch(slice.actions.hasError(error));

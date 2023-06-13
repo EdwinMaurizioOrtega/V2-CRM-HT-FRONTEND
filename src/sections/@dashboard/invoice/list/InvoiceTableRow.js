@@ -153,7 +153,7 @@ export default function InvoiceTableRow({
           }}
         >
           <Iconify icon="eva:eye-fill" />
-          View
+          Ver
         </MenuItem>
 
         <MenuItem
@@ -163,7 +163,7 @@ export default function InvoiceTableRow({
           }}
         >
           <Iconify icon="eva:edit-fill" />
-          Edit
+          Editar
         </MenuItem>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
@@ -176,7 +176,7 @@ export default function InvoiceTableRow({
           sx={{ color: 'error.main' }}
         >
           <Iconify icon="eva:trash-2-outline" />
-          Delete
+          Borrar
         </MenuItem>
       </MenuPopover>
 
