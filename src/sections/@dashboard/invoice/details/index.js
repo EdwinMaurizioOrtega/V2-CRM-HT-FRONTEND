@@ -34,6 +34,7 @@ import {RHFTextField} from "../../../../components/hook-form";
 import {useTable} from "../../../../components/table";
 import axios from "../../../../utils/axios";
 import {Block} from "../../../_examples/Block";
+import {useAuthContext} from "../../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -87,6 +88,7 @@ export default function InvoiceDetails({invoice, onDetailsChange}) {
 
     const router = useRouter();
 
+    const {user} = useAuthContext();
 
     const [selected, setSelected] = useState(false);
 
@@ -282,10 +284,10 @@ export default function InvoiceDetails({invoice, onDetailsChange}) {
     // La  mejor forma de crear un CASE
     function nameWarehouse(ware) {
         const strings = {
-            0: "Cuenca",
-            3: "Quito",
-            4: "Guayaquil",
-            5: "Manta",
+            "002": "Cuenca",
+            "006": "Quito",
+            "015": "Guayaquil",
+            "020": "Manta",
         };
 
         const bodegaActual = strings[ware];
@@ -340,6 +342,25 @@ export default function InvoiceDetails({invoice, onDetailsChange}) {
     console.log('Subtotal: ', subtotalTotal);
     console.log('IVA: ', ivaTotal);
     console.log('Total incluido IVA: ', totalConIva);
+
+    const enviarOrdenSAP = async () => {
+        console.log(ID); // Log ID de la orden
+        console.log(user.ID) // Log ID del usuario
+
+        try {
+            // Actualizar una orden.
+            await axios.post('/hanadb/api/orden_venta_sap', {
+                ID_ORDER: ID,
+                ID_USER: user.ID
+
+            });
+
+        } catch (error) {
+            // Manejar el error de la petición PUT aquí
+            console.error('Error al actualizar la orden:', error);
+        }
+
+    }
 
     return (
         <>
@@ -602,7 +623,7 @@ export default function InvoiceDetails({invoice, onDetailsChange}) {
 
                 <Grid container>
                     <Grid item xs={12} md={12} sx={{py: 3, textAlign: 'center'}}>
-                        <Button >CREAR ORDEN DE VENTA SAP</Button>
+                        <Button onClick={enviarOrdenSAP}>CREAR ORDEN DE VENTA SAP</Button>
                     </Grid>
                 </Grid>
             </Card>
@@ -743,10 +764,10 @@ export default function InvoiceDetails({invoice, onDetailsChange}) {
 
 
 export const top100Films = [
-    {title: 'Cuenca', id: 0},
-    {title: 'Quito', id: 3},
-    {title: 'Guayaquil', id: 4},
-    {title: 'Manta', id: 5}
+    {title: 'Cuenca', id: "002"},
+    {title: 'Quito', id: "006"},
+    {title: 'Guayaquil', id: "015"},
+    {title: 'Manta', id: "020"}
 ]
 
 

@@ -33,35 +33,35 @@ export default function HomePage() {
         <title> The starting point for your next project | Minimal UI</title>
       </Head>
 
-      <ScrollProgress />
+      {/* <ScrollProgress /> */}
 
       <HomeHero />
 
-      <Box
-        sx={{
-          overflow: 'hidden',
-          position: 'relative',
-          bgcolor: 'background.default',
-        }}
-      >
-        <HomeMinimal />
+      {/* <Box */}
+      {/*   sx={{ */}
+      {/*     overflow: 'hidden', */}
+      {/*     position: 'relative', */}
+      {/*     bgcolor: 'background.default', */}
+      {/*   }} */}
+      {/* > */}
+        {/* <HomeMinimal /> */}
 
-        <HomeHugePackElements />
+        {/* <HomeHugePackElements /> */}
 
-        <HomeForDesigner />
+        {/* <HomeForDesigner /> */}
 
-        <HomeDarkMode />
+        {/* <HomeDarkMode /> */}
 
-        <HomeColorPresets />
+        {/* <HomeColorPresets /> */}
 
-        <HomeCleanInterfaces />
+        {/* <HomeCleanInterfaces /> */}
 
-        <HomePricingPlans />
+        {/* <HomePricingPlans /> */}
 
-        <HomeLookingFor />
+        {/* <HomeLookingFor /> */}
 
-        <HomeAdvertisement />
-      </Box>
+        {/* <HomeAdvertisement /> */}
+      {/* </Box> */}
     </>
   );
 }

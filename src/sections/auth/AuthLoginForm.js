@@ -63,11 +63,11 @@ export default function AuthLoginForm() {
       <Stack spacing={3}>
         {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
 
-        <RHFTextField name="email" label="Email address" />
+        <RHFTextField name="email" label="Email" />
 
         <RHFTextField
           name="password"
-          label="Password"
+          label="Contraseña"
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -89,7 +89,7 @@ export default function AuthLoginForm() {
           color="inherit"
           underline="always"
         >
-          Forgot password?
+            ¿Has olvidado tu contraseña?
         </Link>
       </Stack>
 
@@ -109,7 +109,7 @@ export default function AuthLoginForm() {
           },
         }}
       >
-        Login
+          Acceder
       </LoadingButton>
     </FormProvider>
   );

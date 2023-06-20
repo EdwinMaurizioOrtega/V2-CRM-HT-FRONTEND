@@ -59,9 +59,9 @@ export default function Footer() {
         <Logo sx={{ mb: 1, mx: 'auto' }} />
 
         <Typography variant="caption" component="div">
-          © All rights reserved
-          <br /> made by &nbsp;
-          <Link href="https://minimals.cc/"> minimals.cc </Link>
+          © Reservados todos los derechos
+          <br /> hecho por &nbsp;
+          <Link href="#"> LIDENAR S.A. </Link>
         </Typography>
       </Container>
     </Box>

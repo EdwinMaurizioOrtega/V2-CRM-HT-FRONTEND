@@ -98,7 +98,7 @@ export default function EcommerceShopPage() {
       <FormProvider methods={methods}>
         <Container maxWidth={themeStretch ? false : 'lg'}>
           <CustomBreadcrumbs
-            heading="Shop"
+            heading="Tienda"
             links={[
               { name: 'Dashboard', href: PATH_DASHBOARD.root },
               {

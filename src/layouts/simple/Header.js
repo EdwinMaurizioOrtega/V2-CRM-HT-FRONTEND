@@ -46,7 +46,7 @@ export default function Header({ isOffset }) {
         <Logo />
 
         <Link component={NextLink} href={PATH_PAGE.faqs} variant="subtitle2" color="inherit">
-          Need Help?
+          Need Helpp?
         </Link>
       </Toolbar>
 

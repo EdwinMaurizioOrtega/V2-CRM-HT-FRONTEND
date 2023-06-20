@@ -104,7 +104,7 @@ export const PATH_DOCS = {
 
 export const PATH_ZONE_ON_STORE = 'https://mui.com/store/items/zone-landing-page/';
 
-export const PATH_MINIMAL_ON_STORE = 'https://mui.com/store/items/minimal-dashboard/';
+export const PATH_MINIMAL_ON_STORE = '/auth/login/';
 
 export const PATH_FREE_VERSION = 'https://mui.com/store/items/minimal-dashboard-free/';
 

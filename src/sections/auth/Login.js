@@ -20,13 +20,13 @@ export default function Login() {
   return (
     <LoginLayout>
       <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-        <Typography variant="h4">Sign in to Minimal</Typography>
+        <Typography variant="h4">Iniciar sesión en Lidenar</Typography>
 
         <Stack direction="row" spacing={0.5}>
-          <Typography variant="body2">New user?</Typography>
+          <Typography variant="body2">¿Nuevo usuario?</Typography>
 
           <Link component={NextLink} href={PATH_AUTH.register} variant="subtitle2">
-            Create an account
+              Crea una cuenta
           </Link>
         </Stack>
 

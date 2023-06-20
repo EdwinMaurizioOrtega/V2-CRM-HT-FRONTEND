@@ -39,8 +39,8 @@ export default function CheckoutWarehouse({ warehouseOptions, onApplyWarehouse, 
               {...field}
               onChange={(event) => {
                 const { value } = event.target;
-                field.onChange(Number(value));
-                onApplyWarehouse(Number(value));
+                field.onChange(value);
+                onApplyWarehouse(value);
               }}
             >
               <Box

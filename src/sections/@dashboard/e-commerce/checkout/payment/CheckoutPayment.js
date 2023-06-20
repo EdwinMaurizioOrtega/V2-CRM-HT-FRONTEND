@@ -58,22 +58,28 @@ const DELIVERY_OPTIONS = [
 
 const WAREHOUSE_OPTIONS = [
     {
-        id: 1111111,
-        value: 0,
+        id: '002',
+        value: '002',
         title: 'MAYORISTA CUENCA',
         description: 'Matriz en la ciudad de Cuenca.',
     },
     {
-        id: 3333333,
-        value: 3,
+        id: '006',
+        value: '006',
         title: 'MAYORISTA QUITO',
         description: 'Sucursal en la ciudad de Quito.',
     },
     {
-        id: 4444444,
-        value: 4,
+        id: '015',
+        value: '015',
         title: 'MAYORISTA GUAYAQUIL',
         description: 'SUCURSAL en la ciudad de Guayaquil.',
+    },
+    {
+        id: '020',
+        value: '020',
+        title: 'MAYORISTA MANTA',
+        description: 'SUCURSAL en la ciudad de Manta.',
     },
 ];
 

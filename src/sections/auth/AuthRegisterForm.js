@@ -68,15 +68,15 @@ export default function AuthRegisterForm() {
         {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
 
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFTextField name="firstName" label="First name" />
-          <RHFTextField name="lastName" label="Last name" />
+          <RHFTextField name="firstName" label="Nombre" />
+          <RHFTextField name="lastName" label="Apellido" />
         </Stack>
 
-        <RHFTextField name="email" label="Email address" />
+        <RHFTextField name="email" label="Email" />
 
         <RHFTextField
           name="password"
-          label="Password"
+          label="Contraseña"
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -105,7 +105,7 @@ export default function AuthRegisterForm() {
             },
           }}
         >
-          Create account
+          Crear cuenta
         </LoadingButton>
       </Stack>
     </FormProvider>

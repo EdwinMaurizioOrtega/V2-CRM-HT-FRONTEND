@@ -14,15 +14,15 @@ import AuthRegisterForm from './AuthRegisterForm';
 
 export default function Register() {
   return (
-    <LoginLayout title="Manage the job more effectively with Minimal">
+    <LoginLayout title="Administre el trabajo de manera más efectiva con Lidenar.">
       <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-        <Typography variant="h4">Get started absolutely free.</Typography>
+        <Typography variant="h4">Comience absolutamente fácil.</Typography>
 
         <Stack direction="row" spacing={0.5}>
-          <Typography variant="body2"> Already have an account? </Typography>
+          <Typography variant="body2"> ¿Ya tienes una cuenta? </Typography>
 
           <Link component={NextLink} href={PATH_AUTH.login} variant="subtitle2">
-            Sign in
+              Iniciar sesión
           </Link>
         </Stack>
       </Stack>
@@ -33,13 +33,13 @@ export default function Register() {
         component="div"
         sx={{ color: 'text.secondary', mt: 3, typography: 'caption', textAlign: 'center' }}
       >
-        {'By signing up, I agree to '}
+        {'Al registrarme, acepto '}
         <Link underline="always" color="text.primary">
-          Terms of Service
+            Términos de servicio
         </Link>
-        {' and '}
+        {' y '}
         <Link underline="always" color="text.primary">
-          Privacy Policy
+            Política de privacidad
         </Link>
         .
       </Typography>

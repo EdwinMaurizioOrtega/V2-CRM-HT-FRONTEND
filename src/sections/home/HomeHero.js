@@ -116,15 +116,15 @@ export default function HomeHero() {
       <StyledRoot sx={{ ...(hide && { opacity: 0 }) }}>
         <Container component={MotionContainer} sx={{ height: 1 }}>
           <Grid container spacing={10} sx={{ height: 1 }}>
-            <Grid item xs={12} md={6} sx={{ height: 1 }}>
+            <Grid item xs={12} md={12} sx={{ height: 1 }}>
               <Description />
             </Grid>
 
-            {isDesktop && (
-              <Grid item xs={12} md={6}>
-                <Content />
-              </Grid>
-            )}
+            {/* {isDesktop && ( */}
+            {/*   <Grid item xs={12} md={6}> */}
+            {/*     <Content /> */}
+            {/*   </Grid> */}
+            {/* )} */}
           </Grid>
         </Container>
 
@@ -145,8 +145,8 @@ function Description() {
     <StyledDescription>
       <m.div variants={varFade().in}>
         <Typography variant="h2" sx={{ textAlign: 'center' }}>
-          Start a <br />
-          new project with
+          Próximamente un <br />
+          Nuevo CRM en
         </Typography>
       </m.div>
 
@@ -160,14 +160,13 @@ function Description() {
             repeat: Infinity,
           }}
         >
-          Minimal
+          LIDENAR
         </StyledGradientText>
       </m.div>
 
       <m.div variants={varFade().in}>
         <Typography variant="body2" sx={{ textAlign: 'center' }}>
-          The starting point for your next project is based on MUI.Easy customization Helps you
-          build apps faster and better.
+          ¡Hola a todos! Estamos emocionados de anunciar que pronto lanzaremos nuevas funcionalidades para nuestra aplicación/plataforma. Hemos estado trabajando arduamente en mejorar la experiencia de usuario y agregar características que creemos que serán de gran utilidad para todos ustedes.
         </Typography>
       </m.div>
 
@@ -184,73 +183,73 @@ function Description() {
             <Box component="strong" sx={{ mr: 0.5, color: 'text.primary' }}>
               4.95/5
             </Box>
-            (99+ reviews)
+            (99+ reseñas)
           </Typography>
         </Stack>
       </m.div>
 
-      <m.div variants={varFade().in}>
-        <Stack spacing={1.5} direction={{ xs: 'column-reverse', sm: 'row' }} sx={{ mb: 5 }}>
-          <Stack alignItems="center" spacing={2}>
-            <Button
-              component={NextLink}
-              href={PATH_DASHBOARD.root}
-              color="inherit"
-              size="large"
-              variant="contained"
-              startIcon={<Iconify icon="eva:flash-fill" width={24} />}
-              sx={{
-                bgcolor: 'text.primary',
-                color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
-                '&:hover': {
-                  bgcolor: 'text.primary',
-                },
-              }}
-            >
-              Live Preview
-            </Button>
+      {/* <m.div variants={varFade().in}> */}
+      {/*   <Stack spacing={1.5} direction={{ xs: 'column-reverse', sm: 'row' }} sx={{ mb: 5 }}> */}
+      {/*     <Stack alignItems="center" spacing={2}> */}
+      {/*       <Button */}
+      {/*         component={NextLink} */}
+      {/*         href={PATH_DASHBOARD.root} */}
+      {/*         color="inherit" */}
+      {/*         size="large" */}
+      {/*         variant="contained" */}
+      {/*         startIcon={<Iconify icon="eva:flash-fill" width={24} />} */}
+      {/*         sx={{ */}
+      {/*           bgcolor: 'text.primary', */}
+      {/*           color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'), */}
+      {/*           '&:hover': { */}
+      {/*             bgcolor: 'text.primary', */}
+      {/*           }, */}
+      {/*         }} */}
+      {/*       > */}
+      {/*         Live Preview */}
+      {/*       </Button> */}
 
-            <Link
-              color="inherit"
-              variant="caption"
-              target="_blank"
-              rel="noopener"
-              href={PATH_FREE_VERSION}
-              sx={{ textDecoration: 'underline', display: 'inline-flex', alignItems: 'center' }}
-            >
-              <Iconify icon="eva:external-link-fill" width={16} sx={{ mr: 0.5 }} />
-              Get Free Version
-            </Link>
-          </Stack>
+      {/*       <Link */}
+      {/*         color="inherit" */}
+      {/*         variant="caption" */}
+      {/*         target="_blank" */}
+      {/*         rel="noopener" */}
+      {/*         href={PATH_FREE_VERSION} */}
+      {/*         sx={{ textDecoration: 'underline', display: 'inline-flex', alignItems: 'center' }} */}
+      {/*       > */}
+      {/*         <Iconify icon="eva:external-link-fill" width={16} sx={{ mr: 0.5 }} /> */}
+      {/*         Get Free Version */}
+      {/*       </Link> */}
+      {/*     </Stack> */}
 
-          <Button
-            color="inherit"
-            size="large"
-            variant="outlined"
-            startIcon={<Iconify icon="eva:external-link-fill" width={24} />}
-            target="_blank"
-            rel="noopener"
-            href={PATH_FIGMA_PREVIEW}
-            sx={{ borderColor: 'text.primary' }}
-          >
-            Design Preview
-          </Button>
-        </Stack>
-      </m.div>
+      {/*     <Button */}
+      {/*       color="inherit" */}
+      {/*       size="large" */}
+      {/*       variant="outlined" */}
+      {/*       startIcon={<Iconify icon="eva:external-link-fill" width={24} />} */}
+      {/*       target="_blank" */}
+      {/*       rel="noopener" */}
+      {/*       href={PATH_FIGMA_PREVIEW} */}
+      {/*       sx={{ borderColor: 'text.primary' }} */}
+      {/*     > */}
+      {/*       Design Preview */}
+      {/*     </Button> */}
+      {/*   </Stack> */}
+      {/* </m.div> */}
 
-      <Stack spacing={3} sx={{ textAlign: 'center', opacity: 0.48 }}>
-        <m.div variants={varFade().in}>
-          <Typography variant="overline">Available For</Typography>
-        </m.div>
+      {/* <Stack spacing={3} sx={{ textAlign: 'center', opacity: 0.48 }}> */}
+      {/*   <m.div variants={varFade().in}> */}
+      {/*     <Typography variant="overline">Available For</Typography> */}
+      {/*   </m.div> */}
 
-        <Stack spacing={2} direction="row" justifyContent="center">
-          {['sketch', 'figma', 'js', 'ts', 'nextjs'].map((platform) => (
-            <m.div key={platform} variants={varFade().in}>
-              <SvgColor src={`/assets/icons/platforms/ic_${platform}.svg`} />
-            </m.div>
-          ))}
-        </Stack>
-      </Stack>
+      {/*   <Stack spacing={2} direction="row" justifyContent="center"> */}
+      {/*     {['sketch', 'figma', 'js', 'ts', 'nextjs'].map((platform) => ( */}
+      {/*       <m.div key={platform} variants={varFade().in}> */}
+      {/*         <SvgColor src={`/assets/icons/platforms/ic_${platform}.svg`} /> */}
+      {/*       </m.div> */}
+      {/*     ))} */}
+      {/*   </Stack> */}
+      {/* </Stack> */}
     </StyledDescription>
   );
 }

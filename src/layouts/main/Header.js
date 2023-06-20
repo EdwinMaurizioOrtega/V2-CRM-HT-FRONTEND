@@ -59,7 +59,7 @@ export default function Header() {
             underline="none"
             sx={{ ml: 1 }}
           >
-            <Label color="info"> v4.3.0 </Label>
+            <Label color="info"> v 20.06.2023 </Label>
           </Link>
 
           <Box sx={{ flexGrow: 1 }} />
@@ -67,7 +67,7 @@ export default function Header() {
           {isDesktop && <NavDesktop isOffset={isOffset} data={navConfig} />}
 
           <Button variant="contained" target="_blank" rel="noopener" href={PATH_MINIMAL_ON_STORE}>
-            Purchase Now
+            Vendedores
           </Button>
 
           {!isDesktop && <NavMobile isOffset={isOffset} data={navConfig} />}

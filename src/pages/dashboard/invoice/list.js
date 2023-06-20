@@ -51,6 +51,7 @@ import { InvoiceTableRow, InvoiceTableToolbar } from '../../../sections/@dashboa
 import {getUsers} from "../../../redux/slices/user";
 import {useDispatch, useSelector} from "../../../redux/store";
 import {getOrders} from "../../../redux/slices/order";
+import {useAuthContext} from "../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -85,6 +86,9 @@ InvoiceListPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 // ----------------------------------------------------------------------
 
 export default function InvoiceListPage() {
+
+  const { user } = useAuthContext();
+
   const theme = useTheme();
 
   const dispatch = useDispatch();
@@ -131,6 +135,10 @@ export default function InvoiceListPage() {
 
 
   useEffect(() => {
+
+
+    console.log(user.DISPLAYNAME);
+
     dispatch(getOrders());
   }, [dispatch]);
 
