@@ -76,8 +76,8 @@ const WAREHOUSE_OPTIONS = [
         description: 'SUCURSAL en la ciudad de Guayaquil.',
     },
     {
-        id: '020',
-        value: '020',
+        id: '024',
+        value: '024',
         title: 'MAYORISTA MANTA',
         description: 'SUCURSAL en la ciudad de Manta.',
     },

@@ -50,7 +50,12 @@ import InvoiceAnalytic from '../../../sections/@dashboard/invoice/InvoiceAnalyti
 import { InvoiceTableRow, InvoiceTableToolbar } from '../../../sections/@dashboard/invoice/list';
 import {getUsers} from "../../../redux/slices/user";
 import {useDispatch, useSelector} from "../../../redux/store";
-import {getOrders} from "../../../redux/slices/order";
+import {
+  getOrders,
+  getOrdersAllStatus,
+  getOrdersAllStatusByVendedor,
+  getOrdersByBodega
+} from "../../../redux/slices/order";
 import {useAuthContext} from "../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
@@ -136,10 +141,34 @@ export default function InvoiceListPage() {
 
   useEffect(() => {
 
-
     console.log(user.DISPLAYNAME);
+    console.log(user.ROLE);
 
-    dispatch(getOrders());
+    // Perfil vendedor
+    if ( user.ROLE === "vendedor") {
+      const idVendedor = user.ID;
+      // Mostramos todos los estados para el rol del vendedor
+      dispatch(getOrdersAllStatusByVendedor(idVendedor));
+    };
+
+    // Perfil aprobacion
+
+    if ( user.ROLE === "aprobador") {
+      // Enviar el estado 6 para consultar las ordenes pendientes de factuaración.
+      dispatch(getOrders(6));
+    };
+
+    // Perfil bodega
+
+    if ( user.ROLE === "bodega") {
+      console.log(user.WAREHOUSE);
+      const bodegaSAP = user.WAREHOUSE;
+
+      dispatch(getOrdersByBodega(bodegaSAP));
+    };
+
+
+
   }, [dispatch]);
 
   useEffect(() => {
@@ -460,7 +489,7 @@ export default function InvoiceListPage() {
                         selected={selected.includes(row.ID)}
                         onSelectRow={() => onSelectRow(row.ID)}
                         onViewRow={() => handleViewRow(row.ID)}
-                        onEditRow={() => handleEditRow(row.ID)}
+                        // onEditRow={() => handleEditRow(row.ID)}
                         onDeleteRow={() => handleDeleteRow(row.ID)}
                       />
                     ))}

@@ -40,11 +40,38 @@ const slice = createSlice({
 // Reducer
 export default slice.reducer;
 
-export function getOrders() {
+// Ordenes por estado
+export function getOrders(estado) {
     return async (dispatch) => {
         dispatch(slice.actions.startLoading());
         try {
-            const response = await axios.get('/hanadb/api/orders');
+            const response = await axios.get(`/hanadb/api/orders?estado=${estado}`);
+            dispatch(slice.actions.getOrdersSuccess(response.data.orders));
+        } catch (error) {
+            dispatch(slice.actions.hasError(error));
+        }
+    };
+}
+
+// Ordenes con todos los estados.
+export function getOrdersAllStatusByVendedor(idVendedor) {
+    return async (dispatch) => {
+        dispatch(slice.actions.startLoading());
+        try {
+            const response = await axios.get(`/hanadb/api/orders/vendedor?ven=${idVendedor}`);
+            dispatch(slice.actions.getOrdersSuccess(response.data.orders));
+        } catch (error) {
+            dispatch(slice.actions.hasError(error));
+        }
+    };
+}
+
+// Ordenes pendientes de factura por bodega con estado 0
+export function getOrdersByBodega(bodega) {
+    return async (dispatch) => {
+        dispatch(slice.actions.startLoading());
+        try {
+            const response = await axios.get(`/hanadb/api/orders/bodega?bod=${bodega}`);
             dispatch(slice.actions.getOrdersSuccess(response.data.orders));
         } catch (error) {
             dispatch(slice.actions.hasError(error));

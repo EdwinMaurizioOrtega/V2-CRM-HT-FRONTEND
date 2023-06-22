@@ -91,8 +91,8 @@ const navConfig = [
         path: PATH_DASHBOARD.invoice.root,
         icon: ICONS.invoice,
         children: [
-          { title: 'Aprobacón', path: PATH_DASHBOARD.invoice.list },
-          { title: 'Facturación', path: PATH_DASHBOARD.invoice.list },
+          { title: 'Lista', path: PATH_DASHBOARD.invoice.list },
+          // { title: 'Facturación', path: PATH_DASHBOARD.invoice.list },
           // { title: 'details', path: PATH_DASHBOARD.invoice.demoView },
           // { title: 'create', path: PATH_DASHBOARD.invoice.new },
           // { title: 'edit', path: PATH_DASHBOARD.invoice.demoEdit },

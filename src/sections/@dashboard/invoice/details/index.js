@@ -77,6 +77,7 @@ InvoiceDetails.propTypes = {
         Celular: PropTypes.string.isRequired,
         Tipo: PropTypes.string.isRequired,
         VENDEDOR: PropTypes.string.isRequired,
+        BODEGA: PropTypes.string.isRequired,
         CITY: PropTypes.string.isRequired,
     }).isRequired,
 
@@ -93,6 +94,10 @@ export default function InvoiceDetails({invoice, onDetailsChange}) {
     const [selected, setSelected] = useState(false);
 
     const [valueNew, setValueNew] = useState('');
+
+    const [valueGuia, setValueGuia] = useState('');
+    const [valueFactura, setValueFactura] = useState('');
+    const [valueValorFactura, setValueValorFactura] = useState('');
 
     const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -170,6 +175,22 @@ export default function InvoiceDetails({invoice, onDetailsChange}) {
         setValueNew(event.target.value);
         // console.log(`Nuevo precio unitario ${valueNew}`);
     };
+
+    const handleChangeGuia = (event) => {
+        setValueGuia(event.target.value);
+        // console.log(`Nuevo precio unitario ${valueNew}`);
+    };
+
+    const handleChangeFactura = (event) => {
+        setValueFactura(event.target.value);
+        // console.log(`Nuevo precio unitario ${valueNew}`);
+    };
+
+    const handleChangeValorFactura = (event) => {
+        setValueValorFactura(event.target.value);
+        // console.log(`Nuevo precio unitario ${valueNew}`);
+    };
+
 
     const handleChangePriceUnit = async () => {
 
@@ -283,11 +304,12 @@ export default function InvoiceDetails({invoice, onDetailsChange}) {
 
     // La  mejor forma de crear un CASE
     function nameWarehouse(ware) {
+        console.log(`Bodega: ${ware}`);
         const strings = {
             "002": "Cuenca",
             "006": "Quito",
             "015": "Guayaquil",
-            "020": "Manta",
+            "024": "Manta",
         };
 
         const bodegaActual = strings[ware];
@@ -359,6 +381,13 @@ export default function InvoiceDetails({invoice, onDetailsChange}) {
             // Manejar el error de la petición PUT aquí
             console.error('Error al actualizar la orden:', error);
         }
+
+    }
+
+
+    const handleChangePedidoFactura = async () => {
+
+        console.log('Filanalizar pedido.');
 
     }
 
@@ -435,17 +464,21 @@ export default function InvoiceDetails({invoice, onDetailsChange}) {
                                 {/* <Typography variant="body2">{fDate(dueDate)}</Typography> */}
                                 <Typography variant="body2">Bodega actual: {nameWarehouse(BODEGA)}</Typography>
 
-                                <Autocomplete
-                                    fullWidth
-                                    options={top100Films}
-                                    getOptionLabel={(option) => option.title}
-                                    onChange={(event, value) => {
-                                        handleChangeWarehouse(event, value);
-                                        router.reload();
-                                    }
-                                    } // Add onChange event handler
-                                    renderInput={(params) => <TextField {...params} label="-_-" margin="none"/>}
-                                />
+                                {user.ROLE === "aprobador" &&
+
+                                    <Autocomplete
+                                        fullWidth
+                                        options={top100Films}
+                                        getOptionLabel={(option) => option.title}
+                                        onChange={(event, value) => {
+                                            handleChangeWarehouse(event, value);
+                                            router.reload();
+                                        }
+                                        } // Add onChange event handler
+                                        renderInput={(params) => <TextField {...params} label="-_-" margin="none"/>}
+                                    />
+                                }
+
                             </Grid>
 
                             <Grid item xs={12} sm={7} sx={{mb: 1}}>
@@ -453,19 +486,20 @@ export default function InvoiceDetails({invoice, onDetailsChange}) {
                                 <Typography variant="body2">Forma de pago
                                     actual: {nameFormaPago(FORMADEPAGO)}</Typography>
 
-                                <Autocomplete
-                                    fullWidth
-                                    options={topFormaPago}
-                                    getOptionLabel={(option) => option.title}
-                                    onChange={(event, value) => {
-                                        handleChangePayment(event, value);
-                                        router.reload();
-                                    }}
-                                    renderInput={(params) => <TextField {...params} label="-_-" margin="none"/>}
-                                />
+                                {user.ROLE === "aprobador" &&
+                                    <Autocomplete
+                                        fullWidth
+                                        options={topFormaPago}
+                                        getOptionLabel={(option) => option.title}
+                                        onChange={(event, value) => {
+                                            handleChangePayment(event, value);
+                                            router.reload();
+                                        }}
+                                        renderInput={(params) => <TextField {...params} label="-_-" margin="none"/>}
+                                    />
+                                }
+
                             </Grid>
-
-
                         </Grid>
 
 
@@ -544,9 +578,9 @@ export default function InvoiceDetails({invoice, onDetailsChange}) {
                                         Subtotal
                                     </TableCell>
 
-                                    <TableCell align="right" width={120} sx={{ typography: 'body1' }}>
-                                      <Box sx={{ mt: 2 }} />
-                                      {fCurrency(subtotalTotal)}
+                                    <TableCell align="right" width={120} sx={{typography: 'body1'}}>
+                                        <Box sx={{mt: 2}}/>
+                                        {fCurrency(subtotalTotal)}
                                     </TableCell>
                                 </StyledRowResult>
 
@@ -573,8 +607,8 @@ export default function InvoiceDetails({invoice, onDetailsChange}) {
                                         IVA
                                     </TableCell>
 
-                                    <TableCell align="right" width={120} sx={{ typography: 'body1' }}>
-                                      {fCurrency(ivaTotal)}
+                                    <TableCell align="right" width={120} sx={{typography: 'body1'}}>
+                                        {fCurrency(ivaTotal)}
                                     </TableCell>
                                 </StyledRowResult>
 
@@ -585,8 +619,8 @@ export default function InvoiceDetails({invoice, onDetailsChange}) {
                                         Total
                                     </TableCell>
 
-                                    <TableCell align="right" width={140} sx={{ typography: 'h6' }}>
-                                      {fCurrency(totalConIva)}
+                                    <TableCell align="right" width={140} sx={{typography: 'h6'}}>
+                                        {fCurrency(totalConIva)}
                                     </TableCell>
                                 </StyledRowResult>
                             </TableBody>
@@ -620,62 +654,99 @@ export default function InvoiceDetails({invoice, onDetailsChange}) {
 
                 <Divider sx={{mt: 5}}/>
 
-
-                <Grid container>
-                    <Grid item xs={12} md={12} sx={{py: 3, textAlign: 'center'}}>
-                        <Button onClick={enviarOrdenSAP}>CREAR ORDEN DE VENTA SAP</Button>
+                {user.ROLE === "aprobador" &&
+                    <Grid container>
+                        <Grid item xs={12} md={12} sx={{py: 3, textAlign: 'center'}}>
+                            <Button onClick={enviarOrdenSAP}>CREAR ORDEN DE VENTA SAP</Button>
+                        </Grid>
                     </Grid>
-                </Grid>
+                }
+
+                {user.ROLE === "bodega" &&
+                    <Grid container>
+                        <Grid item xs={12} md={12} sx={{py: 6}}>
+
+                            <TextField
+                                label=" Número de guia."
+                                value={valueGuia}
+                                onChange={handleChangeGuia}
+                            />
+                            <TextField
+                                required
+                                label="Número de factura."
+                                value={valueFactura}
+                                onChange={handleChangeFactura}
+                            />
+                            <TextField
+                                required
+                                label="Valor total."
+                                value={valueValorFactura}
+                                onChange={handleChangeValorFactura}
+                            />
+                            <Button variant="contained" color="success" onClick={() => {
+                                handleChangePedidoFactura();
+                                // router.reload();
+                            }}>
+                                Guardar Factura
+                            </Button>
+
+                        </Grid>
+
+                    </Grid>
+                }
             </Card>
 
-            <MenuPopover
-                open={openPopover}
-                onClose={handleClosePopover}
-                arrow="right-top"
-                sx={{width: 160}}
-            >
-                <MenuItem
-                    onClick={() => {
-                        handleOpenPriceUnit();
-                        handleClosePopover();
-                    }}
-                >
-                    <Iconify icon="eva:edit-fill"/>
-                    Precio Unitario.
-                </MenuItem>
-                <MenuItem
-                    onClick={() => {
-                        handleOpenQty();
-                        handleClosePopover();
-                    }}
-                >
-                    <Iconify icon="eva:edit-fill"/>
-                    Cantidad.
-                </MenuItem>
+            {user.ROLE === "aprobador" &&
 
-                <MenuItem
-                    onClick={() => {
-                        handleOpenDiscountPercentage();
-                        handleClosePopover();
-                    }}
+                <MenuPopover
+                    open={openPopover}
+                    onClose={handleClosePopover}
+                    arrow="right-top"
+                    sx={{width: 160}}
                 >
-                    <Iconify icon="eva:edit-fill"/>
-                    %Desc.
-                </MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            handleOpenPriceUnit();
+                            handleClosePopover();
+                        }}
+                    >
+                        <Iconify icon="eva:edit-fill"/>
+                        Precio Unitario.
+                    </MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            handleOpenQty();
+                            handleClosePopover();
+                        }}
+                    >
+                        <Iconify icon="eva:edit-fill"/>
+                        Cantidad.
+                    </MenuItem>
 
-                <Divider sx={{borderStyle: 'dashed'}}/>
+                    <MenuItem
+                        onClick={() => {
+                            handleOpenDiscountPercentage();
+                            handleClosePopover();
+                        }}
+                    >
+                        <Iconify icon="eva:edit-fill"/>
+                        %Desc.
+                    </MenuItem>
 
-                <MenuItem
-                    onClick={() => {
-                        handleOpenConfirm();
-                        handleClosePopover();
-                    }}
-                    sx={{color: 'error.main'}}
-                >
-                    <Iconify icon="eva:trash-2-outline"/>
-                    Borrar
-                </MenuItem>
-            </MenuPopover>
+                    <Divider sx={{borderStyle: 'dashed'}}/>
+
+                    <MenuItem
+                        onClick={() => {
+                            handleOpenConfirm();
+                            handleClosePopover();
+                        }}
+                        sx={{color: 'error.main'}}
+                    >
+                        <Iconify icon="eva:trash-2-outline"/>
+                        Borrar
+                    </MenuItem>
+                </MenuPopover>
+            }
 
             <ConfirmDialog
                 open={openPriceUnit}
@@ -767,7 +838,7 @@ export const top100Films = [
     {title: 'Cuenca', id: "002"},
     {title: 'Quito', id: "006"},
     {title: 'Guayaquil', id: "015"},
-    {title: 'Manta', id: "020"}
+    {title: 'Manta', id: "024"}
 ]
 
 

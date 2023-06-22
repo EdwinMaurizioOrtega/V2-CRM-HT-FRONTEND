@@ -156,15 +156,15 @@ export default function InvoiceTableRow({
           Ver
         </MenuItem>
 
-        <MenuItem
-          onClick={() => {
-            onEditRow();
-            handleClosePopover();
-          }}
-        >
-          <Iconify icon="eva:edit-fill" />
-          Editar
-        </MenuItem>
+        {/* <MenuItem */}
+        {/*   onClick={() => { */}
+        {/*     onEditRow(); */}
+        {/*     handleClosePopover(); */}
+        {/*   }} */}
+        {/* > */}
+        {/*   <Iconify icon="eva:edit-fill" /> */}
+        {/*   Editar */}
+        {/* </MenuItem> */}
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
