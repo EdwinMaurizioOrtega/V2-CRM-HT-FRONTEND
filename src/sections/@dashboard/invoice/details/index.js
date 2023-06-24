@@ -52,40 +52,9 @@ InvoiceDetails.propTypes = {
     onViewRow: PropTypes.func,
     onDeleteRow: PropTypes.func,
 
-    invoice: PropTypes.shape({
-        items: PropTypes.arrayOf(
-            PropTypes.shape({
-                ID: PropTypes.number.isRequired,
-                PRODUCTO_ID: PropTypes.string.isRequired,
-                NOMBRE: PropTypes.string.isRequired,
-                TIPOPRECIO: PropTypes.string.isRequired,
-                COMENTARIOPRECIO: PropTypes.string.isRequired,
-                DISCOUNTPERCENTSAP: PropTypes.number.isRequired,
-                CANTIDAD: PropTypes.number.isRequired,
-                PRECIOUNITARIOVENTA: PropTypes.number.isRequired,
-                TOTAL: PropTypes.number.isRequired,
-                ID_ORDER: PropTypes.number.isRequired,
-            })
-        ).isRequired,
-        ID: PropTypes.number.isRequired,
-        ESTADO: PropTypes.number.isRequired,
-        FECHACREACION: PropTypes.number.isRequired,
-        CLIENTEID: PropTypes.string.isRequired,
-        Nombres: PropTypes.string.isRequired,
-        Cliente: PropTypes.string.isRequired,
-        Ciudad: PropTypes.string.isRequired,
-        Celular: PropTypes.string.isRequired,
-        Tipo: PropTypes.string.isRequired,
-        VENDEDOR: PropTypes.string.isRequired,
-        BODEGA: PropTypes.string.isRequired,
-        CITY: PropTypes.string.isRequired,
-    }).isRequired,
-
-    onDetailsChange: PropTypes.func.isRequired,
-
 };
 
-export default function InvoiceDetails({invoice, onDetailsChange}) {
+export default function InvoiceDetails({invoice}) {
 
     const router = useRouter();
 
@@ -387,7 +356,21 @@ export default function InvoiceDetails({invoice, onDetailsChange}) {
 
     const handleChangePedidoFactura = async () => {
 
-        console.log('Filanalizar pedido.');
+        // console.log(ID);
+        // console.log('Filanalizar pedido.');
+
+        try {
+            // Actualizar una orden.
+            await axios.put('/hanadb/api/orders/order/facturar', {
+                ID_ORDER: ID,
+                NUMERO_FACTURA: `${valueFactura}`,
+                VALOR_FACTURA: `${valueValorFactura}`,
+                NUMERO_GUIA: `${valueGuia}`
+            });
+        } catch (error) {
+            // Manejar el error de la petición PUT aquí
+            console.error('Error al actualizar la orden:', error);
+        }
 
     }
 
@@ -540,7 +523,7 @@ export default function InvoiceDetails({invoice, onDetailsChange}) {
 
                                         <TableCell align="left">
                                             <Box sx={{maxWidth: 560}}>
-                                                <Typography variant="subtitle2">{row.NOMBRE}</Typography>
+                                                <Typography variant="subtitle2">{row.NOMBRE !== null ? row.NOMBRE : 'VALOR DEL ENVIO'}</Typography>
 
                                                 {/* <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap> */}
                                                 {/*   {row.NOMBRE} */}

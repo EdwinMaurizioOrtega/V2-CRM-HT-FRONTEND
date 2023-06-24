@@ -44,6 +44,8 @@ export default function InvoiceDetailsPage() {
         }
     }, [dispatch, id]);
 
+    console.log(currentInvoice);
+
     return (
         <>
             <Head>
