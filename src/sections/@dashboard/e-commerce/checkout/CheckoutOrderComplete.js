@@ -44,7 +44,7 @@ export default function CheckoutOrderComplete({ open, onReset, onDownloadPDF }) 
           Gracias por hacer el pedido
           <br />
           <br />
-          <Link>01dc1370-3df6-11eb-b378-0242ac130002</Link>
+          {/* <Link>01dc1370-3df6-11eb-b378-0242ac130002</Link> */}
           <br />
           <br />
           Le enviaremos una notificación dentro de los 5 días posteriores al envío.
@@ -67,18 +67,18 @@ export default function CheckoutOrderComplete({ open, onReset, onDownloadPDF }) 
             onClick={onReset}
             startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
           >
-            Seguir comprando
-          </Button>
-
-          <Button
-            fullWidth
-            size="large"
-            variant="contained"
-            startIcon={<Iconify icon="ant-design:file-pdf-filled" />}
-            onClick={onDownloadPDF}
-          >
             Mis pedidos
           </Button>
+
+          {/* <Button */}
+          {/*   fullWidth */}
+          {/*   size="large" */}
+          {/*   variant="contained" */}
+          {/*   startIcon={<Iconify icon="ant-design:file-pdf-filled" />} */}
+          {/*   onClick={onDownloadPDF} */}
+          {/* > */}
+          {/*   Mis pedidos */}
+          {/* </Button> */}
         </Stack>
       </Stack>
     </DialogAnimate>

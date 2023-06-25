@@ -1,196 +1,227 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import {useState} from 'react';
 // @mui
 import {
-  Link,
-  Stack,
-  Button,
-  Divider,
-  Checkbox,
-  TableRow,
-  MenuItem,
-  TableCell,
-  IconButton,
-  Typography,
+    Link,
+    Stack,
+    Button,
+    Divider,
+    Checkbox,
+    TableRow,
+    MenuItem,
+    TableCell,
+    IconButton,
+    Typography,
 } from '@mui/material';
 // utils
-import { fDate } from '../../../../utils/formatTime';
-import { fCurrency } from '../../../../utils/formatNumber';
+import {fDate} from '../../../../utils/formatTime';
+import {fCurrency} from '../../../../utils/formatNumber';
 // components
 import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
-import { CustomAvatar } from '../../../../components/custom-avatar';
+import {CustomAvatar} from '../../../../components/custom-avatar';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
+import {useAuthContext} from "../../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
 InvoiceTableRow.propTypes = {
-  row: PropTypes.object,
-  selected: PropTypes.bool,
-  onEditRow: PropTypes.func,
-  onViewRow: PropTypes.func,
-  onDeleteRow: PropTypes.func,
-  onSelectRow: PropTypes.func,
+    row: PropTypes.object,
+    selected: PropTypes.bool,
+    onEditRow: PropTypes.func,
+    onViewRow: PropTypes.func,
+    onDeleteRow: PropTypes.func,
+    onSelectRow: PropTypes.func,
 };
 
 export default function InvoiceTableRow({
-  row,
-  selected,
-  onSelectRow,
-  onViewRow,
-  onEditRow,
-  onDeleteRow,
-}) {
-  const { ID, ESTADO, FECHACREACION, CLIENTEID, Nombres, Cliente, Ciudad, Celular, Tipo, VENDEDOR, CITY, sent, invoiceNumber, createDate, dueDate, status, invoiceTo, totalPrice } = row;
+                                            row,
+                                            selected,
+                                            onSelectRow,
+                                            onViewRow,
+                                            onEditRow,
+                                            onDeleteRow,
+                                        }) {
 
-  const [openConfirm, setOpenConfirm] = useState(false);
+    const {user} = useAuthContext();
 
-  const [openPopover, setOpenPopover] = useState(null);
+    const {
+        ID,
+        ESTADO,
+        FECHACREACION,
+        CLIENTEID,
+        Nombres,
+        Cliente,
+        Ciudad,
+        Celular,
+        Tipo,
+        VENDEDOR,
+        CITY,
+        DOCNUM,
+        sent,
+        invoiceNumber,
+        createDate,
+        dueDate,
+        status,
+        invoiceTo,
+        totalPrice
+    } = row;
 
-  const handleOpenConfirm = () => {
-    setOpenConfirm(true);
-  };
+    const [openConfirm, setOpenConfirm] = useState(false);
 
-  const handleCloseConfirm = () => {
-    setOpenConfirm(false);
-  };
+    const [openPopover, setOpenPopover] = useState(null);
 
-  const handleOpenPopover = (event) => {
-    setOpenPopover(event.currentTarget);
-  };
+    const handleOpenConfirm = () => {
+        setOpenConfirm(true);
+    };
 
-  const handleClosePopover = () => {
-    setOpenPopover(null);
-  };
+    const handleCloseConfirm = () => {
+        setOpenConfirm(false);
+    };
 
-  return (
-    <>
-      <TableRow hover selected={selected}>
-        <TableCell padding="checkbox">
-          <Checkbox checked={selected} onClick={onSelectRow} />
-        </TableCell>
+    const handleOpenPopover = (event) => {
+        setOpenPopover(event.currentTarget);
+    };
 
-        <TableCell>
-          <Stack direction="row" alignItems="center" spacing={2}>
-            {/* <CustomAvatar name={ID} /> */}
+    const handleClosePopover = () => {
+        setOpenPopover(null);
+    };
 
-            <div>
-              <Typography variant="subtitle2" noWrap>
-                {VENDEDOR}
-              </Typography>
+    return (
+        <>
+            <TableRow hover selected={selected}>
+                <TableCell padding="checkbox">
+                    <Checkbox checked={selected} onClick={onSelectRow}/>
+                </TableCell>
 
-              <Link
-                noWrap
-                variant="body2"
-                onClick={onViewRow}
-                sx={{ color: 'text.disabled', cursor: 'pointer' }}
-              >
-                {`INV-${ID}`}
-              </Link>
-            </div>
-          </Stack>
-        </TableCell>
+                <TableCell>
+                    <Stack direction="row" alignItems="center" spacing={2}>
+                        {/* <CustomAvatar name={ID} /> */}
 
-        <TableCell align="left">{FECHACREACION}</TableCell>
+                        <div>
+                            <Typography variant="subtitle2" noWrap>
+                                {VENDEDOR}
+                            </Typography>
 
-        <TableCell align="left">{CLIENTEID}</TableCell>
+                            <Link
+                                noWrap
+                                variant="body2"
+                                onClick={onViewRow}
+                                sx={{color: 'text.disabled', cursor: 'pointer'}}
+                            >
+                                {`INV-${ID}`}
+                            </Link>
+                        </div>
+                    </Stack>
+                </TableCell>
 
-        <TableCell align="center">{Cliente}</TableCell>
+                <TableCell align="left">{FECHACREACION}</TableCell>
 
-        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {Celular}
-        </TableCell>
-        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {Tipo}
-        </TableCell>
-        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {Ciudad}
-        </TableCell>
+                <TableCell align="left">{CLIENTEID}</TableCell>
 
-        <TableCell align="left">
-          <Label
-            variant="soft"
-            color={
-              (ESTADO === 6 && 'success') ||
-              (ESTADO === 0 && 'warning') ||
-              (ESTADO === 1 && 'error') ||
-              'default'
-            }
-          >
-            {
-              (ESTADO === 6 ? 'Pendiende de aprobar': '') ||
-              (ESTADO === 0 ? 'Por Facturar': '') ||
-              (ESTADO === 1 ? 'Facturado': '') ||
-                'default'
-            }
-          </Label>
-        </TableCell>
-        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {VENDEDOR}
-        </TableCell>
-        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {CITY}
-        </TableCell>
+                <TableCell align="center">{Cliente}</TableCell>
 
-        <TableCell align="right">
-          <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-        </TableCell>
-      </TableRow>
+                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                    {Celular}
+                </TableCell>
+                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                    {Tipo}
+                </TableCell>
+                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                    {Ciudad}
+                </TableCell>
 
-      <MenuPopover
-        open={openPopover}
-        onClose={handleClosePopover}
-        arrow="right-top"
-        sx={{ width: 160 }}
-      >
-        <MenuItem
-          onClick={() => {
-            onViewRow();
-            handleClosePopover();
-          }}
-        >
-          <Iconify icon="eva:eye-fill" />
-          Ver
-        </MenuItem>
+                <TableCell align="left">
+                    <Label
+                        variant="soft"
+                        color={
+                            (ESTADO === 6 && 'success') ||
+                            (ESTADO === 0 && 'warning') ||
+                            (ESTADO === 1 && 'error') ||
+                            'default'
+                        }
+                    >
+                        {
+                            (ESTADO === 6 ? 'Pendiende de aprobar' : '') ||
+                            (ESTADO === 0 ? 'Por Facturar' : '') ||
+                            (ESTADO === 1 ? 'Facturado' : '') ||
+                            'default'
+                        }
+                    </Label>
+                </TableCell>
+                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                    {VENDEDOR}
+                </TableCell>
+                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                    {CITY}
+                </TableCell>
 
-        {/* <MenuItem */}
-        {/*   onClick={() => { */}
-        {/*     onEditRow(); */}
-        {/*     handleClosePopover(); */}
-        {/*   }} */}
-        {/* > */}
-        {/*   <Iconify icon="eva:edit-fill" /> */}
-        {/*   Editar */}
-        {/* </MenuItem> */}
+                <TableCell align="right">
+                    <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
+                        <Iconify icon="eva:more-vertical-fill"/>
+                    </IconButton>
+                </TableCell>
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+                {user.ROLE === "bodega" &&
+                    <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                        {DOCNUM}
+                    </TableCell>
+                }
 
-        <MenuItem
-          onClick={() => {
-            handleOpenConfirm();
-            handleClosePopover();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="eva:trash-2-outline" />
-          Borrar
-        </MenuItem>
-      </MenuPopover>
+            </TableRow>
 
-      <ConfirmDialog
-        open={openConfirm}
-        onClose={handleCloseConfirm}
-        title="Delete"
-        content="Are you sure want to delete?"
-        action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
-            Delete
-          </Button>
-        }
-      />
-    </>
-  );
+            <MenuPopover
+                open={openPopover}
+                onClose={handleClosePopover}
+                arrow="right-top"
+                sx={{width: 160}}
+            >
+                <MenuItem
+                    onClick={() => {
+                        onViewRow();
+                        handleClosePopover();
+                    }}
+                >
+                    <Iconify icon="eva:eye-fill"/>
+                    Ver
+                </MenuItem>
+
+                {/* <MenuItem */}
+                {/*   onClick={() => { */}
+                {/*     onEditRow(); */}
+                {/*     handleClosePopover(); */}
+                {/*   }} */}
+                {/* > */}
+                {/*   <Iconify icon="eva:edit-fill" /> */}
+                {/*   Editar */}
+                {/* </MenuItem> */}
+
+                <Divider sx={{borderStyle: 'dashed'}}/>
+
+                {/* <MenuItem */}
+                {/*   onClick={() => { */}
+                {/*     handleOpenConfirm(); */}
+                {/*     handleClosePopover(); */}
+                {/*   }} */}
+                {/*   sx={{ color: 'error.main' }} */}
+                {/* > */}
+                {/*   <Iconify icon="eva:trash-2-outline" /> */}
+                {/*   Borrar */}
+                {/* </MenuItem> */}
+            </MenuPopover>
+
+            <ConfirmDialog
+                open={openConfirm}
+                onClose={handleCloseConfirm}
+                title="Delete"
+                content="Are you sure want to delete?"
+                action={
+                    <Button variant="contained" color="error" onClick={onDeleteRow}>
+                        Delete
+                    </Button>
+                }
+            />
+        </>
+    );
 }

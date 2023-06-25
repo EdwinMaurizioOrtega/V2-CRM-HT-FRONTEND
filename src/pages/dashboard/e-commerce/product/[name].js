@@ -196,6 +196,15 @@ export default function EcommerceProductDetailsPage() {
                     <Stack direction="row" alignItems="center" justifyContent="space-between">
 
                         <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
+                            MAYORISTAS_MANTA
+                        </Typography>
+                        <Typography variant="subtitle2">{fNumber(product?.MAYORISTAS_MANTA)}</Typography>
+
+                    </Stack>
+
+                    <Stack direction="row" alignItems="center" justifyContent="space-between">
+
+                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
                             SAMSUNG_PORTOVIEJO
                         </Typography>
                         <Typography variant="subtitle2">{fNumber(product?.SAMSUNG_PORTOVIEJO)}</Typography>

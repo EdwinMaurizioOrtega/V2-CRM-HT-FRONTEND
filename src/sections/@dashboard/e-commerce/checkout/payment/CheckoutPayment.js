@@ -86,7 +86,7 @@ const WAREHOUSE_OPTIONS = [
 const PAYMENT_OPTIONS = [
     {
         value: 2,
-        title: 'CONTADO 2 DIAS',
+        title: '2 DIAS',
         description: 'Contado 2 días.',
         icons: [],
     },

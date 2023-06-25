@@ -90,7 +90,7 @@ export default function ShopFilterDrawer({ open, onOpen, onClose, isDefault, onR
         endIcon={<Iconify icon="ic:round-filter-list" />}
         onClick={onOpen}
       >
-        Filters
+        Filtros
       </Button>
 
       <Drawer
@@ -110,7 +110,7 @@ export default function ShopFilterDrawer({ open, onOpen, onClose, isDefault, onR
           justifyContent="space-between"
           sx={{ pl: 2, pr: 1, py: 2 }}
         >
-          <Typography variant="subtitle1">Filters</Typography>
+          <Typography variant="subtitle1">Filtros</Typography>
 
           <IconButton onClick={onClose}>
             <Iconify icon="eva:close-fill" />
@@ -131,83 +131,83 @@ export default function ShopFilterDrawer({ open, onOpen, onClose, isDefault, onR
               <RHFRadioGroup name="category" options={FILTER_CATEGORY_OPTIONS} row={false} />
             </Stack>
 
-            <Stack spacing={1}>
-              <Typography variant="subtitle1"> Color </Typography>
+            {/* <Stack spacing={1}> */}
+            {/*   <Typography variant="subtitle1"> Color </Typography> */}
 
-              <Controller
-                name="colors"
-                control={control}
-                render={({ field }) => (
-                  <ColorMultiPicker
-                    selected={field.value}
-                    colors={FILTER_COLOR_OPTIONS}
-                    onChangeColor={(color) => field.onChange(getSelected(field.value, color))}
-                    sx={{ maxWidth: 36 * 4 }}
-                  />
-                )}
-              />
-            </Stack>
+            {/*   <Controller */}
+            {/*     name="colors" */}
+            {/*     control={control} */}
+            {/*     render={({ field }) => ( */}
+            {/*       <ColorMultiPicker */}
+            {/*         selected={field.value} */}
+            {/*         colors={FILTER_COLOR_OPTIONS} */}
+            {/*         onChangeColor={(color) => field.onChange(getSelected(field.value, color))} */}
+            {/*         sx={{ maxWidth: 36 * 4 }} */}
+            {/*       /> */}
+            {/*     )} */}
+            {/*   /> */}
+            {/* </Stack> */}
 
-            <Stack spacing={1} sx={{ pb: 2 }}>
-              <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>
-                Price
-              </Typography>
+            {/* <Stack spacing={1} sx={{ pb: 2 }}> */}
+            {/*   <Typography variant="subtitle1" sx={{ flexGrow: 1 }}> */}
+            {/*     Price */}
+            {/*   </Typography> */}
 
-              <Stack direction="row" spacing={2}>
-                <InputRange type="min" />
-                <InputRange type="max" />
-              </Stack>
+            {/*   <Stack direction="row" spacing={2}> */}
+            {/*     <InputRange type="min" /> */}
+            {/*     <InputRange type="max" /> */}
+            {/*   </Stack> */}
 
-              <RHFSlider
-                name="priceRange"
-                step={10}
-                min={0}
-                max={200}
-                marks={marksLabel}
-                getAriaValueText={(value) => `$${value}`}
-                valueLabelFormat={(value) => `$${value}`}
-                sx={{ alignSelf: 'center', width: `calc(100% - 20px)` }}
-              />
-            </Stack>
+            {/*   <RHFSlider */}
+            {/*     name="priceRange" */}
+            {/*     step={10} */}
+            {/*     min={0} */}
+            {/*     max={200} */}
+            {/*     marks={marksLabel} */}
+            {/*     getAriaValueText={(value) => `$${value}`} */}
+            {/*     valueLabelFormat={(value) => `$${value}`} */}
+            {/*     sx={{ alignSelf: 'center', width: `calc(100% - 20px)` }} */}
+            {/*   /> */}
+            {/* </Stack> */}
 
-            <Stack spacing={1}>
-              <Typography variant="subtitle1">Rating</Typography>
+            {/* <Stack spacing={1}> */}
+            {/*   <Typography variant="subtitle1">Rating</Typography> */}
 
-              <Controller
-                name="rating"
-                control={control}
-                render={({ field }) => (
-                  <RadioGroup {...field}>
-                    {FILTER_RATING_OPTIONS.map((item, index) => (
-                      <FormControlLabel
-                        key={item}
-                        value={item}
-                        control={
-                          <Radio
-                            disableRipple
-                            color="default"
-                            icon={<Rating readOnly value={4 - index} />}
-                            checkedIcon={<Rating readOnly value={4 - index} />}
-                            sx={{
-                              '&:hover': { bgcolor: 'transparent' },
-                            }}
-                          />
-                        }
-                        label="& Up"
-                        sx={{
-                          my: 0.5,
-                          borderRadius: 1,
-                          '&:hover': { opacity: 0.48 },
-                          ...(field.value.includes(item) && {
-                            bgcolor: 'action.selected',
-                          }),
-                        }}
-                      />
-                    ))}
-                  </RadioGroup>
-                )}
-              />
-            </Stack>
+            {/*   <Controller */}
+            {/*     name="rating" */}
+            {/*     control={control} */}
+            {/*     render={({ field }) => ( */}
+            {/*       <RadioGroup {...field}> */}
+            {/*         {FILTER_RATING_OPTIONS.map((item, index) => ( */}
+            {/*           <FormControlLabel */}
+            {/*             key={item} */}
+            {/*             value={item} */}
+            {/*             control={ */}
+            {/*               <Radio */}
+            {/*                 disableRipple */}
+            {/*                 color="default" */}
+            {/*                 icon={<Rating readOnly value={4 - index} />} */}
+            {/*                 checkedIcon={<Rating readOnly value={4 - index} />} */}
+            {/*                 sx={{ */}
+            {/*                   '&:hover': { bgcolor: 'transparent' }, */}
+            {/*                 }} */}
+            {/*               /> */}
+            {/*             } */}
+            {/*             label="& Up" */}
+            {/*             sx={{ */}
+            {/*               my: 0.5, */}
+            {/*               borderRadius: 1, */}
+            {/*               '&:hover': { opacity: 0.48 }, */}
+            {/*               ...(field.value.includes(item) && { */}
+            {/*                 bgcolor: 'action.selected', */}
+            {/*               }), */}
+            {/*             }} */}
+            {/*           /> */}
+            {/*         ))} */}
+            {/*       </RadioGroup> */}
+            {/*     )} */}
+            {/*   /> */}
+            {/* </Stack> */}
           </Stack>
         </Scrollbar>
 
@@ -228,7 +228,7 @@ export default function ShopFilterDrawer({ open, onOpen, onClose, isDefault, onR
               onClick={onResetFilter}
               startIcon={<Iconify icon="eva:trash-2-outline" />}
             >
-              Clear
+              Limpiar
             </Button>
           </Badge>
         </Box>

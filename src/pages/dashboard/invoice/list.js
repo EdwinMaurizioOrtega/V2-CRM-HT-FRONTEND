@@ -81,6 +81,7 @@ const TABLE_HEAD = [
   { id: 'status', label: 'Vendedor', align: 'left' },
   { id: 'status', label: 'Ciudad Vendedor', align: 'left' },
   { id: 'status', label: 'Detalle', align: 'left' },
+
   { id: '' },
 ];
 
@@ -340,41 +341,41 @@ export default function InvoiceListPage() {
                 color={theme.palette.info.main}
               />
 
-              <InvoiceAnalytic
-                title="Paid"
-                total={getLengthByStatus('paid')}
-                percent={getPercentByStatus('paid')}
-                price={getTotalPriceByStatus('paid')}
-                icon="eva:checkmark-circle-2-fill"
-                color={theme.palette.success.main}
-              />
+              {/* <InvoiceAnalytic */}
+              {/*   title="Paid" */}
+              {/*   total={getLengthByStatus('paid')} */}
+              {/*   percent={getPercentByStatus('paid')} */}
+              {/*   price={getTotalPriceByStatus('paid')} */}
+              {/*   icon="eva:checkmark-circle-2-fill" */}
+              {/*   color={theme.palette.success.main} */}
+              {/* /> */}
 
-              <InvoiceAnalytic
-                title="Unpaid"
-                total={getLengthByStatus('unpaid')}
-                percent={getPercentByStatus('unpaid')}
-                price={getTotalPriceByStatus('unpaid')}
-                icon="eva:clock-fill"
-                color={theme.palette.warning.main}
-              />
+              {/* <InvoiceAnalytic */}
+              {/*   title="Unpaid" */}
+              {/*   total={getLengthByStatus('unpaid')} */}
+              {/*   percent={getPercentByStatus('unpaid')} */}
+              {/*   price={getTotalPriceByStatus('unpaid')} */}
+              {/*   icon="eva:clock-fill" */}
+              {/*   color={theme.palette.warning.main} */}
+              {/* /> */}
 
-              <InvoiceAnalytic
-                title="Overdue"
-                total={getLengthByStatus('overdue')}
-                percent={getPercentByStatus('overdue')}
-                price={getTotalPriceByStatus('overdue')}
-                icon="eva:bell-fill"
-                color={theme.palette.error.main}
-              />
+              {/* <InvoiceAnalytic */}
+              {/*   title="Overdue" */}
+              {/*   total={getLengthByStatus('overdue')} */}
+              {/*   percent={getPercentByStatus('overdue')} */}
+              {/*   price={getTotalPriceByStatus('overdue')} */}
+              {/*   icon="eva:bell-fill" */}
+              {/*   color={theme.palette.error.main} */}
+              {/* /> */}
 
-              <InvoiceAnalytic
-                title="Draft"
-                total={getLengthByStatus('draft')}
-                percent={getPercentByStatus('draft')}
-                price={getTotalPriceByStatus('draft')}
-                icon="eva:file-fill"
-                color={theme.palette.text.secondary}
-              />
+              {/* <InvoiceAnalytic */}
+              {/*   title="Draft" */}
+              {/*   total={getLengthByStatus('draft')} */}
+              {/*   percent={getPercentByStatus('draft')} */}
+              {/*   price={getTotalPriceByStatus('draft')} */}
+              {/*   icon="eva:file-fill" */}
+              {/*   color={theme.palette.text.secondary} */}
+              {/* /> */}
             </Stack>
           </Scrollbar>
         </Card>
@@ -490,7 +491,7 @@ export default function InvoiceListPage() {
                         onSelectRow={() => onSelectRow(row.ID)}
                         onViewRow={() => handleViewRow(row.ID)}
                         // onEditRow={() => handleEditRow(row.ID)}
-                        onDeleteRow={() => handleDeleteRow(row.ID)}
+                        // onDeleteRow={() => handleDeleteRow(row.ID)}
                       />
                     ))}
 

@@ -12,7 +12,7 @@ import {
     TableHead,
     TableCell,
     Typography,
-    TableContainer, IconButton, MenuItem, Button, Stack, TextField, Autocomplete,
+    TableContainer, IconButton, MenuItem, Button, Stack, TextField, Autocomplete, Snackbar, Alert,
 } from '@mui/material';
 
 import Link from 'next/link';
@@ -35,6 +35,11 @@ import {useTable} from "../../../../components/table";
 import axios from "../../../../utils/axios";
 import {Block} from "../../../_examples/Block";
 import {useAuthContext} from "../../../../auth/useAuthContext";
+
+import React from 'react';
+import {useSnackbar} from "../../../../components/snackbar";
+import {PATH_DASHBOARD} from "../../../../routes/paths";
+
 
 // ----------------------------------------------------------------------
 
@@ -77,6 +82,8 @@ export default function InvoiceDetails({invoice}) {
     const [openDiscountPercentage, setOpenDiscountPercentage] = useState(false);
 
     const [openPopover, setOpenPopover] = useState(null);
+
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     const handleOpenDiscountPercentage = () => {
         setOpenDiscountPercentage(true);
@@ -346,6 +353,8 @@ export default function InvoiceDetails({invoice}) {
 
             });
 
+            router(PATH_DASHBOARD.invoice.list);
+
         } catch (error) {
             // Manejar el error de la petición PUT aquí
             console.error('Error al actualizar la orden:', error);
@@ -359,17 +368,25 @@ export default function InvoiceDetails({invoice}) {
         // console.log(ID);
         // console.log('Filanalizar pedido.');
 
-        try {
-            // Actualizar una orden.
-            await axios.put('/hanadb/api/orders/order/facturar', {
-                ID_ORDER: ID,
-                NUMERO_FACTURA: `${valueFactura}`,
-                VALOR_FACTURA: `${valueValorFactura}`,
-                NUMERO_GUIA: `${valueGuia}`
-            });
-        } catch (error) {
-            // Manejar el error de la petición PUT aquí
-            console.error('Error al actualizar la orden:', error);
+        if (valueFactura || valueValorFactura) {
+            try {
+                // Actualizar una orden.
+                await axios.put('/hanadb/api/orders/order/facturar', {
+                    ID_ORDER: ID,
+                    NUMERO_FACTURA: `${valueFactura}`,
+                    VALOR_FACTURA: `${valueValorFactura}`,
+                    NUMERO_GUIA: `${valueGuia}`
+                });
+
+                router.push('/dashboard/invoice/list/');
+
+            } catch (error) {
+                // Manejar el error de la petición PUT aquí
+                console.error('Error al actualizar la orden:', error);
+            }
+
+        } else {
+            enqueueSnackbar('Los campos con * son obligatorios.', { variant: 'error' })
         }
 
     }
@@ -523,7 +540,8 @@ export default function InvoiceDetails({invoice}) {
 
                                         <TableCell align="left">
                                             <Box sx={{maxWidth: 560}}>
-                                                <Typography variant="subtitle2">{row.NOMBRE !== null ? row.NOMBRE : 'VALOR DEL ENVIO'}</Typography>
+                                                <Typography
+                                                    variant="subtitle2">{row.NOMBRE !== null ? row.NOMBRE : 'VALOR DEL ENVIO'}</Typography>
 
                                                 {/* <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap> */}
                                                 {/*   {row.NOMBRE} */}
@@ -668,7 +686,6 @@ export default function InvoiceDetails({invoice}) {
                             />
                             <Button variant="contained" color="success" onClick={() => {
                                 handleChangePedidoFactura();
-                                // router.reload();
                             }}>
                                 Guardar Factura
                             </Button>

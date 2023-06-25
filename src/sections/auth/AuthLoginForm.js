@@ -29,13 +29,13 @@ export default function AuthLoginForm() {
   });
 
   const defaultValues = {
-    email: 'edwin.maurizio.ortega@gmail.com',
+    email: 'sistemas@hipertronics.us',
     password: ',2023;MongoDB',
   };
 
   const methods = useForm({
     resolver: yupResolver(LoginSchema),
-    defaultValues,
+    //defaultValues,
   });
 
   const {

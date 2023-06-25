@@ -40,9 +40,9 @@ export default function Login() {
         </Tooltip>
       </Stack>
 
-      <Alert severity="info" sx={{ mb: 3 }}>
-        Use email : <strong>edwin.maurizio.ortega@gmail.com</strong> / password :<strong> ,2023;MongoDB</strong>
-      </Alert>
+      {/* <Alert severity="info" sx={{ mb: 3 }}> */}
+      {/*   Use email : <strong>sistemas@hipertronics.us</strong> / password :<strong> ,2023;MongoDB</strong> */}
+      {/* </Alert> */}
 
       <AuthLoginForm />
 

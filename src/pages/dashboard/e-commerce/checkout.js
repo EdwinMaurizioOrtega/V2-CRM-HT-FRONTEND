@@ -145,7 +145,7 @@ export default function EcommerceCheckoutPage() {
             });
 
             dispatch(resetCart());
-            replace(PATH_DASHBOARD.eCommerce.shop);
+            replace(PATH_DASHBOARD.invoice.list);
 
         }
     };

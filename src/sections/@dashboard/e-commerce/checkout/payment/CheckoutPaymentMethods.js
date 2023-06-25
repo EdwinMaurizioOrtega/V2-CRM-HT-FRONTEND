@@ -64,7 +64,14 @@ export default function CheckoutPaymentMethods({paymentOptions, onApplyMethod, c
                                                 onApplyMethod(Number(value));
                                             }}
                                 >
-                                    <Stack spacing={3} sx={{width: 1}}>
+                                    <Box
+                                        gap={2}
+                                        display="grid"
+                                        gridTemplateColumns={{
+                                            xs: 'repeat(2, 1fr)',
+                                            sm: 'repeat(4, 1fr)',
+                                        }}
+                                    >
                                         {paymentOptions.map((option) => (
                                             <PaymentOption
                                                 key={option.title}
@@ -78,7 +85,7 @@ export default function CheckoutPaymentMethods({paymentOptions, onApplyMethod, c
                                                 onOpen={handleOpen}
                                             />
                                         ))}
-                                    </Stack>
+                                    </Box>
                                 </RadioGroup>
 
                                 {!!error && (
