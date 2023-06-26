@@ -149,7 +149,7 @@ const navConfig = [
 
   // DEMO MENU STATES
   {
-    subheader: 'Other cases',
+    subheader: '-_-',
     items: [
       {
         // default roles : All roles can see this entry.

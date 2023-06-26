@@ -30,7 +30,7 @@ export default function NavDocs() {
 
       <div>
         <Typography gutterBottom variant="subtitle1">
-          {`${translate('docs.hi')}, ${user?.displayName}`}
+          {`${translate('docs.hi')}, ${user?.DISPLAYNAME}`}
         </Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary', whiteSpace: 'pre-line' }}>
@@ -38,8 +38,9 @@ export default function NavDocs() {
         </Typography>
       </div>
 
-      <Button href={PATH_DOCS.root} target="_blank" rel="noopener" variant="contained">
-        {`${translate('docs.documentation')}`}
+      <Button href="https://chat.whatsapp.com/JSLQG7XaGCT1wq7wLNbWJl" target="_blank" rel="noopener" variant="contained">
+          WhatsApp
+        {/* {`${translate('docs.documentation')}`} */}
       </Button>
     </Stack>
   );
