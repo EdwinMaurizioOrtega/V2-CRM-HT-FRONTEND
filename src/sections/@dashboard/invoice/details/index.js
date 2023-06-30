@@ -175,11 +175,20 @@ export default function InvoiceDetails({invoice}) {
 
         try {
             // Actualizar una orden.
-            await axios.put('/hanadb/api/orders/order/detail/priceunit', {
+           const response = await axios.put('/hanadb/api/orders/order/detail/priceunit', {
                 ID_DETALLE_ORDEN: selected.ID,
                 NEW_PRICE_UNIT: valueNew
 
             });
+
+            console.log("Orden actualizada correctamente.");
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+                router.reload();
+            }
+
         } catch (error) {
             // Manejar el error de la petición PUT aquí
             console.error('Error al actualizar la orden:', error);
@@ -194,11 +203,20 @@ export default function InvoiceDetails({invoice}) {
 
         try {
             // Actualizar una orden.
-            await axios.put('/hanadb/api/orders/order/detail/quantity', {
+            const response = await axios.put('/hanadb/api/orders/order/detail/quantity', {
                 ID_DETALLE_ORDEN: selected.ID,
                 NEW_QUANTITY: valueNew
 
             });
+
+            console.log("Orden actualizada correctamente.");
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+                router.reload();
+            }
+
         } catch (error) {
             // Manejar el error de la petición PUT aquí
             console.error('Error al actualizar la orden:', error);
@@ -213,11 +231,20 @@ export default function InvoiceDetails({invoice}) {
 
         try {
             // Actualizar una orden.
-            await axios.put('/hanadb/api/orders/order/detail/discount', {
+            const response = await axios.put('/hanadb/api/orders/order/detail/discount', {
                 ID_DETALLE_ORDEN: selected.ID,
                 NEW_DISCOUNT: valueNew
 
             });
+
+            console.log("Orden actualizada correctamente.");
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+                router.reload();
+            }
+
         } catch (error) {
             // Manejar el error de la petición PUT aquí
             console.error('Error al actualizar la orden:', error);
@@ -227,7 +254,7 @@ export default function InvoiceDetails({invoice}) {
 
     const handleChangeDelete = async () => {
         try {
-            await axios.delete('/hanadb/api/orders/order/detail/delete', {
+           const response = await axios.delete('/hanadb/api/orders/order/detail/delete', {
                 params: {
                     ID: selected.ID
                 }
@@ -235,6 +262,15 @@ export default function InvoiceDetails({invoice}) {
 
             // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
             console.log('La orden se eliminó correctamente');
+
+            console.log("Orden actualizada correctamente.");
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+                router.reload();
+            }
+
         } catch (error) {
             // Manejar el error de la petición DELETE aquí
             console.error('Error al eliminar la orden:', error);
@@ -244,15 +280,27 @@ export default function InvoiceDetails({invoice}) {
 
     // Cambiar de bodega en la base de datos GRUPO_EMPRESARIAL_HT
     const handleChangeWarehouse = async (event, value) => {
-        console.log(value.id); // Log the selected element
-        console.log(ID); // Log ID de la orden
+
         try {
+
+            console.log("Cambio de bodega.")
+            console.log(value.id); // Log the selected element
+            console.log(ID); // Log ID de la orden
+
             // Actualizar una orden.
-            await axios.put('/hanadb/api/orders/order/change_warehouse', {
+            const response = await axios.put('/hanadb/api/orders/order/change_warehouse', {
                 ID_ORDER: ID,
                 NEW_WAREHOUSE: value.id
 
             });
+
+            console.log("Orden actualizada correctamente.");
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+                router.reload();
+            }
 
         } catch (error) {
             // Manejar el error de la petición PUT aquí
@@ -262,14 +310,23 @@ export default function InvoiceDetails({invoice}) {
 
     // Cambiar la forma de pago en la base de datos GRUPO_EMPRESARIAL_HT
     const handleChangePayment = async (event, value) => {
-        console.log(value.id); // Log the selected element
-        console.log(ID); // Log ID de la orden
+
         try {
+            console.log(value.id); // Log the selected element
+            console.log(ID); // Log ID de la orden
             // Actualizar una orden.
-            await axios.put('/hanadb/api/orders/order/change_payment', {
+            const response = await axios.put('/hanadb/api/orders/order/change_payment', {
                 ID_ORDER: ID,
                 NEW_PAYMENT: value.id
             });
+
+            console.log("Orden actualizada correctamente.");
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+                router.reload();
+            }
 
         } catch (error) {
             // Manejar el error de la petición PUT aquí
@@ -347,13 +404,19 @@ export default function InvoiceDetails({invoice}) {
 
         try {
             // Actualizar una orden.
-            await axios.post('/hanadb/api/orden_venta_sap', {
+            const response = await axios.post('/hanadb/api/orden_venta_sap', {
                 ID_ORDER: ID,
                 ID_USER: user.ID
 
             });
 
-            router(PATH_DASHBOARD.invoice.list);
+            console.log("Orden Creada en el SAP.");
+            console.log("Código de estado:", response.status);
+
+            // Se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+                router(PATH_DASHBOARD.invoice.list);
+            }
 
         } catch (error) {
             // Manejar el error de la petición PUT aquí
@@ -371,14 +434,21 @@ export default function InvoiceDetails({invoice}) {
         if (valueFactura || valueValorFactura) {
             try {
                 // Actualizar una orden.
-                await axios.put('/hanadb/api/orders/order/facturar', {
+                const response = await axios.put('/hanadb/api/orders/order/facturar', {
                     ID_ORDER: ID,
                     NUMERO_FACTURA: `${valueFactura}`,
                     VALOR_FACTURA: `${valueValorFactura}`,
                     NUMERO_GUIA: `${valueGuia}`
                 });
 
-                router.push('/dashboard/invoice/list/');
+
+                console.log("Orden Facturada.");
+                console.log("Código de estado:", response.status);
+
+                // Se completó con éxito (código de estado 200)
+                if (response.status === 200) {
+                    router.push('/dashboard/invoice/list/');
+                }
 
             } catch (error) {
                 // Manejar el error de la petición PUT aquí
@@ -472,9 +542,7 @@ export default function InvoiceDetails({invoice}) {
                                         getOptionLabel={(option) => option.title}
                                         onChange={(event, value) => {
                                             handleChangeWarehouse(event, value);
-                                            router.reload();
-                                        }
-                                        } // Add onChange event handler
+                                        }} // Add onChange event handler
                                         renderInput={(params) => <TextField {...params} label="-_-" margin="none"/>}
                                     />
                                 }
@@ -493,7 +561,6 @@ export default function InvoiceDetails({invoice}) {
                                         getOptionLabel={(option) => option.title}
                                         onChange={(event, value) => {
                                             handleChangePayment(event, value);
-                                            router.reload();
                                         }}
                                         renderInput={(params) => <TextField {...params} label="-_-" margin="none"/>}
                                     />
@@ -762,7 +829,6 @@ export default function InvoiceDetails({invoice}) {
                         />
                         <Button variant="contained" color="error" onClick={() => {
                             handleChangePriceUnit();
-                            router.reload();
                         }}
                         >
                             Cambiar P.U.
@@ -785,7 +851,6 @@ export default function InvoiceDetails({invoice}) {
                         />
                         <Button variant="contained" color="error" onClick={() => {
                             handleChangeQuantity();
-                            router.reload();
                         }}>
                             Cambiar Qty.
                         </Button>
@@ -807,7 +872,6 @@ export default function InvoiceDetails({invoice}) {
                         />
                         <Button variant="contained" color="error" onClick={() => {
                             handleChangeDiscount();
-                            router.reload();
                         }}>
                             Cambiar Porcentaje.
                         </Button>
@@ -823,7 +887,6 @@ export default function InvoiceDetails({invoice}) {
                 action={
                     <Button variant="contained" color="error" onClick={() => {
                         handleChangeDelete();
-                        router.reload();
                     }}>
                         Borrar
                     </Button>
