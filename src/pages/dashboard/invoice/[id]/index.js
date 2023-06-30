@@ -54,7 +54,7 @@ export default function InvoiceDetailsPage() {
 
             <Container maxWidth={themeStretch ? false : 'lg'}>
                 <CustomBreadcrumbs
-                    heading="Invoice Details"
+                    heading="Detalle Orden"
                     links={[
                         {name: 'Dashboard', href: PATH_DASHBOARD.root},
                         {

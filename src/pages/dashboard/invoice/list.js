@@ -299,7 +299,7 @@ export default function InvoiceListPage() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Invoice List"
+          heading="Lista Ordenes"
           links={[
             {
               name: 'Dashboard',
@@ -313,16 +313,16 @@ export default function InvoiceListPage() {
               name: 'List',
             },
           ]}
-          action={
-            <Button
-              component={NextLink}
-              href={PATH_DASHBOARD.invoice.new}
-              variant="contained"
-              startIcon={<Iconify icon="eva:plus-fill" />}
-            >
-              New Invoice
-            </Button>
-          }
+          // action={
+          //   <Button
+          //     component={NextLink}
+          //     href={PATH_DASHBOARD.invoice.new}
+          //     variant="contained"
+          //     startIcon={<Iconify icon="eva:plus-fill" />}
+          //   >
+          //     New Invoice
+          //   </Button>
+          // }
         />
 
         <Card sx={{ mb: 5 }}>
