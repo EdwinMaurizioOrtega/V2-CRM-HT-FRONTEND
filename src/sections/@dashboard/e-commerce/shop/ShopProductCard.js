@@ -165,7 +165,10 @@ export default function ShopProductCard({product}) {
                     {/* <ColorPreview colors={colors} /> */}
 
                     <Stack direction="row" spacing={0.5} sx={{typography: 'subtitle1'}}>
-                        Stock Total: &nbsp;<Box component="span">{fNumber(TOTAL)}</Box>
+                        Stock:&nbsp;<Box component="span">{fNumber(TOTAL)}</Box>
+                    </Stack>
+                    <Stack direction="row" spacing={0.5} sx={{typography: 'subtitle1'}}>
+                        SAP:&nbsp;<Box component="span">{CODIGO}</Box>
                     </Stack>
                 </Stack>
             </Stack>

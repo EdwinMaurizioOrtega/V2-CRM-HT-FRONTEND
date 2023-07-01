@@ -19,11 +19,11 @@ export default function SearchNotFound({ query, sx, ...other }) {
       {...other}
     >
       <Typography variant="h6" paragraph>
-        Not found
+        Buscando...
       </Typography>
 
       <Typography variant="body2">
-          No se encontraron resultados parar &nbsp;
+          resultados para: &nbsp;
         <strong>&quot;{query}&quot;</strong>.
         <br /> Intente verificar errores tipográficos o usar palabras completas.
       </Typography>
