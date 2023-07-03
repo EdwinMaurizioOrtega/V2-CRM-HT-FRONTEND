@@ -59,7 +59,7 @@ export default function Header() {
             underline="none"
             sx={{ ml: 1 }}
           >
-            <Label color="info"> v 20.06.2023 </Label>
+            <Label color="info"> V1 Beta </Label>
           </Link>
 
           <Box sx={{ flexGrow: 1 }} />
