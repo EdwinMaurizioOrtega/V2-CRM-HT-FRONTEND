@@ -53,6 +53,7 @@ import { ThemeSettings, SettingsProvider } from '../components/settings';
 // https://docs.minimals.cc/authentication/js-version
 
 import { AuthProvider } from '../auth/JwtContext';
+import {useEffect} from "react";
 // import { AuthProvider } from '../auth/Auth0Context';
 // import { AuthProvider } from '../auth/FirebaseContext';
 // import { AuthProvider } from '../auth/AwsCognitoContext';
@@ -68,6 +69,22 @@ MyApp.propTypes = {
 };
 
 export default function MyApp(props) {
+
+  //Registrar el Service worker
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+          .then(function(registration) {
+            // Registro exitoso
+            console.log('Service Worker registrado con éxito:', registration.scope);
+          })
+          .catch(function(error) {
+            // Error en el registro
+            console.log('Error al registrar el Service Worker:', error);
+          });
+    }
+  }, []);
+
   const { Component, pageProps, emotionCache = clientSideEmotionCache } = props;
 
   const getLayout = Component.getLayout ?? ((page) => page);

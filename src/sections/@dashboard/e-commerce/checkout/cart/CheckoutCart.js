@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
-import sum from 'lodash/sum';
-// next
+import { sum } from 'lodash';// next
 import NextLink from 'next/link';
 // @mui
 import { Grid, Card, Button, CardHeader, Typography } from '@mui/material';
@@ -34,7 +33,7 @@ export default function CheckoutCart({
 }) {
   const { cart, total, discount, subtotal, iva } = checkout;
 
-  const totalItems = sum(cart.map((item) => item.quantity));
+  const totalItems = sum(cart.map((item) => +item.quantity));
 
   const isEmptyCart = !cart.length;
 

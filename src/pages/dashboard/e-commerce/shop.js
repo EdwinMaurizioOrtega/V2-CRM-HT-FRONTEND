@@ -38,7 +38,10 @@ export default function EcommerceShopPage() {
 
   const dispatch = useDispatch();
 
-  const { products, checkout } = useSelector((state) => state.product);
+  const { checkout } = useSelector((state) => state.product);
+  //cache
+  const [products, setProducts] = useState([]);
+
 
   const [openFilter, setOpenFilter] = useState(false);
 
@@ -72,10 +75,45 @@ export default function EcommerceShopPage() {
   const values = watch();
 
   const dataFiltered = applyFilter(products, values);
+  //
+  // useEffect(() => {
+  //   dispatch(getProducts());
+  // }, [dispatch]);
+  //
+
 
   useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
+    const fetchData = async () => {
+      try {
+        const cache = await caches.open('cache-crm');
+        const response = await cache.match('https://crm.lidenar.com/hanadb/api/products');
+
+        if (response) {
+          // Si hay una respuesta en la caché, se obtiene su contenido
+          const cachedData = await response.json();
+          setProducts(cachedData.products);
+          console.log(cachedData);
+        }
+
+        // Independientemente de si hay una respuesta en la caché o no, se realiza la solicitud de red
+        const networkResponse = await fetch('https://crm.lidenar.com/hanadb/api/products');
+        const data = await networkResponse.json();
+
+        // Se almacena la respuesta de red en la caché
+        await cache.put('https://crm.lidenar.com/hanadb/api/products', new Response(JSON.stringify(data)));
+
+        // Si había una respuesta en la caché, los productos ya se establecieron en el estado
+        // Si no había respuesta en la caché, ahora se establecen los productos con los datos de la respuesta de red
+        setProducts(data.products);
+        console.log(data);
+      } catch (error) {
+        console.error('Error al obtener los datos:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
 
   const handleResetFilter = () => {
     reset();

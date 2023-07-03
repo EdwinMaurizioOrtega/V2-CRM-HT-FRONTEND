@@ -63,7 +63,7 @@ const slice = createSlice({
         getCart(state, action) {
             const cart = action.payload;
 
-            const totalItems = sum(cart.map((product) => product.quantity));
+            const totalItems = sum(cart.map((product) => +product.quantity));
             const subtotal = sum(cart.map((product) => product.price * product.quantity));
             const iva = subtotal * 0.12;
             state.checkout.cart = cart;
@@ -99,7 +99,8 @@ const slice = createSlice({
                 });
             }
             state.checkout.cart = uniqBy([...state.checkout.cart, newProduct], 'CODIGO');
-            state.checkout.totalItems = sum(state.checkout.cart.map((product) => product.quantity));
+            //El operador + antes de item.quantity convierte el valor de item.quantity a un número.
+            state.checkout.totalItems = sum(state.checkout.cart.map((product) => +product.quantity));
         },
 
         deleteCart(state, action) {

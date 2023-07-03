@@ -218,7 +218,7 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
                             </Link>
                         }
                         sx={{
-                            maxWidth: 96,
+                            maxWidth: '60%',
                             '& .MuiFormHelperText-root': {
                                 mx: 0,
                                 mt: 1,
@@ -240,22 +240,30 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
                     </Typography>
 
                     <Stack spacing={1}>
-                        <IncrementerButton
-                          name="quantity"
-                          quantity={values.quantity}
-                          disabledDecrease={values.quantity <= 1}
-                          disabledIncrease={values.quantity >= 100}
-                          onIncrease={() => setValue('quantity', values.quantity + 1)}
-                          onDecrease={() => setValue('quantity', values.quantity - 1)}
-                        />
 
-                        <Typography
-                          variant="caption"
-                          component="div"
-                          sx={{ textAlign: 'right', color: 'text.secondary' }}
-                        >
-                            Disponible: ...
-                        </Typography>
+                        <RHFTextField
+                            name="quantity"
+                            onChange={(event) => setValue('quantity', Number(event.target.value))}
+                            InputProps={{
+                                type: 'number',
+                            }}
+                        />
+                        {/* <IncrementerButton */}
+                        {/*   name="quantity" */}
+                        {/*   quantity={values.quantity} */}
+                        {/*   disabledDecrease={values.quantity <= 1} */}
+                        {/*   disabledIncrease={values.quantity >= 100} */}
+                        {/*   onIncrease={() => setValue('quantity', values.quantity + 1)} */}
+                        {/*   onDecrease={() => setValue('quantity', values.quantity - 1)} */}
+                        {/* /> */}
+
+                        {/* <Typography */}
+                        {/*   variant="caption" */}
+                        {/*   component="div" */}
+                        {/*   sx={{ textAlign: 'right', color: 'text.secondary' }} */}
+                        {/* > */}
+                        {/*     Disponible: ... */}
+                        {/* </Typography> */}
                     </Stack>
                 </Stack>
 

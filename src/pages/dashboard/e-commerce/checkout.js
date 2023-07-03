@@ -3,7 +3,7 @@ import {useEffect} from 'react';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 // @mui
-import {Grid, Container} from '@mui/material';
+import {Grid, Container, Button} from '@mui/material';
 // routes
 import {format} from "date-fns";
 import {PATH_DASHBOARD} from '../../../routes/paths';
@@ -133,22 +133,32 @@ export default function EcommerceCheckoutPage() {
 
     const handleReset = async () => {
         if (completed) {
-
             console.log('DATA', checkout);
 
-            // Crear un cliente.
-            await axios.post('/hanadb/api/orders/order', {
+            try {
+                const response = await axios.post('/hanadb/api/orders/order', {
+                    checkoutData: checkout,
+                    checkoutUser: user
+                });
 
-                checkoutData: checkout,
-                checkoutUser: user
-
-            });
-
-            dispatch(resetCart());
-            replace(PATH_DASHBOARD.invoice.list);
-
+                console.log('Status crear orden SAP:', response.status);
+                if (response.status === 201) {
+                    await Promise.all([dispatch(resetCart()), replace(PATH_DASHBOARD.invoice.list)]);
+                } else {
+                    console.log('La solicitud no devolvió un estado 201.');
+                    // Realizar alguna acción adicional en caso de que el estado de respuesta no sea 201
+                }
+            } catch (error) {
+                console.log('Error al crear la orden:', error);
+                // Manejar el error al crear la orden
+            }
         }
     };
+
+
+    const vaciarcarrito = () => {
+        dispatch(resetCart());
+    }
 
     return (
         <>
@@ -174,6 +184,8 @@ export default function EcommerceCheckoutPage() {
                         <CheckoutSteps activeStep={activeStep} steps={STEPS}/>
                     </Grid>
                 </Grid>
+
+                <Button variant="contained" onClick={vaciarcarrito}>Vaciar Carrito</Button>
 
                 {completed ? (
                     <CheckoutOrderComplete open={completed} onReset={handleReset} onDownloadPDF={() => {
