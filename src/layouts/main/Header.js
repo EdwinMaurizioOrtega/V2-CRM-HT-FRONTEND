@@ -66,7 +66,7 @@ export default function Header() {
 
           {isDesktop && <NavDesktop isOffset={isOffset} data={navConfig} />}
 
-          <Button variant="contained" target="_blank" rel="noopener" href={PATH_MINIMAL_ON_STORE}>
+          <Button variant="contained" rel="noopener" href={PATH_MINIMAL_ON_STORE}>
             Vendedores
           </Button>
 
