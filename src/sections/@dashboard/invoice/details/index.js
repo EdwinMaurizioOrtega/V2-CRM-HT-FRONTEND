@@ -585,7 +585,7 @@ export default function InvoiceDetails({invoice}) {
                                 <TableRow>
                                     <TableCell width={40}>#</TableCell>
                                     <TableCell align="left">Descripción</TableCell>
-                                    {/* <TableCell align="left">Tipo Precio</TableCell> */}
+                                    <TableCell align="left">Tipo Precio</TableCell>
                                     <TableCell align="left">Comentario Precio</TableCell>
                                     <TableCell align="left">%Desc.</TableCell>
                                     <TableCell align="left">Cantidad</TableCell>
@@ -616,7 +616,7 @@ export default function InvoiceDetails({invoice}) {
                                             </Box>
                                         </TableCell>
 
-                                        {/* <TableCell align="left">{row.TIPOPRECIO}</TableCell> */}
+                                        <TableCell align="left">{row.TIPOPRECIO}</TableCell>
                                         <TableCell align="left">{row.COMENTARIOPRECIO}</TableCell>
                                         <TableCell align="left">{row.DISCOUNTPERCENTSAP}</TableCell>
 

@@ -19,7 +19,12 @@ const initialState = {
         subtotal: 0,
         total: 0,
         discount: 0,
+        //Valor del envío por defecto
         shipping: 0,
+        //Bodega por defecto
+        warehouse: "002",
+        //Forma de pago por defecto
+        method: 2,
         comment: 'Ninguno.',
         billing: null,
         totalItems: 0,

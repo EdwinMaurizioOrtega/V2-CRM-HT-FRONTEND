@@ -6,8 +6,6 @@ import {Container} from '@mui/material';
 // routes
 import {useEffect, useState} from "react";
 import {PATH_DASHBOARD} from '../../../../routes/paths';
-// _mock_
-import {_invoices} from '../../../../_mock/arrays';
 // layouts
 import DashboardLayout from '../../../../layouts/dashboard';
 // components
@@ -15,7 +13,6 @@ import {useSettingsContext} from '../../../../components/settings';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 // sections
 import InvoiceDetails from '../../../../sections/@dashboard/invoice/details';
-import {getProduct} from "../../../../redux/slices/product";
 import {useDispatch, useSelector} from "../../../../redux/store";
 import {getDetailOrder} from "../../../../redux/slices/order";
 
