@@ -31,6 +31,7 @@ InvoiceTableRow.propTypes = {
     selected: PropTypes.bool,
     onEditRow: PropTypes.func,
     onViewRow: PropTypes.func,
+    onAnularRow: PropTypes.func,
     onDeleteRow: PropTypes.func,
     onSelectRow: PropTypes.func,
 };
@@ -40,6 +41,7 @@ export default function InvoiceTableRow({
                                             selected,
                                             onSelectRow,
                                             onViewRow,
+                                            onAnularRow,
                                             onEditRow,
                                             onDeleteRow,
                                         }) {
@@ -69,6 +71,8 @@ export default function InvoiceTableRow({
     } = row;
 
     const [openConfirm, setOpenConfirm] = useState(false);
+    //Anular la orden.
+    const [openConfirmAnular, setOpenConfirmAnular] = useState(false);
 
     const [openPopover, setOpenPopover] = useState(null);
 
@@ -78,6 +82,14 @@ export default function InvoiceTableRow({
 
     const handleCloseConfirm = () => {
         setOpenConfirm(false);
+    };
+
+    const handleOpenConfirmAnular = () => {
+        setOpenConfirmAnular(true);
+    };
+
+    const handleCloseConfirmAnular = () => {
+        setOpenConfirmAnular(false);
     };
 
     const handleOpenPopover = (event) => {
@@ -187,6 +199,17 @@ export default function InvoiceTableRow({
                     Ver
                 </MenuItem>
 
+                <MenuItem
+                    onClick={() => {
+                        handleOpenConfirmAnular();
+                        handleClosePopover();
+                    }}
+                    sx={{color: 'error.main'}}
+                >
+                    <Iconify icon="eva:trash-2-outline"/>
+                    Anular
+                </MenuItem>
+
                 {/* <MenuItem */}
                 {/*   onClick={() => { */}
                 {/*     onEditRow(); */}
@@ -210,6 +233,18 @@ export default function InvoiceTableRow({
                 {/*   Borrar */}
                 {/* </MenuItem> */}
             </MenuPopover>
+
+            <ConfirmDialog
+                open={openConfirmAnular}
+                onClose={handleCloseConfirmAnular}
+                title="Anular"
+                content="¿Estás seguro de que quieres anular la orden?"
+                action={
+                    <Button variant="contained" color="error" onClick={onAnularRow}>
+                        Anular
+                    </Button>
+                }
+            />
 
             <ConfirmDialog
                 open={openConfirm}

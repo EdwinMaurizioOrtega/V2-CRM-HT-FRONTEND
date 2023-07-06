@@ -383,6 +383,26 @@ export default function InvoiceDetails({invoice}) {
 
     }
 
+
+    function namePriceType(pri) {
+        const strings = {
+            1: "NE",
+            2: "30 U.",
+            3: "15 U.",
+            4: "Reatil",
+            5: "Mayorista",
+            6: "PVP",
+            7: "TC",
+            8: "Militares",
+            9: "09",
+            10: "10",
+        };
+
+        const payActual = strings[pri];
+        return payActual || "Tipo no definido.";
+
+    }
+
     const ivaPorcentaje = 0.12; // Porcentaje de IVA (12% en Ecuador)
     let subtotalTotal = 0;
 
@@ -616,7 +636,7 @@ export default function InvoiceDetails({invoice}) {
                                             </Box>
                                         </TableCell>
 
-                                        <TableCell align="left">{row.TIPOPRECIO}</TableCell>
+                                        <TableCell align="left">{namePriceType(row.TIPOPRECIO)}</TableCell>
                                         <TableCell align="left">{row.COMENTARIOPRECIO}</TableCell>
                                         <TableCell align="left">{row.DISCOUNTPERCENTSAP}</TableCell>
 
