@@ -24,7 +24,7 @@ export default function UserCreatePage() {
   return (
     <>
       <Head>
-        <title> User: Create a new user | Minimal UI</title>
+        <title> User: Create a new user | HT</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>

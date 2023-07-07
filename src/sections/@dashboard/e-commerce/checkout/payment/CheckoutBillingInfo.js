@@ -1,8 +1,19 @@
 import PropTypes from 'prop-types';
 // @mui
-import {Card, Button, Typography, CardHeader, CardContent, RadioGroup, FormControlLabel, Radio} from '@mui/material';
+import {
+    Card,
+    Button,
+    Typography,
+    CardHeader,
+    CardContent,
+    RadioGroup,
+    FormControlLabel,
+    Radio,
+    Divider
+} from '@mui/material';
 // components
 import Iconify from '../../../../../components/iconify';
+import {fCurrency} from "../../../../../utils/formatNumber";
 
 // ----------------------------------------------------------------------
 
@@ -39,13 +50,21 @@ export default function CheckoutBillingInfo({billing, onBackStep}) {
                     {/* </Typography> */}
                 </Typography>
 
-                {/* <Typography variant="body2" gutterBottom> */}
-                {/*     {billing?.Direccion} */}
+                <Typography variant="body2" gutterBottom>
+                    Crédito aprobado: {billing?.ValidComm}
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                    Tipo crédito: {billing?.GLN}
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                    Cupo aprobado: {fCurrency(billing?.Balance)}
+                </Typography>
+
+                {/* <Typography variant="body2" sx={{color: 'text.secondary'}}> */}
+                {/*     {billing?.Celular} */}
                 {/* </Typography> */}
 
-                <Typography variant="body2" sx={{color: 'text.secondary'}}>
-                    {billing?.Celular}
-                </Typography>
+                <Divider/>
 
                 <Typography variant="subtitle2" gutterBottom>
 

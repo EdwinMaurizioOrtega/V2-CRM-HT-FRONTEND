@@ -37,7 +37,7 @@ export default class MyDocument extends Document {
             content="¡Hola a todos! Estamos emocionados de anunciar que pronto lanzaremos nuevas funcionalidades para nuestra aplicación/plataforma."
           />
           <meta name="keywords" content="react,material,kit,application,dashboard,admin,template" />
-          <meta name="author" content="Minimal UI Kit" />
+          <meta name="author" content="HT Kit" />
         </Head>
 
         <body>

@@ -170,7 +170,7 @@ export default function EcommerceCheckoutPage() {
     return (
         <>
             <Head>
-                <title> Ecommerce: Checkout | Minimal UI</title>
+                <title> Ecommerce: Checkout | HT</title>
             </Head>
 
             <Container maxWidth={themeStretch ? false : 'lg'}>

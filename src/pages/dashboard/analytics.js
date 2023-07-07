@@ -36,7 +36,7 @@ export default function GeneralAnalyticsPage() {
   return (
     <>
       <Head>
-        <title> General: Analytics | Minimal UI</title>
+        <title> General: Analytics | HT</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>

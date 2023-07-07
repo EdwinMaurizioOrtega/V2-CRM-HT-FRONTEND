@@ -27,7 +27,7 @@ export default function DemoOrganizationalChartPage() {
   return (
     <>
       <Head>
-        <title> Extra Components: Organizational Chart | Minimal UI</title>
+        <title> Extra Components: Organizational Chart | HT</title>
       </Head>
 
       <Box

@@ -34,7 +34,7 @@ export default function DemoChartsPage() {
   return (
     <>
       <Head>
-        <title> Extra Components: Charts | Minimal UI</title>
+        <title> Extra Components: Charts | HT</title>
       </Head>
 
       <Box

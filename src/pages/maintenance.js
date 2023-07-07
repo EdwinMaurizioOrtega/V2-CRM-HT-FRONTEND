@@ -18,7 +18,7 @@ export default function MaintenancePage() {
   return (
     <>
       <Head>
-        <title> Maintenance | Minimal UI</title>
+        <title> Maintenance | HT</title>
       </Head>
 
       <Stack sx={{ alignItems: 'center' }}>

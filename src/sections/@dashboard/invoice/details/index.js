@@ -143,7 +143,10 @@ export default function InvoiceDetails({invoice}) {
         VENDEDOR,
         BODEGA,
         FORMADEPAGO,
-        CITY
+        CITY,
+        ValidComm,
+        GLN,
+        Balance
     } = invoice;
 
 
@@ -524,13 +527,22 @@ export default function InvoiceDetails({invoice}) {
 
                     <Grid item xs={12} sm={6} sx={{mb: 5}}>
                         <Typography paragraph variant="overline" sx={{color: 'text.disabled'}}>
-                            FACTURA A
+                            FACTURA A:
                         </Typography>
 
                         <Typography variant="body2">{Cliente}</Typography>
                         <Typography variant="body2">CI/RUC: {CLIENTEID}</Typography>
-
                         <Typography variant="body2">{Ciudad}</Typography>
+                        <Divider/>
+                        <Typography variant="body2" gutterBottom>
+                            Crédito aprobado: {ValidComm}
+                        </Typography>
+                        <Typography variant="body2" gutterBottom>
+                            Tipo crédito: {GLN}
+                        </Typography>
+                        <Typography variant="body2" gutterBottom>
+                            Cupo aprobado: {fCurrency(Balance)}
+                        </Typography>
 
                     </Grid>
 

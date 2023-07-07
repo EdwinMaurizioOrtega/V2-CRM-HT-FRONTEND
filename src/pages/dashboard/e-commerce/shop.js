@@ -149,7 +149,7 @@ export default function EcommerceShopPage() {
     return (
         <>
             <Head>
-                <title> Ecommerce: Shop | Minimal UI</title>
+                <title> Ecommerce: Shop | HT</title>
             </Head>
 
             <FormProvider methods={methods}>

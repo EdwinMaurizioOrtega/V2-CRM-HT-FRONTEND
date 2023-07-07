@@ -295,7 +295,7 @@ export default function EcommerceProductDetailsPage() {
     return (
         <>
             <Head>
-                <title>{`Ecommerce: ${product?.NOMBRE || ''} | Minimal UI`}</title>
+                <title>{`Ecommerce: ${product?.NOMBRE || ''} | HT`}</title>
             </Head>
 
             <Container maxWidth={themeStretch ? false : 'lg'}>
