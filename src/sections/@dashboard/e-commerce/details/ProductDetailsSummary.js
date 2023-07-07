@@ -205,36 +205,6 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
                 <Divider sx={{borderStyle: 'dashed'}}/>
 
                 <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                        Lista Precios
-                    </Typography>
-
-                    <RHFSelect
-                        name="price"
-                        size="small"
-                        helperText={
-                            <Link underline="always" color="inherit">
-                                Precio
-                            </Link>
-                        }
-                        sx={{
-                            maxWidth: '60%',
-                            '& .MuiFormHelperText-root': {
-                                mx: 0,
-                                mt: 1,
-                                textAlign: 'right',
-                            },
-                        }}
-                    >
-                        {pricelistproduct.map((price) => (
-                          <MenuItem key={price.PriceList} value={price.Price}>
-                            {fCurrency(price.Price)} | {price.ListName}
-                          </MenuItem>
-                        ))}
-                    </RHFSelect>
-                </Stack>
-
-                <Stack direction="row" justifyContent="space-between">
                     <Typography variant="subtitle2" sx={{ height: 36, lineHeight: '36px' }}>
                         Cantidad
                     </Typography>
@@ -288,6 +258,36 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
                     </Stack>
                 </Stack>
 
+                <Stack direction="row" justifyContent="space-between">
+                    <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
+                        Lista Precios
+                    </Typography>
+
+                    <RHFSelect
+                        name="price"
+                        size="small"
+                        helperText={
+                            <Link underline="always" color="inherit">
+                                Precio
+                            </Link>
+                        }
+                        sx={{
+                            maxWidth: '60%',
+                            '& .MuiFormHelperText-root': {
+                                mx: 0,
+                                mt: 1,
+                                textAlign: 'right',
+                            },
+                        }}
+                    >
+                        {pricelistproduct.map((price) => (
+                            <MenuItem key={price.PriceList} value={price.Price}>
+                                {fCurrency(price.Price)} | {price.ListName}
+                            </MenuItem>
+                        ))}
+                    </RHFSelect>
+                </Stack>
+
                 <Divider sx={{borderStyle: 'dashed'}}/>
 
                 <Stack direction="row" spacing={2}>
@@ -301,7 +301,7 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
                       onClick={handleAddCart}
                       sx={{ whiteSpace: 'nowrap' }}
                     >
-                        Agregar al carrito
+                        Agregar
                     </Button>
 
                     <Button fullWidth size="large" type="submit" variant="contained">

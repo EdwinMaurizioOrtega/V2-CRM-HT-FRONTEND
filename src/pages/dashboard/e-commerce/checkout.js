@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 // next
 import Head from 'next/head';
 import {useRouter} from 'next/router';
@@ -66,6 +66,8 @@ export default function EcommerceCheckoutPage() {
     const {cart, billing, activeStep} = checkout;
 
     const completed = activeStep === STEPS.length;
+
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         dispatch(getCart(cart));
@@ -136,6 +138,9 @@ export default function EcommerceCheckoutPage() {
             console.log('DATA', checkout);
 
             try {
+
+                setLoading(true); // Activar el estado de carga
+
                 const response = await axios.post('/hanadb/api/orders/order', {
                     checkoutData: checkout,
                     checkoutUser: user
@@ -151,6 +156,8 @@ export default function EcommerceCheckoutPage() {
             } catch (error) {
                 console.log('Error al crear la orden:', error);
                 // Manejar el error al crear la orden
+            } finally {
+                setLoading(false); // Desactivar el estado de carga
             }
         }
     };
@@ -188,8 +195,7 @@ export default function EcommerceCheckoutPage() {
                 <Button variant="contained" onClick={vaciarcarrito}>Vaciar Carrito</Button>
 
                 {completed ? (
-                    <CheckoutOrderComplete open={completed} onReset={handleReset} onDownloadPDF={() => {
-                    }}/>
+                        <CheckoutOrderComplete loading={loading} open={completed} onReset={handleReset}/>
                 ) : (
                     <>
                         {activeStep === 0 && (
