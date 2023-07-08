@@ -58,7 +58,9 @@ export default function GeneralAppPage() {
           <Grid item xs={12} md={12}>
             <AppWelcome
               title={`¡Bienvenido de nuevo! \n ${user?.DISPLAYNAME}`}
-              description="¡Hola a todos! Estamos emocionados de anunciar que pronto lanzaremos nuevas funcionalidades para nuestra aplicación/plataforma. Hemos estado trabajando arduamente en mejorar la experiencia de usuario y agregar características que creemos que serán de gran utilidad para todos ustedes."
+              description="¡Hola a todos!
+
+¡Estamos emocionados de anunciar que hemos lanzado nuestro nuevo sistema! 🚀💥 Con características mejoradas y una experiencia de usuario mejorada, ¡es hora de explorar todas las novedades que hemos preparado para ustedes!"
               img={
                 <SeoIllustration
                   sx={{

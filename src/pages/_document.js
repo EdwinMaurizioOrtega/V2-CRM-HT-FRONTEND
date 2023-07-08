@@ -34,7 +34,7 @@ export default class MyDocument extends Document {
           {/* Meta */}
           <meta
             name="description"
-            content="¡Hola a todos! Estamos emocionados de anunciar que pronto lanzaremos nuevas funcionalidades para nuestra aplicación/plataforma."
+            content="HIPERTRONICS"
           />
           <meta name="keywords" content="react,material,kit,application,dashboard,admin,template" />
           <meta name="author" content="HT Kit" />
