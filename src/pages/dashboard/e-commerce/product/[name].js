@@ -54,7 +54,7 @@ EcommerceProductDetailsPage.getLayout = (page) => <DashboardLayout>{page}</Dashb
 
 // ----------------------------------------------------------------------
 
-export default function EcommerceProductDetailsPage() {
+export default  function EcommerceProductDetailsPage() {
     const {themeStretch} = useSettingsContext();
 
     const {user} = useAuthContext();
@@ -65,17 +65,44 @@ export default function EcommerceProductDetailsPage() {
 
     const dispatch = useDispatch();
 
-    const {product, pricelistproduct, isLoading, checkout} = useSelector((state) => state.product);
+    const {pricelistproduct, isLoading, checkout} = useSelector((state) => state.product);
 
-    const [currentTab, setCurrentTab] = useState('description');
+    const [product, setProduct] = useState(null); // Initial state
 
+    const [currentTab, setCurrentTab] = useState('bodegas');
+
+    //V1
+    // useEffect(() => {
+    //     if (name) {
+    //         dispatch(getProduct(name));
+    //
+    //     }
+    // }, [dispatch, name]);
+
+    //V2
     useEffect(() => {
-        if (name) {
-            dispatch(getProduct(name));
+        async function fetchData() {
+            try {
+                if (name) {
+                    const cache = await caches.open('cache-crm');
+                    const response = await cache.match('https://crm.lidenar.com/hanadb/api/products');
 
+                    if (response) {
+                        const cachedData = await response.json();
+                        const searchResultsAux = cachedData.products.filter(product => product.CODIGO === name.trim());
+                        setProduct(searchResultsAux[0]);
+                        console.log('Producto encontrado en la caché:', searchResultsAux[0]);
+                    }
+                }
+            } catch (error) {
+                console.error(error);
+            }
         }
-    }, [dispatch, name]);
 
+        fetchData();
+    }, [name]);
+
+    //Lista de precios por producto
     useEffect(() => {
         if (name) {
 
@@ -93,8 +120,8 @@ export default function EcommerceProductDetailsPage() {
 
     const TABS = [
         {
-            value: 'description',
-            label: 'description',
+            value: 'bodegas',
+            label: 'bodegas',
             component: product ?
 
                 <>
@@ -124,14 +151,14 @@ export default function EcommerceProductDetailsPage() {
                         <Typography variant="subtitle2">{fNumber(product?.BLU_BAHIA)}</Typography>
 
                     </Stack>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
+                    {/* <Stack direction="row" alignItems="center" justifyContent="space-between"> */}
 
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            SAMSUNG_BAHIA
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.SAMSUNG_BAHIA)}</Typography>
+                    {/*     <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}> */}
+                    {/*         SAMSUNG_BAHIA */}
+                    {/*     </Typography> */}
+                    {/*     <Typography variant="subtitle2">{fNumber(product?.SAMSUNG_BAHIA)}</Typography> */}
 
-                    </Stack>
+                    {/* </Stack> */}
                     <Stack direction="row" alignItems="center" justifyContent="space-between">
 
                         <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
@@ -220,41 +247,41 @@ export default function EcommerceProductDetailsPage() {
 
                     </Stack>
 
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
+                    {/* <Stack direction="row" alignItems="center" justifyContent="space-between"> */}
 
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            MATRIZ_CUENCA
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.MATRIZ_CUENCA)}</Typography>
+                    {/*     <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}> */}
+                    {/*         MATRIZ_CUENCA */}
+                    {/*     </Typography> */}
+                    {/*     <Typography variant="subtitle2">{fNumber(product?.MATRIZ_CUENCA)}</Typography> */}
 
-                    </Stack>
+                    {/* </Stack> */}
 
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
+                    {/* <Stack direction="row" alignItems="center" justifyContent="space-between"> */}
 
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            STOCK_DE_GARANTIAS_Y_REPUESTOS
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.STOCK_DE_GARANTIAS_Y_REPUESTOS)}</Typography>
+                    {/*     <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}> */}
+                    {/*         STOCK_DE_GARANTIAS_Y_REPUESTOS */}
+                    {/*     </Typography> */}
+                    {/*     <Typography variant="subtitle2">{fNumber(product?.STOCK_DE_GARANTIAS_Y_REPUESTOS)}</Typography> */}
 
-                    </Stack>
+                    {/* </Stack> */}
 
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
+                    {/* <Stack direction="row" alignItems="center" justifyContent="space-between"> */}
 
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            CONSIGNACION
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.CONSIGNACION)}</Typography>
+                    {/*     <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}> */}
+                    {/*         CONSIGNACION */}
+                    {/*     </Typography> */}
+                    {/*     <Typography variant="subtitle2">{fNumber(product?.CONSIGNACION)}</Typography> */}
 
-                    </Stack>
+                    {/* </Stack> */}
 
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
+                    {/* <Stack direction="row" alignItems="center" justifyContent="space-between"> */}
 
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            GADGETS
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.GADGETS)}</Typography>
+                    {/*     <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}> */}
+                    {/*         GADGETS */}
+                    {/*     </Typography> */}
+                    {/*     <Typography variant="subtitle2">{fNumber(product?.GADGETS)}</Typography> */}
 
-                    </Stack>
+                    {/* </Stack> */}
 
                     <Stack direction="row" alignItems="center" justifyContent="space-between">
 
@@ -266,13 +293,13 @@ export default function EcommerceProductDetailsPage() {
                     </Stack>
 
 
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            BODEGA_DE_CUARENTENA
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.BODEGA_DE_CUARENTENA)}</Typography>
+                    {/* <Stack direction="row" alignItems="center" justifyContent="space-between"> */}
+                    {/*     <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}> */}
+                    {/*         BODEGA_DE_CUARENTENA */}
+                    {/*     </Typography> */}
+                    {/*     <Typography variant="subtitle2">{fNumber(product?.BODEGA_DE_CUARENTENA)}</Typography> */}
 
-                    </Stack>
+                    {/* </Stack> */}
 
                     <Stack direction="row" alignItems="center" justifyContent="space-between">
                         <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
@@ -285,15 +312,17 @@ export default function EcommerceProductDetailsPage() {
                 </> : null
 
         },
-        {
-            value: 'reviews',
-            label: 'Reviews',
-            component: product ? <ProductDetailsReview product={product}/> : null,
-        },
+        // {
+        //     value: 'reviews',
+        //     label: 'Reviews',
+        //     component: product ? <ProductDetailsReview product={product}/> : null,
+        // },
     ];
 
     return (
         <>
+
+
             <Head>
                 <title>{`Ecommerce: ${product?.NOMBRE || ''} | HT`}</title>
             </Head>
