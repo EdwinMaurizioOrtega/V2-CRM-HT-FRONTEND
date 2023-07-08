@@ -282,7 +282,7 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
                     >
                         {pricelistproduct.map((price) => (
                             <MenuItem key={price.PriceList} value={price.Price}>
-                                {fCurrency(price.Price)} | {price.ListName}
+                                {price.ListName} | {fCurrency(price.Price)}+{fCurrency(price.Price*0.12)} = {fCurrency(price.Price*1.12)}
                             </MenuItem>
                         ))}
                     </RHFSelect>
