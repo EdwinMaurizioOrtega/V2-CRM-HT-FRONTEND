@@ -3,9 +3,9 @@ module.exports = {
   trailingSlash: true,
   env: {
     // HOST
-    HOST_API_KEY: 'https://api-dev-minimal-v4.vercel.app',
+    //HOST_API_KEY: 'https://api-dev-minimal-v4.vercel.app',
     //HOST_API_KEY: 'http://localhost',
-    //HOST_API_KEY: 'https://crm.lidenar.com',
+    HOST_API_KEY: 'https://crm.lidenar.com',
     //HOST_API_KEY: 'http://192.168.0.89',
     //HOST_API_KEY: 'http://192.168.1.16',
     // MAPBOX
