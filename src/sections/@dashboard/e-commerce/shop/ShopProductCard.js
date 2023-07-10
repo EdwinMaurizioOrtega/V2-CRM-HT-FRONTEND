@@ -154,7 +154,18 @@ export default function ShopProductCard({product}) {
                 {/*     <Iconify icon="ic:round-add-shopping-cart"/> */}
                 {/* </Fab> */}
 
-                <Image alt={NOMBRE} src={jsonArrayImages?.map((img) => img.URL)} ratio="1/1" sx={{borderRadius: 1.5}}/>
+                {/* <Image alt={NOMBRE} src={jsonArrayImages?.map((img) => img.URL)} ratio="1/1" sx={{borderRadius: 1.5}}/> */}
+
+                {jsonArrayImages && jsonArrayImages.length > 0 ? (
+                    // Mostrar las imágenes si existen
+                    jsonArrayImages.map((img, index) => (
+                        <Image key={index} alt={NOMBRE} src={img.URL} ratio="1/1" sx={{borderRadius: 1.5}} />
+                    ))
+                ) : (
+                    // Mostrar una imagen alternativa en caso contrario
+                    <img src="/assets/images/sin_imagen.jpg" alt="Imagen alternativa" />
+                )}
+
             </Box>
 
             <Stack spacing={2.5} sx={{p: 3}}>

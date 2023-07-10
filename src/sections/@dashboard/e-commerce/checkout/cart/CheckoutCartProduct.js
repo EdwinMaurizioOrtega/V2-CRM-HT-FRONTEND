@@ -20,7 +20,7 @@ CheckoutCartProduct.propTypes = {
 };
 
 export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncrease }) {
-  const { NOMBRE, CODIGO, quantity, size, price } = row;
+  const { NOMBRE, CODIGO, quantity, tipo_precio, size, price } = row;
 
   return (
     <TableRow>
@@ -50,7 +50,9 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
         </Stack>
       </TableCell>
 
-      <TableCell>{fCurrency(price)}</TableCell>
+        <TableCell>{price.PriceList}</TableCell>
+
+      <TableCell>{fCurrency(price.Price)}</TableCell>
 
       <TableCell>
         <Box sx={{ width: 96, textAlign: 'right' }}>
@@ -68,7 +70,7 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
         </Box>
       </TableCell>
 
-      <TableCell align="right">{fCurrency(price * quantity)}</TableCell>
+      <TableCell align="right">{fCurrency(price.Price * quantity)}</TableCell>
 
       <TableCell align="right">
         <IconButton onClick={onDelete}>

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {sentenceCase} from 'change-case';
 // next
 import {useRouter} from 'next/router';
@@ -43,6 +43,8 @@ ProductDetailsSummary.propTypes = {
 
 export default function ProductDetailsSummary({cart, product, pricelistproduct, onAddCart, onGotoStep, ...other}) {
     const {push} = useRouter();
+
+    const [selectedPrice, setSelectedPrice] = useState(null);
 
     const {
         CODIGO,
@@ -110,9 +112,8 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
         MARCA,
         TOTAL,
         quantity: 1,
-        price: pricelistproduct[1],
-        comment: 'Ninguno.'
-
+        price: '',
+        comment: 'Ninguno..'
     };
 
     const methods = useForm({
@@ -131,8 +132,10 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
     }, [product]);
 
     const onSubmit = async (data) => {
+        //console.log("data: "+ data);
         try {
           if (!alreadyProduct) {
+              console.log("data: "+ data);
             onAddCart({
               ...data,
               // colors: [values.colors],
@@ -147,11 +150,13 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
     };
 
     const handleAddCart = async () => {
+        //console.log("values: "+ values.price.Price);
         try {
           onAddCart({
             ...values,
             // colors: [values.colors],
-            subtotal: values.price * values.quantity,
+              price: selectedPrice,
+            subtotal: values.price.Price * values.quantity,
           });
         } catch (error) {
           console.error(error);
@@ -268,7 +273,9 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
                         size="small"
                         helperText={
                             <Link underline="always" color="inherit">
-                                Precio
+                                Precio: {selectedPrice && (
+                                <>{fCurrency(selectedPrice.Price)}</>
+                            )}
                             </Link>
                         }
                         sx={{
@@ -279,13 +286,16 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
                                 textAlign: 'right',
                             },
                         }}
+                        onChange={(event) => setSelectedPrice(event.target.value)}
+                        value={selectedPrice}
                     >
                         {pricelistproduct.map((price) => (
-                            <MenuItem key={price.PriceList} value={price.Price}>
+                            <MenuItem key={price.PriceList} value={price}>
                                 {price.ListName} | {fCurrency(price.Price)}+{fCurrency(price.Price*0.12)} = {fCurrency(price.Price*1.12)}
                             </MenuItem>
                         ))}
                     </RHFSelect>
+
                 </Stack>
 
                 <Divider sx={{borderStyle: 'dashed'}}/>

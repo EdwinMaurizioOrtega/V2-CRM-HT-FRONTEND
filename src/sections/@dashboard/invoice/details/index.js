@@ -541,7 +541,7 @@ export default function InvoiceDetails({invoice}) {
                             Tipo crédito: {GLN}
                         </Typography>
                         <Typography variant="body2" gutterBottom>
-                            Cupo aprobado: {fCurrency(Balance)}
+                            Cupo utilizado: {fCurrency(Balance)}
                         </Typography>
 
                     </Grid>

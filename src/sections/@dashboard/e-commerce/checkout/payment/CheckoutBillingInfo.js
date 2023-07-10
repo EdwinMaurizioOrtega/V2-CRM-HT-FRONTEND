@@ -57,7 +57,7 @@ export default function CheckoutBillingInfo({billing, onBackStep}) {
                     Tipo crédito: {billing?.GLN}
                 </Typography>
                 <Typography variant="body2" gutterBottom>
-                    Cupo aprobado: {fCurrency(billing?.Balance)}
+                    Cupo utilizado: {fCurrency(billing?.Balance)}
                 </Typography>
 
                 {/* <Typography variant="body2" sx={{color: 'text.secondary'}}> */}

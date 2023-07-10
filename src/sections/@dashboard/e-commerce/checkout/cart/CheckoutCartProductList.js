@@ -11,6 +11,7 @@ import CheckoutCartProduct from './CheckoutCartProduct';
 
 const TABLE_HEAD = [
   { CODIGO: 'NOMBRE', label: 'Producto' },
+  { CODIGO: 'tp', label: 'TP' },
   { CODIGO: 'price', label: 'Precio' },
   { CODIGO: 'quantity', label: 'Cantidad' },
   { CODIGO: 'totalPrice', label: 'Precio Total', align: 'right' },
