@@ -22,6 +22,25 @@ CheckoutCartProduct.propTypes = {
 export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncrease }) {
   const { NOMBRE, CODIGO, quantity, tipo_precio, size, price } = row;
 
+    function namePriceType(pri) {
+        const strings = {
+            1: "NE",
+            2: "30 U.",
+            3: "15 U.",
+            4: "Reatil",
+            5: "Mayorista",
+            6: "PVP",
+            7: "TC",
+            8: "Militares",
+            9: "09",
+            10: "10",
+        };
+
+        const payActual = strings[pri];
+        return payActual || "Tipo no definido.";
+
+    }
+
   return (
     <TableRow>
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
@@ -50,7 +69,7 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
         </Stack>
       </TableCell>
 
-        <TableCell>{price.PriceList}</TableCell>
+        <TableCell>{namePriceType(price.PriceList)}</TableCell>
 
       <TableCell>{fCurrency(price.Price)}</TableCell>
 

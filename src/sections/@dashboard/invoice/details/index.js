@@ -386,7 +386,6 @@ export default function InvoiceDetails({invoice}) {
 
     }
 
-
     function namePriceType(pri) {
         const strings = {
             1: "NE",
