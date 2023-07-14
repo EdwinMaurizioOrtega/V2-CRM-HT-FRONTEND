@@ -100,16 +100,16 @@ const navConfig = [
       },
 
       // BLOG
-      // {
-      //   title: 'blog',
-      //   path: PATH_DASHBOARD.blog.root,
-      //   icon: ICONS.blog,
-      //   children: [
-      //     { title: 'posts', path: PATH_DASHBOARD.blog.posts },
-      //     { title: 'post', path: PATH_DASHBOARD.blog.demoView },
-      //     { title: 'create', path: PATH_DASHBOARD.blog.new },
-      //   ],
-      // },
+      {
+        title: 'Gestión',
+        path: PATH_DASHBOARD.blog.root,
+        icon: ICONS.blog,
+        children: [
+          { title: 'clientes', path: PATH_DASHBOARD.blog.posts },
+          // { title: 'post', path: PATH_DASHBOARD.blog.demoView },
+          // { title: 'create', path: PATH_DASHBOARD.blog.new },
+        ],
+      },
       // {
       //   title: 'File manager',
       //   path: PATH_DASHBOARD.fileManager,

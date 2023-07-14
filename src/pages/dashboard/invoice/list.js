@@ -219,11 +219,11 @@ export default function InvoiceListPage() {
   const getPercentByStatus = (status) => (getLengthByStatus(status) / tableData.length) * 100;
 
   const TABS = [
-    { value: 'all', label: 'All', color: 'info', count: tableData.length },
-    { value: 'paid', label: 'Paid', color: 'success', count: getLengthByStatus('paid') },
-    { value: 'unpaid', label: 'Unpaid', color: 'warning', count: getLengthByStatus('unpaid') },
-    { value: 'overdue', label: 'Overdue', color: 'error', count: getLengthByStatus('overdue') },
-    { value: 'draft', label: 'Draft', color: 'default', count: getLengthByStatus('draft') },
+    { value: 'total', label: 'Total', color: 'info', count: tableData.length },
+    { value: 'pendiente-aprobar', label: 'Pendiente de aprobar', color: 'success', count: getLengthByStatus('6') },
+    { value: 'pendiente-facturar', label: 'Pendiente de Facturar', color: 'warning', count: getLengthByStatus('0') },
+    { value: 'facturado', label: 'Facturado', color: 'error', count: getLengthByStatus('1') },
+    // { value: 'draft', label: 'Draft', color: 'default', count: getLengthByStatus('draft') },
   ];
 
   const handleOpenConfirm = () => {
@@ -343,7 +343,7 @@ export default function InvoiceListPage() {
               href: PATH_DASHBOARD.invoice.root,
             },
             {
-              name: 'List',
+              name: 'Lista',
             },
           ]}
           // action={
@@ -374,14 +374,14 @@ export default function InvoiceListPage() {
                 color={theme.palette.info.main}
               />
 
-              {/* <InvoiceAnalytic */}
-              {/*   title="Paid" */}
-              {/*   total={getLengthByStatus('paid')} */}
-              {/*   percent={getPercentByStatus('paid')} */}
-              {/*   price={getTotalPriceByStatus('paid')} */}
-              {/*   icon="eva:checkmark-circle-2-fill" */}
-              {/*   color={theme.palette.success.main} */}
-              {/* /> */}
+              <InvoiceAnalytic
+                title="Pendiente de aprobar"
+                total={getLengthByStatus('paid')}
+                percent={getPercentByStatus('paid')}
+                price={getTotalPriceByStatus('paid')}
+                icon="eva:checkmark-circle-2-fill"
+                color={theme.palette.success.main}
+              />
 
               {/* <InvoiceAnalytic */}
               {/*   title="Unpaid" */}

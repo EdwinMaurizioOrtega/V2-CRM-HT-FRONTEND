@@ -195,14 +195,13 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
 
                     <Typography variant="h5">{NOMBRE}</Typography>
 
-                    {/* <Stack direction="row" alignItems="center" spacing={1}> */}
-                    {/*   <Rating value={totalRating} precision={0.1} readOnly /> */}
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                      {/* <Rating value={totalRating} precision={0.1} readOnly /> */}
 
-                    {/*   <Typography variant="body2" sx={{ color: 'text.secondary' }}> */}
-                    {/*     ({fShortenNumber(totalReview)} */}
-                    {/*     reviews) */}
-                    {/*   </Typography> */}
-                    {/* </Stack> */}
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                          SAP: {CODIGO}
+                      </Typography>
+                    </Stack>
 
 
                 </Stack>
