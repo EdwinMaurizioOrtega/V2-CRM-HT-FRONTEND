@@ -11,6 +11,7 @@ import EmptyContent from '../../../../../components/empty-content';
 //
 import CheckoutSummary from '../CheckoutSummary';
 import CheckoutCartProductList from './CheckoutCartProductList';
+import {resetCart} from "../../../../../redux/slices/product";
 
 // ----------------------------------------------------------------------
 
@@ -37,10 +38,20 @@ export default function CheckoutCart({
 
   const isEmptyCart = !cart.length;
 
+  const vaciarcarrito = () => {
+    dispatch(resetCart());
+  }
+
   return (
     <Grid container spacing={3}>
+
+
       <Grid item xs={12} md={8}>
         <Card sx={{ mb: 3 }}>
+
+
+          <Button variant="contained" onClick={vaciarcarrito}>Vaciar Carrito</Button>
+
           <CardHeader
             title={
               <Typography variant="h6">

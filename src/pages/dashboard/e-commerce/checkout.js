@@ -163,9 +163,9 @@ export default function EcommerceCheckoutPage() {
     };
 
 
-    const vaciarcarrito = () => {
-        dispatch(resetCart());
-    }
+    // const vaciarcarrito = () => {
+    //     dispatch(resetCart());
+    // }
 
     return (
         <>
@@ -192,7 +192,7 @@ export default function EcommerceCheckoutPage() {
                     </Grid>
                 </Grid>
 
-                <Button variant="contained" onClick={vaciarcarrito}>Vaciar Carrito</Button>
+                {/* <Button variant="contained" onClick={vaciarcarrito}>Vaciar Carrito</Button> */}
 
                 {completed ? (
                         <CheckoutOrderComplete loading={loading} open={completed} onReset={handleReset}/>

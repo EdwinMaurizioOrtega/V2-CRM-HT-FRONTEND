@@ -11,11 +11,12 @@ import {
     RadioGroup,
     CardHeader,
     CardContent,
-    FormControlLabel, Stack,
+    FormControlLabel, Stack, Button,
 } from '@mui/material';
 // components
 import Iconify from '../../../../../components/iconify';
 import {RHFTextField} from "../../../../../components/hook-form";
+import {resetCart} from "../../../../../redux/slices/product";
 
 // ----------------------------------------------------------------------
 
@@ -28,13 +29,23 @@ CheckoutDelivery.propTypes = {
 
 
 
-export default function CheckoutDelivery({ deliveryOptions, onApplyShipping, onApplyComment, ...other }) {
+export default function CheckoutDelivery({ total, deliveryOptions, onApplyShipping, onApplyComment, ...other }) {
   const { control } = useFormContext();
+
+    const vaciarcarrito = () => {
+        dispatch(resetCart());
+    }
 
   return (
     <Card {...other}>
-      <CardHeader title="Opciones de entrega" />
 
+        <Button variant="contained" onClick={vaciarcarrito}>Eliminar Pedido</Button>
+
+        <CardHeader title="Opciones de entrega" />
+
+        {/* <Typography variant="h3" sx={{ mb: 5 }}> */}
+        {/*     Valor total: ${total} */}
+        {/* </Typography> */}
       <CardContent>
         <Controller
           name="delivery"
@@ -56,13 +67,39 @@ export default function CheckoutDelivery({ deliveryOptions, onApplyShipping, onA
                   sm: 'repeat(2, 1fr)',
                 }}
               >
-                {deliveryOptions.map((option) => (
-                  <DeliveryOption
-                    key={option.value}
-                    option={option}
-                    isSelected={field.value === option.value}
-                  />
-                ))}
+                {/* {deliveryOptions.map((option) => ( */}
+                {/*   <DeliveryOption */}
+                {/*     key={option.value} */}
+                {/*     option={option} */}
+                {/*     isSelected={field.value === option.value} */}
+                {/*   /> */}
+                {/* ))} */}
+
+                  {
+                      deliveryOptions.map((option, index) => {
+                          if (total < 1000 && (index === 1 || index === 2 || index === 3 || index === 4) ) {
+                              return (
+                                  <DeliveryOption
+                                      key={option.value}
+                                      option={option}
+                                      isSelected={field.value === option.value}
+                                  />
+                              );
+                          } else if (total > 1000 && index === 0) {
+                              return (
+                                  <DeliveryOption
+                                      key={option.value}
+                                      option={option}
+                                      isSelected={field.value === option.value}
+                                  />
+                              );
+                          }
+                          return null;
+                      })
+                  }
+
+
+
               </Box>
             </RadioGroup>
           )}
