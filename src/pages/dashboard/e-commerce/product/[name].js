@@ -125,6 +125,14 @@ export default  function EcommerceProductDetailsPage() {
             component: product ?
 
                 <>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between">
+
+                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
+                            CENTRO_DE_DISTRIBUCION_HT
+                        </Typography>
+                        <Typography variant="subtitle2">{fNumber(product?.CENTRO_DE_DISTRIBUCION_HT)}</Typography>
+
+                    </Stack>
 
                     <Stack direction="row" alignItems="center" justifyContent="space-between">
 
@@ -146,9 +154,9 @@ export default  function EcommerceProductDetailsPage() {
                     <Stack direction="row" alignItems="center" justifyContent="space-between">
 
                         <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            BLU_BAHIA
+                            MAYORISTAS_GUAYAQUIL
                         </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.BLU_BAHIA)}</Typography>
+                        <Typography variant="subtitle2">{fNumber(product?.MAYORISTAS_GUAYAQUIL)}</Typography>
 
                     </Stack>
                     {/* <Stack direction="row" alignItems="center" justifyContent="space-between"> */}
@@ -167,14 +175,7 @@ export default  function EcommerceProductDetailsPage() {
                         <Typography variant="subtitle2">{fNumber(product?.ME_COMPRAS_SAMSUNG_ORELLANA)}</Typography>
 
                     </Stack>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
 
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            CELISTIC
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.CELISTIC)}</Typography>
-
-                    </Stack>
                     <Stack direction="row" alignItems="center" justifyContent="space-between">
 
                         <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
@@ -283,14 +284,14 @@ export default  function EcommerceProductDetailsPage() {
 
                     {/* </Stack> */}
 
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
+                    {/* <Stack direction="row" alignItems="center" justifyContent="space-between"> */}
 
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            LUIS_CORDERO
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.LUIS_CORDERO)}</Typography>
+                    {/*     <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}> */}
+                    {/*         LUIS_CORDERO */}
+                    {/*     </Typography> */}
+                    {/*     <Typography variant="subtitle2">{fNumber(product?.LUIS_CORDERO)}</Typography> */}
 
-                    </Stack>
+                    {/* </Stack> */}
 
 
                     {/* <Stack direction="row" alignItems="center" justifyContent="space-between"> */}
@@ -301,13 +302,13 @@ export default  function EcommerceProductDetailsPage() {
 
                     {/* </Stack> */}
 
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            ACCESORIOS
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.ACCESORIOS)}</Typography>
+                    {/* <Stack direction="row" alignItems="center" justifyContent="space-between"> */}
+                    {/*     <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}> */}
+                    {/*         ACCESORIOS */}
+                    {/*     </Typography> */}
+                    {/*     <Typography variant="subtitle2">{fNumber(product?.ACCESORIOS)}</Typography> */}
 
-                    </Stack>
+                    {/* </Stack> */}
 
                 </> : null
 
