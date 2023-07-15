@@ -28,16 +28,54 @@ import { RHFMultiCheckbox, RHFRadioGroup, RHFSlider } from '../../../../componen
 
 // ----------------------------------------------------------------------
 
-export const FILTER_GENDER_OPTIONS = [
-  { label: 'INFINIX', value: 'INFINIX' },
-  { label: 'SAMSUNG', value: 'SAMSUNG' },
-  { label: 'XIAOMI', value: 'XIAOMI' },
-];
-
 export const FILTER_CATEGORY_OPTIONS = [
-  { label: 'Todo', value: 'Todo' },
+  // { label: 'Todo', value: 'Todo' },
   { label: 'CELULARES', value: 'CELULARES' },
   { label: 'ACCESORIOS', value: 'ACCESORIOS' },
+  { label: 'TABLETS', value: 'TABLETS' },
+];
+
+export const FILTER_GENDER_OPTIONS = [
+  { label: 'LG', value: 'LG'},
+  { label: 'SAMSUNG', value: 'SAMSUNG'},
+  { label: 'BLU', value: 'BLU'},
+  { label: 'NOKIA', value: 'NOKIA'},
+  { label: 'APPLE', value: 'APPLE'},
+  { label: 'VERYKOOL', value: 'VERYKOOL'},
+  { label: 'HUAWEI', value: 'HUAWEI'},
+  { label: 'XIAOMI', value: 'XIAOMI'},
+  { label: 'TECNO', value: 'TECNO'},
+  { label: 'HONOR', value: 'HONOR'},
+  { label: 'BAZZUKA', value: 'BAZZUKA'},
+  { label: 'BLACK&DECKER', value: 'BLACK&DECKER'},
+  { label: 'CONAIR', value: 'CONAIR'},
+  { label: 'DUREX', value: 'DUREX'},
+  { label: 'EPSON', value: 'EPSON'},
+  { label: 'FAST HAIR STRAIGHTENER', value: 'FAST HAIR STRAIGHTENER'},
+  { label: 'LENOVO', value: 'LENOVO'},
+  { label: 'GO BIKE', value: 'GO BIKE'},
+  { label: 'HACEB', value: 'HACEB'},
+  { label: 'HP', value: 'HP'},
+  { label: 'INNOVA', value: 'INNOVA'},
+  { label: 'KOMBO', value: 'KOMBO'},
+  { label: 'INFINIX', value: 'INFINIX'},
+  { label: 'REMINGTON', value: 'REMINGTON'},
+  { label: 'SANKEY', value: 'SANKEY'},
+  { label: 'WAHL', value: 'WAHL'},
+  { label: 'ZEROSTOCKS', value: 'ZEROSTOCKS'},
+  { label: 'KINGSTON', value: 'KINGSTON'},
+  { label: 'SANDISK', value: 'SANDISK'},
+  { label: 'PARLANTE', value: 'PARLANTE'},
+  { label: 'CABLE', value: 'CABLE'},
+  { label: 'CARGADOR', value: 'CARGADOR'},
+  { label: 'AUDIFONO', value: 'AUDIFONO'},
+  { label: 'GAME', value: 'GAME'},
+  { label: 'HUMIFICADOR', value: 'HUMIFICADOR'},
+  { label: 'GENERICO', value: 'GENERICO'},
+  { label: 'SEAGETE', value: 'SEAGETE'},
+  { label: 'CLARO', value: 'CLARO'},
+  { label: 'VARIOS', value: 'VARIOS'},
+  { label: 'TCL', value: 'TCL'},
 ];
 
 export const FILTER_RATING_OPTIONS = ['up4Star', 'up3Star', 'up2Star', 'up1Star'];
@@ -121,14 +159,15 @@ export default function ShopFilterDrawer({ open, onOpen, onClose, isDefault, onR
 
         <Scrollbar>
           <Stack spacing={3} sx={{ p: 2.5 }}>
-            <Stack spacing={1}>
-              <Typography variant="subtitle1"> Marca </Typography>
-              <RHFMultiCheckbox name="gender" options={FILTER_GENDER_OPTIONS} sx={{ width: 1 }} />
-            </Stack>
 
             <Stack spacing={1}>
               <Typography variant="subtitle1"> Categoria </Typography>
               <RHFRadioGroup name="category" options={FILTER_CATEGORY_OPTIONS} row={false} />
+            </Stack>
+
+            <Stack spacing={1}>
+              <Typography variant="subtitle1"> Marca </Typography>
+              <RHFMultiCheckbox name="gender" options={FILTER_GENDER_OPTIONS} sx={{ width: 1 }} />
             </Stack>
 
             {/* <Stack spacing={1}> */}

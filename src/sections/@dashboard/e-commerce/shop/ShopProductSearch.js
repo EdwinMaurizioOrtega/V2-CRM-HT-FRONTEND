@@ -126,7 +126,7 @@ export default function ShopProductSearch() {
                 <CustomTextField
                     {...params}
                     width={220}
-                    placeholder="Buscar..."
+                    placeholder="Buscar...."
                     onKeyUp={handleKeyUp}
                     InputProps={{
                         ...params.InputProps,

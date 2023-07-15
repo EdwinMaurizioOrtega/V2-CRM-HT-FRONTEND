@@ -44,7 +44,7 @@ import {useAuthContext} from "../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
-const STEPS = ['Mi carrito', 'Facturación & cliente', 'Pago'];
+const STEPS = ['Mi carrito', 'Cliente', 'Finalizar'];
 
 // ----------------------------------------------------------------------
 
