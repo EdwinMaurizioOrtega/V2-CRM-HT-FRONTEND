@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import {useState} from 'react';
 // @mui
-import {Grid, Card, Button, Typography, Stack, Box, InputAdornment, Autocomplete} from '@mui/material';
+import {Grid, Card, Button, Typography, Stack, Box, InputAdornment, Autocomplete, CardHeader} from '@mui/material';
 // _mock
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
@@ -78,6 +78,18 @@ export default function CheckoutBillingAddress({checkout, onBackStep, onCreateBi
         <>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={8}>
+
+                    <CardHeader
+                        title={
+                            <Typography variant="h6">
+                                Seleccionar un cliente:
+                                <Typography component="span" sx={{ color: 'text.secondary' }}>
+
+                                </Typography>
+                            </Typography>
+                        }
+                        sx={{ mb: 3 }}
+                    />
 
                     {/* Buscamos todos los clientes creados en al sistema SAP */}
                     <Autocomplete
@@ -164,14 +176,14 @@ export default function CheckoutBillingAddress({checkout, onBackStep, onCreateBi
                             Atrás
                         </Button>
 
-                        <Button
-                            size="small"
-                            variant="soft"
-                            onClick={handleOpen}
-                            startIcon={<Iconify icon="eva:plus-fill"/>}
-                        >
-                            Agregar nueva dirección
-                        </Button>
+                        {/* <Button */}
+                        {/*     size="small" */}
+                        {/*     variant="soft" */}
+                        {/*     onClick={handleOpen} */}
+                        {/*     startIcon={<Iconify icon="eva:plus-fill"/>} */}
+                        {/* > */}
+                        {/*     Agregar nueva dirección */}
+                        {/* </Button> */}
                     </Stack>
                 </Grid>
 

@@ -103,22 +103,22 @@ export default function CheckoutSummary({
             </Box>
           </Stack>
 
-          {enableDiscount && onApplyDiscount && (
-            <TextField
-              fullWidth
-              placeholder="Discount codes / Gifts"
-              value="DISCOUNT5"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <Button onClick={() => onApplyDiscount(0)} sx={{ mr: -0.5 }}>
-                      Aplicar
-                    </Button>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          )}
+          {/* {enableDiscount && onApplyDiscount && ( */}
+          {/*   <TextField */}
+          {/*     fullWidth */}
+          {/*     placeholder="Discount codes / Gifts" */}
+          {/*     value="DISCOUNT5" */}
+          {/*     InputProps={{ */}
+          {/*       endAdornment: ( */}
+          {/*         <InputAdornment position="end"> */}
+          {/*           <Button onClick={() => onApplyDiscount(0)} sx={{ mr: -0.5 }}> */}
+          {/*             Aplicar */}
+          {/*           </Button> */}
+          {/*         </InputAdornment> */}
+          {/*       ), */}
+          {/*     }} */}
+          {/*   /> */}
+          {/* )} */}
         </Stack>
       </CardContent>
     </Card>
