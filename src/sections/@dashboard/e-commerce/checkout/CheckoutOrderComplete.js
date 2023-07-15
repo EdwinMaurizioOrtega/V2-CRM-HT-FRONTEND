@@ -39,22 +39,6 @@ export default function CheckoutOrderComplete({loading, open, onReset, onDownloa
             >
                 <Typography variant="h4">Gracias por su compra!</Typography>
 
-                <OrderCompleteIllustration sx={{height: 260}}/>
-
-                <Typography>
-                    Gracias por hacer el pedido
-                    <br/>
-                    <br/>
-                    {/* <Link>01dc1370-3df6-11eb-b378-0242ac130002</Link> */}
-                    <br/>
-                    <br/>
-                    Le enviaremos una notificación dentro de los 5 días posteriores al envío.
-                    <br/> Si tiene alguna pregunta o consulta, no dude en ponerse en contacto con nosotros. <br/> <br/>
-                    Mis mejores deseos,
-                </Typography>
-
-                <Divider sx={{borderStyle: 'dashed'}}/>
-
                 <Stack
                     spacing={2}
                     justifyContent="space-between"
@@ -73,7 +57,7 @@ export default function CheckoutOrderComplete({loading, open, onReset, onDownloa
                             onClick={onReset}
                             startIcon={<Iconify icon="eva:arrow-ios-back-fill"/>}
                         >
-                            Mis pedidos
+                            Enviar al área de aprobación.
                         </Button>
 
 
@@ -90,6 +74,22 @@ export default function CheckoutOrderComplete({loading, open, onReset, onDownloa
                     {/*   Mis pedidos */}
                     {/* </Button> */}
                 </Stack>
+
+                <OrderCompleteIllustration sx={{height: 260}}/>
+
+                <Divider sx={{borderStyle: 'dashed'}}/>
+
+                <Typography>
+                    Gracias por hacer el pedido
+                    <br/>
+                    <br/>
+                    {/* <Link>01dc1370-3df6-11eb-b378-0242ac130002</Link> */}
+                    <br/>
+                    <br/>
+                    Le enviaremos una notificación dentro de los 5 días posteriores al envío.
+                    <br/> Si tiene alguna pregunta o consulta, no dude en ponerse en contacto con nosotros. <br/> <br/>
+                    Mis mejores deseos,
+                </Typography>
             </Stack>
         </DialogAnimate>
     );

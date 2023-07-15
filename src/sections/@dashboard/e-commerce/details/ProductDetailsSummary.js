@@ -313,9 +313,9 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
                         Agregar
                     </Button>
 
-                    <Button fullWidth size="large" type="submit" variant="contained">
-                        Comprar
-                    </Button>
+                    {/* <Button fullWidth size="large" type="submit" variant="contained"> */}
+                    {/*     Comprar */}
+                    {/* </Button> */}
                 </Stack>
 
                 {/* <Stack direction="row" alignItems="center" justifyContent="center"> */}
