@@ -141,9 +141,22 @@ const PAYMENT_OPTIONS = [
         icons: [],
     },
     {
-        value: 90,
-        title: '90',
-        description: 'Crédito 90 días.',
+        value: '30-60',
+        title: '30-60',
+        description: 'Crédito 30-60 días.',
+        icons: [],
+    },
+    {
+        value: '30-60-90',
+        title: '30-60-90',
+        description: 'Crédito 30-60-90 días.',
+        icons: [],
+    },
+
+    {
+        value: '30-60-90-120',
+        title: '30-60-90-120',
+        description: 'Crédito 30-60-90-120 días.',
         icons: [],
     },
 ];
@@ -203,7 +216,7 @@ export default function CheckoutPayment({checkout, onReset, onNextStep, onBackSt
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={8}>
-                    <CheckoutDelivery total={total} onApplyComment={onApplyComment} onApplyShipping={onApplyShipping} deliveryOptions={DELIVERY_OPTIONS}/>
+                    <CheckoutDelivery billing={billing} total={total} onApplyComment={onApplyComment} onApplyShipping={onApplyShipping} deliveryOptions={DELIVERY_OPTIONS}/>
 
                     <CheckoutWarehouse onApplyWarehouse={onApplyWarehouse} warehouseOptions={WAREHOUSE_OPTIONS}/>
 

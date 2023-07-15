@@ -66,24 +66,24 @@ export default function CheckoutBillingInfo({billing, onBackStep}) {
 
                 <Divider/>
 
-                <Typography variant="subtitle2" gutterBottom>
+                {/* <Typography variant="subtitle2" gutterBottom> */}
 
-                    <RadioGroup>
-                        {billingEnvioArray.map((item, index) => (
-                            <FormControlLabel
-                                key={index}
-                                value={index}
-                                control={<Radio />}
-                                label={ item.TIPO +' | ' + item.DIRECCION}
-                            />
-                        ))}
-                    </RadioGroup>
+                {/*     <RadioGroup> */}
+                {/*         {billingEnvioArray.map((item, index) => ( */}
+                {/*             <FormControlLabel */}
+                {/*                 key={index} */}
+                {/*                 value={index} */}
+                {/*                 control={<Radio />} */}
+                {/*                 label={ item.TIPO +' | ' + item.DIRECCION} */}
+                {/*             /> */}
+                {/*         ))} */}
+                {/*     </RadioGroup> */}
 
 
-                    {/* <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}> */}
-                    {/*   ({billing?.addressType}) */}
-                    {/* </Typography> */}
-                </Typography>
+                {/*     /!* <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}> *!/ */}
+                {/*     /!*   ({billing?.addressType}) *!/ */}
+                {/*     /!* </Typography> *!/ */}
+                {/* </Typography> */}
             </CardContent>
         </Card>
     );

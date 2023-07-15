@@ -11,7 +11,7 @@ import {
     RadioGroup,
     CardHeader,
     CardContent,
-    FormControlLabel, Stack, Button,
+    FormControlLabel, Stack, Button, Divider,
 } from '@mui/material';
 // components
 import Iconify from '../../../../../components/iconify';
@@ -29,8 +29,19 @@ CheckoutDelivery.propTypes = {
 
 
 
-export default function CheckoutDelivery({ total, deliveryOptions, onApplyShipping, onApplyComment, ...other }) {
+export default function CheckoutDelivery({ billing, total, deliveryOptions, onApplyShipping, onApplyComment, ...other }) {
   const { control } = useFormContext();
+
+
+    //Analisamos la cadena de texto y la convertimos en un arreglo valido.
+    let billingEnvioArray = [];
+
+    try {
+        billingEnvioArray = JSON.parse(billing?.ENVIO || '[]');
+    } catch (error) {
+        console.error('Error al analizar la cadena JSON:', error);
+    }
+
 
     const vaciarcarrito = () => {
         dispatch(resetCart());
@@ -125,6 +136,30 @@ export default function CheckoutDelivery({ total, deliveryOptions, onApplyShippi
                   >
                       Observación por el vendedor.
                   </Typography>
+              </Stack>
+          </Stack>
+
+          <Divider/>
+          <Stack direction="row" justifyContent="space-evenly">
+              <Typography variant="subtitle2" sx={{ height: 36, lineHeight: '36px' }}>
+                  DIRECCIONES:
+              </Typography>
+
+              <Stack spacing={1}>
+
+
+                  <RadioGroup>
+                      {billingEnvioArray.map((item, index) => (
+                          <FormControlLabel
+                              key={index}
+                              value={index}
+                              control={<Radio />}
+                              label={ item.TIPO +' | ' + item.DIRECCION}
+                          />
+                      ))}
+                  </RadioGroup>
+
+
               </Stack>
           </Stack>
       </CardContent>
