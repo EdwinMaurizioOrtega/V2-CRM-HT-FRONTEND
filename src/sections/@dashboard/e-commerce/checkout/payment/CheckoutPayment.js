@@ -57,6 +57,14 @@ const DELIVERY_OPTIONS = [
 ];
 
 const WAREHOUSE_OPTIONS = [
+
+    {
+        id: '019',
+        value: '019',
+        title: 'CENTRO DE DISTRIBUCIÓN',
+        description: 'Matriz en la ciudad de Quito.',
+    },
+
     {
         id: '002',
         value: '002',
