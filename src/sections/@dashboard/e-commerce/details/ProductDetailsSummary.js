@@ -357,8 +357,10 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
 const LoadingComponent = () => {
     return (
        <>
-           <p className="ml-2 mb-0">Cargando...</p>
+           {/* <p className="ml-2 mb-0">Cargando...</p> */}
            <img src="/assets/images/loading.gif" height="75px" alt="Loading" />
+           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
        </>
 
     );
