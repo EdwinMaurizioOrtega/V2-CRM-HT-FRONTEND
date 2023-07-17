@@ -193,7 +193,7 @@ export default function EcommerceShopPage() {
                             <>
                                 <Typography variant="body2" gutterBottom>
                                     <strong>{dataFiltered.length}</strong>
-                                    &nbsp;Products found
+                                    &nbsp;Productos encontrados
                                 </Typography>
 
                                 {/* <ShopTagFiltered isFiltered={!isDefault} onResetFilter={handleResetFilter} /> */}

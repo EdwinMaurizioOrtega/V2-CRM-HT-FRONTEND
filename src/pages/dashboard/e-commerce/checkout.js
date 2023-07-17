@@ -162,7 +162,6 @@ export default function EcommerceCheckoutPage() {
         }
     };
 
-
     // const vaciarcarrito = () => {
     //     dispatch(resetCart());
     // }

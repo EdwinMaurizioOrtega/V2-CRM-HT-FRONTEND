@@ -12,6 +12,7 @@ import EmptyContent from '../../../../../components/empty-content';
 import CheckoutSummary from '../CheckoutSummary';
 import CheckoutCartProductList from './CheckoutCartProductList';
 import {resetCart} from "../../../../../redux/slices/product";
+import {dispatch} from "../../../../../redux/store";
 
 // ----------------------------------------------------------------------
 

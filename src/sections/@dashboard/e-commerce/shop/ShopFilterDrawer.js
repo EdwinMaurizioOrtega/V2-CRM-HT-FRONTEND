@@ -33,6 +33,10 @@ export const FILTER_CATEGORY_OPTIONS = [
   { label: 'CELULARES', value: 'CELULARES' },
   { label: 'ACCESORIOS', value: 'ACCESORIOS' },
   { label: 'TABLETS', value: 'TABLETS' },
+  { label: 'ELECTRODOMÉSTICOS', value: 'ELECTRODOMÉSTICOS,TECNOLOGIA,BELLEZA,ELECTROMENORES' },
+  { label: 'CLARO –TARJETAS Y CHIPS', value: 'CLARO –TARJETAS Y CHIPS' },
+  { label: 'VARIOS', value: 'VARIOS' },
+  { label: 'REPUESTOS', value: 'REPUESTOS' },
 ];
 
 export const FILTER_GENDER_OPTIONS = [

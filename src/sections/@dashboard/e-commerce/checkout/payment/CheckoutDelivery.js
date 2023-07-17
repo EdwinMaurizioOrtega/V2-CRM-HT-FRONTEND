@@ -17,6 +17,7 @@ import {
 import Iconify from '../../../../../components/iconify';
 import {RHFTextField} from "../../../../../components/hook-form";
 import {resetCart} from "../../../../../redux/slices/product";
+import {dispatch} from "../../../../../redux/store";
 
 // ----------------------------------------------------------------------
 
