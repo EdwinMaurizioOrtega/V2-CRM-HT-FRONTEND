@@ -7,7 +7,14 @@ import {alpha} from '@mui/material/styles';
 import {Box, Tab, Tabs, Card, Grid, Divider, Container, Typography, Stack} from '@mui/material';
 // redux
 import {useDispatch, useSelector} from '../../../../redux/store';
-import {getProduct, addToCart, gotoStep, getPriceListProduct} from '../../../../redux/slices/product';
+import {
+    clearPriceListProduct,
+    getProduct,
+    addToCart,
+    gotoStep,
+    getPriceListProduct,
+    getClearPriceListProduct
+} from '../../../../redux/slices/product';
 // routes
 import {PATH_DASHBOARD} from '../../../../routes/paths';
 // layouts
@@ -104,8 +111,11 @@ export default  function EcommerceProductDetailsPage() {
 
     //Lista de precios por producto
     useEffect(() => {
+        //1. Eliminar la lista anterior.
+        dispatch(getClearPriceListProduct());
+
         if (name) {
-            //1. Eliminar la lista anterior.
+
             //2. consultar nuevamente.
             dispatch(getPriceListProduct(name, user.ID));
         }

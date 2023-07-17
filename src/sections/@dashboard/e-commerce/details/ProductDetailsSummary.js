@@ -37,12 +37,13 @@ ProductDetailsSummary.propTypes = {
     cart: PropTypes.array,
     onAddCart: PropTypes.func,
     product: PropTypes.object,
-    pricelistproduct: PropTypes.object,
     onGotoStep: PropTypes.func,
 };
 
 export default function ProductDetailsSummary({cart, product, pricelistproduct, onAddCart, onGotoStep, ...other}) {
     const {push} = useRouter();
+
+    const [loading, setLoading] = useState(true);
 
     const [selectedPrice, setSelectedPrice] = useState(null);
 
@@ -81,7 +82,7 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
     const alreadyProduct = cart.map((item) => item.CODIGO).includes(CODIGO);
 
     const isMaxQuantity =
-      cart.filter((item) => item.CODIGO === CODIGO).map((item) => item.quantity)[0] >= 100;
+        cart.filter((item) => item.CODIGO === CODIGO).map((item) => item.quantity)[0] >= 100;
 
     const defaultValues = {
         CODIGO,
@@ -134,34 +135,44 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
     const onSubmit = async (data) => {
         //console.log("data: "+ data);
         try {
-          if (!alreadyProduct) {
-              console.log("data: "+ data);
-            onAddCart({
-              ...data,
-              // colors: [values.colors],
-              subtotal: data.price * data.quantity,
-            });
-          }
-          onGotoStep(0);
-          push(PATH_DASHBOARD.eCommerce.checkout);
+            if (!alreadyProduct) {
+                console.log("data: " + data);
+                onAddCart({
+                    ...data,
+                    // colors: [values.colors],
+                    subtotal: data.price * data.quantity,
+                });
+            }
+            onGotoStep(0);
+            push(PATH_DASHBOARD.eCommerce.checkout);
         } catch (error) {
-          console.error(error);
+            console.error(error);
         }
     };
 
     const handleAddCart = async () => {
         //console.log("values: "+ values.price.Price);
         try {
-          onAddCart({
-            ...values,
-            // colors: [values.colors],
-              price: selectedPrice,
-            subtotal: values.price.Price * values.quantity,
-          });
+            onAddCart({
+                ...values,
+                // colors: [values.colors],
+                price: selectedPrice,
+                subtotal: values.price.Price * values.quantity,
+            });
         } catch (error) {
-          console.error(error);
+            console.error(error);
         }
     };
+
+
+    useEffect(() => {
+        // Simulamos un tiempo de carga de 2 segundos para la animación
+        const loadingTimeout = setTimeout(() => {
+            setLoading(false);
+        }, 5000);
+
+        return () => clearTimeout(loadingTimeout);
+    }, []);
 
     return (
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -176,31 +187,31 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
             >
                 <Stack spacing={2}>
                     <Label
-                      variant="soft"
-                      color="success"
-                      sx={{ textTransform: 'uppercase', mr: 'auto' }}
+                        variant="soft"
+                        color="success"
+                        sx={{textTransform: 'uppercase', mr: 'auto'}}
                     >
-                      {sentenceCase(CATEGORIA || '')}
+                        {sentenceCase(CATEGORIA || '')}
                     </Label>
 
                     <Typography
-                      variant="overline"
-                      component="div"
-                      sx={{
-                        color:'error.main',
-                      }}
+                        variant="overline"
+                        component="div"
+                        sx={{
+                            color: 'error.main',
+                        }}
                     >
-                      {MARCA}
+                        {MARCA}
                     </Typography>
 
                     <Typography variant="h5">{NOMBRE}</Typography>
 
                     <Stack direction="row" alignItems="center" spacing={1}>
-                      {/* <Rating value={totalRating} precision={0.1} readOnly /> */}
+                        {/* <Rating value={totalRating} precision={0.1} readOnly /> */}
 
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                          SAP: {CODIGO}
-                      </Typography>
+                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                            SAP: {CODIGO}
+                        </Typography>
                     </Stack>
 
 
@@ -209,7 +220,7 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
                 <Divider sx={{borderStyle: 'dashed'}}/>
 
                 <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="subtitle2" sx={{ height: 36, lineHeight: '36px' }}>
+                    <Typography variant="subtitle2" sx={{height: 36, lineHeight: '36px'}}>
                         Cantidad
                     </Typography>
 
@@ -242,7 +253,7 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
                 </Stack>
 
                 <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="subtitle2" sx={{ height: 36, lineHeight: '36px' }}>
+                    <Typography variant="subtitle2" sx={{height: 36, lineHeight: '36px'}}>
                         Comentario
                     </Typography>
 
@@ -255,7 +266,7 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
                         <Typography
                             variant="caption"
                             component="div"
-                            sx={{ textAlign: 'right', color: 'text.secondary' }}
+                            sx={{textAlign: 'right', color: 'text.secondary'}}
                         >
                             Observación por el vendedor.
                         </Typography>
@@ -267,33 +278,45 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
                         Lista Precios
                     </Typography>
 
-                    <RHFSelect
-                        name="price"
-                        size="small"
-                        helperText={
-                            <Link underline="always" color="inherit">
-                                Precio: {selectedPrice && (
-                                <>{fCurrency(selectedPrice.Price)}</>
-                            )}
-                            </Link>
-                        }
-                        sx={{
-                            maxWidth: '60%',
-                            '& .MuiFormHelperText-root': {
-                                mx: 0,
-                                mt: 1,
-                                textAlign: 'right',
-                            },
-                        }}
-                        onChange={(event) => setSelectedPrice(event.target.value)}
-                        value={selectedPrice}
-                    >
-                        {pricelistproduct.map((price) => (
-                            <MenuItem key={price.PriceList} value={price}>
-                                {price.ListName} | {fCurrency(price.Price)}+{fCurrency(price.Price*0.12)} = {fCurrency(price.Price*1.12)}
-                            </MenuItem>
-                        ))}
-                    </RHFSelect>
+
+                    {loading ? (
+                        <LoadingComponent/>
+                    ) : (
+
+                        <RHFSelect
+                            name="price"
+                            size="small"
+                            helperText={
+                                <Link underline="always" color="inherit">
+                                    Precio: {selectedPrice && (
+                                    <>{fCurrency(selectedPrice.Price)}</>
+                                )}
+                                </Link>
+                            }
+                            sx={{
+                                maxWidth: '60%',
+                                '& .MuiFormHelperText-root': {
+                                    mx: 0,
+                                    mt: 1,
+                                    textAlign: 'right',
+                                },
+                            }}
+                            onChange={(event) => setSelectedPrice(event.target.value)}
+                            value={selectedPrice}
+                        >
+
+                            {
+                                pricelistproduct.map((price) => (
+                                    <MenuItem key={price.PriceList} value={price}>
+                                        {price.ListName} | {fCurrency(price.Price)}+{fCurrency(price.Price * 0.12)} = {fCurrency(price.Price * 1.12)}
+                                    </MenuItem>
+
+                                ))}
+
+
+                        </RHFSelect>
+
+                    )}
 
                 </Stack>
 
@@ -301,14 +324,14 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
 
                 <Stack direction="row" spacing={2}>
                     <Button
-                      fullWidth
-                      disabled={isMaxQuantity}
-                      size="large"
-                      color="warning"
-                      variant="contained"
-                      startIcon={<Iconify icon="ic:round-add-shopping-cart" />}
-                      onClick={handleAddCart}
-                      sx={{ whiteSpace: 'nowrap' }}
+                        fullWidth
+                        disabled={isMaxQuantity}
+                        size="large"
+                        color="warning"
+                        variant="contained"
+                        startIcon={<Iconify icon="ic:round-add-shopping-cart"/>}
+                        onClick={handleAddCart}
+                        sx={{whiteSpace: 'nowrap'}}
                     >
                         Agregar
                     </Button>
@@ -329,3 +352,14 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
         </FormProvider>
     );
 }
+
+
+const LoadingComponent = () => {
+    return (
+       <>
+           <p className="ml-2 mb-0">Cargando...</p>
+           <img src="/assets/images/loading.gif" height="75px" alt="Loading" />
+       </>
+
+    );
+};

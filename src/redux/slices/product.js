@@ -4,6 +4,7 @@ import uniqBy from 'lodash/uniqBy';
 import {createSlice} from '@reduxjs/toolkit';
 // utils
 import axios from '../../utils/axios';
+import {dispatch} from "../store";
 
 // ----------------------------------------------------------------------
 
@@ -197,6 +198,10 @@ const slice = createSlice({
         applyComment(state, action) {
             state.checkout.comment = action.payload;
         },
+
+        clearPriceListProduct(state) {
+            state.pricelistproduct = null;
+        },
     },
 });
 
@@ -262,10 +267,19 @@ export function getPriceListProduct(name, idUser) {
             const response = await axios.get('/hanadb/api/products/price_list_product', {
                 params: {name, idUser},
             });
+
+            dispatch(slice.actions.clearPriceListProduct);
+
             dispatch(slice.actions.getPriceListProductSuccess(response.data.data));
         } catch (error) {
             console.error(error);
             dispatch(slice.actions.hasError(error));
         }
     };
+}
+
+export function  getClearPriceListProduct (){
+    return async (dispatch) => {
+        dispatch(slice.actions.clearPriceListProduct);
+    }
 }
