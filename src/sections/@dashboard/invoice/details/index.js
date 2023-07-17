@@ -61,6 +61,8 @@ InvoiceDetails.propTypes = {
 
 export default function InvoiceDetails({invoice}) {
 
+    const [loading, setLoading] = useState(false); // Variable de estado para rastrear el estado de carga
+
     const router = useRouter();
 
     const {user} = useAuthContext();
@@ -421,15 +423,16 @@ export default function InvoiceDetails({invoice}) {
     console.log('Total incluido IVA: ', totalConIva);
 
     const enviarOrdenSAP = async () => {
-        console.log(ID); // Log ID de la orden
-        console.log(user.ID) // Log ID del usuario
-
         try {
+            console.log(ID); // Log ID de la orden
+            console.log(user.ID); // Log ID del usuario
+
+            setLoading(true); // Establecer loading a true antes de hacer la llamada a la API
+
             // Actualizar una orden.
             const response = await axios.post('/hanadb/api/orden_venta_sap', {
                 ID_ORDER: ID,
-                ID_USER: user.ID
-
+                ID_USER: user.ID,
             });
 
             console.log("Orden Creada en el SAP.");
@@ -439,13 +442,14 @@ export default function InvoiceDetails({invoice}) {
             if (response.status === 200) {
                 router(PATH_DASHBOARD.invoice.list);
             }
-
         } catch (error) {
-            // Manejar el error de la petición PUT aquí
+            // Manejar el error de la petición POST aquí
             console.error('Error al actualizar la orden:', error);
+        } finally {
+            setLoading(false); // Restablecer loading a false después de que se completa la llamada a la API, independientemente de si fue exitosa o falló
         }
+    };
 
-    }
 
 
     const handleChangePedidoFactura = async () => {
@@ -455,6 +459,9 @@ export default function InvoiceDetails({invoice}) {
 
         if (valueFactura || valueValorFactura) {
             try {
+
+                setLoading(true); // Establecer loading a true antes de hacer la llamada a la API
+
                 // Actualizar una orden.
                 const response = await axios.put('/hanadb/api/orders/order/facturar', {
                     ID_ORDER: ID,
@@ -472,9 +479,14 @@ export default function InvoiceDetails({invoice}) {
                     router.push('/dashboard/invoice/list/');
                 }
 
+                setLoading(false); // Restablecer loading a false después de que se completa la llamada a la API, independientemente de si fue exitosa o falló
+
+
             } catch (error) {
                 // Manejar el error de la petición PUT aquí
                 console.error('Error al actualizar la orden:', error);
+                setLoading(false); // Restablecer loading a false después de que se completa la llamada a la API, independientemente de si fue exitosa o falló
+
             }
 
         } else {
@@ -756,7 +768,11 @@ export default function InvoiceDetails({invoice}) {
                 {user.ROLE === "aprobador" &&
                     <Grid container>
                         <Grid item xs={12} md={12} sx={{py: 3, textAlign: 'center'}}>
-                            <Button onClick={enviarOrdenSAP}>CREAR ORDEN DE VENTA SAP</Button>
+                            {/* <Button onClick={enviarOrdenSAP}>CREAR ORDEN DE VENTA SAP</Button> */}
+
+                            <Button onClick={() => !loading && enviarOrdenSAP()} disabled={loading}>
+                                {loading ? 'CREANDO...' : 'CREAR ORDEN DE VENTA SAP'}
+                            </Button>
                         </Grid>
                     </Grid>
                 }
@@ -782,10 +798,9 @@ export default function InvoiceDetails({invoice}) {
                                 value={valueValorFactura}
                                 onChange={handleChangeValorFactura}
                             />
-                            <Button variant="contained" color="success" onClick={() => {
-                                handleChangePedidoFactura();
-                            }}>
-                                Guardar Factura
+                            <Button variant="contained" color="success"
+                                    onClick={() => !loading && handleChangePedidoFactura()} disabled={loading}>
+                                {loading ? 'GUARDANDO...' : ' Guardar Factura'}
                             </Button>
 
                         </Grid>
@@ -794,7 +809,7 @@ export default function InvoiceDetails({invoice}) {
                 }
             </Card>
 
-            {user.ROLE === "aprobador" &&
+            {user.ROLE === "aprobador" || user.ROLE === "bodega" &&
 
                 <MenuPopover
                     open={openPopover}

@@ -105,7 +105,8 @@ export default  function EcommerceProductDetailsPage() {
     //Lista de precios por producto
     useEffect(() => {
         if (name) {
-
+            //1. Eliminar la lista anterior.
+            //2. consultar nuevamente.
             dispatch(getPriceListProduct(name, user.ID));
         }
     }, [dispatch, name, user.ID]);

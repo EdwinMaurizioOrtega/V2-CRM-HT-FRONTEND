@@ -60,7 +60,7 @@ const slice = createSlice({
 
         // GET PRODUCT
         getPriceListProductSuccess(state, action) {
-            state.isLoading = false;
+            state.isLoading = true;
             state.pricelistproduct = action.payload;
         },
 
