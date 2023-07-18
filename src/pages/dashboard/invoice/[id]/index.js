@@ -33,13 +33,34 @@ export default function InvoiceDetailsPage() {
 
     console.log(`Invoice: ${id}`);
 
-    const {currentInvoice, isLoading} = useSelector((state) => state.orders_status);
+    //const {currentInvoice, isLoading} = useSelector((state) => state.orders_status);
+    const [currentInvoice, setCurrentInvoice] = useState([]);
+
+    // useEffect(() => {
+    //     if (id) {
+    //         dispatch(getDetailOrder(id));
+    //     }
+    // }, [dispatch, id]);
 
     useEffect(() => {
-        if (id) {
-            dispatch(getDetailOrder(id));
+        // Define an async function inside useEffect
+        async function fetchData() {
+            if (id) {
+                try {
+                    const response = await fetch(`https://crm.lidenar.com/hanadb/api/orders/order/detail?id=${id}`);
+                    const data = await response.json();
+                    setCurrentInvoice(data.data);
+                    console.log(currentInvoice);
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    setCurrentInvoice([]);
+                }
+            }
         }
-    }, [dispatch, id]);
+
+        // Call the async function immediately
+        fetchData();
+    }, [id]);
 
     console.log(currentInvoice);
 

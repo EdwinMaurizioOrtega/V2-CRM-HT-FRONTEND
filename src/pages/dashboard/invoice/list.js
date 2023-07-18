@@ -102,7 +102,8 @@ export default function InvoiceListPage() {
 
   const dispatch = useDispatch();
 
-  const { orders, isLoading } = useSelector((state) => state.orders_status);
+  //const { orders, isLoading } = useSelector((state) => state.orders_status);
+  const [orders, setOrders ] = useState([]);
 
 
   const { themeStretch } = useSettingsContext();
@@ -143,37 +144,108 @@ export default function InvoiceListPage() {
   const [filterStartDate, setFilterStartDate] = useState(null);
 
 
+  // useEffect(async () => {
+  //
+  //   console.log(user.DISPLAYNAME);
+  //   console.log(user.ROLE);
+  //
+  //   // Perfil vendedor
+  //   if (user.ROLE === "vendedor") {
+  //     const idVendedor = user.ID;
+  //     // Mostramos todos los estados para el rol del vendedor
+  //     //dispatch(getOrdersAllStatusByVendedor(idVendedor));
+  //
+  //     try {
+  //       const response = await fetch(`https://crm.lidenar.com/hanadb/api/orders/vendedor?ven=${idVendedor}`);
+  //
+  //       const data = await response.json();
+  //       setOrders(data.data.orders);
+  //       console.log(orders);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //       setOrders([]);
+  //     }
+  //
+  //
+  //   };
+  //
+  //   // Perfil aprobacion
+  //
+  //   if (user.ROLE === "aprobador") {
+  //     // Enviar el estado 6 para consultar las ordenes pendientes de factuaración.
+  //     //dispatch(getOrders(6));
+  //
+  //     try {
+  //       const response = await fetch(`https://crm.lidenar.com/hanadb/api/orders?estado=6`);
+  //
+  //       const data = await response.json();
+  //       setOrders(data.orders);
+  //       console.log(orders);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //       setOrders([]);
+  //     }
+  //
+  //   };
+  //
+  //   // Perfil bodega
+  //
+  //   if (user.ROLE === "bodega") {
+  //     console.log(user.WAREHOUSE);
+  //     const bodegaSAP = user.WAREHOUSE;
+  //
+  //     dispatch(getOrdersByBodega(bodegaSAP));
+  //
+  //     try {
+  //       const response = await fetch(`https://crm.lidenar.com/hanadb/api/orders/bodega?bod=${bodegaSAP}`);
+  //
+  //       const data = await response.json();
+  //       setOrders(data.data.orders);
+  //       console.log(orders);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //       setOrders([]);
+  //     }
+  //
+  //   };
+  //
+  //
+  // }, []);
+
   useEffect(() => {
+    async function fetchData() {
+      console.log(user.DISPLAYNAME);
+      console.log(user.ROLE);
 
-    console.log(user.DISPLAYNAME);
-    console.log(user.ROLE);
+      try {
+        let data = [];
 
-    // Perfil vendedor
-    if ( user.ROLE === "vendedor") {
-      const idVendedor = user.ID;
-      // Mostramos todos los estados para el rol del vendedor
-      dispatch(getOrdersAllStatusByVendedor(idVendedor));
-    };
+        if (user.ROLE === "vendedor") {
+          const idVendedor = user.ID;
+          const response = await fetch(`https://crm.lidenar.com/hanadb/api/orders/vendedor?ven=${idVendedor}`);
+          data = await response.json();
+        } else if (user.ROLE === "aprobador") {
+          const response = await fetch(`https://crm.lidenar.com/hanadb/api/orders?estado=6`);
+          data = await response.json();
+        } else if (user.ROLE === "bodega") {
+          console.log(user.WAREHOUSE);
+          const bodegaSAP = user.WAREHOUSE;
+          dispatch(getOrdersByBodega(bodegaSAP));
+          const response = await fetch(`https://crm.lidenar.com/hanadb/api/orders/bodega?bod=${bodegaSAP}`);
+          data = await response.json();
+        }
 
-    // Perfil aprobacion
+        setOrders(data.orders);
+        console.log(data.orders);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setOrders([]);
+      }
+    }
 
-    if ( user.ROLE === "aprobador") {
-      // Enviar el estado 6 para consultar las ordenes pendientes de factuaración.
-      dispatch(getOrders(6));
-    };
+    fetchData();
+  }, [user]);
 
-    // Perfil bodega
-
-    if ( user.ROLE === "bodega") {
-      console.log(user.WAREHOUSE);
-      const bodegaSAP = user.WAREHOUSE;
-
-      dispatch(getOrdersByBodega(bodegaSAP));
-    };
-
-
-
-  }, [dispatch]);
 
   useEffect(() => {
     if (orders.length) {

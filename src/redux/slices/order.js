@@ -41,60 +41,60 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Ordenes por estado
-export function getOrders(estado) {
-    return async (dispatch) => {
-        dispatch(slice.actions.startLoading());
-        try {
-            const response = await axios.get(`/hanadb/api/orders?estado=${estado}`);
-            dispatch(slice.actions.getOrdersSuccess(response.data.orders));
-        } catch (error) {
-            dispatch(slice.actions.hasError(error));
-        }
-    };
-}
+// export function getOrders(estado) {
+//     return async (dispatch) => {
+//         dispatch(slice.actions.startLoading());
+//         try {
+//             const response = await axios.get(`/hanadb/api/orders?estado=${estado}`);
+//             dispatch(slice.actions.getOrdersSuccess(response.data.orders));
+//         } catch (error) {
+//             dispatch(slice.actions.hasError(error));
+//         }
+//     };
+// }
 
 // Ordenes con todos los estados.
-export function getOrdersAllStatusByVendedor(idVendedor) {
-    return async (dispatch) => {
-        dispatch(slice.actions.startLoading());
-        try {
-            const response = await axios.get(`/hanadb/api/orders/vendedor?ven=${idVendedor}`);
-            dispatch(slice.actions.getOrdersSuccess(response.data.orders));
-        } catch (error) {
-            dispatch(slice.actions.hasError(error));
-        }
-    };
-}
+// export function getOrdersAllStatusByVendedor(idVendedor) {
+//     return async (dispatch) => {
+//         dispatch(slice.actions.startLoading());
+//         try {
+//             const response = await axios.get(`/hanadb/api/orders/vendedor?ven=${idVendedor}`);
+//             dispatch(slice.actions.getOrdersSuccess(response.data.orders));
+//         } catch (error) {
+//             dispatch(slice.actions.hasError(error));
+//         }
+//     };
+// }
 
 // Ordenes pendientes de factura por bodega con estado 0
-export function getOrdersByBodega(bodega) {
-    return async (dispatch) => {
-        dispatch(slice.actions.startLoading());
-        try {
-            const response = await axios.get(`/hanadb/api/orders/bodega?bod=${bodega}`);
-            console.log("hola hola: "+response.data.orders);
-            dispatch(slice.actions.getOrdersSuccess(response.data.orders));
-        } catch (error) {
-            dispatch(slice.actions.hasError(error));
-        }
-    };
-}
+// export function getOrdersByBodega(bodega) {
+//     return async (dispatch) => {
+//         dispatch(slice.actions.startLoading());
+//         try {
+//             const response = await axios.get(`/hanadb/api/orders/bodega?bod=${bodega}`);
+//             console.log("hola hola: "+response.data.orders);
+//             dispatch(slice.actions.getOrdersSuccess(response.data.orders));
+//         } catch (error) {
+//             dispatch(slice.actions.hasError(error));
+//         }
+//     };
+// }
 
 // ----------------------------------------------------------------------
 
-export function getDetailOrder(id) {
-    return async (dispatch) => {
-        dispatch(slice.actions.startLoading());
-        try {
-            const response = await axios.get('/hanadb/api/orders/order/detail', {
-                params: {id},
-            });
-            dispatch(slice.actions.getDetailOrderSuccess(response.data.data));
-        } catch (error) {
-            console.error(error);
-            dispatch(slice.actions.hasError(error));
-        }
-    };
-}
+// export function getDetailOrder(id) {
+//     return async (dispatch) => {
+//         dispatch(slice.actions.startLoading());
+//         try {
+//             const response = await axios.get('/hanadb/api/orders/order/detail', {
+//                 params: {id},
+//             });
+//             dispatch(slice.actions.getDetailOrderSuccess(response.data.data));
+//         } catch (error) {
+//             console.error(error);
+//             dispatch(slice.actions.hasError(error));
+//         }
+//     };
+// }
 
 // ----------------------------------------------------------------------

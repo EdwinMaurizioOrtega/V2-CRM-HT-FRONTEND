@@ -35,24 +35,6 @@ EcommerceShopPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout
 
 export default function EcommerceShopPage() {
 
-    //Registrar el Service worker
-    useEffect(() => {
-
-        if (window.location.pathname === '/dashboard/e-commerce/shop/') {
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then(function (registration) {
-                        // Registro exitoso
-                        console.log('Service Worker registrado con éxito:', registration.scope);
-                    })
-                    .catch(function (error) {
-                        // Error en el registro
-                        console.log('Error al registrar el Service Worker:', error);
-                    });
-            }
-        }
-    }, []);
-
     const {themeStretch} = useSettingsContext();
 
     const dispatch = useDispatch();

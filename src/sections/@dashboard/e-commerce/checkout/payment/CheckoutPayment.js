@@ -61,7 +61,7 @@ const WAREHOUSE_OPTIONS = [
     {
         id: '019',
         value: '019',
-        title: 'CENTRO DE DISTRIBUCIÓN',
+        title: 'CENTRO DE DISTRIBUCIÓN HT',
         description: 'Matriz en la ciudad de Quito.',
     },
 
