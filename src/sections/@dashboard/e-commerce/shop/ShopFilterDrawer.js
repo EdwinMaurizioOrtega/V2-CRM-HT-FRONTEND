@@ -31,12 +31,13 @@ import { RHFMultiCheckbox, RHFRadioGroup, RHFSlider } from '../../../../componen
 export const FILTER_CATEGORY_OPTIONS = [
   // { label: 'Todo', value: 'Todo' },
   { label: 'CELULARES', value: 'CELULARES' },
+  { label: 'ELECTRODOMÉSTICOS', value: 'ELECTRODOMÉSTICOS' },
   { label: 'ACCESORIOS', value: 'ACCESORIOS' },
-  { label: 'TABLETS', value: 'TABLETS' },
-  { label: 'ELECTRODOMÉSTICOS', value: 'ELECTRODOMÉSTICOS,TECNOLOGIA,BELLEZA,ELECTROMENORES' },
-  { label: 'CLARO –TARJETAS Y CHIPS', value: 'CLARO –TARJETAS Y CHIPS' },
-  { label: 'VARIOS', value: 'VARIOS' },
+  { label: 'BELLEZA', value: 'BELLEZA' },
   { label: 'REPUESTOS', value: 'REPUESTOS' },
+  { label: 'ELECTROMENORES', value: 'ELECTROMENORES' },
+  { label: 'TECNOLOGIA', value: 'TECNOLOGIA' },
+  { label: 'VARIOS', value: 'VARIOS' },
 ];
 
 export const FILTER_GENDER_OPTIONS = [
