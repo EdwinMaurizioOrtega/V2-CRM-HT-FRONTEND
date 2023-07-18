@@ -148,6 +148,7 @@ export default function InvoiceTableRow({
                     <Label
                         variant="soft"
                         color={
+                            (ESTADO === 6 && 'error') ||
                             (ESTADO === 6 && 'success') ||
                             (ESTADO === 0 && 'warning') ||
                             (ESTADO === 1 && 'error') ||
@@ -155,6 +156,7 @@ export default function InvoiceTableRow({
                         }
                     >
                         {
+                            (ESTADO === 8 ? 'Anulado' : '') ||
                             (ESTADO === 6 ? 'Pendiende de aprobar' : '') ||
                             (ESTADO === 0 ? 'Por Facturar' : '') ||
                             (ESTADO === 1 ? 'Facturado' : '') ||
