@@ -72,7 +72,7 @@ export default function InvoiceToolbar({ invoice }) {
             style={{ textDecoration: 'none' }}
           >
             {({ loading }) => (
-              <Tooltip title="Download">
+              <Tooltip title="Descargar">
                 <IconButton>
                   {loading ? (
                     <CircularProgress size={24} color="inherit" />
@@ -84,7 +84,7 @@ export default function InvoiceToolbar({ invoice }) {
             )}
           </PDFDownloadLink>
 
-          <Tooltip title="Print">
+          <Tooltip title="Imprimir">
             <IconButton>
               <Iconify icon="eva:printer-fill" />
             </IconButton>

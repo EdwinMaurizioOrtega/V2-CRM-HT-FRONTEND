@@ -62,12 +62,11 @@ import axios from "../../../utils/axios";
 // ----------------------------------------------------------------------
 
 const SERVICE_OPTIONS = [
-  'all',
-  'full stack development',
-  'backend development',
-  'ui design',
-  'ui/ux design',
-  'front end development',
+  'Todos',
+  'Pendiente de aprobar',
+  'Pendiente de facturar',
+  'Facturado',
+  'Anulado',
 ];
 
 const TABLE_HEAD = [
@@ -455,23 +454,23 @@ export default function InvoiceListPage() {
                 color={theme.palette.success.main}
               />
 
-              {/* <InvoiceAnalytic */}
-              {/*   title="Unpaid" */}
-              {/*   total={getLengthByStatus('unpaid')} */}
-              {/*   percent={getPercentByStatus('unpaid')} */}
-              {/*   price={getTotalPriceByStatus('unpaid')} */}
-              {/*   icon="eva:clock-fill" */}
-              {/*   color={theme.palette.warning.main} */}
-              {/* /> */}
+              <InvoiceAnalytic
+                title="Pendiente de facturar"
+                total={getLengthByStatus('unpaid')}
+                percent={getPercentByStatus('unpaid')}
+                price={getTotalPriceByStatus('unpaid')}
+                icon="eva:clock-fill"
+                color={theme.palette.warning.main}
+              />
 
-              {/* <InvoiceAnalytic */}
-              {/*   title="Overdue" */}
-              {/*   total={getLengthByStatus('overdue')} */}
-              {/*   percent={getPercentByStatus('overdue')} */}
-              {/*   price={getTotalPriceByStatus('overdue')} */}
-              {/*   icon="eva:bell-fill" */}
-              {/*   color={theme.palette.error.main} */}
-              {/* /> */}
+              <InvoiceAnalytic
+                title="Facturado"
+                total={getLengthByStatus('overdue')}
+                percent={getPercentByStatus('overdue')}
+                price={getTotalPriceByStatus('overdue')}
+                icon="eva:bell-fill"
+                color={theme.palette.error.main}
+              />
 
               {/* <InvoiceAnalytic */}
               {/*   title="Draft" */}

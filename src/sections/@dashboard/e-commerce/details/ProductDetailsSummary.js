@@ -49,6 +49,7 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
 
     const {
         CODIGO,
+        SKU,
         STATUS,
         NOMBRE,
         MAYORISTAS_CUENCA,
@@ -86,6 +87,7 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
 
     const defaultValues = {
         CODIGO,
+        SKU,
         STATUS,
         NOMBRE,
         MAYORISTAS_CUENCA,
@@ -210,7 +212,7 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
                         {/* <Rating value={totalRating} precision={0.1} readOnly /> */}
 
                         <Typography variant="body2" sx={{color: 'text.secondary'}}>
-                            SAP: {CODIGO}
+                            SAP: {CODIGO}  SKU: {SKU}
                         </Typography>
                     </Stack>
 

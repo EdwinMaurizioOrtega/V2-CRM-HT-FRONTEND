@@ -48,7 +48,7 @@ export default function InvoiceTableToolbar({
       <TextField
         fullWidth
         select
-        label="Service type"
+        label="Estado"
         value={filterService}
         onChange={onFilterService}
         SelectProps={{
@@ -80,7 +80,7 @@ export default function InvoiceTableToolbar({
       </TextField>
 
       <DatePicker
-        label="Start date"
+        label="Inicio"
         value={filterStartDate}
         onChange={onFilterStartDate}
         renderInput={(params) => (
@@ -95,7 +95,7 @@ export default function InvoiceTableToolbar({
       />
 
       <DatePicker
-        label="End date"
+        label="Final"
         value={filterEndDate}
         onChange={onFilterEndDate}
         renderInput={(params) => (
@@ -113,7 +113,7 @@ export default function InvoiceTableToolbar({
         fullWidth
         value={filterName}
         onChange={onFilterName}
-        placeholder="Search client or invoice number..."
+        placeholder="Buscar cliente o número de pedido..."
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -130,7 +130,7 @@ export default function InvoiceTableToolbar({
           onClick={onResetFilter}
           startIcon={<Iconify icon="eva:trash-2-outline" />}
         >
-          Clear
+          Limpiar
         </Button>
       )}
     </Stack>
