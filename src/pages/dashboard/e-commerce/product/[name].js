@@ -170,6 +170,15 @@ export default  function EcommerceProductDetailsPage() {
                         <Typography variant="subtitle2">{fNumber(product?.MAYORISTAS_GUAYAQUIL)}</Typography>
 
                     </Stack>
+
+                    <Stack direction="row" alignItems="center" justifyContent="space-between">
+
+                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
+                            MAYORISTAS_MANTA
+                        </Typography>
+                        <Typography variant="subtitle2">{fNumber(product?.MAYORISTAS_MANTA)}</Typography>
+
+                    </Stack>
                     {/* <Stack direction="row" alignItems="center" justifyContent="space-between"> */}
 
                     {/*     <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}> */}
@@ -229,15 +238,6 @@ export default  function EcommerceProductDetailsPage() {
                             SAMSUNG_MANTA
                         </Typography>
                         <Typography variant="subtitle2">{fNumber(product?.SAMSUNG_MANTA)}</Typography>
-
-                    </Stack>
-
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            MAYORISTAS_MANTA
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.MAYORISTAS_MANTA)}</Typography>
 
                     </Stack>
 
