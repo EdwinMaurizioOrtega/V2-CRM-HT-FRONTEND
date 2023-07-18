@@ -14,7 +14,7 @@ import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 // sections
 import InvoiceDetails from '../../../../sections/@dashboard/invoice/details';
 import {useDispatch, useSelector} from "../../../../redux/store";
-import {getDetailOrder} from "../../../../redux/slices/order";
+import { getDetailOrder } from "../../../../redux/slices/order";
 
 // ----------------------------------------------------------------------
 
