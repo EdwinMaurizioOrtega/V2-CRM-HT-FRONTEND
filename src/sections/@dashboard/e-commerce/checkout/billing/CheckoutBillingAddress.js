@@ -216,7 +216,7 @@ function AddressItem({address, onCreateBilling}) {
     const phoneNumber = Celular;
 
     return (
-        <Card
+        <Card onClick={onCreateBilling}
             sx={{
                 p: 3,
                 mb: 3,
@@ -255,17 +255,17 @@ function AddressItem({address, onCreateBilling}) {
                     </Typography>
                 </Stack>
 
-                <Stack flexDirection="row" flexWrap="wrap" flexShrink={0}>
-                    {/* {!isDefault && ( */}
-                    {/*     <Button variant="outlined" size="small" color="inherit" sx={{mr: 1}}> */}
-                    {/*         Borrar */}
-                    {/*     </Button> */}
-                    {/* )} */}
+                {/* <Stack flexDirection="row" flexWrap="wrap" flexShrink={0}> */}
+                {/*     /!* {!isDefault && ( *!/ */}
+                {/*     /!*     <Button variant="outlined" size="small" color="inherit" sx={{mr: 1}}> *!/ */}
+                {/*     /!*         Borrar *!/ */}
+                {/*     /!*     </Button> *!/ */}
+                {/*     /!* )} *!/ */}
 
-                    <Button variant="outlined" size="small" onClick={onCreateBilling}>
-                        Entregar a esta dirección
-                    </Button>
-                </Stack>
+                {/*     <Button variant="outlined" size="small" onClick={onCreateBilling}> */}
+                {/*         Entregar a esta dirección */}
+                {/*     </Button> */}
+                {/* </Stack> */}
             </Stack>
         </Card>
     );
