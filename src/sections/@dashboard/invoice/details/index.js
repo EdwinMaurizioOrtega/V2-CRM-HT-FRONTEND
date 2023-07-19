@@ -344,6 +344,7 @@ export default function InvoiceDetails({invoice}) {
     function nameWarehouse(ware) {
         console.log(`Bodega: ${ware}`);
         const strings = {
+            "019": "Centro Distribución HT",
             "002": "Cuenca",
             "006": "Quito",
             "015": "Guayaquil",
