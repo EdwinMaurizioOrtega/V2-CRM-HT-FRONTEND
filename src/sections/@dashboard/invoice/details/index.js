@@ -810,7 +810,7 @@ export default function InvoiceDetails({invoice}) {
                 }
             </Card>
 
-            {user.ROLE === "aprobador" || user.ROLE === "bodega" &&
+            {user.ROLE === "aprobador" || user.ROLE === "bodega" ? (
 
                 <MenuPopover
                     open={openPopover}
@@ -860,6 +860,7 @@ export default function InvoiceDetails({invoice}) {
                         Borrar
                     </MenuItem>
                 </MenuPopover>
+                ) : null
             }
 
             <ConfirmDialog
