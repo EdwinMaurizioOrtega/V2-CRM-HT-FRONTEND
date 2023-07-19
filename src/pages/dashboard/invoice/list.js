@@ -229,7 +229,6 @@ export default function InvoiceListPage() {
         } else if (user.ROLE === "bodega") {
           console.log(user.WAREHOUSE);
           const bodegaSAP = user.WAREHOUSE;
-          dispatch(getOrdersByBodega(bodegaSAP));
           const response = await fetch(`https://crm.lidenar.com/hanadb/api/orders/bodega?bod=${bodegaSAP}`);
           data = await response.json();
         }
