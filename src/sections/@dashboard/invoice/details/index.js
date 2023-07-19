@@ -945,6 +945,7 @@ export default function InvoiceDetails({invoice}) {
 
 
 export const top100Films = [
+    {title: 'Centro Distribución HT', id: "019"},
     {title: 'Cuenca', id: "002"},
     {title: 'Quito', id: "006"},
     {title: 'Guayaquil', id: "015"},
