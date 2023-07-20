@@ -543,6 +543,7 @@ export default function InvoiceDetails({invoice}) {
                         </Typography>
 
                         <Typography variant="body2">{Cliente}</Typography>
+                        <Typography variant="body2">TIPO: {Tipo}</Typography>
                         <Typography variant="body2">CI/RUC: {CLIENTEID}</Typography>
                         <Typography variant="body2">{Ciudad}</Typography>
                         <Divider/>

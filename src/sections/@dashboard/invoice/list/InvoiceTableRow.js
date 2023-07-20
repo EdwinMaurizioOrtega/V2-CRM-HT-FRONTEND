@@ -148,7 +148,7 @@ export default function InvoiceTableRow({
                     <Label
                         variant="soft"
                         color={
-                            (ESTADO === 6 && 'error') ||
+                            (ESTADO === 8 && 'error') ||
                             (ESTADO === 6 && 'success') ||
                             (ESTADO === 0 && 'warning') ||
                             (ESTADO === 1 && 'error') ||
