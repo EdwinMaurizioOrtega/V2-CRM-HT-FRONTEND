@@ -177,10 +177,13 @@ export default function InvoiceTableRow({
                     </IconButton>
                 </TableCell>
 
-                {user.ROLE === "bodega" &&
+                {
+                    user.ROLE === "aprobador" || user.ROLE === "bodega" ? (
                     <TableCell align="center" sx={{textTransform: 'capitalize'}}>
                         {DOCNUM}
                     </TableCell>
+                    ) : null
+
                 }
 
             </TableRow>
