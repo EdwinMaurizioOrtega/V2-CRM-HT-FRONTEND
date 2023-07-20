@@ -135,7 +135,7 @@ function PaymentOption({option, cardOptions, hasChild, isSelected, isCreditMetho
         >
             <FormControlLabel
                 value={value}
-                control={<Radio checkedIcon={<Iconify icon="eva:checkmark-circle-2-fill"/>}/>}
+                control={<Radio required={true} checkedIcon={<Iconify icon="eva:checkmark-circle-2-fill"/>}/>}
                 label={
                     <Box sx={{ml: 1}}>
                         <Typography variant="subtitle2">{title}</Typography>
