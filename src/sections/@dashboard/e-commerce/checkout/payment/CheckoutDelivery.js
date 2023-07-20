@@ -79,36 +79,39 @@ export default function CheckoutDelivery({ billing, total, deliveryOptions, onAp
                   sm: 'repeat(2, 1fr)',
                 }}
               >
-                {/* {deliveryOptions.map((option) => ( */}
-                {/*   <DeliveryOption */}
-                {/*     key={option.value} */}
-                {/*     option={option} */}
-                {/*     isSelected={field.value === option.value} */}
-                {/*   /> */}
-                {/* ))} */}
+                  {/* V1 */}
+                {deliveryOptions.map((option) => (
+                  <DeliveryOption
+                    key={option.value}
+                    option={option}
+                    isSelected={field.value === option.value}
+                  />
+                ))}
 
-                  {
-                      deliveryOptions.map((option, index) => {
-                          if (total < 1000 && (index === 1 || index === 2 || index === 3 || index === 4) ) {
-                              return (
-                                  <DeliveryOption
-                                      key={option.value}
-                                      option={option}
-                                      isSelected={field.value === option.value}
-                                  />
-                              );
-                          } else if (total > 1000 && index === 0) {
-                              return (
-                                  <DeliveryOption
-                                      key={option.value}
-                                      option={option}
-                                      isSelected={field.value === option.value}
-                                  />
-                              );
-                          }
-                          return null;
-                      })
-                  }
+
+                {/* V2 */}
+                  {/* { */}
+                  {/*     deliveryOptions.map((option, index) => { */}
+                  {/*         if (total < 1000 && (index === 1 || index === 2 || index === 3 || index === 4) ) { */}
+                  {/*             return ( */}
+                  {/*                 <DeliveryOption */}
+                  {/*                     key={option.value} */}
+                  {/*                     option={option} */}
+                  {/*                     isSelected={field.value === option.value} */}
+                  {/*                 /> */}
+                  {/*             ); */}
+                  {/*         } else if (total > 1000 && index === 0) { */}
+                  {/*             return ( */}
+                  {/*                 <DeliveryOption */}
+                  {/*                     key={option.value} */}
+                  {/*                     option={option} */}
+                  {/*                     isSelected={field.value === option.value} */}
+                  {/*                 /> */}
+                  {/*             ); */}
+                  {/*         } */}
+                  {/*         return null; */}
+                  {/*     }) */}
+                  {/* } */}
 
 
 
@@ -117,13 +120,16 @@ export default function CheckoutDelivery({ billing, total, deliveryOptions, onAp
           )}
         />
 
-          <Stack direction="row" justifyContent="space-evenly">
+
+          <Stack >
+
               <Typography variant="subtitle2" sx={{ height: 36, lineHeight: '36px' }}>
-                  Comentario
+
               </Typography>
 
               <Stack spacing={1}>
                   <RHFTextField
+                      label="Comentario"
                       name="commentEnvio"
                       onKeyUp={(event) => {
                           const { value } = event.target;

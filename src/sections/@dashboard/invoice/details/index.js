@@ -654,9 +654,9 @@ export default function InvoiceDetails({invoice}) {
                                                 <Typography
                                                     variant="subtitle2">{row.NOMBRE !== null ? row.NOMBRE : 'VALOR DEL ENVIO'}</Typography>
 
-                                                {/* <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap> */}
-                                                {/*   {row.NOMBRE} */}
-                                                {/* </Typography> */}
+                                                <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                                                  {row.PRODUCTO_ID}
+                                                </Typography>
                                             </Box>
                                         </TableCell>
 

@@ -45,9 +45,12 @@ export default function CheckoutBillingInfo({billing, onBackStep}) {
             <CardContent>
                 <Typography variant="subtitle2" gutterBottom>
                     {billing?.Cliente}&nbsp;
-                    {/* <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}> */}
-                    {/*   ({billing?.addressType}) */}
-                    {/* </Typography> */}
+                    <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}>
+                      ({billing?.Tipo})
+                    </Typography>
+                    <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                        {billing?.ID}
+                    </Typography>
                 </Typography>
 
                 <Typography variant="body2" gutterBottom>

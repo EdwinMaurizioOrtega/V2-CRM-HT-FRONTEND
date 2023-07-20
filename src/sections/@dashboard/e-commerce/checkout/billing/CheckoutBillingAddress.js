@@ -210,10 +210,10 @@ AddressItem.propTypes = {
 
 function AddressItem({address, onCreateBilling}) {
     // const {Cliente, Direccion, Celular, receiver, fullAddress, addressType, phoneNumber, isDefault} = address;
-    const {Cliente, Direccion, Celular} = address;
+    const {Cliente, Direccion, Celular, ID, Tipo} = address;
     const receiver = Cliente;
-    const fullAddress = Direccion;
-    const phoneNumber = Celular;
+    const tipo = Tipo;
+    const id = ID;
 
     return (
         <Card onClick={onCreateBilling}
@@ -248,10 +248,10 @@ function AddressItem({address, onCreateBilling}) {
                         {/* )} */}
                     </Stack>
 
-                    <Typography variant="body2">{fullAddress}</Typography>
+                    <Typography variant="body2">{tipo}</Typography>
 
                     <Typography variant="body2" sx={{color: 'text.secondary'}}>
-                        {phoneNumber}
+                        {id}
                     </Typography>
                 </Stack>
 
