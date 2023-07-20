@@ -154,18 +154,24 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
 
     const handleAddCart = async () => {
         //console.log("values: "+ values.price.Price);
-        try {
-            onAddCart({
-                ...values,
-                // colors: [values.colors],
-                price: selectedPrice,
-                subtotal: values.price.Price * values.quantity,
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    };
+        if (selectedPrice) {
 
+            try {
+                onAddCart({
+                    ...values,
+                    // colors: [values.colors],
+                    price: selectedPrice,
+                    subtotal: values.price.Price * values.quantity,
+                });
+            } catch (error) {
+                console.error(error);
+            }
+
+        } else {
+            alert("Te falto seleccionar un tipo de precio. 😅")
+        }
+
+    };
 
     useEffect(() => {
         // Simulamos un tiempo de carga de 2 segundos para la animación
@@ -212,7 +218,7 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
                         {/* <Rating value={totalRating} precision={0.1} readOnly /> */}
 
                         <Typography variant="body2" sx={{color: 'text.secondary'}}>
-                            SAP: {CODIGO}  SKU: {SKU}
+                            SAP: {CODIGO} SKU: {SKU}
                         </Typography>
                     </Stack>
 
@@ -358,12 +364,12 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
 
 const LoadingComponent = () => {
     return (
-       <>
-           {/* <p className="ml-2 mb-0">Cargando...</p> */}
-           <img src="/assets/images/loading.gif" height="75px" alt="Loading" />
-           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       </>
+        <>
+            {/* <p className="ml-2 mb-0">Cargando...</p> */}
+            <img src="/assets/images/loading.gif" height="75px" alt="Loading"/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </>
 
     );
 };
