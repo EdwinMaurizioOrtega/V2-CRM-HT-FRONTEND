@@ -260,26 +260,26 @@ export function getProduct(name) {
 
 // ----------------------------------------------------------------------
 
-export function getPriceListProduct(name, idUser) {
-    return async (dispatch) => {
-        dispatch(slice.actions.startLoading());
-        try {
-            const response = await axios.get('/hanadb/api/products/price_list_product', {
-                params: {name, idUser},
-            });
+// export function getPriceListProduct(name, idUser) {
+//     return async (dispatch) => {
+//         dispatch(slice.actions.startLoading());
+//         try {
+//             const response = await axios.get('/hanadb/api/products/price_list_product', {
+//                 params: {name, idUser},
+//             });
+//
+//             dispatch(slice.actions.clearPriceListProduct);
+//
+//             dispatch(slice.actions.getPriceListProductSuccess(response.data.data));
+//         } catch (error) {
+//             console.error(error);
+//             dispatch(slice.actions.hasError(error));
+//         }
+//     };
+// }
 
-            dispatch(slice.actions.clearPriceListProduct);
-
-            dispatch(slice.actions.getPriceListProductSuccess(response.data.data));
-        } catch (error) {
-            console.error(error);
-            dispatch(slice.actions.hasError(error));
-        }
-    };
-}
-
-export function  getClearPriceListProduct (){
-    return async (dispatch) => {
-        dispatch(slice.actions.clearPriceListProduct);
-    }
-}
+// export function  getClearPriceListProduct (){
+//     return async (dispatch) => {
+//         dispatch(slice.actions.clearPriceListProduct);
+//     }
+// }

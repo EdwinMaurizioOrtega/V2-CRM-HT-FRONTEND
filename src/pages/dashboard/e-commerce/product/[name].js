@@ -72,7 +72,9 @@ export default  function EcommerceProductDetailsPage() {
 
     const dispatch = useDispatch();
 
-    const {pricelistproduct, isLoading, checkout} = useSelector((state) => state.product);
+    //const {pricelistproduct, isLoading, checkout} = useSelector((state) => state.product);
+    const { checkout } = useSelector((state) => state.product);
+    const [pricelistproduct, setPricelistproduct] = useState([]);
 
     const [product, setProduct] = useState(null); // Initial state
 
@@ -112,13 +114,31 @@ export default  function EcommerceProductDetailsPage() {
     //Lista de precios por producto
     useEffect(() => {
         //1. Eliminar la lista anterior.
-        dispatch(getClearPriceListProduct());
+        // dispatch(getClearPriceListProduct());
 
-        if (name) {
+        // if (name) {
+        //     //2. consultar nuevamente.
+        //     dispatch(getPriceListProduct(name, user.ID));
+        // }
 
-            //2. consultar nuevamente.
-            dispatch(getPriceListProduct(name, user.ID));
+        //V2
+        async function fetchData() {
+            if (name) {
+                try {
+                    const response = await fetch(`https://crm.lidenar.com/hanadb/api/products/price_list_product?name=${name}&idUser=${user.ID}`);
+                    const data = await response.json();
+                    setPricelistproduct(data.data);
+                    console.log(pricelistproduct);
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    setPricelistproduct([]);
+                }
+            }
         }
+
+        // Call the async function immediately
+        fetchData();
+
     }, [dispatch, name, user.ID]);
 
     const handleAddCart = (newProduct) => {
@@ -443,7 +463,7 @@ export default  function EcommerceProductDetailsPage() {
                     </>
                 )}
 
-                {isLoading && <SkeletonProductDetails/>}
+                {/* {isLoading && <SkeletonProductDetails/>} */}
             </Container>
         </>
     );
