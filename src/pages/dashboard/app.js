@@ -70,7 +70,7 @@ export default function GeneralAppPage() {
                   }}
                 />
               }
-              action={<Button href="/dashboard/e-commerce/shop/" variant="contained">TIENDA</Button>}
+              action={<Button href="/dashboard/e-commerce/list/" variant="contained">TIENDA</Button>}
             />
           </Grid>
 

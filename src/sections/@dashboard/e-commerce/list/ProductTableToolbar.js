@@ -52,12 +52,12 @@ export default function ProductTableToolbar({
           width: { xs: 1, md: 240 },
         }}
       >
-        <InputLabel sx={{ '&.Mui-focused': { color: 'text.primary' } }}>Status</InputLabel>
+        <InputLabel sx={{ '&.Mui-focused': { color: 'text.primary' } }}>Categoria</InputLabel>
         <Select
           multiple
           value={filterStatus}
           onChange={onFilterStatus}
-          input={<OutlinedInput label="Status" />}
+          input={<OutlinedInput label="Categoria" />}
           renderValue={(selected) => selected.map((value) => sentenceCase(value)).join(', ')}
         >
           {statusOptions.map((option) => (
@@ -83,7 +83,7 @@ export default function ProductTableToolbar({
         fullWidth
         value={filterName}
         onChange={onFilterName}
-        placeholder="Search..."
+        placeholder="Buscar..."
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -100,7 +100,7 @@ export default function ProductTableToolbar({
           onClick={onResetFilter}
           startIcon={<Iconify icon="eva:trash-2-outline" />}
         >
-          Clear
+          Limpiar
         </Button>
       )}
     </Stack>

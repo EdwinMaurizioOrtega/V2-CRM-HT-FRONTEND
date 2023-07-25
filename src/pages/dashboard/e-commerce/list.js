@@ -45,17 +45,22 @@ import { ProductTableRow, ProductTableToolbar } from '../../../sections/@dashboa
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Product', align: 'left' },
-  { id: 'createdAt', label: 'Create at', align: 'left' },
-  { id: 'inventoryType', label: 'Status', align: 'center', width: 180 },
-  { id: 'price', label: 'Price', align: 'right' },
-  { id: '' },
+  { id: 'name', label: 'Producto', align: 'left' },
+  { id: 'createdAt', label: 'Códifo', align: 'left' },
+  { id: 'inventoryType', label: 'Stock', align: 'center', width: 180 },
+  // { id: 'price', label: 'Price', align: 'right' },
+  // { id: '' },
 ];
 
 const STATUS_OPTIONS = [
-  { value: 'in_stock', label: 'In stock' },
-  { value: 'low_stock', label: 'Low stock' },
-  { value: 'out_of_stock', label: 'Out of stock' },
+  { label: 'CELULARES', value: 'CELULARES' },
+  { label: 'ELECTRODOMÉSTICOS', value: 'ELECTRODOMÉSTICOS' },
+  { label: 'ACCESORIOS', value: 'ACCESORIOS' },
+  { label: 'BELLEZA', value: 'BELLEZA' },
+  { label: 'REPUESTOS', value: 'REPUESTOS' },
+  { label: 'ELECTROMENORES', value: 'ELECTROMENORES' },
+  { label: 'TECNOLOGIA', value: 'TECNOLOGIA' },
+  { label: 'VARIOS', value: 'VARIOS' },
 ];
 
 // ----------------------------------------------------------------------
@@ -181,8 +186,8 @@ export default function EcommerceProductListPage() {
     push(PATH_DASHBOARD.eCommerce.edit(paramCase(id)));
   };
 
-  const handleViewRow = (id) => {
-    push(PATH_DASHBOARD.eCommerce.view(paramCase(id)));
+  const handleViewRow = (CODIGO) => {
+    push(PATH_DASHBOARD.eCommerce.view(CODIGO));
   };
 
   const handleResetFilter = () => {
@@ -198,7 +203,7 @@ export default function EcommerceProductListPage() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Product List"
+          heading="Tienda"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
@@ -207,16 +212,16 @@ export default function EcommerceProductListPage() {
             },
             { name: 'List' },
           ]}
-          action={
-            <Button
-              component={NextLink}
-              href={PATH_DASHBOARD.eCommerce.new}
-              variant="contained"
-              startIcon={<Iconify icon="eva:plus-fill" />}
-            >
-              New Product
-            </Button>
-          }
+          // action={
+          //   <Button
+          //     component={NextLink}
+          //     href={PATH_DASHBOARD.eCommerce.new}
+          //     variant="contained"
+          //     startIcon={<Iconify icon="eva:plus-fill" />}
+          //   >
+          //     New Product
+          //   </Button>
+          // }
         />
 
         <Card>
@@ -262,7 +267,7 @@ export default function EcommerceProductListPage() {
                   onSelectAllRows={(checked) =>
                     onSelectAllRows(
                       checked,
-                      tableData.map((row) => row.id)
+                      tableData.map((row) => row.CODIGO)
                     )
                   }
                 />
@@ -273,13 +278,13 @@ export default function EcommerceProductListPage() {
                     .map((row, index) =>
                       row ? (
                         <ProductTableRow
-                          key={row.id}
+                          key={row.CODIGO}
                           row={row}
-                          selected={selected.includes(row.id)}
-                          onSelectRow={() => onSelectRow(row.id)}
-                          onDeleteRow={() => handleDeleteRow(row.id)}
-                          onEditRow={() => handleEditRow(row.name)}
-                          onViewRow={() => handleViewRow(row.name)}
+                          selected={selected.includes(row.CODIGO)}
+                          onSelectRow={() => onSelectRow(row.CODIGO)}
+                          onDeleteRow={() => handleDeleteRow(row.CODIGO)}
+                          onEditRow={() => handleEditRow(row.CODIGO)}
+                          onViewRow={() => handleViewRow(row.CODIGO)}
                         />
                       ) : (
                         !isNotFound && <TableSkeleton key={index} sx={{ height: denseHeight }} />
@@ -351,12 +356,13 @@ function applyFilter({ inputData, comparator, filterName, filterStatus }) {
 
   if (filterName) {
     inputData = inputData.filter(
-      (product) => product.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+      (product) => product.NOMBRE.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 ||
+          product.CODIGO.indexOf(filterName) !== -1
     );
   }
 
   if (filterStatus.length) {
-    inputData = inputData.filter((product) => filterStatus.includes(product.inventoryType));
+    inputData = inputData.filter((product) => filterStatus.includes(product.CATEGORIA));
   }
 
   return inputData;

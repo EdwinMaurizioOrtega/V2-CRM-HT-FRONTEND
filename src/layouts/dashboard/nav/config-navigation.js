@@ -76,7 +76,7 @@ const navConfig = [
         path: PATH_DASHBOARD.eCommerce.root,
         icon: ICONS.cart,
         children: [
-          { title: 'tienda', path: PATH_DASHBOARD.eCommerce.shop },
+          { title: 'tienda', path: PATH_DASHBOARD.eCommerce.list },
           // { title: 'product', path: PATH_DASHBOARD.eCommerce.demoView },
           // { title: 'list', path: PATH_DASHBOARD.eCommerce.list },
           // { title: 'create', path: PATH_DASHBOARD.eCommerce.new },
