@@ -169,7 +169,7 @@ export default function ShopProductCard({product}) {
             </Box>
 
             <Stack spacing={2.5} sx={{p: 3}}>
-                <Link component={NextLink} href={linkTo} color="inherit" variant="subtitle2" noWrap>
+                <Link component={NextLink} href={linkTo} color="inherit" variant="subtitle2">
                     {NOMBRE}
                 </Link>
                 <Stack direction="row" alignItems="center" justifyContent="space-between">

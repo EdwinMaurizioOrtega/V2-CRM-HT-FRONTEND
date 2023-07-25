@@ -51,7 +51,7 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
         {/* /> */}
 
         <Stack spacing={0.5}>
-          <Typography noWrap variant="subtitle2" sx={{ maxWidth: 240 }}>
+          <Typography variant="subtitle2" sx={{ maxWidth: 240 }}>
             {NOMBRE}
           </Typography>
 
