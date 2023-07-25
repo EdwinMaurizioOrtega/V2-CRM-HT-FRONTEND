@@ -45,39 +45,39 @@ export default function InvoiceTableToolbar({
       }}
       sx={{ px: 2.5, py: 3 }}
     >
-      <TextField
-        fullWidth
-        select
-        label="Estado"
-        value={filterService}
-        onChange={onFilterService}
-        SelectProps={{
-          MenuProps: {
-            PaperProps: {
-              sx: { maxHeight: 220 },
-            },
-          },
-        }}
-        sx={{
-          maxWidth: { md: INPUT_WIDTH },
-          textTransform: 'capitalize',
-        }}
-      >
-        {optionsService.map((option) => (
-          <MenuItem
-            key={option}
-            value={option}
-            sx={{
-              mx: 1,
-              borderRadius: 0.75,
-              typography: 'body2',
-              textTransform: 'capitalize',
-            }}
-          >
-            {option}
-          </MenuItem>
-        ))}
-      </TextField>
+      {/* <TextField */}
+      {/*   fullWidth */}
+      {/*   select */}
+      {/*   label="Estado" */}
+      {/*   value={filterService} */}
+      {/*   onChange={onFilterService} */}
+      {/*   SelectProps={{ */}
+      {/*     MenuProps: { */}
+      {/*       PaperProps: { */}
+      {/*         sx: { maxHeight: 220 }, */}
+      {/*       }, */}
+      {/*     }, */}
+      {/*   }} */}
+      {/*   sx={{ */}
+      {/*     maxWidth: { md: INPUT_WIDTH }, */}
+      {/*     textTransform: 'capitalize', */}
+      {/*   }} */}
+      {/* > */}
+      {/*   {optionsService.map((option) => ( */}
+      {/*     <MenuItem */}
+      {/*       key={option} */}
+      {/*       value={option} */}
+      {/*       sx={{ */}
+      {/*         mx: 1, */}
+      {/*         borderRadius: 0.75, */}
+      {/*         typography: 'body2', */}
+      {/*         textTransform: 'capitalize', */}
+      {/*       }} */}
+      {/*     > */}
+      {/*       {option} */}
+      {/*     </MenuItem> */}
+      {/*   ))} */}
+      {/* </TextField> */}
 
       <DatePicker
         label="Inicio"
