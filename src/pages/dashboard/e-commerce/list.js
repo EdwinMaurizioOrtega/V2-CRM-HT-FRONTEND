@@ -46,7 +46,7 @@ import { ProductTableRow, ProductTableToolbar } from '../../../sections/@dashboa
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Producto', align: 'left' },
-  { id: 'createdAt', label: 'Códifo', align: 'left' },
+  { id: 'createdAt', label: 'Código', align: 'left' },
   { id: 'inventoryType', label: 'Stock', align: 'center', width: 180 },
   // { id: 'price', label: 'Price', align: 'right' },
   // { id: '' },

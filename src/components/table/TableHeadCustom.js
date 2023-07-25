@@ -42,15 +42,15 @@ export default function TableHeadCustom({
   return (
     <TableHead sx={sx}>
       <TableRow>
-        {onSelectAllRows && (
-          <TableCell padding="checkbox">
-            <Checkbox
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={rowCount > 0 && numSelected === rowCount}
-              onChange={(event) => onSelectAllRows(event.target.checked)}
-            />
-          </TableCell>
-        )}
+        {/* {onSelectAllRows && ( */}
+        {/*   <TableCell padding="checkbox"> */}
+        {/*     <Checkbox */}
+        {/*       indeterminate={numSelected > 0 && numSelected < rowCount} */}
+        {/*       checked={rowCount > 0 && numSelected === rowCount} */}
+        {/*       onChange={(event) => onSelectAllRows(event.target.checked)} */}
+        {/*     /> */}
+        {/*   </TableCell> */}
+        {/* )} */}
 
         {headLabel.map((headCell, index) => (
           <TableCell
