@@ -224,7 +224,7 @@ export default function InvoiceListPage() {
                     const response = await fetch(`https://crm.lidenar.com/hanadb/api/orders/vendedor?ven=${idVendedor}`);
                     data = await response.json();
                 } else if (user.ROLE === "aprobador") {
-                    const response = await fetch(`https://crm.lidenar.com/hanadb/api/orders?estado=6`);
+                    const response = await fetch(`http://localhost/hanadb/api/orders/credit`);
                     data = await response.json();
                 } else if (user.ROLE === "bodega") {
                     console.log(user.WAREHOUSE);
