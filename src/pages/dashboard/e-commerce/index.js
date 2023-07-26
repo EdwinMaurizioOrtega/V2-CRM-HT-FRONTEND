@@ -11,7 +11,7 @@ export default function Index() {
 
   useEffect(() => {
     if (pathname === PATH_DASHBOARD.eCommerce.root) {
-      push(PATH_DASHBOARD.eCommerce.shop);
+      push(PATH_DASHBOARD.eCommerce.list);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
