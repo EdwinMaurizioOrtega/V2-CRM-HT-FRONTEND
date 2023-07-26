@@ -370,7 +370,7 @@ export default  function EcommerceProductDetailsPage() {
                         },
                         {
                             name: 'Shop',
-                            href: PATH_DASHBOARD.eCommerce.shop,
+                            href: PATH_DASHBOARD.eCommerce.list,
                         },
                         {name: product?.NOMBRE},
                     ]}
