@@ -229,34 +229,34 @@ export const {
 
 // ----------------------------------------------------------------------
 
-export function getProducts() {
-    return async (dispatch) => {
-        dispatch(slice.actions.startLoading());
-        try {
-            const response = await axios.get('/hanadb/api/products');
-            dispatch(slice.actions.getProductsSuccess(response.data.products));
-        } catch (error) {
-            dispatch(slice.actions.hasError(error));
-        }
-    };
-}
+// export function getProducts() {
+//     return async (dispatch) => {
+//         dispatch(slice.actions.startLoading());
+//         try {
+//             const response = await axios.get('/hanadb/api/products');
+//             dispatch(slice.actions.getProductsSuccess(response.data.products));
+//         } catch (error) {
+//             dispatch(slice.actions.hasError(error));
+//         }
+//     };
+// }
 
 // ----------------------------------------------------------------------
 
-export function getProduct(name) {
-    return async (dispatch) => {
-        dispatch(slice.actions.startLoading());
-        try {
-            const response = await axios.get('/hanadb/api/products/product', {
-                params: {name},
-            });
-            dispatch(slice.actions.getProductSuccess(response.data.product));
-        } catch (error) {
-            console.error(error);
-            dispatch(slice.actions.hasError(error));
-        }
-    };
-}
+// export function getProduct(name) {
+//     return async (dispatch) => {
+//         dispatch(slice.actions.startLoading());
+//         try {
+//             const response = await axios.get('/hanadb/api/products/product', {
+//                 params: {name},
+//             });
+//             dispatch(slice.actions.getProductSuccess(response.data.product));
+//         } catch (error) {
+//             console.error(error);
+//             dispatch(slice.actions.hasError(error));
+//         }
+//     };
+// }
 
 // ----------------------------------------------------------------------
 
