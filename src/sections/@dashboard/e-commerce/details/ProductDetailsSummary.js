@@ -40,10 +40,8 @@ ProductDetailsSummary.propTypes = {
     onGotoStep: PropTypes.func,
 };
 
-export default function ProductDetailsSummary({cart, product, pricelistproduct, onAddCart, onGotoStep, ...other}) {
+export default function ProductDetailsSummary({cart, product, loading, pricelistproduct, onAddCart, onGotoStep, ...other}) {
     const {push} = useRouter();
-
-    const [loading, setLoading] = useState(true);
 
     const [selectedPrice, setSelectedPrice] = useState(null);
 
@@ -173,14 +171,14 @@ export default function ProductDetailsSummary({cart, product, pricelistproduct, 
 
     };
 
-    useEffect(() => {
-        // Simulamos un tiempo de carga de 2 segundos para la animación
-        const loadingTimeout = setTimeout(() => {
-            setLoading(false);
-        }, 5000);
-
-        return () => clearTimeout(loadingTimeout);
-    }, []);
+    // useEffect(() => {
+    //     // Simulamos un tiempo de carga de 2 segundos para la animación
+    //     const loadingTimeout = setTimeout(() => {
+    //         setLoading(false);
+    //     }, 5000);
+    //
+    //     return () => clearTimeout(loadingTimeout);
+    // }, []);
 
     return (
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

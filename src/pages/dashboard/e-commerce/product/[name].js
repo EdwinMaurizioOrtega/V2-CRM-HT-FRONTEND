@@ -111,6 +111,9 @@ export default  function EcommerceProductDetailsPage() {
         fetchData();
     }, [name]);
 
+    const [loading, setLoading] = useState(true);
+
+
     //Lista de precios por producto
     useEffect(() => {
         //1. Eliminar la lista anterior.
@@ -126,12 +129,21 @@ export default  function EcommerceProductDetailsPage() {
             if (name) {
                 try {
                     const response = await fetch(`https://crm.lidenar.com/hanadb/api/products/price_list_product?name=${name}&idUser=${user.ID}`);
+                    if (response.status === 200) {
+                        // Eliminar el estado de carga aquí, ya que la respuesta es exitosa (código 200).
+                        setLoading(false);
+                    } else {
+                        // Mantener el estado de carga aquí, ya que la respuesta no fue exitosa (código diferente de 200).
+                        setLoading(true);
+                    }
                     const data = await response.json();
                     setPricelistproduct(data.data);
                     console.log(pricelistproduct);
                 } catch (error) {
                     console.error('Error fetching data:', error);
                     setPricelistproduct([]);
+                    // Eliminar el estado de carga en caso de error también.
+                    setLoading(false);
                 }
             }
         }
@@ -388,6 +400,7 @@ export default  function EcommerceProductDetailsPage() {
                             <Grid item xs={12} md={6} lg={5}>
                                 <ProductDetailsSummary
                                     product={product}
+                                    loading={loading}
                                     pricelistproduct={pricelistproduct}
                                     cart={checkout.cart}
                                     onAddCart={handleAddCart}
