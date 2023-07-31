@@ -58,6 +58,7 @@ import {
 } from "../../../redux/slices/order";
 import {useAuthContext} from "../../../auth/useAuthContext";
 import axios from "../../../utils/axios";
+import {HOST_API_KEY} from "../../../config-global";
 
 // ----------------------------------------------------------------------
 
@@ -221,15 +222,15 @@ export default function InvoiceListPage() {
 
                 if (user.ROLE === "vendedor") {
                     const idVendedor = user.ID;
-                    const response = await fetch(`https://crm.lidenar.com/hanadb/api/orders/vendedor?ven=${idVendedor}`);
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/vendedor?ven=${idVendedor}`);
                     data = await response.json();
                 } else if (user.ROLE === "aprobador") {
-                    const response = await fetch(`https://crm.lidenar.com/hanadb/api/orders/credit`);
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/credit`);
                     data = await response.json();
                 } else if (user.ROLE === "bodega") {
                     console.log(user.WAREHOUSE);
                     const bodegaSAP = user.WAREHOUSE;
-                    const response = await fetch(`https://crm.lidenar.com/hanadb/api/orders/bodega?bod=${bodegaSAP}`);
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/bodega?bod=${bodegaSAP}`);
                     data = await response.json();
                 }
 
@@ -674,7 +675,8 @@ function applyFilter({
         inputData = inputData.filter(
             (invoice) =>
                 String(invoice.ID).toLowerCase().indexOf(filterName.toLowerCase()) !== -1 ||
-                invoice.Cliente.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+                invoice.Cliente.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 ||
+                invoice.VENDEDOR.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
         );
     }
 
