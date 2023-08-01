@@ -496,6 +496,58 @@ export default function InvoiceDetails({invoice}) {
 
     }
 
+    const handleServiEntrega = async () => {
+
+
+        var guia = {
+            id_tipo_logistica: 'Juan',
+            detalle_envio_1: 30,
+            detalle_envio_2: 'Ingeniero',
+            detalle_envio_3: 'Ingeniero',
+            id_ciudad_origen: 'Ingeniero',
+            id_ciudad_destino: 'Ingeniero',
+            id_destinatario_ne_cl: 'Ingeniero',
+            razon_social_desti_ne: 'Ingeniero',
+            nombre_destinatario_ne: 'Ingeniero',
+            apellido_destinatar_ne: 'Ingeniero',
+            direccion1_destinat_ne: 'Ingeniero',
+            sector_destinat_ne: 'Ingeniero',
+            telefono1_destinat_ne: 'Ingeniero',
+            telefono2_destinat_ne: 'Ingeniero',
+            codigo_postal_dest_ne: 'Ingeniero',
+            id_remitente_cl: 'Ingeniero',
+            razon_social_remite: 'Ingeniero',
+            nombre_remitente: 'Ingeniero',
+            apellido_remite: 'Ingeniero',
+            direccion1_remite: 'Ingeniero',
+            sector_remite: 'Ingeniero',
+            telefono1_remite: 'Ingeniero',
+            telefono2_remite: 'Ingeniero',
+            codigo_postal_remi: 'Ingeniero',
+            id_producto: 'Ingeniero',
+            contenido: 'Ingeniero',
+            numero_piezas: 'Ingeniero',
+            valor_mercancia: 'Ingeniero',
+            valor_asegurado: 'Ingeniero',
+            largo: 'Ingeniero',
+            ancho: 'Ingeniero',
+            alto: 'Ingeniero',
+            peso_fisico: 'Ingeniero',
+            login_creacion: 'Ingeniero',
+            password: 'Ingeniero'
+        };
+
+
+        // Obtener las propiedades del objeto en un array
+        var propiedades = Object.keys(guia);
+// Obtener el número de propiedades
+        var numeroDePropiedades = propiedades.length;
+
+        console.log(numeroDePropiedades); // Imprimirá 3
+        console.log(guia);
+
+    }
+
     return (
         <>
             {/* <InvoiceToolbar invoice={invoice} /> */}
@@ -803,6 +855,13 @@ export default function InvoiceDetails({invoice}) {
                             <Button variant="contained" color="success"
                                     onClick={() => !loading && handleChangePedidoFactura()} disabled={loading}>
                                 {loading ? 'GUARDANDO...' : ' Guardar Factura'}
+                            </Button>
+
+
+
+                            <Button variant="contained" color="success"
+                                    onClick={() =>handleServiEntrega()}>
+                                SERVIENTREGA
                             </Button>
 
                         </Grid>

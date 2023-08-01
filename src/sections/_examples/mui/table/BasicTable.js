@@ -1,53 +1,161 @@
 // @mui
-import { Table, TableRow, TableBody, TableCell, TableContainer } from '@mui/material';
+import {Table, TableRow, TableBody, TableCell, TableContainer} from '@mui/material';
 // components
 import Scrollbar from '../../../../components/scrollbar';
-import { TableHeadCustom } from '../../../../components/table';
+import {TableHeadCustom} from '../../../../components/table';
+import {useEffect, useState} from "react";
+import {useDispatch} from "../../../../redux/store";
+import {HOST_API_KEY} from "../../../../config-global";
+import {fNumber} from "../../../../utils/formatNumber";
 
 // ----------------------------------------------------------------------
 
 function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
+    return {name, calories, fat, carbs, protein};
 }
 
 const TABLE_DATA = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
+    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+    createData('Eclair', 262, 16.0, 24, 6.0),
+    createData('Cupcake', 305, 3.7, 67, 4.3),
+    createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
 const TABLE_HEAD = [
-  { id: 'dessert', label: 'Dessert (100g serving)' },
-  { id: 'calories', label: 'Calories', align: 'right' },
-  { id: 'fat', label: 'Fat (g)', align: 'right' },
-  { id: 'carbs', label: 'Carbs (g)', align: 'right' },
-  { id: 'protein', label: 'Protein (g)', align: 'right' },
+    {id: 'dessert', label: 'BODEGA'},
+    {id: 'fat', label: 'CANTIDAD', align: 'right'},
+    {id: 'carbs', label: 'RESERVADO', align: 'right'},
+    {id: 'protein', label: 'DISPONIBLE', align: 'right'},
+    {id: 'calories', label: 'CODIGO', align: 'right'},
 ];
 
 // ----------------------------------------------------------------------
 
-export default function BasicTable() {
-  return (
-    <TableContainer sx={{ mt: 3, overflow: 'unset' }}>
-      <Scrollbar>
-        <Table sx={{ minWidth: 800 }}>
-          <TableHeadCustom headLabel={TABLE_HEAD} />
+export default function BasicTable({code}) {
 
-          <TableBody>
-            {TABLE_DATA.map((row) => (
-              <TableRow key={row.name}>
-                <TableCell>{row.name}</TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-                <TableCell align="right">{row.carbs}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Scrollbar>
-    </TableContainer>
-  );
+    const dispatch = useDispatch();
+
+
+    const [loading, setLoading] = useState(true);
+
+    const [stockProduct, setStockProduct] = useState([]);
+
+
+    //Lista de precios por producto
+    useEffect(() => {
+        //1. Eliminar la lista anterior.
+        // dispatch(getClearPriceListProduct());
+
+        // if (name) {
+        //     //2. consultar nuevamente.
+        //     dispatch(getPriceListProduct(name, user.ID));
+        // }
+
+        //V2
+        async function fetchData() {
+            if (code) {
+                try {
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/products/stock/product?code=${code}`);
+                    if (response.status === 200) {
+                        // Eliminar el estado de carga aquí, ya que la respuesta es exitosa (código 200).
+                        setLoading(false);
+                    } else {
+                        // Mantener el estado de carga aquí, ya que la respuesta no fue exitosa (código diferente de 200).
+                        setLoading(true);
+                    }
+                    const data = await response.json();
+                    setStockProduct(data.product_stock);
+                    //console.log("Stock: "+ JSON.stringify( data.product_stock));
+                    console.log("Stock: " + JSON.stringify(stockProduct));
+                } catch (error) {
+                    console.error('Error:', error);
+                    setStockProduct([]);
+                    // Eliminar el estado de carga en caso de error también.
+                    setLoading(false);
+                }
+            }
+        }
+
+        // Call the async function immediately
+        fetchData();
+
+    }, [dispatch, code]);
+
+
+    return (
+        <>
+            {loading ? (
+                <LoadingComponent/>
+            ) : (
+                <TableContainer sx={{mt: 3, overflow: 'unset'}}>
+                    <Scrollbar>
+                        <Table sx={{minWidth: 800}}>
+                            <TableHeadCustom headLabel={TABLE_HEAD}/>
+
+                            <TableBody>
+                                {stockProduct.map((row) => (
+                                    <TableRow key={row.BODEGA}>
+                                        <TableCell>{getTextFromCodigo(row.BODEGA)}</TableCell>
+                                        <TableCell align="right">{fNumber(row.CANTIDAD)}</TableCell>
+                                        <TableCell align="right">{fNumber(row.RESERVADO)}</TableCell>
+                                        <TableCell align="right">{fNumber(row.DISPONIBLE)}</TableCell>
+                                        <TableCell align="right">{row.CODIGO}</TableCell>
+
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </Scrollbar>
+                </TableContainer>
+            )}
+        </>
+    );
+}
+
+const LoadingComponent = () => {
+    return (
+        <>
+            {/* <p className="ml-2 mb-0">Cargando...</p> */}
+            <img src="/assets/images/loading.gif" height="100px" alt="Loading"/>
+
+        </>
+
+    );
+};
+
+
+function getTextFromCodigo(rowCodigo) {
+    switch (rowCodigo) {
+        case '019':
+            return "CENTRO_DE_DISTRIBUCION_HT";
+        case '002':
+            return "MAYORISTAS_CUENCA";
+        case '006':
+            return "MAYORISTAS_QUITO";
+        case '015':
+            return "MAYORISTAS_GUAYAQUIL";
+        case '024':
+            return "MAYORISTAS_MANTA";
+        case '009':
+            return "SAMSUNG_BAHIA";
+        case '014':
+            return "ME_COMPRAS_SAMSUNG_ORELLANA";
+        case '001':
+            return "SAMSUNG_CARACOL_QUITO";
+        case '011':
+            return "SAMSUNG_CUENCA";
+        case '016':
+            return "SAMSUNG_MALL_GUAYAQUIL";
+        case '017':
+            return "SAMSUNG_MALL_CUENCA";
+        case '020':
+            return "SAMSUNG_MANTA";
+        case '022':
+            return "SAMSUNG_PORTOVIEJO";
+        case '003':
+            return "PADRE_AGUIRRE";
+        default:
+            return "...";
+    }
 }

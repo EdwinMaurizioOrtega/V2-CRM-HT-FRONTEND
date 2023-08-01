@@ -4,7 +4,7 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 // @mui
 import {alpha} from '@mui/material/styles';
-import {Box, Tab, Tabs, Card, Grid, Divider, Container, Typography, Stack} from '@mui/material';
+import {Box, Tab, Tabs, Card, Grid, Divider, Container, Typography, Stack, CardHeader} from '@mui/material';
 // redux
 import {useDispatch, useSelector} from '../../../../redux/store';
 import {
@@ -34,6 +34,8 @@ import {
 import CartWidget from '../../../../sections/@dashboard/e-commerce/CartWidget';
 import {fNumber} from "../../../../utils/formatNumber";
 import {useAuthContext} from "../../../../auth/useAuthContext";
+import BasicTable from "../../../../sections/_examples/mui/table/BasicTable";
+import {HOST_API_KEY} from "../../../../config-global";
 
 // ----------------------------------------------------------------------
 
@@ -128,7 +130,7 @@ export default  function EcommerceProductDetailsPage() {
         async function fetchData() {
             if (name) {
                 try {
-                    const response = await fetch(`https://crm.lidenar.com/hanadb/api/products/price_list_product?name=${name}&idUser=${user.ID}`);
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/products/price_list_product?name=${name}&idUser=${user.ID}`);
                     if (response.status === 200) {
                         // Eliminar el estado de carga aquí, ya que la respuesta es exitosa (código 200).
                         setLoading(false);
@@ -168,190 +170,15 @@ export default  function EcommerceProductDetailsPage() {
             component: product ?
 
                 <>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            CENTRO_DE_DISTRIBUCION_HT
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.CENTRO_DE_DISTRIBUCION_HT)}</Typography>
-
-                    </Stack>
-
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            MAYORISTAS_CUENCA
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.MAYORISTAS_CUENCA)}</Typography>
+                <Container sx={{ my: 10 }}>
+                    <Stack spacing={3}>
+                        <Card>
+                            <CardHeader title="Stock" />
+                            <BasicTable code={name} />
+                        </Card>
 
                     </Stack>
-
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            MAYORISTAS_QUITO
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.MAYORISTAS_QUITO)}</Typography>
-
-                    </Stack>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            MAYORISTAS_GUAYAQUIL
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.MAYORISTAS_GUAYAQUIL)}</Typography>
-
-                    </Stack>
-
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            MAYORISTAS_MANTA
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.MAYORISTAS_MANTA)}</Typography>
-
-                    </Stack>
-                    {/* <Stack direction="row" alignItems="center" justifyContent="space-between"> */}
-
-                    {/*     <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}> */}
-                    {/*         SAMSUNG_BAHIA */}
-                    {/*     </Typography> */}
-                    {/*     <Typography variant="subtitle2">{fNumber(product?.SAMSUNG_BAHIA)}</Typography> */}
-
-                    {/* </Stack> */}
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            ME_COMPRAS_SAMSUNG_ORELLANA
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.ME_COMPRAS_SAMSUNG_ORELLANA)}</Typography>
-
-                    </Stack>
-
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            SAMSUNG_CARACOL_QUITO
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.SAMSUNG_CARACOL_QUITO)}</Typography>
-
-                    </Stack>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            SAMSUNG_CUENCA
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.SAMSUNG_CUENCA)}</Typography>
-
-                    </Stack>
-
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            SAMSUNG_MALL_GUAYAQUIL
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.SAMSUNG_MALL_GUAYAQUIL)}</Typography>
-
-                    </Stack>
-
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            SAMSUNG_MALL_CUENCA
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.SAMSUNG_MALL_CUENCA)}</Typography>
-
-                    </Stack>
-
-
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            SAMSUNG_MANTA
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.SAMSUNG_MANTA)}</Typography>
-
-                    </Stack>
-
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            SAMSUNG_PORTOVIEJO
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.SAMSUNG_PORTOVIEJO)}</Typography>
-
-                    </Stack>
-
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-
-                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                            PADRE_AGUIRRE
-                        </Typography>
-                        <Typography variant="subtitle2">{fNumber(product?.PADRE_AGUIRRE)}</Typography>
-
-                    </Stack>
-
-                    {/* <Stack direction="row" alignItems="center" justifyContent="space-between"> */}
-
-                    {/*     <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}> */}
-                    {/*         MATRIZ_CUENCA */}
-                    {/*     </Typography> */}
-                    {/*     <Typography variant="subtitle2">{fNumber(product?.MATRIZ_CUENCA)}</Typography> */}
-
-                    {/* </Stack> */}
-
-                    {/* <Stack direction="row" alignItems="center" justifyContent="space-between"> */}
-
-                    {/*     <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}> */}
-                    {/*         STOCK_DE_GARANTIAS_Y_REPUESTOS */}
-                    {/*     </Typography> */}
-                    {/*     <Typography variant="subtitle2">{fNumber(product?.STOCK_DE_GARANTIAS_Y_REPUESTOS)}</Typography> */}
-
-                    {/* </Stack> */}
-
-                    {/* <Stack direction="row" alignItems="center" justifyContent="space-between"> */}
-
-                    {/*     <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}> */}
-                    {/*         CONSIGNACION */}
-                    {/*     </Typography> */}
-                    {/*     <Typography variant="subtitle2">{fNumber(product?.CONSIGNACION)}</Typography> */}
-
-                    {/* </Stack> */}
-
-                    {/* <Stack direction="row" alignItems="center" justifyContent="space-between"> */}
-
-                    {/*     <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}> */}
-                    {/*         GADGETS */}
-                    {/*     </Typography> */}
-                    {/*     <Typography variant="subtitle2">{fNumber(product?.GADGETS)}</Typography> */}
-
-                    {/* </Stack> */}
-
-                    {/* <Stack direction="row" alignItems="center" justifyContent="space-between"> */}
-
-                    {/*     <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}> */}
-                    {/*         LUIS_CORDERO */}
-                    {/*     </Typography> */}
-                    {/*     <Typography variant="subtitle2">{fNumber(product?.LUIS_CORDERO)}</Typography> */}
-
-                    {/* </Stack> */}
-
-
-                    {/* <Stack direction="row" alignItems="center" justifyContent="space-between"> */}
-                    {/*     <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}> */}
-                    {/*         BODEGA_DE_CUARENTENA */}
-                    {/*     </Typography> */}
-                    {/*     <Typography variant="subtitle2">{fNumber(product?.BODEGA_DE_CUARENTENA)}</Typography> */}
-
-                    {/* </Stack> */}
-
-                    {/* <Stack direction="row" alignItems="center" justifyContent="space-between"> */}
-                    {/*     <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}> */}
-                    {/*         ACCESORIOS */}
-                    {/*     </Typography> */}
-                    {/*     <Typography variant="subtitle2">{fNumber(product?.ACCESORIOS)}</Typography> */}
-
-                    {/* </Stack> */}
+                </Container>
 
                 </> : null
 
