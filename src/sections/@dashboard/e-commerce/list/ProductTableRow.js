@@ -134,7 +134,7 @@ export default function ProductTableRow({
 
                 {/* <TableCell align="right">{fCurrency(price)}</TableCell> */}
 
-                <TableCell align="right">{fNumber(TOTAL)}</TableCell>
+                {/* <TableCell align="right">{fNumber(TOTAL)}</TableCell> */}
 
                 {/* <TableCell align="right"> */}
                 {/*     <IconButton color={openPopover ? 'primary' : 'default'} onClick={handleOpenPopover}> */}
