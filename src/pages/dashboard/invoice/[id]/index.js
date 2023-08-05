@@ -15,6 +15,7 @@ import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 import InvoiceDetails from '../../../../sections/@dashboard/invoice/details';
 import {useDispatch, useSelector} from "../../../../redux/store";
 import { getDetailOrder } from "../../../../redux/slices/order";
+import {HOST_API_KEY} from "../../../../config-global";
 
 // ----------------------------------------------------------------------
 
@@ -47,10 +48,10 @@ export default function InvoiceDetailsPage() {
         async function fetchData() {
             if (id) {
                 try {
-                    const response = await fetch(`https://crm.lidenar.com/hanadb/api/orders/order/detail?id=${id}`);
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/order/detail?id=${id}`);
                     const data = await response.json();
                     setCurrentInvoice(data.data);
-                    console.log(currentInvoice);
+                    console.log("currentInvoice: "+JSON.stringify(data.data));
                 } catch (error) {
                     console.error('Error fetching data:', error);
                     setCurrentInvoice([]);

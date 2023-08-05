@@ -12,7 +12,18 @@ import {
     TableHead,
     TableCell,
     Typography,
-    TableContainer, IconButton, MenuItem, Button, Stack, TextField, Autocomplete, Snackbar, Alert, Container,
+    TableContainer,
+    IconButton,
+    MenuItem,
+    Button,
+    Stack,
+    TextField,
+    Autocomplete,
+    Snackbar,
+    Alert,
+    Container,
+    Tooltip,
+    Dialog, DialogActions,
 } from '@mui/material';
 
 import Link from 'next/link';
@@ -45,6 +56,9 @@ import https from 'https';
 import {Space_Grotesk, Space_Mono} from "@next/font/google";
 import CustomBreadcrumbs from "../../../../components/custom-breadcrumbs";
 import {Masonry} from "@mui/lab";
+import {HOST_API_KEY} from "../../../../config-global";
+import {useBoolean} from "../../../../hooks/use-boolean";
+import InvoicePDF from "./InvoicePDF";
 
 // ----------------------------------------------------------------------
 
@@ -65,6 +79,8 @@ InvoiceDetails.propTypes = {
 };
 
 export default function InvoiceDetails({invoice}) {
+
+    const view = useBoolean();
 
     console.log("invoice: " + JSON.stringify(invoice));
 
@@ -156,7 +172,8 @@ export default function InvoiceDetails({invoice}) {
         CITY,
         ValidComm,
         GLN,
-        Balance
+        Balance,
+        OBSERVACIONESB
     } = invoice;
 
 
@@ -503,7 +520,12 @@ export default function InvoiceDetails({invoice}) {
 
     }
 
+
+    const [decodedString, setDecodedString] = useState('');
+
     const handleServiEntrega = async () => {
+
+        console.log("OBSERVACIONESB: " + OBSERVACIONESB);
 
         var dataToSend = {
 
@@ -521,7 +543,7 @@ export default function InvoiceDetails({invoice}) {
             nombre_destinatario_ne: `'${Nombres}'`,
             apellido_destinatar_ne: `'${Apellidos}'`,
             //MUY IMPORTANTE
-            direccion1_destinat_ne: 'Av. Colon 7-90 TEST TEST',
+            direccion1_destinat_ne: `'${(JSON.parse(OBSERVACIONESB)).DIRECCION}'`,
             sector_destinat_ne: '',
             telefono1_destinat_ne: `'${Celular}'`,
             telefono2_destinat_ne: '',
@@ -550,7 +572,7 @@ export default function InvoiceDetails({invoice}) {
             // Valor total int
             valor_mercancia: fNumberSin(totalConIva),
             // Valor 40% int
-            valor_asegurado: fNumberSin( (totalConIva * 40) / 100),
+            valor_asegurado: fNumberSin((totalConIva * 40) / 100),
             largo: 0,
             ancho: 0,
             alto: 0,
@@ -562,6 +584,38 @@ export default function InvoiceDetails({invoice}) {
 
         console.log(JSON.stringify(dataToSend));
 
+// URL del servidor al que deseas enviar los datos
+        const url = `${HOST_API_KEY}/hanadb/api/orders/order/ServiEntrega`;
+
+// Configuración de la solicitud
+        const requestOptions = {
+            method: "POST", // Método de la solicitud (POST en este caso)
+            headers: {
+                "Content-Type": "application/json", // Tipo de contenido de los datos enviados (JSON en este caso)
+            },
+            body: JSON.stringify(dataToSend), // Convertir el objeto en una cadena JSON y usarlo como cuerpo de la solicitud
+        };
+
+// Realizar la solicitud Fetch
+        fetch(url, requestOptions)
+            .then((response) => response.json()) // Convertir la respuesta en formato JSON
+            .then((data) => {
+                // Aquí puedes manejar la respuesta del servidor (data)
+                console.log("Respuesta del servidor:", data);
+
+                var pdfDecode = data.base64File;
+
+
+                setDecodedString(atob(pdfDecode))
+
+
+            })
+            .catch((error) => {
+                // Aquí puedes manejar errores en la solicitud
+                console.error("Error en la solicitud:", error);
+            });
+
+
     }
 
 
@@ -571,7 +625,7 @@ export default function InvoiceDetails({invoice}) {
 
         const fetchData = async () => {
             try {
-                const response = await fetch("http://localhost/hanadb/api/orders/order/ServiEntrega/ciudades");
+                const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/order/ServiEntrega/ciudades`);
                 const result = await response.json();
                 setDataCities(result.data);
                 console.log(dataCities);
@@ -591,14 +645,14 @@ export default function InvoiceDetails({invoice}) {
 
     const [selectedCityOrigen, setSelectedCityOrigen] = useState('');
     const handleCityChangeOrigen = (event, value) => {
-        if (value){
+        if (value) {
             setSelectedCityOrigen(value)
         }
     };
 
     const [selectedCityDestino, setSelectedCityDestino] = useState('');
     const handleCityChangeDestino = (event, value) => {
-        if (value){
+        if (value) {
             setSelectedCityDestino(value)
         }
     };
@@ -606,7 +660,7 @@ export default function InvoiceDetails({invoice}) {
 
     const [selectedCityBoxes, setSelectedCityBoxes] = useState('');
     const handleCityChangeBoxes = (event, value) => {
-        if (value){
+        if (value) {
             setSelectedCityBoxes(value)
         }
     };
@@ -619,6 +673,18 @@ export default function InvoiceDetails({invoice}) {
         console.log("Boxes ID:", selectedCityBoxes.id);
     }, [selectedCityOrigen, selectedCityDestino, selectedCityBoxes]);
 
+
+    const openPDFInNewTab = () => {
+        const byteCharacters = decodedString;
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const pdfBlob = new Blob([byteArray], {type: 'application/pdf'});
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+        window.open(pdfUrl, '_blank');
+    };
 
 
     return (
@@ -946,18 +1012,17 @@ export default function InvoiceDetails({invoice}) {
                     </Grid>
 
 
-
-                    <Masonry columns={{ xs: 1, sm: 2, md: 3 }} spacing={3}>
+                    <Masonry columns={{xs: 1, sm: 2, md: 3}} spacing={3}>
                         <Block title="Ciudad">
                             <Autocomplete
                                 fullWidth
                                 options={dataCities}
                                 getOptionLabel={(option) => option.nombre}
-                                renderInput={(params) => <TextField {...params} label="Origen" />}
+                                renderInput={(params) => <TextField {...params} label="Origen"/>}
                                 onChange={(event, value) => {
                                     handleCityChangeOrigen(event, value);
                                 }}
-                                sx={{ mb: 2 }}
+                                sx={{mb: 2}}
                             />
 
                             <Autocomplete
@@ -969,7 +1034,7 @@ export default function InvoiceDetails({invoice}) {
                                     <TextField
                                         {...params}
                                         label="Destino"
-                                        InputProps={{ ...params.InputProps, type: 'search' }}
+                                        InputProps={{...params.InputProps, type: 'search'}}
                                     />
                                 )}
                                 onChange={(event, value) => {
@@ -985,11 +1050,11 @@ export default function InvoiceDetails({invoice}) {
                                 freeSolo
                                 options={boxes}
                                 getOptionLabel={(option) => option.title}
-                                renderInput={(params) => <TextField {...params} label="Número" />}
+                                renderInput={(params) => <TextField {...params} label="Número"/>}
                                 onChange={(event, value) => {
                                     handleCityChangeBoxes(event, value);
                                 }}
-                                sx={{ mb: 2 }}
+                                sx={{mb: 2}}
                             />
 
                         </Block>
@@ -1005,8 +1070,11 @@ export default function InvoiceDetails({invoice}) {
                     </Masonry>
 
 
-                </Card>
+                    <Tooltip title="View">
+                        <IconButton onClick={openPDFInNewTab}> <Iconify icon="solar:eye-bold"/></IconButton>
+                    </Tooltip>
 
+                </Card>
             }
 
             {user.ROLE === "aprobador" || user.ROLE === "bodega" ? (
@@ -1139,6 +1207,8 @@ export default function InvoiceDetails({invoice}) {
                     </Button>
                 }
             />
+
+
         </>
     );
 }
