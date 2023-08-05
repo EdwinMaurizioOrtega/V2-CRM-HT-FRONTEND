@@ -23,7 +23,7 @@ const DELIVERY_OPTIONS = [
         id: 48212,
         codigo: '06.04.15',
         value: 0,
-        title: 'Entrega estándar (Gratis)',
+        title: 'RETIRO EN OFICINA',
         description: 'Entrega estándar (Gratis)',
     },
     {
@@ -176,11 +176,12 @@ CheckoutPayment.propTypes = {
     onApplyComment: PropTypes.func,
     onApplyShipping: PropTypes.func,
     onApplyWarehouse: PropTypes.func,
+    onApplyServientrega: PropTypes.func,
     onApplyMethod: PropTypes.func,
 };
 
-export default function CheckoutPayment({checkout, onReset, onNextStep, onBackStep, onGotoStep, onApplyComment, onApplyShipping, onApplyWarehouse, onApplyMethod, }) {
-    const {total, discount, subtotal, iva, comment, shipping, warehouse, method, billing} = checkout;
+export default function CheckoutPayment({checkout, onReset, onNextStep, onBackStep, onGotoStep, onApplyComment, onApplyShipping, onApplyServientrega, onApplyWarehouse, onApplyMethod, }) {
+    const {total, discount, subtotal, iva, comment, shipping, servientrega, warehouse, method, billing} = checkout;
 
     const PaymentSchema = Yup.object().shape({
         payment: Yup.string().required('¡Se requiere forma de pago!'),
@@ -189,6 +190,7 @@ export default function CheckoutPayment({checkout, onReset, onNextStep, onBackSt
     const defaultValues = {
         commentEnvio: comment,
         delivery: shipping,
+        servientrega: servientrega,
         store: warehouse,
         payment: method,
     };
@@ -216,7 +218,7 @@ export default function CheckoutPayment({checkout, onReset, onNextStep, onBackSt
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={8}>
-                    <CheckoutDelivery billing={billing} total={total} onApplyComment={onApplyComment} onApplyShipping={onApplyShipping} deliveryOptions={DELIVERY_OPTIONS}/>
+                    <CheckoutDelivery billing={billing} total={total} onApplyComment={onApplyComment} onApplyShipping={onApplyShipping} onApplyServientrega={onApplyServientrega} deliveryOptions={DELIVERY_OPTIONS}/>
 
                     <CheckoutWarehouse onApplyWarehouse={onApplyWarehouse} warehouseOptions={WAREHOUSE_OPTIONS}/>
 

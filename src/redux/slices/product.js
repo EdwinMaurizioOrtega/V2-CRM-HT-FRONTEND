@@ -27,6 +27,7 @@ const initialState = {
         //Forma de pago por defecto
         method: 2,
         comment: 'Ninguno.',
+        servientrega: null,
         billing: null,
         totalItems: 0,
     },
@@ -125,7 +126,8 @@ const slice = createSlice({
             state.checkout.shipping = 0;
             state.checkout.totalItems = 0;
             state.checkout.warehouse = 0;
-            state.checkout.comment= 'Ninguno.';
+            state.checkout.comment = 'Ninguno.';
+            state.checkout.servientrega = null;
             state.checkout.method = 0;
             state.checkout.iva = 0;
         },
@@ -199,6 +201,10 @@ const slice = createSlice({
             state.checkout.comment = action.payload;
         },
 
+        applyServientrega(state, action) {
+            state.checkout.servientrega = action.payload;
+        },
+
         clearPriceListProduct(state) {
             state.pricelistproduct = null;
         },
@@ -222,6 +228,7 @@ export const {
     applyWarehouse,
     applyMethod,
     applyComment,
+    applyServientrega,
     applyDiscount,
     increaseQuantity,
     decreaseQuantity,

@@ -23,6 +23,7 @@ import {
     applyShipping,
     applyWarehouse,
     applyMethod,
+    applyServientrega,
     applyDiscount,
     increaseQuantity,
     decreaseQuantity,
@@ -131,8 +132,13 @@ export default function EcommerceCheckoutPage() {
         dispatch(applyMethod(value));
     };
 
+    const handleApplyServientrega = (value) => {
+        dispatch(applyServientrega(value));
+    };
+
     // const fechaCreacion = format(new Date(), 'dd-MM-yyyy HH:mm:ss');
 
+    //Crear el pedido y enviar al área de aprobación
     const handleReset = async () => {
         if (completed) {
             console.log('DATA', checkout);
@@ -224,6 +230,7 @@ export default function EcommerceCheckoutPage() {
                                 onApplyShipping={handleApplyShipping}
                                 onApplyWarehouse={handleApplyWarehouse}
                                 onApplyMethod={handleApplyMethod}
+                                onApplyServientrega={handleApplyServientrega}
                                 onReset={handleReset}
                             />
                         )}

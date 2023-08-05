@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 // form
-import { Controller, useFormContext } from 'react-hook-form';
+import {Controller, useFormContext} from 'react-hook-form';
 // @mui
 import {
     Box,
@@ -18,20 +18,29 @@ import Iconify from '../../../../../components/iconify';
 import {RHFTextField} from "../../../../../components/hook-form";
 import {resetCart} from "../../../../../redux/slices/product";
 import {dispatch} from "../../../../../redux/store";
+import {useState} from "react";
+import {value} from "lodash/seq";
 
 // ----------------------------------------------------------------------
 
 CheckoutDelivery.propTypes = {
-  onApplyShipping: PropTypes.func,
-  deliveryOptions: PropTypes.array,
+    onApplyShipping: PropTypes.func,
+    deliveryOptions: PropTypes.array,
     onApplyComment: PropTypes.func,
+    onApplyServientrega: PropTypes.func,
 };
 
 
-
-
-export default function CheckoutDelivery({ billing, total, deliveryOptions, onApplyShipping, onApplyComment, ...other }) {
-  const { control } = useFormContext();
+export default function CheckoutDelivery({
+                                             billing,
+                                             total,
+                                             deliveryOptions,
+                                             onApplyShipping,
+                                             onApplyServientrega,
+                                             onApplyComment,
+                                             ...other
+                                         }) {
+    const {control} = useFormContext();
 
 
     //Analisamos la cadena de texto y la convertimos en un arreglo valido.
@@ -48,169 +57,234 @@ export default function CheckoutDelivery({ billing, total, deliveryOptions, onAp
         dispatch(resetCart());
     }
 
-  return (
-    <Card {...other}>
+    const [selectedValue, setSelectedValue] = useState(null);
 
-        <Button variant="contained" onClick={vaciarcarrito}>Eliminar Pedido</Button>
+    const handleRadioChange = (event) => {
+        console.log(event.target.value);
+    };
 
-        <CardHeader title="Opciones de entrega" />
+    return (
+        <Card {...other}>
 
-        {/* <Typography variant="h3" sx={{ mb: 5 }}> */}
-        {/*     Valor total: ${total} */}
-        {/* </Typography> */}
-      <CardContent>
-        <Controller
-          name="delivery"
-          control={control}
-          render={({ field }) => (
-            <RadioGroup
-              {...field}
-              onChange={(event) => {
-                const { value } = event.target;
-                field.onChange(Number(value));
-                onApplyShipping(Number(value));
-              }}
-            >
-              <Box
-                gap={2}
-                display="grid"
-                gridTemplateColumns={{
-                  xs: 'repeat(1, 1fr)',
-                  sm: 'repeat(2, 1fr)',
-                }}
-              >
-                  {/* V1 */}
-                {deliveryOptions.map((option) => (
-                  <DeliveryOption
-                    key={option.value}
-                    option={option}
-                    isSelected={field.value === option.value}
-                  />
-                ))}
+            <Button variant="contained" onClick={vaciarcarrito}>Eliminar Pedido</Button>
 
+            <CardHeader title="Opciones de entrega"/>
 
-                {/* V2 */}
-                  {/* { */}
-                  {/*     deliveryOptions.map((option, index) => { */}
-                  {/*         if (total < 1000 && (index === 1 || index === 2 || index === 3 || index === 4) ) { */}
-                  {/*             return ( */}
-                  {/*                 <DeliveryOption */}
-                  {/*                     key={option.value} */}
-                  {/*                     option={option} */}
-                  {/*                     isSelected={field.value === option.value} */}
-                  {/*                 /> */}
-                  {/*             ); */}
-                  {/*         } else if (total > 1000 && index === 0) { */}
-                  {/*             return ( */}
-                  {/*                 <DeliveryOption */}
-                  {/*                     key={option.value} */}
-                  {/*                     option={option} */}
-                  {/*                     isSelected={field.value === option.value} */}
-                  {/*                 /> */}
-                  {/*             ); */}
-                  {/*         } */}
-                  {/*         return null; */}
-                  {/*     }) */}
-                  {/* } */}
+            {/* <Typography variant="h3" sx={{ mb: 5 }}> */}
+            {/*     Valor total: ${total} */}
+            {/* </Typography> */}
+            <CardContent>
+                <Controller
+                    name="delivery"
+                    control={control}
+                    render={({field}) => (
+                        <RadioGroup
+                            {...field}
+                            onChange={(event) => {
+                                const {value} = event.target;
+                                field.onChange(Number(value));
+                                onApplyShipping(Number(value));
+                            }}
+                        >
+                            <Box
+                                gap={2}
+                                display="grid"
+                                gridTemplateColumns={{
+                                    xs: 'repeat(1, 1fr)',
+                                    sm: 'repeat(2, 1fr)',
+                                }}
+                            >
+                                {/* V1 */}
+                                {deliveryOptions.map((option) => (
+                                    <DeliveryOption
+                                        key={option.value}
+                                        option={option}
+                                        isSelected={field.value === option.value}
+                                    />
+                                ))}
 
 
-
-              </Box>
-            </RadioGroup>
-          )}
-        />
-
-
-          <Stack >
-
-              <Typography variant="subtitle2" sx={{ height: 36, lineHeight: '36px' }}>
-
-              </Typography>
-
-              <Stack spacing={1}>
-                  <RHFTextField
-                      label="Comentario"
-                      name="commentEnvio"
-                      onKeyUp={(event) => {
-                          const { value } = event.target;
-                          onApplyComment(value);
-                      }}
-                  />
-                  <Typography
-                      variant="caption"
-                      component="div"
-                      sx={{ textAlign: 'right', color: 'text.secondary' }}
-                  >
-                      Observación por el vendedor.
-                  </Typography>
-              </Stack>
-          </Stack>
-
-          <Divider/>
-          <Stack direction="row" justifyContent="space-evenly">
-              <Typography variant="subtitle2" sx={{ height: 36, lineHeight: '36px' }}>
-                  DIRECCIONES:
-              </Typography>
-
-              <Stack spacing={1}>
+                                {/* V2 */}
+                                {/* { */}
+                                {/*     deliveryOptions.map((option, index) => { */}
+                                {/*         if (total < 1000 && (index === 1 || index === 2 || index === 3 || index === 4) ) { */}
+                                {/*             return ( */}
+                                {/*                 <DeliveryOption */}
+                                {/*                     key={option.value} */}
+                                {/*                     option={option} */}
+                                {/*                     isSelected={field.value === option.value} */}
+                                {/*                 /> */}
+                                {/*             ); */}
+                                {/*         } else if (total > 1000 && index === 0) { */}
+                                {/*             return ( */}
+                                {/*                 <DeliveryOption */}
+                                {/*                     key={option.value} */}
+                                {/*                     option={option} */}
+                                {/*                     isSelected={field.value === option.value} */}
+                                {/*                 /> */}
+                                {/*             ); */}
+                                {/*         } */}
+                                {/*         return null; */}
+                                {/*     }) */}
+                                {/* } */}
 
 
-                  <RadioGroup>
-                      {billingEnvioArray.map((item, index) => (
-                          <FormControlLabel
-                              key={index}
-                              value={index}
-                              control={<Radio />}
-                              label={ item.TIPO +' | ' + item.DIRECCION}
-                          />
-                      ))}
-                  </RadioGroup>
+                            </Box>
+                        </RadioGroup>
+                    )}
+                />
 
 
-              </Stack>
-          </Stack>
-      </CardContent>
-    </Card>
-  );
+                <Stack>
+
+                    <Typography variant="subtitle2" sx={{height: 36, lineHeight: '36px'}}>
+
+                    </Typography>
+
+                    <Stack spacing={1}>
+                        <RHFTextField
+                            label="Comentario"
+                            name="commentEnvio"
+                            onKeyUp={(event) => {
+                                const {value} = event.target;
+                                onApplyComment(value);
+                            }}
+                        />
+                        <Typography
+                            variant="caption"
+                            component="div"
+                            sx={{textAlign: 'right', color: 'text.secondary'}}
+                        >
+                            Observación por el vendedor.
+                        </Typography>
+                    </Stack>
+                </Stack>
+
+            </CardContent>
+
+            <CardHeader title="SERVIENTREGA"/>
+            <Typography variant="p" sx={{ mb: 5 }}>
+                *Nota: No seleccionar ninguna de las opciones si el retiro es en oficina.
+            </Typography>
+            <CardContent>
+                <Controller
+                    name="servientrega"
+                    control={control}
+                    render={({field}) => (
+                        <RadioGroup
+                            {...field}
+                            onChange={(event) => {
+                                const {value} = event.target;
+                                field.onChange(value);
+                                console.log("Value Muy Importante: " + value);
+                                onApplyServientrega(JSON.parse(value));
+                            }}
+                        >
+                            <Box
+                                gap={2}
+                                display="grid"
+                                gridTemplateColumns={{
+                                    xs: 'repeat(1, 1fr)',
+                                    sm: 'repeat(2, 1fr)',
+                                }}
+                            >
+
+                                {billingEnvioArray.map((option) => (
+                                    <DeliveryOptionAux
+                                        key={option.TIPO}
+                                        option={option}
+                                        isSelected={field.TIPO === option.TIPO}
+                                    />
+                                ))}
+
+                            </Box>
+                        </RadioGroup>
+                    )}
+                />
+
+
+            </CardContent>
+        </Card>
+    );
 }
 
 // ----------------------------------------------------------------------
 
 DeliveryOption.propTypes = {
-  option: PropTypes.object,
-  isSelected: PropTypes.bool,
+    option: PropTypes.object,
+    isSelected: PropTypes.bool,
 };
 
-function DeliveryOption({ option, isSelected }) {
-  const { value, title, description } = option;
+function DeliveryOption({option, isSelected}) {
+    const {value, title, description} = option;
 
-  return (
-    <Paper
-      variant="outlined"
-      key={value}
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        transition: (theme) => theme.transitions.create('all'),
-        ...(isSelected && {
-          boxShadow: (theme) => theme.customShadows.z20,
-        }),
-      }}
-    >
-      <FormControlLabel
-        value={value}
-        control={<Radio required={true} checkedIcon={<Iconify icon="eva:checkmark-circle-2-fill" />} />}
-        label={
-          <Box sx={{ ml: 1 }}>
-            <Typography variant="subtitle2">{title}</Typography>
+    return (
+        <Paper
+            variant="outlined"
+            key={value}
+            sx={{
+                display: 'flex',
+                alignItems: 'center',
+                transition: (theme) => theme.transitions.create('all'),
+                ...(isSelected && {
+                    boxShadow: (theme) => theme.customShadows.z20,
+                }),
+            }}
+        >
+            <FormControlLabel
+                value={value}
+                control={<Radio required={true} checkedIcon={<Iconify icon="eva:checkmark-circle-2-fill"/>}/>}
+                label={
+                    <Box sx={{ml: 1}}>
+                        <Typography variant="subtitle2">{title}</Typography>
 
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {description}
-            </Typography>
-          </Box>
-        }
-        sx={{ py: 3, px: 2.5, flexGrow: 1, mr: 0 }}
-      />
-    </Paper>
-  );
+                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                            {description}
+                        </Typography>
+                    </Box>
+                }
+                sx={{py: 3, px: 2.5, flexGrow: 1, mr: 0}}
+            />
+        </Paper>
+    );
+}
+
+
+DeliveryOptionAux.propTypes = {
+    option: PropTypes.object,
+    isSelected: PropTypes.bool,
+};
+
+function DeliveryOptionAux({option, isSelected}) {
+    const {TIPO, DIRECCION} = option;
+
+    return (
+        <Paper
+            variant="outlined"
+            key={TIPO}
+            sx={{
+                display: 'flex',
+                alignItems: 'center',
+                transition: (theme) => theme.transitions.create('all'),
+                ...(isSelected && {
+                    boxShadow: (theme) => theme.customShadows.z20,
+                }),
+            }}
+        >
+            <FormControlLabel
+                value={JSON.stringify(option)}
+                control={<Radio checkedIcon={<Iconify icon="eva:checkmark-circle-2-fill"/>}/>}
+                label={
+                    <Box sx={{ml: 1}}>
+                        <Typography variant="subtitle2">{TIPO}</Typography>
+
+                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                            {DIRECCION}
+                        </Typography>
+                    </Box>
+                }
+                sx={{py: 3, px: 2.5, flexGrow: 1, mr: 0}}
+            />
+        </Paper>
+    );
 }

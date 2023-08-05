@@ -12,7 +12,7 @@ import {
     TableHead,
     TableCell,
     Typography,
-    TableContainer, IconButton, MenuItem, Button, Stack, TextField, Autocomplete, Snackbar, Alert,
+    TableContainer, IconButton, MenuItem, Button, Stack, TextField, Autocomplete, Snackbar, Alert, Container,
 } from '@mui/material';
 
 import Link from 'next/link';
@@ -20,7 +20,7 @@ import Link from 'next/link';
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {fDate} from '../../../../utils/formatTime';
-import {fCurrency} from '../../../../utils/formatNumber';
+import {fCurrency, fNumber, fNumberSin} from '../../../../utils/formatNumber';
 // components
 import Label from '../../../../components/label';
 import Image from '../../../../components/image';
@@ -40,6 +40,11 @@ import React from 'react';
 import {useSnackbar} from "../../../../components/snackbar";
 import {PATH_DASHBOARD} from "../../../../routes/paths";
 
+import {default as alias_axios} from 'axios';
+import https from 'https';
+import {Space_Grotesk, Space_Mono} from "@next/font/google";
+import CustomBreadcrumbs from "../../../../components/custom-breadcrumbs";
+import {Masonry} from "@mui/lab";
 
 // ----------------------------------------------------------------------
 
@@ -60,6 +65,8 @@ InvoiceDetails.propTypes = {
 };
 
 export default function InvoiceDetails({invoice}) {
+
+    console.log("invoice: " + JSON.stringify(invoice));
 
     const [loading, setLoading] = useState(false); // Variable de estado para rastrear el estado de carga
 
@@ -85,7 +92,7 @@ export default function InvoiceDetails({invoice}) {
 
     const [openPopover, setOpenPopover] = useState(null);
 
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
 
     const handleOpenDiscountPercentage = () => {
         setOpenDiscountPercentage(true);
@@ -138,6 +145,7 @@ export default function InvoiceDetails({invoice}) {
         FECHACREACION,
         CLIENTEID,
         Nombres,
+        Apellidos,
         Cliente,
         Ciudad,
         Celular,
@@ -180,7 +188,7 @@ export default function InvoiceDetails({invoice}) {
 
         try {
             // Actualizar una orden.
-           const response = await axios.put('/hanadb/api/orders/order/detail/priceunit', {
+            const response = await axios.put('/hanadb/api/orders/order/detail/priceunit', {
                 ID_DETALLE_ORDEN: selected.ID,
                 NEW_PRICE_UNIT: valueNew
 
@@ -259,7 +267,7 @@ export default function InvoiceDetails({invoice}) {
 
     const handleChangeDelete = async () => {
         try {
-           const response = await axios.delete('/hanadb/api/orders/order/detail/delete', {
+            const response = await axios.delete('/hanadb/api/orders/order/detail/delete', {
                 params: {
                     ID: selected.ID
                 }
@@ -452,7 +460,6 @@ export default function InvoiceDetails({invoice}) {
     };
 
 
-
     const handleChangePedidoFactura = async () => {
 
         // console.log(ID);
@@ -491,62 +498,128 @@ export default function InvoiceDetails({invoice}) {
             }
 
         } else {
-            enqueueSnackbar('Los campos con * son obligatorios.', { variant: 'error' })
+            enqueueSnackbar('Los campos con * son obligatorios.', {variant: 'error'})
         }
 
     }
 
     const handleServiEntrega = async () => {
 
+        var dataToSend = {
 
-        var guia = {
-            id_tipo_logistica: 'Juan',
-            detalle_envio_1: 30,
-            detalle_envio_2: 'Ingeniero',
-            detalle_envio_3: 'Ingeniero',
-            id_ciudad_origen: 'Ingeniero',
-            id_ciudad_destino: 'Ingeniero',
-            id_destinatario_ne_cl: 'Ingeniero',
-            razon_social_desti_ne: 'Ingeniero',
-            nombre_destinatario_ne: 'Ingeniero',
-            apellido_destinatar_ne: 'Ingeniero',
-            direccion1_destinat_ne: 'Ingeniero',
-            sector_destinat_ne: 'Ingeniero',
-            telefono1_destinat_ne: 'Ingeniero',
-            telefono2_destinat_ne: 'Ingeniero',
-            codigo_postal_dest_ne: 'Ingeniero',
-            id_remitente_cl: 'Ingeniero',
-            razon_social_remite: 'Ingeniero',
-            nombre_remitente: 'Ingeniero',
-            apellido_remite: 'Ingeniero',
-            direccion1_remite: 'Ingeniero',
-            sector_remite: 'Ingeniero',
-            telefono1_remite: 'Ingeniero',
-            telefono2_remite: 'Ingeniero',
-            codigo_postal_remi: 'Ingeniero',
-            id_producto: 'Ingeniero',
-            contenido: 'Ingeniero',
-            numero_piezas: 'Ingeniero',
-            valor_mercancia: 'Ingeniero',
-            valor_asegurado: 'Ingeniero',
-            largo: 'Ingeniero',
-            ancho: 'Ingeniero',
-            alto: 'Ingeniero',
-            peso_fisico: 'Ingeniero',
-            login_creacion: 'Ingeniero',
-            password: 'Ingeniero'
+            // GuiaWebs
+            id_tipo_logistica: 1,
+            detalle_envio_1: '',
+            detalle_envio_2: '',
+            detalle_envio_3: '',
+            // Ciudades
+            id_ciudad_origen: selectedCityOrigen.id,
+            id_ciudad_destino: selectedCityDestino.id,
+            // Datos Destino
+            id_destinatario_ne_cl: `'${CLIENTEID}'`,
+            razon_social_desti_ne: `'${Cliente}'`,
+            nombre_destinatario_ne: `'${Nombres}'`,
+            apellido_destinatar_ne: `'${Apellidos}'`,
+            //MUY IMPORTANTE
+            direccion1_destinat_ne: 'Av. Colon 7-90 TEST TEST',
+            sector_destinat_ne: '',
+            telefono1_destinat_ne: `'${Celular}'`,
+            telefono2_destinat_ne: '',
+            codigo_postal_dest_ne: '',
+            // Datos Remitente || BODEGA
+            id_remitente_cl: '0992537442001',
+            razon_social_remite: 'LIDENAR S.A.',
+            nombre_remitente: `'${user.DISPLAYNAME}'`,
+            apellido_remite: '',
+            direccion1_remite: `'${user.ADDRESS}'`,
+            sector_remite: '',
+            telefono1_remite: `'${user.PHONENUMBER}'`,
+            telefono2_remite: '',
+            codigo_postal_remi: '',
+
+            // 1 DOCUMENTO UNITARIO
+            // 2 MERCANCIA PREMIER
+            // 3 DOCUMENTO MASIVO
+            // 6 MERCANCIA INDUSTRIAL
+            // 8 VALIJA EMPRESARIAL 71 FARMA
+            id_producto: 2,
+            //
+            contenido: 'CELULARES',
+            //Cajas - Bultos
+            numero_piezas: selectedCityBoxes.id,
+            // Valor total int
+            valor_mercancia: fNumberSin(totalConIva),
+            // Valor 40% int
+            valor_asegurado: fNumberSin( (totalConIva * 40) / 100),
+            largo: 0,
+            ancho: 0,
+            alto: 0,
+            //El peso en nuestro caso es por bultos
+            peso_fisico: 0.0,
+            login_creacion: 'lidenar.sa',
+            password: 'lidenar'
         };
 
-
-        // Obtener las propiedades del objeto en un array
-        var propiedades = Object.keys(guia);
-// Obtener el número de propiedades
-        var numeroDePropiedades = propiedades.length;
-
-        console.log(numeroDePropiedades); // Imprimirá 3
-        console.log(guia);
+        console.log(JSON.stringify(dataToSend));
 
     }
+
+
+    const [dataCities, setDataCities] = useState([]);
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+            try {
+                const response = await fetch("http://localhost/hanadb/api/orders/order/ServiEntrega/ciudades");
+                const result = await response.json();
+                setDataCities(result.data);
+                console.log(dataCities);
+            } catch (error) {
+                console.log('error', error);
+            }
+        };
+
+        fetchData();
+
+        // Si necesitas hacer algo al desmontar el componente, puedes retornar una función desde useEffect
+        return () => {
+            // Por ejemplo, limpiar intervalos, cancelar solicitudes, etc.
+        };
+    }, []); // El segundo argumento es un array de dependencias, en este caso, está vacío para que se ejecute solo una vez
+
+
+    const [selectedCityOrigen, setSelectedCityOrigen] = useState('');
+    const handleCityChangeOrigen = (event, value) => {
+        if (value){
+            setSelectedCityOrigen(value)
+        }
+    };
+
+    const [selectedCityDestino, setSelectedCityDestino] = useState('');
+    const handleCityChangeDestino = (event, value) => {
+        if (value){
+            setSelectedCityDestino(value)
+        }
+    };
+
+
+    const [selectedCityBoxes, setSelectedCityBoxes] = useState('');
+    const handleCityChangeBoxes = (event, value) => {
+        if (value){
+            setSelectedCityBoxes(value)
+        }
+    };
+
+
+    //Para imprimir
+    useEffect(() => {
+        console.log("Origen ID:", selectedCityOrigen.id);
+        console.log("Destino ID:", selectedCityDestino.id);
+        console.log("Boxes ID:", selectedCityBoxes.id);
+    }, [selectedCityOrigen, selectedCityDestino, selectedCityBoxes]);
+
+
 
     return (
         <>
@@ -707,8 +780,8 @@ export default function InvoiceDetails({invoice}) {
                                                 <Typography
                                                     variant="subtitle2">{row.NOMBRE !== null ? row.NOMBRE : 'VALOR DEL ENVIO'}</Typography>
 
-                                                <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                                                  {row.PRODUCTO_ID}
+                                                <Typography variant="body2" sx={{color: 'text.secondary'}} noWrap>
+                                                    {row.PRODUCTO_ID}
                                                 </Typography>
                                             </Box>
                                         </TableCell>
@@ -857,18 +930,84 @@ export default function InvoiceDetails({invoice}) {
                                 {loading ? 'GUARDANDO...' : ' Guardar Factura'}
                             </Button>
 
-
-
-                            <Button variant="contained" color="success"
-                                    onClick={() =>handleServiEntrega()}>
-                                SERVIENTREGA
-                            </Button>
-
                         </Grid>
 
                     </Grid>
                 }
             </Card>
+
+
+            {user.ROLE === "bodega" &&
+                <Card sx={{pt: 5, px: 5}}>
+                    <Grid item xs={12} sm={6} sx={{mb: 5}}>
+                        <Box sx={{textAlign: {sm: 'left'}}}>
+                            <Typography variant="h4">SERVIENTREGA</Typography>
+                        </Box>
+                    </Grid>
+
+
+
+                    <Masonry columns={{ xs: 1, sm: 2, md: 3 }} spacing={3}>
+                        <Block title="Ciudad">
+                            <Autocomplete
+                                fullWidth
+                                options={dataCities}
+                                getOptionLabel={(option) => option.nombre}
+                                renderInput={(params) => <TextField {...params} label="Origen" />}
+                                onChange={(event, value) => {
+                                    handleCityChangeOrigen(event, value);
+                                }}
+                                sx={{ mb: 2 }}
+                            />
+
+                            <Autocomplete
+                                fullWidth
+                                disableClearable
+                                options={dataCities}
+                                getOptionLabel={(option) => option.nombre}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Destino"
+                                        InputProps={{ ...params.InputProps, type: 'search' }}
+                                    />
+                                )}
+                                onChange={(event, value) => {
+                                    handleCityChangeDestino(event, value);
+                                }}
+
+                            />
+                        </Block>
+
+                        <Block title="Bultos - Cajas">
+                            <Autocomplete
+                                fullWidth
+                                freeSolo
+                                options={boxes}
+                                getOptionLabel={(option) => option.title}
+                                renderInput={(params) => <TextField {...params} label="Número" />}
+                                onChange={(event, value) => {
+                                    handleCityChangeBoxes(event, value);
+                                }}
+                                sx={{ mb: 2 }}
+                            />
+
+                        </Block>
+
+                        <Block title="Creación">
+                            <Button variant="contained" color="success"
+                                    onClick={() => handleServiEntrega()}>
+                                SERVIENTREGA
+                            </Button>
+
+                        </Block>
+
+                    </Masonry>
+
+
+                </Card>
+
+            }
 
             {user.ROLE === "aprobador" || user.ROLE === "bodega" ? (
 
@@ -920,7 +1059,7 @@ export default function InvoiceDetails({invoice}) {
                         Borrar
                     </MenuItem>
                 </MenuPopover>
-                ) : null
+            ) : null
             }
 
             <ConfirmDialog
@@ -1039,4 +1178,17 @@ export const topFormaPago = [
     {title: '180 DIAS', id: 21},
     {title: '*', id: 22},
     {title: 'CONTADO 2 DIAS', id: 23}
+]
+
+
+export const boxes = [
+    {title: '1', id: 1},
+    {title: '2', id: 2},
+    {title: '3', id: 3},
+    {title: '4', id: 4},
+    {title: '5', id: 5},
+    {title: '6', id: 6},
+    {title: '7', id: 7},
+    {title: '8', id: 8},
+    {title: '9', id: 9}
 ]
