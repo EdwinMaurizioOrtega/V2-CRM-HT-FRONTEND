@@ -11,7 +11,7 @@ import {
     RadioGroup,
     CardHeader,
     CardContent,
-    FormControlLabel, Stack, Button, Divider,
+    FormControlLabel, Stack, Button, Divider, Alert, AlertTitle,
 } from '@mui/material';
 // components
 import Iconify from '../../../../../components/iconify';
@@ -20,6 +20,8 @@ import {resetCart} from "../../../../../redux/slices/product";
 import {dispatch} from "../../../../../redux/store";
 import {useState} from "react";
 import {value} from "lodash/seq";
+import {Block} from "../../../../_examples/Block";
+import ContadorRegresivo from "../../../../../components/ContadorRegresivo/ContadorRegresivo";
 
 // ----------------------------------------------------------------------
 
@@ -62,6 +64,8 @@ export default function CheckoutDelivery({
     const handleRadioChange = (event) => {
         console.log(event.target.value);
     };
+
+
 
     return (
         <Card {...other}>
@@ -163,6 +167,9 @@ export default function CheckoutDelivery({
             </CardContent>
 
             <CardHeader title="SERVIENTREGA"/>
+
+            <ContadorRegresivo />
+
             <Typography variant="p" sx={{ mb: 5 }}>
                 *Nota: No seleccionar ninguna de las opciones si el retiro es en oficina.
             </Typography>
