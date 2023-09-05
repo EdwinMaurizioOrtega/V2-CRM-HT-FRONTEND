@@ -3,7 +3,10 @@ import {Alert, AlertTitle, Stack} from "@mui/material";
 import {Block} from "../../sections/_examples/Block";
 
 function ContadorRegresivo() {
-    const fechaObjetivo = new Date();
+    //const fechaObjetivo = new Date();
+    const fechaObjetivo = new Date('Tue Sep 05 2023 10:00:00 GMT-0500'); // Establecer la fecha objetivo
+    //console.log("fechaObjetivo: "+fechaObjetivo);
+
     fechaObjetivo.setDate(fechaObjetivo.getDate() + 15); // Sumar 15 días a la fecha actual
 
     const [tiempoRestante, setTiempoRestante] = useState(calcularTiempoRestante());
