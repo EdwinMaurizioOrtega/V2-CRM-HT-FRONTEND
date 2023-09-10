@@ -80,8 +80,9 @@ const navConfig = [
           // { title: 'product', path: PATH_DASHBOARD.eCommerce.demoView },
           // { title: 'list', path: PATH_DASHBOARD.eCommerce.list },
           // { title: 'create', path: PATH_DASHBOARD.eCommerce.new },
-          // { title: 'edit', path: PATH_DASHBOARD.eCommerce.demoEdit },
           { title: 'carrito de compras', path: PATH_DASHBOARD.eCommerce.checkout },
+          { title: 'Catálogo', path: PATH_DASHBOARD.eCommerce.catalogo },
+
         ],
       },
 
