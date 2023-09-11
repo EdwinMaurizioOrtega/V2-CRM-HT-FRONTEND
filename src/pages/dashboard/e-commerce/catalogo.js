@@ -155,12 +155,12 @@ export default function CatalogoForm() {
 
     const TABLE_HEAD = [
 
-    {field: 'CODIGO', headerName: 'CODIGO', width: 100},
-    {field: 'NOMBRE', headerName: 'NOMBRE', width: 600},
-    {field: 'CANTIDAD_ALIAS', headerName: 'STOCK', width: 100},
-    {field: 'Price', headerName: 'PRECIO', width: 100},
+        {field: 'CODIGO', headerName: 'CODIGO', width: 100},
+        {field: 'NOMBRE', headerName: 'NOMBRE', width: 600},
+        {field: 'CANTIDAD_ALIAS', headerName: 'STOCK', width: 100},
+        {field: 'Price', headerName: 'PRECIO', width: 100},
 
-];
+    ];
 
     const {
         watch,
@@ -203,7 +203,8 @@ export default function CatalogoForm() {
             setDataCatalog(response.data.catalogo)
         } else {
             // La solicitud POST no se realizó correctamente
-            console.error('Error en la solicitud POST:', response.status);        }
+            console.error('Error en la solicitud POST:', response.status);
+        }
 
     };
 
@@ -225,7 +226,7 @@ export default function CatalogoForm() {
                             name: 'Productos',
                             href: PATH_DASHBOARD.eCommerce.catalogo,
                         },
-                        { name: 'Lista' },
+                        {name: 'Lista'},
                     ]}
                 />
 
@@ -299,7 +300,7 @@ export default function CatalogoForm() {
 
 
                 <Box sx={{height: 720}}>
-                    {dataCatalog.length > 0 && <ExcelDownload data={dataCatalog} />}
+                    {dataCatalog.length > 0 && <ExcelDownload data={dataCatalog}/>}
                     {/* <DataGrid */}
                     {/*     rows={dataCatalog} */}
                     {/*     columns={TABLE_HEAD} */}
@@ -342,10 +343,48 @@ function Block({label = 'RHFTextField', sx, children}) {
     );
 }
 
-function ExcelDownload ({ data }) {
+function ExcelDownload({data}) {
     const handleExportToExcel = () => {
-        const ws = XLSX.utils.json_to_sheet(data);
+
+        // Crear una nueva hoja de trabajo vacía con la fila de texto
+        const ws = XLSX.utils.aoa_to_sheet([['CODIGO', 'NOMBRE', 'CANTIDAD']]);
+
+        // const ws = XLSX.utils.json_to_sheet(data);
+        // Ajustar la anchura de la columna para la columna "Nombre"
+        ws['!cols'] = [{ wch: 10 }, { wch: 75 }, { wch: 10 }];
+
+        // Agregar los datos JSON a la hoja de trabajo según el mapeo
+        XLSX.utils.sheet_add_json(
+            ws,
+            data.map((item) => ({
+                CODIGO: item.CODIGO,
+                NOMBRE: item.NOMBRE,
+                CANTIDAD: item.CANTIDAD_ALIAS,
+
+            })),
+            {origin: 'A2'}
+        );
+
         const wb = XLSX.utils.book_new();
+
+        // Configurar todas las opciones de protección
+        ws['!protect'] = {
+            selectLockedCells: true,      // Permitir la selección de celdas bloqueadas
+            selectUnlockedCells: true,    // Permitir la selección de celdas desbloqueadas
+            formatCells: true,           // Permitir el formato de celdas
+            formatColumns: true,         // Permitir el formato de columnas
+            formatRows: true,            // Permitir el formato de filas
+            insertRows: true,            // Permitir la inserción de filas
+            insertColumns: true,         // Permitir la inserción de columnas
+            insertHyperlinks: true,      // Permitir la inserción de hipervínculos
+            deleteRows: true,            // Permitir la eliminación de filas
+            deleteColumns: true,         // Permitir la eliminación de columnas
+            sort: true,                  // Permitir la ordenación
+            autoFilter: true,            // Permitir el autofiltro
+            pivotTables: true,           // Permitir las tablas dinámicas
+            password: 'miContraseña',    // Establecer la contraseña
+        };
+
         XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
         XLSX.writeFile(wb, 'excel_download.xlsx');
     };
