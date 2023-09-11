@@ -28,7 +28,7 @@ import {
     Typography,
     IconButton,
     InputAdornment,
-    CircularProgress, Container, Card, Box, Button,
+    CircularProgress, Container, Card, Box, Button, Autocomplete,
 } from '@mui/material';
 import {useForm} from "react-hook-form";
 import {FormSchema} from "../../../sections/_examples/extra/form/schema";
@@ -40,6 +40,12 @@ import Head from "next/head";
 import * as Yup from "yup";
 import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 import * as XLSX from "xlsx";
+import SearchNotFound from "../../../components/search-not-found";
+import {CustomTextField} from "../../../components/custom-input";
+import Iconify from "../../../components/iconify";
+import match from "autosuggest-highlight/match";
+import parse from "autosuggest-highlight/parse";
+import {useAuthContext} from "../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -118,7 +124,6 @@ export const MARCAS = [
 ];
 
 export const defaultValues = {
-
     //
     singleSelectTP: '',
     multiSelectB: [],
@@ -181,6 +186,7 @@ export default function CatalogoForm() {
 
 
     const [dataCatalog, setDataCatalog] = useState([]);
+    const [dataCliente, setDataCliente] = useState([]);
 
     const onSubmit = async (data) => {
 
@@ -206,6 +212,41 @@ export default function CatalogoForm() {
         }
 
     };
+    const [searchProducts, setSearchProducts] = useState('');
+
+    const [searchResults, setSearchResults] = useState([]);
+    const handleChangeSearch = async (value) => {
+        try {
+            setSearchProducts(value);
+            if (value) {
+                const response = await axios.get('/hanadb/api/customers/search', {
+                    params: {query: value},
+                });
+
+                setSearchResults(response.data.results);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const onCreateBilling = async (value) => {
+        console.log("CLIENTE SELECCIONADO: " + JSON.stringify(value));
+        setDataCliente(value);
+    }
+
+    const handleKeyUp = (event) => {
+        if (event.key === 'Enter') {
+            handleGotoProduct(searchProducts);
+        }
+    };
+
+    const handleGotoProduct = (name) => {
+        // push(PATH_DASHBOARD.eCommerce.view(paramCase(name)));
+        // push(PATH_DASHBOARD.eCommerce.view(name));
+
+        console.log(name);
+    };
 
     return (
         <>
@@ -227,6 +268,72 @@ export default function CatalogoForm() {
                         },
                         {name: 'Lista'},
                     ]}
+                />
+
+                <Autocomplete
+                    size="small"
+                    autoHighlight
+                    popupIcon={null}
+                    options={searchResults}
+                    onInputChange={(event, value) => handleChangeSearch(value)}
+                    getOptionLabel={(product) => product.Cliente}
+                    noOptionsText={<SearchNotFound query={searchProducts}/>}
+                    isOptionEqualToValue={(option, value) => option.ID === value.ID}
+                    componentsProps={{
+                        paper: {
+                            sx: {
+                                '& .MuiAutocomplete-option': {
+                                    px: `8px !important`,
+                                },
+                            },
+                        },
+                    }}
+                    renderInput={(params) => (
+                        <CustomTextField
+                            {...params}
+
+                            placeholder="Buscar..."
+                            onKeyUp={handleKeyUp}
+                            InputProps={{
+                                ...params.InputProps,
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <Iconify icon="eva:search-fill" sx={{ml: 1, color: 'text.disabled'}}/>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                    )}
+                    renderOption={(props, product, {inputValue}) => {
+                        const {ID, Cliente} = product;
+                        const matches = match(Cliente, inputValue);
+                        const parts = parse(Cliente, matches);
+
+                        return (
+                            <li {...props}>
+
+
+                                <AddressItem
+                                    key={ID}
+                                    address={product}
+                                    onCreateBilling={() => onCreateBilling(product)}
+                                >
+                                    {parts.map((part, index) => (
+                                        <Typography
+                                            key={index}
+                                            component="span"
+                                            variant="subtitle2"
+                                            color={part.highlight ? 'primary' : 'textPrimary'}
+                                        >
+                                            {part.text}
+                                        </Typography>
+                                    ))}
+
+                                </AddressItem>
+
+                            </li>
+                        );
+                    }}
                 />
 
                 <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -299,7 +406,7 @@ export default function CatalogoForm() {
 
 
                 <Box sx={{height: 720}}>
-                    {dataCatalog.length > 0 && <ExcelDownload data={dataCatalog}/>}
+                    {dataCatalog.length > 0 && <ExcelDownload data={dataCatalog} client={dataCliente}/>}
                     {/* <DataGrid */}
                     {/*     rows={dataCatalog} */}
                     {/*     columns={TABLE_HEAD} */}
@@ -342,11 +449,15 @@ function Block({label = 'RHFTextField', sx, children}) {
     );
 }
 
-function ExcelDownload({data}) {
+function ExcelDownload({data, client}) {
+
+    const {user} = useAuthContext();
+
+    console.log(client.Cliente);
     const handleExportToExcel = () => {
 
         // Crear una nueva hoja de trabajo vacía con la fila de texto
-        const ws = XLSX.utils.aoa_to_sheet([['CATÁLOGO DE PRODUCTOS LIDENAR']]);
+        const ws = XLSX.utils.aoa_to_sheet([["CLIENTE: "+client.Cliente + " VENDEDOR: " + user.DISPLAYNAME]]);
 
         // Combinar tres columnas (A, B, C) para centrar el texto
         ws['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 2 } }];
@@ -399,3 +510,69 @@ function ExcelDownload({data}) {
         </div>
     );
 };
+
+
+
+function AddressItem({address, onCreateBilling}) {
+    // const {Cliente, Direccion, Celular, receiver, fullAddress, addressType, phoneNumber, isDefault} = address;
+    const {Cliente, Direccion, Celular, ID, Tipo} = address;
+    const receiver = Cliente;
+    const tipo = Tipo;
+    const id = ID;
+
+    return (
+        <Card onClick={onCreateBilling}
+              sx={{
+                  p: 3,
+                  mb: 3,
+              }}
+        >
+            <Stack
+                spacing={2}
+                alignItems={{
+                    md: 'flex-end',
+                }}
+                direction={{
+                    xs: 'column',
+                    md: 'row',
+                }}
+            >
+                <Stack flexGrow={1} spacing={1}>
+                    <Stack direction="row" alignItems="center">
+                        <Typography variant="subtitle1">
+                            {receiver}
+                            {/* <Box component="span" sx={{ml: 0.5, typography: 'body2', color: 'text.secondary'}}> */}
+                            {/*     ({addressType}) */}
+                            {/* </Box> */}
+                        </Typography>
+
+                        {/* {isDefault && ( */}
+                        {/*     <Label color="info" sx={{ml: 1}}> */}
+                        {/*         Default */}
+                        {/*     </Label> */}
+                        {/* )} */}
+                    </Stack>
+
+                    <Typography variant="body2">{tipo}</Typography>
+
+                    <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                        {id}
+                    </Typography>
+                </Stack>
+
+                {/* <Stack flexDirection="row" flexWrap="wrap" flexShrink={0}> */}
+                {/*     /!* {!isDefault && ( *!/ */}
+                {/*     /!*     <Button variant="outlined" size="small" color="inherit" sx={{mr: 1}}> *!/ */}
+                {/*     /!*         Borrar *!/ */}
+                {/*     /!*     </Button> *!/ */}
+                {/*     /!* )} *!/ */}
+
+                {/*     <Button variant="outlined" size="small" onClick={onCreateBilling}> */}
+                {/*         Entregar a esta dirección */}
+                {/*     </Button> */}
+                {/* </Stack> */}
+            </Stack>
+        </Card>
+    );
+}
+
