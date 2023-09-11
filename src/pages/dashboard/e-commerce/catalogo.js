@@ -75,16 +75,19 @@ const CATEGORIAS = [
 ];
 
 export const MARCAS = [
-    {label: 'LG', value: '01'},
     {label: 'SAMSUNG', value: '02'},
     {label: 'BLU', value: '03'},
+    {label: 'XIAOMI', value: '19'},
+    {label: 'TECNO', value: '20'},
+    {label: 'HONOR', value: '22'},
+    {label: 'INFINIX', value: '43'},
+    {label: 'TCL', value: '64'},
+    {label: 'CLARO', value: '62'},
+    {label: 'LG', value: '01'},
     {label: 'NOKIA', value: '04'},
     {label: 'APPLE', value: '09'},
     {label: 'VERYKOOL', value: '12'},
     {label: 'HUAWEI', value: '13'},
-    {label: 'XIAOMI', value: '19'},
-    {label: 'TECNO', value: '20'},
-    {label: 'HONOR', value: '22'},
     {label: 'BAZZUKA', value: '27'},
     {label: 'BLACK&DECKER', value: '28'},
     {label: 'CONAIR', value: '29'},
@@ -97,7 +100,6 @@ export const MARCAS = [
     {label: 'HP', value: '38'},
     {label: 'INNOVA', value: '40'},
     {label: 'KOMBO', value: '42'},
-    {label: 'INFINIX', value: '43'},
     {label: 'REMINGTON', value: '46'},
     {label: 'SANKEY', value: '47'},
     {label: 'WAHL', value: '48'},
@@ -112,11 +114,8 @@ export const MARCAS = [
     {label: 'HUMIFICADOR', value: '59'},
     {label: 'GENERICO', value: '60'},
     {label: 'SEAGETE', value: '61'},
-    {label: 'CLARO', value: '62'},
     {label: 'VARIOS', value: '63'},
-    {label: 'TCL', value: '64'},
 ];
-
 
 export const defaultValues = {
 
