@@ -277,22 +277,21 @@ export default function CatalogoForm() {
                                         options={MARCAS}
                                     />
                                 </Block>
+                                <LoadingButton
+                                    fullWidth
+                                    color="info"
+                                    size="large"
+                                    type="submit"
+                                    variant="contained"
+                                    loading={isSubmitting}
+                                    onClick={handleSubmit(onSubmit)}
 
-
+                                >
+                                    Buscar
+                                </LoadingButton>
                             </Stack>
                         </Grid>
-                        <LoadingButton
-                            fullWidth
-                            color="info"
-                            size="large"
-                            type="submit"
-                            variant="contained"
-                            loading={isSubmitting}
-                            onClick={handleSubmit(onSubmit)}
 
-                        >
-                            Buscar
-                        </LoadingButton>
                     </Grid>
 
                 </FormProvider>
