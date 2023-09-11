@@ -28,7 +28,7 @@ import {
     Typography,
     IconButton,
     InputAdornment,
-    CircularProgress, Container, Card, Box,
+    CircularProgress, Container, Card, Box, Button,
 } from '@mui/material';
 import {useForm} from "react-hook-form";
 import {FormSchema} from "../../../sections/_examples/extra/form/schema";
@@ -39,6 +39,7 @@ import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
 import Head from "next/head";
 import * as Yup from "yup";
 import {DataGrid, GridToolbar} from "@mui/x-data-grid";
+import * as XLSX from "xlsx";
 
 // ----------------------------------------------------------------------
 
@@ -298,14 +299,15 @@ export default function CatalogoForm() {
 
 
                 <Box sx={{height: 720}}>
-                    <DataGrid
-                        rows={dataCatalog}
-                        columns={TABLE_HEAD}
-                        getRowId={getRowId}
-                        components={{
-                            Toolbar: GridToolbar,
-                        }}
-                    />
+                    <ExcelDownload data={dataCatalog} />
+                    {/* <DataGrid */}
+                    {/*     rows={dataCatalog} */}
+                    {/*     columns={TABLE_HEAD} */}
+                    {/*     getRowId={getRowId} */}
+                    {/*     components={{ */}
+                    {/*         Toolbar: GridToolbar, */}
+                    {/*     }} */}
+                    {/* /> */}
 
                 </Box>
 
@@ -339,3 +341,18 @@ function Block({label = 'RHFTextField', sx, children}) {
         </Stack>
     );
 }
+
+function ExcelDownload ({ data }) {
+    const handleExportToExcel = () => {
+        const ws = XLSX.utils.json_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+        XLSX.writeFile(wb, 'excel_download.xlsx');
+    };
+
+    return (
+        <div>
+            <Button variant="contained" onClick={handleExportToExcel}>Exportar a Excel</Button>
+        </div>
+    );
+};
