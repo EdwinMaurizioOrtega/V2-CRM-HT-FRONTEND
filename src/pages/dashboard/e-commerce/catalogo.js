@@ -457,13 +457,25 @@ function ExcelDownload({data, client}) {
     const handleExportToExcel = () => {
 
         // Crear una nueva hoja de trabajo vacía con la fila de texto
-        const ws = XLSX.utils.aoa_to_sheet([["CLIENTE: "+client.Cliente + " VENDEDOR: " + user.DISPLAYNAME]]);
+        const ws = XLSX.utils.aoa_to_sheet([["CLIENTE: "+client.Cliente ]]);
 
         // Combinar tres columnas (A, B, C) para centrar el texto
         ws['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 2 } }];
 
         // Establecer estilo para centrar el texto
         ws['A1'].s = { alignment: { horizontal: 'center' } };
+
+        // Ajustar la anchura de la columna para la columna "Nombre"
+        ws['!cols'] = [{ wch: 10 }, { wch: 75 }, { wch: 10 }];
+
+        // Crear una segunda fila con un texto de ejemplo
+        const segundaFila = [["VENDEDOR: " + user.DISPLAYNAME]]; // Puedes ajustar el texto según tus necesidades
+        XLSX.utils.sheet_add_aoa(ws, [segundaFila], { origin: 'A2' });
+        // Combinar tres columnas (A, B, C) para centrar el texto
+        ws['!merges'] = [{ s: { r: 1, c: 0 }, e: { r: 1, c: 2 } }];
+
+        // Establecer estilo para centrar el texto
+        ws['A2'].s = { alignment: { horizontal: 'center' } };
 
         // Ajustar la anchura de la columna para la columna "Nombre"
         ws['!cols'] = [{ wch: 10 }, { wch: 75 }, { wch: 10 }];
@@ -477,7 +489,7 @@ function ExcelDownload({data, client}) {
                 CANTIDAD: item.CANTIDAD_ALIAS,
 
             })),
-            {origin: 'A2'}
+            {origin: 'A3'}
         );
 
         const wb = XLSX.utils.book_new();
@@ -510,8 +522,6 @@ function ExcelDownload({data, client}) {
         </div>
     );
 };
-
-
 
 function AddressItem({address, onCreateBilling}) {
     // const {Cliente, Direccion, Celular, receiver, fullAddress, addressType, phoneNumber, isDefault} = address;
