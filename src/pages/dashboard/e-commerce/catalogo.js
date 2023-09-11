@@ -347,9 +347,14 @@ function ExcelDownload({data}) {
     const handleExportToExcel = () => {
 
         // Crear una nueva hoja de trabajo vacía con la fila de texto
-        const ws = XLSX.utils.aoa_to_sheet([['CODIGO', 'NOMBRE', 'CANTIDAD']]);
+        const ws = XLSX.utils.aoa_to_sheet([['CATÁLOGO DE PRODUCTOS LIDENAR']]);
 
-        // const ws = XLSX.utils.json_to_sheet(data);
+        // Combinar tres columnas (A, B, C) para centrar el texto
+        ws['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 2 } }];
+
+        // Establecer estilo para centrar el texto
+        ws['A1'].s = { alignment: { horizontal: 'center' } };
+
         // Ajustar la anchura de la columna para la columna "Nombre"
         ws['!cols'] = [{ wch: 10 }, { wch: 75 }, { wch: 10 }];
 
@@ -382,11 +387,11 @@ function ExcelDownload({data}) {
             sort: true,                  // Permitir la ordenación
             autoFilter: true,            // Permitir el autofiltro
             pivotTables: true,           // Permitir las tablas dinámicas
-            password: 'miContraseña',    // Establecer la contraseña
+            password: 'miPassword',    // Establecer la contraseña
         };
 
         XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-        XLSX.writeFile(wb, 'excel_download.xlsx');
+        XLSX.writeFile(wb, 'Lidenar.xlsx');
     };
 
     return (
