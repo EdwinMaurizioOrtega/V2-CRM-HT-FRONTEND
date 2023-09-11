@@ -44,7 +44,7 @@ import * as XLSX from "xlsx";
 // ----------------------------------------------------------------------
 
 const OPTIONS = [
-    {value: '1', label: 'NE'},
+    // {value: '1', label: 'NE'},
     {value: '2', label: 'Precio 30 unidades'},
     {value: '3', label: 'Precio 15 unidades'},
     {value: '4', label: 'Precio Retail'},
@@ -299,7 +299,7 @@ export default function CatalogoForm() {
 
 
                 <Box sx={{height: 720}}>
-                    <ExcelDownload data={dataCatalog} />
+                    {dataCatalog.length > 0 && <ExcelDownload data={dataCatalog} />}
                     {/* <DataGrid */}
                     {/*     rows={dataCatalog} */}
                     {/*     columns={TABLE_HEAD} */}
