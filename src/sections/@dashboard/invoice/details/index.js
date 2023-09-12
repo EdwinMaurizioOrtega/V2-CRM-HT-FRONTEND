@@ -466,16 +466,19 @@ export default function InvoiceDetails({invoice}) {
 
             // Se completó con éxito (código de estado 200)
             if (response.status === 200) {
+                    //await router.push('/dashboard/invoice/list/');
                 setTimeout(() => {
-                    router.push(PATH_DASHBOARD.invoice.list);
-                }, 3000); // Tiempo de espera de 5 segundos (5000 milisegundos)
+                    window.location.href = '/dashboard/invoice/list/';
+                }, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
             }
         } catch (error) {
             // Manejar el error de la petición POST aquí
             console.error('Error al actualizar la orden:', error);
-        } finally {
-            setLoading(false); // Restablecer loading a false después de que se completa la llamada a la API, independientemente de si fue exitosa o falló
         }
+
+        // finally {
+        //     setLoading(false); // Restablecer loading a false después de que se completa la llamada a la API, independientemente de si fue exitosa o falló
+        // }
     };
 
 
