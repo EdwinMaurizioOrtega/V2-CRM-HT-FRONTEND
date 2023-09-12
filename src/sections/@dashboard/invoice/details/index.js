@@ -466,7 +466,9 @@ export default function InvoiceDetails({invoice}) {
 
             // Se completó con éxito (código de estado 200)
             if (response.status === 200) {
-                router(PATH_DASHBOARD.invoice.list);
+                setTimeout(() => {
+                    router.push(PATH_DASHBOARD.invoice.list);
+                }, 3000); // Tiempo de espera de 5 segundos (5000 milisegundos)
             }
         } catch (error) {
             // Manejar el error de la petición POST aquí
