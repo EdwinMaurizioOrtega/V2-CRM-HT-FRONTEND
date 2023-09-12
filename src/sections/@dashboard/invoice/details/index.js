@@ -469,7 +469,7 @@ export default function InvoiceDetails({invoice}) {
                     //await router.push('/dashboard/invoice/list/');
                 setTimeout(() => {
                     window.location.href = '/dashboard/invoice/list/';
-                }, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
+                }, 8000); // Tiempo de espera de 5 segundos (5000 milisegundos)
             }
         } catch (error) {
             // Manejar el error de la petición POST aquí
