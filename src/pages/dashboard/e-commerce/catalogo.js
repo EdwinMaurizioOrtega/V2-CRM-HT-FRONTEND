@@ -253,7 +253,7 @@ export default function CatalogoForm() {
             <Head>
                 <title> Catálogo: Productos | HT</title>
             </Head>
-            <Container sx={{my: 10}}>
+            <Container >
 
                 <CustomBreadcrumbs
                     heading="Generar catálogo."
@@ -486,7 +486,7 @@ function ExcelDownload({data, client}) {
             data.map((item) => ({
                 CODIGO: item.CODIGO,
                 NOMBRE: item.NOMBRE,
-                CANTIDAD: item.CANTIDAD_ALIAS,
+                STOCK: item.CANTIDAD_ALIAS,
                 SUBTOTAL: item.Price,
                 IVA: (item.Price * 0.12).toFixed(2),
                 TOTAL: (item.Price * 1.12).toFixed(2),
