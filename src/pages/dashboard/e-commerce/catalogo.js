@@ -455,6 +455,7 @@ function ExcelDownload({data, client}) {
 
     console.log(client.Cliente);
     const handleExportToExcel = () => {
+        const wb = XLSX.utils.book_new();
 
         // Crear una nueva hoja de trabajo vacía con la fila de texto
         const ws = XLSX.utils.aoa_to_sheet([["CLIENTE: "+client.Cliente ]]);
@@ -495,7 +496,27 @@ function ExcelDownload({data, client}) {
             {origin: 'A3'}
         );
 
-        const wb = XLSX.utils.book_new();
+        for(let R = 3; R <= 25; ++R) {
+            for(let C = 1; C <= 6; ++C) {
+                const cell_address = {c: C, r: R};
+                /* if an A1-style address is needed, encode the address */
+                var cell_ref = XLSX.utils.encode_cell(cell_address);
+
+                // Obtener la celda actual o crear una nueva si no existe
+                var cell = ws[cell_ref] || (ws[cell_ref] = {});
+
+                // Crear un estilo de borde negro
+                var borderStyle = {
+                    top: { style: "thin", color: { rgb: "000000" } }, // Negro
+                    right: { style: "thin", color: { rgb: "000000" } }, // Negro
+                    bottom: { style: "thin", color: { rgb: "000000" } }, // Negro
+                    left: { style: "thin", color: { rgb: "000000" } } // Negro
+                };
+
+                // Aplicar el estilo de borde a la celda
+                cell.s = { border: borderStyle };
+            }
+        }
 
         // Configurar todas las opciones de protección
         ws['!protect'] = {
