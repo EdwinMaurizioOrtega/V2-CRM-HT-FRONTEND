@@ -407,6 +407,7 @@ export default function InvoiceDetails({invoice}) {
             21: "180 DIAS",
             22: "*",
             23: "CONTADO 2 DIAS",
+            26: "CRÉDITO 21 DÍAS",
         };
 
         const payActual = strings[pay];
