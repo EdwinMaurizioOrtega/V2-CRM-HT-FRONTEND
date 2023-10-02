@@ -1253,7 +1253,8 @@ export const topFormaPago = [
     {title: 'CONTADO 8 DÍAS', id: 20},
     {title: '180 DIAS', id: 21},
     {title: '*', id: 22},
-    {title: 'CONTADO 2 DIAS', id: 23}
+    {title: 'CONTADO 2 DIAS', id: 23},
+    {title: 'CRÉDITO 21 DIAS', id: 26}
 ]
 
 
