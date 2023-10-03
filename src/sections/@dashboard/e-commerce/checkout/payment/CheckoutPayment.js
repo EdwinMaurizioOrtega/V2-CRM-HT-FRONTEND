@@ -123,6 +123,12 @@ const PAYMENT_OPTIONS = [
         icons: [],
     },
     {
+        value: 27,
+        title: '25',
+        description: 'Crédito 25 días.',
+        icons: [],
+    },
+    {
         value: 4,
         title: '30',
         description: 'Crédito 30 días.',
