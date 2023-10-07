@@ -47,6 +47,7 @@ import { ProductTableRow, ProductTableToolbar } from '../../../sections/@dashboa
 const TABLE_HEAD = [
   { id: 'name', label: 'Producto', align: 'left' },
   { id: 'createdAt', label: 'Código', align: 'left' },
+  { id: 'sku', label: 'SKU', align: 'left' },
   // { id: 'inventoryType', label: 'Stock', align: 'center', width: 180 },
   // { id: 'price', label: 'Price', align: 'right' },
   // { id: '' },
@@ -391,7 +392,8 @@ function applyFilter({ inputData, comparator, filterName, filterStatus }) {
   if (filterName) {
     inputData = inputData.filter(
       (product) => product.NOMBRE.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 ||
-          product.CODIGO.indexOf(filterName) !== -1
+          product.CODIGO.indexOf(filterName) !== -1 ||
+          product.SKU && product.SKU.indexOf(filterName) !== -1
     );
   }
 

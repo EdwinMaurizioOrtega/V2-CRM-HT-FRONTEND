@@ -42,7 +42,7 @@ export default function ProductTableRow({
                                             onEditRow,
                                             onViewRow,
                                         }) {
-    const {NOMBRE, CODIGO, TOTAL, cover, createdAt, inventoryType, price, IMAGES} = row;
+    const {NOMBRE, CODIGO, SKU, TOTAL, cover, createdAt, inventoryType, price, IMAGES} = row;
 
     const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -117,6 +117,7 @@ export default function ProductTableRow({
 
                 {/* <TableCell>{fDate(createdAt)}</TableCell> */}
                 <TableCell>{CODIGO}</TableCell>
+                <TableCell>{SKU}</TableCell>
 
                 {/* <TableCell align="center"> */}
                 {/*     <Label */}
