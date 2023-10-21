@@ -795,8 +795,7 @@ export default function InvoiceDetails({invoice}) {
 
                             <Grid item xs={12} sm={7} sx={{mb: 1}}>
 
-                                <Typography variant="body2">Forma de pago
-                                    actual: {nameFormaPago(FORMADEPAGO)}</Typography>
+                                <Typography variant="body2">Forma de pago actual: {nameFormaPago(FORMADEPAGO)}</Typography>
 
                                 {user.ROLE === "aprobador" &&
                                     <Autocomplete

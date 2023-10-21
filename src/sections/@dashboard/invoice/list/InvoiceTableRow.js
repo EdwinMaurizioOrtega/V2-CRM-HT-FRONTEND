@@ -67,7 +67,9 @@ export default function InvoiceTableRow({
         dueDate,
         status,
         invoiceTo,
-        totalPrice
+        totalPrice,
+        BODEGA,
+        FORMADEPAGO
     } = row;
 
     const [openConfirm, setOpenConfirm] = useState(false);
@@ -128,22 +130,6 @@ export default function InvoiceTableRow({
                     </Stack>
                 </TableCell>
 
-                <TableCell align="left">{FECHACREACION}</TableCell>
-
-                <TableCell align="left">{CLIENTEID}</TableCell>
-
-                <TableCell align="center">{Cliente}</TableCell>
-
-                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
-                    {Celular}
-                </TableCell>
-                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
-                    {Tipo}
-                </TableCell>
-                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
-                    {Ciudad}
-                </TableCell>
-
                 <TableCell align="left">
                     <Label
                         variant="soft"
@@ -164,9 +150,30 @@ export default function InvoiceTableRow({
                         }
                     </Label>
                 </TableCell>
+
+                <TableCell align="left">{FECHACREACION}</TableCell>
+
+                <TableCell align="left">{nameWarehouse(BODEGA)}</TableCell>
+                <TableCell align="left">{nameFormaPago(FORMADEPAGO)}</TableCell>
+
+                <TableCell align="left">{CLIENTEID}</TableCell>
+
+                <TableCell align="center">{Cliente}</TableCell>
+
                 <TableCell align="center" sx={{textTransform: 'capitalize'}}>
-                    {VENDEDOR}
+                    {Celular}
                 </TableCell>
+                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                    {Tipo}
+                </TableCell>
+                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                    {Ciudad}
+                </TableCell>
+
+
+                {/* <TableCell align="center" sx={{textTransform: 'capitalize'}}> */}
+                {/*     {VENDEDOR} */}
+                {/* </TableCell> */}
                 <TableCell align="center" sx={{textTransform: 'capitalize'}}>
                     {CITY}
                 </TableCell>
@@ -264,4 +271,56 @@ export default function InvoiceTableRow({
             />
         </>
     );
+}
+
+
+function nameFormaPago(pay) {
+    const strings = {
+        "-1": "CONTADO",
+        1: "CONTADO 5 DÍAS",
+        2: "CONTADO 7 DÍAS",
+        3: "15 DÍAS",
+        4: "30 DÍAS",
+        5: "45 DÍAS",
+        6: "60 DÍAS",
+        7: "90 DÍAS",
+        8: "120 DÍAS",
+        9: "30-60 DÍAS",
+        10: "30-60-90 DÍAS",
+        11: "30-60-90-120 DÍAS",
+        12: "60-90-120 DÍAS",
+        13: "36 MESES",
+        14: "6 MESES",
+        15: "12 MESES",
+        16: "9 MESES",
+        17: "18 MESES",
+        18: "24 MESES",
+        19: "CONTADO / RET",
+        20: "CONTADO 8 DÍAS",
+        21: "180 DIAS",
+        22: "*",
+        23: "CONTADO 2 DIAS",
+        26: "CRÉDITO 21 DÍAS",
+        27: "CRÉDITO 25 DÍAS",
+        28: "CRÉDITO 75 DÍAS",
+    };
+
+    const payActual = strings[pay];
+    return payActual || "Pago no definido.";
+
+}
+
+function nameWarehouse(ware) {
+    console.log(`Bodega: ${ware}`);
+    const strings = {
+        "019": "Centro Distribución HT",
+        "002": "Cuenca",
+        "006": "Quito",
+        "015": "Guayaquil",
+        "024": "Manta",
+    };
+
+    const bodegaActual = strings[ware];
+    return bodegaActual || "Bodega no definida.";
+
 }
