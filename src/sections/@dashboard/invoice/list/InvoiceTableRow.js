@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 // utils
 import {fDate} from '../../../../utils/formatTime';
-import {fCurrency} from '../../../../utils/formatNumber';
+import {fCurrency, fNumberSin} from '../../../../utils/formatNumber';
 // components
 import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
@@ -23,6 +23,8 @@ import {CustomAvatar} from '../../../../components/custom-avatar';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import {useAuthContext} from "../../../../auth/useAuthContext";
+import {HOST_API_KEY} from "../../../../config-global";
+import {PATH_DASHBOARD} from "../../../../routes/paths";
 
 // ----------------------------------------------------------------------
 
@@ -69,7 +71,8 @@ export default function InvoiceTableRow({
         invoiceTo,
         totalPrice,
         BODEGA,
-        FORMADEPAGO
+        FORMADEPAGO,
+        NUMEROGUIA
     } = row;
 
     const [openConfirm, setOpenConfirm] = useState(false);
@@ -100,6 +103,62 @@ export default function InvoiceTableRow({
 
     const handleClosePopover = () => {
         setOpenPopover(null);
+    };
+
+    const [isLoading, setIsLoading] = useState(false);
+
+    const VerGuia = (guia) => {
+        setIsLoading(true); // Set loading to true when starting the fetch
+
+        console.log("Guia: " + guia);
+        var dataToSend = {
+            num_guia: guia
+        };
+
+        console.log(JSON.stringify(dataToSend));
+
+        // URL del servidor al que deseas enviar los datos
+        const url = `${HOST_API_KEY}/hanadb/api/orders/order/ServiEntrega/GuiasWeb`;
+
+        // Configuración de la solicitud
+        const requestOptions = {
+            method: "POST", // Método de la solicitud (POST en este caso)
+            headers: {
+                "Content-Type": "application/json", // Tipo de contenido de los datos enviados (JSON en este caso)
+            },
+            body: JSON.stringify(dataToSend), // Convertir el objeto en una cadena JSON y usarlo como cuerpo de la solicitud
+        };
+
+        // Realizar la solicitud Fetch
+        fetch(url, requestOptions)
+            .then((response) => response.json()) // Convertir la respuesta en formato JSON
+            .then((data) => {
+                // Aquí puedes manejar la respuesta del servidor (data)
+                console.log("Respuesta del servidor:", data);
+
+                var pdfDecode = data.base64File;
+
+                const byteCharacters = atob(pdfDecode);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const pdfBlob = new Blob([byteArray], {type: 'application/pdf'});
+                const pdfUrl = URL.createObjectURL(pdfBlob);
+                window.open(pdfUrl, '_blank');
+
+
+
+
+            })
+            .catch((error) => {
+                // Aquí puedes manejar errores en la solicitud
+                console.error("Error en la solicitud:", error);
+            })
+            .finally(() => {
+                setIsLoading(false); // Set loading to false regardless of success or error
+            });
     };
 
     return (
@@ -178,6 +237,19 @@ export default function InvoiceTableRow({
                     {CITY}
                 </TableCell>
 
+                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+
+                    <Button
+                        variant="text"
+                        onClick={() => VerGuia(NUMEROGUIA)}
+                        sx={{ color: 'text.disabled', cursor: 'pointer' }}
+                        disabled={isLoading} // Disable the button while loading
+                    >
+                        {isLoading ? 'Cargando...' : NUMEROGUIA}
+                    </Button>
+
+                </TableCell>
+
                 <TableCell align="right">
                     <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
                         <Iconify icon="eva:more-vertical-fill"/>
@@ -186,9 +258,9 @@ export default function InvoiceTableRow({
 
                 {
                     user.ROLE === "aprobador" || user.ROLE === "bodega" ? (
-                    <TableCell align="center" sx={{textTransform: 'capitalize'}}>
-                        {DOCNUM}
-                    </TableCell>
+                        <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                            {DOCNUM}
+                        </TableCell>
                     ) : null
 
                 }

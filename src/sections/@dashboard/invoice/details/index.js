@@ -537,6 +537,8 @@ export default function InvoiceDetails({invoice}) {
 
         var dataToSend = {
 
+            num_pedido: ID,
+
             // GuiaWebs
             id_tipo_logistica: 1,
             detalle_envio_1: '',
@@ -544,7 +546,7 @@ export default function InvoiceDetails({invoice}) {
             detalle_envio_3: '',
             // Ciudades
             id_ciudad_origen: selectedCityOrigen.id,
-            id_ciudad_destino: selectedCityDestino.id,
+            id_ciudad_destino: `${(JSON.parse(OBSERVACIONESB)).id}`,
             // Datos Destino
             id_destinatario_ne_cl: `'${CLIENTEID}'`,
             razon_social_desti_ne: `'${Cliente}'`,
@@ -554,8 +556,8 @@ export default function InvoiceDetails({invoice}) {
             direccion1_destinat_ne: `'${(JSON.parse(OBSERVACIONESB)).DIRECCION}'`,
             sector_destinat_ne: '',
             telefono1_destinat_ne: `'${Celular}'`,
-            telefono2_destinat_ne: '',
-            codigo_postal_dest_ne: '',
+            telefono2_destinat_ne: `'${Celular}'`,
+            codigo_postal_dest_ne: '000000',
             // Datos Remitente || BODEGA
             id_remitente_cl: '0992537442001',
             razon_social_remite: 'LIDENAR S.A.',
@@ -613,9 +615,7 @@ export default function InvoiceDetails({invoice}) {
 
                 var pdfDecode = data.base64File;
 
-
                 setDecodedString(atob(pdfDecode))
-
 
             })
             .catch((error) => {
@@ -623,9 +623,7 @@ export default function InvoiceDetails({invoice}) {
                 console.error("Error en la solicitud:", error);
             });
 
-
     }
-
 
     const [dataCities, setDataCities] = useState([]);
 
@@ -1020,7 +1018,7 @@ export default function InvoiceDetails({invoice}) {
 
 
                     <Masonry columns={{xs: 1, sm: 2, md: 3}} spacing={3}>
-                        <Block title="Ciudad">
+                        <Block title="Ciudad Origen">
                             <Autocomplete
                                 fullWidth
                                 options={dataCities}
@@ -1032,23 +1030,23 @@ export default function InvoiceDetails({invoice}) {
                                 sx={{mb: 2}}
                             />
 
-                            <Autocomplete
-                                fullWidth
-                                disableClearable
-                                options={dataCities}
-                                getOptionLabel={(option) => option.nombre}
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        label="Destino"
-                                        InputProps={{...params.InputProps, type: 'search'}}
-                                    />
-                                )}
-                                onChange={(event, value) => {
-                                    handleCityChangeDestino(event, value);
-                                }}
+                            {/* <Autocomplete */}
+                            {/*     fullWidth */}
+                            {/*     disableClearable */}
+                            {/*     options={dataCities} */}
+                            {/*     getOptionLabel={(option) => option.nombre} */}
+                            {/*     renderInput={(params) => ( */}
+                            {/*         <TextField */}
+                            {/*             {...params} */}
+                            {/*             label="Destino" */}
+                            {/*             InputProps={{...params.InputProps, type: 'search'}} */}
+                            {/*         /> */}
+                            {/*     )} */}
+                            {/*     onChange={(event, value) => { */}
+                            {/*         handleCityChangeDestino(event, value); */}
+                            {/*     }} */}
 
-                            />
+                            {/* /> */}
                         </Block>
 
                         <Block title="Bultos - Cajas">
@@ -1077,9 +1075,19 @@ export default function InvoiceDetails({invoice}) {
                     </Masonry>
 
 
-                    <Tooltip title="View">
-                        <IconButton onClick={openPDFInNewTab}> <Iconify icon="solar:eye-bold"/></IconButton>
-                    </Tooltip>
+                    {/* <Tooltip title="View"> */}
+                    {/*     <IconButton onClick={openPDFInNewTab}> <Iconify icon="solar:eye-bold"/></IconButton> */}
+                    {/* </Tooltip> */}
+
+                    {decodedString ? (
+                        <Tooltip title="View">
+                            <IconButton onClick={openPDFInNewTab}>
+                                <Iconify icon="solar:eye-bold" />
+                            </IconButton>
+                        </Tooltip>
+                    ) : (
+                        <p>¡La guía aun no esta creada.!</p>
+                    )}
 
                 </Card>
             }

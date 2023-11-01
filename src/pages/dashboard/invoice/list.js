@@ -83,6 +83,7 @@ const TABLE_HEAD = [
     {id: 'status', label: 'Ciudad Cliente', align: 'left'},
     // {id: 'status', label: 'Vendedor', align: 'left'},
     {id: 'status', label: 'Ciudad Vendedor', align: 'left'},
+    {id: 'status', label: 'Servientrega', align: 'left'},
     {id: 'status', label: 'Detalle', align: 'left'},
 
     {id: ''},

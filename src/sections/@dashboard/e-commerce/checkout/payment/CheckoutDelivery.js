@@ -11,17 +11,19 @@ import {
     RadioGroup,
     CardHeader,
     CardContent,
-    FormControlLabel, Stack, Button, Divider, Alert, AlertTitle,
+    FormControlLabel, Stack, Button, Divider, Alert, AlertTitle, TextField, Autocomplete,
 } from '@mui/material';
 // components
 import Iconify from '../../../../../components/iconify';
 import {RHFTextField} from "../../../../../components/hook-form";
 import {resetCart} from "../../../../../redux/slices/product";
 import {dispatch} from "../../../../../redux/store";
-import {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {value} from "lodash/seq";
 import {Block} from "../../../../_examples/Block";
 import ContadorRegresivo from "../../../../../components/ContadorRegresivo/ContadorRegresivo";
+import {HOST_API_KEY} from "../../../../../config-global";
+import Masonry from "@mui/lab/Masonry";
 
 // ----------------------------------------------------------------------
 
@@ -65,6 +67,36 @@ export default function CheckoutDelivery({
         console.log(event.target.value);
     };
 
+    const [dataCities, setDataCities] = useState([]);
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/order/ServiEntrega/ciudades`);
+                const result = await response.json();
+                setDataCities(result.data);
+                console.log(dataCities);
+            } catch (error) {
+                console.log('error', error);
+            }
+        };
+
+        fetchData();
+
+        // Si necesitas hacer algo al desmontar el componente, puedes retornar una función desde useEffect
+        return () => {
+            // Por ejemplo, limpiar intervalos, cancelar solicitudes, etc.
+        };
+    }, []); // El segundo argumento es un array de dependencias, en este caso, está vacío para que se ejecute solo una vez
+
+
+    const [selectedCityDestino, setSelectedCityDestino] = useState('');
+    const handleCityChangeDestino = (event, value) => {
+        if (value) {
+            setSelectedCityDestino(value)
+        }
+    };
 
 
     return (
@@ -86,6 +118,7 @@ export default function CheckoutDelivery({
                             {...field}
                             onChange={(event) => {
                                 const {value} = event.target;
+                                console.log("Envío: "+value);
                                 field.onChange(Number(value));
                                 onApplyShipping(Number(value));
                             }}
@@ -168,11 +201,31 @@ export default function CheckoutDelivery({
 
             <CardHeader title="SERVIENTREGA"/>
 
-            <ContadorRegresivo />
+            {/* <ContadorRegresivo /> */}
 
-            <Typography variant="p" sx={{ mb: 5 }}>
+            <Typography variant="p" sx={{mb: 5}}>
                 *Nota: No seleccionar ninguna de las opciones si el retiro es en oficina.
             </Typography>
+
+            <Block title="Ciudad Destino">
+                <Autocomplete
+                    fullWidth
+                    disableClearable
+                    options={dataCities}
+                    getOptionLabel={(option) => option.nombre}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            label="Destino"
+                            InputProps={{...params.InputProps, type: 'search'}}
+                        />
+                    )}
+                    onChange={(event, value) => {
+                        handleCityChangeDestino(event, value);
+                    }}
+                />
+            </Block>
+
             <CardContent>
                 <Controller
                     name="servientrega"
@@ -183,8 +236,9 @@ export default function CheckoutDelivery({
                             onChange={(event) => {
                                 const {value} = event.target;
                                 field.onChange(value);
-                                console.log("Value Muy Importante: " + value);
-                                onApplyServientrega(JSON.parse(value));
+                                const mergedObject = {...JSON.parse(value), ...JSON.parse(JSON.stringify(selectedCityDestino))};
+                                console.log("Value Muy Importante: " + JSON.stringify(mergedObject));
+                                onApplyServientrega(mergedObject);
                             }}
                         >
                             <Box
