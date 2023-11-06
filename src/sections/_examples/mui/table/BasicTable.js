@@ -137,6 +137,8 @@ function getTextFromCodigo(rowCodigo) {
             return "MAYORISTAS_GUAYAQUIL";
         case '024':
             return "MAYORISTAS_MANTA";
+        case '030':
+            return "COLON";
         case '009':
             return "SAMSUNG_BAHIA";
         case '014':

@@ -82,7 +82,7 @@ export default function InvoiceDetails({invoice}) {
 
     const view = useBoolean();
 
-    console.log("invoice: " + JSON.stringify(invoice));
+    console.log("Invoice: " + JSON.stringify(invoice));
 
     const [loading, setLoading] = useState(false); // Variable de estado para rastrear el estado de carga
 
