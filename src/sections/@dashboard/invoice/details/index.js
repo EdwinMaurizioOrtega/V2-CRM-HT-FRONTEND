@@ -374,6 +374,7 @@ export default function InvoiceDetails({invoice}) {
             "006": "Quito",
             "015": "Guayaquil",
             "024": "Manta",
+            "030": "Colón",
         };
 
         const bodegaActual = strings[ware];
@@ -1235,7 +1236,8 @@ export const top100Films = [
     {title: 'Cuenca', id: "002"},
     {title: 'Quito', id: "006"},
     {title: 'Guayaquil', id: "015"},
-    {title: 'Manta', id: "024"}
+    {title: 'Manta', id: "024"},
+    {title: 'Colón', id: "030"}
 ]
 
 
