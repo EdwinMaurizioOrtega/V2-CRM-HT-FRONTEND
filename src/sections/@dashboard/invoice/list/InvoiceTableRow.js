@@ -390,6 +390,7 @@ function nameWarehouse(ware) {
         "006": "Quito",
         "015": "Guayaquil",
         "024": "Manta",
+        "030": "Colón"
     };
 
     const bodegaActual = strings[ware];
