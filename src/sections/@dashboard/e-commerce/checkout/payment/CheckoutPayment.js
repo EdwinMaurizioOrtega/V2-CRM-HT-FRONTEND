@@ -89,6 +89,12 @@ const WAREHOUSE_OPTIONS = [
         title: 'MAYORISTA MANTA',
         description: 'SUCURSAL en la ciudad de Manta.',
     },
+    {
+        id: '030',
+        value: '030',
+        title: 'PARQUE EMP. COLÓN',
+        description: 'SUCURSAL en la ciudad de GUAYAQUIL.',
+    },
 ];
 
 const PAYMENT_OPTIONS = [

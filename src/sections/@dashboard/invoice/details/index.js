@@ -555,8 +555,8 @@ export default function InvoiceDetails({invoice}) {
             //MUY IMPORTANTE
             direccion1_destinat_ne: `'${(JSON.parse(OBSERVACIONESB)).DIRECCION}'`,
             sector_destinat_ne: '',
-            telefono1_destinat_ne: `'${Celular}'`,
-            telefono2_destinat_ne: `'${Celular}'`,
+            telefono1_destinat_ne: `${Celular}`,
+            telefono2_destinat_ne: `${Celular}`,
             codigo_postal_dest_ne: '000000',
             // Datos Remitente || BODEGA
             id_remitente_cl: '0992537442001',
@@ -565,7 +565,7 @@ export default function InvoiceDetails({invoice}) {
             apellido_remite: '',
             direccion1_remite: `'${user.ADDRESS}'`,
             sector_remite: '',
-            telefono1_remite: `'${user.PHONENUMBER}'`,
+            telefono1_remite: `${user.PHONENUMBER}`,
             telefono2_remite: '',
             codigo_postal_remi: '',
 
@@ -582,7 +582,8 @@ export default function InvoiceDetails({invoice}) {
             // Valor total int
             valor_mercancia: fNumberSin(totalConIva),
             // Valor 40% int
-            valor_asegurado: fNumberSin((totalConIva * 40) / 100),
+            //valor_asegurado: fNumberSin((totalConIva * 40) / 100),
+            valor_asegurado: fNumberSin(totalConIva),
             largo: 0,
             ancho: 0,
             alto: 0,
