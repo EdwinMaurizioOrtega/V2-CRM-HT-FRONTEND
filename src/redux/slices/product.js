@@ -85,27 +85,34 @@ const slice = createSlice({
         },
 
         addToCart(state, action) {
-            const newProduct = action.payload;
-            const isEmptyCart = !state.checkout.cart.length;
 
-            if (isEmptyCart) {
-                state.checkout.cart = [...state.checkout.cart, newProduct];
-            } else {
-                state.checkout.cart = state.checkout.cart.map((product) => {
-                    const isExisted = product.CODIGO === newProduct.CODIGO;
+            state.checkout.cart = [...state.checkout.cart, action.payload];
 
-                    if (isExisted) {
-                        return {
-                            ...product,
-                            // colors: uniq([...product.colors, ...newProduct.colors]),
-                            quantity: product.quantity + 1,
-                        };
-                    }
-
-                    return product;
-                });
-            }
-            state.checkout.cart = uniqBy([...state.checkout.cart, newProduct], 'CODIGO');
+            // const newProduct = action.payload;
+            //
+            //
+            //
+            //
+            // const isEmptyCart = !state.checkout.cart.length;
+            //
+            // if (isEmptyCart) {
+            //     state.checkout.cart = [...state.checkout.cart, newProduct];
+            // } else {
+            //     state.checkout.cart = state.checkout.cart.map((product) => {
+            //         const isExisted = product.CODIGO === newProduct.CODIGO;
+            //
+            //         if (isExisted) {
+            //             return {
+            //                 ...product,
+            //                 // colors: uniq([...product.colors, ...newProduct.colors]),
+            //                 quantity: product.quantity + 1,
+            //             };
+            //         }
+            //
+            //         return product;
+            //     });
+            // }
+            //state.checkout.cart = uniqBy([...state.checkout.cart, action.payload], 'CODIGO');
             //El operador + antes de item.quantity convierte el valor de item.quantity a un número.
             state.checkout.totalItems = sum(state.checkout.cart.map((product) => +product.quantity));
         },
