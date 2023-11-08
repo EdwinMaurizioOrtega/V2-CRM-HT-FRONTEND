@@ -536,6 +536,10 @@ export default function InvoiceDetails({invoice}) {
 
         console.log("OBSERVACIONESB: " + OBSERVACIONESB);
 
+        var cadenaSinCL = CLIENTEID.replace("CL", "");
+
+        var ciuidadDestino = parseInt(JSON.parse(OBSERVACIONESB).id, 10);
+
         var dataToSend = {
 
             num_pedido: ID,
@@ -547,14 +551,14 @@ export default function InvoiceDetails({invoice}) {
             detalle_envio_3: '',
             // Ciudades
             id_ciudad_origen: selectedCityOrigen.id,
-            id_ciudad_destino: `${(JSON.parse(OBSERVACIONESB)).id}`,
+            id_ciudad_destino: ciuidadDestino,
             // Datos Destino
-            id_destinatario_ne_cl: `'${CLIENTEID}'`,
-            razon_social_desti_ne: `'${Cliente}'`,
-            nombre_destinatario_ne: `'${Nombres}'`,
-            apellido_destinatar_ne: `'${Apellidos}'`,
+            id_destinatario_ne_cl: `${cadenaSinCL}`,
+            razon_social_desti_ne: `${Cliente}`,
+            nombre_destinatario_ne: `${Nombres}`,
+            apellido_destinatar_ne: `${Apellidos}`,
             //MUY IMPORTANTE
-            direccion1_destinat_ne: `'${(JSON.parse(OBSERVACIONESB)).DIRECCION}'`,
+            direccion1_destinat_ne: `${(JSON.parse(OBSERVACIONESB)).DIRECCION}`,
             sector_destinat_ne: '',
             telefono1_destinat_ne: `${Celular}`,
             telefono2_destinat_ne: `${Celular}`,

@@ -149,8 +149,6 @@ export default function InvoiceTableRow({
                 window.open(pdfUrl, '_blank');
 
 
-
-
             })
             .catch((error) => {
                 // Aquí puedes manejar errores en la solicitud
@@ -242,7 +240,7 @@ export default function InvoiceTableRow({
                     <Button
                         variant="text"
                         onClick={() => VerGuia(NUMEROGUIA)}
-                        sx={{ color: 'text.disabled', cursor: 'pointer' }}
+                        sx={{color: 'text.disabled', cursor: 'pointer'}}
                         disabled={isLoading} // Disable the button while loading
                     >
                         {isLoading ? 'Cargando...' : NUMEROGUIA}
@@ -283,16 +281,21 @@ export default function InvoiceTableRow({
                     Ver
                 </MenuItem>
 
-                <MenuItem
-                    onClick={() => {
-                        handleOpenConfirmAnular();
-                        handleClosePopover();
-                    }}
-                    sx={{color: 'error.main'}}
-                >
-                    <Iconify icon="eva:trash-2-outline"/>
-                    Anular
-                </MenuItem>
+                <Divider sx={{borderStyle: 'dashed'}}/>
+
+                {user.ROLE === "aprobador" ? (
+                        <MenuItem
+                            onClick={() => {
+                                handleOpenConfirmAnular();
+                                handleClosePopover();
+                            }}
+                            sx={{color: 'error.main'}}
+                        >
+                            <Iconify icon="eva:trash-2-outline"/>
+                            Anular
+                        </MenuItem>
+                    ) : null
+                }
 
                 {/* <MenuItem */}
                 {/*   onClick={() => { */}
@@ -304,7 +307,6 @@ export default function InvoiceTableRow({
                 {/*   Editar */}
                 {/* </MenuItem> */}
 
-                <Divider sx={{borderStyle: 'dashed'}}/>
 
                 {/* <MenuItem */}
                 {/*   onClick={() => { */}
