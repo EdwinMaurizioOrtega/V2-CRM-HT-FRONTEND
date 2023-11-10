@@ -170,6 +170,12 @@ const PAYMENT_OPTIONS = [
         description: 'Crédito 30-60-90 días.',
         icons: [],
     },
+    {
+        value: 7,
+        title: '90',
+        description: 'Crédito 90 días.',
+        icons: [],
+    },
     // {
     //     value: 11,
     //     title: '30-60-90-120',

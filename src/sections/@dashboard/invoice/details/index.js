@@ -23,7 +23,7 @@ import {
     Alert,
     Container,
     Tooltip,
-    Dialog, DialogActions,
+    Dialog, DialogActions, InputAdornment,
 } from '@mui/material';
 
 import Link from 'next/link';
@@ -698,6 +698,12 @@ export default function InvoiceDetails({invoice}) {
         window.open(pdfUrl, '_blank');
     };
 
+    const [observacion, setObservacion] = useState('');
+
+    const handleButtonClick = () => {
+        console.log('Contenido del texto:', observacion);
+        // Puedes realizar otras acciones con el contenido del texto aquí
+    };
 
     return (
         <>
@@ -768,6 +774,7 @@ export default function InvoiceDetails({invoice}) {
                         </Typography>
 
                         <Typography variant="body2">{FECHACREACION}</Typography>
+
                     </Grid>
 
                     <Grid item xs={12} sm={6} sx={{mb: 5}}>
@@ -943,8 +950,27 @@ export default function InvoiceDetails({invoice}) {
                     </Scrollbar>
                 </TableContainer>
 
-                <Divider sx={{mt: 5}}/>
+                {user.ROLE === "aprobador" &&
+                <TextField
+                    fullWidth
+                    multiline
+                    placeholder="Observación"
+                    label="Observación"
+                    value={observacion}
+                    onChange={(e) => setObservacion(e.target.value)}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <Button variant="contained" color="primary" onClick={handleButtonClick}>
+                                    Guardar
+                                </Button>
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+                }
 
+                <Divider sx={{mt: 5}}/>
                 <Grid container>
                     <Grid item xs={12} md={9} sx={{py: 3}}>
                         <Typography variant="subtitle2">NOTAS</Typography>
