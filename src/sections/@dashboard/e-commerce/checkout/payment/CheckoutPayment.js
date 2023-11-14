@@ -204,7 +204,18 @@ CheckoutPayment.propTypes = {
     onApplyMethod: PropTypes.func,
 };
 
-export default function CheckoutPayment({checkout, onReset, onNextStep, onBackStep, onGotoStep, onApplyComment, onApplyShipping, onApplyServientrega, onApplyWarehouse, onApplyMethod, }) {
+export default function CheckoutPayment({
+                                            checkout,
+                                            onReset,
+                                            onNextStep,
+                                            onBackStep,
+                                            onGotoStep,
+                                            onApplyComment,
+                                            onApplyShipping,
+                                            onApplyServientrega,
+                                            onApplyWarehouse,
+                                            onApplyMethod,
+                                        }) {
     const {total, discount, subtotal, iva, comment, shipping, servientrega, warehouse, method, billing} = checkout;
 
     const PaymentSchema = Yup.object().shape({
@@ -229,10 +240,10 @@ export default function CheckoutPayment({checkout, onReset, onNextStep, onBackSt
         formState: {isSubmitting},
     } = methods;
 
-    const [alerta, setAlerta] = useState({ mostrar: false, tipo: 'error', mensaje: '' });
+    const [alerta, setAlerta] = useState({mostrar: false, tipo: 'error', mensaje: ''});
 
     const mostrarAlerta = (tipo, mensaje) => {
-        setAlerta({ mostrar: true, tipo, mensaje });
+        setAlerta({mostrar: true, tipo, mensaje});
     };
 
 
@@ -242,23 +253,25 @@ export default function CheckoutPayment({checkout, onReset, onNextStep, onBackSt
             //onReset();
 
             //console.log("Valor envío... "+ shipping);
-            if (shipping == 3 || shipping == 5 || shipping == 7 || shipping == 13){
+            if (shipping == 3 || shipping == 5 || shipping == 7 || shipping == 13) {
                 // console.error("Debe de seleccionar una ciudad destino y una dirección")
                 // mostrarAlerta('Debe seleccionar una ciudad destino y una dirección');
 
-                if (servientrega && servientrega.id != null){
+                if (servientrega && servientrega.id != null) {
                     console.log("Se va ha crear una guia de servientrega")
                     onNextStep();
                     onReset();
 
-                }else {
+                } else {
                     console.error("Debe de seleccionar una ciudad destino y una dirección.")
                     mostrarAlerta('error', 'Debe de seleccionar una ciudad destino y una dirección.');
                 }
 
-            }else {
+            } else {
                 //console.error("El retiro será en oficina.")
                 mostrarAlerta('error', 'El retiro será en oficina.');
+                onNextStep();
+                onReset();
             }
 
         } catch (error) {
@@ -270,12 +283,14 @@ export default function CheckoutPayment({checkout, onReset, onNextStep, onBackSt
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={8}>
-                    <CheckoutDelivery alerta={alerta} billing={billing} total={total} onApplyComment={onApplyComment} onApplyShipping={onApplyShipping} onApplyServientrega={onApplyServientrega} deliveryOptions={DELIVERY_OPTIONS}/>
+                    <CheckoutDelivery alerta={alerta} billing={billing} total={total} onApplyComment={onApplyComment}
+                                      onApplyShipping={onApplyShipping} onApplyServientrega={onApplyServientrega}
+                                      deliveryOptions={DELIVERY_OPTIONS}/>
 
                     <CheckoutWarehouse onApplyWarehouse={onApplyWarehouse} warehouseOptions={WAREHOUSE_OPTIONS}/>
 
                     <CheckoutPaymentMethods onApplyMethod={onApplyMethod} paymentOptions={PAYMENT_OPTIONS}
-                        sx={{my: 3}}
+                                            sx={{my: 3}}
                     />
 
                     <Button
