@@ -248,6 +248,8 @@ export default function CheckoutPayment({checkout, onReset, onNextStep, onBackSt
 
                 if (servientrega && servientrega.id != null){
                     console.log("Se va ha crear una guia de servientrega")
+                    onNextStep();
+                    onReset();
 
                 }else {
                     console.error("Debe de seleccionar una ciudad destino y una dirección.")
