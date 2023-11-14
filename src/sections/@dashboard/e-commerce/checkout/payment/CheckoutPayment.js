@@ -15,6 +15,7 @@ import CheckoutDelivery from './CheckoutDelivery';
 import CheckoutBillingInfo from './CheckoutBillingInfo';
 import CheckoutPaymentMethods from './CheckoutPaymentMethods';
 import CheckoutWarehouse from './CheckoutWarehouse';
+import {useState} from "react";
 
 // ----------------------------------------------------------------------
 
@@ -228,10 +229,36 @@ export default function CheckoutPayment({checkout, onReset, onNextStep, onBackSt
         formState: {isSubmitting},
     } = methods;
 
+    const [alerta, setAlerta] = useState({ mostrar: false, tipo: 'error', mensaje: '' });
+
+    const mostrarAlerta = (tipo, mensaje) => {
+        setAlerta({ mostrar: true, tipo, mensaje });
+    };
+
+
     const onSubmit = async () => {
         try {
-            onNextStep();
-            onReset();
+            //onNextStep();
+            //onReset();
+
+            //console.log("Valor envío... "+ shipping);
+            if (shipping == 3 || shipping == 5 || shipping == 7 || shipping == 13){
+                // console.error("Debe de seleccionar una ciudad destino y una dirección")
+                // mostrarAlerta('Debe seleccionar una ciudad destino y una dirección');
+
+                if (servientrega && servientrega.id != null){
+                    console.log("Se va ha crear una guia de servientrega")
+
+                }else {
+                    console.error("Debe de seleccionar una ciudad destino y una dirección.")
+                    mostrarAlerta('error', 'Debe de seleccionar una ciudad destino y una dirección.');
+                }
+
+            }else {
+                //console.error("El retiro será en oficina.")
+                mostrarAlerta('error', 'El retiro será en oficina.');
+            }
+
         } catch (error) {
             console.error(error);
         }
@@ -241,7 +268,7 @@ export default function CheckoutPayment({checkout, onReset, onNextStep, onBackSt
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={8}>
-                    <CheckoutDelivery billing={billing} total={total} onApplyComment={onApplyComment} onApplyShipping={onApplyShipping} onApplyServientrega={onApplyServientrega} deliveryOptions={DELIVERY_OPTIONS}/>
+                    <CheckoutDelivery alerta={alerta} billing={billing} total={total} onApplyComment={onApplyComment} onApplyShipping={onApplyShipping} onApplyServientrega={onApplyServientrega} deliveryOptions={DELIVERY_OPTIONS}/>
 
                     <CheckoutWarehouse onApplyWarehouse={onApplyWarehouse} warehouseOptions={WAREHOUSE_OPTIONS}/>
 

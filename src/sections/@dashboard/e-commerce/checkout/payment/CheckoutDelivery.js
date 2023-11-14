@@ -36,6 +36,7 @@ CheckoutDelivery.propTypes = {
 
 
 export default function CheckoutDelivery({
+                                             alerta,
                                              billing,
                                              total,
                                              deliveryOptions,
@@ -206,6 +207,13 @@ export default function CheckoutDelivery({
             <Typography variant="p" sx={{mb: 5}}>
                 *Nota: No seleccionar ninguna de las opciones si el retiro es en oficina.
             </Typography>
+            <Alert
+                severity="info"
+                open={alerta.mostrar}
+                onClose={() => {}}
+            >
+                {alerta.mensaje}
+            </Alert>
 
             <Block title="Ciudad Destino">
                 <Autocomplete
