@@ -88,6 +88,7 @@ export const MARCAS = [
     {label: 'HONOR', value: '22'},
     {label: 'INFINIX', value: '43'},
     {label: 'TCL', value: '64'},
+    {label: 'KIESLECT', value: '10'},
     {label: 'CLARO', value: '62'},
     {label: 'LG', value: '01'},
     {label: 'NOKIA', value: '04'},

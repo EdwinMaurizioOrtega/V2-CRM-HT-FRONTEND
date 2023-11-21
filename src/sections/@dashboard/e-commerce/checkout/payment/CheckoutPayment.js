@@ -240,12 +240,11 @@ export default function CheckoutPayment({
         formState: {isSubmitting},
     } = methods;
 
-    const [alerta, setAlerta] = useState({mostrar: false, tipo: 'error', mensaje: ''});
+    const [alerta, setAlerta] = useState({mostrar: false, mensaje: ''});
 
-    const mostrarAlerta = (tipo, mensaje) => {
-        setAlerta({mostrar: true, tipo, mensaje});
+    const mostrarAlerta = (mensaje) => {
+        setAlerta({mostrar: true, mensaje});
     };
-
 
     const onSubmit = async () => {
         try {
@@ -264,12 +263,12 @@ export default function CheckoutPayment({
 
                 } else {
                     console.error("Debe de seleccionar una ciudad destino y una dirección.")
-                    mostrarAlerta('error', 'Debe de seleccionar una ciudad destino y una dirección.');
+                    mostrarAlerta('Debe de seleccionar una ciudad destino y una dirección.');
                 }
 
             } else {
                 //console.error("El retiro será en oficina.")
-                mostrarAlerta('error', 'El retiro será en oficina.');
+                mostrarAlerta('El retiro será en oficina.');
                 onNextStep();
                 onReset();
             }
