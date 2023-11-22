@@ -78,6 +78,7 @@ const CATEGORIAS = [
     {label: 'ELECTROMENORES', value: '118'},
     {label: 'TECNOLOGIA', value: '116'},
     {label: 'VARIOS', value: '112'},
+    {label: 'TABLETS', value: '110'},
 ];
 
 export const MARCAS = [
