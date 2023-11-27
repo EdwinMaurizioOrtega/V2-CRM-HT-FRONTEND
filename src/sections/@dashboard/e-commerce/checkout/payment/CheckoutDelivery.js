@@ -36,7 +36,6 @@ CheckoutDelivery.propTypes = {
 
 
 export default function CheckoutDelivery({
-                                             alerta,
                                              billing,
                                              total,
                                              deliveryOptions,
@@ -92,12 +91,12 @@ export default function CheckoutDelivery({
     }, []); // El segundo argumento es un array de dependencias, en este caso, está vacío para que se ejecute solo una vez
 
 
-    const [selectedCityDestino, setSelectedCityDestino] = useState('');
-    const handleCityChangeDestino = (event, value) => {
-        if (value) {
-            setSelectedCityDestino(value)
-        }
-    };
+    //const [selectedCityDestino, setSelectedCityDestino] = useState('');
+    // const handleCityChangeDestino = (event, value) => {
+    //     if (value) {
+    //         setSelectedCityDestino(value)
+    //     }
+    // };
 
 
     return (
@@ -207,32 +206,25 @@ export default function CheckoutDelivery({
             <Typography variant="p" sx={{mb: 5}}>
                 *Nota: No seleccionar ninguna de las opciones si el retiro es en oficina.
             </Typography>
-            <Alert
-                severity="info"
-                open={alerta.mostrar}
-                onClose={() => {}}
-            >
-                {alerta.mensaje}
-            </Alert>
 
-            <Block title="Ciudad Destino">
-                <Autocomplete
-                    fullWidth
-                    disableClearable
-                    options={dataCities}
-                    getOptionLabel={(option) => option.nombre}
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="Destino"
-                            InputProps={{...params.InputProps, type: 'search'}}
-                        />
-                    )}
-                    onChange={(event, value) => {
-                        handleCityChangeDestino(event, value);
-                    }}
-                />
-            </Block>
+            {/* <Block title="Ciudad Destino"> */}
+            {/*     <Autocomplete */}
+            {/*         fullWidth */}
+            {/*         disableClearable */}
+            {/*         options={dataCities} */}
+            {/*         getOptionLabel={(option) => option.nombre} */}
+            {/*         renderInput={(params) => ( */}
+            {/*             <TextField */}
+            {/*                 {...params} */}
+            {/*                 label="Destino" */}
+            {/*                 InputProps={{...params.InputProps, type: 'search'}} */}
+            {/*             /> */}
+            {/*         )} */}
+            {/*         onChange={(event, value) => { */}
+            {/*             handleCityChangeDestino(event, value); */}
+            {/*         }} */}
+            {/*     /> */}
+            {/* </Block> */}
 
             <CardContent>
                 <Controller
@@ -244,8 +236,9 @@ export default function CheckoutDelivery({
                             onChange={(event) => {
                                 const {value} = event.target;
                                 field.onChange(value);
-                                const mergedObject = {...JSON.parse(value), ...JSON.parse(JSON.stringify(selectedCityDestino))};
-                                console.log("Value Muy Importante: " + JSON.stringify(mergedObject));
+                                //const mergedObject = {...JSON.parse(value), ...JSON.parse(JSON.stringify(selectedCityDestino))};
+                                const mergedObject = JSON.parse(value);
+                                //console.log("Value Muy Importante: " + JSON.stringify(mergedObject));
                                 onApplyServientrega(mergedObject);
                             }}
                         >

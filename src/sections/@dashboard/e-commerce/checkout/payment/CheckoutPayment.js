@@ -16,6 +16,7 @@ import CheckoutBillingInfo from './CheckoutBillingInfo';
 import CheckoutPaymentMethods from './CheckoutPaymentMethods';
 import CheckoutWarehouse from './CheckoutWarehouse';
 import {useState} from "react";
+import {useSnackbar} from "../../../../../components/snackbar";
 
 // ----------------------------------------------------------------------
 
@@ -240,10 +241,20 @@ export default function CheckoutPayment({
         formState: {isSubmitting},
     } = methods;
 
-    const [alerta, setAlerta] = useState({mostrar: false, mensaje: ''});
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-    const mostrarAlerta = (mensaje) => {
-        setAlerta({mostrar: true, mensaje});
+    const onSnackbarAction = (data, color, anchor) => {
+        enqueueSnackbar(`${data}`, {
+            variant: color,
+            anchorOrigin: anchor,
+            action: (key) => (
+                <>
+                    <Button size="small" color="inherit" onClick={() => closeSnackbar(key)}>
+                        Cerrar
+                    </Button>
+                </>
+            ),
+        });
     };
 
     const onSubmit = async () => {
@@ -254,21 +265,26 @@ export default function CheckoutPayment({
             //console.log("Valor envío... "+ shipping);
             if (shipping == 3 || shipping == 5 || shipping == 7 || shipping == 13) {
                 // console.error("Debe de seleccionar una ciudad destino y una dirección")
-                // mostrarAlerta('Debe seleccionar una ciudad destino y una dirección');
-
-                if (servientrega && servientrega.id != null) {
+                if (servientrega && servientrega.CODE_SERVIENTREGA != null) {
                     console.log("Se va ha crear una guia de servientrega")
                     onNextStep();
                     onReset();
 
                 } else {
                     console.error("Debe de seleccionar una ciudad destino y una dirección.")
-                    mostrarAlerta('Debe de seleccionar una ciudad destino y una dirección.');
+                    onSnackbarAction('Debe de seleccionar una ciudad destino y una dirección.','default', {
+                        vertical: 'top',
+                        horizontal: 'center',
+                    })
+
                 }
 
             } else {
                 //console.error("El retiro será en oficina.")
-                mostrarAlerta('El retiro será en oficina.');
+                onSnackbarAction('El retiro será en oficina.','default', {
+                    vertical: 'top',
+                    horizontal: 'center',
+                })
                 onNextStep();
                 onReset();
             }
@@ -282,7 +298,7 @@ export default function CheckoutPayment({
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={8}>
-                    <CheckoutDelivery alerta={alerta} billing={billing} total={total} onApplyComment={onApplyComment}
+                    <CheckoutDelivery billing={billing} total={total} onApplyComment={onApplyComment}
                                       onApplyShipping={onApplyShipping} onApplyServientrega={onApplyServientrega}
                                       deliveryOptions={DELIVERY_OPTIONS}/>
 

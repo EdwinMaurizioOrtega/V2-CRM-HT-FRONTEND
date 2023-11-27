@@ -538,7 +538,7 @@ export default function InvoiceDetails({invoice}) {
 
         var cadenaSinCL = CLIENTEID.replace("CL", "");
 
-        var ciuidadDestino = parseInt(JSON.parse(OBSERVACIONESB).id, 10);
+        var ciuidadDestino = parseInt(JSON.parse(OBSERVACIONESB).CODE_SERVIENTREGA, 10);
 
         var dataToSend = {
 
