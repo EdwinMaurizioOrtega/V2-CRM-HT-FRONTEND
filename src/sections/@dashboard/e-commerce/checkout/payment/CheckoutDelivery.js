@@ -318,7 +318,7 @@ DeliveryOptionAux.propTypes = {
 };
 
 function DeliveryOptionAux({option, isSelected}) {
-    const {TIPO, DIRECCION} = option;
+    const {TIPO, DIRECCION, NAME_SERVIENTREGA} = option;
 
     return (
         <Paper
@@ -342,6 +342,10 @@ function DeliveryOptionAux({option, isSelected}) {
 
                         <Typography variant="body2" sx={{color: 'text.secondary'}}>
                             {DIRECCION}
+                        </Typography>
+
+                        <Typography variant="subtitle2" sx={{color: 'red'}}>
+                            DESTINO: {NAME_SERVIENTREGA}
                         </Typography>
                     </Box>
                 }
