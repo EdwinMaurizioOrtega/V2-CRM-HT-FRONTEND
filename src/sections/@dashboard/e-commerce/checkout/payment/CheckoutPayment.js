@@ -259,35 +259,38 @@ export default function CheckoutPayment({
 
     const onSubmit = async () => {
         try {
-            //onNextStep();
-            //onReset();
 
-            //console.log("Valor envío... "+ shipping);
-            if (shipping == 3 || shipping == 5 || shipping == 7 || shipping == 13) {
-                // console.error("Debe de seleccionar una ciudad destino y una dirección")
-                if (servientrega && servientrega.CODE_SERVIENTREGA != null) {
-                    console.log("Se va ha crear una guia de servientrega")
-                    onNextStep();
-                    onReset();
+            //V1
+            onNextStep();
+            onReset();
 
-                } else {
-                    console.error("Debe de seleccionar una ciudad destino y una dirección.")
-                    onSnackbarAction('Debe de seleccionar una ciudad destino y una dirección.','default', {
-                        vertical: 'top',
-                        horizontal: 'center',
-                    })
-
-                }
-
-            } else {
-                //console.error("El retiro será en oficina.")
-                onSnackbarAction('El retiro será en oficina.','default', {
-                    vertical: 'top',
-                    horizontal: 'center',
-                })
-                onNextStep();
-                onReset();
-            }
+            //V2
+            // //console.log("Valor envío... "+ shipping);
+            // if (shipping == 3 || shipping == 5 || shipping == 7 || shipping == 13) {
+            //     // console.error("Debe de seleccionar una ciudad destino y una dirección")
+            //     if (servientrega && servientrega.CODE_SERVIENTREGA != null) {
+            //         console.log("Se va ha crear una guia de servientrega")
+            //         onNextStep();
+            //         onReset();
+            //
+            //     } else {
+            //         console.error("Debe de seleccionar una ciudad destino y una dirección.")
+            //         onSnackbarAction('Debe de seleccionar una ciudad destino y una dirección.','default', {
+            //             vertical: 'top',
+            //             horizontal: 'center',
+            //         })
+            //
+            //     }
+            //
+            // } else {
+            //     //console.error("El retiro será en oficina.")
+            //     onSnackbarAction('El retiro será en oficina.','default', {
+            //         vertical: 'top',
+            //         horizontal: 'center',
+            //     })
+            //     onNextStep();
+            //     onReset();
+            // }
 
         } catch (error) {
             console.error(error);
