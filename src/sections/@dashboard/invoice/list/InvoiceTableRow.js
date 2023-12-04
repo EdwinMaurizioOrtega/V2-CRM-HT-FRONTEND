@@ -54,6 +54,8 @@ export default function InvoiceTableRow({
         ID,
         ESTADO,
         FECHACREACION,
+        FECHAAPROBO,
+        FECHAFACTURACION,
         CLIENTEID,
         Nombres,
         Cliente,
@@ -209,6 +211,8 @@ export default function InvoiceTableRow({
                 </TableCell>
 
                 <TableCell align="left">{FECHACREACION}</TableCell>
+                <TableCell align="left">{FECHAAPROBO}</TableCell>
+                <TableCell align="left">{FECHAFACTURACION}</TableCell>
 
                 <TableCell align="left">{nameWarehouse(BODEGA)}</TableCell>
                 <TableCell align="left">{nameFormaPago(FORMADEPAGO)}</TableCell>
