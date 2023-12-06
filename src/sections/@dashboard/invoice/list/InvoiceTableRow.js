@@ -210,10 +210,6 @@ export default function InvoiceTableRow({
                     </Label>
                 </TableCell>
 
-                <TableCell align="left">{FECHACREACION}</TableCell>
-                <TableCell align="left">{FECHAAPROBO}</TableCell>
-                <TableCell align="left">{FECHAFACTURACION}</TableCell>
-
                 <TableCell align="left">{nameWarehouse(BODEGA)}</TableCell>
                 <TableCell align="left">{nameFormaPago(FORMADEPAGO)}</TableCell>
 
@@ -266,6 +262,9 @@ export default function InvoiceTableRow({
                     ) : null
 
                 }
+                <TableCell align="left">{FECHACREACION}</TableCell>
+                <TableCell align="left">{FECHAAPROBO}</TableCell>
+                <TableCell align="left">{FECHAFACTURACION}</TableCell>
 
             </TableRow>
 

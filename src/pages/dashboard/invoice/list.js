@@ -73,9 +73,6 @@ const SERVICE_OPTIONS = [
 const TABLE_HEAD = [
     {id: 'invoiceNumber', label: 'Orden', align: 'left'},
     {id: 'status', label: 'Estado', align: 'left'},
-    {id: 'createDate', label: 'Creación', align: 'left'},
-    {id: 'createDate', label: 'Aprobación', align: 'left'},
-    {id: 'createDate', label: 'Facturación', align: 'left'},
     {id: 'bodega', label: 'Bodega', align: 'left'},
     {id: 'formaPago', label: 'FPago', align: 'left'},
     {id: 'dueDate', label: 'CI/RUC', align: 'left'},
@@ -89,6 +86,9 @@ const TABLE_HEAD = [
     {id: 'status', label: 'Detalle', align: 'left'},
 
     {id: ''},
+    {id: 'createDate', label: 'Creación', align: 'left'},
+    {id: 'aproDate', label: 'Aprobación', align: 'left'},
+    {id: 'facDate', label: 'Facturación', align: 'left'},
 ];
 
 // ----------------------------------------------------------------------

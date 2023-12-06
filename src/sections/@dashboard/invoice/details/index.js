@@ -1012,9 +1012,19 @@ export default function InvoiceDetails({invoice}) {
                         <Grid item xs={12} md={12} sx={{py: 6}}>
 
                             <TextField
-                                label=" Número de guia."
+                                required
+                                label="Número de guia."
                                 value={valueGuia}
-                                onChange={handleChangeGuia}
+                                // onChange={handleChangeGuia}
+                                onChange={(e) => {
+                                    const inputValue = e.target.value;
+                                    if (/^[0-9]{0,9}$/.test(inputValue)) {
+                                        handleChangeGuia(e);
+                                    }
+                                }}
+                                inputProps={{ maxLength: 9 }}
+                                error={valueGuia.length !== 9}
+                                helperText={valueGuia.length !== 9 ? 'El número de guía debe tener 9 caracteres' : ''}
                             />
                             <TextField
                                 required
