@@ -78,14 +78,14 @@ const TABLE_HEAD = [
     {id: 'dueDate', label: 'CI/RUC', align: 'left'},
     {id: 'price', label: 'R.Social', align: 'center', width: 140},
     {id: 'sent', label: 'Celular', align: 'center', width: 140},
-    {id: 'status', label: 'Tipo Cliente', align: 'left'},
-    {id: 'status', label: 'Ciudad Cliente', align: 'left'},
+    {id: 'tipCliente', label: 'Tipo Cliente', align: 'left'},
+    {id: 'ciuCliente', label: 'Ciudad Cliente', align: 'left'},
     // {id: 'status', label: 'Vendedor', align: 'left'},
-    {id: 'status', label: 'Ciudad Vendedor', align: 'left'},
-    {id: 'status', label: 'Servientrega', align: 'left'},
-    {id: 'status', label: 'Detalle', align: 'left'},
+    {id: 'ciuVendedor', label: 'Ciudad Vendedor', align: 'left'},
+    {id: 'serviEntrega', label: 'Servientrega', align: 'left'},
+    {id: 'detalle', label: 'Detalle', align: 'left'},
 
-    {id: ''},
+    {id: 'ordenVenta', label: 'OV SAP', align: 'left'},
     {id: 'createDate', label: 'Creación', align: 'left'},
     {id: 'aproDate', label: 'Aprobación', align: 'left'},
     {id: 'facDate', label: 'Facturación', align: 'left'},
@@ -132,7 +132,7 @@ export default function InvoiceListPage() {
         onChangeDense,
         onChangePage,
         onChangeRowsPerPage,
-    } = useTable({defaultOrderBy: 'createDate'});
+    } = useTable({defaultOrderBy: 'invoiceNumber'});
 
     const [tableData, setTableData] = useState([]);
 

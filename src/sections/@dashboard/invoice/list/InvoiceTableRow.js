@@ -48,6 +48,8 @@ export default function InvoiceTableRow({
                                             onDeleteRow,
                                         }) {
 
+    console.log("row: " + JSON.stringify(row));
+
     const {user} = useAuthContext();
 
     const {
@@ -74,7 +76,8 @@ export default function InvoiceTableRow({
         totalPrice,
         BODEGA,
         FORMADEPAGO,
-        NUMEROGUIA
+        NUMEROGUIA,
+        FECHA_IMPRESION
     } = row;
 
     const [openConfirm, setOpenConfirm] = useState(false);
@@ -161,193 +164,206 @@ export default function InvoiceTableRow({
             });
     };
 
+    const handleImprimir = () => {
+        console.log('Botón clickeado');
+        // Puedes agregar más lógica aquí según tus necesidades
+    };
+
+
     return (
         <>
-            <TableRow hover selected={selected}>
-                {/* <TableCell padding="checkbox"> */}
-                {/*     <Checkbox checked={selected} onClick={onSelectRow}/> */}
-                {/* </TableCell> */}
 
-                <TableCell>
-                    <Stack direction="row" alignItems="center" spacing={2}>
-                        {/* <CustomAvatar name={ID} /> */}
+        <TableRow hover selected={selected}
+                  style={{backgroundColor: user.ROLE === "bodega" && FECHA_IMPRESION != null ? '#ffdab9' : 'transparent',}}
+>
+            {/* <TableCell padding="checkbox"> */}
+            {/*     <Checkbox checked={selected} onClick={onSelectRow}/> */}
+            {/* </TableCell> */}
 
-                        <div>
-                            <Typography variant="subtitle2" noWrap>
-                                {VENDEDOR}
-                            </Typography>
+        <TableCell>
+            <Stack direction="row" alignItems="center" spacing={2}>
+                {/* <CustomAvatar name={ID} /> */}
 
-                            <Link
-                                noWrap
-                                variant="body2"
-                                onClick={onViewRow}
-                                sx={{color: 'text.disabled', cursor: 'pointer'}}
-                            >
-                                {`INV-${ID}`}
-                            </Link>
-                        </div>
-                    </Stack>
-                </TableCell>
+                <div>
+                    <Typography variant="subtitle2" noWrap>
+                        {VENDEDOR}
+                    </Typography>
 
-                <TableCell align="left">
-                    <Label
-                        variant="soft"
-                        color={
-                            (ESTADO === 8 && 'error') ||
-                            (ESTADO === 6 && 'success') ||
-                            (ESTADO === 0 && 'warning') ||
-                            (ESTADO === 1 && 'error') ||
-                            'default'
-                        }
-                    >
-                        {
-                            (ESTADO === 8 ? 'Anulado' : '') ||
-                            (ESTADO === 6 ? 'Pendiende de aprobar' : '') ||
-                            (ESTADO === 0 ? 'Por Facturar' : '') ||
-                            (ESTADO === 1 ? 'Facturado' : '') ||
-                            'default'
-                        }
-                    </Label>
-                </TableCell>
-
-                <TableCell align="left">{nameWarehouse(BODEGA)}</TableCell>
-                <TableCell align="left">{nameFormaPago(FORMADEPAGO)}</TableCell>
-
-                <TableCell align="left">{CLIENTEID}</TableCell>
-
-                <TableCell align="center">{Cliente}</TableCell>
-
-                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
-                    {Celular}
-                </TableCell>
-                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
-                    {Tipo}
-                </TableCell>
-                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
-                    {Ciudad}
-                </TableCell>
-
-
-                {/* <TableCell align="center" sx={{textTransform: 'capitalize'}}> */}
-                {/*     {VENDEDOR} */}
-                {/* </TableCell> */}
-                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
-                    {CITY}
-                </TableCell>
-
-                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
-
-                    <Button
-                        variant="text"
-                        onClick={() => VerGuia(NUMEROGUIA)}
+                    <Link
+                        noWrap
+                        variant="body2"
+                        onClick={onViewRow}
                         sx={{color: 'text.disabled', cursor: 'pointer'}}
-                        disabled={isLoading} // Disable the button while loading
                     >
-                        {isLoading ? 'Cargando...' : NUMEROGUIA}
-                    </Button>
+                        {`INV-${ID}`}
+                    </Link>
+                </div>
+            </Stack>
+        </TableCell>
 
-                </TableCell>
-
-                <TableCell align="right">
-                    <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
-                        <Iconify icon="eva:more-vertical-fill"/>
-                    </IconButton>
-                </TableCell>
-
-                {
-                    user.ROLE === "aprobador" || user.ROLE === "bodega" ? (
-                        <TableCell align="center" sx={{textTransform: 'capitalize'}}>
-                            {DOCNUM}
-                        </TableCell>
-                    ) : null
-
+        <TableCell align="left">
+            <Label
+                variant="soft"
+                color={
+                    (ESTADO === 8 && 'error') ||
+                    (ESTADO === 6 && 'success') ||
+                    (ESTADO === 0 && 'warning') ||
+                    (ESTADO === 1 && 'error') ||
+                    'default'
                 }
-                <TableCell align="left">{FECHACREACION}</TableCell>
-                <TableCell align="left">{FECHAAPROBO}</TableCell>
-                <TableCell align="left">{FECHAFACTURACION}</TableCell>
-
-            </TableRow>
-
-            <MenuPopover
-                open={openPopover}
-                onClose={handleClosePopover}
-                arrow="right-top"
-                sx={{width: 160}}
             >
-                <MenuItem
-                    onClick={() => {
-                        onViewRow();
-                        handleClosePopover();
-                    }}
-                >
-                    <Iconify icon="eva:eye-fill"/>
-                    Ver
-                </MenuItem>
-
-                <Divider sx={{borderStyle: 'dashed'}}/>
-
-                {user.ROLE === "aprobador" || user.ROLE === "bodega" ? (
-                        <MenuItem
-                            onClick={() => {
-                                handleOpenConfirmAnular();
-                                handleClosePopover();
-                            }}
-                            sx={{color: 'error.main'}}
-                        >
-                            <Iconify icon="eva:trash-2-outline"/>
-                            Anular
-                        </MenuItem>
-                    ) : null
+                {
+                    (ESTADO === 8 ? 'Anulado' : '') ||
+                    (ESTADO === 6 ? 'Pendiende de aprobar' : '') ||
+                    (ESTADO === 0 ? 'Por Facturar' : '') ||
+                    (ESTADO === 1 ? 'Facturado' : '') ||
+                    'default'
                 }
+            </Label>
+        </TableCell>
 
-                {/* <MenuItem */}
-                {/*   onClick={() => { */}
-                {/*     onEditRow(); */}
-                {/*     handleClosePopover(); */}
-                {/*   }} */}
-                {/* > */}
-                {/*   <Iconify icon="eva:edit-fill" /> */}
-                {/*   Editar */}
-                {/* </MenuItem> */}
+        <TableCell align="left">{nameWarehouse(BODEGA)}</TableCell>
+        <TableCell align="left">{nameFormaPago(FORMADEPAGO)}</TableCell>
+
+        <TableCell align="left">{CLIENTEID}</TableCell>
+
+        <TableCell align="center">{Cliente}</TableCell>
+
+        <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+            {Celular}
+        </TableCell>
+        <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+            {Tipo}
+        </TableCell>
+        <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+            {Ciudad}
+        </TableCell>
 
 
-                {/* <MenuItem */}
-                {/*   onClick={() => { */}
-                {/*     handleOpenConfirm(); */}
-                {/*     handleClosePopover(); */}
-                {/*   }} */}
-                {/*   sx={{ color: 'error.main' }} */}
-                {/* > */}
-                {/*   <Iconify icon="eva:trash-2-outline" /> */}
-                {/*   Borrar */}
-                {/* </MenuItem> */}
-            </MenuPopover>
+            {/* <TableCell align="center" sx={{textTransform: 'capitalize'}}> */}
+            {/*     {VENDEDOR} */}
+            {/* </TableCell> */}
+        <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+            {CITY}
+        </TableCell>
 
-            <ConfirmDialog
-                open={openConfirmAnular}
-                onClose={handleCloseConfirmAnular}
-                title="Anular"
-                content="¿Estás seguro de que quieres anular la orden?"
-                action={
-                    <Button variant="contained" color="error" onClick={onAnularRow}>
-                        Anular
-                    </Button>
-                }
-            />
+        <TableCell align="center" sx={{textTransform: 'capitalize'}}>
 
-            <ConfirmDialog
-                open={openConfirm}
-                onClose={handleCloseConfirm}
-                title="Delete"
-                content="Are you sure want to delete?"
-                action={
-                    <Button variant="contained" color="error" onClick={onDeleteRow}>
-                        Delete
-                    </Button>
-                }
-            />
-        </>
-    );
+            <Button
+                variant="text"
+                onClick={() => VerGuia(NUMEROGUIA)}
+                sx={{color: 'text.disabled', cursor: 'pointer'}}
+                disabled={isLoading} // Disable the button while loading
+            >
+                {isLoading ? 'Cargando...' : NUMEROGUIA}
+            </Button>
+
+        </TableCell>
+
+        <TableCell align="right">
+            <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
+                <Iconify icon="eva:more-vertical-fill"/>
+            </IconButton>
+        </TableCell>
+
+            {/* { */}
+            {/*     user.ROLE === "aprobador" || user.ROLE === "bodega" ? ( */}
+        <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+            {DOCNUM}
+        </TableCell>
+            {/* //     ) : null */}
+            {/* // */}
+            {/* // } */}
+        <TableCell align="left">{FECHACREACION}</TableCell>
+        <TableCell align="left">{FECHAAPROBO}</TableCell>
+        <TableCell align="left">{FECHAFACTURACION}</TableCell>
+            {/* <TableCell align="left"> */}
+            {/*     <Button variant="contained" onClick={handleImprimir}>Imprimir</Button> */}
+            {/* </TableCell> */}
+
+        </TableRow>
+
+    <MenuPopover
+        open={openPopover}
+        onClose={handleClosePopover}
+        arrow="right-top"
+        sx={{width: 160}}
+    >
+        <MenuItem
+            onClick={() => {
+                onViewRow();
+                handleClosePopover();
+            }}
+        >
+            <Iconify icon="eva:eye-fill"/>
+            Ver
+        </MenuItem>
+
+        <Divider sx={{borderStyle: 'dashed'}}/>
+
+        {user.ROLE === "aprobador" || user.ROLE === "bodega" ? (
+            <MenuItem
+                onClick={() => {
+                    handleOpenConfirmAnular();
+                    handleClosePopover();
+                }}
+                sx={{color: 'error.main'}}
+            >
+                <Iconify icon="eva:trash-2-outline"/>
+                Anular
+            </MenuItem>
+        ) : null
+        }
+
+        {/* <MenuItem */}
+        {/*   onClick={() => { */}
+        {/*     onEditRow(); */}
+        {/*     handleClosePopover(); */}
+        {/*   }} */}
+        {/* > */}
+        {/*   <Iconify icon="eva:edit-fill" /> */}
+        {/*   Editar */}
+        {/* </MenuItem> */}
+
+
+        {/* <MenuItem */}
+        {/*   onClick={() => { */}
+        {/*     handleOpenConfirm(); */}
+        {/*     handleClosePopover(); */}
+        {/*   }} */}
+        {/*   sx={{ color: 'error.main' }} */}
+        {/* > */}
+        {/*   <Iconify icon="eva:trash-2-outline" /> */}
+        {/*   Borrar */}
+        {/* </MenuItem> */}
+    </MenuPopover>
+
+    <ConfirmDialog
+        open={openConfirmAnular}
+        onClose={handleCloseConfirmAnular}
+        title="Anular"
+        content="¿Estás seguro de que quieres anular la orden?"
+        action={
+            <Button variant="contained" color="error" onClick={onAnularRow}>
+                Anular
+            </Button>
+        }
+    />
+
+    <ConfirmDialog
+        open={openConfirm}
+        onClose={handleCloseConfirm}
+        title="Delete"
+        content="Are you sure want to delete?"
+        action={
+            <Button variant="contained" color="error" onClick={onDeleteRow}>
+                Delete
+            </Button>
+        }
+    />
+</>
+)
+    ;
 }
 
 

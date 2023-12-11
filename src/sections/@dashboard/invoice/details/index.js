@@ -23,7 +23,7 @@ import {
     Alert,
     Container,
     Tooltip,
-    Dialog, DialogActions, InputAdornment,
+    Dialog, DialogActions, InputAdornment, CircularProgress,
 } from '@mui/material';
 
 import Link from 'next/link';
@@ -59,6 +59,8 @@ import {Masonry} from "@mui/lab";
 import {HOST_API_KEY} from "../../../../config-global";
 import {useBoolean} from "../../../../hooks/use-boolean";
 import InvoicePDF from "./InvoicePDF";
+import {PDFDownloadLink} from "@react-pdf/renderer";
+import PedidoInvoicePDF from "./PedidoInvoicePDF";
 
 // ----------------------------------------------------------------------
 
@@ -705,6 +707,33 @@ export default function InvoiceDetails({invoice}) {
         // Puedes realizar otras acciones con el contenido del texto aquí
     };
 
+    const handleDownloadClick = async (id) => {
+        // Your method or logic to execute after the download icon is clicked
+        console.log('Download icon clicked!');
+        console.log("Número de orden: " + id);
+
+        try {
+            const response = await axios.put('/hanadb/api/orders/order/imprimir', {
+                params: {
+                    ID: id
+                }
+            });
+
+            // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+                console.log('Impresión de la orden en PDF.');
+            }
+
+        } catch (error) {
+            // Manejar el error de la petición DELETE aquí
+            console.error('Error al colocar la fecha de impresión en la orden:', error);
+        }
+
+    };
+
     return (
         <>
             {/* <InvoiceToolbar invoice={invoice} /> */}
@@ -713,7 +742,25 @@ export default function InvoiceDetails({invoice}) {
                 <Grid container>
                     <Grid item xs={12} sm={6} sx={{mb: 5}}>
                         <Image disabledEffect alt="logo" src="/logo/logo_full.svg" sx={{maxWidth: 120}}/>
+                        <PDFDownloadLink
+                            document={<PedidoInvoicePDF invoice={invoice}/>}
+                            fileName={`PEDIDO_CLIENTE_${invoice.ID}`}
+                            style={{textDecoration: 'none'}}
+                        >
+                            {({loading}) => (
+                                <Tooltip title="Descargar">
+                                    <IconButton onClick={() => handleDownloadClick(ID)}>
+                                        {loading ? (
+                                            <CircularProgress size={24} color="inherit"/>
+                                        ) : (
+                                            <Iconify icon="eva:download-fill"/>
+                                        )}
+                                    </IconButton>
+                                </Tooltip>
+                            )}
+                        </PDFDownloadLink>
                     </Grid>
+
 
                     <Grid item xs={12} sm={6} sx={{mb: 5}}>
                         <Box sx={{textAlign: {sm: 'right'}}}>
