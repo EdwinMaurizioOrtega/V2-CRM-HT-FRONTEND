@@ -749,7 +749,8 @@ export default function InvoiceDetails({invoice}) {
                         >
                             {({loading}) => (
                                 <Tooltip title="Descargar">
-                                    <IconButton onClick={() => handleDownloadClick(ID)}>
+                                    <IconButton onClick={user.ROLE === "bodega" ? () => handleDownloadClick(ID) : undefined}
+                                    >
                                         {loading ? (
                                             <CircularProgress size={24} color="inherit"/>
                                         ) : (
