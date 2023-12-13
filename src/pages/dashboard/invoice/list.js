@@ -5,7 +5,7 @@ import Head from 'next/head';
 import NextLink from 'next/link';
 import {useRouter} from 'next/router';
 // @mui
-import {useTheme} from '@mui/material/styles';
+import {alpha, useTheme} from '@mui/material/styles';
 import {
     Tab,
     Tabs,
@@ -434,7 +434,10 @@ export default function InvoiceListPage() {
                     // }
                 />
 
-                <Card sx={{mb: 5}}>
+                <Card sx={{
+                    mb: { xs: 3, md: 5 },
+                    }}
+                >
                     <Scrollbar>
                         <Stack
                             direction="row"
@@ -446,7 +449,7 @@ export default function InvoiceListPage() {
                                 total={tableData.length}
                                 percent={100}
                                 price={sumBy(tableData, 'totalPrice')}
-                                icon="ic:round-receipt"
+                                icon="solar:bill-list-bold-duotone"
                                 color={theme.palette.info.main}
                             />
 
@@ -455,7 +458,7 @@ export default function InvoiceListPage() {
                                 total={getLengthByStatus(6)}
                                 percent={getPercentByStatus('paid')}
                                 price={getTotalPriceByStatus('paid')}
-                                icon="eva:checkmark-circle-2-fill"
+                                icon="solar:file-check-bold-duotone"
                                 color={theme.palette.success.main}
                             />
 
@@ -464,7 +467,7 @@ export default function InvoiceListPage() {
                                 total={getLengthByStatus(0)}
                                 percent={getPercentByStatus('unpaid')}
                                 price={getTotalPriceByStatus('unpaid')}
-                                icon="eva:clock-fill"
+                                icon="solar:sort-by-time-bold-duotone"
                                 color={theme.palette.warning.main}
                             />
 
@@ -473,7 +476,7 @@ export default function InvoiceListPage() {
                                 total={getLengthByStatus(1)}
                                 percent={getPercentByStatus('overdue')}
                                 price={getTotalPriceByStatus('overdue')}
-                                icon="eva:bell-fill"
+                                icon="solar:bell-bing-bold-duotone"
                                 color={theme.palette.error.main}
                             />
 
@@ -482,7 +485,7 @@ export default function InvoiceListPage() {
                               total={getLengthByStatus(8)}
                               percent={getPercentByStatus('draft')}
                               price={getTotalPriceByStatus('draft')}
-                              icon="eva:file-fill"
+                              icon="solar:file-corrupted-bold-duotone"
                               color={theme.palette.text.secondary}
                             />
                         </Stack>
@@ -494,8 +497,8 @@ export default function InvoiceListPage() {
                         value={filterStatus}
                         onChange={handleFilterStatus}
                         sx={{
-                            px: 2,
-                            bgcolor: 'background.neutral',
+                            px: 2.5,
+                            boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
                         }}
                     >
                         {TABS.map((tab) => (
@@ -503,8 +506,13 @@ export default function InvoiceListPage() {
                                 key={tab.value}
                                 value={tab.value}
                                 label={tab.label}
+                                iconPosition="end"
                                 icon={
-                                    <Label color={tab.color} sx={{mr: 1}}>
+                                    <Label
+                                        variant={
+                                            ((tab.value === 'all' || tab.value === filterStatus) && 'filled') || 'soft'
+                                        }
+                                        color={tab.color} >
                                         {tab.count}
                                     </Label>
                                 }
