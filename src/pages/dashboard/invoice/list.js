@@ -71,6 +71,8 @@ const SERVICE_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
+    {id: 'detalle', label: 'Detalle', align: 'left'},
+
     {id: 'invoiceNumber', label: 'Orden', align: 'left'},
     {id: 'status', label: 'Estado', align: 'left'},
     {id: 'bodega', label: 'Bodega', align: 'left'},
@@ -83,7 +85,6 @@ const TABLE_HEAD = [
     // {id: 'status', label: 'Vendedor', align: 'left'},
     {id: 'ciuVendedor', label: 'Ciudad Vendedor', align: 'left'},
     {id: 'serviEntrega', label: 'Servientrega', align: 'left'},
-    {id: 'detalle', label: 'Detalle', align: 'left'},
 
     {id: 'ordenVenta', label: 'OV SAP', align: 'left'},
     {id: 'createDate', label: 'Creación', align: 'left'},
