@@ -1012,7 +1012,6 @@ export default function InvoiceDetails({invoice}) {
                     </Scrollbar>
                 </TableContainer>
 
-                {user.ROLE === "aprobador" &&
                 <TextField
                     fullWidth
                     multiline
@@ -1021,7 +1020,6 @@ export default function InvoiceDetails({invoice}) {
                     value={observacionA}
                     onChange={(e) => setObservacionA(e.target.value)}
                 />
-                }
 
                 <Divider sx={{mt: 5}}/>
                 <Grid container>

@@ -560,12 +560,12 @@ export default function InvoiceListPage() {
                                     rowCount={tableData.length}
                                     numSelected={selected.length}
                                     onSort={onSort}
-                                    onSelectAllRows={(checked) =>
-                                        onSelectAllRows(
-                                            checked,
-                                            tableData.map((row) => row.id)
-                                        )
-                                    }
+                                    // onSelectAllRows={(checked) =>
+                                    //     onSelectAllRows(
+                                    //         checked,
+                                    //         tableData.map((row) => row.id)
+                                    //     )
+                                    // }
                                 />
 
                                 <TableBody>

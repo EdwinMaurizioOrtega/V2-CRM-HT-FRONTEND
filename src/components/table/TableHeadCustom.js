@@ -39,6 +39,11 @@ export default function TableHeadCustom({
   onSelectAllRows,
   sx,
 }) {
+
+  console.log("headLabel: "+ JSON.stringify(headLabel));
+  console.log("onSort: "+ JSON.stringify(onSort));
+  console.log("orderBy: "+ JSON.stringify(orderBy));
+
   return (
     <TableHead sx={sx}>
       <TableRow>
