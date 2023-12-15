@@ -25,6 +25,9 @@ import ConfirmDialog from '../../../../components/confirm-dialog';
 import {useAuthContext} from "../../../../auth/useAuthContext";
 import {HOST_API_KEY} from "../../../../config-global";
 import {PATH_DASHBOARD} from "../../../../routes/paths";
+import axios from "../../../../utils/axios";
+import {useRouter} from "next/router";
+
 
 // ----------------------------------------------------------------------
 
@@ -77,6 +80,8 @@ export default function InvoiceTableRow({
         NUMEROGUIA,
         FECHA_IMPRESION
     } = row;
+
+    const router = useRouter();
 
     const [valueNew, setValueNew] = useState('Ninguno..');
 
