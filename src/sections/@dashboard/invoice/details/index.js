@@ -322,7 +322,8 @@ export default function InvoiceDetails({invoice}) {
             // Actualizar una orden.
             const response = await axios.put('/hanadb/api/orders/order/change_warehouse', {
                 ID_ORDER: ID,
-                NEW_WAREHOUSE: value.id
+                NEW_WAREHOUSE: value.id,
+                ID_USER: user.ID,
 
             });
 
@@ -465,6 +466,7 @@ export default function InvoiceDetails({invoice}) {
             const response = await axios.post('/hanadb/api/orden_venta_sap', {
                 ID_ORDER: ID,
                 ID_USER: user.ID,
+                OBSERVACION_APROBACION: observacionA,
             });
 
             console.log("Orden Creada en el SAP.");
@@ -700,7 +702,7 @@ export default function InvoiceDetails({invoice}) {
         window.open(pdfUrl, '_blank');
     };
 
-    const [observacion, setObservacion] = useState('');
+    const [observacionA, setObservacionA] = useState('Ninguno...');
 
     const handleButtonClick = () => {
         console.log('Contenido del texto:', observacion);
@@ -1002,19 +1004,10 @@ export default function InvoiceDetails({invoice}) {
                 <TextField
                     fullWidth
                     multiline
-                    placeholder="Observación"
-                    label="Observación"
-                    value={observacion}
-                    onChange={(e) => setObservacion(e.target.value)}
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <Button variant="contained" color="primary" onClick={handleButtonClick}>
-                                    Guardar
-                                </Button>
-                            </InputAdornment>
-                        ),
-                    }}
+                    placeholder="Observaciones al aprobar."
+                    label="Observaciones al aprobar."
+                    value={observacionA}
+                    onChange={(e) => setObservacionA(e.target.value)}
                 />
                 }
 

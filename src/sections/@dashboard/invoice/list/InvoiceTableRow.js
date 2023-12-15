@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import {useState} from 'react';
+import React, {useState} from 'react';
 // @mui
 import {
     Link,
@@ -11,7 +11,7 @@ import {
     MenuItem,
     TableCell,
     IconButton,
-    Typography,
+    Typography, TextField,
 } from '@mui/material';
 // utils
 import {fDate} from '../../../../utils/formatTime';
@@ -33,7 +33,6 @@ InvoiceTableRow.propTypes = {
     selected: PropTypes.bool,
     onEditRow: PropTypes.func,
     onViewRow: PropTypes.func,
-    onAnularRow: PropTypes.func,
     onDeleteRow: PropTypes.func,
     onSelectRow: PropTypes.func,
 };
@@ -43,7 +42,6 @@ export default function InvoiceTableRow({
                                             selected,
                                             onSelectRow,
                                             onViewRow,
-                                            onAnularRow,
                                             onEditRow,
                                             onDeleteRow,
                                         }) {
@@ -79,6 +77,8 @@ export default function InvoiceTableRow({
         NUMEROGUIA,
         FECHA_IMPRESION
     } = row;
+
+    const [valueNew, setValueNew] = useState('Ninguno..');
 
     const [openConfirm, setOpenConfirm] = useState(false);
     //Anular la orden.
@@ -167,6 +167,76 @@ export default function InvoiceTableRow({
     const handleImprimir = () => {
         console.log('Botón clickeado');
         // Puedes agregar más lógica aquí según tus necesidades
+    };
+
+    const handleChange = (event) => {
+        setValueNew(event.target.value);
+        // console.log(`Nuevo precio unitario ${valueNew}`);
+    };
+
+//Anúla una orden
+    const onAnularRow = async () => {
+        console.log("Número de orden: " + ID);
+        console.log("Observación anulación orden: " + valueNew);
+
+        try {
+            const response = await axios.put('/hanadb/api/orders/order/anular', {
+                params: {
+                    ID_ORDER: ID,
+                    OBSERVACION_ANULACION: valueNew,
+                    ID_USER: user.ID,
+                }
+            });
+
+            // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
+            console.log('Estado de orden anulado.');
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+
+                setTimeout(() => {
+                    router.reload();
+                }, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
+            }
+
+        } catch (error) {
+            // Manejar el error de la petición DELETE aquí
+            console.error('Error al eliminar la orden:', error);
+        }
+
+    };
+
+
+    //Recuperar pedido cuando se encuentre en estado anulado.
+    //Retornar pedido desde bodega a cartera
+    const sendOrderToBagRow = async () => {
+        console.log("Número de orden: " + ID);
+
+        try {
+            const response = await axios.put('/hanadb/api/orders/order/to_bag', {
+                params: {
+                    ID_ORDER: ID
+                }
+            });
+
+            // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
+            console.log('Cambiando estado');
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+
+                setTimeout(() => {
+                    router.reload();
+                }, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
+            }
+
+        } catch (error) {
+            // Manejar el error de la petición DELETE aquí
+            console.error('Error al cambiar el status de la orden:', error);
+        }
+
     };
 
 
@@ -301,6 +371,38 @@ export default function InvoiceTableRow({
 
         <Divider sx={{borderStyle: 'dashed'}}/>
 
+
+        {ESTADO === 0 && user.ROLE === "bodega" ? (
+        <MenuItem
+            onClick={() => {
+                sendOrderToBagRow();
+                handleClosePopover();
+            }}
+        >
+            <Iconify icon="eva:shopping-bag-outline"/>
+            Cartera
+        </MenuItem>
+
+        ) : null
+        }
+
+        {ESTADO === 8 && user.ROLE === "aprobador" ? (
+            <MenuItem
+                onClick={() => {
+                    sendOrderToBagRow();
+                    handleClosePopover();
+                }}
+            >
+                <Iconify icon="eva:shopping-bag-outline"/>
+                Regre. Cartera
+            </MenuItem>
+
+        ) : null
+        }
+
+
+        <Divider sx={{borderStyle: 'dashed'}}/>
+
         {user.ROLE === "aprobador" || user.ROLE === "bodega" ? (
             <MenuItem
                 onClick={() => {
@@ -344,9 +446,21 @@ export default function InvoiceTableRow({
         title="Anular"
         content="¿Estás seguro de que quieres anular la orden?"
         action={
-            <Button variant="contained" color="error" onClick={onAnularRow}>
+        <>
+            <TextField
+                label="Observaciones al anular."
+                value={valueNew}
+                onChange={handleChange}
+            />
+
+            <Button variant="contained" color="error" onClick={() => {
+                onAnularRow();
+            }}
+            >
                 Anular
             </Button>
+        </>
+
         }
     />
 

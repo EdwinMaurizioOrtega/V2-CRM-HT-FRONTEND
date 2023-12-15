@@ -362,36 +362,6 @@ export default function InvoiceListPage() {
         push(PATH_DASHBOARD.invoice.view(id));
     };
 
-    //Anúla una orden
-    const handleAnularRow = async (id) => {
-        console.log("Número de orden: " + id);
-
-        try {
-            const response = await axios.put('/hanadb/api/orders/order/anular', {
-                params: {
-                    ID: id
-                }
-            });
-
-            // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
-            console.log('Estado de orden anulado.');
-            console.log("Código de estado:", response.status);
-
-            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
-            if (response.status === 200) {
-
-                setTimeout(() => {
-                    router.reload();
-                }, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
-            }
-
-        } catch (error) {
-            // Manejar el error de la petición DELETE aquí
-            console.error('Error al eliminar la orden:', error);
-        }
-
-    };
-
     const handleResetFilter = () => {
         setFilterName('');
         setFilterStatus('all');
@@ -607,7 +577,7 @@ export default function InvoiceListPage() {
                                                 selected={selected.includes(row.ID)}
                                                 onSelectRow={() => onSelectRow(row.ID)}
                                                 onViewRow={() => handleViewRow(row.ID)}
-                                                onAnularRow={() => handleAnularRow(row.ID)}
+                                                // onAnularRow={() => handleAnularRow(row.ID)}
                                                 // onEditRow={() => handleEditRow(row.ID)}
                                                 // onDeleteRow={() => handleDeleteRow(row.ID)}
                                             />
