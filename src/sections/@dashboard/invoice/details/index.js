@@ -175,8 +175,21 @@ export default function InvoiceDetails({invoice}) {
         ValidComm,
         GLN,
         Balance,
-        OBSERVACIONESB
+        OBSERVACIONESB,
+        OBSERVACIONES
     } = invoice;
+
+    console.log("OBSERVACIONES: "+ OBSERVACIONES)
+
+    const [observacionA, setObservacionA] = useState('Ninguno...');
+
+    useEffect(() => {
+        // Aquí se ejecuta después del montaje del componente
+        setObservacionA(OBSERVACIONES !== '' ? OBSERVACIONES : 'Ninguno...');
+
+        // También puedes poner otros efectos secundarios aquí si es necesario
+
+    }, [OBSERVACIONES]); // Este efecto se ejecutará cada vez que invoice.OBSERVACIONES cambie
 
 
     const handleChange = (event) => {
@@ -702,7 +715,6 @@ export default function InvoiceDetails({invoice}) {
         window.open(pdfUrl, '_blank');
     };
 
-    const [observacionA, setObservacionA] = useState('Ninguno...');
 
     const handleButtonClick = () => {
         console.log('Contenido del texto:', observacion);
