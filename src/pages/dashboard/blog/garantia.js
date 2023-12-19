@@ -1,29 +1,21 @@
-import orderBy from 'lodash/orderBy';
 import {useEffect, useCallback, useState} from 'react';
 // next
 import Head from 'next/head';
-import NextLink from 'next/link';
 // @mui
 import {Grid, Button, Container, Stack, TextField} from '@mui/material';
-// utils
-import axios from '../../../utils/axios';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
-// components
-import Iconify from '../../../components/iconify';
-import {SkeletonPostItem} from '../../../components/skeleton';
-import {useSettingsContext} from '../../../components/settings';
-import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
+
 // sections
-import {BlogPostCard, BlogPostsSort, BlogPostsSearch} from '../../../sections/@dashboard/blog';
-import {useSnackbar} from "../../../components/snackbar";
-import {Text} from "@react-pdf/renderer";
+import {useSnackbar} from '../../../components/snackbar';
 
 // ----------------------------------------------------------------------
 
 import { HOST_API_KEY } from '../../../config-global';
+import {useSettingsContext} from "../../../components/settings";
+import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
 
 // ----------------------------------------------------------------------
 
@@ -34,56 +26,68 @@ GarantiaPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function GarantiaPage() {
     const {themeStretch} = useSettingsContext();
 
-    const urlG = HOST_API_KEY ;
-    console.log("urlG: "+ urlG)
-
-
     const [enteredName, setEnteredName] = useState(''); //INIT TO EMPTY
     const [garantia, setGarantia] = useState('');
 
     const [marca, setMarca] = useState('');
 
-    const showImei = async enteredName => {
+    // const showImei = async enteredName => {
+    //
+    //     if (enteredName.length === 15) {
+    //         console.log("IMEI A CONSULTAR: " + enteredName);
+    //         //PAC
+    //         console.log("Buscando en el sistema Facturacion PAC")
+    //         const responseFull = await fetch(`${HOST_API_KEY}/api/crm-ht/garantia_imei_pac_sap?id=${enteredName}`);
+    //         console.log(responseFull)
+    //         console.log("Status 200: " + responseFull.status)
+    //         let jsonFull = await responseFull.json();
+    //
+    //         //Retornamos el objeto
+    //         setGarantia(jsonFull.message);
+    //         setMarca(jsonFull.marca);
+    //
+    //     } else {
+    //         // toast.current.show({severity: 'error', summary: 'Mensaje de error', detail: 'El IMEI debe tener 15 dígitos.', life: 3000});
+    //         onSnackbarAction('El IMEI debe tener 15 dígitos.', 'default', {
+    //             vertical: 'top',
+    //             horizontal: 'center',
+    //         })
+    //     }
+    //
+    // }
 
+    const showImei = async (enteredName) => {
         if (enteredName.length === 15) {
+            try {
+                console.log(`IMEI A CONSULTAR: ${enteredName}`);
+                console.log("Buscando en el sistema Facturacion PAC");
 
-            console.log("IMEI A CONSULTAR: " + enteredName);
+                const responseFull = await fetch(`${HOST_API_KEY}/api/crm-ht/garantia_imei_pac_sap?id=${enteredName}`);
+                console.log(responseFull);
 
-            //PAC
-            console.log("Buscando en el sistema Facturacion PAC")
-            const responseFull = await fetch(urlG+"/api/crm-ht/garantia_imei_pac_sap?id=" + enteredName, {
-                method: "GET"
-
-            }).then(responseP => responseP)
-
-            console.log(responseFull)
-
-            console.log("Status 200: " + responseFull.status)
-            let jsonFull = await responseFull.json();
-
-
-            //Retornamos el objeto
-            setGarantia(jsonFull.message);
-            setMarca(jsonFull.marca);
-
-
+                if (responseFull.status === 200) {
+                    const { message, marca } = await responseFull.json();
+                    setGarantia(message);
+                    setMarca(marca);
+                } else {
+                    console.log(`Status ${responseFull.status}: Hubo un problema en la consulta.`);
+                }
+            } catch (error) {
+                console.error("Error en la consulta:", error);
+            }
         } else {
-            // toast.current.show({severity: 'error', summary: 'Mensaje de error', detail: 'El IMEI debe tener 15 dígitos.', life: 3000});
             onSnackbarAction('El IMEI debe tener 15 dígitos.', 'default', {
                 vertical: 'top',
                 horizontal: 'center',
-            })
+            });
         }
+    };
 
-    }
 
-    // const contextPath = getConfig().publicRuntimeConfig.contextPath;
 
-    //const mostrarCondicion = {}
 
 
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
-
     const onSnackbarAction = (data, color, anchor) => {
         enqueueSnackbar(`${data}`, {
             variant: color,
