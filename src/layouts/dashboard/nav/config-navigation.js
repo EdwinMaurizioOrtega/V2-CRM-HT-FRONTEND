@@ -111,9 +111,11 @@ const navConfig = [
           // { title: 'create', path: PATH_DASHBOARD.blog.new },
         ],
       },
+
+        //
       {
         title: 'Servicio Técnico',
-        path: '',
+        path: PATH_DASHBOARD.blog.garantia,
         icon: ICONS.folder,
         children: [
           { title: 'garantía', path: PATH_DASHBOARD.blog.garantia },
