@@ -111,11 +111,16 @@ const navConfig = [
           // { title: 'create', path: PATH_DASHBOARD.blog.new },
         ],
       },
-      // {
-      //   title: 'File manager',
-      //   path: PATH_DASHBOARD.fileManager,
-      //   icon: ICONS.folder,
-      // },
+      {
+        title: 'Servicio Técnico',
+        path: PATH_DASHBOARD.fileManager,
+        icon: ICONS.folder,
+        children: [
+          { title: 'garantía', path: PATH_DASHBOARD.blog.garantia },
+          // { title: 'post', path: PATH_DASHBOARD.blog.demoView },
+          // { title: 'create', path: PATH_DASHBOARD.blog.new },
+        ],
+      },
     ],
   },
 
