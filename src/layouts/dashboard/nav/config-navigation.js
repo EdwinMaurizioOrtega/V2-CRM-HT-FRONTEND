@@ -113,7 +113,7 @@ const navConfig = [
       },
       {
         title: 'Servicio Técnico',
-        path: PATH_DASHBOARD.fileManager,
+        path: '',
         icon: ICONS.folder,
         children: [
           { title: 'garantía', path: PATH_DASHBOARD.blog.garantia },
