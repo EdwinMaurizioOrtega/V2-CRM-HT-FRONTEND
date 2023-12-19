@@ -115,10 +115,10 @@ const navConfig = [
         //
       {
         title: 'Servicio Técnico',
-        path: PATH_DASHBOARD.blog.garantia,
+        path: '',
         icon: ICONS.folder,
         children: [
-          { title: 'garantía', path: PATH_DASHBOARD.blog.garantia },
+          { title: 'garantía', path: PATH_DASHBOARD.st.garantia },
           // { title: 'post', path: PATH_DASHBOARD.blog.demoView },
           // { title: 'create', path: PATH_DASHBOARD.blog.new },
         ],
