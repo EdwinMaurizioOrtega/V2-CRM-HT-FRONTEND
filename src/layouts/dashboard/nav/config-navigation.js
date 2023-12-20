@@ -103,10 +103,11 @@ const navConfig = [
       // BLOG
       {
         title: 'Gestión',
-        path: PATH_DASHBOARD.blog.root,
+        path: PATH_DASHBOARD.gestion.root,
         icon: ICONS.blog,
         children: [
-          { title: 'clientes', path: PATH_DASHBOARD.blog.posts },
+          { title: 'Mayoristas', path: PATH_DASHBOARD.gestion.mayorista },
+          { title: 'C. Finales', path: PATH_DASHBOARD.gestion.cfinal },
           // { title: 'post', path: PATH_DASHBOARD.blog.demoView },
           // { title: 'create', path: PATH_DASHBOARD.blog.new },
         ],

@@ -97,6 +97,11 @@ export const PATH_DASHBOARD = {
     view: (title) => path(ROOTS_DASHBOARD, `/blog/post/${title}`),
     demoView: path(ROOTS_DASHBOARD, '/blog/post/apply-these-7-secret-techniques-to-improve-event'),
   },
+  gestion: {
+    root: path(ROOTS_DASHBOARD, '/ge'),
+    mayorista: path(ROOTS_DASHBOARD, '/gestion/mayorista'),
+    cfinal: path(ROOTS_DASHBOARD, '/gestion/cfinal'),
+  },
   st: {
     root: path(ROOTS_DASHBOARD, '/st'),
     garantia: path(ROOTS_DASHBOARD, '/st/garantia'),
