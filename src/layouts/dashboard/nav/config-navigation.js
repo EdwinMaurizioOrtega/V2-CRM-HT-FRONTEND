@@ -116,7 +116,7 @@ const navConfig = [
         //
       {
         title: 'Servicio Técnico',
-        path: '',
+        path: PATH_DASHBOARD.st.root,
         icon: ICONS.folder,
         children: [
           { title: 'garantía', path: PATH_DASHBOARD.st.garantia },

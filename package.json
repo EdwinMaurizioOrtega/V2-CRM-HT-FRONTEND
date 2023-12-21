@@ -37,7 +37,7 @@
     "@mui/lab": "^5.0.0-alpha.116",
     "@mui/material": "^5.11.10",
     "@mui/system": "^5.11.5",
-    "@mui/x-data-grid": "^5.17.19",
+    "@mui/x-data-grid": "^6.18.4",
     "@mui/x-date-pickers": "^5.0.14",
     "@next/font": "^13.4.6",
     "@react-pdf/renderer": "^3.1.5",
@@ -84,7 +84,8 @@
     "stylis-plugin-rtl": "^2.1.1",
     "xlsx": "^0.18.5",
     "yet-another-react-lightbox": "^2.4.2",
-    "yup": "^1.0.0"
+    "yup": "^1.0.0",
+    "swr": "^2.2.4"
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",
