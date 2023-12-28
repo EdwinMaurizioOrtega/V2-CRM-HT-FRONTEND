@@ -389,7 +389,7 @@ export default function InvoiceListPage() {
         a.dispatchEvent(clickEvt)
         a.remove()
     }
-    const exportToJson = e => {
+    const exportJsonToCSV = e => {
         e.preventDefault()
         // Convierte el JSON a CSV de manera simple
         const csvData = Object.keys(dataFiltered[0]).join(';') + '\n' +
@@ -640,7 +640,7 @@ export default function InvoiceListPage() {
                     />
 
                     <Tooltip title="Descargar">
-                        <IconButton onClick={exportToJson}
+                        <IconButton onClick={exportJsonToCSV}
                         >
                                 <Iconify icon="eva:download-fill"/>
                         </IconButton>
