@@ -14,7 +14,7 @@ TablePaginationCustom.propTypes = {
 export default function TablePaginationCustom({
   dense,
   onChangeDense,
-  rowsPerPageOptions = [5, 10, 25],
+  rowsPerPageOptions = [5, 10, 25, 100, 500, 1000],
   sx,
   ...other
 }) {
