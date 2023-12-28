@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import sumBy from 'lodash/sumBy';
 // next
 import Head from 'next/head';
@@ -18,7 +18,7 @@ import {
     TableBody,
     Container,
     IconButton,
-    TableContainer,
+    TableContainer, CircularProgress,
 } from '@mui/material';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
@@ -373,6 +373,36 @@ export default function InvoiceListPage() {
         // setFilterStartDate(null);
     };
 
+    const downloadFile = ({ data, fileName, fileType }) => {
+        // Create a blob with the data we want to download as a file
+        const blob = new Blob([data], { type: fileType })
+        // Create an anchor element and dispatch a click event on it
+        // to trigger a download
+        const a = document.createElement('a')
+        a.download = fileName
+        a.href = window.URL.createObjectURL(blob)
+        const clickEvt = new MouseEvent('click', {
+            view: window,
+            bubbles: true,
+            cancelable: true,
+        })
+        a.dispatchEvent(clickEvt)
+        a.remove()
+    }
+    const exportToJson = e => {
+        e.preventDefault()
+        // Convierte el JSON a CSV de manera simple
+        const csvData = Object.keys(dataFiltered[0]).join(';') + '\n' +
+            dataFiltered.map(row => Object.values(row).join(';')).join('\n');
+
+        // Descarga el archivo CSV
+        downloadFile({
+            data: csvData,
+            fileName: 'invoices.csv',
+            fileType: 'text/csv',
+        });
+    }
+
     return (
         <>
             <Head>
@@ -594,6 +624,7 @@ export default function InvoiceListPage() {
                                     <TableNoData isNotFound={isNotFound}/>
                                 </TableBody>
                             </Table>
+
                         </Scrollbar>
                     </TableContainer>
 
@@ -607,6 +638,13 @@ export default function InvoiceListPage() {
                         dense={dense}
                         onChangeDense={onChangeDense}
                     />
+
+                    <Tooltip title="Descargar">
+                        <IconButton onClick={exportToJson}
+                        >
+                                <Iconify icon="eva:download-fill"/>
+                        </IconButton>
+                    </Tooltip>
                 </Card>
             </Container>
 
