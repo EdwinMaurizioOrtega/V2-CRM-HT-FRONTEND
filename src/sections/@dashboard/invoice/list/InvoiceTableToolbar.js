@@ -79,35 +79,35 @@ export default function InvoiceTableToolbar({
       {/*   ))} */}
       {/* </TextField> */}
 
-      <DatePicker
-        label="Inicio"
-        value={filterStartDate}
-        onChange={onFilterStartDate}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            fullWidth
-            sx={{
-              maxWidth: { md: INPUT_WIDTH },
-            }}
-          />
-        )}
-      />
+      {/* <DatePicker */}
+      {/*   label="Inicio" */}
+      {/*   value={filterStartDate} */}
+      {/*   onChange={onFilterStartDate} */}
+      {/*   renderInput={(params) => ( */}
+      {/*     <TextField */}
+      {/*       {...params} */}
+      {/*       fullWidth */}
+      {/*       sx={{ */}
+      {/*         maxWidth: { md: INPUT_WIDTH }, */}
+      {/*       }} */}
+      {/*     /> */}
+      {/*   )} */}
+      {/* /> */}
 
-      <DatePicker
-        label="Final"
-        value={filterEndDate}
-        onChange={onFilterEndDate}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            fullWidth
-            sx={{
-              maxWidth: { md: INPUT_WIDTH },
-            }}
-          />
-        )}
-      />
+      {/* <DatePicker */}
+      {/*   label="Final" */}
+      {/*   value={filterEndDate} */}
+      {/*   onChange={onFilterEndDate} */}
+      {/*   renderInput={(params) => ( */}
+      {/*     <TextField */}
+      {/*       {...params} */}
+      {/*       fullWidth */}
+      {/*       sx={{ */}
+      {/*         maxWidth: { md: INPUT_WIDTH }, */}
+      {/*       }} */}
+      {/*     /> */}
+      {/*   )} */}
+      {/* /> */}
 
       <TextField
         fullWidth

@@ -2,26 +2,40 @@
 import Head from 'next/head';
 // @mui
 import { alpha } from '@mui/material/styles';
-import {Container, Typography, Box, Rating, Stack, Avatar, LinearProgress} from '@mui/material';
+import {
+    Container,
+    Typography,
+    Box,
+    Rating,
+    Stack,
+    Avatar,
+    LinearProgress,
+    Card,
+    TextField,
+    Autocomplete
+} from '@mui/material';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
 // components
 import { useSettingsContext } from '../../../components/settings';
 import EmptyContent from "../../../components/empty-content";
-import {useImperativeHandle, useMemo, useRef, useState} from "react";
+import React, {useEffect, useImperativeHandle, useMemo, useRef, useState} from "react";
 import {
-    DataGrid, GridActionsCellItem,
+    DataGrid, GridActionsCellItem, GridToolbar,
     GridToolbarColumnsButton,
     GridToolbarContainer, GridToolbarDensitySelector, GridToolbarExport,
     GridToolbarFilterButton,
     GridToolbarQuickFilter
 } from "@mui/x-data-grid";
-import DataGridCustom from "../../../sections/_examples/mui/data-grid/DataGridCustom";
 import PropTypes from "prop-types";
 import _mock from "../../../_mock";
 import Label from "../../../components/label";
 import Iconify from "../../../components/iconify";
 import {fPercent} from "../../../utils/formatNumber";
+import axios from "../../../utils/axios";
+import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
+import {PATH_DASHBOARD} from "../../../routes/paths";
+import {top100Films} from "../../../sections/@dashboard/invoice/details";
 
 // ----------------------------------------------------------------------
 
@@ -29,215 +43,168 @@ MayoristaPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-const HIDE_COLUMNS = {
-    id: false,
-};
-
 const baseColumns = [
+
     {
         field: 'id',
-        headerName: 'Id',
-        filterable: false,
-    },
-    // {
-    //     field: 'name',
-    //     headerName: 'Name',
-    //     flex: 1,
-    //     minWidth: 160,
-    //     hideable: false,
-    //     renderCell: (params) => (
-    //         <Stack spacing={2} direction="row" alignItems="center" sx={{ minWidth: 0 }}>
-    //             <Avatar alt={params.row.name} sx={{ width: 36, height: 36 }}>
-    //                 {params.row.name.charAt(0).toUpperCase()}
-    //             </Avatar>
-    //             <Typography component="span" variant="body2" noWrap>
-    //                 {params.row.name}
-    //             </Typography>
-    //         </Stack>
-    //     ),
-    // },
-    // {
-    //     field: 'email',
-    //     headerName: 'Email',
-    //     flex: 1,
-    //     minWidth: 160,
-    //     editable: true,
-    //     renderCell: (params) => (
-    //         <Link color="inherit" noWrap>
-    //             {params.row.email}
-    //         </Link>
-    //     ),
-    // },
-    // {
-    //     type: 'dateTime',
-    //     field: 'lastLogin',
-    //     headerName: 'Last login',
-    //     align: 'right',
-    //     headerAlign: 'right',
-    //     width: 120,
-    //     renderCell: (params) => (
-    //         <Stack sx={{ textAlign: 'right' }}>
-    //             <Box component="span">{fDate(params.row.lastLogin)}</Box>
-    //             <Box component="span" sx={{ color: 'text.secondary', typography: 'caption' }}>
-    //                 {fTime(params.row.lastLogin)}
-    //             </Box>
-    //         </Stack>
-    //     ),
-    // },
-    {
-        type: 'number',
-        field: 'rating',
-        headerName: 'Rating',
-        width: 140,
-        renderCell: (params) => (
-            <Rating size="small" value={params.row.rating} precision={0.5} readOnly />
-        ),
+        hide: true,
     },
     {
-        type: 'singleSelect',
-        field: 'status',
-        headerName: 'Status',
-        align: 'center',
-        headerAlign: 'center',
-        width: 100,
-        editable: true,
-        valueOptions: ['online', 'alway', 'busy'],
-        renderCell: (params) => (
-            <Label
-                variant="soft"
-                color={
-                    (params.row.status === 'busy' && 'error') ||
-                    (params.row.status === 'alway' && 'warning') ||
-                    'success'
-                }
-                sx={{ mx: 'auto' }}
-            >
-                {params.row.status}
-            </Label>
-        ),
+        field: 'Cliente',
+        headerName: 'CLIENTE',
+        flex: 1,
+        minWidth: 160,
     },
     {
-        type: 'boolean',
-        field: 'isAdmin',
-        align: 'center',
-        headerAlign: 'center',
-        width: 80,
-        renderCell: (params) =>
-            params.row.isAdmin ? (
-                <Iconify icon="eva:checkmark-circle-2-fill" sx={{ color: 'primary.main' }} />
-            ) : (
-                '-'
-            ),
+        field: 'ID',
+        headerName: 'ID',
+        flex: 1,
+        minWidth: 160,
     },
     {
-        type: 'number',
-        field: 'performance',
-        headerName: 'Performance',
-        align: 'center',
-        headerAlign: 'center',
-        width: 160,
-        renderCell: (params) => (
-            <Stack spacing={1} direction="row" alignItems="center" sx={{ px: 1, width: 1, height: 1 }}>
-                <LinearProgress
-                    value={params.row.performance}
-                    variant="determinate"
-                    color={
-                        (params.row.performance < 30 && 'error') ||
-                        (params.row.performance > 30 && params.row.performance < 70 && 'warning') ||
-                        'primary'
-                    }
-                    sx={{ width: 1, height: 6 }}
-                />
-                <Typography variant="caption" sx={{ width: 80 }}>
-                    {fPercent(params.row.performance)}
-                </Typography>
-            </Stack>
-        ),
+        field: 'Tipo',
+        headerName: 'Tipo',
+        flex: 1,
+        minWidth: 160,
     },
     {
-        type: 'actions',
-        field: 'actions',
-        headerName: 'Actions',
-        align: 'right',
-        headerAlign: 'right',
-        width: 80,
-        sortable: false,
-        filterable: false,
-        disableColumnMenu: true,
-        getActions: (params) => [
-            <GridActionsCellItem
-                showInMenu
-                icon={<Iconify icon="solar:eye-bold" />}
-                label="View"
-                onClick={() => console.info('VIEW', params.row.id)}
-            />,
-            <GridActionsCellItem
-                showInMenu
-                icon={<Iconify icon="solar:pen-bold" />}
-                label="Edit"
-                onClick={() => console.info('EDIT', params.row.id)}
-            />,
-            <GridActionsCellItem
-                showInMenu
-                icon={<Iconify icon="solar:trash-bin-trash-bold" />}
-                label="Delete"
-                onClick={() => console.info('DELETE', params.row.id)}
-                sx={{ color: 'error.main' }}
-            />,
-        ],
+        field: 'Celular',
+        headerName: 'Celular',
+        flex: 1,
+        minWidth: 160,
     },
-];
+    {
+        field: 'Ciudad',
+        headerName: 'Ciudad',
+        flex: 1,
+        minWidth: 160,
+    },
+    {
+        field: 'Direccion',
+        headerName: 'Direccion',
+        flex: 1,
+        minWidth: 160,
+    },
+    {
+        field: 'Cupo',
+        headerName: 'Cupo',
+        flex: 1,
+        minWidth: 160,
+    },
+    {
+        field: 'Score',
+        headerName: 'Score',
+        flex: 1,
+        minWidth: 160,
+    },
+    {
+        field: 'Capacidad de Pago',
+        headerName: 'Capacidad de Pago',
+        flex: 1,
+        minWidth: 160,
+    },
+    {
+        field: 'Endeudamiento',
+        headerName: 'Endeudamiento',
+        flex: 1,
+        minWidth: 160,
+    },
+    {
+        field: 'GLN',
+        headerName: 'GLN',
+        flex: 1,
+        minWidth: 160,
+    },
+    {
+        field: 'ValidComm',
+        headerName: 'ValidComm',
+        flex: 1,
+        minWidth: 160,
+    },
+    {
+        field: 'Balance',
+        headerName: 'Balance',
+        flex: 1,
+        minWidth: 160,
+    },
 
+]
 
-const rows = [...Array(20)].map((_, index) => {
-    const status =
-        (index % 2 && 'online') || (index % 3 && 'alway') || (index % 4 && 'busy') || 'offline';
-
-    return {
-        id: _mock.id(index),
-        status,
-        email: _mock.email(index),
-        // name: _mock.fullName(index),
-        age: _mock.number.age(index),
-        lastLogin: _mock.time(index),
-        isAdmin: _mock.boolean(index),
-        // lastName: _mock.lastName(index),
-        rating: _mock.number.rating(index),
-        // firstName: _mock.firstName(index),
-        performance: _mock.number.percent(index),
-    };
-});
-
+export const rangos = [
+    {title: '0-15 dias', id: "01"},
+    {title: '16-30 dias', id: "02"},
+    {title: '31-60 dias', id: "03"},
+    {title: '61-90 dias', id: "04"},
+    {title: '91-180 dias', id: "05"},
+    {title: '180-360 dias', id: "06"},
+    {title: '+360 dias', id: "07"},
+    {title: 'Nunca', id: "08"}
+]
 
 export default function MayoristaPage() {
     const { themeStretch } = useSettingsContext();
 
+    const [businessPartners, setBusinessPartners] = useState([]);
 
-    const [selectedRows, setSelectedRows] = useState([]);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('/hanadb/api/BusinessPartners');
 
-    const [columnVisibilityModel, setColumnVisibilityModel] = useState(HIDE_COLUMNS);
+                const businessPartnersWithId = response.data.data.map((partner, index) => ({
+                    ...partner,
+                    id: index + 1, // Puedes ajustar la lógica según tus necesidades
+                }));
 
-    const columns = useMemo(
-        () =>
-            baseColumns.map((col) =>
-                col.field === 'rating'
-                    ? {
-                        ...col,
-                        filterOperators: ratingOnlyOperators,
-                    }
-                    : col
-            ),
-        []
-    );
+                setBusinessPartners(businessPartnersWithId);
+                console.log("response.data.data: "+JSON.stringify(response.data.data));
+                console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
 
-    const getTogglableColumns = () =>
-        columns
-            .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
-            .map((column) => column.field);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
 
-    const selected = rows.filter((row) => selectedRows.includes(row.id)).map((_row) => _row.id);
+        fetchData();
+    }, []); // The empty dependency array ensures the effect runs once after the initial render
 
-    console.info('SELECTED ROWS', selected);
+    let counter = 0;
+    const getRowId = (row) => {
+        counter += 1;
+        return counter;
+    };
+
+
+
+    const BuscarPorRango = async (event, value) => {
+
+        try {
+
+            console.log("ID RANGO: "+value.id); // Log the selected element
+            //console.log(ID); // Log ID de la orden
+
+            // // Actualizar una orden.
+            // const response = await axios.put('/hanadb/api/orders/order/change_warehouse', {
+            //     ID_ORDER: ID,
+            //     NEW_WAREHOUSE: value.id,
+            //     ID_USER: user.ID,
+            //
+            // });
+            //
+            // console.log("Orden actualizada correctamente.");
+            // console.log("Código de estado:", response.status);
+            //
+            // // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            // if (response.status === 200) {
+            //     router.reload();
+            // }
+
+        } catch (error) {
+            // Manejar el error de la petición PUT aquí
+            console.error('Error al actualizar la orden:', error);
+        }
+    };
+
 
     return (
         <>
@@ -245,51 +212,54 @@ export default function MayoristaPage() {
                 <title> Mayorista Page | HT</title>
             </Head>
 
-            <Container maxWidth={themeStretch ? false : 'xl'}>
-                <Typography variant="h4"> Mayorista </Typography>
+            <Container maxWidth={themeStretch ? false : 'lg'}>
+                <CustomBreadcrumbs
+                    heading="Gestión Mayoristas"
+                    links={[
+                        {
+                            name: 'Dashboard',
+                            href: PATH_DASHBOARD.root,
+                        },
+                        {
+                            name: 'Gestión',
+                            href: PATH_DASHBOARD.gestion.mayorista,
+                        },
+                        {
+                            name: 'Mayoristas',
+                        },
+                    ]}
+                />
 
-                <Box
-                    sx={{
-                        mt: 5,
-                        width: 1,
-                        height: 320,
-                        borderRadius: 2,
-                        bgcolor: (theme) => alpha(theme.palette.grey[500], 0.04),
-                        border: (theme) => `dashed 1px ${theme.palette.divider}`,
+                <Card sx={{
+                    mb: { xs: 3, md: 5 },
+                }}
+                >
+                    <Autocomplete
+                        fullWidth
+                        options={rangos}
+                        getOptionLabel={(option) => option.title}
+                        onChange={(event, value) => {
+                            BuscarPorRango(event, value);
+                        }} // Add onChange event handler
+                        renderInput={(params) => <TextField {...params} label="..." margin="none"/>}
+                    />
+                <DataGrid
+                    rows={businessPartners}
+                    columns={baseColumns}
+                    pagination
+                    slots={{
+                        toolbar: CustomToolbar,
+                        noRowsOverlay: () => <EmptyContent title="No Data" />,
+                        noResultsOverlay: () => <EmptyContent title="No results found" />,
                     }}
                 />
+                </Card>
+
             </Container>
-            <DataGrid
-                checkboxSelection
-                disableRowSelectionOnClick
-                rows={rows}
-                columns={columns}
-                onRowSelectionModelChange={(newSelectionModel) => {
-                    setSelectedRows(newSelectionModel);
-                }}
-                columnVisibilityModel={columnVisibilityModel}
-                onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
-                slots={{
-                    toolbar: CustomToolbar,
-                    noRowsOverlay: () => <EmptyContent title="No Data" />,
-                    noResultsOverlay: () => <EmptyContent title="No results found" />,
-                }}
-                slotProps={{
-                    toolbar: {
-                        showQuickFilter: true,
-                    },
-                    columnsPanel: {
-                        getTogglableColumns,
-                    },
-                }}
-            />
+
         </>
     );
 }
-
-DataGridCustom.propTypes = {
-    data: PropTypes.array,
-};
 
 // ----------------------------------------------------------------------
 
@@ -308,51 +278,5 @@ function CustomToolbar() {
 
 // ----------------------------------------------------------------------
 
-function RatingInputValue({ item, applyValue, focusElementRef }) {
-    const ratingRef = useRef(null);
 
-    useImperativeHandle(focusElementRef, () => ({
-        focus: () => {
-            ratingRef.current.querySelector(`input[value="${Number(item.value) || ''}"]`).focus();
-        },
-    }));
-
-    const handleFilterChange = (event, newValue) => {
-        applyValue({ ...item, value: newValue });
-    };
-
-    return (
-        <Rating
-            ref={ratingRef}
-            precision={0.5}
-            value={Number(item.value)}
-            onChange={handleFilterChange}
-            name="custom-rating-filter-operator"
-            sx={{ ml: 2 }}
-        />
-    );
-}
-
-RatingInputValue.propTypes = {
-    item: PropTypes.object,
-    applyValue: PropTypes.func,
-    focusElementRef: PropTypes.any,
-};
-
-const ratingOnlyOperators = [
-    {
-        label: 'Above',
-        value: 'above',
-        getApplyFilterFn: (filterItem) => {
-            if (!filterItem.field || !filterItem.value || !filterItem.operator) {
-                return null;
-            }
-
-            return (params) => Number(params.value) >= Number(filterItem.value);
-        },
-        InputComponent: RatingInputValue,
-        InputComponentProps: { type: 'number' },
-        getValueAsString: (value) => `${value} Stars`,
-    },
-];
 

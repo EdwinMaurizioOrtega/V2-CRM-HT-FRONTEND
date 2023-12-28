@@ -73,23 +73,23 @@ const SERVICE_OPTIONS = [
 const TABLE_HEAD = [
     {id: 'detalle', label: 'Detalle', align: 'left'},
 
-    {id: 'invoiceNumber', label: 'Orden', align: 'left'},
-    {id: 'status', label: 'Estado', align: 'left'},
-    {id: 'bodega', label: 'Bodega', align: 'left'},
-    {id: 'formaPago', label: 'FPago', align: 'left'},
-    {id: 'dueDate', label: 'CI/RUC', align: 'left'},
-    {id: 'price', label: 'R.Social', align: 'center', width: 140},
-    {id: 'sent', label: 'Celular', align: 'center', width: 140},
-    {id: 'tipCliente', label: 'Tipo Cliente', align: 'left'},
-    {id: 'ciuCliente', label: 'Ciudad Cliente', align: 'left'},
+    {id: 'ID', label: 'Orden', align: 'left'},
+    {id: 'ESTADO', label: 'Estado', align: 'left'},
+    {id: 'BODEGA', label: 'Bodega', align: 'left'},
+    {id: 'FORMADEPAGO', label: 'FPago', align: 'left'},
+    {id: 'CLIENTEID', label: 'CI/RUC', align: 'left'},
+    {id: 'Cliente', label: 'R.Social', align: 'center', width: 140},
+    {id: 'Celular', label: 'Celular', align: 'center', width: 140},
+    {id: 'Tipo', label: 'Tipo Cliente', align: 'left'},
+    {id: 'Ciudad', label: 'Ciudad Cliente', align: 'left'},
     // {id: 'status', label: 'Vendedor', align: 'left'},
-    {id: 'ciuVendedor', label: 'Ciudad Vendedor', align: 'left'},
-    {id: 'serviEntrega', label: 'Servientrega', align: 'left'},
+    {id: 'CITY', label: 'Ciudad Vendedor', align: 'left'},
+    {id: 'NUMEROGUIA', label: 'Servientrega', align: 'left'},
 
-    {id: 'ordenVenta', label: 'OV SAP', align: 'left'},
-    {id: 'createDate', label: 'Creación', align: 'left'},
-    {id: 'aproDate', label: 'Aprobación', align: 'left'},
-    {id: 'facDate', label: 'Facturación', align: 'left'},
+    {id: 'DOCNUM', label: 'OV SAP', align: 'left'},
+    {id: 'FECHACREACION', label: 'Creación', align: 'left'},
+    {id: 'FECHAAPROBO', label: 'Aprobación', align: 'left'},
+    {id: 'FECHAFACTURACION', label: 'Facturación', align: 'left'},
 ];
 
 // ----------------------------------------------------------------------
@@ -262,28 +262,30 @@ export default function InvoiceListPage() {
         inputData: tableData,
         comparator: getComparator(order, orderBy),
         filterName,
-        filterService,
+        // filterService,
         filterStatus,
-        filterStartDate,
-        filterEndDate,
+        // filterStartDate,
+        // filterEndDate,
     });
 
-    const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    // const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
     const denseHeight = dense ? 56 : 76;
 
     const isFiltered =
         filterStatus !== 'all' ||
-        filterName !== '' ||
-        filterService !== 'all' ||
-        (!!filterStartDate && !!filterEndDate);
+        filterName !== ''
+        // filterService !== 'all' ||
+        // (!!filterStartDate && !!filterEndDate)
+    ;
 
     const isNotFound =
         (!dataFiltered.length && !!filterName) ||
-        (!dataFiltered.length && !!filterStatus) ||
-        (!dataFiltered.length && !!filterService) ||
-        (!dataFiltered.length && !!filterEndDate) ||
-        (!dataFiltered.length && !!filterStartDate);
+        (!dataFiltered.length && !!filterStatus)
+        // (!dataFiltered.length && !!filterService) ||
+        // (!dataFiltered.length && !!filterEndDate) ||
+        // (!dataFiltered.length && !!filterStartDate)
+    ;
 
     const getLengthByStatus = (status) => tableData.filter((item) => item.ESTADO === status).length;
 
@@ -338,22 +340,22 @@ export default function InvoiceListPage() {
         }
     };
 
-    const handleDeleteRows = (selectedRows) => {
-        const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
-        setSelected([]);
-        setTableData(deleteRows);
-
-        if (page > 0) {
-            if (selectedRows.length === dataInPage.length) {
-                setPage(page - 1);
-            } else if (selectedRows.length === dataFiltered.length) {
-                setPage(0);
-            } else if (selectedRows.length > dataInPage.length) {
-                const newPage = Math.ceil((tableData.length - selectedRows.length) / rowsPerPage) - 1;
-                setPage(newPage);
-            }
-        }
-    };
+    // const handleDeleteRows = (selectedRows) => {
+    //     const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
+    //     setSelected([]);
+    //     setTableData(deleteRows);
+    //
+    //     if (page > 0) {
+    //         if (selectedRows.length === dataInPage.length) {
+    //             setPage(page - 1);
+    //         } else if (selectedRows.length === dataFiltered.length) {
+    //             setPage(0);
+    //         } else if (selectedRows.length > dataInPage.length) {
+    //             const newPage = Math.ceil((tableData.length - selectedRows.length) / rowsPerPage) - 1;
+    //             setPage(newPage);
+    //         }
+    //     }
+    // };
 
     const handleEditRow = (id) => {
         push(PATH_DASHBOARD.invoice.edit(id));
@@ -366,9 +368,9 @@ export default function InvoiceListPage() {
     const handleResetFilter = () => {
         setFilterName('');
         setFilterStatus('all');
-        setFilterService('all');
-        setFilterEndDate(null);
-        setFilterStartDate(null);
+        // setFilterService('all');
+        // setFilterEndDate(null);
+        // setFilterStartDate(null);
     };
 
     return (
@@ -496,60 +498,60 @@ export default function InvoiceListPage() {
                     <InvoiceTableToolbar
                         isFiltered={isFiltered}
                         filterName={filterName}
-                        filterService={filterService}
-                        filterEndDate={filterEndDate}
+                        // filterService={filterService}
+                        // filterEndDate={filterEndDate}
                         onFilterName={handleFilterName}
                         optionsService={SERVICE_OPTIONS}
                         onResetFilter={handleResetFilter}
-                        filterStartDate={filterStartDate}
+                        // filterStartDate={filterStartDate}
                         onFilterService={handleFilterService}
-                        onFilterStartDate={(newValue) => {
-                            setFilterStartDate(newValue);
-                        }}
-                        onFilterEndDate={(newValue) => {
-                            setFilterEndDate(newValue);
-                        }}
+                        // onFilterStartDate={(newValue) => {
+                        //     setFilterStartDate(newValue);
+                        // }}
+                        // onFilterEndDate={(newValue) => {
+                        //     setFilterEndDate(newValue);
+                        // }}
                     />
 
                     <TableContainer sx={{position: 'relative', overflow: 'unset'}}>
-                        <TableSelectedAction
-                            dense={dense}
-                            numSelected={selected.length}
-                            rowCount={tableData.length}
-                            onSelectAllRows={(checked) =>
-                                onSelectAllRows(
-                                    checked,
-                                    tableData.map((row) => row.id)
-                                )
-                            }
-                            action={
-                                <Stack direction="row">
-                                    <Tooltip title="Sent">
-                                        <IconButton color="primary">
-                                            <Iconify icon="ic:round-send"/>
-                                        </IconButton>
-                                    </Tooltip>
+                        {/* <TableSelectedAction */}
+                        {/*     dense={dense} */}
+                        {/*     numSelected={selected.length} */}
+                        {/*     rowCount={tableData.length} */}
+                        {/*     onSelectAllRows={(checked) => */}
+                        {/*         onSelectAllRows( */}
+                        {/*             checked, */}
+                        {/*             tableData.map((row) => row.id) */}
+                        {/*         ) */}
+                        {/*     } */}
+                        {/*     action={ */}
+                        {/*         <Stack direction="row"> */}
+                        {/*             <Tooltip title="Sent"> */}
+                        {/*                 <IconButton color="primary"> */}
+                        {/*                     <Iconify icon="ic:round-send"/> */}
+                        {/*                 </IconButton> */}
+                        {/*             </Tooltip> */}
 
-                                    <Tooltip title="Download">
-                                        <IconButton color="primary">
-                                            <Iconify icon="eva:download-outline"/>
-                                        </IconButton>
-                                    </Tooltip>
+                        {/*             <Tooltip title="Download"> */}
+                        {/*                 <IconButton color="primary"> */}
+                        {/*                     <Iconify icon="eva:download-outline"/> */}
+                        {/*                 </IconButton> */}
+                        {/*             </Tooltip> */}
 
-                                    <Tooltip title="Print">
-                                        <IconButton color="primary">
-                                            <Iconify icon="eva:printer-fill"/>
-                                        </IconButton>
-                                    </Tooltip>
+                        {/*             <Tooltip title="Print"> */}
+                        {/*                 <IconButton color="primary"> */}
+                        {/*                     <Iconify icon="eva:printer-fill"/> */}
+                        {/*                 </IconButton> */}
+                        {/*             </Tooltip> */}
 
-                                    <Tooltip title="Delete">
-                                        <IconButton color="primary" onClick={handleOpenConfirm}>
-                                            <Iconify icon="eva:trash-2-outline"/>
-                                        </IconButton>
-                                    </Tooltip>
-                                </Stack>
-                            }
-                        />
+                        {/*             <Tooltip title="Delete"> */}
+                        {/*                 <IconButton color="primary" onClick={handleOpenConfirm}> */}
+                        {/*                     <Iconify icon="eva:trash-2-outline"/> */}
+                        {/*                 </IconButton> */}
+                        {/*             </Tooltip> */}
+                        {/*         </Stack> */}
+                        {/*     } */}
+                        {/* /> */}
 
                         <Scrollbar>
                             <Table size={dense ? 'small' : 'medium'} sx={{minWidth: 800}}>
@@ -558,7 +560,7 @@ export default function InvoiceListPage() {
                                     orderBy={orderBy}
                                     headLabel={TABLE_HEAD}
                                     rowCount={tableData.length}
-                                    numSelected={selected.length}
+                                    // numSelected={selected.length}
                                     onSort={onSort}
                                     // onSelectAllRows={(checked) =>
                                     //     onSelectAllRows(
@@ -575,8 +577,8 @@ export default function InvoiceListPage() {
                                             <InvoiceTableRow
                                                 key={row.ID}
                                                 row={row}
-                                                selected={selected.includes(row.ID)}
-                                                onSelectRow={() => onSelectRow(row.ID)}
+                                                // selected={selected.includes(row.ID)}
+                                                // onSelectRow={() => onSelectRow(row.ID)}
                                                 onViewRow={() => handleViewRow(row.ID)}
                                                 // onAnularRow={() => handleAnularRow(row.ID)}
                                                 // onEditRow={() => handleEditRow(row.ID)}
@@ -608,28 +610,28 @@ export default function InvoiceListPage() {
                 </Card>
             </Container>
 
-            <ConfirmDialog
-                open={openConfirm}
-                onClose={handleCloseConfirm}
-                title="Delete"
-                content={
-                    <>
-                        Are you sure want to delete <strong> {selected.length} </strong> items?
-                    </>
-                }
-                action={
-                    <Button
-                        variant="contained"
-                        color="error"
-                        onClick={() => {
-                            handleDeleteRows(selected);
-                            handleCloseConfirm();
-                        }}
-                    >
-                        Delete
-                    </Button>
-                }
-            />
+            {/* <ConfirmDialog */}
+            {/*     open={openConfirm} */}
+            {/*     onClose={handleCloseConfirm} */}
+            {/*     title="Delete" */}
+            {/*     content={ */}
+            {/*         <> */}
+            {/*             Are you sure want to delete <strong> {selected.length} </strong> items? */}
+            {/*         </> */}
+            {/*     } */}
+            {/*     action={ */}
+            {/*         <Button */}
+            {/*             variant="contained" */}
+            {/*             color="error" */}
+            {/*             onClick={() => { */}
+            {/*                 handleDeleteRows(selected); */}
+            {/*                 handleCloseConfirm(); */}
+            {/*             }} */}
+            {/*         > */}
+            {/*             Delete */}
+            {/*         </Button> */}
+            {/*     } */}
+            {/* /> */}
         </>
     );
 }
@@ -641,9 +643,9 @@ function applyFilter({
                          comparator,
                          filterName,
                          filterStatus,
-                         filterService,
-                         filterStartDate,
-                         filterEndDate,
+                         // filterService,
+                         // filterStartDate,
+                         // filterEndDate,
                      }) {
     const stabilizedThis = inputData.map((el, index) => [el, index]);
 
@@ -668,23 +670,23 @@ function applyFilter({
         inputData = inputData.filter((invoice) => invoice.ESTADO === filterStatus);
     }
 
-    if (filterService !== 'all') {
-        inputData = inputData.filter((invoice) => invoice.ESTADO === filterService);
-    }
+    // if (filterService !== 'all') {
+    //     inputData = inputData.filter((invoice) => invoice.ESTADO === filterService);
+    // }
 
-    if (filterStartDate && filterEndDate) {
-
-        inputData = inputData.filter(
-            (invoice) => {
-                console.log("invoice.FECHACREACION: "+parseCustomDate(invoice.FECHACREACION));
-                console.log("filterStartDate: "+filterStartDate);
-                console.log("filterEndDate: "+filterEndDate);
-                fTimestamp(parseCustomDate(invoice.FECHACREACION)) >= fTimestamp(filterStartDate) &&
-                fTimestamp(parseCustomDate(invoice.FECHACREACION)) <= fTimestamp(filterEndDate)
-            }
-        );
-
-    }
+    // if (filterStartDate && filterEndDate) {
+    //
+    //     inputData = inputData.filter(
+    //         (invoice) => {
+    //             console.log("invoice.FECHACREACION: "+parseCustomDate(invoice.FECHACREACION));
+    //             console.log("filterStartDate: "+filterStartDate);
+    //             console.log("filterEndDate: "+filterEndDate);
+    //             fTimestamp(parseCustomDate(invoice.FECHACREACION)) >= fTimestamp(filterStartDate) &&
+    //             fTimestamp(parseCustomDate(invoice.FECHACREACION)) <= fTimestamp(filterEndDate)
+    //         }
+    //     );
+    //
+    // }
 
     return inputData;
 }
