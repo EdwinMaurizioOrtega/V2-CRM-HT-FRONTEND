@@ -205,7 +205,6 @@ export default function MayoristaPage() {
         }
     };
 
-
     return (
         <>
             <Head>
@@ -231,7 +230,7 @@ export default function MayoristaPage() {
                 />
 
                 <Card sx={{
-                    mb: { xs: 3, md: 5 },
+                    mb: {xs: 3, md: 5},
                 }}
                 >
                     <Autocomplete
@@ -243,16 +242,16 @@ export default function MayoristaPage() {
                         }} // Add onChange event handler
                         renderInput={(params) => <TextField {...params} label="..." margin="none"/>}
                     />
-                <DataGrid
-                    rows={businessPartners}
-                    columns={baseColumns}
-                    pagination
-                    slots={{
-                        toolbar: CustomToolbar,
-                        noRowsOverlay: () => <EmptyContent title="No Data" />,
-                        noResultsOverlay: () => <EmptyContent title="No results found" />,
-                    }}
-                />
+                    <DataGrid
+                        rows={businessPartners}
+                        columns={baseColumns}
+                        pagination
+                        slots={{
+                            toolbar: CustomToolbar,
+                            noRowsOverlay: () => <EmptyContent title="No Data"/>,
+                            noResultsOverlay: () => <EmptyContent title="No results found"/>,
+                        }}
+                    />
                 </Card>
 
             </Container>
