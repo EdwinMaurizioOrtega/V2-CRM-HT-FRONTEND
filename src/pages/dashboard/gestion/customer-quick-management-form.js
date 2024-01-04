@@ -126,7 +126,7 @@ export default function CustomerQuickManagementForm({ currentPartner, open, onCl
 
         <DialogContent>
           <Alert variant="outlined" severity="info" sx={{ mb: 3 }}>
-            CI/RUC: {currentPartner.ID}
+            CI/RUC: {currentPartner?.ID || ''}
           </Alert>
 
           <Box

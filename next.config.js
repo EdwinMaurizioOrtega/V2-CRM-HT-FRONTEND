@@ -24,5 +24,3 @@ module.exports = {
     AUTH0_CLIENT_ID: '',
   },
 };
-
-// hola
