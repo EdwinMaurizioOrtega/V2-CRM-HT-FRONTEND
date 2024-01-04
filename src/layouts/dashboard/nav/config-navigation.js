@@ -82,6 +82,7 @@ const navConfig = [
           // { title: 'create', path: PATH_DASHBOARD.eCommerce.new },
           { title: 'carrito de compras', path: PATH_DASHBOARD.eCommerce.checkout },
           { title: 'Catálogo', path: PATH_DASHBOARD.eCommerce.catalogo },
+          { title: 'Clientes', path: PATH_DASHBOARD.eCommerce.clientes },
 
         ],
       },
@@ -129,32 +130,34 @@ const navConfig = [
 
   // APP
   // ----------------------------------------------------------------------
-  // {
-  //   subheader: 'app',
-  //   items: [
-  //     {
-  //       title: 'mail',
-  //       path: PATH_DASHBOARD.mail.root,
-  //       icon: ICONS.mail,
-  //       info: <Label color="error">+32</Label>,
-  //     },
-  //     {
-  //       title: 'chat',
-  //       path: PATH_DASHBOARD.chat.root,
-  //       icon: ICONS.chat,
-  //     },
-  //     {
-  //       title: 'calendar',
-  //       path: PATH_DASHBOARD.calendar,
-  //       icon: ICONS.calendar,
-  //     },
-  //     {
-  //       title: 'kanban',
-  //       path: PATH_DASHBOARD.kanban,
-  //       icon: ICONS.kanban,
-  //     },
-  //   ],
-  // },
+  {
+    subheader: 'INFINIX',
+    items: [
+      { title: 'tienda', path: PATH_DASHBOARD.eCommerce.list, icon: ICONS.calendar, },
+      { title: 'Clientes', path: PATH_DASHBOARD.eCommerce.clientes, icon: ICONS.kanban, },
+      // {
+      //   title: 'mail',
+      //   path: PATH_DASHBOARD.mail.root,
+      //   icon: ICONS.mail,
+      //   info: <Label color="error">+32</Label>,
+      // },
+      // {
+      //   title: 'chat',
+      //   path: PATH_DASHBOARD.chat.root,
+      //   icon: ICONS.chat,
+      // },
+      // {
+      //   title: 'calendar',
+      //   path: PATH_DASHBOARD.calendar,
+      //   icon: ICONS.calendar,
+      // },
+      // {
+      //   title: 'kanban',
+      //   path: PATH_DASHBOARD.kanban,
+      //   icon: ICONS.kanban,
+      // },
+    ],
+  },
 
   // DEMO MENU STATES
   {

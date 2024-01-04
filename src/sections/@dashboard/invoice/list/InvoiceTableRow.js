@@ -513,7 +513,7 @@ function nameFormaPago(pay) {
         20: "CONTADO 8 DÍAS",
         21: "180 DIAS",
         22: "*",
-        23: "CONTADO 2 DIAS",
+        23: "CRÉDITO 2 DIAS",
         26: "CRÉDITO 21 DÍAS",
         27: "CRÉDITO 25 DÍAS",
         28: "CRÉDITO 75 DÍAS",

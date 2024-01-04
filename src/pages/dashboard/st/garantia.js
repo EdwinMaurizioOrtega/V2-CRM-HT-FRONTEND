@@ -133,7 +133,7 @@ export default function GarantiaPage() {
                         <div className="col-12 md:col-12">
                             <div className="card p-fluid">
 
-                                \ <div className="App" style={{display: "contents"}}>
+                                 <div className="App" style={{display: "contents"}}>
 
                                 <div className="input-wrapper input-wrapper-inline input-wrapper-round">
                                     <TextField type="text" className="form-control email" name="email" id="email2"

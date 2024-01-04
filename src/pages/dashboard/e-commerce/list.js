@@ -41,13 +41,14 @@ import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import ConfirmDialog from '../../../components/confirm-dialog';
 // sections
 import { ProductTableRow, ProductTableToolbar } from '../../../sections/@dashboard/e-commerce/list';
+import {useAuthContext} from "../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Producto', align: 'left' },
-  { id: 'createdAt', label: 'Código', align: 'left' },
-  { id: 'sku', label: 'SKU', align: 'left' },
+  { id: 'NOMBRE', label: 'Producto', align: 'left' },
+  { id: 'CODIGO', label: 'Código', align: 'left' },
+  { id: 'SKU', label: 'SKU', align: 'left' },
   // { id: 'inventoryType', label: 'Stock', align: 'center', width: 180 },
   // { id: 'price', label: 'Price', align: 'right' },
   // { id: '' },
@@ -92,6 +93,8 @@ export default function EcommerceProductListPage() {
     defaultOrderBy: 'createdAt',
   });
 
+  const {user} = useAuthContext();
+
   const { themeStretch } = useSettingsContext();
 
   const { push } = useRouter();
@@ -116,6 +119,9 @@ export default function EcommerceProductListPage() {
 
   useEffect(() => {
     const fetchData = async () => {
+
+      console.log("ROLE: "+user.ROLE);
+
       try {
         const cache = await caches.open('cache-crm');
         const response = await cache.match('https://crm.lidenar.com/hanadb/api/products');
@@ -123,8 +129,15 @@ export default function EcommerceProductListPage() {
         if (response) {
           // Si hay una respuesta en la caché, se obtiene su contenido
           const cachedData = await response.json();
-          setProducts(cachedData.products);
-          console.log(cachedData);
+
+          if (user.ROLE == 'infinix'){
+            const infinixProducts = cachedData.products.filter(product => product.MARCA === 'INFINIX');
+            setProducts(infinixProducts);
+          }else {
+            setProducts(cachedData.products);
+          }
+
+          console.log("cachedData: "+JSON.stringify(cachedData));
         }
 
         // Independientemente de si hay una respuesta en la caché o no, se realiza la solicitud de red
@@ -136,8 +149,13 @@ export default function EcommerceProductListPage() {
 
         // Si había una respuesta en la caché, los productos ya se establecieron en el estado
         // Si no había respuesta en la caché, ahora se establecen los productos con los datos de la respuesta de red
-        setProducts(data.products);
-        console.log(data);
+        if (user.ROLE == 'infinix'){
+          const infinixProducts = data.products.filter(product => product.MARCA === 'INFINIX');
+          setProducts(infinixProducts);
+        }else {
+          setProducts(data.products);
+        }
+        console.log("data: "+JSON.stringify(data));
       } catch (error) {
         console.error('Error al obtener los datos:', error);
       }

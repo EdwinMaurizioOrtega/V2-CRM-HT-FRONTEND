@@ -103,7 +103,7 @@ const PAYMENT_OPTIONS = [
     {
         value: 23,
         title: '2 DIAS',
-        description: 'Contado 2 días.',
+        description: 'Crédito 2 días.',
         icons: [],
     },
     {
