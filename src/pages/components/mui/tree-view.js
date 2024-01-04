@@ -3,7 +3,7 @@ import Head from 'next/head';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
 import { Box, Container } from '@mui/material';
-import { TreeView, TreeItem, treeItemClasses } from '@mui/lab';
+import { TreeView, TreeItem } from '@mui/lab';
 // routes
 import { PATH_PAGE } from '../../../routes/paths';
 // layouts

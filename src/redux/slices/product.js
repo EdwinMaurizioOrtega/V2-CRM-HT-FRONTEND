@@ -244,17 +244,17 @@ export const {
 
 // ----------------------------------------------------------------------
 
-// export function getProducts() {
-//     return async (dispatch) => {
-//         dispatch(slice.actions.startLoading());
-//         try {
-//             const response = await axios.get('/hanadb/api/products');
-//             dispatch(slice.actions.getProductsSuccess(response.data.products));
-//         } catch (error) {
-//             dispatch(slice.actions.hasError(error));
-//         }
-//     };
-// }
+export function getProducts() {
+    return async (dispatch) => {
+        dispatch(slice.actions.startLoading());
+        try {
+            const response = await axios.get('/hanadb/api/products');
+            dispatch(slice.actions.getProductsSuccess(response.data.products));
+        } catch (error) {
+            dispatch(slice.actions.hasError(error));
+        }
+    };
+}
 
 // ----------------------------------------------------------------------
 
