@@ -48,7 +48,7 @@ export default function CustomerQuickManagementForm({ currentPartner, open, onCl
 
   const {user} = useAuthContext();
 
-  console.log("partner.ID "+ currentPartner.ID);
+  console.log("partner.ID "+ currentPartner?.ID || '');
 
   // const NewUserSchema = Yup.object().shape({
   //   name: Yup.string().required('Name is required'),
