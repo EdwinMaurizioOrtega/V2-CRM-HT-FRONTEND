@@ -35,8 +35,6 @@ import {fPercent} from "../../../utils/formatNumber";
 import axios from "../../../utils/axios";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
 import {PATH_DASHBOARD} from "../../../routes/paths";
-import {top100Films} from "../../../sections/@dashboard/invoice/details";
-import CustomerQuickManagementForm from "./customer-quick-management-form";
 import {useBoolean} from "../../../hooks/use-boolean";
 
 // ----------------------------------------------------------------------
@@ -383,8 +381,8 @@ export default function MayoristaPage(callback, deps) {
                     />
 
 
-                    <CustomerQuickManagementForm currentPartner={partner} open={quickEdit.value}
-                                                 onClose={quickEdit.onFalse}/>
+                    {/* <CustomerQuickManagementForm currentPartner={partner} open={quickEdit.value} */}
+                    {/*                              onClose={quickEdit.onFalse}/> */}
 
                 </Card>
 
