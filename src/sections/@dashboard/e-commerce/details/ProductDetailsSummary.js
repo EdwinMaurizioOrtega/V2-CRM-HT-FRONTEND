@@ -40,7 +40,7 @@ ProductDetailsSummary.propTypes = {
     onGotoStep: PropTypes.func,
 };
 
-export default function ProductDetailsSummary({cart, product, loading, pricelistproduct, onAddCart, onGotoStep, ...other}) {
+export default function ProductDetailsSummary({cart, product, loading, pricelistproduct, onAddCart, onGotoStep, user, ...other}) {
     const {push} = useRouter();
 
     const [selectedPrice, setSelectedPrice] = useState(null);
@@ -329,18 +329,24 @@ export default function ProductDetailsSummary({cart, product, loading, pricelist
                 <Divider sx={{borderStyle: 'dashed'}}/>
 
                 <Stack direction="row" spacing={2}>
-                    <Button
-                        fullWidth
-                        disabled={isMaxQuantity}
-                        size="large"
-                        color="warning"
-                        variant="contained"
-                        startIcon={<Iconify icon="ic:round-add-shopping-cart"/>}
-                        onClick={handleAddCart}
-                        sx={{whiteSpace: 'nowrap'}}
-                    >
-                        Agregar
-                    </Button>
+
+                    { user.ROLE != 'infinix' ? (
+                        <Button
+                            fullWidth
+                            disabled={isMaxQuantity}
+                            size="large"
+                            color="warning"
+                            variant="contained"
+                            startIcon={<Iconify icon="ic:round-add-shopping-cart"/>}
+                            onClick={handleAddCart}
+                            sx={{whiteSpace: 'nowrap'}}
+                        >
+                            Agregar
+                        </Button>
+                    ) : null
+
+                    }
+
 
                     {/* <Button fullWidth size="large" type="submit" variant="contained"> */}
                     {/*     Comprar */}

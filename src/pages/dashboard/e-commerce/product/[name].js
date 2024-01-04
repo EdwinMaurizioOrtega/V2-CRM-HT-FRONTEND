@@ -232,6 +232,7 @@ export default  function EcommerceProductDetailsPage() {
                                     cart={checkout.cart}
                                     onAddCart={handleAddCart}
                                     onGotoStep={handleGotoStep}
+                                    user={user}
                                 />
                             </Grid>
                         </Grid>

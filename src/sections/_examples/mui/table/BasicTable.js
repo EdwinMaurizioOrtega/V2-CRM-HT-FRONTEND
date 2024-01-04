@@ -7,6 +7,7 @@ import {useEffect, useState} from "react";
 import {useDispatch} from "../../../../redux/store";
 import {HOST_API_KEY} from "../../../../config-global";
 import {fNumber} from "../../../../utils/formatNumber";
+import {useAuthContext} from "../../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -36,6 +37,7 @@ export default function BasicTable({code}) {
 
     const dispatch = useDispatch();
 
+    const { user } = useAuthContext();
 
     const [loading, setLoading] = useState(true);
 
@@ -66,8 +68,8 @@ export default function BasicTable({code}) {
                     }
                     const data = await response.json();
                     setStockProduct(data.product_stock);
-                    //console.log("Stock: "+ JSON.stringify( data.product_stock));
-                    console.log("Stock: " + JSON.stringify(stockProduct));
+                    console.log("Stock: "+ JSON.stringify( data.product_stock));
+                    //console.log("Stock: " + JSON.stringify(stockProduct));
                 } catch (error) {
                     console.error('Error:', error);
                     setStockProduct([]);
@@ -94,16 +96,35 @@ export default function BasicTable({code}) {
                             <TableHeadCustom headLabel={TABLE_HEAD}/>
 
                             <TableBody>
-                                {stockProduct.map((row) => (
-                                    <TableRow key={row.BODEGA}>
-                                        <TableCell>{getTextFromCodigo(row.BODEGA)}</TableCell>
-                                        <TableCell align="right">{fNumber(row.CANTIDAD)}</TableCell>
-                                        <TableCell align="right">{fNumber(row.RESERVADO)}</TableCell>
-                                        <TableCell align="right">{fNumber(row.DISPONIBLE)}</TableCell>
-                                        <TableCell align="right">{row.CODIGO}</TableCell>
 
-                                    </TableRow>
-                                ))}
+                                { user.ROLE != 'infinix' ? (
+                                    stockProduct.map((row) => (
+                                            <TableRow key={row.BODEGA}>
+                                                <TableCell>{getTextFromCodigo(row.BODEGA)}</TableCell>
+                                                <TableCell align="right">{fNumber(row.CANTIDAD)}</TableCell>
+                                                <TableCell align="right">{fNumber(row.RESERVADO)}</TableCell>
+                                                <TableCell align="right">{fNumber(row.DISPONIBLE)}</TableCell>
+                                                <TableCell align="right">{row.CODIGO}</TableCell>
+                                            </TableRow>
+                                        ))
+
+                                ) : (
+                                    // Mostrar solo las filas con BODEGA 3 y 4
+                                    stockProduct
+                                        .filter((row) => row.BODEGA === '019' || row.BODEGA === '002' || row.BODEGA === '030')
+                                        .map((filteredRow) => (
+                                            <TableRow key={filteredRow.BODEGA}>
+                                                <TableCell>{getTextFromCodigo(filteredRow.BODEGA)}</TableCell>
+                                                <TableCell align="right">{fNumber(filteredRow.CANTIDAD)}</TableCell>
+                                                <TableCell align="right">{fNumber(filteredRow.RESERVADO)}</TableCell>
+                                                <TableCell align="right">{fNumber(filteredRow.DISPONIBLE)}</TableCell>
+                                                <TableCell align="right">{filteredRow.CODIGO}</TableCell>
+                                            </TableRow>
+                                        )
+                                )
+                                )
+                                }
+
                             </TableBody>
                         </Table>
                     </Scrollbar>
