@@ -100,7 +100,7 @@ export default function ConsultClientForm() {
             });
 
             if (response.status === 200) {
-                console.log(response);
+                console.log("DATA: "+ JSON.stringify(response));
                 // La solicitud PUT se realizó correctamente
                 setDataCliente(response.data.data);
             } else {
@@ -197,6 +197,7 @@ export default function ConsultClientForm() {
 
                                     {dataCliente && dataCliente.length > 0 ? (
                                         <>
+                                            <Label color="success">Vendedor: {dataCliente[0].SlpName} </Label>
                                             <Label color="success">Cliente: {dataCliente[0].Cliente} </Label>
                                             <Label color="success">Crédito aprobado: {dataCliente[0].ValidComm} </Label>
                                             <Label color="success">Tipo crédito: {dataCliente[0].GLN} </Label>
