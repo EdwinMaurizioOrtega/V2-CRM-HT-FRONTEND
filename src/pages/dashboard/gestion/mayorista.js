@@ -36,6 +36,7 @@ import axios from "../../../utils/axios";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
 import {PATH_DASHBOARD} from "../../../routes/paths";
 import {useBoolean} from "../../../hooks/use-boolean";
+import CustomerQuickManagementForm from "../../../sections/@dashboard/gestion/customer-quick-management-form";
 
 // ----------------------------------------------------------------------
 
@@ -381,8 +382,8 @@ export default function MayoristaPage(callback, deps) {
                     />
 
 
-                    {/* <CustomerQuickManagementForm currentPartner={partner} open={quickEdit.value} */}
-                    {/*                              onClose={quickEdit.onFalse}/> */}
+                    <CustomerQuickManagementForm currentPartner={partner} open={quickEdit.value}
+                                                 onClose={quickEdit.onFalse}/>
 
                 </Card>
 

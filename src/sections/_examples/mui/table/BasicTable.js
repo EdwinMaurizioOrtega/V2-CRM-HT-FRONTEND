@@ -109,7 +109,7 @@ export default function BasicTable({code}) {
                                         ))
 
                                 ) : (
-                                    // Mostrar solo las filas con BODEGA 3 y 4
+                                    // Mostrar solo las filas con BODEGA 019, 002 y 030
                                     stockProduct
                                         .filter((row) => row.BODEGA === '019' || row.BODEGA === '002' || row.BODEGA === '030')
                                         .map((filteredRow) => (
