@@ -101,7 +101,7 @@ const WAREHOUSE_OPTIONS = [
 
 const PAYMENT_OPTIONS = [
     {
-        value: 23,
+        value: 30,
         title: '2 DIAS',
         description: 'Crédito 2 días.',
         icons: [],

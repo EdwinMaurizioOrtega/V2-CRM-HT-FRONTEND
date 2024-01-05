@@ -423,7 +423,7 @@ export default function InvoiceDetails({invoice}) {
             20: "CONTADO 8 DÍAS",
             21: "180 DIAS",
             22: "*",
-            23: "CRÉDITO 2 DIAS",
+            30: "CRÉDITO 2 DIAS",
             26: "CRÉDITO 21 DÍAS",
             27: "CRÉDITO 25 DÍAS",
             28: "CRÉDITO 75 DÍAS",
@@ -1356,7 +1356,7 @@ export const topFormaPago = [
     {title: 'CONTADO 8 DÍAS', id: 20},
     {title: '180 DIAS', id: 21},
     {title: '*', id: 22},
-    {title: 'CRÉDITO 2 DIAS', id: 23},
+    {title: 'CRÉDITO 2 DIAS', id: 30},
     {title: 'CRÉDITO 21 DIAS', id: 26},
     {title: 'CRÉDITO 25 DIAS', id: 27},
     {title: 'CRÉDITO 75 DIAS', id: 28}
