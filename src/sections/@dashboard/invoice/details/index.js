@@ -179,7 +179,7 @@ export default function InvoiceDetails({invoice}) {
         OBSERVACIONES
     } = invoice;
 
-    console.log("OBSERVACIONES: "+ OBSERVACIONES)
+    console.log("OBSERVACIONES: " + OBSERVACIONES)
 
     const [observacionA, setObservacionA] = useState('Ninguno...');
 
@@ -401,32 +401,34 @@ export default function InvoiceDetails({invoice}) {
     function nameFormaPago(pay) {
         const strings = {
             "-1": "CONTADO",
-            1: "CONTADO 5 DÍAS",
-            2: "CONTADO 7 DÍAS",
-            3: "15 DÍAS",
-            4: "30 DÍAS",
-            5: "45 DÍAS",
-            6: "60 DÍAS",
+            1: "CRÉDITO 5 DÍAS",
+            2: "CRÉDITO 7 DÍAS",
+            3: "CRÉDITO 15 DÍAS",
+            4: "CRÉDITO 30 DÍAS",
+            5: "CRÉDITO 45 DÍAS",
+            6: "CRÉDITO 60 DÍAS",
             7: "90 DÍAS",
             8: "120 DÍAS",
-            9: "30-60 DÍAS",
-            10: "30-60-90 DÍAS",
-            11: "30-60-90-120 DÍAS",
-            12: "60-90-120 DÍAS",
-            13: "36 MESES",
-            14: "6 MESES",
+            9: "CRÉDITO 30-60 DÍAS",
+            10: "CRÉDITO 30-60-90 DÍAS",
+            11: "CRÉDITO 30-60-90-120 DÍAS",
+            12: "CRÉDITO 60-90-120 DÍAS",
+            13: "6 MESES",
+            14: "9 MESES",
             15: "12 MESES",
-            16: "9 MESES",
-            17: "18 MESES",
-            18: "24 MESES",
+            16: "18 MESES",
+            17: "24 MESES",
+            18: "36 MESES",
             19: "CONTADO / RET",
-            20: "CONTADO 8 DÍAS",
-            21: "180 DIAS",
+            20: "CRÉDITO 8 DÍAS",
+            21: "180 DÍAS",
             22: "*",
-            30: "CRÉDITO 2 DIAS",
+            23: "CONTADO 2 DÍAS",
+            25: "CRÉDITO 90 DÍAS",
             26: "CRÉDITO 21 DÍAS",
             27: "CRÉDITO 25 DÍAS",
             28: "CRÉDITO 75 DÍAS",
+            30: "CRÉDITO 2 DÍAS"
         };
 
         const payActual = strings[pay];
@@ -487,7 +489,7 @@ export default function InvoiceDetails({invoice}) {
 
             // Se completó con éxito (código de estado 200)
             if (response.status === 200) {
-                    //await router.push('/dashboard/invoice/list/');
+                //await router.push('/dashboard/invoice/list/');
                 setTimeout(() => {
                     window.location.href = '/dashboard/invoice/list/';
                 }, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
@@ -763,7 +765,8 @@ export default function InvoiceDetails({invoice}) {
                         >
                             {({loading}) => (
                                 <Tooltip title="Descargar">
-                                    <IconButton onClick={user.ROLE === "bodega" ? () => handleDownloadClick(ID) : undefined}
+                                    <IconButton
+                                        onClick={user.ROLE === "bodega" ? () => handleDownloadClick(ID) : undefined}
                                     >
                                         {loading ? (
                                             <CircularProgress size={24} color="inherit"/>
@@ -868,7 +871,8 @@ export default function InvoiceDetails({invoice}) {
 
                             <Grid item xs={12} sm={7} sx={{mb: 1}}>
 
-                                <Typography variant="body2">Forma de pago actual: {nameFormaPago(FORMADEPAGO)}</Typography>
+                                <Typography variant="body2">Forma de pago
+                                    actual: {nameFormaPago(FORMADEPAGO)}</Typography>
 
                                 {user.ROLE === "aprobador" &&
                                     <Autocomplete
@@ -1073,7 +1077,7 @@ export default function InvoiceDetails({invoice}) {
                                         handleChangeGuia(e);
                                     }
                                 }}
-                                inputProps={{ maxLength: 9 }}
+                                inputProps={{maxLength: 9}}
                                 error={valueGuia.length !== 9}
                                 helperText={valueGuia.length !== 9 ? 'El número de guía debe tener 9 caracteres' : ''}
                             />
@@ -1175,7 +1179,7 @@ export default function InvoiceDetails({invoice}) {
                     {decodedString ? (
                         <Tooltip title="View">
                             <IconButton onClick={openPDFInNewTab}>
-                                <Iconify icon="solar:eye-bold" />
+                                <Iconify icon="solar:eye-bold"/>
                             </IconButton>
                         </Tooltip>
                     ) : (
@@ -1333,33 +1337,36 @@ export const top100Films = [
 
 
 export const topFormaPago = [
-    {title: 'CONTADO', id: -1},
-    {title: 'CONTADO 5 DÍAS', id: 1},
-    {title: 'CONTADO 7 DÍAS', id: 2},
-    {title: '15 DÍAS', id: 3},
-    {title: '30 DÍAS', id: 4},
-    {title: '45 DÍAS', id: 5},
-    {title: '60 DÍAS', id: 6},
-    {title: '90 DÍAS', id: 7},
-    {title: '120 DÍAS', id: 8},
-    {title: '30-60 DÍAS', id: 9},
-    {title: '30-60-90 DÍAS', id: 10},
-    {title: '30-60-90-120 DÍAS', id: 11},
-    {title: '60-90-120 DÍAS', id: 12},
-    {title: '36 MESES', id: 13},
-    {title: '6 MESES', id: 14},
-    {title: '12 MESES', id: 15},
-    {title: '9 MESES', id: 16},
-    {title: '18 MESES', id: 17},
-    {title: '24 MESES', id: 18},
-    {title: 'CONTADO / RET', id: 19},
-    {title: 'CONTADO 8 DÍAS', id: 20},
-    {title: '180 DIAS', id: 21},
-    {title: '*', id: 22},
-    {title: 'CRÉDITO 2 DIAS', id: 30},
-    {title: 'CRÉDITO 21 DIAS', id: 26},
-    {title: 'CRÉDITO 25 DIAS', id: 27},
-    {title: 'CRÉDITO 75 DIAS', id: 28}
+
+    {id: -1, title: "CONTADO"},
+    {id: 1, title: "CRÉDITO 5 DÍAS"},
+    {id: 2, title: "CRÉDITO 7 DÍAS"},
+    {id: 3, title: "CRÉDITO 15 DÍAS"},
+    {id: 4, title: "CRÉDITO 30 DÍAS"},
+    {id: 5, title: "CRÉDITO 45 DÍAS"},
+    {id: 6, title: "CRÉDITO 60 DÍAS"},
+    {id: 7, title: "90 DÍAS"},
+    {id: 8, title: "120 DÍAS"},
+    {id: 9, title: "CRÉDITO 30-60 DÍAS"},
+    {id: 10, title: "CRÉDITO 30-60-90 DÍAS"},
+    {id: 11, title: "CRÉDITO 30-60-90-120 DÍAS"},
+    {id: 12, title: "CRÉDITO 60-90-120 DÍAS"},
+    {id: 13, title: "6 MESES"},
+    {id: 14, title: "9 MESES"},
+    {id: 15, title: "12 MESES"},
+    {id: 16, title: "18 MESES"},
+    {id: 17, title: "24 MESES"},
+    {id: 18, title: "36 MESES"},
+    {id: 19, title: "CONTADO / RET"},
+    {id: 20, title: "CRÉDITO 8 DÍAS"},
+    {id: 21, title: "180 DÍAS"},
+    {id: 22, title: "*"},
+    {id: 23, title: "CONTADO 2 DÍAS"},
+    {id: 25, title: "CRÉDITO 90 DÍAS"},
+    {id: 26, title: "CRÉDITO 21 DÍAS"},
+    {id: 27, title: "CRÉDITO 25 DÍAS"},
+    {id: 28, title: "CRÉDITO 75 DÍAS"},
+    {id: 30, title: "CRÉDITO 2 DÍAS"}
 ]
 
 
