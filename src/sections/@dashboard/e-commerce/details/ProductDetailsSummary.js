@@ -40,7 +40,7 @@ ProductDetailsSummary.propTypes = {
     onGotoStep: PropTypes.func,
 };
 
-export default function ProductDetailsSummary({cart, product, loading, pricelistproduct, onAddCart, onGotoStep, user, ...other}) {
+export default function ProductDetailsSummary({cart, product, loading, pricelistproduct, onAddCart, onGotoStep, user, onStockValidate, ...other}) {
     const {push} = useRouter();
 
     const [selectedPrice, setSelectedPrice] = useState(null);
@@ -151,7 +151,7 @@ export default function ProductDetailsSummary({cart, product, loading, pricelist
     };
 
     const handleAddCart = async () => {
-        //console.log("values: "+ values.price.Price);
+        // //console.log("values: "+ values.price.Price);
         if (selectedPrice) {
 
             try {
@@ -168,6 +168,17 @@ export default function ProductDetailsSummary({cart, product, loading, pricelist
         } else {
             alert("Te falto seleccionar un tipo de precio. 😅")
         }
+
+        if (onStockValidate >= values.quantity ){
+                 alert("🙂Stock disponible. ✅")
+
+        }else {
+                 alert("😤El stock disponible "+onStockValidate +" ✅ es menor al número "+values.quantity +" 🙄 de unidades ingresadas.😮‍💨")
+
+        }
+
+        // console.log("onStockValidate: "+onStockValidate);
+        // console.log("onValueQuality: "+JSON.stringify(values.quantity));
 
     };
 

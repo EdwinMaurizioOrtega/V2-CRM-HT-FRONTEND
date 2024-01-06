@@ -163,6 +163,13 @@ export default  function EcommerceProductDetailsPage() {
         dispatch(gotoStep(step));
     };
 
+    const [resultado, setResultado] = useState(null);
+
+    const functionStock = (dato) => {
+        console.log("dato: "+ dato);
+        setResultado(dato);
+    }
+
     const TABS = [
         {
             value: 'bodegas',
@@ -174,7 +181,9 @@ export default  function EcommerceProductDetailsPage() {
                     <Stack spacing={3}>
                         <Card>
                             <CardHeader title="Stock" />
-                            <BasicTable code={name} />
+                            <BasicTable code={name}
+                                        validateStock={functionStock}
+                            />
                         </Card>
 
                     </Stack>
@@ -233,6 +242,7 @@ export default  function EcommerceProductDetailsPage() {
                                     onAddCart={handleAddCart}
                                     onGotoStep={handleGotoStep}
                                     user={user}
+                                    onStockValidate={resultado}
                                 />
                             </Grid>
                         </Grid>

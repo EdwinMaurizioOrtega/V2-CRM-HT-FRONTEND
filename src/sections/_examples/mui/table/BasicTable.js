@@ -8,6 +8,8 @@ import {useDispatch} from "../../../../redux/store";
 import {HOST_API_KEY} from "../../../../config-global";
 import {fNumber} from "../../../../utils/formatNumber";
 import {useAuthContext} from "../../../../auth/useAuthContext";
+import PropTypes from "prop-types";
+import InvoiceTableRow from "../../../@dashboard/invoice/list/InvoiceTableRow";
 
 // ----------------------------------------------------------------------
 
@@ -33,11 +35,15 @@ const TABLE_HEAD = [
 
 // ----------------------------------------------------------------------
 
-export default function BasicTable({code}) {
+BasicTable.propTypes = {
+    validateStock: PropTypes.func,
+};
+
+export default function BasicTable({code, validateStock}) {
 
     const dispatch = useDispatch();
 
-    const { user } = useAuthContext();
+    const {user} = useAuthContext();
 
     const [loading, setLoading] = useState(true);
 
@@ -70,6 +76,20 @@ export default function BasicTable({code}) {
                     setStockProduct(data.product_stock);
                     console.log("Stock: "+ JSON.stringify( data.product_stock));
                     //console.log("Stock: " + JSON.stringify(stockProduct));
+
+
+                    if (data.product_stock && data.product_stock.length > 0) {
+
+                        // Usamos reduce para sumar todos los valores del campo DISPONIBLE
+                        const sumaDisponible = data.product_stock.reduce((total, producto) => total + Number(producto.DISPONIBLE), 0);
+
+                        console.log(`La suma total del campo DISPONIBLE es: ${sumaDisponible}`);
+                        validateStock(sumaDisponible);
+
+                    } else {
+                        console.log('No hay datos de stock disponibles.');
+                    }
+
                 } catch (error) {
                     console.error('Error:', error);
                     setStockProduct([]);
@@ -97,31 +117,31 @@ export default function BasicTable({code}) {
 
                             <TableBody>
 
-                                { user.ROLE != 'infinix' ? (
+                                {user.ROLE != 'infinix' ? (
                                     stockProduct.map((row) => (
-                                            <TableRow key={row.BODEGA}>
-                                                <TableCell>{getTextFromCodigo(row.BODEGA)}</TableCell>
-                                                <TableCell align="right">{fNumber(row.CANTIDAD)}</TableCell>
-                                                <TableCell align="right">{fNumber(row.RESERVADO)}</TableCell>
-                                                <TableCell align="right">{fNumber(row.DISPONIBLE)}</TableCell>
-                                                <TableCell align="right">{row.CODIGO}</TableCell>
-                                            </TableRow>
-                                        ))
+                                        <TableRow key={row.BODEGA}>
+                                            <TableCell>{getTextFromCodigo(row.BODEGA)}</TableCell>
+                                            <TableCell align="right">{fNumber(row.CANTIDAD)}</TableCell>
+                                            <TableCell align="right">{fNumber(row.RESERVADO)}</TableCell>
+                                            <TableCell align="right">{fNumber(row.DISPONIBLE)}</TableCell>
+                                            <TableCell align="right">{row.CODIGO}</TableCell>
+                                        </TableRow>
+                                    ))
 
                                 ) : (
                                     // Mostrar solo las filas con BODEGA 019, 002 y 030
                                     stockProduct
                                         .filter((row) => row.BODEGA === '019' || row.BODEGA === '002' || row.BODEGA === '030')
                                         .map((filteredRow) => (
-                                            <TableRow key={filteredRow.BODEGA}>
-                                                <TableCell>{getTextFromCodigo(filteredRow.BODEGA)}</TableCell>
-                                                <TableCell align="right">{fNumber(filteredRow.CANTIDAD)}</TableCell>
-                                                <TableCell align="right">{fNumber(filteredRow.RESERVADO)}</TableCell>
-                                                <TableCell align="right">{fNumber(filteredRow.DISPONIBLE)}</TableCell>
-                                                <TableCell align="right">{filteredRow.CODIGO}</TableCell>
-                                            </TableRow>
+                                                <TableRow key={filteredRow.BODEGA}>
+                                                    <TableCell>{getTextFromCodigo(filteredRow.BODEGA)}</TableCell>
+                                                    <TableCell align="right">{fNumber(filteredRow.CANTIDAD)}</TableCell>
+                                                    <TableCell align="right">{fNumber(filteredRow.RESERVADO)}</TableCell>
+                                                    <TableCell align="right">{fNumber(filteredRow.DISPONIBLE)}</TableCell>
+                                                    <TableCell align="right">{filteredRow.CODIGO}</TableCell>
+                                                </TableRow>
+                                            )
                                         )
-                                )
                                 )
                                 }
 
@@ -182,3 +202,9 @@ function getTextFromCodigo(rowCodigo) {
             return "...";
     }
 }
+
+
+// function functionAuxStock (data) {
+//     functionStock(data)
+//     console.log(data);
+// }

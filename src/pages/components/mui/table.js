@@ -53,7 +53,7 @@ export default function MUITablePage() {
         <Stack spacing={3}>
           <Card>
             <CardHeader title="Basic Table" />
-            <BasicTable />
+            {/* <BasicTable /> */}
           </Card>
 
           <Card>
