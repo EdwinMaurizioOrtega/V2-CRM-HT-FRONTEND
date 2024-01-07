@@ -81,10 +81,21 @@ export default function BasicTable({code, validateStock}) {
                     if (data.product_stock && data.product_stock.length > 0) {
 
                         // Usamos reduce para sumar todos los valores del campo DISPONIBLE
-                        const sumaDisponible = data.product_stock.reduce((total, producto) => total + Number(producto.DISPONIBLE), 0);
+                        //const sumaDisponible = data.product_stock.reduce((total, producto) => total + Number(producto.DISPONIBLE), 0);
 
-                        console.log(`La suma total del campo DISPONIBLE es: ${sumaDisponible}`);
-                        validateStock(sumaDisponible);
+                        // console.log(`La suma total del campo DISPONIBLE es: ${sumaDisponible}`);
+                        // validateStock(sumaDisponible);
+
+                        //Cuatro B. Mayoristas: 019 CDH - 002 Cuenca - 024 Manta - 030 Colon
+
+                        const bodegasM = data.product_stock.reduce((acumulador, producto) => {
+                            if (producto.BODEGA === '019' || producto.BODEGA === '002' ||producto.BODEGA === '024' ||producto.BODEGA === '030') {
+                                acumulador.push(producto);
+                            }
+                            return acumulador;
+                        }, []);
+
+                        validateStock(bodegasM);
 
                     } else {
                         console.log('No hay datos de stock disponibles.');

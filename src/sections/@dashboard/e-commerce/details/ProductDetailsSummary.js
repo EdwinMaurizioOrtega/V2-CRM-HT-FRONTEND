@@ -30,6 +30,7 @@ import {IncrementerButton} from '../../../../components/custom-input';
 import {ColorSinglePicker} from '../../../../components/color-utils';
 import FormProvider, {RHFSelect, RHFTextField} from '../../../../components/hook-form';
 import CustomTextField from "../../../../components/custom-input/CustomTextField";
+import {useSnackbar} from "../../../../components/snackbar";
 
 // ----------------------------------------------------------------------
 
@@ -169,15 +170,21 @@ export default function ProductDetailsSummary({cart, product, loading, pricelist
             alert("Te falto seleccionar un tipo de precio. 😅")
         }
 
-        if (onStockValidate >= values.quantity ){
+        const sumaDisponible = onStockValidate.reduce((total, producto) => total + Number(producto.DISPONIBLE), 0);
+        if (sumaDisponible >= values.quantity ){
                  alert("🙂Stock disponible. ✅")
 
         }else {
-                 alert("😤El stock disponible "+onStockValidate +" ✅ es menor al número "+values.quantity +" 🙄 de unidades ingresadas.😮‍💨")
+            alert(`😤El stock disponible ${sumaDisponible} ✅ es menor al número ${values.quantity} 🙄 de unidades ingresadas.😮‍💨
+        ${onStockValidate[0].BODEGA == '019' ? " CD-HT" : null}  ${Number( onStockValidate[0].DISPONIBLE)}
+        ${onStockValidate[1].BODEGA == '002' ? "CUENCA" : null}  ${Number( onStockValidate[1].DISPONIBLE)}
+        ${onStockValidate[2].BODEGA == '024' ? " MANTA" : null}  ${Number( onStockValidate[2].DISPONIBLE)}
+        ${onStockValidate[3].BODEGA == '030' ? " COLÓN" : null}  ${Number( onStockValidate[3].DISPONIBLE)}
+        `);
 
         }
 
-        // console.log("onStockValidate: "+onStockValidate);
+        //console.log("onStockValidate: "+JSON.stringify( onStockValidate));
         // console.log("onValueQuality: "+JSON.stringify(values.quantity));
 
     };
