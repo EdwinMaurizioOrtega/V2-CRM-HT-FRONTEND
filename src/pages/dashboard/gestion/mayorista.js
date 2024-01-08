@@ -37,6 +37,8 @@ import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
 import {PATH_DASHBOARD} from "../../../routes/paths";
 import {useBoolean} from "../../../hooks/use-boolean";
 import CustomerQuickManagementForm from "../../../sections/@dashboard/gestion/customer-quick-management-form";
+import PreviousClientManagement from "../../../sections/@dashboard/gestion/previous-client-management";
+import InvoicedClientOrders from "../../../sections/@dashboard/gestion/invoiced-client-orders";
 
 // ----------------------------------------------------------------------
 
@@ -250,6 +252,8 @@ export default function MayoristaPage(callback, deps) {
 
     const [partner, setPartner] = useState('');
     const quickEdit = useBoolean();
+    const quickPCM = useBoolean();
+    const quickICO = useBoolean();
 
     const handleViewRow = useCallback(
         (row) => {
@@ -261,66 +265,27 @@ export default function MayoristaPage(callback, deps) {
         [quickEdit]
     );
 
-    //Ver el registro de gestiones
-    const handleViewManagementRow = async (row) => {
 
-        console.log("event: " + JSON.stringify(row.ID));
+    const handleViewManagementRow = useCallback(
+        (row) => {
+            quickPCM.onTrue();
+            console.log("Cliente a gestionar: " + JSON.stringify(row));
+            setPartner(row);
 
-        try {
-            const response = await axios.post('/hanadb/api/BusinessPartners/VisitList', {
-                ID_CLIENTE: row.ID,
-            });
-
-            if (response.status === 200) {
-                console.log("DATA: " + JSON.stringify(response.data));
-
-                //setBusinessPartners(businessPartnersWithId);
-                // console.log("response.data.data: " + JSON.stringify(response.data.data));
-                // console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
-
-            } else {
-                // La solicitud POST no se realizó correctamente
-                console.error('Error en la solicitud POST:', response.status);
-            }
+        },
+        [quickEdit]
+    );
 
 
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-        ;
+    const handleViewOrdersRow = useCallback(
+        (row) => {
+            quickICO.onTrue();
+            console.log("Cliente a gestionar: " + JSON.stringify(row));
+            setPartner(row);
 
-
-    };
-    //Ver el registro de pedidos
-    const handleViewOrdersRow = async (row) => {
-
-        console.log("event: " + JSON.stringify(row.ID));
-
-        try {
-            const response = await axios.post('/hanadb/api/BusinessPartners/OrdersList', {
-                ID_CLIENTE: row.ID,
-            });
-
-            if (response.status === 200) {
-                console.log("DATA: " + JSON.stringify(response.data));
-
-                //setBusinessPartners(businessPartnersWithId);
-                // console.log("response.data.data: " + JSON.stringify(response.data.data));
-                // console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
-
-            } else {
-                // La solicitud POST no se realizó correctamente
-                console.error('Error en la solicitud POST:', response.status);
-            }
-
-
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-        ;
-
-    };
-
+        },
+        [quickEdit]
+    );
 
     return (
         <>
@@ -384,6 +349,12 @@ export default function MayoristaPage(callback, deps) {
 
                     <CustomerQuickManagementForm currentPartner={partner} open={quickEdit.value}
                                                  onClose={quickEdit.onFalse}/>
+
+                    <PreviousClientManagement currentPartner={partner} open={quickPCM.value}
+                                                 onClose={quickPCM.onFalse}/>
+
+                    <InvoicedClientOrders currentPartner={partner} open={quickICO.value}
+                                                 onClose={quickICO.onFalse}/>
 
                 </Card>
 
