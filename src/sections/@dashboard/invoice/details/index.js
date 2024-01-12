@@ -512,43 +512,45 @@ export default function InvoiceDetails({invoice}) {
 
         if (valueGuia.length === 9) {
 
-            if (valueFactura || valueValorFactura) {
-                try {
+            if (valueFactura.length === 17) {
 
-                    setLoading(true); // Establecer loading a true antes de hacer la llamada a la API
+                if (valueFactura || valueValorFactura) {
+                    try {
 
-                    // Actualizar una orden.
-                    const response = await axios.put('/hanadb/api/orders/order/facturar', {
-                        ID_ORDER: ID,
-                        NUMERO_FACTURA: `${valueFactura}`,
-                        VALOR_FACTURA: `${valueValorFactura}`,
-                        NUMERO_GUIA: `${valueGuia}`
-                    });
+                        setLoading(true); // Establecer loading a true antes de hacer la llamada a la API
+
+                        // Actualizar una orden.
+                        const response = await axios.put('/hanadb/api/orders/order/facturar', {
+                            ID_ORDER: ID,
+                            NUMERO_FACTURA: `${valueFactura}`,
+                            VALOR_FACTURA: `${valueValorFactura}`,
+                            NUMERO_GUIA: `${valueGuia}`
+                        });
 
 
-                    console.log("Orden Facturada.");
-                    console.log("Código de estado:", response.status);
+                        console.log("Orden Facturada.");
+                        console.log("Código de estado:", response.status);
 
-                    // Se completó con éxito (código de estado 200)
-                    if (response.status === 200) {
-                        router.push('/dashboard/invoice/list/');
+                        // Se completó con éxito (código de estado 200)
+                        if (response.status === 200) {
+                            router.push('/dashboard/invoice/list/');
+                        }
+
+                        setLoading(false); // Restablecer loading a false después de que se completa la llamada a la API, independientemente de si fue exitosa o falló
+
+                    } catch (error) {
+                        // Manejar el error de la petición PUT aquí
+                        console.error('Error al actualizar la orden:', error);
+                        setLoading(false); // Restablecer loading a false después de que se completa la llamada a la API, independientemente de si fue exitosa o falló
+
                     }
-
-                    setLoading(false); // Restablecer loading a false después de que se completa la llamada a la API, independientemente de si fue exitosa o falló
-
-
-                } catch (error) {
-                    // Manejar el error de la petición PUT aquí
-                    console.error('Error al actualizar la orden:', error);
-                    setLoading(false); // Restablecer loading a false después de que se completa la llamada a la API, independientemente de si fue exitosa o falló
-
+                } else {
+                    enqueueSnackbar('Los campos con * son obligatorios.', {variant: 'error'})
                 }
 
             } else {
-                enqueueSnackbar('Los campos con * son obligatorios.', {variant: 'error'})
+                enqueueSnackbar('El número de factura debe tener 17 caracteres, incluido los guiones.', {variant: 'error'})
             }
-
-
         } else {
             enqueueSnackbar('El número de guía debe tener 9 caracteres.', {variant: 'error'})
         }
