@@ -15,6 +15,7 @@ import Image from '../../../../components/image';
 import Iconify from '../../../../components/iconify';
 import {CustomTextField} from '../../../../components/custom-input';
 import SearchNotFound from '../../../../components/search-not-found';
+import {HOST_API_KEY} from "../../../../config-global";
 
 // ----------------------------------------------------------------------
 
@@ -48,7 +49,7 @@ export default function ShopProductSearch() {
             if (value) {
 
                 const cache = await caches.open('cache-crm');
-                const response = await cache.match('https://crm.lidenar.com/hanadb/api/products');
+                const response = await cache.match(`${HOST_API_KEY}/hanadb/api/products/`);
 
                 if (response) {
                     const cachedData = await response.json();

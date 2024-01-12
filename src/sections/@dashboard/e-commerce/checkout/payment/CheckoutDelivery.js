@@ -67,29 +67,29 @@ export default function CheckoutDelivery({
         console.log(event.target.value);
     };
 
-    const [dataCities, setDataCities] = useState([]);
-
-    useEffect(() => {
-
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/order/ServiEntrega/ciudades`);
-                const result = await response.json();
-                setDataCities(result.data);
-                console.log(dataCities);
-            } catch (error) {
-                console.log('error', error);
-            }
-        };
-
-        fetchData();
-
-        // Si necesitas hacer algo al desmontar el componente, puedes retornar una función desde useEffect
-        return () => {
-            // Por ejemplo, limpiar intervalos, cancelar solicitudes, etc.
-        };
-    }, []); // El segundo argumento es un array de dependencias, en este caso, está vacío para que se ejecute solo una vez
-
+    // const [dataCities, setDataCities] = useState([]);
+    //
+    // useEffect(() => {
+    //
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/order/ServiEntrega/ciudades`);
+    //             const result = await response.json();
+    //             setDataCities(result.data);
+    //             console.log(dataCities);
+    //         } catch (error) {
+    //             console.log('error', error);
+    //         }
+    //     };
+    //
+    //     fetchData();
+    //
+    //     // Si necesitas hacer algo al desmontar el componente, puedes retornar una función desde useEffect
+    //     return () => {
+    //         // Por ejemplo, limpiar intervalos, cancelar solicitudes, etc.
+    //     };
+    // }, []); // El segundo argumento es un array de dependencias, en este caso, está vacío para que se ejecute solo una vez
+    //
 
     //const [selectedCityDestino, setSelectedCityDestino] = useState('');
     // const handleCityChangeDestino = (event, value) => {

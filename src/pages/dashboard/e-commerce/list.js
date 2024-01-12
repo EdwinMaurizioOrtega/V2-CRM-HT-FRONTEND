@@ -42,6 +42,7 @@ import ConfirmDialog from '../../../components/confirm-dialog';
 // sections
 import { ProductTableRow, ProductTableToolbar } from '../../../sections/@dashboard/e-commerce/list';
 import {useAuthContext} from "../../../auth/useAuthContext";
+import {HOST_API_KEY} from "../../../config-global";
 
 // ----------------------------------------------------------------------
 
@@ -124,7 +125,7 @@ export default function EcommerceProductListPage() {
 
       try {
         const cache = await caches.open('cache-crm');
-        const response = await cache.match('https://crm.lidenar.com/hanadb/api/products');
+        const response = await cache.match(`${HOST_API_KEY}/hanadb/api/products/`);
 
         if (response) {
           // Si hay una respuesta en la caché, se obtiene su contenido
@@ -141,11 +142,11 @@ export default function EcommerceProductListPage() {
         }
 
         // Independientemente de si hay una respuesta en la caché o no, se realiza la solicitud de red
-        const networkResponse = await fetch('https://crm.lidenar.com/hanadb/api/products');
+        const networkResponse = await fetch(`${HOST_API_KEY}/hanadb/api/products/`);
         const data = await networkResponse.json();
 
         // Se almacena la respuesta de red en la caché
-        await cache.put('https://crm.lidenar.com/hanadb/api/products', new Response(JSON.stringify(data)));
+        await cache.put(`${HOST_API_KEY}/hanadb/api/products/`, new Response(JSON.stringify(data)));
 
         // Si había una respuesta en la caché, los productos ya se establecieron en el estado
         // Si no había respuesta en la caché, ahora se establecen los productos con los datos de la respuesta de red
