@@ -478,7 +478,7 @@ export default function InvoiceDetails({invoice}) {
             setLoading(true); // Establecer loading a true antes de hacer la llamada a la API
 
             // Actualizar una orden.
-            const response = await axios.post('/hanadb/api/orden_venta_sap', {
+            const response = await axios.post('/hanadb/api/orders/orden_venta_sap', {
                 ID_ORDER: ID,
                 ID_USER: user.ID,
                 OBSERVACION_APROBACION: observacionA,
@@ -490,9 +490,9 @@ export default function InvoiceDetails({invoice}) {
             // Se completó con éxito (código de estado 200)
             if (response.status === 200) {
                 //await router.push('/dashboard/invoice/list/');
-                setTimeout(() => {
+                //setTimeout(() => {
                     window.location.href = '/dashboard/invoice/list/';
-                }, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
+                //}, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
             }
         } catch (error) {
             // Manejar el error de la petición POST aquí
