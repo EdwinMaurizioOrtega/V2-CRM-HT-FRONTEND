@@ -200,9 +200,9 @@ export default function InvoiceTableRow({
             // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
             if (response.status === 200) {
 
-                setTimeout(() => {
+                //setTimeout(() => {
                     router.reload();
-                }, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
+                //}, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
             }
 
         } catch (error) {
@@ -232,9 +232,9 @@ export default function InvoiceTableRow({
             // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
             if (response.status === 200) {
 
-                setTimeout(() => {
+                //setTimeout(() => {
                     router.reload();
-                }, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
+                //}, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
             }
 
         } catch (error) {
