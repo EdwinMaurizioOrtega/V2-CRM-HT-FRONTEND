@@ -78,7 +78,7 @@ export default function ConsultClientForm() {
         formState: {isSubmitting},
     } = methods;
 
-    const [dataCliente, setDataCliente] = useState([]);
+    const [dataCliente, setDataCliente] = useState(null);
 
     const onSubmit = async (data) => {
 
@@ -93,14 +93,14 @@ export default function ConsultClientForm() {
             reset();
 
             // Crear un cliente.
-            const response = await axios.post('/hanadb/api/BusinessPartners/ByRucCI', {
+            const response = await axios.post('/hanadb/api/customers/BusinessPartners/ByRucCI', {
                 CI_RUC: data.ci_ruc,
                 USUARIO_ID: user.ID,
 
             });
 
             if (response.status === 200) {
-                console.log("DATA: "+ JSON.stringify(response));
+                console.log("DATA: "+ JSON.stringify(response.data.data));
                 // La solicitud PUT se realizó correctamente
                 setDataCliente(response.data.data);
             } else {
@@ -195,14 +195,14 @@ export default function ConsultClientForm() {
                             <Stack spacing={2}>
                                 <Block label="Detalle">
 
-                                    {dataCliente && dataCliente.length > 0 ? (
+                                    {dataCliente ? (
                                         <>
-                                            <Label color="success">Vendedor: {dataCliente[0].SlpName} </Label>
-                                            <Label color="success">Cliente: {dataCliente[0].Cliente} </Label>
-                                            <Label color="success">Crédito aprobado: {dataCliente[0].ValidComm} </Label>
-                                            <Label color="success">Tipo crédito: {dataCliente[0].GLN} </Label>
+                                            <Label color="success">Vendedor: {dataCliente.SlpName} </Label>
+                                            <Label color="success">Cliente: {dataCliente.Cliente} </Label>
+                                            <Label color="success">Crédito aprobado: {dataCliente.ValidComm} </Label>
+                                            <Label color="success">Tipo crédito: {dataCliente.GLN} </Label>
                                             <Label color="success">Cupo
-                                                utilizado: {fCurrency(dataCliente[0].Balance)} </Label>
+                                                utilizado: {fCurrency(dataCliente.Balance)} </Label>
                                         </>
 
                                     ) : (
