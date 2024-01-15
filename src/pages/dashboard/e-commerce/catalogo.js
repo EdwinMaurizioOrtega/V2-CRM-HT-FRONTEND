@@ -193,11 +193,11 @@ export default function CatalogoForm() {
     const onSubmit = async (data) => {
 
         // await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log('DATA', data);
+        //console.log('DATA', JSON.stringify(data));
         // reset();
 
         // Crear un cliente.
-        const response = await axios.post('/hanadb/api/catalogo', {
+        const response = await axios.post('/hanadb/api/products/catalogo', {
             singleSelectTP: data.singleSelectTP,
             multiSelectB: data.multiSelectB,
             multiSelectC: data.multiSelectC,
