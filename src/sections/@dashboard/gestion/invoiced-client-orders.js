@@ -100,35 +100,37 @@ export default function InvoicedClientOrders({ currentPartner, open, onClose }) 
   //Ver el registro de pedidos
   useEffect(() => {
     const handleViewManagementRow = async () => {
+      if (currentPartner) {
+        console.log("event: " + JSON.stringify(currentPartner.ID));
 
-      console.log("event: " + JSON.stringify(currentPartner.ID));
+        try {
+          const response = await axios.post('/hanadb/api/BusinessPartners/OrdersList', {
+            ID_CLIENTE: currentPartner.ID,
+          });
 
-      try {
-        const response = await axios.post('/hanadb/api/BusinessPartners/OrdersList', {
-          ID_CLIENTE: currentPartner.ID,
-        });
+          if (response.status === 200) {
+            console.log("DATA: " + JSON.stringify(response.data));
 
-        if (response.status === 200) {
-          console.log("DATA: " + JSON.stringify(response.data));
+            const businessPartnersWithId = response.data.data.map((partner, index) => ({
+              ...partner,
+              id: index + 1, // Puedes ajustar la lógica según tus necesidades
+            }));
 
-          const businessPartnersWithId = response.data.data.map((partner, index) => ({
-            ...partner,
-            id: index + 1, // Puedes ajustar la lógica según tus necesidades
-          }));
+            setBusinessPartnersInvoiced(businessPartnersWithId);
+            console.log("response.data.data: " + JSON.stringify(response.data.data));
+            console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
 
-          setBusinessPartnersInvoiced(businessPartnersWithId);
-          console.log("response.data.data: " + JSON.stringify(response.data.data));
-          console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
+          } else {
+            // La solicitud POST no se realizó correctamente
+            console.error('Error en la solicitud POST:', response.status);
+          }
 
-        } else {
-          // La solicitud POST no se realizó correctamente
-          console.error('Error en la solicitud POST:', response.status);
+
+        } catch (error) {
+          console.error('Error fetching data:', error);
         }
-
-
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      };
+        ;
+      }
     };
 
     handleViewManagementRow();

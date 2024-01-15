@@ -76,32 +76,37 @@ export default function PreviousClientManagement({currentPartner, open, onClose}
 
             console.log("event: " + JSON.stringify(currentPartner.ID));
 
-            try {
-                const response = await axios.post('/hanadb/api/BusinessPartners/VisitList', {
-                    ID_CLIENTE: currentPartner.ID,
-                });
+            if (currentPartner) {
 
-                if (response.status === 200) {
-                    console.log("DATA: " + JSON.stringify(response.data));
+                try {
+                    const response = await axios.post('/hanadb/api/BusinessPartners/VisitList', {
+                        ID_CLIENTE: currentPartner.ID,
+                    });
 
-                    const businessPartnersWithId = response.data.data.map((partner, index) => ({
-                        ...partner,
-                        id: index + 1, // Puedes ajustar la lógica según tus necesidades
-                    }));
+                    if (response.status === 200) {
+                        console.log("DATA: " + JSON.stringify(response.data));
 
-                    setBusinessPartnersManagement(businessPartnersWithId);
-                    console.log("response.data.data: " + JSON.stringify(response.data.data));
-                    console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
+                        const businessPartnersWithId = response.data.data.map((partner, index) => ({
+                            ...partner,
+                            id: index + 1, // Puedes ajustar la lógica según tus necesidades
+                        }));
 
-                } else {
-                    // La solicitud POST no se realizó correctamente
-                    console.error('Error en la solicitud POST:', response.status);
-                }
+                        setBusinessPartnersManagement(businessPartnersWithId);
+                        console.log("response.data.data: " + JSON.stringify(response.data.data));
+                        console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
+
+                    } else {
+                        // La solicitud POST no se realizó correctamente
+                        console.error('Error en la solicitud POST:', response.status);
+                    }
 
 
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            };
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                };
+
+            }
+
         };
 
         handleViewManagementRow();

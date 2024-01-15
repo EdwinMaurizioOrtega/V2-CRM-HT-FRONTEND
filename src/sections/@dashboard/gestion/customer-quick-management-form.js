@@ -14,14 +14,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 
-import { USER_STATUS_OPTIONS } from 'src/_mock';
-
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
 import {DatePicker} from "@mui/x-date-pickers";
 import {TextField} from "@mui/material";
-import Label from "../../../components/label";
-import Iconify from "../../../components/iconify";
 import {useAuthContext} from "../../../auth/useAuthContext";
 import axios from "../../../utils/axios";
 

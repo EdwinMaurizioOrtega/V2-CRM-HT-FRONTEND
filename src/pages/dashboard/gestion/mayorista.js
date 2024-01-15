@@ -216,7 +216,7 @@ export default function MayoristaPage(callback, deps) {
             console.log("ID RANGO: " + value.id); // Log the selected element
 
             try {
-                const response = await axios.post('/hanadb/api/BusinessPartnersByRange', {
+                const response = await axios.post('/hanadb/api/customers/BusinessPartnersByRange', {
                     ID_RANGO: value.id,
                 });
 
