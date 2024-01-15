@@ -100,7 +100,7 @@ export default function ConsultClientForm() {
             });
 
             if (response.status === 200) {
-                console.log("DATA: "+ JSON.stringify(response.data.data));
+                console.log("DATA: " + JSON.stringify(response.data.data));
                 // La solicitud PUT se realizó correctamente
                 setDataCliente(response.data.data);
             } else {
@@ -131,6 +131,43 @@ export default function ConsultClientForm() {
         });
     };
 
+    const [searchProducts, setSearchProducts] = useState('');
+
+    const [searchResults, setSearchResults] = useState([]);
+    const handleChangeSearch = async (value) => {
+        try {
+            setSearchProducts(value);
+            if (value) {
+                const response = await axios.get('/hanadb/api/customers/search', {
+                    params: {query: value},
+                });
+
+                setSearchResults(response.data.results);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const onCreateBilling = async (value) => {
+        console.log("CLIENTE SELECCIONADO: " + JSON.stringify(value));
+        setDataCliente(value);
+    }
+
+
+    const handleKeyUp = (event) => {
+        if (event.key === 'Enter') {
+            handleGotoProduct(searchProducts);
+        }
+    };
+
+    const handleGotoProduct = (name) => {
+        // push(PATH_DASHBOARD.eCommerce.view(paramCase(name)));
+        // push(PATH_DASHBOARD.eCommerce.view(name));
+
+        console.log(name);
+    };
+
     return (
         <>
             <Head>
@@ -152,6 +189,76 @@ export default function ConsultClientForm() {
                         {name: 'Cliente'},
                     ]}
                 />
+
+                {user.ROLE != 'infinix' ? (
+
+                    <Autocomplete
+                        size="small"
+                        autoHighlight
+                        popupIcon={null}
+                        options={searchResults}
+                        onInputChange={(event, value) => handleChangeSearch(value)}
+                        getOptionLabel={(product) => product.Cliente}
+                        noOptionsText={<SearchNotFound query={searchProducts}/>}
+                        isOptionEqualToValue={(option, value) => option.ID === value.ID}
+                        componentsProps={{
+                            paper: {
+                                sx: {
+                                    '& .MuiAutocomplete-option': {
+                                        px: `8px !important`,
+                                    },
+                                },
+                            },
+                        }}
+                        renderInput={(params) => (
+                            <CustomTextField
+                                {...params}
+
+                                placeholder="Buscar..."
+                                onKeyUp={handleKeyUp}
+                                InputProps={{
+                                    ...params.InputProps,
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <Iconify icon="eva:search-fill" sx={{ml: 1, color: 'text.disabled'}}/>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                        )}
+                        renderOption={(props, product, {inputValue}) => {
+                            const {ID, Cliente} = product;
+                            const matches = match(Cliente, inputValue);
+                            const parts = parse(Cliente, matches);
+
+                            return (
+                                <li {...props}>
+
+
+                                    <AddressItem
+                                        key={ID}
+                                        address={product}
+                                        onCreateBilling={() => onCreateBilling(product)}
+                                    >
+                                        {parts.map((part, index) => (
+                                            <Typography
+                                                key={index}
+                                                component="span"
+                                                variant="subtitle2"
+                                                color={part.highlight ? 'primary' : 'textPrimary'}
+                                            >
+                                                {part.text}
+                                            </Typography>
+                                        ))}
+
+                                    </AddressItem>
+
+                                </li>
+                            );
+                        }}
+                    />
+
+                ) : null }
 
                 <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={5}>
@@ -249,3 +356,68 @@ function Block({label = 'RHFTextField', sx, children}) {
         </Stack>
     );
 }
+
+
+function AddressItem({address, onCreateBilling}) {
+    // const {Cliente, Direccion, Celular, receiver, fullAddress, addressType, phoneNumber, isDefault} = address;
+    const {Cliente, Direccion, Celular, ID, Tipo} = address;
+    const receiver = Cliente;
+    const tipo = Tipo;
+    const id = ID;
+
+    return (
+        <Card onClick={onCreateBilling}
+              sx={{
+                  p: 3,
+                  mb: 3,
+              }}
+        >
+            <Stack
+                spacing={2}
+                alignItems={{
+                    md: 'flex-end',
+                }}
+                direction={{
+                    xs: 'column',
+                    md: 'row',
+                }}
+            >
+                <Stack flexGrow={1} spacing={1}>
+                    <Stack direction="row" alignItems="center">
+                        <Typography variant="subtitle1">
+                            {receiver}
+                            {/* <Box component="span" sx={{ml: 0.5, typography: 'body2', color: 'text.secondary'}}> */}
+                            {/*     ({addressType}) */}
+                            {/* </Box> */}
+                        </Typography>
+
+                        {/* {isDefault && ( */}
+                        {/*     <Label color="info" sx={{ml: 1}}> */}
+                        {/*         Default */}
+                        {/*     </Label> */}
+                        {/* )} */}
+                    </Stack>
+
+                    <Typography variant="body2">{tipo}</Typography>
+
+                    <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                        {id}
+                    </Typography>
+                </Stack>
+
+                {/* <Stack flexDirection="row" flexWrap="wrap" flexShrink={0}> */}
+                {/*     /!* {!isDefault && ( *!/ */}
+                {/*     /!*     <Button variant="outlined" size="small" color="inherit" sx={{mr: 1}}> *!/ */}
+                {/*     /!*         Borrar *!/ */}
+                {/*     /!*     </Button> *!/ */}
+                {/*     /!* )} *!/ */}
+
+                {/*     <Button variant="outlined" size="small" onClick={onCreateBilling}> */}
+                {/*         Entregar a esta dirección */}
+                {/*     </Button> */}
+                {/* </Stack> */}
+            </Stack>
+        </Card>
+    );
+}
+
