@@ -72,7 +72,18 @@ export default function InvoicedClientOrders({ currentPartner, open, onClose }) 
       flex: 1,
       minWidth: 160,
     },
-
+    {
+      field: 'ESTADO',
+      headerName: 'ESTADO',
+      flex: 1,
+      minWidth: 160,
+    },
+    {
+      field: 'Nombres',
+      headerName: 'NOMBRES',
+      flex: 1,
+      minWidth: 160,
+    },
     {
       field: 'CLIENTEID',
       headerName: 'CLIENTEID',
@@ -81,8 +92,8 @@ export default function InvoicedClientOrders({ currentPartner, open, onClose }) 
     },
 
     {
-      field: 'TOTAL',
-      headerName: 'TOTAL',
+      field: 'BODEGA',
+      headerName: 'BODEGA',
       flex: 1,
       minWidth: 160,
     },
@@ -104,7 +115,7 @@ export default function InvoicedClientOrders({ currentPartner, open, onClose }) 
         console.log("event: " + JSON.stringify(currentPartner.ID));
 
         try {
-          const response = await axios.post('/hanadb/api/BusinessPartners/OrdersList', {
+          const response = await axios.post('/hanadb/api/customers/management/OrdersList', {
             ID_CLIENTE: currentPartner.ID,
           });
 
@@ -135,7 +146,7 @@ export default function InvoicedClientOrders({ currentPartner, open, onClose }) 
 
     handleViewManagementRow();
 
-  })
+  }, [currentPartner?.ID])
 
   return (
       <Dialog
@@ -144,7 +155,7 @@ export default function InvoicedClientOrders({ currentPartner, open, onClose }) 
           open={open}
           onClose={onClose}
           PaperProps={{
-            sx: {maxWidth: 720},
+            sx: {maxWidth: 1500},
           }}
       >
 

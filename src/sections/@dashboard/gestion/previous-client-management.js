@@ -79,7 +79,7 @@ export default function PreviousClientManagement({currentPartner, open, onClose}
             if (currentPartner) {
 
                 try {
-                    const response = await axios.post('/hanadb/api/BusinessPartners/VisitList', {
+                    const response = await axios.post('/hanadb/api/customers/management/VisitList', {
                         ID_CLIENTE: currentPartner.ID,
                     });
 
@@ -111,7 +111,7 @@ export default function PreviousClientManagement({currentPartner, open, onClose}
 
         handleViewManagementRow();
 
-    })
+    }, [currentPartner?.ID])
 
     return (
         <Dialog
@@ -120,7 +120,7 @@ export default function PreviousClientManagement({currentPartner, open, onClose}
             open={open}
             onClose={onClose}
             PaperProps={{
-                sx: {maxWidth: 720},
+                sx: {maxWidth: 1080},
             }}
         >
 

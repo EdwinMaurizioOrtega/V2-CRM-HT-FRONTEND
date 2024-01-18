@@ -346,15 +346,11 @@ export default function MayoristaPage(callback, deps) {
                         }}
                     />
 
+                        <CustomerQuickManagementForm currentPartner={partner} open={quickEdit.value} onClose={quickEdit.onFalse}/>
 
-                    <CustomerQuickManagementForm currentPartner={partner} open={quickEdit.value}
-                                                 onClose={quickEdit.onFalse}/>
+                        <PreviousClientManagement currentPartner={partner} open={quickPCM.value} onClose={quickPCM.onFalse}/>
 
-                    <PreviousClientManagement currentPartner={partner} open={quickPCM.value}
-                                                 onClose={quickPCM.onFalse}/>
-
-                    <InvoicedClientOrders currentPartner={partner} open={quickICO.value}
-                                                 onClose={quickICO.onFalse}/>
+                        <InvoicedClientOrders currentPartner={partner} open={quickICO.value} onClose={quickICO.onFalse}/>
 
                 </Card>
 

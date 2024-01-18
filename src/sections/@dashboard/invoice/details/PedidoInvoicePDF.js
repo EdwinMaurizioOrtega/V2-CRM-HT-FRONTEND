@@ -45,7 +45,8 @@ export default function PedidoInvoicePDF({invoice}) {
         ValidComm,
         GLN,
         Balance,
-        OBSERVACIONESB
+        OBSERVACIONESB,
+        DOCNUM
     } = invoice;
 
 
@@ -72,6 +73,7 @@ export default function PedidoInvoicePDF({invoice}) {
                     <View style={{alignItems: 'flex-end', flexDirection: 'column'}}>
                         <Text style={styles.h3}>{status}</Text>
                         <Text> {`PEDIDO: ${ID}`} </Text>
+                        {/* <Text> {`SAP: ${DOCNUM}`} </Text> */}
                     </View>
                 </View>
                 <View style={[styles.gridContainer, styles.mb8, {justifyContent: 'center', alignItems: 'center'}]}>

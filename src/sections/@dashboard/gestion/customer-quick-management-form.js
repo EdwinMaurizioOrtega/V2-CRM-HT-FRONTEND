@@ -80,13 +80,13 @@ export default function CustomerQuickManagementForm({ currentPartner, open, onCl
 
   const onSubmit = handleSubmit(async (data) => {
 
-    console.info('DATA: ', data);
-    console.info("CLIENTE_ID: "+ currentPartner.ID);
-    console.info("USER_ID: "+ user.ID);
+    //console.info('DATA: ', JSON.stringify(data));
+    //console.info("CLIENTE_ID: "+ currentPartner.ID);
+    //console.info("USER_ID: "+ user.ID);
 
     try {
       // Actualizar una orden.
-      const response = await axios.post('/hanadb/api/BusinessPartners/management', {
+      const response = await axios.post('/hanadb/api/customers/management/', {
         DATA: data,
         CLIENTE_ID: currentPartner.ID,
         USER_ID: user.ID,

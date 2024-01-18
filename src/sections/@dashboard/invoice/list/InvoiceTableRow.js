@@ -125,7 +125,7 @@ export default function InvoiceTableRow({
             num_guia: guia
         };
 
-        console.log(JSON.stringify(dataToSend));
+        //console.log("dataToSend: "+JSON.stringify(dataToSend));
 
         // URL del servidor al que deseas enviar los datos
         const url = `${HOST_API_KEY}/hanadb/api/orders/order/ServiEntrega/GuiasWeb`;
