@@ -490,7 +490,7 @@ export default function InvoiceTableRow({
 
 
 function nameFormaPago(pay) {
-    const payActual = PAYMENT_OPTIONS_V2[pay];
+    const payActual = PAYMENT_OPTIONS_V2.find(option => option.id == pay);
     return payActual ? payActual.title : "Pago no definido.";
 }
 
