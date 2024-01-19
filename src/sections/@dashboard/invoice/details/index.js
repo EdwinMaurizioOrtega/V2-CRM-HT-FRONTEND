@@ -61,6 +61,7 @@ import {useBoolean} from "../../../../hooks/use-boolean";
 import InvoicePDF from "./InvoicePDF";
 import {PDFDownloadLink} from "@react-pdf/renderer";
 import PedidoInvoicePDF from "./PedidoInvoicePDF";
+import {PAYMENT_OPTIONS_V2} from "../../../../utils/formaPago";
 
 // ----------------------------------------------------------------------
 
@@ -399,41 +400,8 @@ export default function InvoiceDetails({invoice}) {
     }
 
     function nameFormaPago(pay) {
-        const strings = {
-            "-1": "CONTADO",
-            1: "CRÉDITO 5 DÍAS",
-            2: "CRÉDITO 7 DÍAS",
-            3: "CRÉDITO 15 DÍAS",
-            4: "CRÉDITO 30 DÍAS",
-            5: "CRÉDITO 45 DÍAS",
-            6: "CRÉDITO 60 DÍAS",
-            7: "90 DÍAS",
-            8: "120 DÍAS",
-            9: "CRÉDITO 30-60 DÍAS",
-            10: "CRÉDITO 30-60-90 DÍAS",
-            11: "CRÉDITO 30-60-90-120 DÍAS",
-            12: "CRÉDITO 60-90-120 DÍAS",
-            13: "6 MESES",
-            14: "9 MESES",
-            15: "12 MESES",
-            16: "18 MESES",
-            17: "24 MESES",
-            18: "36 MESES",
-            19: "CONTADO / RET",
-            20: "CRÉDITO 8 DÍAS",
-            21: "180 DÍAS",
-            22: "*",
-            23: "CRÉDITO 1 DÍA",
-            25: "CRÉDITO 90 DÍAS",
-            26: "CRÉDITO 21 DÍAS",
-            27: "CRÉDITO 25 DÍAS",
-            28: "CRÉDITO 75 DÍAS",
-            30: "CRÉDITO 2 DÍAS"
-        };
-
-        const payActual = strings[pay];
-        return payActual || "Pago no definido.";
-
+        const payActual = PAYMENT_OPTIONS_V2[pay];
+        return payActual ? payActual.title : "Pago no definido.";
     }
 
     function namePriceType(pri) {
@@ -885,7 +853,7 @@ export default function InvoiceDetails({invoice}) {
                                 {user.ROLE === "aprobador" &&
                                     <Autocomplete
                                         fullWidth
-                                        options={topFormaPago}
+                                        options={PAYMENT_OPTIONS_V2}
                                         getOptionLabel={(option) => option.title}
                                         onChange={(event, value) => {
                                             handleChangePayment(event, value);
@@ -1342,41 +1310,6 @@ export const top100Films = [
     {title: 'Manta', id: "024"},
     {title: 'Colón', id: "030"}
 ]
-
-
-export const topFormaPago = [
-
-    {id: -1, title: "CONTADO"},
-    {id: 1, title: "CRÉDITO 5 DÍAS"},
-    {id: 2, title: "CRÉDITO 7 DÍAS"},
-    {id: 3, title: "CRÉDITO 15 DÍAS"},
-    {id: 4, title: "CRÉDITO 30 DÍAS"},
-    {id: 5, title: "CRÉDITO 45 DÍAS"},
-    {id: 6, title: "CRÉDITO 60 DÍAS"},
-    {id: 7, title: "90 DÍAS"},
-    {id: 8, title: "120 DÍAS"},
-    {id: 9, title: "CRÉDITO 30-60 DÍAS"},
-    {id: 10, title: "CRÉDITO 30-60-90 DÍAS"},
-    {id: 11, title: "CRÉDITO 30-60-90-120 DÍAS"},
-    {id: 12, title: "CRÉDITO 60-90-120 DÍAS"},
-    {id: 13, title: "6 MESES"},
-    {id: 14, title: "9 MESES"},
-    {id: 15, title: "12 MESES"},
-    {id: 16, title: "18 MESES"},
-    {id: 17, title: "24 MESES"},
-    {id: 18, title: "36 MESES"},
-    {id: 19, title: "CONTADO / RET"},
-    {id: 20, title: "CRÉDITO 8 DÍAS"},
-    {id: 21, title: "180 DÍAS"},
-    {id: 22, title: "*"},
-    {id: 23, title: "CRÉDITO 1 DÍA"},
-    {id: 25, title: "CRÉDITO 90 DÍAS"},
-    {id: 26, title: "CRÉDITO 21 DÍAS"},
-    {id: 27, title: "CRÉDITO 25 DÍAS"},
-    {id: 28, title: "CRÉDITO 75 DÍAS"},
-    {id: 30, title: "CRÉDITO 2 DÍAS"}
-]
-
 
 export const boxes = [
     {title: '1', id: 1},

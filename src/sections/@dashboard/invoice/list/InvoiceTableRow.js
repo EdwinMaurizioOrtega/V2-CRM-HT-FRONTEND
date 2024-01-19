@@ -27,6 +27,7 @@ import {HOST_API_KEY} from "../../../../config-global";
 import {PATH_DASHBOARD} from "../../../../routes/paths";
 import axios from "../../../../utils/axios";
 import {useRouter} from "next/router";
+import {PAYMENT_OPTIONS_V2} from "../../../../utils/formaPago";
 
 
 // ----------------------------------------------------------------------
@@ -489,41 +490,8 @@ export default function InvoiceTableRow({
 
 
 function nameFormaPago(pay) {
-    const strings = {
-        "-1": "CONTADO",
-        1: "CRÉDITO 5 DÍAS",
-        2: "CRÉDITO 7 DÍAS",
-        3: "CRÉDITO 15 DÍAS",
-        4: "CRÉDITO 30 DÍAS",
-        5: "CRÉDITO 45 DÍAS",
-        6: "CRÉDITO 60 DÍAS",
-        7: "90 DÍAS",
-        8: "120 DÍAS",
-        9: "CRÉDITO 30-60 DÍAS",
-        10: "CRÉDITO 30-60-90 DÍAS",
-        11: "CRÉDITO 30-60-90-120 DÍAS",
-        12: "CRÉDITO 60-90-120 DÍAS",
-        13: "6 MESES",
-        14: "9 MESES",
-        15: "12 MESES",
-        16: "18 MESES",
-        17: "24 MESES",
-        18: "36 MESES",
-        19: "CONTADO / RET",
-        20: "CRÉDITO 8 DÍAS",
-        21: "180 DÍAS",
-        22: "*",
-        23: "CRÉDITO 1 DÍA",
-        25: "CRÉDITO 90 DÍAS",
-        26: "CRÉDITO 21 DÍAS",
-        27: "CRÉDITO 25 DÍAS",
-        28: "CRÉDITO 75 DÍAS",
-        30: "CRÉDITO 2 DÍAS"
-    };
-
-    const payActual = strings[pay];
-    return payActual || "Pago no definido.";
-
+    const payActual = PAYMENT_OPTIONS_V2[pay];
+    return payActual ? payActual.title : "Pago no definido.";
 }
 
 function nameWarehouse(ware) {
