@@ -66,8 +66,8 @@ export default function GarantiaPage() {
                 console.log(responseFull);
 
                 if (responseFull.status === 200) {
-                    const { message, marca } = await responseFull.json();
-                    setGarantia(message);
+                    const { garantia, marca } = await responseFull.json();
+                    setGarantia(garantia);
                     setMarca(marca);
                 } else {
                     console.log(`Status ${responseFull.status}: Hubo un problema en la consulta.`);
