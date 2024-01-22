@@ -1,39 +1,43 @@
-import PropTypes from 'prop-types';
-import { useState, useCallback, memo } from 'react';
-import Map from 'react-map-gl';
-// components
-import { MapControl } from '../../../../../components/map';
-//
-import ControlPanel from './ControlPanel';
+import {useState, memo, useEffect} from 'react';
+import Map, {GeolocateControl} from 'react-map-gl';
 
 // ----------------------------------------------------------------------
 
-MapChangeTheme.propTypes = {
-  themes: PropTypes.object,
-};
+function MapChangeTheme({ latitude, longitude, ...other }) {
 
-function MapChangeTheme({ themes, ...other }) {
-  const [selectTheme, setSelectTheme] = useState('outdoors');
+    // console.log("latitude: "+ latitude)
+    // console.log("longitudefddg: "+ longitude)
 
-  const handleChangeTheme = useCallback((value) => setSelectTheme(value), []);
+    const [showGeolocateControl, setShowGeolocateControl] = useState(true);
 
-  return (
+    useEffect(() => {
+        // Se ejecuta cuando el componente se monta
+        setShowGeolocateControl(true);
+
+        // Limpia la configuración al desmontar el componente
+        return () => setShowGeolocateControl(false);
+    }, []);
+
+    return (
     <>
       <Map
         initialViewState={{
-          latitude: 37.785164,
-          longitude: -100,
-          zoom: 3.5,
-          bearing: 0,
+          latitude: latitude,
+          longitude: longitude,
+          zoom: 12,  // Ajusta el valor de zoom según sea necesariobearing: 0,
           pitch: 0,
         }}
-        mapStyle={themes?.[selectTheme]}
+        mapStyle="mapbox://styles/mapbox/light-v10"
+        positionOptions={{ enableHighAccuracy: true }}
+        geolocateControlOptions={showGeolocateControl}
         {...other}
+
       >
-        <MapControl />
+          {showGeolocateControl && (
+              <GeolocateControl position="top-left" positionOptions={{ enableHighAccuracy: true }} />
+          )}
       </Map>
 
-      <ControlPanel themes={themes} selectTheme={selectTheme} onChangeTheme={handleChangeTheme} />
     </>
   );
 }

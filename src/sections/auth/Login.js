@@ -1,7 +1,19 @@
 // next
 import NextLink from 'next/link';
 // @mui
-import {Alert, Tooltip, Stack, Typography, Link, Box, AlertTitle, Button} from '@mui/material';
+import {
+    Alert,
+    Tooltip,
+    Stack,
+    Typography,
+    Link,
+    Box,
+    AlertTitle,
+    Button,
+    CardHeader,
+    CardContent,
+    Card
+} from '@mui/material';
 // auth
 import { useAuthContext } from '../../auth/useAuthContext';
 // layouts
@@ -14,6 +26,11 @@ import AuthWithSocial from './AuthWithSocial';
 import React, {useEffect, useState} from "react";
 import Iconify from "../../components/iconify";
 import Label from "../../components/label";
+import MapChangeTheme from "../_examples/extra/map/change-theme";
+import {styled} from "@mui/material/styles";
+import {MAP_API} from "../../config-global";
+import {MapControl} from "../../components/map";
+import Map from "react-map-gl";
 
 // ----------------------------------------------------------------------
 
@@ -96,12 +113,24 @@ export default function Login() {
                       <AuthWithSocial />
 
                   <Stack spacing={2} sx={{mb: 5, position: 'relative'}}>
-                      <Label variant="filled" color="primary" startIcon={<Iconify icon="eva:info-fill" />}>
-                          {latitude && <p>Latitud: {latitude}</p>}
-                      </Label>
-                      <Label variant="filled" color="primary" startIcon={<Iconify icon="eva:info-fill" />}>
-                          {longitude && <p>Longitud: {longitude}</p>}
-                      </Label>
+                      {/* <Label variant="filled" color="primary" startIcon={<Iconify icon="eva:info-fill" />}> */}
+                      {/*     {latitude && <p>Latitud: {latitude}</p>} */}
+                      {/* </Label> */}
+                      {/* <Label variant="filled" color="primary" startIcon={<Iconify icon="eva:info-fill" />}> */}
+                      {/*     {longitude && <p>Longitud: {longitude}</p>} */}
+                      {/* </Label> */}
+
+                          {/* <CardHeader title="Change Theme" /> */}
+                          { latitude && longitude && (
+                          <CardContent>
+                              <StyledMapContainer>
+                                  <MapChangeTheme {...baseSettings} latitude={latitude} longitude={longitude} />
+                              </StyledMapContainer>
+                          </CardContent>
+
+                          )}
+
+
                   </Stack>
 
               </div>
@@ -110,3 +139,22 @@ export default function Login() {
       </LoginLayout>
   );
 }
+
+const StyledMapContainer = styled('div')(({ theme }) => ({
+    zIndex: 0,
+    height: 260,
+    overflow: 'hidden',
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    '& .mapboxgl-ctrl-logo, .mapboxgl-ctrl-bottom-right': {
+        display: 'none',
+    },
+}));
+
+const baseSettings = {
+    mapboxAccessToken: MAP_API,
+    minZoom: 1,
+};
+
+
+
