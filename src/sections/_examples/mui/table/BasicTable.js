@@ -153,7 +153,7 @@ export default function BasicTable({code, validateStock}) {
                                                 <TableCell>{getTextFromCodigo(row.BODEGA)}</TableCell>
                                                 <TableCell align="right">{
 
-                                                    fNumber(row.DISPONIBLE) >= 0 && fNumber(row.DISPONIBLE) < 5 ? (
+                                                    fNumber(row.DISPONIBLE) >= 1 && fNumber(row.DISPONIBLE) < 5 ? (
                                                         "+1"
                                                     ) : fNumber(row.DISPONIBLE) >= 5 && fNumber(row.DISPONIBLE) < 10 ? (
                                                         "+5"
@@ -162,7 +162,7 @@ export default function BasicTable({code, validateStock}) {
                                                     ) : fNumber(row.DISPONIBLE) >= 20 ? (
                                                         "+20"
                                                     ) : (
-                                                        "+20"
+                                                        "0"
                                                     )
 
                                                 }</TableCell>
