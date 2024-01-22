@@ -49,6 +49,7 @@ export default function BasicTable({code, validateStock}) {
 
     const [stockProduct, setStockProduct] = useState([]);
 
+    const filteredTableHead = user.ROLE === 'tienda' ? TABLE_HEAD.filter(column => column.id === 'dessert' || column.id === 'protein' || column.id === 'calories') : TABLE_HEAD;
 
     //Lista de precios por producto
     useEffect(() => {
@@ -74,7 +75,7 @@ export default function BasicTable({code, validateStock}) {
                     }
                     const data = await response.json();
                     setStockProduct(data.product_stock);
-                    console.log("Stock: "+ JSON.stringify( data.product_stock));
+                    console.log("Stock: " + JSON.stringify(data.product_stock));
                     //console.log("Stock: " + JSON.stringify(stockProduct));
 
 
@@ -89,7 +90,7 @@ export default function BasicTable({code, validateStock}) {
                         //Cuatro B. Mayoristas: 019 CDH - 002 Cuenca - 024 Manta - 030 Colon
 
                         const bodegasM = data.product_stock.reduce((acumulador, producto) => {
-                            if (producto.BODEGA === '019' || producto.BODEGA === '002' ||producto.BODEGA === '024' ||producto.BODEGA === '030') {
+                            if (producto.BODEGA === '019' || producto.BODEGA === '002' || producto.BODEGA === '024' || producto.BODEGA === '030') {
                                 acumulador.push(producto);
                             }
                             return acumulador;
@@ -124,20 +125,54 @@ export default function BasicTable({code, validateStock}) {
                 <TableContainer sx={{mt: 3, overflow: 'unset'}}>
                     <Scrollbar>
                         <Table sx={{minWidth: 800}}>
-                            <TableHeadCustom headLabel={TABLE_HEAD}/>
+                            <TableHeadCustom headLabel={filteredTableHead}/>
 
                             <TableBody>
 
                                 {user.ROLE != 'infinix' ? (
-                                    stockProduct.map((row) => (
-                                        <TableRow key={row.BODEGA}>
-                                            <TableCell>{getTextFromCodigo(row.BODEGA)}</TableCell>
-                                            <TableCell align="right">{fNumber(row.CANTIDAD)}</TableCell>
-                                            <TableCell align="right">{fNumber(row.RESERVADO)}</TableCell>
-                                            <TableCell align="right">{fNumber(row.DISPONIBLE)}</TableCell>
-                                            <TableCell align="right">{row.CODIGO}</TableCell>
-                                        </TableRow>
-                                    ))
+
+                                    user.ROLE != 'tienda' ? (
+
+
+                                        stockProduct.map((row) => (
+                                            <TableRow key={row.BODEGA}>
+                                                <TableCell>{getTextFromCodigo(row.BODEGA)}</TableCell>
+                                                <TableCell align="right">{fNumber(row.CANTIDAD)}</TableCell>
+                                                <TableCell align="right">{fNumber(row.RESERVADO)}</TableCell>
+                                                <TableCell align="right">{fNumber(row.DISPONIBLE)}</TableCell>
+                                                <TableCell align="right">{row.CODIGO}</TableCell>
+                                            </TableRow>
+                                        ))
+
+
+                                    ) : (
+
+
+                                        stockProduct.map((row) => (
+                                            <TableRow key={row.BODEGA}>
+                                                <TableCell>{getTextFromCodigo(row.BODEGA)}</TableCell>
+                                                <TableCell align="right">{
+
+                                                    fNumber(row.DISPONIBLE) >= 0 && fNumber(row.DISPONIBLE) < 5 ? (
+                                                        "+1"
+                                                    ) : fNumber(row.DISPONIBLE) >= 5 && fNumber(row.DISPONIBLE) < 10 ? (
+                                                        "+5"
+                                                    ) : fNumber(row.DISPONIBLE) >= 10 && fNumber(row.DISPONIBLE) < 20 ? (
+                                                        "+10"
+                                                    ) : fNumber(row.DISPONIBLE) >= 20 ? (
+                                                        "+20"
+                                                    ) : (
+                                                        "+20"
+                                                    )
+
+                                                }</TableCell>
+
+                                                <TableCell align="right">{row.CODIGO}</TableCell>
+                                            </TableRow>
+                                        ))
+
+                                    )
+
 
                                 ) : (
                                     // Mostrar solo las filas con BODEGA 019, 002 y 030
