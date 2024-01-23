@@ -1165,7 +1165,7 @@ export default function InvoiceDetails({invoice}) {
                 </Card>
             }
 
-            {user.ROLE === "aprobador" || user.ROLE === "bodega" ? (
+            {user.ROLE === "aprobador" ? (
 
                 <MenuPopover
                     open={openPopover}

@@ -411,7 +411,7 @@ export default function InvoiceTableRow({
 
                 <Divider sx={{borderStyle: 'dashed'}}/>
 
-                {user.ROLE === "aprobador" || user.ROLE === "bodega" ? (
+                {user.ROLE === "aprobador" ? (
                     <MenuItem
                         onClick={() => {
                             handleOpenConfirmAnular();
