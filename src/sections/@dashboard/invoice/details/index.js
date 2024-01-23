@@ -885,6 +885,12 @@ export default function InvoiceDetails({invoice}) {
                                     <TableCell align="left">Comentario Precio</TableCell>
                                     <TableCell align="left">%Desc.</TableCell>
                                     <TableCell align="left">Cantidad</TableCell>
+
+                                    {
+                                        user.ROLE === 'aprobador' ? (
+                                    <TableCell align="left">Disponible</TableCell>
+                                            ) : null
+                                    }
                                     <TableCell align="right">Precio unitario</TableCell>
                                     <TableCell align="right">Total</TableCell>
                                     <TableCell align="left">Acciones</TableCell>
@@ -915,11 +921,14 @@ export default function InvoiceDetails({invoice}) {
                                         <TableCell align="left">{namePriceType(row.TIPOPRECIO)}</TableCell>
                                         <TableCell align="left">{row.COMENTARIOPRECIO}</TableCell>
                                         <TableCell align="left">{row.DISCOUNTPERCENTSAP}</TableCell>
-
                                         <TableCell align="left">{row.CANTIDAD}</TableCell>
+                                        {
+                                            user.ROLE === 'aprobador' ? (
+                                                <TableCell align="left"  style={{ backgroundColor: 'rgba(0, 171, 85, 0.08)' }}>{Number(row.DISPONIBLE_POR_BODEGA)}</TableCell>
 
+                                            ) : null
+                                        }
                                         <TableCell align="right">{fCurrency(row.PRECIOUNITARIOVENTA)}</TableCell>
-
                                         <TableCell
                                             align="right">{fCurrency(row.PRECIOUNITARIOVENTA * row.CANTIDAD)}</TableCell>
 
