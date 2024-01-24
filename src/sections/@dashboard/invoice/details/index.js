@@ -1299,7 +1299,7 @@ export default function InvoiceDetails({invoice}) {
             <ConfirmDialog
                 open={openChangeProduct}
                 onClose={handleCloseChangeProduct}
-                title="Nuevo producto"
+                title="Cambiar el color del modelo."
                 content={`¿Estás seguro de que quieres cambiar el producto? ${selected.PRODUCTO_ID}`}
                 action={
                     <>
