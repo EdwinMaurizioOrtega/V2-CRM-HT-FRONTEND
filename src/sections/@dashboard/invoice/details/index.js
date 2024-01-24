@@ -104,6 +104,7 @@ export default function InvoiceDetails({invoice}) {
     const [openConfirm, setOpenConfirm] = useState(false);
 
     const [openPriceUnit, setOpenPriceUnit] = useState(false);
+    const [openChangeProduct, setOpenChangeProduct] = useState(false);
 
     const [openQty, setOpenQty] = useState(false);
 
@@ -133,8 +134,16 @@ export default function InvoiceDetails({invoice}) {
         setOpenPriceUnit(true);
     };
 
+    const handleOpenChangeProduct = () => {
+        setOpenChangeProduct(true);
+    };
+
     const handleClosePriceUnit = () => {
         setOpenPriceUnit(false);
+    };
+
+    const handleCloseChangeProduct = () => {
+        setOpenChangeProduct(false);
     };
 
     const handleOpenConfirm = () => {
@@ -224,6 +233,34 @@ export default function InvoiceDetails({invoice}) {
             const response = await axios.put('/hanadb/api/orders/order/detail/priceunit', {
                 ID_DETALLE_ORDEN: selected.ID,
                 NEW_PRICE_UNIT: valueNew
+
+            });
+
+            console.log("Orden actualizada correctamente.");
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+                router.reload();
+            }
+
+        } catch (error) {
+            // Manejar el error de la petición PUT aquí
+            console.error('Error al actualizar la orden:', error);
+        }
+
+    }
+
+    const handleChangeProduct = async () => {
+
+        // console.log(selected.ID);
+        // console.log(valueNew);
+
+        try {
+            // Actualizar una orden.
+            const response = await axios.put('/hanadb/api/orders/order/detail/change_product', {
+                ID_DETALLE_ORDEN: selected.ID,
+                PRODUCTO_ID: valueNew
 
             });
 
@@ -1211,6 +1248,16 @@ export default function InvoiceDetails({invoice}) {
                         %Desc.
                     </MenuItem>
 
+                    <MenuItem
+                        onClick={() => {
+                            handleOpenChangeProduct();
+                            handleClosePopover();
+                        }}
+                    >
+                        <Iconify icon="eva:edit-fill"/>
+                        Producto.
+                    </MenuItem>
+
                     <Divider sx={{borderStyle: 'dashed'}}/>
 
                     <MenuItem
@@ -1248,6 +1295,29 @@ export default function InvoiceDetails({invoice}) {
                     </>
                 }
             />
+
+            <ConfirmDialog
+                open={openChangeProduct}
+                onClose={handleCloseChangeProduct}
+                title="Nuevo producto"
+                content={`¿Estás seguro de que quieres cambiar el producto? ${selected.PRODUCTO_ID}`}
+                action={
+                    <>
+                        <TextField
+                            label="Nuevo producto."
+                            value={valueNew}
+                            onChange={handleChange}
+                        />
+                        <Button variant="contained" color="error" onClick={() => {
+                            handleChangeProduct();
+                        }}
+                        >
+                            Cambiar Producto.
+                        </Button>
+                    </>
+                }
+            />
+
 
             <ConfirmDialog
                 open={openQty}
