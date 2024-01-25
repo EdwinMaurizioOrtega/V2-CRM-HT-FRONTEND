@@ -128,7 +128,7 @@ export default function PreviousClientManagement({currentPartner, open, onClose}
 
             <DialogContent>
                 <Alert variant="outlined" severity="info" sx={{mb: 3}}>
-                    CI/RUC: {currentPartner?.ID || ''}
+                    Cliente: {currentPartner?.Cliente || ''}
                 </Alert>
 
 

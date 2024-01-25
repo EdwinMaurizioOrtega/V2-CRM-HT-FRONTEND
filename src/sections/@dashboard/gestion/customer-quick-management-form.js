@@ -32,7 +32,7 @@ const options_1 = [
 ]
 
 const options_2 = [
-  { id: '01', label: 'Llamada telefonic' },
+  { id: '01', label: 'Llamada telefonica' },
   { id: '02', label: 'Llamada telefonica'},
   { id: '03', label: 'Whatsapp'},
   { id: '04', label: 'Correo'},
@@ -122,7 +122,7 @@ export default function CustomerQuickManagementForm({ currentPartner, open, onCl
 
         <DialogContent>
           <Alert variant="outlined" severity="info" sx={{ mb: 3 }}>
-            CI/RUC: {currentPartner?.ID || ''}
+            Cliente: {currentPartner?.Cliente || ''}
           </Alert>
 
           <Box
@@ -177,7 +177,7 @@ export default function CustomerQuickManagementForm({ currentPartner, open, onCl
                 render={({ field, fieldState: { error } }) => (
                     <DatePicker
                         {...field}
-                        label="Fecha de proxima gestion (Obligatorio)"
+                        label="Próxima gestión (Obligatorio)"
                         inputFormat="dd/MM/yyyy"
                         renderInput={(params) => (
                             <TextField

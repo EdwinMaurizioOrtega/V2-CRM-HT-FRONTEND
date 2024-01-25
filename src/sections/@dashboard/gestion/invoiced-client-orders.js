@@ -19,7 +19,7 @@ import { USER_STATUS_OPTIONS } from 'src/_mock';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
 import {DatePicker} from "@mui/x-date-pickers";
-import {TextField} from "@mui/material";
+import {Link, TextField} from "@mui/material";
 import Label from "../../../components/label";
 import Iconify from "../../../components/iconify";
 import {useAuthContext} from "../../../auth/useAuthContext";
@@ -32,6 +32,8 @@ import {
   GridToolbarQuickFilter
 } from "@mui/x-data-grid";
 import EmptyContent from "../../../components/empty-content";
+import {PATH_DASHBOARD} from "../../../routes/paths";
+import {useRouter} from "next/router";
 
 
 // ----------------------------------------------------------------------
@@ -55,6 +57,15 @@ export default function InvoicedClientOrders({ currentPartner, open, onClose }) 
 
   console.log("partner.ID " + currentPartner?.ID || '');
 
+  const {push} = useRouter();
+
+  const handleViewRow = (id) => {
+    // console.log("id_id"+ id);
+    //push(PATH_DASHBOARD.invoice.view(id));
+    window.open(PATH_DASHBOARD.invoice.view(id), '_blank');
+
+  };
+
   const baseColumns = [
     {
       field: 'id',
@@ -62,9 +73,17 @@ export default function InvoicedClientOrders({ currentPartner, open, onClose }) 
     },
     {
       field: 'ID',
-      headerName: 'ID',
+      headerName: 'ORDEN',
       flex: 1,
       minWidth: 160,
+      renderCell: (param) =>  <Link
+          noWrap
+          variant="body2"
+          onClick={() => handleViewRow(param.row.ID)}
+          sx={{color: 'text.disabled', cursor: 'pointer'}}
+      >
+        {`INV-${param.row.ID}`}
+      </Link>
     },
     {
       field: 'FECHACREACION',
@@ -77,10 +96,15 @@ export default function InvoicedClientOrders({ currentPartner, open, onClose }) 
       headerName: 'ESTADO',
       flex: 1,
       minWidth: 160,
+      renderCell: (params) => params.row.ESTADO == "8" && "Anulado"
+          || params.row.ESTADO == "6" && "Área de crédito"
+          || params.row.ESTADO == "0" && "Área de facturación"
+          || params.row.ESTADO == "1" && "Facturado"
+
     },
     {
-      field: 'Nombres',
-      headerName: 'NOMBRES',
+      field: 'Cliente',
+      headerName: 'CLIENTE',
       flex: 1,
       minWidth: 160,
     },
@@ -96,6 +120,11 @@ export default function InvoicedClientOrders({ currentPartner, open, onClose }) 
       headerName: 'BODEGA',
       flex: 1,
       minWidth: 160,
+      renderCell: (params) => params.row.BODEGA == "002" && "MAYORISTA CUENCA"
+          || params.row.BODEGA == "019" && "C. DISTRIBUCIÓN HT"
+          || params.row.BODEGA == "006" && "MAYORISTA QUITO"
+          || params.row.BODEGA == "015" && "MAYORISTA GUAYAQUIL"
+          || params.row.BODEGA == "024" && "MAYORISTA MANTA"
     },
     {
       field: 'VENDEDOR',
@@ -159,11 +188,11 @@ export default function InvoicedClientOrders({ currentPartner, open, onClose }) 
           }}
       >
 
-        <DialogTitle>Gestiones anteriores.</DialogTitle>
+        <DialogTitle>Historico ordenes.</DialogTitle>
 
         <DialogContent>
           <Alert variant="outlined" severity="info" sx={{mb: 3}}>
-            CI/RUC: {currentPartner?.ID || ''}
+            Cliente: {currentPartner?.Cliente || ''}
           </Alert>
 
 

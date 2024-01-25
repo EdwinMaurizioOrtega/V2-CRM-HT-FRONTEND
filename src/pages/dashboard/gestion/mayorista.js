@@ -12,7 +12,7 @@ import {
     LinearProgress,
     Card,
     TextField,
-    Autocomplete
+    Autocomplete, InputAdornment, IconButton
 } from '@mui/material';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
@@ -87,7 +87,7 @@ export default function MayoristaPage(callback, deps) {
                 <GridActionsCellItem
                     showInMenu
                     icon={<Iconify icon="solar:eye-bold"/>}
-                    label="Pedidos facturados"
+                    label="Historico Invoices"
                     onClick={() => handleViewOrdersRow(params.row)}
                 />,
             ],
@@ -159,19 +159,19 @@ export default function MayoristaPage(callback, deps) {
         },
         {
             field: 'GLN',
-            headerName: 'GLN',
+            headerName: 'Tipo crédito',
             flex: 1,
             minWidth: 160,
         },
         {
             field: 'ValidComm',
-            headerName: 'ValidComm',
+            headerName: 'Crédito aprobado',
             flex: 1,
             minWidth: 160,
         },
         {
             field: 'Balance',
-            headerName: 'Balance',
+            headerName: 'Cupo utilizado',
             flex: 1,
             minWidth: 160,
         },
@@ -334,7 +334,88 @@ export default function MayoristaPage(callback, deps) {
                             renderInput={(params) => <TextField {...params} label="Filtrar por rango" margin="none"/>}
                         />
 
+
+                        <TextField
+                            fullWidth
+                            type="text"
+                            label="Nombre / Razon Social"
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            edge="end"
+                                        >
+                                            <Iconify icon="eva:search-fill" width={24}/>
+
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+
+                        <TextField
+                            fullWidth
+                            type="text"
+                            label="Cédula/RUC"
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            edge="end"
+                                        >
+                                            <Iconify icon="eva:search-fill" width={24}/>
+
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+
+                        <TextField
+                            fullWidth
+                            type="text"
+                            label="Nombre Producto"
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            edge="end"
+                                        >
+                                            <Iconify icon="eva:search-fill" width={24}/>
+
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+
+                        <TextField
+                            fullWidth
+                            type="text"
+                            label="Código Producto"
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            edge="end"
+                                        >
+                                            <Iconify icon="eva:search-fill" width={24}/>
+
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+
+
                     </Box>
+
+                </Card>
+
+                <Card sx={{
+                    p: 5
+                }}
+                >
                     <DataGrid
                         rows={businessPartners}
                         columns={baseColumns}
@@ -346,11 +427,13 @@ export default function MayoristaPage(callback, deps) {
                         }}
                     />
 
-                        <CustomerQuickManagementForm currentPartner={partner} open={quickEdit.value} onClose={quickEdit.onFalse}/>
+                    <CustomerQuickManagementForm currentPartner={partner} open={quickEdit.value}
+                                                 onClose={quickEdit.onFalse}/>
 
-                        <PreviousClientManagement currentPartner={partner} open={quickPCM.value} onClose={quickPCM.onFalse}/>
+                    <PreviousClientManagement currentPartner={partner} open={quickPCM.value}
+                                              onClose={quickPCM.onFalse}/>
 
-                        <InvoicedClientOrders currentPartner={partner} open={quickICO.value} onClose={quickICO.onFalse}/>
+                    <InvoicedClientOrders currentPartner={partner} open={quickICO.value} onClose={quickICO.onFalse}/>
 
                 </Card>
 
