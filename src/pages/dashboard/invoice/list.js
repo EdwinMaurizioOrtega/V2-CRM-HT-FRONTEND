@@ -48,7 +48,7 @@ import {
 // sections
 import InvoiceAnalytic from '../../../sections/@dashboard/invoice/InvoiceAnalytic';
 import {InvoiceTableRow, InvoiceTableToolbar} from '../../../sections/@dashboard/invoice/list';
-import {getUsers} from "../../../redux/slices/user";
+import user, {getUsers} from "../../../redux/slices/user";
 import {useDispatch, useSelector} from "../../../redux/store";
 import {
     getOrders,
@@ -148,6 +148,7 @@ export default function InvoiceListPage() {
     const [filterEndDate, setFilterEndDate] = useState(null);
 
     const [filterStartDate, setFilterStartDate] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
 
 
     // useEffect(async () => {
@@ -223,6 +224,8 @@ export default function InvoiceListPage() {
             console.log(user.DISPLAYNAME);
             console.log(user.ROLE);
 
+            setCurrentUser(user);
+
             try {
                 let data = [];
 
@@ -264,6 +267,7 @@ export default function InvoiceListPage() {
         filterName,
         // filterService,
         filterStatus,
+        currentUser,
         // filterStartDate,
         // filterEndDate,
     });
@@ -681,6 +685,7 @@ function applyFilter({
                          comparator,
                          filterName,
                          filterStatus,
+                         currentUser,
                          // filterService,
                          // filterStartDate,
                          // filterEndDate,
@@ -704,8 +709,55 @@ function applyFilter({
         );
     }
 
+
+
+    console.log("user_user:"+ currentUser)
+
     if (filterStatus !== 'all') {
-        inputData = inputData.filter((invoice) => invoice.ESTADO === filterStatus);
+
+        //console.log("user_user:"+ user)
+
+        if(currentUser.ROLE === "bodega") {
+
+            //CDHT
+            if( currentUser.WAREHOUSE  === "019") {
+
+                if (filterStatus === 0) {
+                    inputData = inputData.slice(0, 6); // Return only the first two items
+                }
+
+            }
+
+            //Cuenca
+            if( currentUser.WAREHOUSE  === "002") {
+
+                if (filterStatus === 0) {
+                    inputData = inputData.slice(0, 1); // Return only the first two items
+                }
+
+            }
+
+            //Colon
+            if( currentUser.WAREHOUSE  === "030") {
+
+                if (filterStatus === 0) {
+                    inputData = inputData.slice(0, 1); // Return only the first two items
+                }
+
+            }
+
+            // Manta
+            if( currentUser.WAREHOUSE  === "024") {
+
+                if (filterStatus === 0) {
+                    inputData = inputData.slice(0, 1); // Return only the first two items
+                }
+
+            }
+
+        } else {
+            inputData = inputData.filter((invoice) => invoice.ESTADO === filterStatus);
+        }
     }
 
     // if (filterService !== 'all') {
