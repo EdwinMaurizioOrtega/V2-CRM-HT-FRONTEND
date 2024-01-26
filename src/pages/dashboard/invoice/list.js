@@ -732,7 +732,7 @@ function applyFilter({
             if( currentUser.WAREHOUSE  === "002") {
 
                 if (filterStatus === 0) {
-                    inputData = inputData.slice(0, 1); // Return only the first two items
+                    inputData = inputData.slice(0, 3); // Return only the first two items
                 }
 
             }
