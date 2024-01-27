@@ -246,6 +246,35 @@ export default function InvoiceTableRow({
     };
 
 
+    const sendOrderMoveToOneInWarehouse = async () => {
+        console.log("Número de orden: " + ID);
+
+        try {
+            const response = await axios.put('/hanadb/api/orders/order/move_to_one', {
+                    ID_ORDER: ID,
+                    WAREHOUSE: BODEGA
+            });
+
+            // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
+            console.log('Cambiando estado');
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+
+                //setTimeout(() => {
+                router.reload();
+                //}, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
+            }
+
+        } catch (error) {
+            // Manejar el error de la petición DELETE aquí
+            console.error('Error al cambiar el status de la orden:', error);
+        }
+
+    };
+
+
     return (
         <>
 
@@ -408,6 +437,19 @@ export default function InvoiceTableRow({
                 ) : null
                 }
 
+                {ESTADO === 0 && user.ROLE === "aprobador" ? (
+                    <MenuItem
+                        onClick={() => {
+                            sendOrderMoveToOneInWarehouse();
+                            handleClosePopover();
+                        }}
+                    >
+                        <Iconify icon="eva:shopping-bag-outline"/>
+                        Priorizar Fac.
+                    </MenuItem>
+
+                ) : null
+                }
 
                 <Divider sx={{borderStyle: 'dashed'}}/>
 
