@@ -63,7 +63,7 @@ export default function AuthLoginForm() {
       <Stack spacing={3}>
         {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
 
-        <RHFTextField name="email" label="Email" />
+        <RHFTextField name="email" label="Email" autoComplete="off"/>
 
         <RHFTextField
           name="password"
