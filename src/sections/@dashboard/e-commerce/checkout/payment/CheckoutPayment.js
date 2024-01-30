@@ -101,6 +101,12 @@ const WAREHOUSE_OPTIONS = [
 
 const PAYMENT_OPTIONS = [
     {
+        value: -1,
+        title: 'CONTADO',
+        description: 'CONTADO.',
+        icons: [],
+    },
+    {
         value: 30,
         title: '2 DÍAS',
         description: 'CRÉDITO 2 DÍAS.',
