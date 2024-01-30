@@ -68,7 +68,6 @@ export default function ConsultClientForm() {
         //defaultValues,
     });
 
-
     const {
         watch,
         reset,
@@ -77,6 +76,11 @@ export default function ConsultClientForm() {
         handleSubmit,
         formState: {isSubmitting},
     } = methods;
+
+    const methods_second_form = useForm({
+        //resolver: yupResolver(FormSchemaAAAAAA),
+        //defaultValues,
+    });
 
     const [dataCliente, setDataCliente] = useState(null);
 
@@ -167,6 +171,15 @@ export default function ConsultClientForm() {
 
         console.log(name);
     };
+
+
+    const onSubmitSend = async (data) => {
+
+        console.log('DATA', data);
+        console.log('Usuario: ', user.ID);
+
+
+    }
 
     return (
         <>
@@ -324,6 +337,78 @@ export default function ConsultClientForm() {
                     </Grid>
 
                 </FormProvider>
+
+                {/* <h2>Solicitud Creación Cliente</h2> */}
+
+                {/* <form onSubmit={methods_second_form.handleSubmit(onSubmitSend)}> */}
+                {/*     <Grid container spacing={5}> */}
+                {/*         <Grid item xs={12} md={6}> */}
+                {/*             <Stack spacing={2}> */}
+                {/*                 <Block label="Cliente"> */}
+                {/*                     <RHFTextField name="ci_ruc_send" */}
+                {/*                                   label="RUC/Cédula" */}
+                {/*                                   onChange={(event) => { */}
+                {/*                                       const inputValue = event.target.value.replace(/\D/g, ''); // Solo números */}
+                {/*                                       if (/^\d{10,13}$/.test(inputValue)) { */}
+                {/*                                           setValueSecond('ci_ruc', inputValue, {shouldValidate: true}); */}
+                {/*                                       } */}
+                {/*                                   }} */}
+                {/*                                   InputProps={{ */}
+                {/*                                       type: 'number', */}
+                {/*                                       pattern: '[0-9]*', // Asegura que solo se ingresen números */}
+                {/*                                   }} */}
+                {/*                     /> */}
+
+                {/*                 </Block> */}
+
+                {/*                 <Block label="Cliente"> */}
+                {/*                     <RHFTextField name="nombre_send" */}
+                {/*                                   label="Nombre/Razón Social" */}
+                {/*                     /> */}
+
+                {/*                 </Block> */}
+
+
+                {/*                 <Block label="Acción"> */}
+                {/*                     <LoadingButton */}
+                {/*                         fullWidth */}
+                {/*                         color="success" */}
+                {/*                         size="large" */}
+                {/*                         type="submit" */}
+                {/*                         variant="contained" */}
+                {/*                     > */}
+                {/*                         Enviar */}
+                {/*                     </LoadingButton> */}
+
+                {/*                 </Block> */}
+
+                {/*             </Stack> */}
+                {/*         </Grid> */}
+
+                {/*         <Grid item xs={12} md={6}> */}
+                {/*             <Stack spacing={2}> */}
+                {/*                 <Block label="Cliente"> */}
+                {/*                     <RHFTextField name="celular_send" */}
+                {/*                                   label="Celular" */}
+
+                {/*                     /> */}
+
+                {/*                 </Block> */}
+                {/*                 <Block label="Cliente"> */}
+                {/*                     <RHFTextField name="direccion_send" */}
+                {/*                                   label="Direccion" */}
+                {/*                     /> */}
+
+                {/*                 </Block> */}
+
+                {/*             </Stack> */}
+                {/*         </Grid> */}
+
+                {/*     </Grid> */}
+
+                {/* </form> */}
+
+
 
 
             </Container>
