@@ -40,7 +40,7 @@ const en = {
   calendar: `calendar`,
   analytics: `analytics`,
   ecommerce: `e-commerce`,
-  management: `administración`,
+  management: `management`,
   menu_level: `menu level`,
   menu_level_2a: `menu level 2a`,
   menu_level_2b: `menu level 2b`,

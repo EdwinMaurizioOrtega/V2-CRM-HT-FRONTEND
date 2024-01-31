@@ -39,11 +39,11 @@ const navConfig = [
   // GENERAL
   // ----------------------------------------------------------------------
   {
-    subheader: 'general',
+    subheader: 'overview',
     items: [
       { title: 'app', path: PATH_DASHBOARD.general.app, icon: ICONS.dashboard },
       // { title: 'ecommerce', path: PATH_DASHBOARD.general.ecommerce, icon: ICONS.ecommerce },
-      // { title: 'analytics', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
+      { title: 'analytics M.', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
       // { title: 'banking', path: PATH_DASHBOARD.general.banking, icon: ICONS.banking },
       // { title: 'booking', path: PATH_DASHBOARD.general.booking, icon: ICONS.booking },
       // { title: 'file', path: PATH_DASHBOARD.general.file, icon: ICONS.file },
@@ -61,12 +61,13 @@ const navConfig = [
         path: PATH_DASHBOARD.user.root,
         icon: ICONS.user,
         children: [
-          { title: 'perfil', path: PATH_DASHBOARD.user.profile },
+          //{ title: 'perfil', path: PATH_DASHBOARD.user.profile },
           // { title: 'cards', path: PATH_DASHBOARD.user.cards },
-          { title: 'lista', path: PATH_DASHBOARD.user.list },
-          { title: 'crear', path: PATH_DASHBOARD.user.new },
+          //{ title: 'lista', path: PATH_DASHBOARD.user.list },
+          //{ title: 'crear', path: PATH_DASHBOARD.user.new },
           // { title: 'edit', path: PATH_DASHBOARD.user.demoEdit },
           // { title: 'cuenta', path: PATH_DASHBOARD.user.account },
+          { title: 'Tracking', path: PATH_DASHBOARD.user.tracking },
         ],
       },
 
@@ -109,7 +110,6 @@ const navConfig = [
         children: [
           { title: 'Mayoristas', path: PATH_DASHBOARD.gestion.mayorista },
           { title: 'C. Finales', path: PATH_DASHBOARD.gestion.cfinal },
-          // { title: 'post', path: PATH_DASHBOARD.blog.demoView },
           // { title: 'create', path: PATH_DASHBOARD.blog.new },
         ],
       },

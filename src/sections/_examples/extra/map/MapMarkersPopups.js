@@ -18,9 +18,14 @@ function MapMarkersPopups({ data, ...other }) {
 
   return (
     <Map
-      initialViewState={{
-        zoom: 2,
-      }}
+        initialViewState={{
+            latitude: -2.8959059,
+            longitude: -79.0055115,
+            zoom: 3.5,
+            bearing: 0,
+            pitch: 0,
+        }}
+        mapStyle="mapbox://styles/mapbox/satellite-streets-v11"
       {...other}
     >
       <MapControl />
@@ -67,7 +72,7 @@ function MapMarkersPopups({ data, ...other }) {
             </Box>
 
             <Typography component="div" variant="caption">
-              Timezones: {popupInfo.timezones}
+              Tipo: {popupInfo.capital}
             </Typography>
 
             <Typography component="div" variant="caption">

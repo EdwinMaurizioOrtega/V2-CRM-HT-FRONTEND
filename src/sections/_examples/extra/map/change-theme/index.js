@@ -1,45 +1,41 @@
-import {useState, memo, useEffect} from 'react';
-import Map, {GeolocateControl} from 'react-map-gl';
+import Map from 'react-map-gl';
+import PropTypes from 'prop-types';
+import { memo, useState, useCallback } from 'react';
+
+import { MapControl } from 'src/components/map';
+
+// import ControlPanel from './control-panel';
 
 // ----------------------------------------------------------------------
 
-function MapChangeTheme({ latitude, longitude, ...other }) {
+function MapChangeTheme({ themes, ...other }) {
+    const [selectTheme, setSelectTheme] = useState('outdoors');
 
-    // console.log("latitude: "+ latitude)
-    // console.log("longitudefddg: "+ longitude)
-
-    const [showGeolocateControl, setShowGeolocateControl] = useState(true);
-
-    useEffect(() => {
-        // Se ejecuta cuando el componente se monta
-        setShowGeolocateControl(true);
-
-        // Limpia la configuración al desmontar el componente
-        return () => setShowGeolocateControl(false);
-    }, []);
+    const handleChangeTheme = useCallback((value) => setSelectTheme(value), []);
 
     return (
-    <>
-      <Map
-        initialViewState={{
-          latitude: latitude,
-          longitude: longitude,
-          zoom: 12,  // Ajusta el valor de zoom según sea necesariobearing: 0,
-          pitch: 0,
-        }}
-        mapStyle="mapbox://styles/mapbox/light-v10"
-        positionOptions={{ enableHighAccuracy: true }}
-        geolocateControlOptions={showGeolocateControl}
-        {...other}
+        <>
+            <Map
+                initialViewState={{
+                    latitude: -2.8959059,
+                    longitude: -79.0055115,
+                    zoom: 3.5,
+                    bearing: 0,
+                    pitch: 0,
+                }}
+                mapStyle="mapbox://styles/mapbox/satellite-streets-v11"
+                {...other}
+            >
+                <MapControl />
+            </Map>
 
-      >
-          {showGeolocateControl && (
-              <GeolocateControl position="top-left" positionOptions={{ enableHighAccuracy: true }} />
-          )}
-      </Map>
-
-    </>
-  );
+            {/* <ControlPanel themes={themes} selectTheme={selectTheme} onChangeTheme={handleChangeTheme} /> */}
+        </>
+    );
 }
+
+MapChangeTheme.propTypes = {
+    themes: PropTypes.object,
+};
 
 export default memo(MapChangeTheme);

@@ -26,11 +26,11 @@ export default function MapControl({
         <GeolocateControl position="top-left" positionOptions={{ enableHighAccuracy: true }} />
       )}
 
-      {/* {!hideFullscreenControl && <FullscreenControl position="top-left" />} */}
+      {!hideFullscreenControl && <FullscreenControl position="top-left" />}
 
-      {/* {!hideScaleControl && <ScaleControl position="bottom-left" />} */}
+      {!hideScaleControl && <ScaleControl position="bottom-left" />}
 
-      {/* {!hideNavigationnControl && <NavigationControl position="bottom-left" />} */}
+      {!hideNavigationnControl && <NavigationControl position="bottom-left" />}
     </>
   );
 }

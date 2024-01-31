@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // @mui
 import { alpha, useTheme } from '@mui/material/styles';
-import { Card, Typography } from '@mui/material';
+import {Box, Card, Stack, Typography} from '@mui/material';
 // utils
 import { bgGradient } from '../../../../utils/cssStyles';
 import { fShortenNumber } from '../../../../utils/formatNumber';
@@ -9,14 +9,6 @@ import { fShortenNumber } from '../../../../utils/formatNumber';
 import Iconify from '../../../../components/iconify';
 
 // ----------------------------------------------------------------------
-
-AnalyticsWidgetSummary.propTypes = {
-  sx: PropTypes.object,
-  icon: PropTypes.string,
-  color: PropTypes.string,
-  title: PropTypes.string,
-  total: PropTypes.number,
-};
 
 export default function AnalyticsWidgetSummary({
   title,
@@ -29,39 +21,38 @@ export default function AnalyticsWidgetSummary({
   const theme = useTheme();
 
   return (
-    <Card
-      sx={{
-        py: 5,
-        boxShadow: 0,
-        textAlign: 'center',
-        color: theme.palette[color].darker,
-        bgcolor: theme.palette[color].lighter,
-        ...sx,
-      }}
-      {...other}
-    >
-      <Iconify
-        icon={icon}
-        sx={{
-          mb: 3,
-          p: 2.5,
-          width: 64,
-          height: 64,
-          borderRadius: '50%',
-          color: theme.palette[color].dark,
-          ...bgGradient({
-            direction: '135deg',
-            startColor: `${alpha(theme.palette[color].dark, 0)} 0%`,
-            endColor: `${alpha(theme.palette[color].dark, 0.24)} 100%`,
-          }),
-        }}
-      />
+      <Stack
+          alignItems="center"
+          sx={{
+              ...bgGradient({
+                  direction: '135deg',
+                  startColor: alpha(theme.palette[color].light, 0.2),
+                  endColor: alpha(theme.palette[color].main, 0.2),
+              }),
+              py: 5,
+              borderRadius: 2,
+              textAlign: 'center',
+              color: `${color}.darker`,
+              backgroundColor: 'common.white',
+              ...sx,
+          }}
+          {...other}
+      >
+          {icon && <Box sx={{ width: 64, height: 64, mb: 1 }}>{icon}</Box>}
 
-      <Typography variant="h3">{fShortenNumber(total)}</Typography>
+          <Typography variant="h3">{fShortenNumber(total)}</Typography>
 
-      <Typography variant="subtitle2" sx={{ opacity: 0.64 }}>
-        {title}
-      </Typography>
-    </Card>
+          <Typography variant="subtitle2" sx={{ opacity: 0.64 }}>
+              {title}
+          </Typography>
+      </Stack>
   );
 }
+
+AnalyticsWidgetSummary.propTypes = {
+    color: PropTypes.string,
+    icon: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+    sx: PropTypes.object,
+    title: PropTypes.string,
+    total: PropTypes.number,
+};

@@ -49,7 +49,7 @@ export default function GeneralAnalyticsPage() {
             <AnalyticsWidgetSummary
               title="Weekly Sales"
               total={714000}
-              icon="ant-design:android-filled"
+              icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
             />
           </Grid>
 
@@ -58,7 +58,7 @@ export default function GeneralAnalyticsPage() {
               title="New Users"
               total={1352831}
               color="info"
-              icon="ant-design:apple-filled"
+              icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
             />
           </Grid>
 
@@ -67,7 +67,7 @@ export default function GeneralAnalyticsPage() {
               title="Item Orders"
               total={1723315}
               color="warning"
-              icon="ant-design:windows-filled"
+              icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
             />
           </Grid>
 
@@ -76,7 +76,7 @@ export default function GeneralAnalyticsPage() {
               title="Bug Reports"
               total={234}
               color="error"
-              icon="ant-design:bug-filled"
+              icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
             />
           </Grid>
 
