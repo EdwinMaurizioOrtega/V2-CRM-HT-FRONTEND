@@ -47,6 +47,11 @@ const navConfig = [
       // { title: 'banking', path: PATH_DASHBOARD.general.banking, icon: ICONS.banking },
       // { title: 'booking', path: PATH_DASHBOARD.general.booking, icon: ICONS.booking },
       // { title: 'file', path: PATH_DASHBOARD.general.file, icon: ICONS.file },
+      {
+        title: 'calendar M.',
+        path: PATH_DASHBOARD.calendar,
+        icon: ICONS.calendar,
+      },
     ],
   },
 

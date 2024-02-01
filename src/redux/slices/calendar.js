@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
+import axios from "axios";
 // utils
-import axios from '../../utils/axios';
+//import axios from '../../utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -66,7 +67,7 @@ export function getEvents() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/calendar/events');
+      const response = await axios.get('https://api-dev-minimal-v4.vercel.app/api/calendar/events');
       dispatch(slice.actions.getEventsSuccess(response.data.events));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
