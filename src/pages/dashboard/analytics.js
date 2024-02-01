@@ -189,18 +189,18 @@ export default function GeneralAnalyticsPage() {
           {/*   <AnalyticsTrafficBySite title="Traffic by Site" list={_analyticTraffic} /> */}
           {/* </Grid> */}
 
-          {/* <Grid item xs={12} md={6} lg={8}> */}
-          {/*   <AnalyticsTasks */}
-          {/*     title="Tasks" */}
-          {/*     list={[ */}
-          {/*       { id: '1', label: 'Create FireStone Logo' }, */}
-          {/*       { id: '2', label: 'Add SCSS and JS files if required' }, */}
-          {/*       { id: '3', label: 'Stakeholder Meeting' }, */}
-          {/*       { id: '4', label: 'Scoping & Estimations' }, */}
-          {/*       { id: '5', label: 'Sprint Showcase' }, */}
-          {/*     ]} */}
-          {/*   /> */}
-          {/* </Grid> */}
+          <Grid item xs={12} md={6} lg={8}>
+            <AnalyticsTasks
+              title="Tasks"
+              list={[
+                { id: '1', label: 'Create FireStone Logo' },
+                { id: '2', label: 'Add SCSS and JS files if required' },
+                { id: '3', label: 'Stakeholder Meeting' },
+                { id: '4', label: 'Scoping & Estimations' },
+                { id: '5', label: 'Sprint Showcase' },
+              ]}
+            />
+          </Grid>
         </Grid>
       </Container>
     </>
