@@ -39,6 +39,7 @@ import {useBoolean} from "../../../hooks/use-boolean";
 import CustomerQuickManagementForm from "../../../sections/@dashboard/gestion/customer-quick-management-form";
 import PreviousClientManagement from "../../../sections/@dashboard/gestion/previous-client-management";
 import InvoicedClientOrders from "../../../sections/@dashboard/gestion/invoiced-client-orders";
+import {useAuthContext} from "../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -57,6 +58,9 @@ export const rangos = [
 ]
 
 export default function MayoristaPage(callback, deps) {
+
+    const {user} = useAuthContext();
+
     const {themeStretch} = useSettingsContext();
 
     const baseColumns = [
@@ -214,10 +218,12 @@ export default function MayoristaPage(callback, deps) {
         try {
 
             console.log("ID RANGO: " + value.id); // Log the selected element
+            console.log("Usuario logueado: "+ user.DISPLAYNAME)
 
             try {
                 const response = await axios.post('/hanadb/api/customers/BusinessPartnersByRange', {
                     ID_RANGO: value.id,
+                    USER_NAME: user.DISPLAYNAME
                 });
 
                 if (response.status === 200) {
@@ -240,8 +246,6 @@ export default function MayoristaPage(callback, deps) {
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
-            ;
-
 
         } catch
             (error) {
@@ -371,41 +375,41 @@ export default function MayoristaPage(callback, deps) {
                             }}
                         />
 
-                        <TextField
-                            fullWidth
-                            type="text"
-                            label="Nombre Producto"
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            edge="end"
-                                        >
-                                            <Iconify icon="eva:search-fill" width={24}/>
+                        {/*<TextField*/}
+                        {/*    fullWidth*/}
+                        {/*    type="text"*/}
+                        {/*    label="Nombre Producto"*/}
+                        {/*    InputProps={{*/}
+                        {/*        endAdornment: (*/}
+                        {/*            <InputAdornment position="end">*/}
+                        {/*                <IconButton*/}
+                        {/*                    edge="end"*/}
+                        {/*                >*/}
+                        {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
 
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
+                        {/*                </IconButton>*/}
+                        {/*            </InputAdornment>*/}
+                        {/*        ),*/}
+                        {/*    }}*/}
+                        {/*/>*/}
 
-                        <TextField
-                            fullWidth
-                            type="text"
-                            label="Código Producto"
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            edge="end"
-                                        >
-                                            <Iconify icon="eva:search-fill" width={24}/>
+                        {/*<TextField*/}
+                        {/*    fullWidth*/}
+                        {/*    type="text"*/}
+                        {/*    label="Código Producto"*/}
+                        {/*    InputProps={{*/}
+                        {/*        endAdornment: (*/}
+                        {/*            <InputAdornment position="end">*/}
+                        {/*                <IconButton*/}
+                        {/*                    edge="end"*/}
+                        {/*                >*/}
+                        {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
 
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
+                        {/*                </IconButton>*/}
+                        {/*            </InputAdornment>*/}
+                        {/*        ),*/}
+                        {/*    }}*/}
+                        {/*/>*/}
 
 
                     </Box>
