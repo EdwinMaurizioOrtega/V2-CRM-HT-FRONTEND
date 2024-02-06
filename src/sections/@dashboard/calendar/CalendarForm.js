@@ -100,77 +100,77 @@ export default function CalendarForm({
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3} sx={{ px: 3 }}>
-        <RHFTextField name="title" label="Title" />
+        {/*<RHFTextField name="title" label="Cliente" />*/}
 
-        <RHFTextField name="description" label="Description" multiline rows={3} />
+        <RHFTextField disabled name="description" label="Cliente/Descripción" multiline rows={3} />
 
-        <RHFSwitch name="allDay" label="All day" />
+        {/*<RHFSwitch name="allDay" label="All day" />*/}
 
-        <Controller
-          name="start"
-          control={control}
-          render={({ field }) => (
-            <MobileDateTimePicker
-              {...field}
-              onChange={(newValue) => field.onChange(newValue)}
-              label="Start date"
-              inputFormat="dd/MM/yyyy hh:mm a"
-              renderInput={(params) => <TextField {...params} fullWidth />}
-            />
-          )}
-        />
+        {/*<Controller*/}
+        {/*  name="start"*/}
+        {/*  control={control}*/}
+        {/*  render={({ field }) => (*/}
+        {/*    <MobileDateTimePicker*/}
+        {/*      {...field}*/}
+        {/*      onChange={(newValue) => field.onChange(newValue)}*/}
+        {/*      label="Start date"*/}
+        {/*      inputFormat="dd/MM/yyyy hh:mm a"*/}
+        {/*      renderInput={(params) => <TextField {...params} fullWidth />}*/}
+        {/*    />*/}
+        {/*  )}*/}
+        {/*/>*/}
 
-        <Controller
-          name="end"
-          control={control}
-          render={({ field }) => (
-            <MobileDateTimePicker
-              {...field}
-              onChange={(newValue) => field.onChange(newValue)}
-              label="End date"
-              inputFormat="dd/MM/yyyy hh:mm a"
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  fullWidth
-                  error={!!isDateError}
-                  helperText={isDateError && 'End date must be later than start date'}
-                />
-              )}
-            />
-          )}
-        />
+        {/*<Controller*/}
+        {/*  name="end"*/}
+        {/*  control={control}*/}
+        {/*  render={({ field }) => (*/}
+        {/*    <MobileDateTimePicker*/}
+        {/*      {...field}*/}
+        {/*      onChange={(newValue) => field.onChange(newValue)}*/}
+        {/*      label="End date"*/}
+        {/*      inputFormat="dd/MM/yyyy hh:mm a"*/}
+        {/*      renderInput={(params) => (*/}
+        {/*        <TextField*/}
+        {/*          {...params}*/}
+        {/*          fullWidth*/}
+        {/*          error={!!isDateError}*/}
+        {/*          helperText={isDateError && 'End date must be later than start date'}*/}
+        {/*        />*/}
+        {/*      )}*/}
+        {/*    />*/}
+        {/*  )}*/}
+        {/*/>*/}
 
-        <Controller
-          name="color"
-          control={control}
-          render={({ field }) => (
-            <ColorSinglePicker
-              value={field.value}
-              onChange={field.onChange}
-              colors={colorOptions}
-            />
-          )}
-        />
+        {/*<Controller*/}
+        {/*  name="color"*/}
+        {/*  control={control}*/}
+        {/*  render={({ field }) => (*/}
+        {/*    <ColorSinglePicker*/}
+        {/*      value={field.value}*/}
+        {/*      onChange={field.onChange}*/}
+        {/*      colors={colorOptions}*/}
+        {/*    />*/}
+        {/*  )}*/}
+        {/*/>*/}
       </Stack>
 
       <DialogActions>
-        {hasEventData && (
-          <Tooltip title="Delete Event">
-            <IconButton onClick={onDeleteEvent}>
-              <Iconify icon="eva:trash-2-outline" />
-            </IconButton>
-          </Tooltip>
-        )}
+        {/*{hasEventData && (*/}
+        {/*  <Tooltip title="Delete Event">*/}
+        {/*    <IconButton onClick={onDeleteEvent}>*/}
+        {/*      <Iconify icon="eva:trash-2-outline" />*/}
+        {/*    </IconButton>*/}
+        {/*  </Tooltip>*/}
+        {/*)}*/}
 
         <Box sx={{ flexGrow: 1 }} />
 
         <Button variant="outlined" color="inherit" onClick={onCancel}>
-          Cancel
+          Cancelar
         </Button>
 
         <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-          {hasEventData ? 'Update' : 'Add'}
+          {hasEventData ? 'Cerrar visita' : 'Add'}
         </LoadingButton>
       </DialogActions>
     </FormProvider>

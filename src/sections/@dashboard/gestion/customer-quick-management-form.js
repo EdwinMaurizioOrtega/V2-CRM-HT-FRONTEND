@@ -16,7 +16,7 @@ import DialogContent from '@mui/material/DialogContent';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
-import {DatePicker} from "@mui/x-date-pickers";
+import {DatePicker, DateTimePicker} from "@mui/x-date-pickers";
 import {TextField} from "@mui/material";
 import {useAuthContext} from "../../../auth/useAuthContext";
 import axios from "../../../utils/axios";
@@ -32,8 +32,8 @@ const options_1 = [
 ]
 
 const options_2 = [
-  { id: '01', label: 'Llamada telefonica' },
-  { id: '02', label: 'Llamada telefonica'},
+  { id: '01', label: 'Llamada telefónica' },
+  { id: '02', label: 'Visita en Local'},
   { id: '03', label: 'Whatsapp'},
   { id: '04', label: 'Correo'},
   { id: '05', label: 'Otros'},
@@ -175,7 +175,7 @@ export default function CustomerQuickManagementForm({ currentPartner, open, onCl
                 name="dateManagement"
                 control={control}
                 render={({ field, fieldState: { error } }) => (
-                    <DatePicker
+                    <DateTimePicker
                         {...field}
                         label="Próxima gestión (Obligatorio)"
                         inputFormat="dd/MM/yyyy"

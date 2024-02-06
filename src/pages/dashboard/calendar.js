@@ -34,6 +34,7 @@ import {
   CalendarToolbar,
   CalendarFilterDrawer,
 } from '../../sections/@dashboard/calendar';
+import {useAuthContext} from "../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -200,7 +201,7 @@ export default function CalendarPage() {
 
   const handleCreateUpdateEvent = (newEvent) => {
     if (selectedEventId) {
-      dispatch(updateEvent(selectedEventId, newEvent));
+      dispatch(updateEvent(selectedEventId));
       enqueueSnackbar('Update success!');
     } else {
       dispatch(createEvent(newEvent));
@@ -247,6 +248,12 @@ export default function CalendarPage() {
     isError: !!picker.isError,
   });
 
+  // const dataFiltered = [
+  //   { title: 'Meeting', start: new Date() },
+  //   { title: 'Meeting', start: new Date() },
+  //   { title: 'Meeting', start: new Date() }
+  // ]
+
   return (
     <>
       <Head>
@@ -265,16 +272,16 @@ export default function CalendarPage() {
               name: 'Calendar',
             },
           ]}
-          moreLink={['https://fullcalendar.io/docs/react']}
-          action={
-            <Button
-              variant="contained"
-              startIcon={<Iconify icon="eva:plus-fill" />}
-              onClick={handleOpenModal}
-            >
-              New Event
-            </Button>
-          }
+          // moreLink={['https://fullcalendar.io/docs/react']}
+          // action={
+          //   <Button
+          //     variant="contained"
+          //     startIcon={<Iconify icon="eva:plus-fill" />}
+          //     onClick={handleOpenModal}
+          //   >
+          //     New Event
+          //   </Button>
+          // }
         />
 
         <Card>
@@ -323,7 +330,7 @@ export default function CalendarPage() {
       </Container>
 
       <Dialog fullWidth maxWidth="xs" open={openForm} onClose={handleCloseModal}>
-        <DialogTitle>{selectedEvent ? 'Edit Event' : 'Add Event'}</DialogTitle>
+        <DialogTitle>{selectedEvent ? 'Cerrar Evento Agenda' : 'Add Event'}</DialogTitle>
 
         <CalendarForm
           event={selectedEvent}
@@ -335,22 +342,22 @@ export default function CalendarPage() {
         />
       </Dialog>
 
-      <CalendarFilterDrawer
-        events={events}
-        picker={picker}
-        openFilter={openFilter}
-        colorOptions={COLOR_OPTIONS}
-        onResetFilter={handleResetFilter}
-        filterEventColor={filterEventColor}
-        onCloseFilter={() => setOpenFilter(false)}
-        onFilterEventColor={handleFilterEventColor}
-        onSelectEvent={(eventId) => {
-          if (eventId) {
-            handleOpenModal();
-            setSelectedEventId(eventId);
-          }
-        }}
-      />
+      {/*<CalendarFilterDrawer*/}
+      {/*  events={events}*/}
+      {/*  picker={picker}*/}
+      {/*  openFilter={openFilter}*/}
+      {/*  colorOptions={COLOR_OPTIONS}*/}
+      {/*  onResetFilter={handleResetFilter}*/}
+      {/*  filterEventColor={filterEventColor}*/}
+      {/*  onCloseFilter={() => setOpenFilter(false)}*/}
+      {/*  onFilterEventColor={handleFilterEventColor}*/}
+      {/*  onSelectEvent={(eventId) => {*/}
+      {/*    if (eventId) {*/}
+      {/*      handleOpenModal();*/}
+      {/*      setSelectedEventId(eventId);*/}
+      {/*    }*/}
+      {/*  }}*/}
+      {/*/>*/}
     </>
   );
 }
@@ -360,10 +367,16 @@ export default function CalendarPage() {
 const useGetEvents = () => {
   const dispatch = useDispatch();
 
+  const { user } = useAuthContext();
+
+
   const { events: data } = useSelector((state) => state.calendar);
 
+  console.log("data: "+ JSON.stringify( data) );
+  // console.log("events: "+ JSON.stringify( events) );
+
   const getAllEvents = useCallback(() => {
-    dispatch(getEvents());
+    dispatch(getEvents(user));
   }, [dispatch]);
 
   useEffect(() => {
@@ -371,9 +384,17 @@ const useGetEvents = () => {
   }, [getAllEvents]);
 
   const events = data.map((event) => ({
-    ...event,
-    textColor: event.color,
+    //...event,
+    // textColor: event.color,
+    id: event.ID,
+    title:  event.CLIENTE,
+    start: new Date(event.FECHA),
+    // allDay: true,
+    description: `${event.CLIENTE} ${event.CLIENTE_ID} ${event.NOTA} ${event.VISITO ? "CERRADO" : "NO CERRADO"}`
   }));
+
+
+  console.log("events: "+ JSON.stringify( events) );
 
   return events;
 };
@@ -397,5 +418,6 @@ function applyFilter({ inputData, filterEventColor, filterStartDate, filterEndDa
     );
   }
 
+  console.log("inputData: "+  JSON.stringify(inputData));
   return inputData;
 }
