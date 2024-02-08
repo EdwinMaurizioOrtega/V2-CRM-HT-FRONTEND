@@ -20,6 +20,9 @@ import {
     GridToolbarQuickFilter
 } from "@mui/x-data-grid";
 import EmptyContent from "../../../components/empty-content";
+import {AnalyticsCurrentVisits, AnalyticsWebsiteVisits} from "../general/analytics";
+import {Grid} from "@mui/material";
+import {useTheme} from "@mui/material/styles";
 
 
 // ----------------------------------------------------------------------
@@ -27,6 +30,9 @@ import EmptyContent from "../../../components/empty-content";
 export default function PreviousClientManagement({currentPartner, open, onClose}) {
 
     console.log("partner.ID " + currentPartner?.ID || '');
+
+    const theme = useTheme();
+
 
     const baseColumns = [
         {
@@ -103,7 +109,8 @@ export default function PreviousClientManagement({currentPartner, open, onClose}
 
                 } catch (error) {
                     console.error('Error fetching data:', error);
-                };
+                }
+                ;
 
             }
 
@@ -131,7 +138,53 @@ export default function PreviousClientManagement({currentPartner, open, onClose}
                     Cliente: {currentPartner?.Cliente || ''}
                 </Alert>
 
+                <Grid container spacing={3}>
 
+                    <Grid item xs={12} md={6} lg={8}>
+                        <AnalyticsWebsiteVisits
+                            title="Visitas Semanales"
+                            subheader="(+43%) que la semana pasada."
+                            chart={{
+                                labels: [
+                                    '01/01/2004',
+                                    '02/01/2004',
+                                    '03/01/2004',
+                                    '04/01/2004',
+                                    '05/01/2004',
+                                    '06/01/2004',
+                                    '07/01/2004',
+                                ],
+                                series: [
+                                    {
+                                        name: 'Team A',
+                                        type: 'column',
+                                        fill: 'solid',
+                                        data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
+                                    }
+                                ],
+                            }}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12} md={6} lg={4}>
+                        <AnalyticsCurrentVisits
+                            title="Gestión inteligente de cliente"
+                            chart={{
+                                series: [
+                                    {label: 'Total Gestiones', value: 5435},
+                                    {label: 'Total Agenda', value: 1443},
+                                    {label: 'Agenda Cerrada', value: 1443},
+                                ],
+                                colors: [
+                                    theme.palette.primary.main,
+                                    theme.palette.info.main,
+                                    theme.palette.error.main,
+                                    theme.palette.warning.main,
+                                ],
+                            }}
+                        />
+                    </Grid>
+                </Grid>
                 <DataGrid
                     rows={businessPartnersManagement}
                     columns={baseColumns}
