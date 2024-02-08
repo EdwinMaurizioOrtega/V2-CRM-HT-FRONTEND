@@ -14,6 +14,7 @@ import {
 // components
 import Iconify from '../../../../../components/iconify';
 import {fCurrency} from "../../../../../utils/formatNumber";
+import {TIPO_CREDITO} from "../../../../../utils/constants";
 
 // ----------------------------------------------------------------------
 
@@ -30,6 +31,11 @@ export default function CheckoutBillingInfo({billing, onBackStep}) {
         billingEnvioArray = JSON.parse(billing?.ENVIO || '[]');
     } catch (error) {
         console.error('Error al analizar la cadena JSON:', error);
+    }
+
+    function tipoCredito(pay) {
+        const payActual = TIPO_CREDITO.find(option => option.id == pay);
+        return payActual ? payActual.title : "Pago no definido.";
     }
 
     return (
@@ -54,15 +60,14 @@ export default function CheckoutBillingInfo({billing, onBackStep}) {
                 </Typography>
 
                 <Typography variant="body2" gutterBottom>
-                    Crédito aprobado: {billing?.ValidComm}
+                    Saldo Deuda: {fCurrency(billing?.Balance)}
                 </Typography>
                 <Typography variant="body2" gutterBottom>
-                    Tipo crédito: {billing?.GLN}
+                    Cupo Disponible: {fCurrency(billing?.CreditLine - billing?.Balance)}
                 </Typography>
                 <Typography variant="body2" gutterBottom>
-                    Cupo utilizado: {fCurrency(billing?.Balance)}
+                    Tipo Crédito: {tipoCredito(billing?.U_SYP_CREDITO)}
                 </Typography>
-
                 {/* <Typography variant="body2" sx={{color: 'text.secondary'}}> */}
                 {/*     {billing?.Celular} */}
                 {/* </Typography> */}
