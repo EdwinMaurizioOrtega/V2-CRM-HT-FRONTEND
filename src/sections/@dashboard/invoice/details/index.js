@@ -844,7 +844,7 @@ export default function InvoiceDetails({invoice}) {
                         <Label color="success">{Ciudad}</Label>
                         <Typography variant="body2">TIPO: {Tipo}</Typography>
                         <Label color="success">Lista Precio: {tipoPrecio(Lista)}</Label>
-                        <Typography variant="body2">Saldo de Cuenta: {Balance}</Typography>
+                        <Typography variant="body2">Saldo de Cuenta: {fCurrency(Balance)}</Typography>
                         <Label color="success">DOCUMENTACIÓN: {documentacion(U_SYP_DOCUMENTACION)}</Label>
                         <Typography variant="body2">Tipo de Crédito: {tipoCredito(U_SYP_CREDITO)}</Typography>
                         <Label color="success">Condicion de Pago: {nameFormaPago(GroupNum)}</Label>
