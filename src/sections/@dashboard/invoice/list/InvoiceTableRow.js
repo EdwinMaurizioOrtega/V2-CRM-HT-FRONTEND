@@ -27,7 +27,7 @@ import {HOST_API_KEY} from "../../../../config-global";
 import {PATH_DASHBOARD} from "../../../../routes/paths";
 import axios from "../../../../utils/axios";
 import {useRouter} from "next/router";
-import {PAYMENT_OPTIONS_V2} from "../../../../utils/formaPago";
+import {PAYMENT_OPTIONS_V2} from "../../../../utils/constants";
 
 
 // ----------------------------------------------------------------------

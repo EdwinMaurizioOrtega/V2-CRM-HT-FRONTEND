@@ -61,7 +61,7 @@ import {useBoolean} from "../../../../hooks/use-boolean";
 import InvoicePDF from "./InvoicePDF";
 import {PDFDownloadLink} from "@react-pdf/renderer";
 import PedidoInvoicePDF from "./PedidoInvoicePDF";
-import {PAYMENT_OPTIONS_V2} from "../../../../utils/formaPago";
+import {PAYMENT_OPTIONS_V2} from "../../../../utils/constants";
 
 // ----------------------------------------------------------------------
 

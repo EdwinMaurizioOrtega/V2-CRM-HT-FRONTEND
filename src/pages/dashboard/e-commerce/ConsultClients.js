@@ -49,6 +49,7 @@ import {useAuthContext} from "../../../auth/useAuthContext";
 import Label from "../../../components/label";
 import {fCurrency} from "../../../utils/formatNumber";
 import {useSnackbar} from "../../../components/snackbar";
+import {DOCUMENTACION, PAYMENT_OPTIONS_V2, TIPO_CREDITO, TIPO_PRECIO} from "../../../utils/constants";
 
 // ----------------------------------------------------------------------
 
@@ -181,6 +182,27 @@ export default function ConsultClientForm() {
 
     }
 
+    function nameFormaPago(pay) {
+        const payActual = PAYMENT_OPTIONS_V2.find(option => option.id == pay);
+        return payActual ? payActual.title : "Pago no definido.";
+    }
+
+
+    function documentacion(pay) {
+        const payActual = DOCUMENTACION.find(option => option.id == pay);
+        return payActual ? payActual.title : "Pago no definido.";
+    }
+
+    function tipoCredito(pay) {
+        const payActual = TIPO_CREDITO.find(option => option.id == pay);
+        return payActual ? payActual.title : "Pago no definido.";
+    }
+
+    function tipoPrecio(pay) {
+        const payActual = TIPO_PRECIO.find(option => option.id == pay);
+        return payActual ? payActual.title : "Pago no definido.";
+    }
+
     return (
         <>
             <Head>
@@ -204,80 +226,91 @@ export default function ConsultClientForm() {
                 />
 
                 {user.ROLE != 'infinix' ? (
+                    <Grid container spacing={5}>
+                        <Grid item xs={12} md={6}>
+                            <Stack spacing={2}>
+                                <Block label="Cliente Razon Social">
+                                    <Autocomplete
+                                        size="small"
+                                        autoHighlight
+                                        popupIcon={null}
+                                        options={searchResults}
+                                        onInputChange={(event, value) => handleChangeSearch(value)}
+                                        getOptionLabel={(product) => product.Cliente}
+                                        noOptionsText={<SearchNotFound query={searchProducts}/>}
+                                        isOptionEqualToValue={(option, value) => option.ID === value.ID}
+                                        componentsProps={{
+                                            paper: {
+                                                sx: {
+                                                    '& .MuiAutocomplete-option': {
+                                                        px: `8px !important`,
+                                                    },
+                                                },
+                                            },
+                                        }}
+                                        renderInput={(params) => (
+                                            <CustomTextField
+                                                {...params}
 
-                    <Autocomplete
-                        size="small"
-                        autoHighlight
-                        popupIcon={null}
-                        options={searchResults}
-                        onInputChange={(event, value) => handleChangeSearch(value)}
-                        getOptionLabel={(product) => product.Cliente}
-                        noOptionsText={<SearchNotFound query={searchProducts}/>}
-                        isOptionEqualToValue={(option, value) => option.ID === value.ID}
-                        componentsProps={{
-                            paper: {
-                                sx: {
-                                    '& .MuiAutocomplete-option': {
-                                        px: `8px !important`,
-                                    },
-                                },
-                            },
-                        }}
-                        renderInput={(params) => (
-                            <CustomTextField
-                                {...params}
+                                                placeholder="Buscar..."
+                                                onKeyUp={handleKeyUp}
+                                                InputProps={{
+                                                    ...params.InputProps,
+                                                    startAdornment: (
+                                                        <InputAdornment position="start">
+                                                            <Iconify icon="eva:search-fill"
+                                                                     sx={{ml: 1, color: 'text.disabled'}}/>
+                                                        </InputAdornment>
+                                                    ),
+                                                }}
+                                            />
+                                        )}
+                                        renderOption={(props, product, {inputValue}) => {
+                                            const {ID, Cliente} = product;
+                                            const matches = match(Cliente, inputValue);
+                                            const parts = parse(Cliente, matches);
 
-                                placeholder="Buscar..."
-                                onKeyUp={handleKeyUp}
-                                InputProps={{
-                                    ...params.InputProps,
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                            <Iconify icon="eva:search-fill" sx={{ml: 1, color: 'text.disabled'}}/>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-                        )}
-                        renderOption={(props, product, {inputValue}) => {
-                            const {ID, Cliente} = product;
-                            const matches = match(Cliente, inputValue);
-                            const parts = parse(Cliente, matches);
-
-                            return (
-                                <li {...props}>
+                                            return (
+                                                <li {...props}>
 
 
-                                    <AddressItem
-                                        key={ID}
-                                        address={product}
-                                        onCreateBilling={() => onCreateBilling(product)}
-                                    >
-                                        {parts.map((part, index) => (
-                                            <Typography
-                                                key={index}
-                                                component="span"
-                                                variant="subtitle2"
-                                                color={part.highlight ? 'primary' : 'textPrimary'}
-                                            >
-                                                {part.text}
-                                            </Typography>
-                                        ))}
+                                                    <AddressItem
+                                                        key={ID}
+                                                        address={product}
+                                                        onCreateBilling={() => onCreateBilling(product)}
+                                                    >
+                                                        {parts.map((part, index) => (
+                                                            <Typography
+                                                                key={index}
+                                                                component="span"
+                                                                variant="subtitle2"
+                                                                color={part.highlight ? 'primary' : 'textPrimary'}
+                                                            >
+                                                                {part.text}
+                                                            </Typography>
+                                                        ))}
 
-                                    </AddressItem>
+                                                    </AddressItem>
 
-                                </li>
-                            );
-                        }}
-                    />
+                                                </li>
+                                            );
+                                        }}
+                                    />
 
-                ) : null }
+                                </Block>
+
+                            </Stack>
+                        </Grid>
+
+                    </Grid>
+
+                ) : null}
 
                 <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={5}>
                         <Grid item xs={12} md={6}>
                             <Stack spacing={2}>
-                                <Block label="Cliente">
+                                <Block label="Cliente RUC/Cédula">
                                     <RHFTextField name="ci_ruc"
                                                   label="RUC/Cédula"
                                                   onChange={(event) => {
@@ -311,32 +344,47 @@ export default function ConsultClientForm() {
                             </Stack>
                         </Grid>
 
-                        <Grid item xs={12} md={6}>
-                            <Stack spacing={2}>
-                                <Block label="Detalle">
-
-                                    {dataCliente ? (
-                                        <>
-                                            <Label color="success">Vendedor: {dataCliente.SlpName} </Label>
-                                            <Label color="success">Cliente: {dataCliente.Cliente} </Label>
-                                            <Label color="success">Crédito aprobado: {dataCliente.ValidComm} </Label>
-                                            <Label color="success">Tipo crédito: {dataCliente.GLN} </Label>
-                                            <Label color="success">Cupo
-                                                utilizado: {fCurrency(dataCliente.Balance)} </Label>
-                                        </>
-
-                                    ) : (
-                                        <Label color="error">Cliente no encontrado</Label>
-                                    )}
-
-                                </Block>
-
-                            </Stack>
-                        </Grid>
 
                     </Grid>
 
                 </FormProvider>
+
+
+                <Grid item xs={12} md={6}>
+                    <Stack spacing={2}>
+                        <Block label="Detalle">
+
+                            {dataCliente ? (
+                                <>
+                                    <Label color="success">Tipo: {dataCliente.Tipo} </Label>
+                                    <Label color="success">Vendedor: {dataCliente.SlpName} </Label>
+                                    <Label color="success">Cliente: {dataCliente.Cliente} </Label>
+
+                                    <Label color="success">Lista Precio: {tipoPrecio(dataCliente.Lista)} </Label>
+                                    <Label color="success">Saldo de Cuenta: {fCurrency(dataCliente.Balance)} </Label>
+                                    <Label
+                                        color="success">DOCUMENTACIÓN: {documentacion(dataCliente.U_SYP_DOCUMENTACION)} </Label>
+                                    <Label color="success">Tipo de
+                                        Crédito: {tipoCredito(dataCliente.U_SYP_CREDITO)} </Label>
+                                    <Label color="success">Condicion de
+                                        Pago: {nameFormaPago(dataCliente.GroupNum)} </Label>
+                                    <Label color="success">Límte de
+                                        Crédito: {fCurrency(dataCliente.CreditLine)} </Label>
+                                    <Label color="success">Límite de
+                                        comprometido: {fCurrency(dataCliente.DebtLine)} </Label>
+                                    <Label color="success">Pedidos Clientes: {fCurrency(dataCliente.OrdersBal)} </Label>
+                                    <Label color="success">Comentario: {dataCliente.Free_Text} </Label>
+                                </>
+
+                            ) : (
+                                <Label color="error">Cliente no encontrado</Label>
+                            )}
+
+                        </Block>
+
+                    </Stack>
+                </Grid>
+
 
                 {/* <h2>Solicitud Creación Cliente</h2> */}
 
@@ -407,8 +455,6 @@ export default function ConsultClientForm() {
                 {/*     </Grid> */}
 
                 {/* </form> */}
-
-
 
 
             </Container>

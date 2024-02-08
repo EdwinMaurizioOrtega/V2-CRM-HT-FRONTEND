@@ -116,3 +116,81 @@ export const PAYMENT_OPTIONS_V2 = [
         title: "CRÉDITO 2 DÍAS"
     }
 ];
+
+export const TIPO_CREDITO = [
+    {
+        id: 1,
+        title: "ASEGURADORA NOMINADO"
+    },
+    {
+        id: 2,
+        title: "ASEGURADORA INNOMINADO"
+    },
+    {
+        id: 3,
+        title: "INTERNO"
+    },
+    {
+        id: 4,
+        title: "CONTADO"
+    }
+]
+
+export const DOCUMENTACION = [
+    {
+        id: 1,
+        title: "SIN DOCUMENTOS"
+    },
+    {
+        id: 2,
+        title: "COM DOCUMENTOS"
+    },
+    {
+        id: 3,
+        title: "DOCUMENTOS INCOMPLETOS"
+    }
+]
+
+
+export const TIPO_PRECIO = [
+    {
+        id: 1,
+        title: "NE"
+    },
+    {
+        id: 2,
+        title: "Precio 30 unidades"
+    },
+    {
+        id: 3,
+        title: "Precio 15 unidades"
+    },
+    {
+        id: 4,
+        title: "Precio Retail"
+    },
+    {
+        id: 5,
+        title: "Precio Mayorista"
+    },
+    {
+        id: 6,
+        title: "Precio PVP"
+    },
+    {
+        id: 7,
+        title: "Precio T/C 3M"
+    },
+    {
+        id: 8,
+        title: "Precio T/C 12M"
+    },
+    {
+        id: 9,
+        title: "eStore"
+    },
+    {
+        id: 10,
+        title: "EPP"
+    }
+]
