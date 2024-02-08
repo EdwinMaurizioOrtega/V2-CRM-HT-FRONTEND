@@ -519,7 +519,7 @@ export default function InvoiceDetails({invoice}) {
             if (response.status === 200) {
                 //await router.push('/dashboard/invoice/list/');
                 //setTimeout(() => {
-                    window.location.href = '/dashboard/invoice/list/';
+                window.location.href = '/dashboard/invoice/list/';
                 //}, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
             }
         } catch (error) {
@@ -837,72 +837,6 @@ export default function InvoiceDetails({invoice}) {
 
                     <Grid item xs={12} sm={6} sx={{mb: 5}}>
                         <Typography paragraph variant="overline" sx={{color: 'text.disabled'}}>
-                            Orden de
-                        </Typography>
-
-                        <Typography variant="body2">{VENDEDOR}</Typography>
-
-                        <Typography variant="body2">{CITY}</Typography>
-
-                        {/* <Typography variant="body2">Phone: {invoiceFrom.phone}</Typography> */}
-                        <Typography paragraph variant="overline" sx={{color: 'text.disabled'}}>
-                            fecha de creación
-                        </Typography>
-
-                        <Typography variant="body2">{FECHACREACION}</Typography>
-
-                        <Typography paragraph variant="overline" sx={{color: 'text.disabled'}}>
-                            opciones
-                        </Typography>
-
-
-
-                            <Grid item xs={12} sm={5} sx={{mb: 1}}>
-
-                                {/* <Typography variant="body2">{fDate(dueDate)}</Typography> */}
-                                <Typography variant="body2">Bodega actual: {nameWarehouse(BODEGA)}</Typography>
-
-                                {user.ROLE === "aprobador" &&
-
-                                    <Autocomplete
-                                        fullWidth
-                                        options={top100Films}
-                                        getOptionLabel={(option) => option.title}
-                                        onChange={(event, value) => {
-                                            handleChangeWarehouse(event, value);
-                                        }} // Add onChange event handler
-                                        renderInput={(params) => <TextField {...params} label="-_-" margin="none"/>}
-                                    />
-                                }
-
-                            </Grid>
-
-                            <Grid item xs={12} sm={7} sx={{mb: 1}}>
-
-                                <Typography variant="body2">Forma de pago
-                                    actual: {nameFormaPago(FORMADEPAGO)}</Typography>
-
-                                {user.ROLE === "aprobador" &&
-                                    <Autocomplete
-                                        fullWidth
-                                        options={PAYMENT_OPTIONS_V2}
-                                        getOptionLabel={(option) => option.title}
-                                        onChange={(event, value) => {
-                                            handleChangePayment(event, value);
-                                        }}
-                                        renderInput={(params) => <TextField {...params} label="-_-" margin="none"/>}
-                                    />
-                                }
-
-                            </Grid>
-
-
-
-
-                    </Grid>
-
-                    <Grid item xs={12} sm={6} sx={{mb: 5}}>
-                        <Typography paragraph variant="overline" sx={{color: 'text.disabled'}}>
                             FACTURA A:
                         </Typography>
                         <Label color="success">{Cliente}</Label>
@@ -918,6 +852,68 @@ export default function InvoiceDetails({invoice}) {
                         <Label color="success">Límite de comprometido: {fCurrency(DebtLine)}</Label>
                         <Typography variant="body2">Pedidos Clientes: {fCurrency(OrdersBal)}</Typography>
                         <Label color="success">Comentario: {Free_Text}</Label>
+
+                    </Grid>
+
+                    <Grid item xs={12} sm={6} sx={{mb: 5}}>
+                        <Typography paragraph variant="overline" sx={{color: 'text.disabled'}}>
+                            Orden de
+                        </Typography>
+
+                        <Typography variant="body2">{VENDEDOR}</Typography>
+
+                        <Typography variant="body2">{CITY}</Typography>
+
+                        {/* <Typography variant="body2">Phone: {invoiceFrom.phone}</Typography> */}
+                        <Typography variant="overline" sx={{color: 'text.disabled'}}>
+                            fecha de creación
+                        </Typography>
+
+                        <Typography variant="body2">{FECHACREACION}</Typography>
+
+                        <Typography variant="overline" sx={{color: 'text.disabled'}}>
+                            opciones
+                        </Typography>
+
+                        <Grid item xs={12} sm={5} sx={{mb: 1}}>
+
+                            {/* <Typography variant="body2">{fDate(dueDate)}</Typography> */}
+                            <Typography variant="body2">Bodega actual: {nameWarehouse(BODEGA)}</Typography>
+
+                            {user.ROLE === "aprobador" &&
+
+                                <Autocomplete
+                                    fullWidth
+                                    options={top100Films}
+                                    getOptionLabel={(option) => option.title}
+                                    onChange={(event, value) => {
+                                        handleChangeWarehouse(event, value);
+                                    }} // Add onChange event handler
+                                    renderInput={(params) => <TextField {...params} label="-_-" margin="none"/>}
+                                />
+                            }
+
+                        </Grid>
+
+                        <Grid item xs={12} sm={7} sx={{mb: 1}}>
+
+                            <Typography variant="body2">Forma de pago
+                                actual: {nameFormaPago(FORMADEPAGO)}</Typography>
+
+                            {user.ROLE === "aprobador" &&
+                                <Autocomplete
+                                    fullWidth
+                                    options={PAYMENT_OPTIONS_V2}
+                                    getOptionLabel={(option) => option.title}
+                                    onChange={(event, value) => {
+                                        handleChangePayment(event, value);
+                                    }}
+                                    renderInput={(params) => <TextField {...params} label="-_-" margin="none"/>}
+                                />
+                            }
+
+                        </Grid>
+
 
                     </Grid>
 
@@ -949,8 +945,8 @@ export default function InvoiceDetails({invoice}) {
 
                                     {
                                         user.ROLE === 'aprobador' ? (
-                                    <TableCell align="left">Disponible</TableCell>
-                                            ) : null
+                                            <TableCell align="left">Disponible</TableCell>
+                                        ) : null
                                     }
                                     <TableCell align="right">Precio unitario</TableCell>
                                     <TableCell align="right">Total</TableCell>
@@ -985,7 +981,8 @@ export default function InvoiceDetails({invoice}) {
                                         <TableCell align="left">{row.CANTIDAD}</TableCell>
                                         {
                                             user.ROLE === 'aprobador' ? (
-                                                <TableCell align="left"  style={{ backgroundColor: 'rgba(0, 171, 85, 0.08)' }}>{Number(row.DISPONIBLE_POR_BODEGA)}</TableCell>
+                                                <TableCell align="left"
+                                                           style={{backgroundColor: 'rgba(0, 171, 85, 0.08)'}}>{Number(row.DISPONIBLE_POR_BODEGA)}</TableCell>
 
                                             ) : null
                                         }
