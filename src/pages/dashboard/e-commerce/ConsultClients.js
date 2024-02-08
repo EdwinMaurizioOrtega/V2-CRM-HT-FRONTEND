@@ -359,19 +359,13 @@ export default function ConsultClientForm() {
                                     <Label color="success">Tipo: {dataCliente.Tipo} </Label>
                                     <Label color="success">Vendedor: {dataCliente.SlpName} </Label>
                                     <Label color="success">Cliente: {dataCliente.Cliente} </Label>
-
                                     <Label color="success">Lista Precio: {tipoPrecio(dataCliente.Lista)} </Label>
                                     <Label color="success">Saldo de Cuenta: {fCurrency(dataCliente.Balance)} </Label>
-                                    <Label
-                                        color="success">DOCUMENTACIÓN: {documentacion(dataCliente.U_SYP_DOCUMENTACION)} </Label>
-                                    <Label color="success">Tipo de
-                                        Crédito: {tipoCredito(dataCliente.U_SYP_CREDITO)} </Label>
-                                    <Label color="success">Condicion de
-                                        Pago: {nameFormaPago(dataCliente.GroupNum)} </Label>
-                                    <Label color="success">Límte de
-                                        Crédito: {fCurrency(dataCliente.CreditLine)} </Label>
-                                    <Label color="success">Límite de
-                                        comprometido: {fCurrency(dataCliente.DebtLine)} </Label>
+                                    <Label color="success">DOCUMENTACIÓN: {documentacion(dataCliente.U_SYP_DOCUMENTACION)} </Label>
+                                    <Label color="success">Tipo de Crédito: {tipoCredito(dataCliente.U_SYP_CREDITO)} </Label>
+                                    <Label color="success">Condicion de Pago: {nameFormaPago(dataCliente.GroupNum)} </Label>
+                                    <Label color="success">Límte de Crédito: {fCurrency(dataCliente.CreditLine)} </Label>
+                                    <Label color="success">Límite de comprometido: {fCurrency(dataCliente.DebtLine)} </Label>
                                     <Label color="success">Pedidos Clientes: {fCurrency(dataCliente.OrdersBal)} </Label>
                                     <Label color="success">Comentario: {dataCliente.Free_Text} </Label>
                                 </>

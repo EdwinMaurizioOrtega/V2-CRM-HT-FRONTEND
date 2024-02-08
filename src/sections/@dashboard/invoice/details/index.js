@@ -61,7 +61,7 @@ import {useBoolean} from "../../../../hooks/use-boolean";
 import InvoicePDF from "./InvoicePDF";
 import {PDFDownloadLink} from "@react-pdf/renderer";
 import PedidoInvoicePDF from "./PedidoInvoicePDF";
-import {PAYMENT_OPTIONS_V2} from "../../../../utils/constants";
+import {DOCUMENTACION, PAYMENT_OPTIONS_V2, TIPO_CREDITO, TIPO_PRECIO} from "../../../../utils/constants";
 
 // ----------------------------------------------------------------------
 
@@ -85,7 +85,7 @@ export default function InvoiceDetails({invoice}) {
 
     const view = useBoolean();
 
-    console.log("Invoice: " + JSON.stringify(invoice));
+    console.log("InvoiceDetail: " + JSON.stringify(invoice));
 
     const [loading, setLoading] = useState(false); // Variable de estado para rastrear el estado de carga
 
@@ -185,6 +185,14 @@ export default function InvoiceDetails({invoice}) {
         ValidComm,
         GLN,
         Balance,
+        Lista,
+        U_SYP_DOCUMENTACION,
+        U_SYP_CREDITO,
+        GroupNum,
+        CreditLine,
+        DebtLine,
+        OrdersBal,
+        Free_Text,
         OBSERVACIONESB,
         OBSERVACIONES
     } = invoice;
@@ -438,6 +446,21 @@ export default function InvoiceDetails({invoice}) {
 
     function nameFormaPago(pay) {
         const payActual = PAYMENT_OPTIONS_V2.find(option => option.id == pay);
+        return payActual ? payActual.title : "Pago no definido.";
+    }
+
+    function documentacion(pay) {
+        const payActual = DOCUMENTACION.find(option => option.id == pay);
+        return payActual ? payActual.title : "Pago no definido.";
+    }
+
+    function tipoCredito(pay) {
+        const payActual = TIPO_CREDITO.find(option => option.id == pay);
+        return payActual ? payActual.title : "Pago no definido.";
+    }
+
+    function tipoPrecio(pay) {
+        const payActual = TIPO_PRECIO.find(option => option.id == pay);
         return payActual ? payActual.title : "Pago no definido.";
     }
 
@@ -822,45 +845,17 @@ export default function InvoiceDetails({invoice}) {
                         <Typography variant="body2">{CITY}</Typography>
 
                         {/* <Typography variant="body2">Phone: {invoiceFrom.phone}</Typography> */}
-                    </Grid>
-
-                    <Grid item xs={12} sm={6} sx={{mb: 5}}>
-                        <Typography paragraph variant="overline" sx={{color: 'text.disabled'}}>
-                            FACTURA A:
-                        </Typography>
-
-                        <Typography variant="body2">{Cliente}</Typography>
-                        <Typography variant="body2">TIPO: {Tipo}</Typography>
-                        <Typography variant="body2">CI/RUC: {CLIENTEID}</Typography>
-                        <Typography variant="body2">{Ciudad}</Typography>
-                        <Divider/>
-                        <Typography variant="body2" gutterBottom>
-                            Crédito aprobado: {ValidComm}
-                        </Typography>
-                        <Typography variant="body2" gutterBottom>
-                            Tipo crédito: {GLN}
-                        </Typography>
-                        <Typography variant="body2" gutterBottom>
-                            Cupo utilizado: {fCurrency(Balance)}
-                        </Typography>
-
-                    </Grid>
-
-                    <Grid item xs={12} sm={6} sx={{mb: 5}}>
                         <Typography paragraph variant="overline" sx={{color: 'text.disabled'}}>
                             fecha de creación
                         </Typography>
 
                         <Typography variant="body2">{FECHACREACION}</Typography>
 
-                    </Grid>
-
-                    <Grid item xs={12} sm={6} sx={{mb: 5}}>
                         <Typography paragraph variant="overline" sx={{color: 'text.disabled'}}>
                             opciones
                         </Typography>
 
-                        <Grid container>
+
 
                             <Grid item xs={12} sm={5} sx={{mb: 1}}>
 
@@ -900,8 +895,37 @@ export default function InvoiceDetails({invoice}) {
                                 }
 
                             </Grid>
-                        </Grid>
 
+
+
+
+                    </Grid>
+
+                    <Grid item xs={12} sm={6} sx={{mb: 5}}>
+                        <Typography paragraph variant="overline" sx={{color: 'text.disabled'}}>
+                            FACTURA A:
+                        </Typography>
+                        <Label color="success">{Cliente}</Label>
+                        <Typography variant="body2">CI/RUC: {CLIENTEID}</Typography>
+                        <Label color="success">{Ciudad}</Label>
+                        <Typography variant="body2">TIPO: {Tipo}</Typography>
+                        <Label color="success">Lista Precio: {tipoPrecio(Lista)}</Label>
+                        <Typography variant="body2">Saldo de Cuenta: {Balance}</Typography>
+                        <Label color="success">DOCUMENTACIÓN: {documentacion(U_SYP_DOCUMENTACION)}</Label>
+                        <Typography variant="body2">Tipo de Crédito: {tipoCredito(U_SYP_CREDITO)}</Typography>
+                        <Label color="success">Condicion de Pago: {nameFormaPago(GroupNum)}</Label>
+                        <Typography variant="body2">Límte de Crédito: {fCurrency(CreditLine)}</Typography>
+                        <Label color="success">Límite de comprometido: {fCurrency(DebtLine)}</Label>
+                        <Typography variant="body2">Pedidos Clientes: {fCurrency(OrdersBal)}</Typography>
+                        <Label color="success">Comentario: {Free_Text}</Label>
+
+                    </Grid>
+
+                    <Grid item xs={12} sm={6} sx={{mb: 5}}>
+
+                    </Grid>
+
+                    <Grid item xs={12} sm={6} sx={{mb: 5}}>
 
                     </Grid>
                 </Grid>
