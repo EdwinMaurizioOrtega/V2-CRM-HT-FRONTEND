@@ -12,7 +12,7 @@ import {
     LinearProgress,
     Card,
     TextField,
-    Autocomplete, InputAdornment, IconButton, Grid
+    Autocomplete, InputAdornment, IconButton, Grid, Divider
 } from '@mui/material';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
@@ -42,6 +42,7 @@ import InvoicedClientOrders from "../../../sections/@dashboard/gestion/invoiced-
 import {useAuthContext} from "../../../auth/useAuthContext";
 import CalendarView from "../../../sections/calendar/view/calendar";
 import {AnalyticsWidgetSummary} from "../../../sections/@dashboard/general/analytics";
+import {Space_Mono} from "@next/font/google";
 
 // ----------------------------------------------------------------------
 
@@ -214,7 +215,6 @@ export default function MayoristaPage(callback, deps) {
         return counter;
     };
 
-
     const BuscarPorRango = async (event, value) => {
 
         try {
@@ -293,6 +293,23 @@ export default function MayoristaPage(callback, deps) {
         [quickEdit]
     );
 
+
+    const [dataContAgenda, setDataContAgenda] = useState([]);
+    const [dataContAgendaCErrado, setDataContAgendaCerrado] = useState([]);
+    const [dataContAgendaPorCerrar, setDataContAgendaPorCerrar] = useState([]);
+
+
+    const handleValorCambiado = (nuevoValor) => {
+        console.log("Llega el nuevo valor: "+ JSON.stringify(nuevoValor));
+
+        setDataContAgenda(nuevoValor.length); // Corregido: asignar la longitud directamente
+        const agendaCerrada = nuevoValor.filter((agenda) => agenda.VISITO === false); // Usar filter() para obtener todos los elementos que cumplan con la condición
+        setDataContAgendaCerrado(agendaCerrada.length); // Almacenar los elementos que cumplen con la condición
+
+        const agendaPorCerrar = nuevoValor.filter((agenda) => agenda.VISITO === true); // Usar filter() para obtener todos los elementos que cumplan con la condición
+        setDataContAgendaPorCerrar(agendaPorCerrar.length); // Almacenar los elementos que cumplen con la condición
+    };
+
     return (
         <>
             <Head>
@@ -317,54 +334,13 @@ export default function MayoristaPage(callback, deps) {
                     ]}
                 />
 
-
-
-
-                    <Grid container spacing={3}>
-                        <Grid item xs={12} sm={6} md={3}>
-                            <AnalyticsWidgetSummary
-                                title="Total Gestiones"
-                                total={50}
-                                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png"/>}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12} sm={6} md={3}>
-                            <AnalyticsWidgetSummary
-                                title="Por Gestionar"
-                                total={30}
-                                color="info"
-                                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png"/>}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12} sm={6} md={3}>
-                            <AnalyticsWidgetSummary
-                                title="Total Agenda"
-                                total={35}
-                                color="warning"
-                                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png"/>}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12} sm={6} md={3}>
-                            <AnalyticsWidgetSummary
-                                title="Por Cerrar Agenda"
-                                total={10}
-                                color="error"
-                                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png"/>}
-                            />
-                        </Grid>
-                    </Grid>
-
-
                 <Card sx={{
                     p: 5
                 }}
                 >
 
 
-                    <Grid item xs={12} md={12} lg={8}>
+                    <Grid item xs={12} md={12} lg={8} padding={2}>
                         {/*<Box*/}
                         {/*    rowGap={3}*/}
                         {/*    columnGap={2}*/}
@@ -374,93 +350,131 @@ export default function MayoristaPage(callback, deps) {
                         {/*        sm: 'repeat(2, 1fr)',*/}
                         {/*    }}*/}
                         {/*>*/}
-                            <Autocomplete
-                                fullWidth
-                                options={rangos}
-                                getOptionLabel={(option) => option.title}
-                                onChange={(event, value) => {
-                                    BuscarPorRango(event, value);
-                                }} // Add onChange event handler
-                                renderInput={(params) => <TextField {...params} label="Filtrar por rango"
-                                                                    margin="none"/>}
-                            />
+                        <Autocomplete
+                            fullWidth
+                            options={rangos}
+                            getOptionLabel={(option) => option.title}
+                            onChange={(event, value) => {
+                                BuscarPorRango(event, value);
+                            }} // Add onChange event handler
+                            renderInput={(params) => <TextField {...params} label="Filtrar por rango"
+                                                                margin="none"/>}
+                        />
 
 
-                            {/*<TextField*/}
-                            {/*    fullWidth*/}
-                            {/*    type="text"*/}
-                            {/*    label="Nombre / Razon Social"*/}
-                            {/*    InputProps={{*/}
-                            {/*        endAdornment: (*/}
-                            {/*            <InputAdornment position="end">*/}
-                            {/*                <IconButton*/}
-                            {/*                    edge="end"*/}
-                            {/*                >*/}
-                            {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
+                        {/*<TextField*/}
+                        {/*    fullWidth*/}
+                        {/*    type="text"*/}
+                        {/*    label="Nombre / Razon Social"*/}
+                        {/*    InputProps={{*/}
+                        {/*        endAdornment: (*/}
+                        {/*            <InputAdornment position="end">*/}
+                        {/*                <IconButton*/}
+                        {/*                    edge="end"*/}
+                        {/*                >*/}
+                        {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
 
-                            {/*                </IconButton>*/}
-                            {/*            </InputAdornment>*/}
-                            {/*        ),*/}
-                            {/*    }}*/}
-                            {/*/>*/}
+                        {/*                </IconButton>*/}
+                        {/*            </InputAdornment>*/}
+                        {/*        ),*/}
+                        {/*    }}*/}
+                        {/*/>*/}
 
-                            {/*<TextField*/}
-                            {/*    fullWidth*/}
-                            {/*    type="text"*/}
-                            {/*    label="Cédula/RUC"*/}
-                            {/*    InputProps={{*/}
-                            {/*        endAdornment: (*/}
-                            {/*            <InputAdornment position="end">*/}
-                            {/*                <IconButton*/}
-                            {/*                    edge="end"*/}
-                            {/*                >*/}
-                            {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
+                        {/*<TextField*/}
+                        {/*    fullWidth*/}
+                        {/*    type="text"*/}
+                        {/*    label="Cédula/RUC"*/}
+                        {/*    InputProps={{*/}
+                        {/*        endAdornment: (*/}
+                        {/*            <InputAdornment position="end">*/}
+                        {/*                <IconButton*/}
+                        {/*                    edge="end"*/}
+                        {/*                >*/}
+                        {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
 
-                            {/*                </IconButton>*/}
-                            {/*            </InputAdornment>*/}
-                            {/*        ),*/}
-                            {/*    }}*/}
-                            {/*/>*/}
+                        {/*                </IconButton>*/}
+                        {/*            </InputAdornment>*/}
+                        {/*        ),*/}
+                        {/*    }}*/}
+                        {/*/>*/}
 
-                            {/*<TextField*/}
-                            {/*    fullWidth*/}
-                            {/*    type="text"*/}
-                            {/*    label="Nombre Producto"*/}
-                            {/*    InputProps={{*/}
-                            {/*        endAdornment: (*/}
-                            {/*            <InputAdornment position="end">*/}
-                            {/*                <IconButton*/}
-                            {/*                    edge="end"*/}
-                            {/*                >*/}
-                            {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
+                        {/*<TextField*/}
+                        {/*    fullWidth*/}
+                        {/*    type="text"*/}
+                        {/*    label="Nombre Producto"*/}
+                        {/*    InputProps={{*/}
+                        {/*        endAdornment: (*/}
+                        {/*            <InputAdornment position="end">*/}
+                        {/*                <IconButton*/}
+                        {/*                    edge="end"*/}
+                        {/*                >*/}
+                        {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
 
-                            {/*                </IconButton>*/}
-                            {/*            </InputAdornment>*/}
-                            {/*        ),*/}
-                            {/*    }}*/}
-                            {/*/>*/}
+                        {/*                </IconButton>*/}
+                        {/*            </InputAdornment>*/}
+                        {/*        ),*/}
+                        {/*    }}*/}
+                        {/*/>*/}
 
-                            {/*<TextField*/}
-                            {/*    fullWidth*/}
-                            {/*    type="text"*/}
-                            {/*    label="Código Producto"*/}
-                            {/*    InputProps={{*/}
-                            {/*        endAdornment: (*/}
-                            {/*            <InputAdornment position="end">*/}
-                            {/*                <IconButton*/}
-                            {/*                    edge="end"*/}
-                            {/*                >*/}
-                            {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
+                        {/*<TextField*/}
+                        {/*    fullWidth*/}
+                        {/*    type="text"*/}
+                        {/*    label="Código Producto"*/}
+                        {/*    InputProps={{*/}
+                        {/*        endAdornment: (*/}
+                        {/*            <InputAdornment position="end">*/}
+                        {/*                <IconButton*/}
+                        {/*                    edge="end"*/}
+                        {/*                >*/}
+                        {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
 
-                            {/*                </IconButton>*/}
-                            {/*            </InputAdornment>*/}
-                            {/*        ),*/}
-                            {/*    }}*/}
-                            {/*/>*/}
+                        {/*                </IconButton>*/}
+                        {/*            </InputAdornment>*/}
+                        {/*        ),*/}
+                        {/*    }}*/}
+                        {/*/>*/}
 
 
                         {/*</Box>*/}
                     </Grid>
+
+
+                    <Grid container spacing={3}>
+
+                        <Grid item xs={12} sm={6} md={3}>
+                            <AnalyticsWidgetSummary
+                                title="Por Gestionar"
+                                total={businessPartners.length}
+                                color="info"
+                                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png"/>}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} sm={6} md={3}>
+                            <AnalyticsWidgetSummary
+                                title="Total Agenda"
+                                total={dataContAgenda}
+                                color="warning"
+                                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png"/>}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={3}>
+                            <AnalyticsWidgetSummary
+                                title="Agenda Cerrados"
+                                total={dataContAgendaPorCerrar}
+                                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png"/>}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={3}>
+                            <AnalyticsWidgetSummary
+                                title="Agenda Abiertos"
+                                total={dataContAgendaCErrado}
+                                color="error"
+                                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png"/>}
+                            />
+                        </Grid>
+                    </Grid>
+
                 </Card>
 
                 <Card sx={{
@@ -494,7 +508,7 @@ export default function MayoristaPage(callback, deps) {
                     p: 5
                 }}
                 >
-                    <CalendarView/>
+                    <CalendarView onValorCambiado={handleValorCambiado}/>
 
                 </Card>
 

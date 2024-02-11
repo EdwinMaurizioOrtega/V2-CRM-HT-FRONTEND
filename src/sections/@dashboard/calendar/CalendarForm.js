@@ -107,20 +107,6 @@ export default function CalendarForm({
         {/*<RHFSwitch name="allDay" label="All day" />*/}
 
         {/*<Controller*/}
-        {/*  name="start"*/}
-        {/*  control={control}*/}
-        {/*  render={({ field }) => (*/}
-        {/*    <MobileDateTimePicker*/}
-        {/*      {...field}*/}
-        {/*      onChange={(newValue) => field.onChange(newValue)}*/}
-        {/*      label="Start date"*/}
-        {/*      inputFormat="dd/MM/yyyy hh:mm a"*/}
-        {/*      renderInput={(params) => <TextField {...params} fullWidth />}*/}
-        {/*    />*/}
-        {/*  )}*/}
-        {/*/>*/}
-
-        {/*<Controller*/}
         {/*  name="end"*/}
         {/*  control={control}*/}
         {/*  render={({ field }) => (*/}
