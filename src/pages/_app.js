@@ -71,20 +71,20 @@ MyApp.propTypes = {
 export default function MyApp(props) {
 
     //Registrar el Service worker
-    useEffect(() => {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/service-worker.js')
-                .then(function (registration) {
-                    // Registro exitoso
-                    console.log('Service Worker registrado con éxito:', registration.scope);
-                })
-                .catch(function (error) {
-                    // Error en el registro
-                    console.log('Error al registrar el Service Worker:', error);
-                });
-        }
-
-    }, []);
+    // useEffect(() => {
+    //     if ('serviceWorker' in navigator) {
+    //         navigator.serviceWorker.register('/service-worker.js')
+    //             .then(function (registration) {
+    //                 // Registro exitoso
+    //                 console.log('Service Worker registrado con éxito:', registration.scope);
+    //             })
+    //             .catch(function (error) {
+    //                 // Error en el registro
+    //                 console.log('Error al registrar el Service Worker:', error);
+    //             });
+    //     }
+    //
+    // }, []);
 
     const {Component, pageProps, emotionCache = clientSideEmotionCache} = props;
 

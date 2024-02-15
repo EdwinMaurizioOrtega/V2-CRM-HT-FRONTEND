@@ -29,6 +29,7 @@ const options_1 = [
   { id: '02', label: 'No le interesa'},
   { id: '03', label: 'Cierre definitivo'},
   { id: '04', label: 'No Contactado'},
+  { id: '05', label: 'Cobranza'},
 ]
 
 const options_2 = [

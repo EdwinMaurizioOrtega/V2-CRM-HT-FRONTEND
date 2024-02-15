@@ -36,6 +36,8 @@ import {PATH_DASHBOARD} from "../../../routes/paths";
 import {useRouter} from "next/router";
 import {AnalyticsConversionRates, AnalyticsCurrentSubject, AnalyticsCurrentVisits} from "../general/analytics";
 import {useTheme} from "@mui/material/styles";
+import {EcommerceSaleByGender} from "../general/e-commerce";
+import {AppCurrentDownload} from "../general/app";
 
 
 // ----------------------------------------------------------------------
@@ -55,9 +57,10 @@ const options_2 = [
     {id: '05', label: 'Otros'},
 ]
 
-export default function InvoicedClientOrders({currentPartner, open, onClose}) {
+export default function InvoicedClientOrders({userID, currentPartner, open, onClose}) {
 
     console.log("partner.ID " + currentPartner?.ID || '');
+    console.log("Current User: " + userID || '');
 
     const {push} = useRouter();
 
@@ -140,6 +143,8 @@ export default function InvoicedClientOrders({currentPartner, open, onClose}) {
     ]
 
     const [businessPartnersInvoiced, setBusinessPartnersInvoiced] = useState([]);
+    const [ventasBySemanaUserWithId, setVentasBySemanaUserWithId] = useState([]);
+    const [ventasAnuladoFacturado, setVentasAnuladoFacturado] = useState([]);
 
     //Ver el registro de pedidos
     useEffect(() => {
@@ -179,7 +184,76 @@ export default function InvoicedClientOrders({currentPartner, open, onClose}) {
 
         handleViewManagementRow();
 
-    }, [currentPartner?.ID])
+        const handleValorFacturado = async () => {
+            if (userID) {
+                console.log("userIDuserID: " + JSON.stringify(userID));
+
+                try {
+                    const response = await axios.get(`/hanadb/api/customers/total_sales_per_week?USER_ID=${userID}&ID_CLIENTE=${currentPartner.ID}`);
+
+                    if (response.status === 200) {
+                        console.log("DATA: " + JSON.stringify(response.data));
+
+                        const ventasBySemanaUserWithId = response.data.data.map((partner, index) => ({
+                            id: index + 1, // Puedes ajustar la lógica según tus necesidades
+                            label: `Semana ${partner.SEMANA}`, //
+                            value: partner.TOTAL_SUBTOTAL, //
+                        }));
+
+                        setVentasBySemanaUserWithId(ventasBySemanaUserWithId);
+                        console.log("PorSemana: " + JSON.stringify(response.data.data));
+                        console.log("PorSemana: " + JSON.stringify(ventasBySemanaUserWithId));
+
+                    } else {
+                        // La solicitud POST no se realizó correctamente
+                        console.error('Error en la solicitud POST:', response.status);
+                    }
+
+
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                };
+            }
+        };
+
+        handleValorFacturado();
+
+
+        const handleFacturadoAndAnulado = async () => {
+            if (userID) {
+                console.log("userIDuserID: " + JSON.stringify(userID));
+
+                try {
+                    const response = await axios.get(`/hanadb/api/customers/total_billed_and_voided?USER_ID=${userID}&ID_CLIENTE=${currentPartner.ID}`);
+
+                    if (response.status === 200) {
+                        console.log("DATA: " + JSON.stringify(response.data));
+
+                        const ventasBySemanaUserWithId = response.data.data.map((partner, index) => ({
+                            id: index + 1, // Puedes ajustar la lógica según tus necesidades
+                            label: partner.LABEL, //
+                            value: Number(partner.VALUE), //
+                        }));
+
+                        setVentasAnuladoFacturado(ventasBySemanaUserWithId);
+                        console.log("PorSemana: " + JSON.stringify(response.data.data));
+                        console.log("PorSemana: " + JSON.stringify(ventasBySemanaUserWithId));
+
+                    } else {
+                        // La solicitud POST no se realizó correctamente
+                        console.error('Error en la solicitud POST:', response.status);
+                    }
+
+
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                };
+            }
+        };
+
+        handleFacturadoAndAnulado();
+
+    }, [currentPartner?.ID, userID])
 
     return (
         <Dialog
@@ -202,33 +276,27 @@ export default function InvoicedClientOrders({currentPartner, open, onClose}) {
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={6} lg={8}>
                         <AnalyticsConversionRates
-                            title="Pedidos Semanales"
-                            subheader="(+78%) que la semana pasada"
+                            title="Últimas 4 semanas."
+                            subheader="Valor total facturado por"
                             chart={{
-                                series: [
-                                    {label: 'Lunes', value: 400},
-                                    {label: 'Martes', value: 430},
-                                    {label: 'Miércoles', value: 448},
-                                    {label: 'Jueves', value: 470},
-                                    {label: 'Viernes', value: 540},
-                                    {label: 'Sábado', value: 580},
-                                    {label: 'Domingo', value: 690},
-                                ],
+                                series: ventasBySemanaUserWithId
                             }}
                         />
                     </Grid>
 
                     <Grid item xs={12} md={6} lg={4}>
-                        <AnalyticsCurrentSubject
-                            title="Nro. Ordenes + Valor Total"
-                            chart={{
-                                categories: ['Nro. Facturado', 'Nro. Anulado', 'Valor Total Facturado', 'Valor Total Anulado'],
-                                series: [
-                                    {name: 'Facturado', data: [80, 50, 30, 40, 100, 20]},
-                                    {name: 'Anulado', data: [20, 30, 40, 80, 20, 80]},
-                                ],
-                            }}
-                        />
+                             <AppCurrentDownload
+                               title="Valo Facturado/Anulado"
+                               chart={{
+                                 colors: [
+                                   theme.palette.primary.main,
+                                   theme.palette.info.main,
+                                   theme.palette.error.main,
+                                   theme.palette.warning.main,
+                                 ],
+                                 series: ventasAnuladoFacturado,
+                               }}
+                             />
                     </Grid>
                 </Grid>
 

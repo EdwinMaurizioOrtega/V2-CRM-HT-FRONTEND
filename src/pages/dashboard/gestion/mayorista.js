@@ -498,8 +498,13 @@ export default function MayoristaPage(callback, deps) {
                     <PreviousClientManagement currentPartner={partner} open={quickPCM.value}
                                               onClose={quickPCM.onFalse}/>
 
-                    <InvoicedClientOrders currentPartner={partner} open={quickICO.value} onClose={quickICO.onFalse}/>
-
+                    {user?.ID && partner && (
+                    <InvoicedClientOrders
+                        userID={user.ID}
+                        currentPartner={partner}
+                        open={quickICO.value}
+                        onClose={quickICO.onFalse}/>
+                    )}
 
                 </Card>
 
