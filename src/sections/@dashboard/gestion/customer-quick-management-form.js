@@ -119,7 +119,7 @@ export default function CustomerQuickManagementForm({ currentPartner, open, onCl
       }}
     >
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <DialogTitle>Registrar gestión</DialogTitle>
+        <DialogTitle>Opciones gestión</DialogTitle>
 
         <DialogContent>
           <Alert variant="outlined" severity="info" sx={{ mb: 3 }}>
@@ -153,8 +153,8 @@ export default function CustomerQuickManagementForm({ currentPartner, open, onCl
             <RHFAutocomplete
               name="dato"
               type="dato"
-              label="Datos de la gestión."
-              placeholder="Datos de la gestión."
+              label="Opciones gestión."
+              placeholder="Opciones gestión."
               fullWidth
               options={options_1}
               getOptionLabel={(option) => option.label}

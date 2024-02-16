@@ -277,7 +277,7 @@ export default function InvoicedClientOrders({userID, currentPartner, open, onCl
                     <Grid item xs={12} md={6} lg={8}>
                         <AnalyticsConversionRates
                             title="Últimas 4 semanas."
-                            subheader="Valor total facturado por"
+                            subheader="Valor total facturado por semana."
                             chart={{
                                 series: ventasBySemanaUserWithId
                             }}
@@ -286,7 +286,7 @@ export default function InvoicedClientOrders({userID, currentPartner, open, onCl
 
                     <Grid item xs={12} md={6} lg={4}>
                              <AppCurrentDownload
-                               title="Valo Facturado/Anulado"
+                               title="Valor Facturado/Anulado"
                                chart={{
                                  colors: [
                                    theme.palette.primary.main,

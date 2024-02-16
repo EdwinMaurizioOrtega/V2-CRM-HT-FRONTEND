@@ -296,7 +296,8 @@ export default function InvoiceListPage() {
     const getTotalPriceByStatus = (status) =>
         sumBy(
             tableData.filter((item) => item.ESTADO === status),
-            'totalPrice'
+            (item) => Number(item.SUBTOTAL)  // Convertir SUBTOTAL a número
+
         );
 
     const getPercentByStatus = (status) => (getLengthByStatus(status) / tableData.length) * 100;
@@ -455,25 +456,25 @@ export default function InvoiceListPage() {
                                 title="Total"
                                 total={tableData.length}
                                 percent={100}
-                                price={sumBy(tableData, 'totalPrice')}
+                                price={sumBy(tableData, (item) => Number(item.SUBTOTAL))}
                                 icon="solar:bill-list-bold-duotone"
                                 color={theme.palette.info.main}
                             />
 
                             <InvoiceAnalytic
-                                title="Pendiente de aprobar"
+                                title="Por Aprobar"
                                 total={getLengthByStatus(6)}
-                                percent={getPercentByStatus('paid')}
-                                price={getTotalPriceByStatus('paid')}
+                                percent={getPercentByStatus(6)}
+                                price={getTotalPriceByStatus(6)}
                                 icon="solar:file-check-bold-duotone"
                                 color={theme.palette.success.main}
                             />
 
                             <InvoiceAnalytic
-                                title="Pendiente de facturar"
+                                title="Por Facturar"
                                 total={getLengthByStatus(0)}
-                                percent={getPercentByStatus('unpaid')}
-                                price={getTotalPriceByStatus('unpaid')}
+                                percent={getPercentByStatus(0)}
+                                price={getTotalPriceByStatus(0)}
                                 icon="solar:sort-by-time-bold-duotone"
                                 color={theme.palette.warning.main}
                             />
@@ -481,8 +482,8 @@ export default function InvoiceListPage() {
                             <InvoiceAnalytic
                                 title="Facturado"
                                 total={getLengthByStatus(1)}
-                                percent={getPercentByStatus('overdue')}
-                                price={getTotalPriceByStatus('overdue')}
+                                percent={getPercentByStatus(1)}
+                                price={getTotalPriceByStatus(1)}
                                 icon="solar:bell-bing-bold-duotone"
                                 color={theme.palette.error.main}
                             />
@@ -490,8 +491,8 @@ export default function InvoiceListPage() {
                             <InvoiceAnalytic
                               title="Anulado"
                               total={getLengthByStatus(8)}
-                              percent={getPercentByStatus('draft')}
-                              price={getTotalPriceByStatus('draft')}
+                              percent={getPercentByStatus(8)}
+                              price={getTotalPriceByStatus(8)}
                               icon="solar:file-corrupted-bold-duotone"
                               color={theme.palette.text.secondary}
                             />

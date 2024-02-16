@@ -142,8 +142,8 @@ export default function PreviousClientManagement({currentPartner, open, onClose}
 
                     <Grid item xs={12} md={6} lg={8}>
                         <AnalyticsWebsiteVisits
-                            title="Visitas Semanales"
-                            subheader="(+43%) que la semana pasada."
+                            title="Gestiones Mensuales"
+                            subheader="(+43%) que el mes pasado."
                             chart={{
                                 labels: [
                                     '01/01/2004',
@@ -153,13 +153,16 @@ export default function PreviousClientManagement({currentPartner, open, onClose}
                                     '05/01/2004',
                                     '06/01/2004',
                                     '07/01/2004',
+                                    '08/01/2004',
+                                    '09/01/2004',
+                                    '10/01/2004',
                                 ],
                                 series: [
                                     {
                                         name: 'Team A',
                                         type: 'column',
                                         fill: 'solid',
-                                        data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
+                                        data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22],
                                     }
                                 ],
                             }}
