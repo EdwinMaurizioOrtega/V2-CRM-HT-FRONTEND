@@ -119,7 +119,8 @@ export default function TrackingPage(callback, deps) {
 
         onceRef.current = true;
 
-        const socket = io("ws://ss.lidenar.com");
+        //const socket = io("ws://ss.lidenar.com");
+        const socket = io("wss://ss.lidenar.com");
         setSocket(socket);
 
         socket.on("connect", () => {
