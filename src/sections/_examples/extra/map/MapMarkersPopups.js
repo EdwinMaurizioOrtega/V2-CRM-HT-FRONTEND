@@ -56,23 +56,27 @@ function MapMarkersPopups({ data, ...other }) {
                 alignItems: 'center',
               }}
             >
-              <Box
-                sx={{
-                  height: '18px',
-                  minWidth: '28px',
-                  marginRight: '8px',
-                  borderRadius: '4px',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundImage: `url(https://cdn.staticaly.com/gh/hjnilsson/country-flags/master/svg/${popupInfo.country_code.toLowerCase()}.svg)`,
-                }}
-              />
+              {/*<Box*/}
+              {/*  sx={{*/}
+              {/*    height: '18px',*/}
+              {/*    minWidth: '28px',*/}
+              {/*    marginRight: '8px',*/}
+              {/*    borderRadius: '4px',*/}
+              {/*    backgroundSize: 'cover',*/}
+              {/*    backgroundPosition: 'center',*/}
+              {/*    backgroundRepeat: 'no-repeat',*/}
+              {/*    backgroundImage: `url(https://cdn.staticaly.com/gh/hjnilsson/country-flags/master/svg/${popupInfo.country_code.toLowerCase()}.svg)`,*/}
+              {/*  }}*/}
+              {/*/>*/}
               <Typography variant="subtitle2">{popupInfo.name}</Typography>
             </Box>
 
+              {/*<Typography component="div" variant="caption">*/}
+              {/*    Hora: {popupInfo.country_code}*/}
+              {/*</Typography>*/}
+
             <Typography component="div" variant="caption">
-              Tipo: {popupInfo.capital}
+              F/H: {popupInfo.capital}
             </Typography>
 
             <Typography component="div" variant="caption">
@@ -83,12 +87,12 @@ function MapMarkersPopups({ data, ...other }) {
               Long: {popupInfo.latlng[1]}
             </Typography>
 
-            <Image
-              alt={popupInfo.name}
-              src={popupInfo.photo}
-              ratio="4/3"
-              sx={{ mt: 1, borderRadius: 1 }}
-            />
+            {/*<Image*/}
+            {/*  alt={popupInfo.name}*/}
+            {/*  src={popupInfo.photo}*/}
+            {/*  ratio="4/3"*/}
+            {/*  sx={{ mt: 1, borderRadius: 1 }}*/}
+            {/*/>*/}
           </Box>
         </MapPopup>
       )}
