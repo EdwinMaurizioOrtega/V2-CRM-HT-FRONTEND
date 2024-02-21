@@ -42,12 +42,11 @@ import InvoicedClientOrders from "../../../sections/@dashboard/gestion/invoiced-
 import MapChangeTheme from "../../../sections/_examples/extra/map/change-theme";
 import {MAP_API} from "../../../config-global";
 import MapMarkersPopups from "../../../sections/_examples/extra/map/MapMarkersPopups";
-import { countries as COUNTRIES } from 'src/_mock/map/countries';
+import {countries as COUNTRIES} from 'src/_mock/map/countries';
 
-import { io } from "socket.io-client";
+import {io} from "socket.io-client";
 import mapboxgl from "mapbox-gl";
 import {useAuthContext} from "../../../auth/useAuthContext";
-
 
 
 // ----------------------------------------------------------------------
@@ -87,18 +86,12 @@ export default function TrackingPage(callback, deps) {
 
     const {user} = useAuthContext();
 
-
-
-
-
-
-
-
-
-
     const [messages, setMessages] = useState([]);
+    const [coordinates, setCoordinates] = useState([])
+
     const [input, setInput] = useState("");
     const [currentRoom, setCurrentRoom] = useState("General");
+    const [currentRoomMap, setCurrentRoomMap] = useState("Lidenar");
     const [name, setName] = useState(null);
     const [socket, setSocket] = useState(null);
     const [connected, setConnected] = useState(false);
@@ -110,6 +103,7 @@ export default function TrackingPage(callback, deps) {
     useEffect(() => {
         setMessages([]);
         socket?.emit("join", currentRoom);
+        socket?.emit("get_coordinates", currentRoomMap)
     }, [currentRoom]);
 
     useEffect(() => {
@@ -119,9 +113,11 @@ export default function TrackingPage(callback, deps) {
 
         onceRef.current = true;
 
-        //const socket = io("ws://ss.lidenar.com");
+        //const socket = io("ws://localhost:3000");
         const socket = io("wss://ss.lidenar.com");
         setSocket(socket);
+
+        // CHAT
 
         socket.on("connect", () => {
             console.log("Connected to socket server");
@@ -133,13 +129,13 @@ export default function TrackingPage(callback, deps) {
         });
 
         socket.on("message", (msg) => {
-            console.log("Message received", msg);
+            console.log("Message received AAA", msg);
             msg.date = new Date(msg.date);
             setMessages((messages) => [...messages, msg]);
         });
 
         socket.on("messages", (msgs) => {
-            console.log("Messages received", msgs);
+            console.log("Messages received BBB", msgs);
             let messages = msgs.messages.map((msg) => {
                 msg.date = new Date(msg.date);
                 return msg;
@@ -147,51 +143,114 @@ export default function TrackingPage(callback, deps) {
             setMessages(messages);
 
         });
+
+
+        // MAP
+        socket.on("connect", () => {
+            console.log("Connected to socket server");
+            setName(`anon-${socket.id}`);
+            setConnected(true);
+            console.log("joining room map ", currentRoomMap);
+
+            socket.emit("get_coordinates", currentRoomMap);
+
+
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+
+                        socket?.emit("coordinates", {
+                            latitud: latitude.toString(),
+                            longitud: longitude.toString(),
+                            user_name: user.DISPLAYNAME,
+                            room_map: currentRoomMap,
+                        });
+
+                    },
+                    (error) => {
+                        console.error("Error al obtener la posición:", error.message);
+                    }
+                );
+            } else {
+                console.error("Geolocalización no está soportada por este navegador");
+            }
+
+
+        });
+
+
+        // Agregar un manejador de eventos para el evento "coordinates"
+        socket.on("coordinates", (data) => {
+            console.log("Coordenadas recibidas: ", data);
+            setCoordinates((coord) => [...coord, data])
+        });
+
+
+        socket.on("list_coordinates", (msgs) => {
+            console.log("Lista Coordenadas Recibidas: ", msgs);
+            let messages = msgs.coordinates.map((msg) => {
+                msg.date = new Date(msg.date);
+                return msg;
+            });
+            setCoordinates(messages);
+
+        });
+
+
     }, []);
 
     const sendMessage = (e) => {
         e.preventDefault();
-        // Verificar si el navegador soporta la geolocalización
-        if ("geolocation" in navigator) {
-            // Obtener la posición del usuario
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
+        socket?.emit("message", {
+            text: input,
+            room: currentRoom,
+        });
+        setInput("");
 
-                    // Crear un objeto con las coordenadas
-                    const coordinates = {
-                        latitude: latitude,
-                        longitude: longitude,
-                        user: user.DISPLAYNAME,
-                        text: input
-                    };
-
-                    // Convertir las coordenadas a formato JSON en texto
-                    const coordinatesJSON = JSON.stringify(coordinates);
-
-                    // Enviar las coordenadas a través del socket
-                    socket?.emit("message", {
-                        text: coordinatesJSON,
-                        room: "General",
-                    });
-                    setInput("");
-                },
-                (error) => {
-                    // Manejar errores de geolocalización
-                    console.error("Error al obtener la posición:", error.message);
-                }
-            );
-        } else {
-            // Manejar el caso en que el navegador no soporte geolocalización
-            console.error("Geolocalización no está soportada por este navegador");
-        }
+        // e.preventDefault();
+        // // Verificar si el navegador soporta la geolocalización
+        // if ("geolocation" in navigator) {
+        //     // Obtener la posición del usuario
+        //     navigator.geolocation.getCurrentPosition(
+        //         (position) => {
+        //             const latitude = position.coords.latitude;
+        //             const longitude = position.coords.longitude;
+        //
+        //             // Crear un objeto con las coordenadas
+        //             const coordinates = {
+        //                 latitude: latitude,
+        //                 longitude: longitude,
+        //                 user: user.DISPLAYNAME,
+        //                 text: input
+        //             };
+        //
+        //             // Convertir las coordenadas a formato JSON en texto
+        //             const coordinatesJSON = JSON.stringify(coordinates);
+        //
+        //             // Enviar las coordenadas a través del socket
+        //             socket?.emit("message", {
+        //                 text: coordinatesJSON,
+        //                 room: "General",
+        //             });
+        //             setInput("");
+        //         },
+        //         (error) => {
+        //             // Manejar errores de geolocalización
+        //             console.error("Error al obtener la posición:", error.message);
+        //         }
+        //     );
+        // } else {
+        //     // Manejar el caso en que el navegador no soporte geolocalización
+        //     console.error("Geolocalización no está soportada por este navegador");
+        // }
     };
 
     useEffect(() => {
-        if (messages.length > 0) {
+        if (coordinates.length > 0) {
 
-            console.log("messages: "+ JSON.stringify(messages));
+            console.log("messages: "+ JSON.stringify(coordinates));
             const objectArray = [];
 
             // Definir los valores estáticos para todos los países
@@ -204,17 +263,16 @@ export default function TrackingPage(callback, deps) {
             };
 
             // Iterar sobre todos los mensajes y obtener las coordenadas de cada uno
-            messages.forEach((message) => {
+            coordinates.forEach((coor) => {
                 // Convertir el texto del mensaje a JSON y obtener las coordenadas
-                const { latitude, longitude, user } = JSON.parse(message.text);
-                const { date } = message;
+                const { latitud, longitud, date, user_name } = coor
 
                 // Agregar las coordenadas al objeto estático y agregarlo al array
                 const country = {
                     ...staticValues,
-                    latlng: [latitude, longitude],
+                    latlng: [latitud, longitud],
                     capital: date.toLocaleString(), //Fecha/Hora
-                    name: user //Usuario
+                    name: user_name //Usuario
                 };
                 objectArray.push(country);
             });
@@ -224,7 +282,7 @@ export default function TrackingPage(callback, deps) {
             // Establecer los países como datos
             setCountriesData(objectArray);
         }
-    }, [messages]);
+    }, [coordinates]);
 
 
     return (
@@ -266,13 +324,14 @@ export default function TrackingPage(callback, deps) {
                         <Grid item xs={12} md={6}>
                             <Card>
                                 <div className="h-screen p-4 bg-ctp-crust flex flex-col flex-grow justify-end">
-                                    <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                                    <div style={{maxHeight: '300px', overflowY: 'auto'}}>
                                         <List>
                                             {messages?.map((msg, index) => (
                                                 <ListItem key={index} alignItems="flex-start">
                                                     <ListItemText
                                                         // primary={msg.user}
-                                                        primary={JSON.parse(msg.text).user}
+                                                        //primary={JSON.parse(msg.text).user}
+                                                        primary={msg.user}
                                                         secondary={
                                                             <>
                                                                 <Typography
@@ -282,13 +341,13 @@ export default function TrackingPage(callback, deps) {
                                                                 >
                                                                     {msg.date.toLocaleString()}
                                                                 </Typography>
-                                                                <br /> {/* Agrega un salto de línea */}
+                                                                <br/> {/* Agrega un salto de línea */}
                                                                 <Typography
                                                                     component="span"
                                                                     variant="body1"
                                                                     color="textPrimary"
                                                                 >
-                                                                    {JSON.parse(msg.text).text}
+                                                                    {msg.text}
                                                                 </Typography>
                                                             </>
                                                         }
