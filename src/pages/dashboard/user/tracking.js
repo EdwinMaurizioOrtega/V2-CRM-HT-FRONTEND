@@ -6,48 +6,28 @@ import {
     Container,
     Typography,
     Box,
-    Rating,
-    Stack,
-    Avatar,
-    LinearProgress,
     Card,
     TextField,
-    Autocomplete, InputAdornment, IconButton, CardContent, Button, ListItem, ListItemText, List, Grid
+    CardContent, Button, ListItem, ListItemText, List, Grid
 } from '@mui/material';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
 // components
 import {useSettingsContext} from '../../../components/settings';
-import EmptyContent from "../../../components/empty-content";
-import React, {useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {
-    DataGrid, GridActionsCellItem, GridToolbar,
     GridToolbarColumnsButton,
     GridToolbarContainer, GridToolbarDensitySelector, GridToolbarExport,
     GridToolbarFilterButton,
     GridToolbarQuickFilter
 } from "@mui/x-data-grid";
-import PropTypes from "prop-types";
 import _mock from "../../../_mock";
-import Label from "../../../components/label";
-import Iconify from "../../../components/iconify";
-import {fPercent} from "../../../utils/formatNumber";
-import axios from "../../../utils/axios";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
 import {PATH_DASHBOARD} from "../../../routes/paths";
-import {useBoolean} from "../../../hooks/use-boolean";
-import CustomerQuickManagementForm from "../../../sections/@dashboard/gestion/customer-quick-management-form";
-import PreviousClientManagement from "../../../sections/@dashboard/gestion/previous-client-management";
-import InvoicedClientOrders from "../../../sections/@dashboard/gestion/invoiced-client-orders";
-import MapChangeTheme from "../../../sections/_examples/extra/map/change-theme";
 import {MAP_API} from "../../../config-global";
 import MapMarkersPopups from "../../../sections/_examples/extra/map/MapMarkersPopups";
-import {countries as COUNTRIES} from 'src/_mock/map/countries';
-
 import {io} from "socket.io-client";
-import mapboxgl from "mapbox-gl";
 import {useAuthContext} from "../../../auth/useAuthContext";
-
 
 // ----------------------------------------------------------------------
 
@@ -99,12 +79,65 @@ export default function TrackingPage(callback, deps) {
 
     const [countriesData, setCountriesData] = useState([]);
 
+    // useEffect(() => {
+    //     setMessages([]);
+    //     socket?.emit("join", currentRoom);
+    // }, [currentRoom]);
+    //
+    // useEffect(() => {
+    //     if (onceRef.current) {
+    //         return;
+    //     }
+    //
+    //     onceRef.current = true;
+    //
+    //     const socket = io("ws://localhost:80");
+    //     //const socket = io("wss://ss.lidenar.com");
+    //     setSocket(socket);
+    //
+    //     // CHAT
+    //
+    //     socket.on("connect", () => {
+    //         console.log("Connected to socket server");
+    //         setName(`anon-${socket.id}`);
+    //         setConnected(true);
+    //         console.log("joining room", currentRoom);
+    //
+    //         socket.emit("join", currentRoom);
+    //     });
+    //
+    //     socket.on("message", (msg) => {
+    //         console.log("Message received AAA", msg);
+    //         msg.date = new Date(msg.date);
+    //         setMessages((messages) => [...messages, msg]);
+    //     });
+    //
+    //     socket.on("messages", (msgs) => {
+    //         console.log("Messages received BBB", msgs);
+    //         let messages = msgs.messages.map((msg) => {
+    //             msg.date = new Date(msg.date);
+    //             return msg;
+    //         });
+    //         setMessages(messages);
+    //
+    //     });
+    //
+    // }, []);
+    //
+    // const sendMessage = (e) => {
+    //     e.preventDefault();
+    //     socket?.emit("message", {
+    //         text: input,
+    //         room: currentRoom,
+    //     });
+    //     setInput("");
+    // };
 
     useEffect(() => {
         setMessages([]);
-        socket?.emit("join", currentRoom);
         socket?.emit("get_coordinates", currentRoomMap)
-    }, [currentRoom]);
+    }, [currentRoomMap]);
+
 
     useEffect(() => {
         if (onceRef.current) {
@@ -113,37 +146,9 @@ export default function TrackingPage(callback, deps) {
 
         onceRef.current = true;
 
-        //const socket = io("ws://localhost:3000");
+        //const socket = io("ws://localhost:80");
         const socket = io("wss://ss.lidenar.com");
         setSocket(socket);
-
-        // CHAT
-
-        socket.on("connect", () => {
-            console.log("Connected to socket server");
-            setName(`anon-${socket.id}`);
-            setConnected(true);
-            console.log("joining room", currentRoom);
-
-            socket.emit("join", currentRoom);
-        });
-
-        socket.on("message", (msg) => {
-            console.log("Message received AAA", msg);
-            msg.date = new Date(msg.date);
-            setMessages((messages) => [...messages, msg]);
-        });
-
-        socket.on("messages", (msgs) => {
-            console.log("Messages received BBB", msgs);
-            let messages = msgs.messages.map((msg) => {
-                msg.date = new Date(msg.date);
-                return msg;
-            });
-            setMessages(messages);
-
-        });
-
 
         // MAP
         socket.on("connect", () => {
@@ -200,52 +205,6 @@ export default function TrackingPage(callback, deps) {
 
 
     }, []);
-
-    const sendMessage = (e) => {
-        e.preventDefault();
-        socket?.emit("message", {
-            text: input,
-            room: currentRoom,
-        });
-        setInput("");
-
-        // e.preventDefault();
-        // // Verificar si el navegador soporta la geolocalización
-        // if ("geolocation" in navigator) {
-        //     // Obtener la posición del usuario
-        //     navigator.geolocation.getCurrentPosition(
-        //         (position) => {
-        //             const latitude = position.coords.latitude;
-        //             const longitude = position.coords.longitude;
-        //
-        //             // Crear un objeto con las coordenadas
-        //             const coordinates = {
-        //                 latitude: latitude,
-        //                 longitude: longitude,
-        //                 user: user.DISPLAYNAME,
-        //                 text: input
-        //             };
-        //
-        //             // Convertir las coordenadas a formato JSON en texto
-        //             const coordinatesJSON = JSON.stringify(coordinates);
-        //
-        //             // Enviar las coordenadas a través del socket
-        //             socket?.emit("message", {
-        //                 text: coordinatesJSON,
-        //                 room: "General",
-        //             });
-        //             setInput("");
-        //         },
-        //         (error) => {
-        //             // Manejar errores de geolocalización
-        //             console.error("Error al obtener la posición:", error.message);
-        //         }
-        //     );
-        // } else {
-        //     // Manejar el caso en que el navegador no soporte geolocalización
-        //     console.error("Geolocalización no está soportada por este navegador");
-        // }
-    };
 
     useEffect(() => {
         if (coordinates.length > 0) {
@@ -312,7 +271,7 @@ export default function TrackingPage(callback, deps) {
 
                 <div className="flex">
                     <Grid container spacing={2}>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={12} md={12}>
                             <Card>
                                 <CardContent>
                                     <StyledMapContainer>
@@ -321,62 +280,62 @@ export default function TrackingPage(callback, deps) {
                                 </CardContent>
                             </Card>
                         </Grid>
-                        <Grid item xs={12} md={6}>
-                            <Card>
-                                <div className="h-screen p-4 bg-ctp-crust flex flex-col flex-grow justify-end">
-                                    <div style={{maxHeight: '300px', overflowY: 'auto'}}>
-                                        <List>
-                                            {messages?.map((msg, index) => (
-                                                <ListItem key={index} alignItems="flex-start">
-                                                    <ListItemText
-                                                        // primary={msg.user}
-                                                        //primary={JSON.parse(msg.text).user}
-                                                        primary={msg.user}
-                                                        secondary={
-                                                            <>
-                                                                <Typography
-                                                                    component="span"
-                                                                    variant="body2"
-                                                                    color="textPrimary"
-                                                                >
-                                                                    {msg.date.toLocaleString()}
-                                                                </Typography>
-                                                                <br/> {/* Agrega un salto de línea */}
-                                                                <Typography
-                                                                    component="span"
-                                                                    variant="body1"
-                                                                    color="textPrimary"
-                                                                >
-                                                                    {msg.text}
-                                                                </Typography>
-                                                            </>
-                                                        }
-                                                    />
-                                                </ListItem>
-                                            ))}
-                                        </List>
-                                    </div>
-                                    <form className="flex h-11" onSubmit={sendMessage}>
-                                        <TextField
-                                            type="text"
-                                            value={input}
-                                            onChange={(e) => setInput(e.target.value)}
-                                            variant="filled"
-                                            fullWidth
-                                            placeholder="Escribe un mensaje..."
-                                        />
-                                        <Button
-                                            type="submit"
-                                            variant="contained"
-                                            color="primary"
-                                            className="ml-2"
-                                        >
-                                            Enviar
-                                        </Button>
-                                    </form>
-                                </div>
-                            </Card>
-                        </Grid>
+                        {/*<Grid item xs={12} md={6}>*/}
+                        {/*    <Card>*/}
+                        {/*        <div className="h-screen p-4 bg-ctp-crust flex flex-col flex-grow justify-end">*/}
+                        {/*            <div style={{maxHeight: '300px', overflowY: 'auto'}}>*/}
+                        {/*                <List>*/}
+                        {/*                    {messages?.map((msg, index) => (*/}
+                        {/*                        <ListItem key={index} alignItems="flex-start">*/}
+                        {/*                            <ListItemText*/}
+                        {/*                                // primary={msg.user}*/}
+                        {/*                                //primary={JSON.parse(msg.text).user}*/}
+                        {/*                                primary={msg.user}*/}
+                        {/*                                secondary={*/}
+                        {/*                                    <>*/}
+                        {/*                                        <Typography*/}
+                        {/*                                            component="span"*/}
+                        {/*                                            variant="body2"*/}
+                        {/*                                            color="textPrimary"*/}
+                        {/*                                        >*/}
+                        {/*                                            {msg.date.toLocaleString()}*/}
+                        {/*                                        </Typography>*/}
+                        {/*                                        <br/> /!* Agrega un salto de línea *!/*/}
+                        {/*                                        <Typography*/}
+                        {/*                                            component="span"*/}
+                        {/*                                            variant="body1"*/}
+                        {/*                                            color="textPrimary"*/}
+                        {/*                                        >*/}
+                        {/*                                            {msg.text}*/}
+                        {/*                                        </Typography>*/}
+                        {/*                                    </>*/}
+                        {/*                                }*/}
+                        {/*                            />*/}
+                        {/*                        </ListItem>*/}
+                        {/*                    ))}*/}
+                        {/*                </List>*/}
+                        {/*            </div>*/}
+                        {/*            <form className="flex h-11" onSubmit={sendMessage}>*/}
+                        {/*                <TextField*/}
+                        {/*                    type="text"*/}
+                        {/*                    value={input}*/}
+                        {/*                    onChange={(e) => setInput(e.target.value)}*/}
+                        {/*                    variant="filled"*/}
+                        {/*                    fullWidth*/}
+                        {/*                    placeholder="Escribe un mensaje..."*/}
+                        {/*                />*/}
+                        {/*                <Button*/}
+                        {/*                    type="submit"*/}
+                        {/*                    variant="contained"*/}
+                        {/*                    color="primary"*/}
+                        {/*                    className="ml-2"*/}
+                        {/*                >*/}
+                        {/*                    Enviar*/}
+                        {/*                </Button>*/}
+                        {/*            </form>*/}
+                        {/*        </div>*/}
+                        {/*    </Card>*/}
+                        {/*</Grid>*/}
                     </Grid>
                 </div>
 
