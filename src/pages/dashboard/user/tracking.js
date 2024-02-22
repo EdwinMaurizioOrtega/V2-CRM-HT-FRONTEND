@@ -148,7 +148,9 @@ export default function TrackingPage(callback, deps) {
                 const {latitud, longitud, date, user_name} = coor
 
                 // Agregar las coordenadas al objeto estático y agregarlo al array
-                if (filterUserName === '' || user_name === filterUserName) {
+                if (filterUserName === '' ||
+                    user_name.toLowerCase().includes(filterUserName.toLowerCase()) ||
+                    user_name.split(" ").some(word => word.toLowerCase().includes(filterUserName.toLowerCase()))) {
                     const country = {
                         ...staticValues,
                         latlng: [latitud, longitud],
