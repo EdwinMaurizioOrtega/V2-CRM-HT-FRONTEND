@@ -31,7 +31,7 @@ import PropTypes from "prop-types";
 import _mock from "../../../_mock";
 import Label from "../../../components/label";
 import Iconify from "../../../components/iconify";
-import {fPercent} from "../../../utils/formatNumber";
+import {fCurrency, fPercent} from "../../../utils/formatNumber";
 import axios from "../../../utils/axios";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
 import {PATH_DASHBOARD} from "../../../routes/paths";
@@ -43,6 +43,7 @@ import {useAuthContext} from "../../../auth/useAuthContext";
 import CalendarView from "../../../sections/calendar/view/calendar";
 import {AnalyticsWidgetSummary} from "../../../sections/@dashboard/general/analytics";
 import {Space_Mono} from "@next/font/google";
+import {TIPO_CREDITO} from "../../../utils/constants";
 
 // ----------------------------------------------------------------------
 
@@ -75,6 +76,11 @@ export default function MayoristaPage(callback, deps) {
             return `${diasDifference} días`; // Concatena "días" al valor y devuelve el resultado
         }
     };
+
+    function tipoCredito(pay) {
+        const payActual = TIPO_CREDITO.find(option => option.id == pay);
+        return payActual ? payActual.title : "Pago no definido.";
+    }
 
     const baseColumns = [
         {
@@ -158,24 +164,37 @@ export default function MayoristaPage(callback, deps) {
             minWidth: 160,
         },
 
-        // {
-        //     field: 'Cupo',
-        //     headerName: 'Cupo',
-        //     flex: 1,
-        //     minWidth: 160,
-        // },
-        // {
-        //     field: 'Score',
-        //     headerName: 'Score',
-        //     flex: 1,
-        //     minWidth: 160,
-        // },
-        // {
-        //     field: 'Capacidad de Pago',
-        //     headerName: 'Capacidad de Pago',
-        //     flex: 1,
-        //     minWidth: 160,
-        // },
+        {
+            field: 'CreditLine',
+            headerName: 'Límte de Crédito',
+            flex: 1,
+            minWidth: 160,
+            renderCell: (params) => fCurrency(params.value),
+        },
+        {
+            field: 'Balance',
+            headerName: 'Saldo Deuda',
+            flex: 1,
+            minWidth: 160,
+            renderCell: (params) => fCurrency(params.value),
+        },
+        {
+            headerName: 'Cupo Disponible',
+            flex: 1,
+            minWidth: 160,
+            renderCell: (params) => {
+                const creditLine = params.row.CreditLine || 0; // Valor predeterminado de CreditLine si es null o undefined
+                const balance = params.row.Balance || 0; // Valor predeterminado de Balance si es null o undefined
+                return fCurrency (creditLine - balance);
+            },
+        },
+        {
+            field: 'U_SYP_CREDITO',
+            headerName: 'Tipo Crédito:',
+            flex: 1,
+            minWidth: 160,
+            renderCell: (params) => tipoCredito(params.value)
+        },
         // {
         //     field: 'Endeudamiento',
         //     headerName: 'Endeudamiento',
