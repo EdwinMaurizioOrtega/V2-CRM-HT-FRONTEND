@@ -190,7 +190,7 @@ export default function MayoristaPage(callback, deps) {
         },
         {
             field: 'U_SYP_CREDITO',
-            headerName: 'Tipo Crédito:',
+            headerName: 'Tipo Crédito',
             flex: 1,
             minWidth: 160,
             renderCell: (params) => tipoCredito(params.value)
