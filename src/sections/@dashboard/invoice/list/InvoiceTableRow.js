@@ -79,7 +79,8 @@ export default function InvoiceTableRow({
         BODEGA,
         FORMADEPAGO,
         NUMEROGUIA,
-        FECHA_IMPRESION
+        FECHA_IMPRESION,
+        NUMEROFACTURALIDENAR
     } = row;
 
     const router = useRouter();
@@ -384,6 +385,7 @@ export default function InvoiceTableRow({
                 <TableCell align="left">{FECHACREACION}</TableCell>
                 <TableCell align="left">{FECHAAPROBO}</TableCell>
                 <TableCell align="left">{FECHAFACTURACION}</TableCell>
+                <TableCell align="left">{NUMEROFACTURALIDENAR}</TableCell>
                 {/* <TableCell align="left"> */}
                 {/*     <Button variant="contained" onClick={handleImprimir}>Imprimir</Button> */}
                 {/* </TableCell> */}

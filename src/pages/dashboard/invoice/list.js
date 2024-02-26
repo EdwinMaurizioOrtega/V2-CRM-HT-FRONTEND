@@ -90,6 +90,7 @@ const TABLE_HEAD = [
     {id: 'FECHACREACION', label: 'Creación', align: 'left'},
     {id: 'FECHAAPROBO', label: 'Aprobación', align: 'left'},
     {id: 'FECHAFACTURACION', label: 'Facturación', align: 'left'},
+    {id: 'NUMEROFACTURALIDENAR', label: 'Nro. Factura', align: 'left'},
 ];
 
 // ----------------------------------------------------------------------

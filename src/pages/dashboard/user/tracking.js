@@ -107,13 +107,11 @@ export default function TrackingPage(callback, deps) {
 
         });
 
-
         // Agregar un manejador de eventos para el evento "coordinates"
         socket.on("coordinates", (data) => {
             console.log("Coordenadas recibidas: ", data);
             setCoordinates((coord) => [...coord, data])
         });
-
 
         socket.on("list_coordinates", (msgs) => {
             console.log("Lista Coordenadas Recibidas: ", msgs);

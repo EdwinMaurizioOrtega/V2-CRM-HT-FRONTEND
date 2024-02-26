@@ -66,6 +66,16 @@ export default function MayoristaPage(callback, deps) {
 
     const {themeStretch} = useSettingsContext();
 
+    // Define el renderizador de celdas personalizado para la columna "DIAS_DIFFERENCE"
+    const renderDiasColumn = (params) => {
+        const diasDifference = params.value; // Obtén el valor de la celda
+        if (diasDifference === null) {
+            return '∞ días'; // Devuelve '...' si el valor es null
+        } else {
+            return `${diasDifference} días`; // Concatena "días" al valor y devuelve el resultado
+        }
+    };
+
     const baseColumns = [
         {
             type: 'actions',
@@ -88,13 +98,13 @@ export default function MayoristaPage(callback, deps) {
                 <GridActionsCellItem
                     showInMenu
                     icon={<Iconify icon="solar:eye-bold"/>}
-                    label="Gestiones anteriores"
+                    label="Gestiones Anteriores"
                     onClick={() => handleViewManagementRow(params.row)}
                 />,
                 <GridActionsCellItem
                     showInMenu
                     icon={<Iconify icon="solar:eye-bold"/>}
-                    label="Historico Invoices"
+                    label="Histórico Órdenes"
                     onClick={() => handleViewOrdersRow(params.row)}
                 />,
             ],
@@ -103,6 +113,13 @@ export default function MayoristaPage(callback, deps) {
         {
             field: 'id',
             hide: true,
+        },
+        {
+            field: 'DIAS_DIFFERENCE',
+            headerName: 'ÚLTIMA GESTIÓN',
+            flex: 1,
+            minWidth: 160,
+            renderCell: renderDiasColumn, // Usa el renderizador de celdas personalizado
         },
         {
             field: 'Cliente',
@@ -122,12 +139,12 @@ export default function MayoristaPage(callback, deps) {
             flex: 1,
             minWidth: 160,
         },
-        {
-            field: 'Celular',
-            headerName: 'Celular',
-            flex: 1,
-            minWidth: 160,
-        },
+        // {
+        //     field: 'Celular',
+        //     headerName: 'Celular',
+        //     flex: 1,
+        //     minWidth: 160,
+        // },
         {
             field: 'Ciudad',
             headerName: 'Ciudad',
@@ -140,48 +157,49 @@ export default function MayoristaPage(callback, deps) {
             flex: 1,
             minWidth: 160,
         },
-        {
-            field: 'Cupo',
-            headerName: 'Cupo',
-            flex: 1,
-            minWidth: 160,
-        },
-        {
-            field: 'Score',
-            headerName: 'Score',
-            flex: 1,
-            minWidth: 160,
-        },
-        {
-            field: 'Capacidad de Pago',
-            headerName: 'Capacidad de Pago',
-            flex: 1,
-            minWidth: 160,
-        },
-        {
-            field: 'Endeudamiento',
-            headerName: 'Endeudamiento',
-            flex: 1,
-            minWidth: 160,
-        },
-        {
-            field: 'GLN',
-            headerName: 'Tipo crédito',
-            flex: 1,
-            minWidth: 160,
-        },
-        {
-            field: 'ValidComm',
-            headerName: 'Crédito aprobado',
-            flex: 1,
-            minWidth: 160,
-        },
-        {
-            field: 'Balance',
-            headerName: 'Cupo utilizado',
-            flex: 1,
-            minWidth: 160,
-        },
+
+        // {
+        //     field: 'Cupo',
+        //     headerName: 'Cupo',
+        //     flex: 1,
+        //     minWidth: 160,
+        // },
+        // {
+        //     field: 'Score',
+        //     headerName: 'Score',
+        //     flex: 1,
+        //     minWidth: 160,
+        // },
+        // {
+        //     field: 'Capacidad de Pago',
+        //     headerName: 'Capacidad de Pago',
+        //     flex: 1,
+        //     minWidth: 160,
+        // },
+        // {
+        //     field: 'Endeudamiento',
+        //     headerName: 'Endeudamiento',
+        //     flex: 1,
+        //     minWidth: 160,
+        // },
+        // {
+        //     field: 'GLN',
+        //     headerName: 'Tipo crédito',
+        //     flex: 1,
+        //     minWidth: 160,
+        // },
+        // {
+        //     field: 'ValidComm',
+        //     headerName: 'Crédito aprobado',
+        //     flex: 1,
+        //     minWidth: 160,
+        // },
+        // {
+        //     field: 'Balance',
+        //     headerName: 'Cupo utilizado',
+        //     flex: 1,
+        //     minWidth: 160,
+        // },
     ]
 
 
@@ -300,7 +318,7 @@ export default function MayoristaPage(callback, deps) {
 
 
     const handleValorCambiado = (nuevoValor) => {
-        console.log("Llega el nuevo valor: "+ JSON.stringify(nuevoValor));
+        console.log("Llega el nuevo valor: " + JSON.stringify(nuevoValor));
 
         setDataContAgenda(nuevoValor.length); // Corregido: asignar la longitud directamente
         const agendaCerrada = nuevoValor.filter((agenda) => agenda.VISITO === false); // Usar filter() para obtener todos los elementos que cumplan con la condición
@@ -499,11 +517,11 @@ export default function MayoristaPage(callback, deps) {
                                               onClose={quickPCM.onFalse}/>
 
                     {user?.ID && partner && (
-                    <InvoicedClientOrders
-                        userID={user.ID}
-                        currentPartner={partner}
-                        open={quickICO.value}
-                        onClose={quickICO.onFalse}/>
+                        <InvoicedClientOrders
+                            userID={user.ID}
+                            currentPartner={partner}
+                            open={quickICO.value}
+                            onClose={quickICO.onFalse}/>
                     )}
 
                 </Card>
