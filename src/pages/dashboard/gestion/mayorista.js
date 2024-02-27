@@ -67,6 +67,11 @@ export default function MayoristaPage(callback, deps) {
 
     const {themeStretch} = useSettingsContext();
 
+    const [partner, setPartner] = useState(null);
+    const quickEdit = useBoolean();
+    const quickPCM = useBoolean();
+    const quickICO = useBoolean();
+
     // Define el renderizador de celdas personalizado para la columna "DIAS_DIFFERENCE"
     const renderDiasColumn = (params) => {
         const diasDifference = params.value; // Obtén el valor de la celda
@@ -185,7 +190,7 @@ export default function MayoristaPage(callback, deps) {
             renderCell: (params) => {
                 const creditLine = params.row.CreditLine || 0; // Valor predeterminado de CreditLine si es null o undefined
                 const balance = params.row.Balance || 0; // Valor predeterminado de Balance si es null o undefined
-                return fCurrency (creditLine - balance);
+                return fCurrency(creditLine - balance);
             },
         },
         {
@@ -293,11 +298,6 @@ export default function MayoristaPage(callback, deps) {
         }
     };
 
-    const [partner, setPartner] = useState('');
-    const quickEdit = useBoolean();
-    const quickPCM = useBoolean();
-    const quickICO = useBoolean();
-
     const handleViewRow = useCallback(
         (row) => {
             quickEdit.onTrue();
@@ -331,9 +331,9 @@ export default function MayoristaPage(callback, deps) {
     );
 
 
-    const [dataContAgenda, setDataContAgenda] = useState([]);
-    const [dataContAgendaCErrado, setDataContAgendaCerrado] = useState([]);
-    const [dataContAgendaPorCerrar, setDataContAgendaPorCerrar] = useState([]);
+    const [dataContAgenda, setDataContAgenda] = useState(0);
+    const [dataContAgendaCErrado, setDataContAgendaCerrado] = useState(0);
+    const [dataContAgendaPorCerrar, setDataContAgendaPorCerrar] = useState(0);
 
 
     const handleValorCambiado = (nuevoValor) => {
@@ -481,7 +481,9 @@ export default function MayoristaPage(callback, deps) {
                         <Grid item xs={12} sm={6} md={3}>
                             <AnalyticsWidgetSummary
                                 title="Por Gestionar"
-                                total={businessPartners.length}
+                                total={
+                                    businessPartners && businessPartners.length ? businessPartners.length : 0
+                                }
                                 color="info"
                                 icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png"/>}
                             />
@@ -529,13 +531,20 @@ export default function MayoristaPage(callback, deps) {
                         }}
                     />
 
+                    {user && partner && (
                     <CustomerQuickManagementForm currentPartner={partner} open={quickEdit.value}
                                                  onClose={quickEdit.onFalse}/>
+                    )}
 
-                    <PreviousClientManagement currentPartner={partner} open={quickPCM.value}
-                                              onClose={quickPCM.onFalse}/>
+                    {user && partner && (
+                        <PreviousClientManagement
+                            userID={user.ID}
+                            currentPartner={partner}
+                            open={quickPCM.value}
+                            onClose={quickPCM.onFalse}/>
+                    )}
 
-                    {user?.ID && partner && (
+                    {user && partner && (
                         <InvoicedClientOrders
                             userID={user.ID}
                             currentPartner={partner}
