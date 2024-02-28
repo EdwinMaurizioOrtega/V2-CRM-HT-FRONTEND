@@ -21,7 +21,7 @@ const GeoLocationComponent = ({ user }) => {
                             latitud: latitude.toString(),
                             longitud: longitude.toString(),
                             user_name: user.DISPLAYNAME,
-                            user_id: user.ID,
+                            user_id: Number(user.ID),
                             room_map: 'Lidenar',
                         });
                     },
