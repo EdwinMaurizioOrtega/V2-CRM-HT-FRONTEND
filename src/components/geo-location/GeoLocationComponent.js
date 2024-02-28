@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { io } from "socket.io-client";
 
 const GeoLocationComponent = ({ user }) => {
-    //Geolocalizar V1
+    console.log("Geolocalizar V1:")
     useEffect(() => {
         // Establecer la conexión del socket
         //const socket = io("ws://localhost:80");
@@ -36,9 +36,9 @@ const GeoLocationComponent = ({ user }) => {
         }
 
         // Limpiar la conexión del socket al desmontar el componente
-        return () => {
-            socket.disconnect();
-        }; //disconnect
+        // return () => {
+        //     socket.disconnect();
+        // }; //disconnect
     }, [user]);
 
     return null; // Este componente no renderiza nada visualmente

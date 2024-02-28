@@ -68,8 +68,8 @@ export default function TrackingPage(callback, deps) {
 
         onceRef.current = true;
 
-        const socket = io("ws://localhost:80");
-        //const socket = io("wss://ss.lidenar.com");
+        //const socket = io("ws://localhost:80");
+        const socket = io("wss://ss.lidenar.com");
         setSocket(socket);
 
         // MAP
@@ -80,6 +80,7 @@ export default function TrackingPage(callback, deps) {
             console.log("joining room map ", currentRoomMap);
 
             socket.emit("get_coordinates", currentRoomMap);
+
 
             // if ("geolocation" in navigator) {
             //     navigator.geolocation.getCurrentPosition(
