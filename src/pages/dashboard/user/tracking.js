@@ -68,8 +68,8 @@ export default function TrackingPage(callback, deps) {
 
         onceRef.current = true;
 
-        //const socket = io("ws://localhost:80");
-        const socket = io("wss://ss.lidenar.com");
+        const socket = io("ws://localhost:80");
+        //const socket = io("wss://ss.lidenar.com");
         setSocket(socket);
 
         // MAP
@@ -81,28 +81,27 @@ export default function TrackingPage(callback, deps) {
 
             socket.emit("get_coordinates", currentRoomMap);
 
-
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const latitude = position.coords.latitude;
-                        const longitude = position.coords.longitude;
-
-                        socket?.emit("coordinates", {
-                            latitud: latitude.toString(),
-                            longitud: longitude.toString(),
-                            user_name: user.DISPLAYNAME,
-                            room_map: currentRoomMap,
-                        });
-
-                    },
-                    (error) => {
-                        console.error("Error al obtener la posición:", error.message);
-                    }
-                );
-            } else {
-                console.error("Geolocalización no está soportada por este navegador");
-            }
+            // if ("geolocation" in navigator) {
+            //     navigator.geolocation.getCurrentPosition(
+            //         (position) => {
+            //             const latitude = position.coords.latitude;
+            //             const longitude = position.coords.longitude;
+            //
+            //             socket?.emit("coordinates", {
+            //                 latitud: latitude.toString(),
+            //                 longitud: longitude.toString(),
+            //                 user_name: user.DISPLAYNAME,
+            //                 room_map: currentRoomMap,
+            //             });
+            //
+            //         },
+            //         (error) => {
+            //             console.error("Error al obtener la posición:", error.message);
+            //         }
+            //     );
+            // } else {
+            //     console.error("Geolocalización no está soportada por este navegador");
+            // }
 
 
         });
