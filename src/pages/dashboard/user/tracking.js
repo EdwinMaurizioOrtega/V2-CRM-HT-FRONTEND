@@ -15,7 +15,7 @@ import React, {useEffect, useRef, useState} from "react";
 import _mock from "../../../_mock";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
 import {PATH_DASHBOARD} from "../../../routes/paths";
-import {MAP_API} from "../../../config-global";
+import {HOST_API_KEY, HOST_SOCKET, MAP_API} from "../../../config-global";
 import MapMarkersPopups from "../../../sections/_examples/extra/map/MapMarkersPopups";
 import {io} from "socket.io-client";
 import {useAuthContext} from "../../../auth/useAuthContext";
@@ -68,8 +68,7 @@ export default function TrackingPage(callback, deps) {
 
         onceRef.current = true;
 
-        //const socket = io("ws://localhost:80");
-        const socket = io("wss://ss.lidenar.com");
+        const socket = io(`${HOST_SOCKET}`);
         setSocket(socket);
 
         // MAP
@@ -80,28 +79,6 @@ export default function TrackingPage(callback, deps) {
             console.log("joining room map ", currentRoomMap);
 
             socket.emit("get_coordinates", currentRoomMap);
-
-            // if ("geolocation" in navigator) {
-            //     navigator.geolocation.getCurrentPosition(
-            //         (position) => {
-            //             const latitude = position.coords.latitude;
-            //             const longitude = position.coords.longitude;
-            //
-            //             socket?.emit("coordinates", {
-            //                 latitud: latitude.toString(),
-            //                 longitud: longitude.toString(),
-            //                 user_name: user.DISPLAYNAME,
-            //                 room_map: currentRoomMap,
-            //             });
-            //
-            //         },
-            //         (error) => {
-            //             console.error("Error al obtener la posición:", error.message);
-            //         }
-            //     );
-            // } else {
-            //     console.error("Geolocalización no está soportada por este navegador");
-            // }
 
         });
 
@@ -141,7 +118,7 @@ export default function TrackingPage(callback, deps) {
             // Iterar sobre todos los mensajes y obtener las coordenadas de cada uno
             coordinates.forEach((coor) => {
                 // Convertir el texto del mensaje a JSON y obtener las coordenadas
-                const {latitud, longitud, date, user_name} = coor
+                const {latitud, longitud, date, user_name, user_id} = coor
 
                 // Agregar las coordenadas al objeto estático y agregarlo al array
                 if (filterUserName === '' ||
@@ -151,7 +128,7 @@ export default function TrackingPage(callback, deps) {
                         ...staticValues,
                         latlng: [latitud, longitud],
                         capital: date.toLocaleString(),
-                        name: user_name
+                        name: user_id + " "+ user_name
                     };
                     objectArray.push(country);
                 }
