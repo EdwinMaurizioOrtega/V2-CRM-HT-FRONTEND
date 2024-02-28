@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { io } from "socket.io-client";
+import {HOST_SOCKET} from "../../config-global";
 
 const GeoLocationComponent = ({ user }) => {
     useEffect(() => {
-        const socket = io("wss://ss.lidenar.com");
-
+        const socket = io(`${HOST_SOCKET}`);
         const sendCoordinates = () => {
             // Obtener las coordenadas usando la geolocalización del navegador
             if ("geolocation" in navigator) {
@@ -21,6 +21,7 @@ const GeoLocationComponent = ({ user }) => {
                             latitud: latitude.toString(),
                             longitud: longitude.toString(),
                             user_name: user.DISPLAYNAME,
+                            user_id: user.ID,
                             room_map: 'Lidenar',
                         });
                     },
@@ -33,11 +34,17 @@ const GeoLocationComponent = ({ user }) => {
             }
         };
 
-        // Llamar a la función para enviar las coordenadas cada 30 segundos
-        const intervalId = setInterval(sendCoordinates, 30000);
+        // // Llamar a la función para enviar las coordenadas cada 30 segundos
+        // const intervalId = setInterval(sendCoordinates, 30000);
+        //
+        // // Limpiar el intervalo al desmontar el componente
+        // return () => clearInterval(intervalId);
 
-        // Limpiar el intervalo al desmontar el componente
-        return () => clearInterval(intervalId);
+        // Limpiar la conexión del socket al desmontar el componente
+        return () => {
+            socket.disconnect();
+        };
+
     }, [user]);
 
     return null; // Este componente no renderiza nada visualmente
