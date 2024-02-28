@@ -5,7 +5,7 @@ import {HOST_SOCKET} from "../../config-global";
 const GeoLocationComponent = ({ user }) => {
     useEffect(() => {
         const socket = io(`${HOST_SOCKET}`);
-        const sendCoordinates = () => {
+
             // Obtener las coordenadas usando la geolocalización del navegador
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(
@@ -32,7 +32,7 @@ const GeoLocationComponent = ({ user }) => {
             } else {
                 console.error("Geolocalización no está soportada por este navegador");
             }
-        };
+
 
         // // Llamar a la función para enviar las coordenadas cada 30 segundos
         // const intervalId = setInterval(sendCoordinates, 30000);
