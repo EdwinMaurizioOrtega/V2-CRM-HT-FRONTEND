@@ -81,7 +81,6 @@ export default function TrackingPage(callback, deps) {
 
             socket.emit("get_coordinates", currentRoomMap);
 
-
             // if ("geolocation" in navigator) {
             //     navigator.geolocation.getCurrentPosition(
             //         (position) => {
@@ -103,7 +102,6 @@ export default function TrackingPage(callback, deps) {
             // } else {
             //     console.error("Geolocalización no está soportada por este navegador");
             // }
-
 
         });
 
