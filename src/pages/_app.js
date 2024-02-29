@@ -54,6 +54,7 @@ import {ThemeSettings, SettingsProvider} from '../components/settings';
 
 import {AuthProvider} from '../auth/JwtContext';
 import {useEffect} from "react";
+import {Analytics} from "@vercel/analytics/next";
 // import { AuthProvider } from '../auth/Auth0Context';
 // import { AuthProvider } from '../auth/FirebaseContext';
 // import { AuthProvider } from '../auth/AwsCognitoContext';
@@ -107,7 +108,10 @@ export default function MyApp(props) {
                                             <SnackbarProvider>
                                                 <StyledChart/>
                                                 <ProgressBar/>
-                                                {getLayout(<Component {...pageProps} />)}
+                                                {getLayout(
+                                                    <Component {...pageProps} />
+                                                )}
+                                                <Analytics />
                                             </SnackbarProvider>
                                         </ThemeLocalization>
                                     </ThemeSettings>
