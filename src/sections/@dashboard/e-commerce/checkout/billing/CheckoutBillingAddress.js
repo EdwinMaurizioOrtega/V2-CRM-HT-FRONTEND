@@ -17,6 +17,8 @@ import ShopCustomerSearch from "../../shop/ShopCustomerSearch";
 import SearchNotFound from "../../../../../components/search-not-found";
 import {CustomTextField} from "../../../../../components/custom-input";
 import axios from "../../../../../utils/axios";
+import {TIPO_CREDITO} from "../../../../../utils/constants";
+import {fCurrency} from "../../../../../utils/formatNumber";
 
 // ----------------------------------------------------------------------
 
@@ -27,7 +29,7 @@ CheckoutBillingAddress.propTypes = {
 };
 
 export default function CheckoutBillingAddress({checkout, onBackStep, onCreateBilling}) {
-    const {total, discount, subtotal, iva } = checkout;
+    const {total, discount, subtotal, iva} = checkout;
 
     const [open, setOpen] = useState(false);
 
@@ -83,12 +85,12 @@ export default function CheckoutBillingAddress({checkout, onBackStep, onCreateBi
                         title={
                             <Typography variant="h6">
                                 Seleccionar un cliente:
-                                <Typography component="span" sx={{ color: 'text.secondary' }}>
+                                <Typography component="span" sx={{color: 'text.secondary'}}>
 
                                 </Typography>
                             </Typography>
                         }
-                        sx={{ mb: 3 }}
+                        sx={{mb: 3}}
                     />
 
                     {/* Buscamos todos los clientes creados en al sistema SAP */}
@@ -210,17 +212,28 @@ AddressItem.propTypes = {
 
 function AddressItem({address, onCreateBilling}) {
     // const {Cliente, Direccion, Celular, receiver, fullAddress, addressType, phoneNumber, isDefault} = address;
-    const {Cliente, Direccion, Celular, ID, Tipo} = address;
+    const {Cliente, Direccion, Celular, ID, Tipo, U_SYP_CREDITO, CreditLine, Balance} = address;
     const receiver = Cliente;
     const tipo = Tipo;
     const id = ID;
+    const tipo_credito = U_SYP_CREDITO;
+    const credit_line = CreditLine;
+    const balance_a = Balance;
+
+
+    function tipoCredito(pay) {
+        const payActual = TIPO_CREDITO.find(option => option.id == pay);
+        return payActual ? payActual.title : "Pago no definido.";
+    }
 
     return (
         <Card onClick={onCreateBilling}
-            sx={{
-                p: 3,
-                mb: 3,
-            }}
+              sx={{
+                  p: 3,
+                  mb: 3,
+                  width: '100%', // Hacer que el card ocupe todo el ancho disponible
+
+              }}
         >
             <Stack
                 spacing={2}
@@ -236,9 +249,9 @@ function AddressItem({address, onCreateBilling}) {
                     <Stack direction="row" alignItems="center">
                         <Typography variant="subtitle1">
                             {receiver}
-                            {/* <Box component="span" sx={{ml: 0.5, typography: 'body2', color: 'text.secondary'}}> */}
-                            {/*     ({addressType}) */}
-                            {/* </Box> */}
+                            {/*<Box component="span" sx={{ml: 0.5, typography: 'body2', color: 'text.secondary'}}>*/}
+                            {/*    ({tipo_credito}) */}
+                            {/*</Box>*/}
                         </Typography>
 
                         {/* {isDefault && ( */}
@@ -253,6 +266,17 @@ function AddressItem({address, onCreateBilling}) {
                     <Typography variant="body2" sx={{color: 'text.secondary'}}>
                         {id}
                     </Typography>
+                    <Label color="success" sx={{ml: 1}}>
+                        Cupo Otorgado: {fCurrency(credit_line)}
+                    </Label>
+
+                    <Label color="warning" sx={{ml: 1}}>
+                        Cupo Disponible: {fCurrency(credit_line - balance_a)}
+                    </Label>
+
+                    <Label color="info" sx={{ml: 1}}>
+                        Tipo de Crédito: {tipoCredito(tipo_credito)}
+                    </Label>
                 </Stack>
 
                 {/* <Stack flexDirection="row" flexWrap="wrap" flexShrink={0}> */}
