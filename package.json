@@ -45,6 +45,7 @@
     "@react-pdf/renderer": "^3.1.5",
     "@reduxjs/toolkit": "^1.9.1",
     "@vercel/analytics": "^1.2.2",
+    "@vercel/speed-insights": "^1.0.10",
     "amazon-cognito-identity-js": "^6.1.2",
     "apexcharts": "^3.36.3",
     "autosuggest-highlight": "^3.3.4",
