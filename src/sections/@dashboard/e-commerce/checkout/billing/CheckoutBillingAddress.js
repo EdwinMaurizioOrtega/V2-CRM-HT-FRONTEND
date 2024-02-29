@@ -249,9 +249,9 @@ function AddressItem({address, onCreateBilling}) {
                     <Stack direction="row" alignItems="center">
                         <Typography variant="subtitle1">
                             {receiver}
-                            {/*<Box component="span" sx={{ml: 0.5, typography: 'body2', color: 'text.secondary'}}>*/}
-                            {/*    ({tipo_credito}) */}
-                            {/*</Box>*/}
+                            <Box component="span" sx={{ml: 0.5, typography: 'body2', color: 'text.secondary'}}>
+                                ({id + " | " + tipo})
+                            </Box>
                         </Typography>
 
                         {/* {isDefault && ( */}
@@ -261,11 +261,11 @@ function AddressItem({address, onCreateBilling}) {
                         {/* )} */}
                     </Stack>
 
-                    <Typography variant="body2">{tipo}</Typography>
+                    {/*<Typography variant="body2">{tipo + " " +id}</Typography>*/}
 
-                    <Typography variant="body2" sx={{color: 'text.secondary'}}>
-                        {id}
-                    </Typography>
+                    {/*<Typography variant="body2" sx={{color: 'text.secondary'}}>*/}
+                    {/*    {id}*/}
+                    {/*</Typography>*/}
                     <Label color="success" sx={{ml: 1}}>
                         Cupo Otorgado: {fCurrency(credit_line)}
                     </Label>
