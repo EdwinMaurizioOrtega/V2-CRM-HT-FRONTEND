@@ -5,7 +5,7 @@ import {styled} from '@mui/material/styles';
 import {
     Container,
     Card,
-    CardContent, Grid, TextField
+    CardContent, Grid, TextField, Box, Button
 } from '@mui/material';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
@@ -20,6 +20,15 @@ import {HOST_API_KEY, HOST_SOCKET, MAP_API} from "../../../config-global";
 import {io} from "socket.io-client";
 import {useAuthContext} from "../../../auth/useAuthContext";
 import {GoogleMap, useJsApiLoader, Marker, InfoWindow} from "@react-google-maps/api";
+import EmptyContent from "../../../components/empty-content";
+import {
+    DataGrid,
+    GridActionsCellItem,
+    GridToolbarColumnsButton,
+    GridToolbarContainer, GridToolbarDensitySelector, GridToolbarExport, GridToolbarFilterButton,
+    GridToolbarQuickFilter
+} from "@mui/x-data-grid";
+import Iconify from "../../../components/iconify";
 
 // ----------------------------------------------------------------------
 
@@ -55,7 +64,8 @@ export default function TrackingPage(callback, deps) {
     const [connected, setConnected] = useState(false);
     const onceRef = useRef(false);
     const [countriesData, setCountriesData] = useState([]);
-    const [filterUserName, setFilterUserName] = useState('');
+
+    const [selectedCoordinates, setSelectedCoordinates] = useState(null);
 
     useEffect(() => {
         setCoordinates([]);
@@ -86,6 +96,7 @@ export default function TrackingPage(callback, deps) {
         // Agregar un manejador de eventos para el evento "coordinates"
         socket.on("coordinates", (data) => {
             console.log("Coordenadas recibidas: ", data);
+            data.date = new Date(data.date);
             setCoordinates((coord) => [...coord, data])
         });
 
@@ -117,24 +128,21 @@ export default function TrackingPage(callback, deps) {
             };
 
             // Iterar sobre todos los mensajes y obtener las coordenadas de cada uno
-            coordinates.forEach((coor) => {
+            coordinates.forEach((coor, index) => {
                 // Convertir el texto del mensaje a JSON y obtener las coordenadas
                 const {latitud, longitud, date, user_name, user_id} = coor
 
-                // Agregar las coordenadas al objeto estático y agregarlo al array
-                if (filterUserName === '' ||
-                    user_name.toLowerCase().includes(filterUserName.toLowerCase()) ||
-                    user_name.split(" ").some(word => word.toLowerCase().includes(filterUserName.toLowerCase()))) {
                     const country = {
                         ...staticValues,
                         // latlng: [latitud, longitud],
 
-                        position: { lat: Number(latitud), lng: Number(longitud) },
+                        position: {lat: Number(latitud), lng: Number(longitud)},
                         date_time: date.toString(),
-                        name: user_id + " "+ user_name
+                        name: user_name  + " (" +  user_id+ ")",
+                        id: index + 1
                     };
                     objectArray.push(country);
-                }
+
             });
 
             console.log("Lista de todos los países:", objectArray);
@@ -142,11 +150,54 @@ export default function TrackingPage(callback, deps) {
             // Establecer los países como datos
             setCountriesData(objectArray);
         }
-    }, [coordinates, filterUserName]);
+    }, [coordinates]);
 
     const handleFilterChange = (event) => {
         setFilterUserName(event.target.value);
     };
+
+    const baseColumns = [
+        {
+            field: 'id',
+            hide: true,
+        },
+        {
+            field: 'name',
+            headerName: 'Usuario',
+            flex: true
+        },
+        { field: 'date_time',
+            headerName: 'Fecha',
+            flex: true
+        },
+
+        { field: 'position',
+            headerName: 'Position',
+            flex: true,
+            renderCell: (params) => {
+                return (
+                    <Button
+                        variant="contained"
+                        onClick={() => handleShowCoordinates(params.row)}
+                    >
+                        Mostrar Ubicación
+                    </Button>
+                );
+            }
+        }
+    ]
+
+    const handleShowCoordinates = (position) => {
+        if (position) {
+            console.log("Coordenadas seleccionadas:", position);
+            // Puedes hacer algo con las coordenadas seleccionadas aquí, si es necesario
+            setSelectedCoordinates(position);
+
+        } else {
+            console.log("No se ha seleccionado ningún marcador.");
+        }
+    };
+
 
     return (
         <>
@@ -177,16 +228,19 @@ export default function TrackingPage(callback, deps) {
                         <Grid item xs={12} md={12}>
                             <Card>
                                 <CardContent>
-                                    <TextField
-                                        label="Filtrar por nombre de usuario"
-                                        variant="outlined"
-                                        value={filterUserName}
-                                        onChange={handleFilterChange}
-                                        fullWidth
-                                        margin="normal"
+                                    <MapComponent markers={countriesData} selectedCoordinates={selectedCoordinates}/>
+
+                                    <DataGrid
+                                        rows={countriesData}
+                                        columns={baseColumns}
+                                        pagination
+                                        slots={{
+                                            toolbar: CustomToolbar,
+                                            noRowsOverlay: () => <EmptyContent title="No Data"/>,
+                                            noResultsOverlay: () => <EmptyContent title="No results found"/>,
+                                        }}
                                     />
 
-                                    <MapComponent markers={countriesData} />
                                 </CardContent>
                             </Card>
                         </Grid>
@@ -199,7 +253,6 @@ export default function TrackingPage(callback, deps) {
 }
 
 
-const center = { lat: -1.8312, lng: -78.1834 };
 
 const mapContainerStyle = {
     width: '100%',
@@ -209,8 +262,14 @@ const mapContainerStyle = {
 // URL de tu imagen personalizada para el marcador
 // const customMarkerIcon = 'URL_DE_TU_IMAGEN';
 
-function MapComponent({ markers }) {
-    const { isLoaded } = useJsApiLoader({
+function MapComponent({markers, selectedCoordinates}) {
+
+    console.log("Markers: " + JSON.stringify(markers));
+
+    const center = selectedCoordinates || {lat: -1.8312, lng: -78.1834};
+
+
+    const {isLoaded} = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: 'AIzaSyARV9G0tkya9zgXXlVNmx8U5ep7mg8XdHI',
     });
@@ -241,6 +300,19 @@ function MapComponent({ markers }) {
                 />
             ))}
 
+            {/* Mostrar marcador de la coordenada seleccionada */}
+            {selectedCoordinates && (
+                <InfoWindow
+                    position={selectedCoordinates.position}
+                    onCloseClick={handleInfoWindowClose}
+                >
+                    <div>
+                        <p>Nombre: {selectedCoordinates.name}</p>
+                        <p>Fecha y Hora: {selectedCoordinates.date_time}</p>
+                    </div>
+                </InfoWindow>
+            )}
+
             {/* Ventana de información para el marcador seleccionado */}
             {selectedMarker && (
                 <InfoWindow
@@ -258,3 +330,20 @@ function MapComponent({ markers }) {
         <></>
     );
 }
+
+// ----------------------------------------------------------------------
+
+function CustomToolbar() {
+    return (
+        <GridToolbarContainer>
+            <GridToolbarQuickFilter/>
+            <Box sx={{flexGrow: 1}}/>
+            <GridToolbarColumnsButton/>
+            <GridToolbarFilterButton/>
+            <GridToolbarDensitySelector/>
+            <GridToolbarExport/>
+        </GridToolbarContainer>
+    );
+}
+
+// ----------------------------------------------------------------------
