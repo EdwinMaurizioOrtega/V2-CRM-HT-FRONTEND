@@ -44,6 +44,7 @@ import CalendarView from "../../../sections/calendar/view/calendar";
 import {AnalyticsWidgetSummary} from "../../../sections/@dashboard/general/analytics";
 import {Space_Mono} from "@next/font/google";
 import {TIPO_CREDITO} from "../../../utils/constants";
+import CustomerData from "../../../sections/@dashboard/gestion/customer-data";
 
 // ----------------------------------------------------------------------
 
@@ -71,6 +72,7 @@ export default function MayoristaPage(callback, deps) {
     const quickEdit = useBoolean();
     const quickPCM = useBoolean();
     const quickICO = useBoolean();
+    const quickDC = useBoolean();
 
     // Define el renderizador de celdas personalizado para la columna "DIAS_DIFFERENCE"
     const renderDiasColumn = (params) => {
@@ -117,6 +119,12 @@ export default function MayoristaPage(callback, deps) {
                     icon={<Iconify icon="solar:eye-bold"/>}
                     label="Histórico Órdenes"
                     onClick={() => handleViewOrdersRow(params.row)}
+                />,
+                <GridActionsCellItem
+                    showInMenu
+                    icon={<Iconify icon="solar:eye-bold"/>}
+                    label="Datos del Cliente"
+                    onClick={() => handleViewDataCustomerRow(params.row)}
                 />,
             ],
         },
@@ -316,7 +324,7 @@ export default function MayoristaPage(callback, deps) {
             setPartner(row);
 
         },
-        [quickEdit]
+        [quickPCM]
     );
 
 
@@ -327,7 +335,39 @@ export default function MayoristaPage(callback, deps) {
             setPartner(row);
 
         },
-        [quickEdit]
+        [quickICO]
+    );
+
+    const [dataCliente, setDataCliente] = useState(null);
+
+    const handleViewDataCustomerRow = useCallback(
+        async (row) => {
+            quickDC.onTrue();
+
+            console.log("ID: " + row?.ID);
+            console.log('USER: ', user.ID);
+
+            let currentPartner = row?.ID.replace(/CL/g, "");
+            console.log('Cliente: ', currentPartner); // Output: "Mi nombre es ara y vivo en oud ity."
+
+            // Crear un cliente.
+            const response = await axios.post('/hanadb/api/customers/BusinessPartners/ByRucCI', {
+                CI_RUC: currentPartner,
+                USUARIO_ID: user.ID,
+
+            });
+
+            if (response.status === 200) {
+                console.log("DATA: " + JSON.stringify(response.data.data));
+                // La solicitud PUT se realizó correctamente
+                setDataCliente(response.data.data);
+            } else {
+                // La solicitud POST no se realizó correctamente
+                console.error('Error en la solicitud POST:', response.status);
+            }
+
+        },
+        [quickDC]
     );
 
 
@@ -532,8 +572,10 @@ export default function MayoristaPage(callback, deps) {
                     />
 
                     {user && partner && (
-                    <CustomerQuickManagementForm currentPartner={partner} open={quickEdit.value}
-                                                 onClose={quickEdit.onFalse}/>
+                        <CustomerQuickManagementForm
+                            currentPartner={partner}
+                            open={quickEdit.value}
+                            onClose={quickEdit.onFalse}/>
                     )}
 
                     {user && partner && (
@@ -550,6 +592,14 @@ export default function MayoristaPage(callback, deps) {
                             currentPartner={partner}
                             open={quickICO.value}
                             onClose={quickICO.onFalse}/>
+                    )}
+
+                    {user && dataCliente && (
+                        <CustomerData
+                            userID={user.ID}
+                            currentPartner={dataCliente}
+                            open={quickDC.value}
+                            onClose={quickDC.onFalse}/>
                     )}
 
                 </Card>
