@@ -1,7 +1,7 @@
 // next
 import Head from 'next/head';
 // @mui
-import {Button, Container, IconButton, SvgIcon, TextField} from '@mui/material';
+import {Button, Container, Grid, IconButton, SvgIcon, TextField} from '@mui/material';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
 // layouts
@@ -137,32 +137,36 @@ export default function InvoiceCreatePage() {
 
                 <h2>IMEIs</h2>
 
-                <div>
+                <Grid container spacing={2}>
+                    <Grid item xs={3}>
 
-                    <div style={{display: 'flex', alignItems: 'center'}}>
-                        <p style={{marginRight: '10px'}}>Líneas ingresadas: {textArrayCount}</p>
-                        <p style={{marginRight: '10px', color: "red"}}>TOTAL ITEMs COPIADOS: {uniqueTextArrayCount}</p>
+                            <p style={{marginRight: '10px'}}>Líneas ingresadas: {textArrayCount}</p>
+                            <p style={{marginRight: '10px', color: "red", fontSize : '40px', fontWeight: 'bold'}}>TOTAL ITEMs
+                                COPIADOS: {uniqueTextArrayCount}</p>
 
-                        <IconButton variant="outlined" onClick={handlePrintClick} disabled={buttonDisabled}>
-                            <FileCopySvgIcon/>
-                        </IconButton>
+                            <IconButton variant="outlined" onClick={handlePrintClick} disabled={buttonDisabled}>
+                                <FileCopySvgIcon/>
+                            </IconButton>
 
-                        <Button variant="outlined" onClick={handleClearClick} style={{marginLeft: '10px'}}>
-                            Limpiar
-                        </Button>
-                    </div>
+                            <Button variant="outlined" onClick={handleClearClick} style={{marginLeft: '10px'}}>
+                                Limpiar
+                            </Button>
+                    </Grid>
 
-                    <TextField
-                        rows={100}
-                        fullWidth
-                        multiline
-                        label="Lista IMEIs SAP"
-                        value={text}
-                        onChange={handleTextChange}
-                        disabled={buttonDisabled}
-                    />
+                    <Grid item xs={9}>
 
-                </div>
+                        <TextField
+                            rows={100}
+                            fullWidth
+                            multiline
+                            label="Lista IMEIs SAP"
+                            value={text}
+                            onChange={handleTextChange}
+                            disabled={buttonDisabled}
+                        />
+
+                    </Grid>
+                </Grid>
 
             </Container>
         </>
