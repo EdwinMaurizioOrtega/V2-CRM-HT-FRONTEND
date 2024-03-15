@@ -17,7 +17,7 @@ import {DOCUMENTACION, PAYMENT_OPTIONS_V2, TIPO_CREDITO, TIPO_PRECIO} from "../.
 
 export default function CustomerData({currentPartner, open, onClose}) {
 
-    console.log("partner.ID " + currentPartner?.SlpName || '');
+    console.log("partner.ID " + currentPartner?.Cliente || '');
 
     function nameFormaPago(pay) {
         const payActual = PAYMENT_OPTIONS_V2.find(option => option.id == pay);
@@ -54,7 +54,7 @@ export default function CustomerData({currentPartner, open, onClose}) {
 
             <DialogContent>
                 <Alert variant="outlined" severity="info" sx={{mb: 3}}>
-                    Cliente: {currentPartner?.SlpName || ''}
+                    Cliente: {currentPartner?.Cliente || ''}
                 </Alert>
 
                 <Box

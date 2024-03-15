@@ -45,6 +45,7 @@ import {AnalyticsWidgetSummary} from "../../../sections/@dashboard/general/analy
 import {Space_Mono} from "@next/font/google";
 import {TIPO_CREDITO} from "../../../utils/constants";
 import CustomerData from "../../../sections/@dashboard/gestion/customer-data";
+import CustomerLocationMap from "../../../sections/@dashboard/gestion/customer-location-map";
 
 // ----------------------------------------------------------------------
 
@@ -73,6 +74,7 @@ export default function MayoristaPage(callback, deps) {
     const quickPCM = useBoolean();
     const quickICO = useBoolean();
     const quickDC = useBoolean();
+    const quickCLM = useBoolean();
 
     // Define el renderizador de celdas personalizado para la columna "DIAS_DIFFERENCE"
     const renderDiasColumn = (params) => {
@@ -104,27 +106,33 @@ export default function MayoristaPage(callback, deps) {
 
                 <GridActionsCellItem
                     showInMenu
-                    icon={<Iconify icon="solar:pen-bold"/>}
+                    icon={<Iconify icon="solar:pen-broken"/>}
                     label="Registar Gestión"
                     onClick={() => handleViewRow(params.row)}
                 />,
                 <GridActionsCellItem
                     showInMenu
-                    icon={<Iconify icon="solar:eye-bold"/>}
+                    icon={<Iconify icon="solar:eye-broken"/>}
                     label="Gestiones Anteriores"
                     onClick={() => handleViewManagementRow(params.row)}
                 />,
                 <GridActionsCellItem
                     showInMenu
-                    icon={<Iconify icon="solar:eye-bold"/>}
+                    icon={<Iconify icon="solar:paperclip-rounded-outline"/>}
                     label="Histórico Órdenes"
                     onClick={() => handleViewOrdersRow(params.row)}
                 />,
                 <GridActionsCellItem
                     showInMenu
-                    icon={<Iconify icon="solar:eye-bold"/>}
+                    icon={<Iconify icon="solar:maximize-square-3-linear"/>}
                     label="Datos del Cliente"
                     onClick={() => handleViewDataCustomerRow(params.row)}
+                />,
+                <GridActionsCellItem
+                    showInMenu
+                    icon={<Iconify icon="solar:map-point-favourite-linear"/>}
+                    label="Google Maps"
+                    onClick={() => handleViewCustomerLocationMapRow(params.row)}
                 />,
             ],
         },
@@ -371,6 +379,17 @@ export default function MayoristaPage(callback, deps) {
     );
 
 
+    const handleViewCustomerLocationMapRow = useCallback(
+        (row) => {
+            quickCLM.onTrue();
+            console.log("Cliente a gestionar: " + JSON.stringify(row));
+            setPartner(row);
+
+        },
+        [quickCLM]
+    );
+
+
     const [dataContAgenda, setDataContAgenda] = useState(0);
     const [dataContAgendaCErrado, setDataContAgendaCerrado] = useState(0);
     const [dataContAgendaPorCerrar, setDataContAgendaPorCerrar] = useState(0);
@@ -600,6 +619,13 @@ export default function MayoristaPage(callback, deps) {
                             currentPartner={dataCliente}
                             open={quickDC.value}
                             onClose={quickDC.onFalse}/>
+                    )}
+
+                    {user && partner && (
+                        <CustomerLocationMap
+                            currentPartner={partner}
+                            open={quickCLM.value}
+                            onClose={quickCLM.onFalse}/>
                     )}
 
                 </Card>
