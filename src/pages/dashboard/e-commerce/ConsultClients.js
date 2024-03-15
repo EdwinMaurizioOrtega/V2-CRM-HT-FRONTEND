@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import {useState, useCallback, useEffect, useRef, useLayoutEffect} from 'react';
+import React, {useState, useCallback, useEffect, useRef, useLayoutEffect} from 'react';
 // form
 import {yupResolver} from '@hookform/resolvers/yup';
 import FormProvider, {
@@ -51,6 +51,7 @@ import {fCurrency} from "../../../utils/formatNumber";
 import {useSnackbar} from "../../../components/snackbar";
 import {DOCUMENTACION, PAYMENT_OPTIONS_V2, TIPO_CREDITO, TIPO_PRECIO} from "../../../utils/constants";
 import {io} from "socket.io-client";
+import {GoogleMap, InfoWindow, Marker, useJsApiLoader} from "@react-google-maps/api";
 
 // ----------------------------------------------------------------------
 
@@ -454,6 +455,18 @@ export default function ConsultClientForm() {
                                 <Label color="error">Cliente no encontrado</Label>
                             )}
 
+                            <Box
+                                rowGap={1}
+                                columnGap={1}
+                            >
+                                {dataCliente ? (<>
+                                        <MapComponent markers={JSON.parse(dataCliente?.ENVIO)}/>
+                                    </>
+                                ) : (<Label color="error">Cliente no encontrado</Label>)}
+
+
+                            </Box>
+
                         </Block>
 
                     </Stack>
@@ -683,4 +696,80 @@ function AddressItem({address, onCreateBilling}) {
         </Card>
     );
 }
+
+
+
+const mapContainerStyle = {
+    width: '100%', height: '800px',
+};
+
+function MapComponent({markers}) {
+
+    console.log("Markers: " + JSON.stringify(markers));
+
+    const [map, setMap] = useState(null);
+    const [center, setCenter] = useState({ lat: -1.8312, lng: -78.1834 });
+    const [zoom, setZoom] = useState(8);
+    const [selectedMarker, setSelectedMarker] = useState(null);
+
+    const {isLoaded} = useJsApiLoader({
+        id: 'google-map-script', googleMapsApiKey: 'AIzaSyARV9G0tkya9zgXXlVNmx8U5ep7mg8XdHI',
+    });
+
+    useEffect(() => {
+        if (isLoaded && map) {
+            let bounds = new window.google.maps.LatLngBounds();
+            markers.forEach(marker => {
+                bounds.extend({ lat: parseFloat(marker.U_LS_LATITUD), lng: parseFloat(marker.U_LS_LONGITUD) });
+            });
+            map.fitBounds(bounds);
+        }
+    }, [isLoaded, map, markers]);
+
+    const handleMarkerClick = (marker) => {
+        setSelectedMarker(marker);
+    };
+
+    const handleInfoWindowClose = () => {
+        setSelectedMarker(null);
+    };
+
+    const onLoad = (map) => {
+        setMap(map);
+    };
+
+    return isLoaded ? (<GoogleMap
+        mapContainerStyle={mapContainerStyle}
+        center={center}
+        zoom={zoom}
+        onLoad={onLoad}
+        onZoomChanged={() => map && setZoom(map.getZoom())}
+        onCenterChanged={() => map && setCenter(map.getCenter())}
+    >
+        {/* Renderizar marcadores */}
+        {markers.map((marker, index) => (<Marker
+            key={index}
+            position={{lat: parseFloat(marker.U_LS_LATITUD), lng: parseFloat(marker.U_LS_LONGITUD)}}
+            // icon={customMarkerIcon} // Usar icono personalizado
+            onClick={() => handleMarkerClick(marker)}
+        />))}
+
+        {/* Mostrar información del marcador seleccionado */}
+        {selectedMarker && (<InfoWindow
+            position={{
+                lat: parseFloat(selectedMarker.U_LS_LATITUD), lng: parseFloat(selectedMarker.U_LS_LONGITUD)
+            }}
+            onCloseClick={handleInfoWindowClose}
+        >
+            <div>
+                <p>TIPO: {selectedMarker.TIPO}</p>
+                <p>PROVINCIA: {selectedMarker.PROVINCIA}</p>
+                <p>CANTON: {selectedMarker.CANTON}</p>
+                <p>DIRECCION: {selectedMarker.DIRECCION}</p>
+            </div>
+        </InfoWindow>)}
+
+    </GoogleMap>) : (<></>);
+}
+
 

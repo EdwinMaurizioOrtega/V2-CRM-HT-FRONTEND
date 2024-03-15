@@ -46,7 +46,7 @@ export default function CustomerData({currentPartner, open, onClose}) {
             open={open}
             onClose={onClose}
             PaperProps={{
-                sx: {maxWidth: 720},
+                sx: {maxWidth: 1080},
             }}
         >
 
@@ -58,8 +58,8 @@ export default function CustomerData({currentPartner, open, onClose}) {
                 </Alert>
 
                 <Box
-                    rowGap={3}
-                    columnGap={2}
+                    rowGap={1}
+                    columnGap={1}
                     display="grid"
                     gridTemplateColumns={{
                         xs: 'repeat(1, 1fr)',
@@ -81,7 +81,7 @@ export default function CustomerData({currentPartner, open, onClose}) {
                             <Label color="success">Límte de Crédito: {fCurrency(currentPartner.CreditLine)} </Label>
                             <Label color="success">Límite de comprometido: {fCurrency(currentPartner.DebtLine)} </Label>
                             <Label color="success">Pedidos Clientes: {fCurrency(currentPartner.OrdersBal)} </Label>
-                            <Label color="success">Comentario: {currentPartner.Free_Text} </Label>
+                            {/*<Label color="success">Comentario: {currentPartner.Free_Text} </Label>*/}
                         </>
 
                     ) : (
