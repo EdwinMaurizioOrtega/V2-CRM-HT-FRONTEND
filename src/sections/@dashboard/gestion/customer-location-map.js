@@ -22,7 +22,7 @@ export default function CustomerLocationMap({currentPartner, open, onClose}) {
             open={open}
             onClose={onClose}
             PaperProps={{
-                sx: {maxWidth: 720},
+                sx: {maxWidth: 1080},
             }}
         >
 
