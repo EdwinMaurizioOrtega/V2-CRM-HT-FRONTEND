@@ -52,10 +52,8 @@ TrackingPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 //     },
 // }));
 
-export default function TrackingPage(callback, deps) {
+export default function TrackingPage() {
     const {themeStretch} = useSettingsContext();
-
-    const {user} = useAuthContext();
 
     const [coordinates, setCoordinates] = useState([])
     const [currentRoomMap, setCurrentRoomMap] = useState("Lidenar");
@@ -164,11 +162,11 @@ export default function TrackingPage(callback, deps) {
         {
             field: 'name',
             headerName: 'Usuario',
-            flex: true
+            flex: true,
         },
         { field: 'date_time',
             headerName: 'Fecha',
-            flex: true
+            width: 400, // Ancho específico en píxeles
         },
 
         { field: 'position',
@@ -259,25 +257,28 @@ const mapContainerStyle = {
     height: '800px',
 };
 
-// URL de tu imagen personalizada para el marcador
-// const customMarkerIcon = 'URL_DE_TU_IMAGEN';
+const defaultCuencaCoordinates = {lat: -2.90055, lng: -79.00453}; // Coordenadas de Cuenca, Ecuador
+
+const selectedMarkerIcon = {
+    url: 'data:image/svg+xml;base64,' + btoa('<svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 395.71 395.71" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M197.849,0C122.131,0,60.531,61.609,60.531,137.329c0,72.887,124.591,243.177,129.896,250.388l4.951,6.738 c0.579,0.792,1.501,1.255,2.471,1.255c0.985,0,1.901-0.463,2.486-1.255l4.948-6.738c5.308-7.211,129.896-177.501,129.896-250.388 C335.179,61.609,273.569,0,197.849,0z M197.849,88.138c27.13,0,49.191,22.062,49.191,49.191c0,27.115-22.062,49.191-49.191,49.191 c-27.114,0-49.191-22.076-49.191-49.191C148.658,110.2,170.734,88.138,197.849,88.138z"></path> </g> </g></svg>'),
+    scaledSize: { width: 60, height: 60 }, // Tamaño del icono
+};
+
 
 function MapComponent({markers, selectedCoordinates}) {
+    const [selectedMarker, setSelectedMarker] = useState(null);
+    const [zoom, setZoom] = useState(100); // Estado para el zoom del mapa
 
-    console.log("Markers: " + JSON.stringify(markers));
-
-    const center = selectedCoordinates || {lat: -1.8312, lng: -78.1834};
-
+    const center = selectedCoordinates?.position || defaultCuencaCoordinates;
 
     const {isLoaded} = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: 'AIzaSyARV9G0tkya9zgXXlVNmx8U5ep7mg8XdHI',
     });
 
-    const [selectedMarker, setSelectedMarker] = useState(null);
-
     const handleMarkerClick = (marker) => {
         setSelectedMarker(marker);
+        setZoom(12); // Ajusta el zoom al hacer clic en un marcador
     };
 
     const handleInfoWindowClose = () => {
@@ -288,33 +289,19 @@ function MapComponent({markers, selectedCoordinates}) {
         <GoogleMap
             mapContainerStyle={mapContainerStyle}
             center={center}
-            zoom={8}
+            zoom={zoom} // Usa el estado de zoom aquí
         >
             {/* Renderizar marcadores */}
             {markers.map((marker, index) => (
                 <Marker
                     key={index}
                     position={marker.position}
-                    // icon={customMarkerIcon} // Usar icono personalizado
                     onClick={() => handleMarkerClick(marker)}
                 />
             ))}
 
             {/* Mostrar marcador de la coordenada seleccionada */}
-            {selectedCoordinates && (
-                <InfoWindow
-                    position={selectedCoordinates.position}
-                    onCloseClick={handleInfoWindowClose}
-                >
-                    <div>
-                        <p>Nombre: {selectedCoordinates.name}</p>
-                        <p>Fecha y Hora: {selectedCoordinates.date_time}</p>
-                    </div>
-                </InfoWindow>
-            )}
-
-            {/* Ventana de información para el marcador seleccionado */}
-            {selectedMarker && (
+            {selectedMarker?.position && (
                 <InfoWindow
                     position={selectedMarker.position}
                     onCloseClick={handleInfoWindowClose}
@@ -324,6 +311,15 @@ function MapComponent({markers, selectedCoordinates}) {
                         <p>Fecha y Hora: {selectedMarker.date_time}</p>
                     </div>
                 </InfoWindow>
+            )}
+
+            {/* Renderizar marcador de coordenada seleccionada */}
+            {selectedCoordinates?.position && (
+                <Marker
+                    icon={selectedMarkerIcon}
+                    position={selectedCoordinates.position}
+                    onClick={() => handleMarkerClick(selectedCoordinates)}
+                />
             )}
         </GoogleMap>
     ) : (
