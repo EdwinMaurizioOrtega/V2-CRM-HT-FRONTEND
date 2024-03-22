@@ -5,7 +5,7 @@ import {styled} from '@mui/material/styles';
 import {
     Container,
     Card,
-    CardContent, Grid, TextField, Box, Button
+    CardContent, Grid, TextField, Box, Button, CardHeader
 } from '@mui/material';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
@@ -222,7 +222,7 @@ export default function TrackingPage() {
         {
             field: 'name',
             headerName: 'Usuario',
-            flex: true,
+            width: 200, // Ancho específico en píxeles
         },
         { field: 'date_time',
             headerName: 'Fecha',
@@ -231,7 +231,7 @@ export default function TrackingPage() {
 
         { field: 'position',
             headerName: 'Position',
-            flex: true,
+            width: 150,
             renderCell: (params) => {
                 return (
                     <Button
@@ -283,11 +283,21 @@ export default function TrackingPage() {
 
                 <div className="flex">
                     <Grid container spacing={2}>
-                        <Grid item xs={12} md={12}>
+                        <Grid item xs={12} md={6}>
                             <Card>
+                                <CardHeader title="Clientes + Usuarios" />
+
                                 <CardContent>
                                     <MapComponent markers={countriesData} selectedCoordinates={selectedCoordinates} coordinatesCustomersA={coordinatesCustomers}/>
+                                </CardContent>
+                            </Card>
+                        </Grid>
 
+                        <Grid item xs={12} md={6}>
+                            <Card>
+                                <CardHeader title="Logs Usuarios" />
+
+                                <CardContent>
                                     <DataGrid
                                         rows={countriesData}
                                         columns={baseColumns}
@@ -298,11 +308,6 @@ export default function TrackingPage() {
                                             noResultsOverlay: () => <EmptyContent title="No results found"/>,
                                         }}
                                     />
-
-
-
-                                    {/*<MapWithRoute />*/}
-
                                 </CardContent>
                             </Card>
                         </Grid>
@@ -316,7 +321,7 @@ export default function TrackingPage() {
 
 const mapContainerStyle = {
     width: '100%',
-    height: '800px',
+    height: '1800px',
 };
 
 const defaultCuencaCoordinates = {lat: -2.90055, lng: -79.00453}; // Coordenadas de Cuenca, Ecuador
@@ -383,8 +388,8 @@ function MapComponent({markers, selectedCoordinates, coordinatesCustomersA}) {
                     onCloseClick={handleInfoWindowClose}
                 >
                     <div>
-                        <p>1) {selectedMarker.name}</p>
-                        <p>2) {selectedMarker.date_time}</p>
+                        <p>1. {selectedMarker.name}</p>
+                        <p>2. {selectedMarker.date_time}</p>
                     </div>
                 </InfoWindow>
             )}
