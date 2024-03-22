@@ -166,12 +166,12 @@ export default function MayoristaPage(callback, deps) {
             flex: 1,
             minWidth: 160,
         },
-        // {
-        //     field: 'Celular',
-        //     headerName: 'Celular',
-        //     flex: 1,
-        //     minWidth: 160,
-        // },
+        {
+            field: 'Celular',
+            headerName: 'Celular',
+            flex: 1,
+            minWidth: 160,
+        },
         {
             field: 'Ciudad',
             headerName: 'Ciudad',
@@ -234,12 +234,12 @@ export default function MayoristaPage(callback, deps) {
         //     flex: 1,
         //     minWidth: 160,
         // },
-        // {
-        //     field: 'Balance',
-        //     headerName: 'Cupo utilizado',
-        //     flex: 1,
-        //     minWidth: 160,
-        // },
+         {
+            field: 'PADRE',
+            headerName: 'PADRE',
+            flex: 1,
+            minWidth: 160,
+        },
     ]
 
 
