@@ -19,7 +19,15 @@ import {HOST_API_KEY, HOST_SOCKET, MAP_API} from "../../../config-global";
 // import MapMarkersPopups from "../../../sections/_examples/extra/map/MapMarkersPopups";
 import {io} from "socket.io-client";
 import {useAuthContext} from "../../../auth/useAuthContext";
-import {GoogleMap, useJsApiLoader, Marker, InfoWindow} from "@react-google-maps/api";
+import {
+    GoogleMap,
+    useJsApiLoader,
+    Marker,
+    InfoWindow,
+    LoadScript,
+    DirectionsRenderer,
+    DirectionsService
+} from "@react-google-maps/api";
 import EmptyContent from "../../../components/empty-content";
 import {
     DataGrid,
@@ -36,21 +44,21 @@ TrackingPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-// const baseSettings = {
-//     mapboxAccessToken: MAP_API,
-//     minZoom: 1,
-// };
-//
-// const StyledMapContainer = styled('div')(({theme}) => ({
-//     zIndex: 0,
-//     height: 560,
-//     overflow: 'hidden',
-//     position: 'relative',
-//     borderRadius: theme.shape.borderRadius,
-//     '& .mapboxgl-ctrl-logo, .mapboxgl-ctrl-bottom-right': {
-//         display: 'none',
-//     },
-// }));
+const baseSettings = {
+    mapboxAccessToken: MAP_API,
+    minZoom: 1,
+};
+
+const StyledMapContainer = styled('div')(({theme}) => ({
+    zIndex: 0,
+    height: 560,
+    overflow: 'hidden',
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    '& .mapboxgl-ctrl-logo, .mapboxgl-ctrl-bottom-right': {
+        display: 'none',
+    },
+}));
 
 export default function TrackingPage() {
     const {themeStretch} = useSettingsContext();
@@ -64,6 +72,58 @@ export default function TrackingPage() {
     const [countriesData, setCountriesData] = useState([]);
 
     const [selectedCoordinates, setSelectedCoordinates] = useState(null);
+
+    const [coordinatesCustomers, setCoordinatesCustomers] = useState([]);
+
+    useEffect(() => {
+        async function fetchData() {
+                try {
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/customers/all_coordinates`);
+                    if (response.status === 200) {
+
+
+                    } else {
+
+                    }
+                    const data = await response.json();
+                    console.log("coordinatesCustomers: "+JSON.stringify(data.data));
+
+                    const objectArray = [];
+
+                    // Iterar sobre todos los mensajes y obtener las coordenadas de cada uno
+                    data.data.forEach((coor, index) => {
+                        // Convertir el texto del mensaje a JSON y obtener las coordenadas
+                        const {U_LS_LATITUD, U_LS_LONGITUD, CLIENTE, NOMBRE_VENDEDOR} = coor
+
+                        const country = {
+                            position: {lat: Number(U_LS_LATITUD), lng: Number(U_LS_LONGITUD)},
+                            name: CLIENTE,
+                            date_time: NOMBRE_VENDEDOR,
+                            id: index + 1
+                        };
+                        objectArray.push(country);
+
+                    });
+
+                    setCoordinatesCustomers(objectArray);
+
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+
+                }
+
+        }
+
+        // Call the async function immediately
+        fetchData();
+
+    }, []);
+
+
+
+
+
+
 
     useEffect(() => {
         setCoordinates([]);
@@ -226,7 +286,7 @@ export default function TrackingPage() {
                         <Grid item xs={12} md={12}>
                             <Card>
                                 <CardContent>
-                                    <MapComponent markers={countriesData} selectedCoordinates={selectedCoordinates}/>
+                                    <MapComponent markers={countriesData} selectedCoordinates={selectedCoordinates} coordinatesCustomersA={coordinatesCustomers}/>
 
                                     <DataGrid
                                         rows={countriesData}
@@ -239,6 +299,10 @@ export default function TrackingPage() {
                                         }}
                                     />
 
+
+
+                                    {/*<MapWithRoute />*/}
+
                                 </CardContent>
                             </Card>
                         </Grid>
@@ -250,8 +314,6 @@ export default function TrackingPage() {
     );
 }
 
-
-
 const mapContainerStyle = {
     width: '100%',
     height: '800px',
@@ -259,13 +321,9 @@ const mapContainerStyle = {
 
 const defaultCuencaCoordinates = {lat: -2.90055, lng: -79.00453}; // Coordenadas de Cuenca, Ecuador
 
-const selectedMarkerIcon = {
-    url: 'data:image/svg+xml;base64,' + btoa('<svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 395.71 395.71" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M197.849,0C122.131,0,60.531,61.609,60.531,137.329c0,72.887,124.591,243.177,129.896,250.388l4.951,6.738 c0.579,0.792,1.501,1.255,2.471,1.255c0.985,0,1.901-0.463,2.486-1.255l4.948-6.738c5.308-7.211,129.896-177.501,129.896-250.388 C335.179,61.609,273.569,0,197.849,0z M197.849,88.138c27.13,0,49.191,22.062,49.191,49.191c0,27.115-22.062,49.191-49.191,49.191 c-27.114,0-49.191-22.076-49.191-49.191C148.658,110.2,170.734,88.138,197.849,88.138z"></path> </g> </g></svg>'),
-    scaledSize: { width: 60, height: 60 }, // Tamaño del icono
-};
+const selectedMarkerIcon =  '/location-134-64.png';
 
-
-function MapComponent({markers, selectedCoordinates}) {
+function MapComponent({markers, selectedCoordinates, coordinatesCustomersA}) {
     const [selectedMarker, setSelectedMarker] = useState(null);
     const [zoom, setZoom] = useState(100); // Estado para el zoom del mapa
 
@@ -285,6 +343,11 @@ function MapComponent({markers, selectedCoordinates}) {
         setSelectedMarker(null);
     };
 
+
+    // Nombre de la imagen del marcador
+    const markerImage = '/location-134-48.png'; // Ruta a tu imagen local en la carpeta public
+
+
     return isLoaded ? (
         <GoogleMap
             mapContainerStyle={mapContainerStyle}
@@ -300,6 +363,19 @@ function MapComponent({markers, selectedCoordinates}) {
                 />
             ))}
 
+            {coordinatesCustomersA.map((marker, index) => (
+                <Marker
+                    key={index}
+                    // icon={{
+                    //     url: markerImage,
+                    //     scaledSize: new window.google.maps.Size(40, 40) // Ajusta el tamaño según tus necesidades
+                    // }}
+                    position={marker.position}
+                    onClick={() => handleMarkerClick(marker)}
+                />
+            ))}
+
+
             {/* Mostrar marcador de la coordenada seleccionada */}
             {selectedMarker?.position && (
                 <InfoWindow
@@ -307,8 +383,8 @@ function MapComponent({markers, selectedCoordinates}) {
                     onCloseClick={handleInfoWindowClose}
                 >
                     <div>
-                        <p>Nombre: {selectedMarker.name}</p>
-                        <p>Fecha y Hora: {selectedMarker.date_time}</p>
+                        <p>1) {selectedMarker.name}</p>
+                        <p>2) {selectedMarker.date_time}</p>
                     </div>
                 </InfoWindow>
             )}
@@ -343,3 +419,59 @@ function CustomToolbar() {
 }
 
 // ----------------------------------------------------------------------
+
+// function MapWithRoute() {
+//     const [directions, setDirections] = useState(null);
+//     const [waypointsLoaded, setWaypointsLoaded] = useState(false);
+//
+//     const onLoad = (map) => {
+//         console.log('Mapa cargado:', map);
+//     };
+//
+//     const onDirectionsLoad = (directionsResult) => {
+//         console.log('Direcciones cargadas:', directionsResult);
+//         if (!directions) {
+//             setDirections(directionsResult);
+//         }
+//     };
+//
+//     useEffect(() => {
+//         // Verificar si todos los waypoints se han cargado
+//         const allWaypointsLoaded = directions?.routes[0]?.waypoint_order?.length === waypoints.length;
+//         setWaypointsLoaded(allWaypointsLoaded);
+//     }, [directions]);
+//
+//     // Define un array de waypoints
+//     const waypoints = [
+//         { location: { lat: -1.2603505817446543, lng: -78.6140073979747}, stopover: true }, // Coordenada intermedia 1
+//         { location: { lat: -1.3257909202554965, lng: -78.53405119529798}, stopover: true }, // Coordenada intermedia 2
+//         { location: { lat: -1.3257909202554965, lng: -78.53405119529798}, stopover: true }, // Coordenada intermedia 3
+//         // Agrega más coordenadas intermedias si es necesario
+//     ];
+//
+//     return (
+//         <LoadScript
+//             googleMapsApiKey="AIzaSyARV9G0tkya9zgXXlVNmx8U5ep7mg8XdHI"
+//             libraries={["places"]}
+//             onLoad={() => console.log('Biblioteca de Google Maps cargada correctamente')}
+//         >
+//             <GoogleMap
+//                 mapContainerStyle={{ width: '100%', height: '400px' }}
+//                 center={{ lat: -2.0516452963522567, lng: -78.73670863937744 }}
+//                 zoom={15}
+//                 onLoad={onLoad}
+//             >
+//                 {waypointsLoaded && directions && <DirectionsRenderer directions={directions} />}
+//                 {window.google && <DirectionsService
+//                     options={{
+//                         origin: { lat: -1.252271306227923, lng: -78.61434820904819 },
+//                         destination: { lat: -2.8811718051221376, lng: -79.064459790521 },
+//                         travelMode: "WALKING",
+//                         waypoints: waypoints // Utiliza el array de waypoints aquí
+//                     }}
+//                     callback={onDirectionsLoad}
+//                 />}
+//             </GoogleMap>
+//         </LoadScript>
+//     );
+// }
