@@ -1011,7 +1011,9 @@ export default function InvoiceDetails({invoice}) {
                                         {
                                             user.ROLE === 'aprobador' ? (
                                                 <TableCell align="left"
-                                                           style={{backgroundColor: 'rgba(0, 171, 85, 0.08)'}}>{Number(row.DISPONIBLE_POR_BODEGA)}</TableCell>
+                                                           style={{ backgroundColor: Number(row.DISPONIBLE_POR_BODEGA) <= 0 ? 'rgba(255, 0, 0, 0.08)' : 'rgba(0, 171, 85, 0.08)' }}>
+
+                                                    {Number(row.DISPONIBLE_POR_BODEGA)}</TableCell>
 
                                             ) : null
                                         }
