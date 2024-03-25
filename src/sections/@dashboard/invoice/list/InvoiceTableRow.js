@@ -80,12 +80,14 @@ export default function InvoiceTableRow({
         FORMADEPAGO,
         NUMEROGUIA,
         FECHA_IMPRESION,
-        NUMEROFACTURALIDENAR
+        NUMEROFACTURALIDENAR,
+        NUMEROFACTURAE4
     } = row;
 
     const router = useRouter();
 
     const [valueNew, setValueNew] = useState('Ninguno..');
+    const [valueNewOBS, setValueNewOBS] = useState('Ninguno..');
 
     const [openConfirm, setOpenConfirm] = useState(false);
     //Anular la orden.
@@ -118,6 +120,8 @@ export default function InvoiceTableRow({
     };
 
     const [isLoading, setIsLoading] = useState(false);
+
+    const [openOBS, setOpenOBS] = useState(false);
 
     const VerGuia = (guia) => {
         setIsLoading(true); // Set loading to true when starting the fetch
@@ -246,7 +250,6 @@ export default function InvoiceTableRow({
 
     };
 
-
     const sendOrderMoveToOneInWarehouse = async () => {
         console.log("Número de orden: " + ID);
 
@@ -275,6 +278,48 @@ export default function InvoiceTableRow({
 
     };
 
+    const handleOpenOBS = () => {
+        setOpenOBS(true);
+    };
+
+    const handleCloseOBS = () => {
+        setOpenOBS(false);
+    };
+
+    const handleChangeOBS = (event) => {
+        setValueNewOBS(event.target.value);
+        // console.log(`Nuevo precio unitario ${valueNew}`);
+    };
+
+//Anúla una orden
+    const onRowOBS = async () => {
+        console.log("Número de orden: " + ID);
+        console.log("Observación de cartera: " + valueNewOBS);
+        try {
+            const response = await axios.put('/hanadb/api/orders/order/obs_cartera_temp', {
+                ID_ORDER: ID,
+                OBS: valueNewOBS
+            });
+
+            // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
+            console.log('Cambiando estado');
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+
+                //setTimeout(() => {
+                router.reload();
+                //}, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
+            }
+
+        } catch (error) {
+            // Manejar el error de la petición DELETE aquí
+            console.error('Error al cambiar el status de la orden:', error);
+        }
+
+
+    };
 
     return (
         <>
@@ -389,6 +434,7 @@ export default function InvoiceTableRow({
                 {/* <TableCell align="left"> */}
                 {/*     <Button variant="contained" onClick={handleImprimir}>Imprimir</Button> */}
                 {/* </TableCell> */}
+                <TableCell style={{ maxWidth: '100px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} align="left">{NUMEROFACTURAE4}</TableCell>
 
             </TableRow>
 
@@ -420,6 +466,20 @@ export default function InvoiceTableRow({
                     >
                         <Iconify icon="eva:shopping-bag-outline"/>
                         Cartera
+                    </MenuItem>
+
+                ) : null
+                }
+
+                {ESTADO === 6 && user.ROLE === "aprobador" ? (
+                    <MenuItem
+                        onClick={() => {
+                            handleOpenOBS();
+                            handleClosePopover();
+                        }}
+                    >
+                        <Iconify icon="eva:shopping-bag-outline"/>
+                        Observación
                     </MenuItem>
 
                 ) : null
@@ -525,6 +585,26 @@ export default function InvoiceTableRow({
                     <Button variant="contained" color="error" onClick={onDeleteRow}>
                         Delete
                     </Button>
+                }
+            />
+
+            <ConfirmDialog
+                open={openOBS}
+                onClose={handleCloseOBS}
+                title="Observación Cartera (Aprobación)"
+                action={
+                    <>
+                        <TextField
+                            label="Nota"
+                            value={valueNewOBS}
+                            onChange={handleChangeOBS}
+                        />
+                        <Button variant="contained" color="error" onClick={() => {
+                            onRowOBS();
+                        }}>
+                             Guardar.
+                        </Button>
+                    </>
                 }
             />
         </>

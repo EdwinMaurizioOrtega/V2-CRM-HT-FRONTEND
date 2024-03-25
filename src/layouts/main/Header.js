@@ -60,7 +60,7 @@ export default function Header() {
                         underline="none"
                         sx={{ml: 1}}
                     >
-                        <Label color="info"> V 2024 </Label>
+                        <Label color="info"> Versión 2024 </Label>
                     </Link>
 
                     <Box sx={{flexGrow: 1}}/>
