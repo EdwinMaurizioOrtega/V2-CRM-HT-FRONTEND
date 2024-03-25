@@ -81,6 +81,32 @@ InvoiceDetails.propTypes = {
 
 };
 
+function insertLineBreaks(text, maxLength) {
+    if (!text) return ''; // Si el texto no está definido, retorna una cadena vacía
+    let result = '';
+    let currentLine = '';
+    let words = text.split(' '); // Dividir el texto en palabras
+
+    console.log(`Palabras: ${words}`)
+
+    for (let i = 0; i < words.length; i++) {
+        if (currentLine.length + words[i].length <= maxLength) {
+            // Si la palabra cabe en la línea actual, agregala
+            currentLine += words[i] + ' ';
+        } else {
+            // Si no cabe, inicia una nueva línea
+            result += currentLine.trim() + '\n';
+            currentLine = words[i] + ' ';
+        }
+    }
+
+    // Agregar la última línea
+    result += currentLine.trim();
+console.log(`Última línea: ${result}`)
+    return result;
+}
+
+
 export default function InvoiceDetails({invoice}) {
 
     const view = useBoolean();
@@ -789,7 +815,6 @@ export default function InvoiceDetails({invoice}) {
     return (
         <>
             {/* <InvoiceToolbar invoice={invoice} /> */}
-
             <Card sx={{pt: 5, px: 5}}>
                 <Grid container>
                     <Grid item xs={12} sm={6} sx={{mb: 5}}>
@@ -851,7 +876,11 @@ export default function InvoiceDetails({invoice}) {
                         <Typography variant="body2">Límte de Crédito: {fCurrency(CreditLine)}</Typography>
                         <Label color="success">Límite de comprometido: {fCurrency(DebtLine)}</Label>
                         <Typography variant="body2">Pedidos Clientes: {fCurrency(OrdersBal)}</Typography>
-                        <Label color="success">Comentario: {Free_Text}</Label>
+                        <div style={{whiteSpace: 'pre-line', fontSize: '15px'}}>
+                            <span>
+                            Comentario: {insertLineBreaks(Free_Text, 40)}
+                            </span>
+                        </div>
 
                     </Grid>
 

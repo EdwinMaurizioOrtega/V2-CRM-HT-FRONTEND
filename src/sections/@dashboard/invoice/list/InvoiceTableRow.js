@@ -11,7 +11,7 @@ import {
     MenuItem,
     TableCell,
     IconButton,
-    Typography, TextField,
+    Typography, TextField, Tooltip,
 } from '@mui/material';
 // utils
 import {fDate} from '../../../../utils/formatTime';
@@ -357,7 +357,11 @@ export default function InvoiceTableRow({
                         </div>
                     </Stack>
                 </TableCell>
-
+                <TableCell align="left">
+                    <Tooltip title={NUMEROFACTURAE4 ? NUMEROFACTURAE4 : 'N/A'} sx={{ maxWidth: 500 }}>
+                        <Button color="inherit">🤔</Button>
+                    </Tooltip>
+                </TableCell>
                 <TableCell align="left">
                     <Label
                         variant="soft"
@@ -434,7 +438,6 @@ export default function InvoiceTableRow({
                 {/* <TableCell align="left"> */}
                 {/*     <Button variant="contained" onClick={handleImprimir}>Imprimir</Button> */}
                 {/* </TableCell> */}
-                <TableCell style={{ maxWidth: '100px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} align="left">{NUMEROFACTURAE4}</TableCell>
 
             </TableRow>
 

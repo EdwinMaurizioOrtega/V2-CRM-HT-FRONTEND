@@ -74,6 +74,7 @@ const TABLE_HEAD = [
     {id: 'detalle', label: 'Detalle', align: 'left'},
 
     {id: 'ID', label: 'Orden', align: 'left'},
+    {id: 'NUMEROFACTURAE4', label: 'NOTA', align: 'left'},
     {id: 'ESTADO', label: 'Estado', align: 'left'},
     {id: 'BODEGA', label: 'Bodega', align: 'left'},
     {id: 'FORMADEPAGO', label: 'FPago', align: 'left'},
@@ -91,7 +92,6 @@ const TABLE_HEAD = [
     {id: 'FECHAAPROBO', label: 'Aprobación', align: 'left'},
     {id: 'FECHAFACTURACION', label: 'Facturación', align: 'left'},
     {id: 'NUMEROFACTURALIDENAR', label: 'Nro. Factura', align: 'left'},
-    {id: 'NUMEROFACTURAE4', label: 'NOTA', align: 'left'},
 ];
 
 // ----------------------------------------------------------------------
