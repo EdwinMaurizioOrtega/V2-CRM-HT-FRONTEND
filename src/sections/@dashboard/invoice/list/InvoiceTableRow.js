@@ -358,9 +358,11 @@ export default function InvoiceTableRow({
                     </Stack>
                 </TableCell>
                 <TableCell align="left">
-                    <Tooltip title={NUMEROFACTURAE4 ? NUMEROFACTURAE4 : 'N/A'} sx={{ maxWidth: 500 }}>
-                        <Button color="inherit">🤔</Button>
-                    </Tooltip>
+                    {NUMEROFACTURAE4 && (
+                        <Tooltip title={NUMEROFACTURAE4} sx={{ maxWidth: 500 }}>
+                            <Button color="inherit">🤔</Button>
+                        </Tooltip>
+                    )}
                 </TableCell>
                 <TableCell align="left">
                     <Label
