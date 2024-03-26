@@ -227,7 +227,8 @@ export default function InvoiceTableRow({
         try {
             const response = await axios.put('/hanadb/api/orders/order/to_bag', {
                 params: {
-                    ID_ORDER: ID
+                    ID_ORDER: ID,
+                    DOCNUM: Number(DOCNUM)
                 }
             });
 
@@ -520,7 +521,7 @@ export default function InvoiceTableRow({
 
                 <Divider sx={{borderStyle: 'dashed'}}/>
 
-                {user.ROLE === "aprobador" ? (
+                {ESTADO === 6 && user.ROLE === "aprobador" ? (
                     <MenuItem
                         onClick={() => {
                             handleOpenConfirmAnular();
