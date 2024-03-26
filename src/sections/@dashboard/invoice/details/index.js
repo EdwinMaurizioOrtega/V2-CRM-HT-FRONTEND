@@ -998,7 +998,7 @@ export default function InvoiceDetails({invoice}) {
                                                 <Typography
                                                     variant="subtitle2">{row.NOMBRE !== null ? row.NOMBRE : 'VALOR DEL ENVIO'}</Typography>
 
-                                                <Typography variant="body2" sx={{color: 'text.secondary'}} noWrap>
+                                                <Typography variant="body2" sx={{color: 'text.secondary', backgroundColor: row.PRODUCTO_ID === '07.62.02' || row.PRODUCTO_ID === '07.62.01' ? 'yellow' : 'inherit'}} noWrap>
                                                     {row.PRODUCTO_ID}
                                                 </Typography>
                                             </Box>
