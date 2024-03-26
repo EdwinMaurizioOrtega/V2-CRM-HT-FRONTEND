@@ -240,6 +240,12 @@ export default function MayoristaPage(callback, deps) {
             flex: 1,
             minWidth: 160,
         },
+        {
+            field: 'NOM_PADRE',
+            headerName: 'NOM_PADRE',
+            flex: 1,
+            minWidth: 160,
+        },
     ]
 
 
