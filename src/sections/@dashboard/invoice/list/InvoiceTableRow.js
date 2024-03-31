@@ -196,6 +196,7 @@ export default function InvoiceTableRow({
                     ID_ORDER: ID,
                     OBSERVACION_ANULACION: valueNew,
                     ID_USER: user.ID,
+                    empresa: user.EMPRESA
                 }
             });
 
@@ -299,7 +300,8 @@ export default function InvoiceTableRow({
         try {
             const response = await axios.put('/hanadb/api/orders/order/obs_cartera_temp', {
                 ID_ORDER: ID,
-                OBS: valueNewOBS
+                OBS: valueNewOBS,
+                empresa: user.EMPRESA
             });
 
             // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
@@ -386,7 +388,16 @@ export default function InvoiceTableRow({
                     </Label>
                 </TableCell>
 
-                <TableCell align="left">{nameWarehouse(BODEGA)}</TableCell>
+                <TableCell align="left">{
+                    // Hipertronics
+                    user.EMPRESA == '0992537442001' ? (
+                        nameWarehouse(BODEGA)
+                    ) : (
+                        //Alphacell
+                        nameWarehouseAlphacell(BODEGA)
+                    )
+
+                }</TableCell>
                 <TableCell align="left">{nameFormaPago(FORMADEPAGO)}</TableCell>
 
                 <TableCell align="left">{CLIENTEID}</TableCell>
@@ -633,6 +644,23 @@ function nameWarehouse(ware) {
         "015": "Guayaquil",
         "024": "Manta",
         "030": "Colón"
+    };
+
+    const bodegaActual = strings[ware];
+    return bodegaActual || "Bodega no definida.";
+
+}
+
+function nameWarehouseAlphacell(ware) {
+    console.log(`Bodega: ${ware}`);
+    const strings = {
+        "001": "BODEGA",
+        "002": "MOVISTAR RESERVA",
+        "003": "MOVISTAR ENTREGADO",
+        "004": "DEPRATI",
+        "005": "CRESA CONSIGNACIÓN",
+        "006": "COMPUTRONSA CONSIGNACIÓN",
+        "099": "INVENTARIO TRANSITO IMPORTACIONES"
     };
 
     const bodegaActual = strings[ware];

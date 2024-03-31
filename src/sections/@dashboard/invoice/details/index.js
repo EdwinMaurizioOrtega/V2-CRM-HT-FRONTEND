@@ -266,8 +266,8 @@ export default function InvoiceDetails({invoice}) {
             // Actualizar una orden.
             const response = await axios.put('/hanadb/api/orders/order/detail/priceunit', {
                 ID_DETALLE_ORDEN: selected.ID,
-                NEW_PRICE_UNIT: valueNew
-
+                NEW_PRICE_UNIT: valueNew,
+                empresa: user.EMPRESA
             });
 
             console.log("Orden actualizada correctamente.");
@@ -294,8 +294,8 @@ export default function InvoiceDetails({invoice}) {
             // Actualizar una orden.
             const response = await axios.put('/hanadb/api/orders/order/detail/change_product', {
                 ID_DETALLE_ORDEN: selected.ID,
-                PRODUCTO_ID: valueNew
-
+                PRODUCTO_ID: valueNew,
+                empresa: user.EMPRESA
             });
 
             console.log("Orden actualizada correctamente.");
@@ -322,8 +322,8 @@ export default function InvoiceDetails({invoice}) {
             // Actualizar una orden.
             const response = await axios.put('/hanadb/api/orders/order/detail/quantity', {
                 ID_DETALLE_ORDEN: selected.ID,
-                NEW_QUANTITY: valueNew
-
+                NEW_QUANTITY: valueNew,
+                empresa: user.EMPRESA
             });
 
             console.log("Orden actualizada correctamente.");
@@ -350,8 +350,8 @@ export default function InvoiceDetails({invoice}) {
             // Actualizar una orden.
             const response = await axios.put('/hanadb/api/orders/order/detail/discount', {
                 ID_DETALLE_ORDEN: selected.ID,
-                NEW_DISCOUNT: valueNew
-
+                NEW_DISCOUNT: valueNew,
+                empresa: user.EMPRESA
             });
 
             console.log("Orden actualizada correctamente.");
@@ -373,7 +373,8 @@ export default function InvoiceDetails({invoice}) {
         try {
             const response = await axios.delete('/hanadb/api/orders/order/detail/delete', {
                 params: {
-                    ID: selected.ID
+                    ID: selected.ID,
+                    empresa: user.EMPRESA
                 }
             });
 
@@ -409,7 +410,7 @@ export default function InvoiceDetails({invoice}) {
                 ID_ORDER: ID,
                 NEW_WAREHOUSE: value.id,
                 ID_USER: user.ID,
-
+                empresa: user.EMPRESA
             });
 
             console.log("Orden actualizada correctamente.");
@@ -435,7 +436,8 @@ export default function InvoiceDetails({invoice}) {
             // Actualizar una orden.
             const response = await axios.put('/hanadb/api/orders/order/change_payment', {
                 ID_ORDER: ID,
-                NEW_PAYMENT: value.id
+                NEW_PAYMENT: value.id,
+                empresa: user.EMPRESA
             });
 
             console.log("Orden actualizada correctamente.");
@@ -463,6 +465,23 @@ export default function InvoiceDetails({invoice}) {
             "015": "Guayaquil",
             "024": "Manta",
             "030": "Colón",
+        };
+
+        const bodegaActual = strings[ware];
+        return bodegaActual || "Bodega no definida.";
+
+    }
+
+    function nameWarehouseAlphacell(ware) {
+        console.log(`Bodega: ${ware}`);
+        const strings = {
+            "001": "BODEGA",
+            "002": "MOVISTAR RESERVA",
+            "003": "MOVISTAR ENTREGADO",
+            "004": "DEPRATI",
+            "005": "CRESA CONSIGNACIÓN",
+            "006": "COMPUTRONSA CONSIGNACIÓN",
+            "099": "INVENTARIO TRANSITO IMPORTACIONES"
         };
 
         const bodegaActual = strings[ware];
@@ -536,6 +555,7 @@ export default function InvoiceDetails({invoice}) {
                 ID_ORDER: ID,
                 ID_USER: user.ID,
                 OBSERVACION_APROBACION: observacionA,
+                empresa: user.EMPRESA,
             });
 
             console.log("Orden Creada en el SAP.");
@@ -578,7 +598,8 @@ export default function InvoiceDetails({invoice}) {
                             ID_ORDER: ID,
                             NUMERO_FACTURA: `${valueFactura}`,
                             VALOR_FACTURA: `${valueValorFactura}`,
-                            NUMERO_GUIA: `${valueGuia}`
+                            NUMERO_GUIA: `${valueGuia}`,
+                            empresa: user.EMPRESA
                         });
 
 
@@ -907,13 +928,31 @@ export default function InvoiceDetails({invoice}) {
                         <Grid item xs={12} sm={5} sx={{mb: 1}}>
 
                             {/* <Typography variant="body2">{fDate(dueDate)}</Typography> */}
-                            <Typography variant="body2">Bodega actual: {nameWarehouse(BODEGA)}</Typography>
+                            <Typography variant="body2">Bodega actual: {
+
+                                // Hipertronics
+                                user.EMPRESA == '0992537442001' ? (
+                                    nameWarehouse(BODEGA)
+                                ) : (
+                                    //Alphacell
+                                    nameWarehouseAlphacell(BODEGA)
+                                )
+
+                            }</Typography>
 
                             {user.ROLE === "aprobador" &&
 
                                 <Autocomplete
                                     fullWidth
-                                    options={top100Films}
+                                    options={
+                                        // Hipertronics
+                                        user.EMPRESA == '0992537442001' ? (
+                                            top100Films
+                                        ) : (
+                                            //Alphacell
+                                            top100FilmsAlphacell
+                                        )
+                                }
                                     getOptionLabel={(option) => option.title}
                                     onChange={(event, value) => {
                                         handleChangeWarehouse(event, value);
@@ -1440,6 +1479,16 @@ export const top100Films = [
     {title: 'Guayaquil', id: "015"},
     {title: 'Manta', id: "024"},
     {title: 'Colón', id: "030"}
+]
+
+export const top100FilmsAlphacell = [
+    {title: 'BODEGA', id: "001"},
+    {title: 'MOVISTAR RESERVA', id: "002"},
+    {title: 'MOVISTAR ENTREGADO', id: "003"},
+    {title: 'DEPRATI', id: "004"},
+    {title: 'CRESA CONSIGNACIÓN', id: "005"},
+    {title: 'COMPUTRONSA CONSIGNACIÓN', id: "006"},
+    {title: 'INVENTARIO TRANSITO IMPORTACIONES', id: "099"}
 ]
 
 export const boxes = [

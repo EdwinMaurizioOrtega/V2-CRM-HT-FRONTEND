@@ -19,6 +19,8 @@ import {CustomTextField} from "../../../../../components/custom-input";
 import axios from "../../../../../utils/axios";
 import {TIPO_CREDITO} from "../../../../../utils/constants";
 import {fCurrency} from "../../../../../utils/formatNumber";
+import user from "../../../../../redux/slices/user";
+import {useAuthContext} from "../../../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +31,9 @@ CheckoutBillingAddress.propTypes = {
 };
 
 export default function CheckoutBillingAddress({checkout, onBackStep, onCreateBilling}) {
+
+    const { user } = useAuthContext();
+
     const {total, discount, subtotal, iva} = checkout;
 
     const [open, setOpen] = useState(false);
@@ -53,7 +58,7 @@ export default function CheckoutBillingAddress({checkout, onBackStep, onCreateBi
             setSearchProducts(value);
             if (value) {
                 const response = await axios.get('/hanadb/api/customers/search', {
-                    params: {query: value},
+                    params: {query: value, empresa: user.EMPRESA},
                 });
 
                 setSearchResults(response.data.results);

@@ -96,7 +96,7 @@ export default  function EcommerceProductDetailsPage() {
             try {
                 if (name) {
                     const cache = await caches.open('cache-crm');
-                    const response = await cache.match(`${HOST_API_KEY}/hanadb/api/products/`);
+                    const response = await cache.match(`${HOST_API_KEY}/hanadb/api/products/?empresa=${user.EMPRESA}`);
 
                     if (response) {
                         const cachedData = await response.json();

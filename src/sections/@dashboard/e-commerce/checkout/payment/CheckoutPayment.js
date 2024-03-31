@@ -17,6 +17,7 @@ import CheckoutPaymentMethods from './CheckoutPaymentMethods';
 import CheckoutWarehouse from './CheckoutWarehouse';
 import {useState} from "react";
 import {useSnackbar} from "../../../../../components/snackbar";
+import {useAuthContext} from "../../../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -98,6 +99,52 @@ const WAREHOUSE_OPTIONS = [
         description: 'SUCURSAL en la ciudad de GUAYAQUIL.',
     },
 ];
+
+const WAREHOUSE_OPTIONS_ALPACELL = [
+
+    {
+        id: '001',
+        value: '001',
+        title: 'BODEGA',
+        description: 'INVENTARIO.',
+    },
+    {
+        id: '002',
+        value: '002',
+        title: 'MOVISTAR RESERVA',
+        description: 'ALMACEN',
+    },
+    {
+        id: '003',
+        value: '003',
+        title: 'MOVISTAR ENTREGADO',
+        description: 'ALMACEN',
+    },
+    {
+        id: '004',
+        value: '004',
+        title: 'DEPRATI',
+        description: 'CONSIGNACIÓN',
+    },
+    {
+        id: '005',
+        value: '005',
+        title: 'CRESA CONSIGNACIÓN',
+        description: 'CONSIGNACIÓN',
+    },
+    {
+        id: '006',
+        value: '006',
+        title: 'COMPUTRONSA CONSIGNACIÓN',
+        description: 'CONSIGNACIÓN',
+    },
+    {
+        id: '099',
+        value: '099',
+        title: 'INVENTARIO TRANSITO IMPORTACIONES',
+        description: 'ALMACEN VIRTUAL',
+    },
+]
 
 const PAYMENT_OPTIONS = [
     {
@@ -223,6 +270,9 @@ export default function CheckoutPayment({
                                             onApplyWarehouse,
                                             onApplyMethod,
                                         }) {
+
+    const {user} = useAuthContext();
+
     const {total, discount, subtotal, iva, comment, shipping, servientrega, warehouse, method, billing} = checkout;
 
     const PaymentSchema = Yup.object().shape({
@@ -311,7 +361,15 @@ export default function CheckoutPayment({
                                       onApplyShipping={onApplyShipping} onApplyServientrega={onApplyServientrega}
                                       deliveryOptions={DELIVERY_OPTIONS}/>
 
-                    <CheckoutWarehouse onApplyWarehouse={onApplyWarehouse} warehouseOptions={WAREHOUSE_OPTIONS}/>
+                    <CheckoutWarehouse onApplyWarehouse={onApplyWarehouse} warehouseOptions={
+                        // Hipertronics
+                        user.EMPRESA == '0992537442001' ? (
+                        WAREHOUSE_OPTIONS
+                        ) : (
+                            // Alphacell
+                            WAREHOUSE_OPTIONS_ALPACELL
+                        )
+                    }/>
 
                     <CheckoutPaymentMethods onApplyMethod={onApplyMethod} paymentOptions={PAYMENT_OPTIONS}
                                             sx={{my: 3}}

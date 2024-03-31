@@ -233,15 +233,15 @@ export default function InvoiceListPage() {
 
                 if (user.ROLE === "vendedor") {
                     const idVendedor = user.ID;
-                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/vendedor?ven=${idVendedor}`);
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/vendedor?ven=${idVendedor}&empresa=${user.EMPRESA}`);
                     data = await response.json();
                 } else if (user.ROLE === "aprobador") {
-                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/credit`);
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/credit?empresa=${user.EMPRESA}`);
                     data = await response.json();
                 } else if (user.ROLE === "bodega") {
                     console.log(user.WAREHOUSE);
                     const bodegaSAP = user.WAREHOUSE;
-                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/bodega?bod=${bodegaSAP}`);
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/bodega?bod=${bodegaSAP}&empresa=${user.EMPRESA}\``);
                     data = await response.json();
                 }
 

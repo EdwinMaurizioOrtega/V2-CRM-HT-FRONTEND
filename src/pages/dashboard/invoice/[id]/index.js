@@ -16,6 +16,7 @@ import InvoiceDetails from '../../../../sections/@dashboard/invoice/details';
 import {useDispatch, useSelector} from "../../../../redux/store";
 import { getDetailOrder } from "../../../../redux/slices/order";
 import {HOST_API_KEY} from "../../../../config-global";
+import {useAuthContext} from "../../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -25,6 +26,8 @@ InvoiceDetailsPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayou
 
 export default function InvoiceDetailsPage() {
     const {themeStretch} = useSettingsContext();
+
+    const { user } = useAuthContext();
 
     const {
         query: {id},
@@ -48,7 +51,7 @@ export default function InvoiceDetailsPage() {
         async function fetchData() {
             if (id) {
                 try {
-                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/order/detail?id=${id}`);
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/order/detail?id=${id}&empresa=${user.EMPRESA}`);
                     const data = await response.json();
                     setCurrentInvoice(data.data);
                     console.log("currentInvoice: "+JSON.stringify(data.data));

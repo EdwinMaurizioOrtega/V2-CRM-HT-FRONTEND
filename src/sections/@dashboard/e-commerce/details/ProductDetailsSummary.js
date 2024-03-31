@@ -41,7 +41,17 @@ ProductDetailsSummary.propTypes = {
     onGotoStep: PropTypes.func,
 };
 
-export default function ProductDetailsSummary({cart, product, loading, pricelistproduct, onAddCart, onGotoStep, user, onStockValidate, ...other}) {
+export default function ProductDetailsSummary({
+                                                  cart,
+                                                  product,
+                                                  loading,
+                                                  pricelistproduct,
+                                                  onAddCart,
+                                                  onGotoStep,
+                                                  user,
+                                                  onStockValidate,
+                                                  ...other
+                                              }) {
     const {push} = useRouter();
 
     const [selectedPrice, setSelectedPrice] = useState(null);
@@ -170,18 +180,23 @@ export default function ProductDetailsSummary({cart, product, loading, pricelist
             alert("Te falto seleccionar un tipo de precio. 😅")
         }
 
-        const sumaDisponible = onStockValidate.reduce((total, producto) => total + Number(producto.DISPONIBLE), 0);
-        if (sumaDisponible >= values.quantity ){
-                 alert("🙂Stock disponible. ✅")
+        //Distinto a Alphacel
+        if (user.EMPRESA != '0992264373001') {
 
-        }else {
-            alert(`😤El stock disponible ${sumaDisponible} ✅ es menor al número ${values.quantity} 🙄 de unidades ingresadas.😮‍💨
-        ${onStockValidate[0].BODEGA == '019' ? " CD-HT" : null}  ${Number( onStockValidate[0].DISPONIBLE)}
-        ${onStockValidate[1].BODEGA == '002' ? "CUENCA" : null}  ${Number( onStockValidate[1].DISPONIBLE)}
-        ${onStockValidate[2].BODEGA == '024' ? " MANTA" : null}  ${Number( onStockValidate[2].DISPONIBLE)}
-        ${onStockValidate[3].BODEGA == '030' ? " COLÓN" : null}  ${Number( onStockValidate[3].DISPONIBLE)}
+            const sumaDisponible = onStockValidate.reduce((total, producto) => total + Number(producto.DISPONIBLE), 0);
+
+            if (sumaDisponible >= values.quantity) {
+                alert("🙂Stock disponible. ✅")
+
+            } else {
+                alert(`😤El stock disponible ${sumaDisponible} ✅ es menor al número ${values.quantity} 🙄 de unidades ingresadas.😮‍💨
+        ${onStockValidate[0].BODEGA == '019' ? " CD-HT" : null}  ${Number(onStockValidate[0].DISPONIBLE)}
+        ${onStockValidate[1].BODEGA == '002' ? "CUENCA" : null}  ${Number(onStockValidate[1].DISPONIBLE)}
+        ${onStockValidate[2].BODEGA == '024' ? " MANTA" : null}  ${Number(onStockValidate[2].DISPONIBLE)}
+        ${onStockValidate[3].BODEGA == '030' ? " COLÓN" : null}  ${Number(onStockValidate[3].DISPONIBLE)}
         `);
 
+            }
         }
 
         //console.log("onStockValidate: "+JSON.stringify( onStockValidate));
@@ -348,7 +363,7 @@ export default function ProductDetailsSummary({cart, product, loading, pricelist
 
                 <Stack direction="row" spacing={2}>
 
-                    { user.ROLE != 'infinix' ? (
+                    {user.ROLE != 'infinix' ? (
                         <Button
                             fullWidth
                             disabled={isMaxQuantity}
