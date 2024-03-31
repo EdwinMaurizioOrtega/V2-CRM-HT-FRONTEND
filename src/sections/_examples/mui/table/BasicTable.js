@@ -65,7 +65,7 @@ export default function BasicTable({code, validateStock}) {
         async function fetchData() {
             if (code) {
                 try {
-                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/products/stock/product?code=${code}`);
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/products/stock/product?code=${code}&empresa=${user.EMPRESA}`);
                     if (response.status === 200) {
                         // Eliminar el estado de carga aquí, ya que la respuesta es exitosa (código 200).
                         setLoading(false);
@@ -129,67 +129,86 @@ export default function BasicTable({code, validateStock}) {
 
                             <TableBody>
 
-                                {user.ROLE != 'infinix' ? (
+                                {
+                                    // Hipertronics
+                                    user.EMPRESA == '0992537442001' ? (
 
-                                    user.ROLE != 'tienda' ? (
+                                        user.ROLE != 'infinix' ? (
+
+                                            user.ROLE != 'tienda' ? (
 
 
+                                                stockProduct.map((row) => (
+                                                    <TableRow key={row.BODEGA}>
+                                                        <TableCell>{getTextFromCodigo(row.BODEGA)}</TableCell>
+                                                        <TableCell align="right">{fNumber(row.CANTIDAD)}</TableCell>
+                                                        <TableCell align="right">{fNumber(row.RESERVADO)}</TableCell>
+                                                        <TableCell align="right">{fNumber(row.DISPONIBLE)}</TableCell>
+                                                        <TableCell align="right">{row.CODIGO}</TableCell>
+                                                    </TableRow>
+                                                ))
+
+
+                                            ) : (
+
+
+                                                stockProduct.map((row) => (
+                                                    <TableRow key={row.BODEGA}>
+                                                        <TableCell>{getTextFromCodigo(row.BODEGA)}</TableCell>
+                                                        <TableCell align="right">{
+
+                                                            fNumber(row.DISPONIBLE) >= 1 && fNumber(row.DISPONIBLE) < 5 ? (
+                                                                "+1"
+                                                            ) : fNumber(row.DISPONIBLE) >= 5 && fNumber(row.DISPONIBLE) < 10 ? (
+                                                                "+5"
+                                                            ) : fNumber(row.DISPONIBLE) >= 10 && fNumber(row.DISPONIBLE) < 20 ? (
+                                                                "+10"
+                                                            ) : fNumber(row.DISPONIBLE) >= 20 ? (
+                                                                "+20"
+                                                            ) : (
+                                                                "0"
+                                                            )
+
+                                                        }</TableCell>
+
+                                                        <TableCell align="right">{row.CODIGO}</TableCell>
+                                                    </TableRow>
+                                                ))
+
+                                            )
+
+
+                                        ) : (
+                                            // Mostrar solo las filas con BODEGA 019, 002 y 030
+                                            stockProduct
+                                                .filter((row) => row.BODEGA === '019' || row.BODEGA === '002' || row.BODEGA === '030')
+                                                .map((filteredRow) => (
+                                                        <TableRow key={filteredRow.BODEGA}>
+                                                            <TableCell>{getTextFromCodigo(filteredRow.BODEGA)}</TableCell>
+                                                            <TableCell align="right">{fNumber(filteredRow.CANTIDAD)}</TableCell>
+                                                            <TableCell align="right">{fNumber(filteredRow.RESERVADO)}</TableCell>
+                                                            <TableCell align="right">{fNumber(filteredRow.DISPONIBLE)}</TableCell>
+                                                            <TableCell align="right">{filteredRow.CODIGO}</TableCell>
+                                                        </TableRow>
+                                                    )
+                                                )
+                                        )
+
+                                    ) : (
+                                        //Alphacell
                                         stockProduct.map((row) => (
                                             <TableRow key={row.BODEGA}>
-                                                <TableCell>{getTextFromCodigo(row.BODEGA)}</TableCell>
+                                                <TableCell>{getTextFromCodigoAlphacell(row.BODEGA)}</TableCell>
                                                 <TableCell align="right">{fNumber(row.CANTIDAD)}</TableCell>
                                                 <TableCell align="right">{fNumber(row.RESERVADO)}</TableCell>
                                                 <TableCell align="right">{fNumber(row.DISPONIBLE)}</TableCell>
                                                 <TableCell align="right">{row.CODIGO}</TableCell>
                                             </TableRow>
                                         ))
-
-
-                                    ) : (
-
-
-                                        stockProduct.map((row) => (
-                                            <TableRow key={row.BODEGA}>
-                                                <TableCell>{getTextFromCodigo(row.BODEGA)}</TableCell>
-                                                <TableCell align="right">{
-
-                                                    fNumber(row.DISPONIBLE) >= 1 && fNumber(row.DISPONIBLE) < 5 ? (
-                                                        "+1"
-                                                    ) : fNumber(row.DISPONIBLE) >= 5 && fNumber(row.DISPONIBLE) < 10 ? (
-                                                        "+5"
-                                                    ) : fNumber(row.DISPONIBLE) >= 10 && fNumber(row.DISPONIBLE) < 20 ? (
-                                                        "+10"
-                                                    ) : fNumber(row.DISPONIBLE) >= 20 ? (
-                                                        "+20"
-                                                    ) : (
-                                                        "0"
-                                                    )
-
-                                                }</TableCell>
-
-                                                <TableCell align="right">{row.CODIGO}</TableCell>
-                                            </TableRow>
-                                        ))
-
                                     )
-
-
-                                ) : (
-                                    // Mostrar solo las filas con BODEGA 019, 002 y 030
-                                    stockProduct
-                                        .filter((row) => row.BODEGA === '019' || row.BODEGA === '002' || row.BODEGA === '030')
-                                        .map((filteredRow) => (
-                                                <TableRow key={filteredRow.BODEGA}>
-                                                    <TableCell>{getTextFromCodigo(filteredRow.BODEGA)}</TableCell>
-                                                    <TableCell align="right">{fNumber(filteredRow.CANTIDAD)}</TableCell>
-                                                    <TableCell align="right">{fNumber(filteredRow.RESERVADO)}</TableCell>
-                                                    <TableCell align="right">{fNumber(filteredRow.DISPONIBLE)}</TableCell>
-                                                    <TableCell align="right">{filteredRow.CODIGO}</TableCell>
-                                                </TableRow>
-                                            )
-                                        )
-                                )
                                 }
+
+
 
                             </TableBody>
                         </Table>
@@ -249,6 +268,27 @@ function getTextFromCodigo(rowCodigo) {
     }
 }
 
+
+function getTextFromCodigoAlphacell(rowCodigo) {
+    switch (rowCodigo) {
+        case '001':
+            return "BODEGA";
+        case '002':
+            return "MOVISTAR RESERVA";
+        case '003':
+            return "MOVISTAR ENTREGADO";
+        case '004':
+            return "DEPRATI";
+        case '005':
+            return "CRESA CONSIGNACIÓN";
+        case '006':
+            return "COMPUTRONSA CONSIGNACIÓN";
+        case '099':
+            return "INVENTARIO TRANSITO IMPORTACIONES";
+        default:
+            return "...";
+    }
+}
 
 // function functionAuxStock (data) {
 //     functionStock(data)

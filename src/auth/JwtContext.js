@@ -112,8 +112,9 @@ export function AuthProvider({children}) {
     }, [initialize]);
 
     // LOGIN
-    const login = useCallback(async (email, password) => {
+    const login = useCallback(async (empresa, email, password) => {
         const response = await axios.post('/hanadb/api/account/login', {
+            empresa,
             email,
             password,
         });

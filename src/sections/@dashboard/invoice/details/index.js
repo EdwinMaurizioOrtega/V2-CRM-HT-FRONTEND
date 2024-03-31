@@ -509,7 +509,7 @@ export default function InvoiceDetails({invoice}) {
 
     }
 
-    const ivaPorcentaje = 0.12; // Porcentaje de IVA (12% en Ecuador)
+    const ivaPorcentaje = 0.15; // Porcentaje de IVA (12% en Ecuador)
     let subtotalTotal = 0;
 
     items.forEach((row) => {

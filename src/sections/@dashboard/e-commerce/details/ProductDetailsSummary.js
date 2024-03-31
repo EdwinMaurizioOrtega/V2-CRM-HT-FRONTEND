@@ -332,7 +332,7 @@ export default function ProductDetailsSummary({cart, product, loading, pricelist
                             {
                                 pricelistproduct.map((price) => (
                                     <MenuItem key={price.PriceList} value={price}>
-                                        {price.ListName} | {fCurrency(price.Price)}+{fCurrency(price.Price * 0.12)} = {fCurrency(price.Price * 1.12)}
+                                        {price.ListName} | {fCurrency(price.Price)}+{fCurrency(price.Price * 0.15)} = {fCurrency(price.Price * 1.15)}
                                     </MenuItem>
 
                                 ))}

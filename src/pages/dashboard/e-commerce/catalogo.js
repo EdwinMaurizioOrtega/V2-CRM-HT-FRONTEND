@@ -491,8 +491,8 @@ function ExcelDownload({data, client}) {
                 NOMBRE: item.NOMBRE,
                 STOCK: item.CANTIDAD_ALIAS,
                 SUBTOTAL: item.Price,
-                IVA: (item.Price * 0.12).toFixed(2),
-                TOTAL: (item.Price * 1.12).toFixed(2),
+                IVA: (item.Price * 0.15).toFixed(2),
+                TOTAL: (item.Price * 1.15).toFixed(2),
 
             })),
             {origin: 'A3'}

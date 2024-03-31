@@ -72,7 +72,7 @@ const slice = createSlice({
 
             const totalItems = sum(cart.map((product) => +product.quantity));
             const subtotal = sum(cart.map((product) => product.price.Price * product.quantity));
-            const iva = subtotal * 0.12;
+            const iva = subtotal * 0.15;
             state.checkout.cart = cart;
             state.checkout.discount = state.checkout.discount || 0;
             state.checkout.shipping = state.checkout.shipping || 0;

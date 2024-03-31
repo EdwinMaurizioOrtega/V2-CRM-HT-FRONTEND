@@ -130,7 +130,7 @@ export default  function EcommerceProductDetailsPage() {
         async function fetchData() {
             if (name) {
                 try {
-                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/products/price_list_product?name=${name}&idUser=${user.ID}`);
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/products/price_list_product?name=${name}&idUser=${user.ID}&empresa=${user.EMPRESA}`);
                     if (response.status === 200) {
                         // Eliminar el estado de carga aquí, ya que la respuesta es exitosa (código 200).
                         setLoading(false);
