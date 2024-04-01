@@ -3,11 +3,11 @@ module.exports = {
   trailingSlash: true,
   env: {
     // HOST LOCAL
-    HOST_API_KEY: 'http://localhost:7070',
-    HOST_SOCKET: 'ws://localhost:80',
+    // HOST_API_KEY: 'http://localhost:7070',
+    // HOST_SOCKET: 'ws://localhost:80',
     // HOST REMOTO
-    // HOST_API_KEY: 'https://crm.lidenar.com',
-    // HOST_SOCKET: 'wss://ss.lidenar.com',
+    HOST_API_KEY: 'https://crm.lidenar.com',
+    HOST_SOCKET: 'wss://ss.lidenar.com',
     // MAPBOX
     MAPBOX_API: 'pk.eyJ1Ijoic2lzdGVtYXMtMjEwMCIsImEiOiJjbHJwM2p6OTgwMG1vMnFvNjZ5dnM5OHo4In0.WfTKE_C5op0Ameu3Llhldw',
     // FIREBASE
