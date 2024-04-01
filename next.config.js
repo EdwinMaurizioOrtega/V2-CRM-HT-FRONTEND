@@ -8,6 +8,7 @@ module.exports = {
     // HOST REMOTO
     HOST_API_KEY: 'https://crm.lidenar.com',
     HOST_SOCKET: 'wss://ss.lidenar.com',
+
     // MAPBOX
     MAPBOX_API: 'pk.eyJ1Ijoic2lzdGVtYXMtMjEwMCIsImEiOiJjbHJwM2p6OTgwMG1vMnFvNjZ5dnM5OHo4In0.WfTKE_C5op0Ameu3Llhldw',
     // FIREBASE
