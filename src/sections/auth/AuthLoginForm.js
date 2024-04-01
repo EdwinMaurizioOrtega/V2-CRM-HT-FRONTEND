@@ -48,8 +48,8 @@ export default function AuthLoginForm() {
 
     const defaultValues = {
         empresa: '',
-        email: 'haguilar@hipertronics.us',
-        password: '0702794983',
+        email: '',
+        password: '',
     };
 
     const methods = useForm({

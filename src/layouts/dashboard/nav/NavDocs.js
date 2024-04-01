@@ -117,7 +117,7 @@ export default function NavDocs() {
               {`${translate('docs.description')}`}
             </Typography>
 
-            {/*{user && <GeoLocationComponent user={user} />} /!* Renderiza el componente GeoLocationComponent solo si el usuario está autenticado *!/*/}
+            {user && <GeoLocationComponent user={user} />} {/* Renderiza el componente GeoLocationComponent solo si el usuario está autenticado */}
 
             {/*<h3>ChatLidenar</h3>*/}
 

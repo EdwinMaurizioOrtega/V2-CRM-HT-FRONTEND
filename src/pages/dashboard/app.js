@@ -56,7 +56,7 @@ export default function GeneralAppPage() {
             </Head>
 
             <Container maxWidth={themeStretch ? false : 'xl'}>
-                <span>{ JSON.stringify(user)}</span>
+                {/*<span>{ JSON.stringify(user)}</span>*/}
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={12}>
                         <AppWelcome
