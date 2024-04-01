@@ -241,7 +241,7 @@ export default function InvoiceListPage() {
                 } else if (user.ROLE === "bodega") {
                     console.log(user.WAREHOUSE);
                     const bodegaSAP = user.WAREHOUSE;
-                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/bodega?bod=${bodegaSAP}&empresa=${user.EMPRESA}\``);
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/bodega?bod=${bodegaSAP}&empresa=${user.EMPRESA}`);
                     data = await response.json();
                 }
 
