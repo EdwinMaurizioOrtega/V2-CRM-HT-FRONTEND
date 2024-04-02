@@ -229,7 +229,8 @@ export default function InvoiceTableRow({
             const response = await axios.put('/hanadb/api/orders/order/to_bag', {
                 params: {
                     ID_ORDER: ID,
-                    DOCNUM: Number(DOCNUM)
+                    DOCNUM: Number(DOCNUM),
+                    empresa: user.EMPRESA
                 }
             });
 
