@@ -25,3 +25,8 @@ export function fToNow(date) {
       })
     : '';
 }
+
+export function fDateCustom(date) {
+    const fm =  'dd-MM-yyyy';
+    return date ? format(new Date(date), fm) : '';
+}

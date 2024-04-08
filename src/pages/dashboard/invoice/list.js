@@ -18,12 +18,12 @@ import {
     TableBody,
     Container,
     IconButton,
-    TableContainer, CircularProgress,
+    TableContainer, CircularProgress, Box,
 } from '@mui/material';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
 // utils
-import {fTimestamp} from '../../../utils/formatTime';
+import {fDate, fDateCustom, fTimestamp} from '../../../utils/formatTime';
 // _mock_
 import {_invoices} from '../../../_mock/arrays';
 // layouts
@@ -59,6 +59,10 @@ import {
 import {useAuthContext} from "../../../auth/useAuthContext";
 import axios from "../../../utils/axios";
 import {HOST_API_KEY} from "../../../config-global";
+
+import CustomDateRangePicker, {useDateRangePicker} from 'src/components/custom-date-range-picker';
+import ComponentBlock from "../../../sections/_examples/component-block";
+
 
 // ----------------------------------------------------------------------
 
@@ -103,6 +107,8 @@ InvoiceListPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function InvoiceListPage() {
 
     const router = useRouter();
+
+    const rangeInputPicker = useDateRangePicker(new Date(), new Date());
 
     const {user} = useAuthContext();
 
@@ -231,9 +237,12 @@ export default function InvoiceListPage() {
             try {
                 let data = [];
 
-                if (user.ROLE === "vendedor") {
-                    const idVendedor = user.ID;
-                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/vendedor?ven=${idVendedor}&empresa=${user.EMPRESA}`);
+
+                if (user.ROLE === "admin") {
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/admin?empresa=${user.EMPRESA}&fecha_inicio=${fDateCustom(rangeInputPicker.startDate)}&fecha_fin=${fDateCustom(rangeInputPicker.endDate)}`);
+                    data = await response.json();
+                } else if (user.ROLE === "vendedor") {
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/vendedor?ven=${user.ID}&empresa=${user.EMPRESA}`);
                     data = await response.json();
                 } else if (user.ROLE === "aprobador") {
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/credit?empresa=${user.EMPRESA}`);
@@ -246,7 +255,7 @@ export default function InvoiceListPage() {
                 }
 
                 setOrders(data.orders);
-                console.log("data.orders: "+JSON.stringify(data.orders));
+                console.log("data.orders: " + JSON.stringify(data.orders));
             } catch (error) {
                 console.error('Error fetching data:', error);
                 setOrders([]);
@@ -254,7 +263,7 @@ export default function InvoiceListPage() {
         }
 
         fetchData();
-    }, [user]);
+    }, [user, orders]);
 
 
     useEffect(() => {
@@ -279,15 +288,15 @@ export default function InvoiceListPage() {
     const denseHeight = dense ? 56 : 76;
 
     const isFiltered =
-        filterStatus !== 'all' ||
-        filterName !== ''
+            filterStatus !== 'all' ||
+            filterName !== ''
         // filterService !== 'all' ||
         // (!!filterStartDate && !!filterEndDate)
     ;
 
     const isNotFound =
-        (!dataFiltered.length && !!filterName) ||
-        (!dataFiltered.length && !!filterStatus)
+            (!dataFiltered.length && !!filterName) ||
+            (!dataFiltered.length && !!filterStatus)
         // (!dataFiltered.length && !!filterService) ||
         // (!dataFiltered.length && !!filterEndDate) ||
         // (!dataFiltered.length && !!filterStartDate)
@@ -380,9 +389,9 @@ export default function InvoiceListPage() {
         // setFilterStartDate(null);
     };
 
-    const downloadFile = ({ data, fileName, fileType }) => {
+    const downloadFile = ({data, fileName, fileType}) => {
         // Create a blob with the data we want to download as a file
-        const blob = new Blob([data], { type: fileType })
+        const blob = new Blob([data], {type: fileType})
         // Create an anchor element and dispatch a click event on it
         // to trigger a download
         const a = document.createElement('a')
@@ -410,6 +419,19 @@ export default function InvoiceListPage() {
         });
     }
 
+    const {
+        startDate,
+        endDate,
+        onChangeStartDate,
+        onChangeEndDate,
+        open: openPicker,
+        onOpen: onOpenPicker,
+        onClose: onClosePicker,
+        isSelected: isSelectedValuePicker,
+        isError,
+        shortLabel,
+    } = useDateRangePicker(new Date(), new Date());
+
     return (
         <>
             <Head>
@@ -432,22 +454,46 @@ export default function InvoiceListPage() {
                             name: 'Lista',
                         },
                     ]}
-                    // action={
-                    //   <Button
-                    //     component={NextLink}
-                    //     href={PATH_DASHBOARD.invoice.new}
-                    //     variant="contained"
-                    //     startIcon={<Iconify icon="eva:plus-fill" />}
-                    //   >
-                    //     New Invoice
-                    //   </Button>
-                    // }
+                    action={
+                      // <Button
+                      //   component={NextLink}
+                      //   href={PATH_DASHBOARD.invoice.new}
+                      //   variant="contained"
+                      //   startIcon={<Iconify icon="eva:plus-fill" />}
+                      // >
+                      //   New Invoice
+                      // </Button>
+                      <>
+                          <Button variant="contained" onClick={rangeInputPicker.onOpen}>
+                              Rango
+                          </Button>
+
+                          <CustomDateRangePicker
+                              open={rangeInputPicker.open}
+                              startDate={rangeInputPicker.startDate}
+                              endDate={rangeInputPicker.endDate}
+                              onChangeStartDate={rangeInputPicker.onChangeStartDate}
+                              onChangeEndDate={rangeInputPicker.onChangeEndDate}
+                              onClose={rangeInputPicker.onClose}
+                              error={rangeInputPicker.error}
+                          />
+                      </>
+
+
+                    }
                 />
 
                 <Card sx={{
-                    mb: { xs: 3, md: 5 },
-                    }}
+                    mb: {xs: 3, md: 5},
+                }}
                 >
+                    <Stack sx={{typography: 'body2', mt: 3}} alignItems="center">
+                        <div>
+                            <strong>Inicio: </strong> {fDate(rangeInputPicker.startDate)}
+                            {' - '}
+                            <strong>Fin: </strong> {fDate(rangeInputPicker.endDate)}
+                        </div>
+                    </Stack>
                     <Scrollbar>
                         <Stack
                             direction="row"
@@ -491,12 +537,12 @@ export default function InvoiceListPage() {
                             />
 
                             <InvoiceAnalytic
-                              title="Anulado"
-                              total={getLengthByStatus(8)}
-                              percent={getPercentByStatus(8)}
-                              price={getTotalPriceByStatus(8)}
-                              icon="solar:file-corrupted-bold-duotone"
-                              color={theme.palette.text.secondary}
+                                title="Anulado"
+                                total={getLengthByStatus(8)}
+                                percent={getPercentByStatus(8)}
+                                price={getTotalPriceByStatus(8)}
+                                icon="solar:file-corrupted-bold-duotone"
+                                color={theme.palette.text.secondary}
                             />
                         </Stack>
                     </Scrollbar>
@@ -522,7 +568,7 @@ export default function InvoiceListPage() {
                                         variant={
                                             ((tab.value === 'all' || tab.value === filterStatus) && 'filled') || 'soft'
                                         }
-                                        color={tab.color} >
+                                        color={tab.color}>
                                         {tab.count}
                                     </Label>
                                 }
@@ -649,7 +695,7 @@ export default function InvoiceListPage() {
                     <Tooltip title="Descargar">
                         <IconButton onClick={exportJsonToCSV}
                         >
-                                <Iconify icon="eva:download-fill"/>
+                            <Iconify icon="eva:download-fill"/>
                         </IconButton>
                     </Tooltip>
                 </Card>
@@ -713,17 +759,16 @@ function applyFilter({
     }
 
 
-
-    console.log("user_user:"+ currentUser)
+    console.log("user_user:" + currentUser)
 
     if (filterStatus !== 'all') {
 
         //console.log("user_user:"+ user)
 
-        if(currentUser.ROLE === "bodega") {
+        if (currentUser.ROLE === "bodega") {
 
             //CDHT
-            if( currentUser.WAREHOUSE  === "019") {
+            if (currentUser.WAREHOUSE === "019") {
 
                 if (filterStatus === 0) {
                     inputData = inputData.slice(0, 6); // Return only the first two items
@@ -732,7 +777,7 @@ function applyFilter({
             }
 
             //Cuenca
-            if( currentUser.WAREHOUSE  === "002") {
+            if (currentUser.WAREHOUSE === "002") {
 
                 if (filterStatus === 0) {
                     inputData = inputData.slice(0, 3); // Return only the first two items
@@ -741,7 +786,7 @@ function applyFilter({
             }
 
             //Colon
-            if( currentUser.WAREHOUSE  === "030") {
+            if (currentUser.WAREHOUSE === "030") {
 
                 if (filterStatus === 0) {
                     inputData = inputData.slice(0, 1); // Return only the first two items
@@ -750,7 +795,7 @@ function applyFilter({
             }
 
             // Manta
-            if( currentUser.WAREHOUSE  === "024") {
+            if (currentUser.WAREHOUSE === "024") {
 
                 if (filterStatus === 0) {
                     inputData = inputData.slice(0, 1); // Return only the first two items
