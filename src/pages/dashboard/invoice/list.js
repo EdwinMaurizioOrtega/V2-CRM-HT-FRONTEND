@@ -464,10 +464,10 @@ export default function InvoiceListPage() {
                       //   New Invoice
                       // </Button>
                       <>
-                          <Button variant="contained" onClick={rangeInputPicker.onOpen}>
+                          {user.ROLE === "admin" && <Button variant="contained" onClick={rangeInputPicker.onOpen}>
                               Rango
                           </Button>
-
+                          }
                           <CustomDateRangePicker
                               open={rangeInputPicker.open}
                               startDate={rangeInputPicker.startDate}
