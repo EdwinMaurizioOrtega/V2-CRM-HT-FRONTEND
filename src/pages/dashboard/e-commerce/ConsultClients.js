@@ -167,7 +167,7 @@ export default function ConsultClientForm() {
             setSearchProducts(value);
             if (value) {
                 const response = await axios.get('/hanadb/api/customers/search', {
-                    params: {query: value},
+                    params: {query: value, empresa: user.EMPRESA},
                 });
 
                 setSearchResults(response.data.results);
