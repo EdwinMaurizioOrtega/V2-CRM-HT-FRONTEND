@@ -68,6 +68,10 @@ const BODEGAS = [
     {value: '024', label: 'MAYORISTA MANTA'},
 ];
 
+const BODEGAS_ALPHACELL = [
+    {value: '001', label: 'BODEGA'},
+];
+
 
 const CATEGORIAS = [
     {label: 'CELULARES', value: '108'},
@@ -154,6 +158,8 @@ const FormSchemaAAAAAA = Yup.object().shape({
 
 export default function CatalogoForm() {
 
+    const {user} = useAuthContext();
+
     const methods = useForm({
         resolver: yupResolver(FormSchemaAAAAAA),
         defaultValues,
@@ -202,6 +208,7 @@ export default function CatalogoForm() {
             multiSelectB: data.multiSelectB,
             multiSelectC: data.multiSelectC,
             multiSelectM: data.multiSelectM,
+            empresa: user.EMPRESA,
         });
 
         if (response.status === 200) {
@@ -222,7 +229,7 @@ export default function CatalogoForm() {
             setSearchProducts(value);
             if (value) {
                 const response = await axios.get('/hanadb/api/customers/search', {
-                    params: {query: value},
+                    params: {query: value, empresa: user.EMPRESA},
                 });
 
                 setSearchResults(response.data.results);
@@ -359,7 +366,11 @@ export default function CatalogoForm() {
                                         checkbox
                                         name="multiSelectB"
                                         label="Selección multiple"
-                                        options={BODEGAS}
+                                        options={
+
+                                            user.EMPRESA === '0992264373001' ? BODEGAS_ALPHACELL : BODEGAS
+
+                                        }
                                     />
                                 </Block>
                             </Stack>
