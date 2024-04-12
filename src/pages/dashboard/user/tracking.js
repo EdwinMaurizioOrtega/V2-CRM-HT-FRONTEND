@@ -5,13 +5,23 @@ import {styled} from '@mui/material/styles';
 import {
     Container,
     Card,
-    CardContent, Grid, TextField, Box, Button, CardHeader
+    CardContent,
+    Grid,
+    TextField,
+    Box,
+    Button,
+    CardHeader,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions, Slide
 } from '@mui/material';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
 // components
 import {useSettingsContext} from '../../../components/settings';
-import React, {useEffect, useRef, useState} from "react";
+import React, {forwardRef, useEffect, useRef, useState} from "react";
 import _mock from "../../../_mock";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
 import {PATH_DASHBOARD} from "../../../routes/paths";
@@ -37,6 +47,8 @@ import {
     GridToolbarQuickFilter
 } from "@mui/x-data-grid";
 import Iconify from "../../../components/iconify";
+import {fDate, fDateCustom, fDateCustomDateAndTime} from "../../../utils/formatTime";
+import TransitionsDialogs from "../../../sections/_examples/mui/dialog/TransitionsDialogs";
 
 // ----------------------------------------------------------------------
 
@@ -224,22 +236,32 @@ export default function TrackingPage() {
             headerName: 'Usuario',
             width: 200, // Ancho específico en píxeles
         },
-        { field: 'date_time',
-            headerName: 'Fecha',
-            width: 400, // Ancho específico en píxeles
-        },
+        // { field: 'date_time',
+        //     headerName: 'Fecha',
+        //     width: 400, // Ancho específico en píxeles
+        // },
 
         { field: 'position',
             headerName: 'Position',
-            width: 150,
+            width: 400,
             renderCell: (params) => {
                 return (
                     <Button
                         variant="contained"
                         onClick={() => handleShowCoordinates(params.row)}
                     >
-                        Mostrar Ubicación
+                        {fDateCustomDateAndTime(params.row.date_time) }
                     </Button>
+                );
+            }
+        },
+
+        { field: 'position_v2',
+            headerName: 'Position V2',
+            width: 400,
+            renderCell: (params) => {
+                return (
+                    <TransitionsDialogsEd gps_coordinates={params.row} />
                 );
             }
         }
@@ -283,7 +305,27 @@ export default function TrackingPage() {
 
                 <div className="flex">
                     <Grid container spacing={2}>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={12} md={12}>
+
+                            <Card>
+                                <CardHeader title="Logs Usuarios" />
+
+                                <CardContent>
+                                    <Box sx={{ height: 590 }}>
+                                    <DataGrid
+                                        rows={countriesData}
+                                        columns={baseColumns}
+                                        disableRowSelectionOnClick
+                                        slots={{
+                                            toolbar: CustomToolbar,
+                                            noRowsOverlay: () => <EmptyContent title="No Data"/>,
+                                            noResultsOverlay: () => <EmptyContent title="No results found"/>,
+                                        }}
+                                    />
+                                    </Box>
+                                </CardContent>
+                            </Card>
+
                             <Card>
                                 <CardHeader title="Clientes + Usuarios" />
 
@@ -291,25 +333,8 @@ export default function TrackingPage() {
                                     <MapComponent markers={countriesData} selectedCoordinates={selectedCoordinates} coordinatesCustomersA={coordinatesCustomers}/>
                                 </CardContent>
                             </Card>
-                        </Grid>
 
-                        <Grid item xs={12} md={6}>
-                            <Card>
-                                <CardHeader title="Logs Usuarios" />
 
-                                <CardContent>
-                                    <DataGrid
-                                        rows={countriesData}
-                                        columns={baseColumns}
-                                        pagination
-                                        slots={{
-                                            toolbar: CustomToolbar,
-                                            noRowsOverlay: () => <EmptyContent title="No Data"/>,
-                                            noResultsOverlay: () => <EmptyContent title="No results found"/>,
-                                        }}
-                                    />
-                                </CardContent>
-                            </Card>
                         </Grid>
                     </Grid>
                 </div>
@@ -321,7 +346,7 @@ export default function TrackingPage() {
 
 const mapContainerStyle = {
     width: '100%',
-    height: '1800px',
+    height: '500px',
 };
 
 const defaultCuencaCoordinates = {lat: -2.90055, lng: -79.00453}; // Coordenadas de Cuenca, Ecuador
@@ -480,3 +505,54 @@ function CustomToolbar() {
 //         </LoadScript>
 //     );
 // }
+
+const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
+
+function TransitionsDialogsEd() {
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    return (
+        <div>
+            <Button variant="outlined" color="success" onClick={handleClickOpen}>
+                GPS
+            </Button>
+
+            <Dialog
+                open={open}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-slide-title"
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <DialogTitle id="alert-dialog-slide-title">{`Use Google's location service?`}</DialogTitle>
+
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-slide-description">
+                        Let Google help apps determine location. This means sending anonymous location data to
+                        Google, even when no apps are running.
+                    </DialogContentText>
+                </DialogContent>
+
+                <DialogActions>
+                    <Button color="inherit" onClick={handleClose}>
+                        Disagree
+                    </Button>
+
+                    <Button variant="contained" onClick={handleClose}>
+                        Agree
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+    );
+}
+

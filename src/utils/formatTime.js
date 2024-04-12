@@ -30,3 +30,8 @@ export function fDateCustom(date) {
     const fm =  'dd-MM-yyyy';
     return date ? format(new Date(date), fm) : '';
 }
+
+export function fDateCustomDateAndTime(date) {
+    const fm =  'dd-MM-yyyy HH:mm:ss';
+    return date ? format(new Date(date), fm) : '';
+}

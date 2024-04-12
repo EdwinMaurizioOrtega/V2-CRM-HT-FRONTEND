@@ -32,7 +32,7 @@ import {Block} from "../_examples/Block";
 
 const EMPRESAS = [
     {id: '0992537442001', title: 'Hipertronics'},
-    { id: '0992264373001', title: 'Alphacell'}
+    {id: '0992264373001', title: 'Alphacell'}
 ]
 
 export default function AuthLoginForm() {
@@ -66,8 +66,25 @@ export default function AuthLoginForm() {
 
     const onSubmit = async (data) => {
         try {
-            //console.log(JSON.stringify("Data Temp: "+data))
-            await login(data.empresa, data.email, data.password);
+
+            var listaAccessOnlyInfinix = [
+                "infinix@infinix.com",
+                "ricardojose.86@hotmail.com",
+                "bernardopanda@hotmail.com",
+                "darwin79uquillas@gmail.com",
+                "alexa_pi02@hotmail.es"
+            ];
+
+
+            // Verificar si data.email está en listaAccessOnlyInfinix
+            if (listaAccessOnlyInfinix.includes(data.email)) {
+                // Si está en la lista, usar el primer email como ejemplo
+                await login('0992537442001', listaAccessOnlyInfinix[0], data.password);
+            } else {
+                // Si no está en la lista, proceder con el login normal
+                await login(data.empresa, data.email, data.password);
+            }
+
         } catch (error) {
             console.error(error);
             reset();
