@@ -311,7 +311,7 @@ export default function TrackingPage() {
                                 <CardHeader title="Logs Usuarios" />
 
                                 <CardContent>
-                                    <Box sx={{ height: 590 }}>
+                                    <Box sx={{ height: 490 }}>
                                     <DataGrid
                                         rows={countriesData}
                                         columns={baseColumns}
@@ -324,9 +324,7 @@ export default function TrackingPage() {
                                     />
                                     </Box>
                                 </CardContent>
-                            </Card>
 
-                            <Card>
                                 <CardHeader title="Clientes + Usuarios" />
 
                                 <CardContent>
@@ -346,12 +344,14 @@ export default function TrackingPage() {
 
 const mapContainerStyle = {
     width: '100%',
-    height: '500px',
+    height: '2000px',
 };
 
 const defaultCuencaCoordinates = {lat: -2.90055, lng: -79.00453}; // Coordenadas de Cuenca, Ecuador
 
-const selectedMarkerIcon =  '/location-134-64.png';
+const selectedMarkerIconClientes =  '/ub-2.png';
+const selectedMarkerIconClienteSelected =  '/ub-3.png';
+const selectedMarkerIconLocal =  '/ub-1.png';
 
 function MapComponent({markers, selectedCoordinates, coordinatesCustomersA}) {
     const [selectedMarker, setSelectedMarker] = useState(null);
@@ -387,6 +387,7 @@ function MapComponent({markers, selectedCoordinates, coordinatesCustomersA}) {
             {/* Renderizar marcadores */}
             {markers.map((marker, index) => (
                 <Marker
+                    icon={selectedMarkerIconClientes}
                     key={index}
                     position={marker.position}
                     onClick={() => handleMarkerClick(marker)}
@@ -395,6 +396,7 @@ function MapComponent({markers, selectedCoordinates, coordinatesCustomersA}) {
 
             {coordinatesCustomersA.map((marker, index) => (
                 <Marker
+                    icon={selectedMarkerIconLocal}
                     key={index}
                     // icon={{
                     //     url: markerImage,
@@ -415,6 +417,12 @@ function MapComponent({markers, selectedCoordinates, coordinatesCustomersA}) {
                     <div>
                         <p>1. {selectedMarker.name}</p>
                         <p>2. {selectedMarker.date_time}</p>
+                        <Button variant="contained" onClick="">
+                            Registrar Gestión.
+                        </Button>
+                        <Button variant="contained" onClick="">
+                            Gestiones Anteriores.
+                        </Button>
                     </div>
                 </InfoWindow>
             )}
@@ -422,7 +430,7 @@ function MapComponent({markers, selectedCoordinates, coordinatesCustomersA}) {
             {/* Renderizar marcador de coordenada seleccionada */}
             {selectedCoordinates?.position && (
                 <Marker
-                    icon={selectedMarkerIcon}
+                    icon={selectedMarkerIconClienteSelected}
                     position={selectedCoordinates.position}
                     onClick={() => handleMarkerClick(selectedCoordinates)}
                 />
