@@ -16,6 +16,7 @@ import {useSnackbar} from '../../../components/snackbar';
 import { HOST_API_KEY } from '../../../config-global';
 import {useSettingsContext} from "../../../components/settings";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
+import {useAuthContext} from "../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -30,6 +31,8 @@ export default function GarantiaPage() {
     const [garantia, setGarantia] = useState('');
 
     const [marca, setMarca] = useState('');
+
+    const {user} = useAuthContext();
 
     // const showImei = async enteredName => {
     //
@@ -62,8 +65,8 @@ export default function GarantiaPage() {
                 console.log(`IMEI A CONSULTAR: ${enteredName}`);
                 console.log("Buscando en el sistema Facturacion PAC");
 
-                const responseFull = await fetch(`${HOST_API_KEY}/api/crm-ht/garantia_imei_pac_sap?id=${enteredName}`);
-                console.log(responseFull);
+                const responseFull = await fetch(`${HOST_API_KEY}/api/crm-ht/garantia_imei_pac_sap?id=${enteredName}&empresa=${user.EMPRESA}`);
+                console.log(" responseFull: "+ JSON.stringify( responseFull));
 
                 if (responseFull.status === 200) {
                     const { garantia, marca } = await responseFull.json();
