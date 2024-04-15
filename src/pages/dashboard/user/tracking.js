@@ -326,7 +326,6 @@ export default function TrackingPage() {
                                 </CardContent>
 
                                 <CardHeader title="Clientes + Usuarios" />
-
                                 <CardContent>
                                     <MapComponent markers={countriesData} selectedCoordinates={selectedCoordinates} coordinatesCustomersA={coordinatesCustomers}/>
                                 </CardContent>
@@ -373,10 +372,13 @@ function MapComponent({markers, selectedCoordinates, coordinatesCustomersA}) {
         setSelectedMarker(null);
     };
 
+    const handleRegistrarGestion = (data) => {
+       console.log("Data para gestionar: "+ JSON.stringify( data));
+    };
 
-    // Nombre de la imagen del marcador
-    const markerImage = '/location-134-48.png'; // Ruta a tu imagen local en la carpeta public
-
+    const handleGestionesAnteriores = (data) => {
+        console.log("Gestiones anteriores: "+ JSON.stringify( data));
+    };
 
     return isLoaded ? (
         <GoogleMap
@@ -417,10 +419,10 @@ function MapComponent({markers, selectedCoordinates, coordinatesCustomersA}) {
                     <div>
                         <p>1. {selectedMarker.name}</p>
                         <p>2. {selectedMarker.date_time}</p>
-                        <Button variant="contained" onClick="">
+                        <Button variant="contained" onClick={() => handleRegistrarGestion(selectedMarker)}>
                             Registrar Gestión.
                         </Button>
-                        <Button variant="contained" onClick="">
+                        <Button variant="contained" onClick={() => handleGestionesAnteriores(selectedMarker)}>
                             Gestiones Anteriores.
                         </Button>
                     </div>
