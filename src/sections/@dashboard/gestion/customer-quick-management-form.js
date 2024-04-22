@@ -1,14 +1,11 @@
-import * as Yup from 'yup';
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {Controller, useForm} from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import MenuItem from '@mui/material/MenuItem';
 import LoadingButton from '@mui/lab/LoadingButton';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
@@ -45,32 +42,7 @@ export default function CustomerQuickManagementForm({ currentPartner, open, onCl
 
   const {user} = useAuthContext();
 
-  console.log("partner.ID "+ currentPartner?.ID || '');
-
-  // const NewUserSchema = Yup.object().shape({
-  //   name: Yup.string().required('Name is required'),
-  //   email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-  //   phoneNumber: Yup.string().required('Phone number is required'),
-  //   address: Yup.string().required('Address is required'),
-  //   country: Yup.string().required('Country is required'),
-  //   company: Yup.string().required('Company is required'),
-  //   state: Yup.string().required('State is required'),
-  //   city: Yup.string().required('City is required'),
-  //   role: Yup.string().required('Role is required'),
-  // });
-
-  const defaultValues = useMemo(
-    () => ({
-      ci: currentPartner?.ID || '',
-
-    }),
-    [currentPartner]
-  );
-
-  const methods = useForm({
-    // resolver: yupResolver(NewUserSchema),
-    //defaultValues,
-  });
+  console.log("Cliente a gestionar: "+ currentPartner?.ID || '');
 
   const {
     reset,
@@ -80,10 +52,6 @@ export default function CustomerQuickManagementForm({ currentPartner, open, onCl
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
-
-    //console.info('DATA: ', JSON.stringify(data));
-    //console.info("CLIENTE_ID: "+ currentPartner.ID);
-    //console.info("USER_ID: "+ user.ID);
 
     try {
       // Actualizar una orden.
@@ -123,7 +91,7 @@ export default function CustomerQuickManagementForm({ currentPartner, open, onCl
 
         <DialogContent>
           <Alert variant="outlined" severity="info" sx={{ mb: 3 }}>
-            Cliente: {currentPartner?.Cliente || ''}
+            Cliente: {currentPartner?.Cliente || currentPartner?.ID || ''}
           </Alert>
 
           <Box
@@ -135,20 +103,8 @@ export default function CustomerQuickManagementForm({ currentPartner, open, onCl
               sm: 'repeat(2, 1fr)',
             }}
           >
-          {/*   <RHFSelect name="status" label="Status"> */}
-          {/*     {USER_STATUS_OPTIONS.map((status) => ( */}
-          {/*       <MenuItem key={status.value} value={status.value}> */}
-          {/*         {status.label} */}
-          {/*       </MenuItem> */}
-          {/*     ))} */}
-          {/*   </RHFSelect> */}
-
             <Box sx={{ display: { xs: 'none', sm: 'block' } }} />
             <Box sx={{ display: { xs: 'none', sm: 'block' } }} />
-
-          {/*   <RHFTextField name="name" label="Full Name" /> */}
-          {/*   <RHFTextField name="email" label="Email Address" /> */}
-          {/*   <RHFTextField name="phoneNumber" label="Phone Number" /> */}
 
             <RHFAutocomplete
               name="dato"
@@ -191,11 +147,7 @@ export default function CustomerQuickManagementForm({ currentPartner, open, onCl
                     />
                 )}
             />
-          {/*   <RHFTextField name="city" label="City" /> */}
-          {/*   <RHFTextField name="address" label="Address" /> */}
-          {/*   <RHFTextField name="zipCode" label="Zip/Code" /> */}
-          {/*   <RHFTextField name="company" label="Company" /> */}
-          {/*   <RHFTextField name="role" label="Role" /> */}
+
           </Box>
         </DialogContent>
 

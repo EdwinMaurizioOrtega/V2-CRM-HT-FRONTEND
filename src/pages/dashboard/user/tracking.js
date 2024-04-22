@@ -21,34 +21,28 @@ import {
 import DashboardLayout from '../../../layouts/dashboard';
 // components
 import {useSettingsContext} from '../../../components/settings';
-import React, {forwardRef, useEffect, useRef, useState} from "react";
+import React, {forwardRef, useCallback, useEffect, useRef, useState} from "react";
 import _mock from "../../../_mock";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
 import {PATH_DASHBOARD} from "../../../routes/paths";
 import {HOST_API_KEY, HOST_SOCKET, MAP_API} from "../../../config-global";
-// import MapMarkersPopups from "../../../sections/_examples/extra/map/MapMarkersPopups";
 import {io} from "socket.io-client";
-import {useAuthContext} from "../../../auth/useAuthContext";
 import {
     GoogleMap,
     useJsApiLoader,
     Marker,
     InfoWindow,
-    LoadScript,
-    DirectionsRenderer,
-    DirectionsService
 } from "@react-google-maps/api";
 import EmptyContent from "../../../components/empty-content";
 import {
     DataGrid,
-    GridActionsCellItem,
     GridToolbarColumnsButton,
     GridToolbarContainer, GridToolbarDensitySelector, GridToolbarExport, GridToolbarFilterButton,
     GridToolbarQuickFilter
 } from "@mui/x-data-grid";
-import Iconify from "../../../components/iconify";
-import {fDate, fDateCustom, fDateCustomDateAndTime} from "../../../utils/formatTime";
-import TransitionsDialogs from "../../../sections/_examples/mui/dialog/TransitionsDialogs";
+import {fDateCustomDateAndTime} from "../../../utils/formatTime";
+import {useBoolean} from "../../../hooks/use-boolean";
+import CustomerQuickManagementForm from "../../../sections/@dashboard/gestion/customer-quick-management-form";
 
 // ----------------------------------------------------------------------
 
@@ -105,12 +99,13 @@ export default function TrackingPage() {
                     // Iterar sobre todos los mensajes y obtener las coordenadas de cada uno
                     data.data.forEach((coor, index) => {
                         // Convertir el texto del mensaje a JSON y obtener las coordenadas
-                        const {U_LS_LATITUD, U_LS_LONGITUD, CLIENTE, NOMBRE_VENDEDOR} = coor
+                        const {U_LS_LATITUD, U_LS_LONGITUD, CLIENTE, NOMBRE_VENDEDOR, CARDCODE} = coor
 
                         const country = {
                             position: {lat: Number(U_LS_LATITUD), lng: Number(U_LS_LONGITUD)},
                             name: CLIENTE,
                             date_time: NOMBRE_VENDEDOR,
+                            ID: CARDCODE,
                             id: index + 1
                         };
                         objectArray.push(country);
@@ -130,12 +125,6 @@ export default function TrackingPage() {
         fetchData();
 
     }, []);
-
-
-
-
-
-
 
     useEffect(() => {
         setCoordinates([]);
@@ -221,10 +210,6 @@ export default function TrackingPage() {
             setCountriesData(objectArray);
         }
     }, [coordinates]);
-
-    const handleFilterChange = (event) => {
-        setFilterUserName(event.target.value);
-    };
 
     const baseColumns = [
         {
@@ -353,6 +338,12 @@ const selectedMarkerIconClienteSelected =  '/ub-3.png';
 const selectedMarkerIconLocal =  '/ub-1.png';
 
 function MapComponent({markers, selectedCoordinates, coordinatesCustomersA}) {
+
+    const quickEdit = useBoolean();
+
+    const [partner, setPartner] = useState(null);
+
+
     const [selectedMarker, setSelectedMarker] = useState(null);
     const [zoom, setZoom] = useState(100); // Estado para el zoom del mapa
 
@@ -372,13 +363,20 @@ function MapComponent({markers, selectedCoordinates, coordinatesCustomersA}) {
         setSelectedMarker(null);
     };
 
-    const handleRegistrarGestion = (data) => {
-       console.log("Data para gestionar: "+ JSON.stringify( data));
-    };
 
     const handleGestionesAnteriores = (data) => {
         console.log("Gestiones anteriores: "+ JSON.stringify( data));
     };
+
+    const handleViewRow = useCallback(
+        (row) => {
+            quickEdit.onTrue();
+            console.log("Cliente a gestionar: " + JSON.stringify(row));
+            setPartner(row);
+
+        },
+        [quickEdit]
+    );
 
     return isLoaded ? (
         <GoogleMap
@@ -419,7 +417,8 @@ function MapComponent({markers, selectedCoordinates, coordinatesCustomersA}) {
                     <div>
                         <p>1. {selectedMarker.name}</p>
                         <p>2. {selectedMarker.date_time}</p>
-                        <Button variant="contained" onClick={() => handleRegistrarGestion(selectedMarker)}>
+                        <Button variant="contained" onClick={() => handleViewRow(selectedMarker)}
+                        >
                             Registrar Gestión.
                         </Button>
                         <Button variant="contained" onClick={() => handleGestionesAnteriores(selectedMarker)}>
@@ -437,7 +436,16 @@ function MapComponent({markers, selectedCoordinates, coordinatesCustomersA}) {
                     onClick={() => handleMarkerClick(selectedCoordinates)}
                 />
             )}
+
+            {selectedMarker && (
+                <CustomerQuickManagementForm
+                    currentPartner={partner}
+                    open={quickEdit.value}
+                    onClose={quickEdit.onFalse}/>
+            )}
+
         </GoogleMap>
+
     ) : (
         <></>
     );
@@ -565,4 +573,7 @@ function TransitionsDialogsEd() {
         </div>
     );
 }
+
+
+
 
