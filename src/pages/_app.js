@@ -55,7 +55,8 @@ import {ThemeSettings, SettingsProvider} from '../components/settings';
 import {AuthProvider} from '../auth/JwtContext';
 import {useEffect} from "react";
 import {Analytics} from "@vercel/analytics/next";
-import { SpeedInsights } from '@vercel/speed-insights/next';
+import {SpeedInsights} from '@vercel/speed-insights/next';
+import OneSignal from "react-onesignal";
 // import { AuthProvider } from '../auth/Auth0Context';
 // import { AuthProvider } from '../auth/FirebaseContext';
 // import { AuthProvider } from '../auth/AwsCognitoContext';
@@ -71,6 +72,12 @@ MyApp.propTypes = {
 };
 
 export default function MyApp(props) {
+
+    useEffect(() => {
+        // Inicializar OneSignal
+        OneSignal.init({appId: 'ab877dfc-0d29-410b-a945-53ceeaacb617', allowLocalhostAsSecureOrigin: true});
+        OneSignal.Slidedown.promptPush();
+    }, []);
 
     //Registrar el Service worker
     // useEffect(() => {
@@ -112,8 +119,8 @@ export default function MyApp(props) {
                                                 {getLayout(
                                                     <Component {...pageProps} />
                                                 )}
-                                                <Analytics />
-                                                <SpeedInsights />
+                                                <Analytics/>
+                                                <SpeedInsights/>
                                             </SnackbarProvider>
                                         </ThemeLocalization>
                                     </ThemeSettings>
