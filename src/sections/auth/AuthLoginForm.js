@@ -78,8 +78,8 @@ export default function AuthLoginForm() {
 
             // Verificar si data.email está en listaAccessOnlyInfinix
             if (listaAccessOnlyInfinix.includes(data.email)) {
-                // Si está en la lista, usar el primer email como ejemplo
-                await login('0992537442001', listaAccessOnlyInfinix[0], data.password);
+                // Si está en la lista, usar el email el input
+                await login('0992537442001', data.email, data.password);
             } else {
                 // Si no está en la lista, proceder con el login normal
                 await login(data.empresa, data.email, data.password);

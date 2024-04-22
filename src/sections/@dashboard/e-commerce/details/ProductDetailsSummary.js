@@ -363,7 +363,7 @@ export default function ProductDetailsSummary({
 
                 <Stack direction="row" spacing={2}>
 
-                    {user.ROLE != 'infinix' ? (
+
                         <Button
                             fullWidth
                             disabled={isMaxQuantity}
@@ -376,9 +376,7 @@ export default function ProductDetailsSummary({
                         >
                             Agregar
                         </Button>
-                    ) : null
 
-                    }
 
 
                     {/* <Button fullWidth size="large" type="submit" variant="contained"> */}

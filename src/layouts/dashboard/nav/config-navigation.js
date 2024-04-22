@@ -140,6 +140,8 @@ const navConfig = [
     items: [
       { title: 'tienda', path: PATH_DASHBOARD.eCommerce.list, icon: ICONS.calendar, },
       { title: 'Clientes', path: PATH_DASHBOARD.eCommerce.clientes, icon: ICONS.kanban, },
+      { title: 'Lista', path: PATH_DASHBOARD.invoice.list, icon: ICONS.banking, },
+
       // {
       //   title: 'mail',
       //   path: PATH_DASHBOARD.mail.root,

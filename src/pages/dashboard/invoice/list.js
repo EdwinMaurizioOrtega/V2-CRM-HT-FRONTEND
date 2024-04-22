@@ -241,7 +241,7 @@ export default function InvoiceListPage() {
                 if (user.ROLE === "admin") {
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/admin?empresa=${user.EMPRESA}&fecha_inicio=${fDateCustom(rangeInputPicker.startDate)}&fecha_fin=${fDateCustom(rangeInputPicker.endDate)}`);
                     data = await response.json();
-                } else if (user.ROLE === "vendedor") {
+                } else if (user.ROLE === "vendedor" || user.ROLE === "infinix") {
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/vendedor?ven=${user.ID}&empresa=${user.EMPRESA}`);
                     data = await response.json();
                 } else if (user.ROLE === "aprobador") {
@@ -487,6 +487,7 @@ export default function InvoiceListPage() {
                     mb: {xs: 3, md: 5},
                 }}
                 >
+                    {user.ROLE === "admin" &&
                     <Stack sx={{typography: 'body2', mt: 3}} alignItems="center">
                         <div>
                             <strong>Inicio: </strong> {fDate(rangeInputPicker.startDate)}
@@ -494,6 +495,7 @@ export default function InvoiceListPage() {
                             <strong>Fin: </strong> {fDate(rangeInputPicker.endDate)}
                         </div>
                     </Stack>
+                    }
                     <Scrollbar>
                         <Stack
                             direction="row"
