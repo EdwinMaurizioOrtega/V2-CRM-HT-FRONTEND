@@ -1,7 +1,5 @@
-import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {Controller, useForm} from 'react-hook-form';
-
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
@@ -10,14 +8,12 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
-import {DatePicker, DateTimePicker} from "@mui/x-date-pickers";
+import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
+import {DateTimePicker} from "@mui/x-date-pickers";
 import {TextField} from "@mui/material";
 import {useAuthContext} from "../../../auth/useAuthContext";
 import axios from "../../../utils/axios";
-
 
 // ----------------------------------------------------------------------
 
@@ -44,9 +40,14 @@ export default function CustomerQuickManagementForm({ currentPartner, open, onCl
 
   console.log("Cliente a gestionar: "+ currentPartner?.ID || '');
 
+  const methods = useForm({
+    // resolver: yupResolver(NewUserSchema),
+    //defaultValues,
+  });
+
   const {
     reset,
-      control,
+    control,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;

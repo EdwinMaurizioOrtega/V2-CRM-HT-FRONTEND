@@ -81,12 +81,12 @@ export default function TrackingPage() {
 
     const [coordinatesCustomers, setCoordinatesCustomers] = useState([]);
 
+    //Coordenadas de los clientes que se guardan al momento de crear el cliente en el SAP
     useEffect(() => {
         async function fetchData() {
                 try {
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/customers/all_coordinates`);
                     if (response.status === 200) {
-
 
                     } else {
 
@@ -126,6 +126,7 @@ export default function TrackingPage() {
 
     }, []);
 
+    //Coordenadas que se encuentran guardadas temporalmente en WebSocketRustLidenar
     useEffect(() => {
         setCoordinates([]);
         socket?.emit("get_coordinates", currentRoomMap)
@@ -204,7 +205,7 @@ export default function TrackingPage() {
 
             });
 
-            console.log("Lista de todos los países:", objectArray);
+            console.log("Lista de todos los países: ", objectArray);
 
             // Establecer los países como datos
             setCountriesData(objectArray);
@@ -226,7 +227,8 @@ export default function TrackingPage() {
         //     width: 400, // Ancho específico en píxeles
         // },
 
-        { field: 'position',
+        {
+            field: 'position',
             headerName: 'Position',
             width: 400,
             renderCell: (params) => {
@@ -241,7 +243,8 @@ export default function TrackingPage() {
             }
         },
 
-        { field: 'position_v2',
+        {
+            field: 'position_v2',
             headerName: 'Position V2',
             width: 400,
             renderCell: (params) => {

@@ -65,16 +65,20 @@ export default function AuthLoginForm() {
     } = methods;
 
     const onSubmit = async (data) => {
+
         try {
 
             var listaAccessOnlyInfinix = [
                 "infinix@infinix.com",
                 "ricardojose.86@hotmail.com",
+                "justhynjonayker@gmail.com",
                 "bernardopanda@hotmail.com",
                 "darwin79uquillas@gmail.com",
-                "alexa_pi02@hotmail.es"
+                "alexa_pi02@hotmail.es",
+                "criseliza_valdez96@hotmail.com",
+                "javi24chimbolema@gmail.com",
+                "imarchan9067@gmail.com"
             ];
-
 
             // Verificar si data.email está en listaAccessOnlyInfinix
             if (listaAccessOnlyInfinix.includes(data.email)) {
