@@ -15,7 +15,7 @@ import {
     DialogTitle,
     DialogContent,
     DialogContentText,
-    DialogActions, Slide
+    DialogActions, Slide, Accordion, AccordionSummary, Typography, AccordionDetails
 } from '@mui/material';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
@@ -43,6 +43,9 @@ import {
 import {fDateCustomDateAndTime} from "../../../utils/formatTime";
 import {useBoolean} from "../../../hooks/use-boolean";
 import CustomerQuickManagementForm from "../../../sections/@dashboard/gestion/customer-quick-management-form";
+import {Block} from "../../../sections/_examples/Block";
+import Iconify from "../../../components/iconify";
+import Stack from "@mui/material/Stack";
 
 // ----------------------------------------------------------------------
 
@@ -84,15 +87,12 @@ export default function TrackingPage() {
     //Coordenadas de los clientes que se guardan al momento de crear el cliente en el SAP
     useEffect(() => {
         async function fetchData() {
-                try {
-                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/customers/all_coordinates`);
-                    if (response.status === 200) {
+            try {
+                const response = await fetch(`${HOST_API_KEY}/hanadb/api/customers/all_coordinates`);
+                if (response.status === 200) {
 
-                    } else {
-
-                    }
                     const data = await response.json();
-                    console.log("coordinatesCustomers: "+JSON.stringify(data.data));
+                    console.log("coordinatesCustomers: " + JSON.stringify(data.data));
 
                     const objectArray = [];
 
@@ -114,10 +114,17 @@ export default function TrackingPage() {
 
                     setCoordinatesCustomers(objectArray);
 
-                } catch (error) {
-                    console.error('Error fetching data:', error);
 
+
+                } else {
+                    console.log("Error error.")
                 }
+
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+
+            }
 
         }
 
@@ -190,18 +197,18 @@ export default function TrackingPage() {
             // Iterar sobre todos los mensajes y obtener las coordenadas de cada uno
             coordinates.forEach((coor, index) => {
                 // Convertir el texto del mensaje a JSON y obtener las coordenadas
-                const {latitud, longitud, date, user_name, user_id} = coor
+                const {latitud, longitud, date, user_name, user_id, company} = coor
 
-                    const country = {
-                        ...staticValues,
-                        // latlng: [latitud, longitud],
-
-                        position: {lat: Number(latitud), lng: Number(longitud)},
-                        date_time: date.toString(),
-                        name: user_name  + " (" +  user_id+ ")",
-                        id: index + 1
-                    };
-                    objectArray.push(country);
+                const country = {
+                    ...staticValues,
+                    // latlng: [latitud, longitud],
+                    company: company,
+                    position: {lat: Number(latitud), lng: Number(longitud)},
+                    date_time: date.toString(),
+                    name: user_name + " (" + user_id + ")",
+                    id: index + 1
+                };
+                objectArray.push(country);
 
             });
 
@@ -222,14 +229,14 @@ export default function TrackingPage() {
             headerName: 'Usuario',
             width: 200, // Ancho específico en píxeles
         },
-        // { field: 'date_time',
-        //     headerName: 'Fecha',
-        //     width: 400, // Ancho específico en píxeles
-        // },
+        { field: 'company',
+            headerName: 'Empresa',
+            width: 100, // Ancho específico en píxeles
+        },
 
         {
             field: 'position',
-            headerName: 'Position',
+            headerName: 'Posición',
             width: 400,
             renderCell: (params) => {
                 return (
@@ -237,23 +244,57 @@ export default function TrackingPage() {
                         variant="contained"
                         onClick={() => handleShowCoordinates(params.row)}
                     >
-                        {fDateCustomDateAndTime(params.row.date_time) }
+                        {fDateCustomDateAndTime(params.row.date_time)}
                     </Button>
                 );
             }
         },
+        //
+        // {
+        //     field: 'position_v2',
+        //     headerName: 'Position V2',
+        //     width: 400,
+        //     renderCell: (params) => {
+        //         return (
+        //             <TransitionsDialogsEd gps_coordinates={params.row}/>
+        //         );
+        //     }
+        // }
+    ]
 
+    const baseColumnsCustomers = [
         {
-            field: 'position_v2',
-            headerName: 'Position V2',
+            field: 'id',
+            hide: true,
+        },
+        {
+            field: 'ID',
+            headerName: 'CI/RUC',
+            width: 200, // Ancho específico en píxeles
+        },
+
+        // {
+        //     field: 'name',
+        //     headerName: 'CLIENTE',
+        //     width: 400, // Ancho específico en píxeles
+        // },
+        {
+            field: 'name',
+            headerName: 'CLIENTE',
             width: 400,
             renderCell: (params) => {
                 return (
-                    <TransitionsDialogsEd gps_coordinates={params.row} />
+                    <Button
+                        variant="contained"
+                        onClick={() => handleShowCoordinates(params.row)}
+                    >
+                        {(params.row.name)}
+                    </Button>
                 );
             }
-        }
+        },
     ]
+
 
     const handleShowCoordinates = (position) => {
         if (position) {
@@ -265,7 +306,6 @@ export default function TrackingPage() {
             console.log("No se ha seleccionado ningún marcador.");
         }
     };
-
 
     return (
         <>
@@ -291,31 +331,69 @@ export default function TrackingPage() {
                     ]}
                 />
 
+
+                <Stack spacing={5}>
+                    <Block title="Logs">
+
+                        <Accordion key="1">
+                            <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill"/>}>
+                                <Typography variant="subtitle1">Usuarios</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+
+                                <CardContent>
+                                    <Box sx={{height: 490}}>
+                                        <DataGrid
+                                            rows={countriesData}
+                                            columns={baseColumns}
+                                            disableRowSelectionOnClick
+                                            slots={{
+                                                toolbar: CustomToolbar,
+                                                noRowsOverlay: () => <EmptyContent title="No Data"/>,
+                                                noResultsOverlay: () => <EmptyContent title="No results found"/>,
+                                            }}
+                                        />
+                                    </Box>
+                                </CardContent>
+                            </AccordionDetails>
+                        </Accordion>
+
+                        <Accordion key="2">
+                            <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill"/>}>
+                                <Typography variant="subtitle1">Clientes</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <CardContent>
+                                    <Box sx={{height: 490}}>
+                                        <DataGrid
+                                            rows={coordinatesCustomers}
+                                            columns={baseColumnsCustomers}
+                                            disableRowSelectionOnClick
+                                            slots={{
+                                                toolbar: CustomToolbar,
+                                                noRowsOverlay: () => <EmptyContent title="No Data"/>,
+                                                noResultsOverlay: () => <EmptyContent title="No results found"/>,
+                                            }}
+                                        />
+                                    </Box>
+                                </CardContent>
+                            </AccordionDetails>
+                        </Accordion>
+
+                    </Block>
+                </Stack>
+
                 <div className="flex">
                     <Grid container spacing={2}>
                         <Grid item xs={12} md={12}>
 
                             <Card>
-                                <CardHeader title="Logs Usuarios" />
 
-                                <CardContent>
-                                    <Box sx={{ height: 490 }}>
-                                    <DataGrid
-                                        rows={countriesData}
-                                        columns={baseColumns}
-                                        disableRowSelectionOnClick
-                                        slots={{
-                                            toolbar: CustomToolbar,
-                                            noRowsOverlay: () => <EmptyContent title="No Data"/>,
-                                            noResultsOverlay: () => <EmptyContent title="No results found"/>,
-                                        }}
-                                    />
-                                    </Box>
-                                </CardContent>
 
-                                <CardHeader title="Clientes + Usuarios" />
+                                <CardHeader title="Clientes + Usuarios"/>
                                 <CardContent>
-                                    <MapComponent markers={countriesData} selectedCoordinates={selectedCoordinates} coordinatesCustomersA={coordinatesCustomers}/>
+                                    <MapComponent markers={countriesData} selectedCoordinates={selectedCoordinates}
+                                                  coordinatesCustomersA={coordinatesCustomers}/>
                                 </CardContent>
                             </Card>
 
@@ -336,9 +414,9 @@ const mapContainerStyle = {
 
 const defaultCuencaCoordinates = {lat: -2.90055, lng: -79.00453}; // Coordenadas de Cuenca, Ecuador
 
-const selectedMarkerIconClientes =  '/ub-2.png';
-const selectedMarkerIconClienteSelected =  '/ub-3.png';
-const selectedMarkerIconLocal =  '/ub-1.png';
+const selectedMarkerIconClientes = '/ub-2.png';
+const selectedMarkerIconClienteSelected = '/ub-3.png';
+const selectedMarkerIconLocal = '/ub-1.png';
 
 function MapComponent({markers, selectedCoordinates, coordinatesCustomersA}) {
 
@@ -368,7 +446,7 @@ function MapComponent({markers, selectedCoordinates, coordinatesCustomersA}) {
 
 
     const handleGestionesAnteriores = (data) => {
-        console.log("Gestiones anteriores: "+ JSON.stringify( data));
+        console.log("Gestiones anteriores: " + JSON.stringify(data));
     };
 
     const handleViewRow = useCallback(
@@ -424,9 +502,9 @@ function MapComponent({markers, selectedCoordinates, coordinatesCustomersA}) {
                         >
                             Registrar Gestión.
                         </Button>
-                        <Button variant="contained" onClick={() => handleGestionesAnteriores(selectedMarker)}>
-                            Gestiones Anteriores.
-                        </Button>
+                        {/*<Button variant="contained" onClick={() => handleGestionesAnteriores(selectedMarker)}>*/}
+                        {/*    Gestiones Anteriores.*/}
+                        {/*</Button>*/}
                     </div>
                 </InfoWindow>
             )}
@@ -529,7 +607,10 @@ function CustomToolbar() {
 
 const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
-function TransitionsDialogsEd() {
+function TransitionsDialogsEd(gps_coordinates) {
+
+    console.log("gps_coordinates: " + JSON.stringify(gps_coordinates));
+
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
@@ -542,6 +623,7 @@ function TransitionsDialogsEd() {
 
     return (
         <div>
+
             <Button variant="outlined" color="success" onClick={handleClickOpen}>
                 GPS
             </Button>
@@ -554,22 +636,18 @@ function TransitionsDialogsEd() {
                 aria-labelledby="alert-dialog-slide-title"
                 aria-describedby="alert-dialog-slide-description"
             >
-                <DialogTitle id="alert-dialog-slide-title">{`Use Google's location service?`}</DialogTitle>
+                <DialogTitle id="alert-dialog-slide-title">{`Mapa individual`}</DialogTitle>
 
                 <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description">
-                        Let Google help apps determine location. This means sending anonymous location data to
-                        Google, even when no apps are running.
+                        Hola hola hola hola hola hola hola hola hola hola hola hola hola hola hola hola hola hola hola
+                        hola hola
                     </DialogContentText>
                 </DialogContent>
 
                 <DialogActions>
                     <Button color="inherit" onClick={handleClose}>
-                        Disagree
-                    </Button>
-
-                    <Button variant="contained" onClick={handleClose}>
-                        Agree
+                        Cerrar
                     </Button>
                 </DialogActions>
             </Dialog>

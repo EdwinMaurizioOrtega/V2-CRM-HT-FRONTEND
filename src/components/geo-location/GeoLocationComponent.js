@@ -23,6 +23,7 @@ const GeoLocationComponent = ({ user }) => {
                             user_name: user.DISPLAYNAME,
                             user_id: Number(user.ID),
                             room_map: 'Lidenar',
+                            company: user.COMPANY
                         });
                     },
                     (error) => {
