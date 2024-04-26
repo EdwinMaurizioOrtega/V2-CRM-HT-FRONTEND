@@ -419,7 +419,7 @@ export default function CatalogoForm() {
 
 
                 <Box sx={{height: 720}}>
-                    {dataCatalog.length > 0 && <ExcelDownload data={dataCatalog} client={dataCliente}/>}
+                    {dataCatalog.length > 0 && dataCliente && <ExcelDownload data={dataCatalog} client={dataCliente}/>}
                     {/* <DataGrid */}
                     {/*     rows={dataCatalog} */}
                     {/*     columns={TABLE_HEAD} */}
@@ -466,7 +466,9 @@ function ExcelDownload({data, client}) {
 
     const {user} = useAuthContext();
 
-    console.log(client.Cliente);
+    console.log("data: "+data);
+    console.log("client: "+JSON.stringify( client));
+
     const handleExportToExcel = () => {
         const wb = XLSX.utils.book_new();
 
@@ -549,8 +551,8 @@ function ExcelDownload({data, client}) {
             password: 'miPassword',    // Establecer la contraseña
         };
 
-        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-        XLSX.writeFile(wb, 'Lidenar.xlsx');
+        XLSX.utils.book_append_sheet(wb, ws, `${client.Cliente}`);
+        XLSX.writeFile(wb, `${client.Cliente}.xlsx`);
     };
 
     return (
