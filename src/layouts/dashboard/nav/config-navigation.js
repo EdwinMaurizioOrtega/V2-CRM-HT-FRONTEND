@@ -171,6 +171,7 @@ const navConfig = [
     items: [
       { title: 'tienda', path: PATH_DASHBOARD.eCommerce.list },
       { title: 'ordenes', path: PATH_DASHBOARD.invoice.list },
+      { title: 'Catálogo', path: PATH_DASHBOARD.eCommerce.catalogo },
 
     ],
   },
