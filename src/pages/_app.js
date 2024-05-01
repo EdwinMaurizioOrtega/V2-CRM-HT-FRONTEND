@@ -56,7 +56,7 @@ import {AuthProvider} from '../auth/JwtContext';
 import {useEffect} from "react";
 import {Analytics} from "@vercel/analytics/next";
 import {SpeedInsights} from '@vercel/speed-insights/next';
-import OneSignal from "react-onesignal";
+import {useRouter} from "next/router";
 // import { AuthProvider } from '../auth/Auth0Context';
 // import { AuthProvider } from '../auth/FirebaseContext';
 // import { AuthProvider } from '../auth/AwsCognitoContext';
@@ -71,13 +71,8 @@ MyApp.propTypes = {
     emotionCache: PropTypes.object,
 };
 
-export default function MyApp(props) {
 
-    useEffect(() => {
-        // Inicializar OneSignal
-        OneSignal.init({appId: 'ab877dfc-0d29-410b-a945-53ceeaacb617', allowLocalhostAsSecureOrigin: true});
-        OneSignal.Slidedown.promptPush();
-    }, []);
+export default function MyApp(props) {
 
     //Registrar el Service worker
     // useEffect(() => {
