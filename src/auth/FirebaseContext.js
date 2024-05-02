@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import { createContext, useEffect, useReducer, useCallback, useMemo } from 'react';
 import { initializeApp } from 'firebase/app';
+import { getAnalytics } from 'firebase/analytics';
+import { getMessaging } from 'firebase/messaging';
 import {
   getAuth,
   signOut,
@@ -50,6 +52,10 @@ export const AuthContext = createContext(null);
 
 const firebaseApp = initializeApp(FIREBASE_API);
 
+const analytics = getAnalytics(firebaseApp);
+
+export  const  messaging = getMessaging(firebaseApp);
+
 const AUTH = getAuth(firebaseApp);
 
 const DB = getFirestore(firebaseApp);
@@ -65,6 +71,9 @@ AuthProvider.propTypes = {
 };
 
 export function AuthProvider({ children }) {
+
+  console.log("AUTH: "+ AUTH);
+
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const initialize = useCallback(() => {

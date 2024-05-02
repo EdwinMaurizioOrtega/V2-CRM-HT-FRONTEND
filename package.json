@@ -52,7 +52,7 @@
     "axios": "^1.2.3",
     "change-case": "^4.1.2",
     "date-fns": "^2.30.0",
-    "firebase": "^9.23.0",
+    "firebase": "^9.8.4",
     "framer-motion": "^9.0.4",
     "highlight.js": "^11.7.0",
     "i18next": "^22.4.9",
