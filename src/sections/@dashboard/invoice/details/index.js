@@ -102,7 +102,7 @@ function insertLineBreaks(text, maxLength) {
 
     // Agregar la última línea
     result += currentLine.trim();
-console.log(`Última línea: ${result}`)
+    console.log(`Última línea: ${result}`)
     return result;
 }
 
@@ -952,7 +952,7 @@ export default function InvoiceDetails({invoice}) {
                                             //Alphacell
                                             top100FilmsAlphacell
                                         )
-                                }
+                                    }
                                     getOptionLabel={(option) => option.title}
                                     onChange={(event, value) => {
                                         handleChangeWarehouse(event, value);
@@ -1035,9 +1035,18 @@ export default function InvoiceDetails({invoice}) {
                                         <TableCell align="left">
                                             <Box sx={{maxWidth: 560}}>
                                                 <Typography
-                                                    variant="subtitle2">{row.NOMBRE !== null ? row.NOMBRE : 'VALOR DEL ENVIO'}</Typography>
+                                                    variant="subtitle2"
+                                                    sx={{
+                                                        backgroundColor: allowedValues.includes(row.PRODUCTO_ID) ? 'pink' : 'inherit'
+                                                    }}>
+                                                    {row.NOMBRE !== null ? row.NOMBRE : 'VALOR DEL ENVIO'}
+                                                </Typography>
 
-                                                <Typography variant="body2" sx={{color: 'text.secondary', backgroundColor: row.PRODUCTO_ID === '07.62.02' || row.PRODUCTO_ID === '07.62.01' ? 'yellow' : 'inherit'}} noWrap>
+                                                <Typography variant="body2" sx={{
+                                                    color: 'text.secondary',
+                                                    backgroundColor: row.PRODUCTO_ID === '07.62.02'
+                                                    || row.PRODUCTO_ID === '07.62.01' ? 'yellow' : 'inherit'
+                                                }} noWrap>
                                                     {row.PRODUCTO_ID}
                                                 </Typography>
                                             </Box>
@@ -1050,7 +1059,7 @@ export default function InvoiceDetails({invoice}) {
                                         {
                                             user.ROLE === 'aprobador' ? (
                                                 <TableCell align="left"
-                                                           style={{ backgroundColor: Number(row.DISPONIBLE_POR_BODEGA) <= 0 ? 'rgba(255, 0, 0, 0.08)' : 'rgba(0, 171, 85, 0.08)' }}>
+                                                           style={{backgroundColor: Number(row.DISPONIBLE_POR_BODEGA) <= 0 ? 'rgba(255, 0, 0, 0.08)' : 'rgba(0, 171, 85, 0.08)'}}>
 
                                                     {Number(row.DISPONIBLE_POR_BODEGA)}</TableCell>
 
@@ -1502,3 +1511,134 @@ export const boxes = [
     {title: '8', id: 8},
     {title: '9', id: 9}
 ]
+
+
+// Lista de valores permitidos
+const allowedValues = [
+    '10.02.152',
+    '10.02.109',
+    '10.02.131',
+    '10.02.143',
+    '10.02.153',
+    '12.02.14',
+    '12.02.380',
+    '10.02.106',
+    '10.02.131',
+    '10.43.51',
+    '10.43.52',
+    '13.02.17',
+    '10.43.87',
+    '10.22.19',
+    '10.43.65',
+    '15.02.61',
+    '15.02.67',
+    '10.02.111',
+    '10.02.143',
+    '10.02.144',
+    '10.02.156',
+    '10.02.158',
+    '10.02.151',
+    '10.02.143',
+    '10.02.144',
+    '10.02.158',
+    '10.02.112',
+    '10.02.137',
+    '10.02.144',
+    '10.02.149',
+    '10.02.154',
+    '13.02.21',
+    '10.02.151',
+    '10.02.144',
+    '10.02.153',
+    '12.02.14',
+    '12.02.377',
+    '10.02.152',
+    '10.43.68',
+    '10.43.69',
+    '10.43.75',
+    '10.43.83',
+    '07.62.02',
+    '10.64.03',
+    '10.64.04',
+    '10.02.151',
+    '10.02.152',
+    '10.02.153',
+    '10.02.154',
+    '10.02.156',
+    '10.04.01',
+    '10.02.145',
+    '10.02.146',
+    '10.02.154',
+    '10.02.156',
+    '15.02.63',
+    '15.02.56',
+    '10.02.151',
+    '10.02.152',
+    '10.43.71',
+    '10.43.72',
+    '10.43.73',
+    '10.43.76',
+    '10.43.77',
+    '10.43.79',
+    '10.43.80',
+    '10.43.81',
+    '10.43.83',
+    '10.43.84',
+    '10.43.87',
+    '10.43.88',
+    '10.43.89',
+    '10.43.90',
+    '10.43.91',
+    '10.43.92',
+    '13.02.20',
+    '07.62.01',
+    '07.62.02',
+    '10.02.134',
+    '10.02.143',
+    '10.02.144',
+    '10.02.145',
+    '10.02.146',
+    '10.02.149',
+    '10.02.153',
+    '10.02.154',
+    '10.02.156',
+    '10.02.158',
+    '10.04.04',
+    '10.19.128',
+    '10.19.129',
+    '10.19.133',
+    '10.19.143',
+    '10.19.144',
+    '10.19.146',
+    '10.19.147',
+    '10.19.148',
+    '10.19.149',
+    '10.19.150',
+    '10.19.152',
+    '10.19.153',
+    '10.19.154',
+    '10.19.155',
+    '10.19.158',
+    '10.19.159',
+    '10.19.160',
+    '10.19.161',
+    '10.19.162',
+    '10.22.19',
+    '10.22.20',
+    '10.22.21',
+    '10.43.78',
+    '10.43.82',
+    '10.43.85',
+    '10.64.01',
+    '10.64.02',
+    '10.64.03',
+    '10.64.04',
+    '13.02.15',
+    '13.02.17',
+    '13.02.21',
+    '13.02.22',
+    '13.02.23',
+    '10.02.134',
+    '10.02.135',
+    '10.02.133',
+];
