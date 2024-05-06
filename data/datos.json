@@ -1,0 +1,506 @@
+[
+  {
+    "CODIGO": "10.02.152",
+    "BODEGA": 1
+  },
+  {
+    "CODIGO": "10.02.109",
+    "BODEGA": 1
+  },
+  {
+    "CODIGO": "10.02.131",
+    "BODEGA": 1
+  },
+  {
+    "CODIGO": "10.02.143",
+    "BODEGA": 1
+  },
+  {
+    "CODIGO": "10.02.153",
+    "BODEGA": 1
+  },
+  {
+    "CODIGO": "12.02.14",
+    "BODEGA": 1
+  },
+  {
+    "CODIGO": "12.02.380",
+    "BODEGA": 1
+  },
+  {
+    "CODIGO": "10.02.106",
+    "BODEGA": 2
+  },
+  {
+    "CODIGO": "10.02.131",
+    "BODEGA": 2
+  },
+  {
+    "CODIGO": "10.43.51",
+    "BODEGA": 2
+  },
+  {
+    "CODIGO": "10.43.52",
+    "BODEGA": 2
+  },
+  {
+    "CODIGO": "13.02.17",
+    "BODEGA": 2
+  },
+  {
+    "CODIGO": "10.43.87",
+    "BODEGA": 3
+  },
+  {
+    "CODIGO": "10.22.19",
+    "BODEGA": 3
+  },
+  {
+    "CODIGO": "10.43.65",
+    "BODEGA": 3
+  },
+  {
+    "CODIGO": "15.02.61",
+    "BODEGA": 3
+  },
+  {
+    "CODIGO": "15.02.67",
+    "BODEGA": 3
+  },
+  {
+    "CODIGO": "10.02.111",
+    "BODEGA": 6
+  },
+  {
+    "CODIGO": "10.02.143",
+    "BODEGA": 10
+  },
+  {
+    "CODIGO": "10.02.144",
+    "BODEGA": 10
+  },
+  {
+    "CODIGO": "10.02.156",
+    "BODEGA": 10
+  },
+  {
+    "CODIGO": "10.02.158",
+    "BODEGA": 10
+  },
+  {
+    "CODIGO": "10.02.151",
+    "BODEGA": 11
+  },
+  {
+    "CODIGO": "10.02.143",
+    "BODEGA": 11
+  },
+  {
+    "CODIGO": "10.02.144",
+    "BODEGA": 11
+  },
+  {
+    "CODIGO": "10.02.158",
+    "BODEGA": 11
+  },
+  {
+    "CODIGO": "10.02.112",
+    "BODEGA": 16
+  },
+  {
+    "CODIGO": "10.02.137",
+    "BODEGA": 16
+  },
+  {
+    "CODIGO": "10.02.144",
+    "BODEGA": 16
+  },
+  {
+    "CODIGO": "10.02.149",
+    "BODEGA": 16
+  },
+  {
+    "CODIGO": "10.02.154",
+    "BODEGA": 16
+  },
+  {
+    "CODIGO": "13.02.21",
+    "BODEGA": 16
+  },
+  {
+    "CODIGO": "10.02.151",
+    "BODEGA": 17
+  },
+  {
+    "CODIGO": "10.02.144",
+    "BODEGA": 17
+  },
+  {
+    "CODIGO": "10.02.153",
+    "BODEGA": 17
+  },
+  {
+    "CODIGO": "12.02.14",
+    "BODEGA": 17
+  },
+  {
+    "CODIGO": "12.02.377",
+    "BODEGA": 17
+  },
+  {
+    "CODIGO": "10.02.152",
+    "BODEGA": 19
+  },
+  {
+    "CODIGO": "10.43.68",
+    "BODEGA": 19
+  },
+  {
+    "CODIGO": "10.43.69",
+    "BODEGA": 19
+  },
+  {
+    "CODIGO": "10.43.75",
+    "BODEGA": 19
+  },
+  {
+    "CODIGO": "10.43.83",
+    "BODEGA": 19
+  },
+  {
+    "CODIGO": "07.62.02",
+    "BODEGA": 19
+  },
+  {
+    "CODIGO": "10.64.03",
+    "BODEGA": 19
+  },
+  {
+    "CODIGO": "10.64.04",
+    "BODEGA": 19
+  },
+  {
+    "CODIGO": "10.02.151",
+    "BODEGA": 20
+  },
+  {
+    "CODIGO": "10.02.152",
+    "BODEGA": 20
+  },
+  {
+    "CODIGO": "10.02.153",
+    "BODEGA": 20
+  },
+  {
+    "CODIGO": "10.02.154",
+    "BODEGA": 20
+  },
+  {
+    "CODIGO": "10.02.156",
+    "BODEGA": 20
+  },
+  {
+    "CODIGO": "10.04.01",
+    "BODEGA": 21
+  },
+  {
+    "CODIGO": "10.02.145",
+    "BODEGA": 22
+  },
+  {
+    "CODIGO": "10.02.146",
+    "BODEGA": 22
+  },
+  {
+    "CODIGO": "10.02.154",
+    "BODEGA": 22
+  },
+  {
+    "CODIGO": "10.02.156",
+    "BODEGA": 22
+  },
+  {
+    "CODIGO": "15.02.63",
+    "BODEGA": 22
+  },
+  {
+    "CODIGO": "15.02.56",
+    "BODEGA": 24
+  },
+  {
+    "CODIGO": "10.02.151",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.02.152",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.43.71",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.43.72",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.43.73",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.43.76",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.43.77",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.43.79",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.43.80",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.43.81",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.43.83",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.43.84",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.43.87",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.43.88",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.43.89",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.43.90",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.43.91",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.43.92",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "13.02.20",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "07.62.01",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "07.62.02",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.02.134",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.02.143",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.02.144",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.02.145",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.02.146",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.02.149",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.02.153",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.02.154",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.02.156",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.02.158",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.04.04",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.19.128",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.19.129",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.19.133",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.19.143",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.19.144",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.19.146",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.19.147",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.19.148",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.19.149",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.19.150",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.19.152",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.19.153",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.19.154",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.19.155",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.19.158",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.19.159",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.19.160",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.19.161",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.19.162",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.22.19",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.22.20",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.22.21",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.43.78",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.43.82",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.43.85",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.64.01",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.64.02",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.64.03",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.64.04",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "13.02.15",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "13.02.17",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "13.02.21",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "13.02.22",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "13.02.23",
+    "BODEGA": 30
+  },
+  {
+    "CODIGO": "10.02.134",
+    "BODEGA": 31
+  },
+  {
+    "CODIGO": "10.02.135",
+    "BODEGA": 31
+  },
+  {
+    "CODIGO": "10.02.133",
+    "BODEGA": 35
+  }
+]
