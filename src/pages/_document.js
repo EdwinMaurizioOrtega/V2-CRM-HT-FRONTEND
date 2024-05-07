@@ -38,11 +38,26 @@ export default class MyDocument extends Document {
           />
           <meta name="keywords" content="react,material,kit,application,dashboard,admin,template" />
           <meta name="author" content="HT Kit" />
+
+          <script
+              type="text/javascript"
+              dangerouslySetInnerHTML={{
+                __html: `
+              (function(d, t) {
+                var g = d.createElement(t),
+                  s = d.getElementsByTagName(t)[0];
+                g.src = "https://cdn.pushalert.co/integrate_358fa9b3ddf8a1db671c08987c4d6205.js";
+                s.parentNode.insertBefore(g, s);
+              }(document, "script"));
+            `,
+              }}
+          />
+
         </Head>
 
         <body>
-          <Main />
-          <NextScript />
+        <Main/>
+        <NextScript/>
         </body>
       </Html>
     );
@@ -56,11 +71,11 @@ MyDocument.getInitialProps = async (ctx) => {
 
   const cache = createEmotionCache();
 
-  const { extractCriticalToChunks } = createEmotionServer(cache);
+  const {extractCriticalToChunks} = createEmotionServer(cache);
 
   ctx.renderPage = () =>
-    originalRenderPage({
-      enhanceApp: (App) =>
+      originalRenderPage({
+        enhanceApp: (App) =>
         function EnhanceApp(props) {
           return <App emotionCache={cache} {...props} />;
         },
