@@ -231,12 +231,12 @@ const PAYMENT_OPTIONS = [
         description: 'CRÉDITO 90 DÍAS.',
         icons: [],
     },
-    // {
-    //     value: 11,
-    //     title: '30-60-90-120',
-    //     description: 'CRÉDITO 30-60-90-120 DÍAS.',
-    //     icons: [],
-    // },
+    {
+        value: 11,
+        title: '30-60-90-120',
+        description: 'CRÉDITO 30-60-90-120 DÍAS.',
+        icons: [],
+    },
 ];
 
 const CARDS_OPTIONS = [
