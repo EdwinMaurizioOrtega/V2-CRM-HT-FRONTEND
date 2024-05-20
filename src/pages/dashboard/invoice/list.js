@@ -252,6 +252,18 @@ export default function InvoiceListPage() {
                     const bodegaSAP = user.WAREHOUSE;
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/bodega?bod=${bodegaSAP}&empresa=${user.EMPRESA}`);
                     data = await response.json();
+                } else if (user.ROLE === "0") {
+                    console.log("Tomebamba: Vendedor")
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/vendedor?ven=${user.ID}&empresa=0992537442001`);
+                    data = await response.json();
+                } else if (user.ROLE === "2") {
+                    console.log("Tomebamba: Ejecutivo Soporte")
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/tomebamba_credit?empresa=0992537442001&status=10`);
+                    data = await response.json();
+                } else if (user.ROLE === "1") {
+                    console.log("Tomebamba: Compras - Carlos Mendez")
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/tomebamba_credit?empresa=0992537442001&status=13, 6, 0, 1`);
+                    data = await response.json();
                 }
 
                 setOrders(data.orders);

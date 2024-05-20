@@ -132,15 +132,17 @@ export default  function EcommerceProductDetailsPage() {
                 try {
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/products/price_list_product?name=${name}&idUser=${user.ID}&empresa=${user.EMPRESA}`);
                     if (response.status === 200) {
+                        const data = await response.json();
+                        setPricelistproduct(data.data);
+                        console.log("pricelistproduct: "+JSON.stringify(pricelistproduct));
+
                         // Eliminar el estado de carga aquí, ya que la respuesta es exitosa (código 200).
                         setLoading(false);
                     } else {
                         // Mantener el estado de carga aquí, ya que la respuesta no fue exitosa (código diferente de 200).
                         setLoading(true);
                     }
-                    const data = await response.json();
-                    setPricelistproduct(data.data);
-                    console.log(pricelistproduct);
+
                 } catch (error) {
                     console.error('Error fetching data:', error);
                     setPricelistproduct([]);

@@ -38,7 +38,13 @@ import {PATH_DASHBOARD} from "../../../routes/paths";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
 import Head from "next/head";
 import * as Yup from "yup";
-import {DataGrid, GridToolbar} from "@mui/x-data-grid";
+import {
+    DataGrid,
+    GridToolbar,
+    GridToolbarColumnsButton,
+    GridToolbarContainer, GridToolbarDensitySelector, GridToolbarExport, GridToolbarFilterButton,
+    GridToolbarQuickFilter
+} from "@mui/x-data-grid";
 import * as XLSX from "xlsx";
 import SearchNotFound from "../../../components/search-not-found";
 import {CustomTextField} from "../../../components/custom-input";
@@ -52,6 +58,8 @@ import {useSnackbar} from "../../../components/snackbar";
 import {DOCUMENTACION, PAYMENT_OPTIONS_V2, TIPO_CREDITO, TIPO_PRECIO} from "../../../utils/constants";
 import {io} from "socket.io-client";
 import {GoogleMap, InfoWindow, Marker, useJsApiLoader} from "@react-google-maps/api";
+import EmptyContent from "../../../components/empty-content";
+import {HOST_API_KEY} from "../../../config-global";
 
 // ----------------------------------------------------------------------
 
@@ -65,151 +73,48 @@ export default function ConsultClientForm() {
 
     const {user} = useAuthContext();
 
-    // const [messages, setMessages] = useState([]);
-    // const [coordinates, setCoordinates] = useState([])
-    //
-    // const [input, setInput] = useState("");
-    // const [currentRoom, setCurrentRoom] = useState("General");
-    // const [currentRoomMap, setCurrentRoomMap] = useState("Lidenar");
-    // const [name, setName] = useState(null);
-    // const [socket, setSocket] = useState(null);
-    // const [connected, setConnected] = useState(false);
-    // const onceRef = useRef(false);
-    //
-    // const [countriesData, setCountriesData] = useState([]);
-    //
-    // const listRef = useRef(null);
-    //
-    // useLayoutEffect(() => {
-    //     // Scroll hasta abajo
-    //     if (listRef.current) {
-    //         listRef.current.scrollTop = listRef.current.scrollHeight;
-    //     }
-    // }, [messages]); // Ajusta el scroll cuando cambien los mensajes
 
-    const methods = useForm({
-        //resolver: yupResolver(FormSchemaAAAAAA),
-        //defaultValues,
-    });
+    const baseColumns = [
+        {
+            field: 'id',
+            hide: true,
+        },
 
-    const {
-        watch,
-        reset,
-        control,
-        setValue,
-        handleSubmit,
-        formState: {isSubmitting},
-    } = methods;
-
-    const methods_second_form = useForm({
-        //resolver: yupResolver(FormSchemaAAAAAA),
-        //defaultValues,
-    });
-
-    const [dataCliente, setDataCliente] = useState(null);
-
-    const onSubmit = async (data) => {
-
-        console.log('DATA', data);
-        console.log('Usuario: ', user.ID);
-
-        const ci_ruc = data.ci_ruc || ""; // Si data.ci_ruc es undefined, asigna una cadena vacía
-
-
-        if (ci_ruc.length == 10 || ci_ruc.length == 13) {
-
-            reset();
-
-            // Crear un cliente.
-            const response = await axios.post('/hanadb/api/customers/BusinessPartners/ByRucCI', {
-                CI_RUC: data.ci_ruc,
-                USUARIO_ID: user.ID,
-
-            });
-
-            if (response.status === 200) {
-                console.log("DATA: " + JSON.stringify(response.data.data));
-                // La solicitud PUT se realizó correctamente
-                setDataCliente(response.data.data);
-            } else {
-                // La solicitud POST no se realizó correctamente
-                console.error('Error en la solicitud POST:', response.status);
-            }
-
-        } else {
-            onSnackbarAction('Número de caracteres invalido.', 'default', {
-                vertical: 'top',
-                horizontal: 'center',
-            });
-        }
-    }
-
-    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
-    const onSnackbarAction = (data, color, anchor) => {
-        enqueueSnackbar(`${data}`, {
-            variant: color,
-            anchorOrigin: anchor,
-            action: (key) => (
-                <>
-                    <Button size="small" color="inherit" onClick={() => closeSnackbar(key)}>
-                        Cerrar
+        {
+            field: 'COMPANY',
+            headerName: 'EMPRESA',
+            width: 150,
+            renderCell: (params) => {
+                return (
+                    <Button
+                        variant="contained"
+                        onClick={() => handleShowCoordinates(params.row)}
+                    >
+                        {(params.row.COMPANY)}
                     </Button>
-                </>
-            ),
-        });
-    };
-
-    const [searchProducts, setSearchProducts] = useState('');
-
-    const [searchResults, setSearchResults] = useState([]);
-    const handleChangeSearch = async (value) => {
-        try {
-            setSearchProducts(value);
-            if (value) {
-                const response = await axios.get('/hanadb/api/customers/search', {
-                    params: {query: value, empresa: user.EMPRESA},
-                });
-
-                setSearchResults(response.data.results);
+                );
             }
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const onCreateBilling = async (value) => {
-        console.log("CLIENTE SELECCIONADO: " + JSON.stringify(value));
-        setDataCliente(value);
-    }
-
-
-    const handleKeyUp = (event) => {
-        if (event.key === 'Enter') {
-            handleGotoProduct(searchProducts);
-        }
-    };
-
-    const handleGotoProduct = (name) => {
-        // push(PATH_DASHBOARD.eCommerce.view(paramCase(name)));
-        // push(PATH_DASHBOARD.eCommerce.view(name));
-
-        console.log(name);
-    };
+        },
+        { field: 'Cliente',
+            headerName: 'CLIENTE',
+            width: 500, // Ancho específico en píxeles
+        },
+        { field: 'ID',
+            headerName: 'CI/RUC',
+            width: 150, // Ancho específico en píxeles
+        },
 
 
-    const onSubmitSend = async (data) => {
 
-        console.log('DATA', data);
-        console.log('Usuario: ', user.ID);
+    ]
 
-
-    }
+    const [dataClienteAll, setDataClienteAll] = useState([]);
+    const [dataCliente, setDataCliente] = useState(null);
 
     function nameFormaPago(pay) {
         const payActual = PAYMENT_OPTIONS_V2.find(option => option.id == pay);
         return payActual ? payActual.title : "Pago no definido.";
     }
-
 
     function documentacion(pay) {
         const payActual = DOCUMENTACION.find(option => option.id == pay);
@@ -226,63 +131,42 @@ export default function ConsultClientForm() {
         return payActual ? payActual.title : "Pago no definido.";
     }
 
+    useEffect(() => {
+        const fetchData = async () => {
+
+            try {
+                const response = await axios.get(`${HOST_API_KEY}/hanadb/api/customers/all_customers_of_companys`);
+
+                if (response.status === 200) {
+                    console.log("DATA: " + JSON.stringify(response.data.data));
+                    // La solicitud PUT se realizó correctamente
+                    setDataClienteAll(response.data.data);
+                } else {
+                    // La solicitud POST no se realizó correctamente
+                    console.error('Error en la solicitud POST:', response.status);
+                }
 
 
+            } catch (error) {
+                console.error('Error al obtener los datos:', error);
+            }
+        };
 
-    // useEffect(() => {
-    //     setMessages([]);
-    //     socket?.emit("join", currentRoom);
-    // }, [currentRoom]);
-    //
-    // useEffect(() => {
-    //     if (onceRef.current) {
-    //         return;
-    //     }
-    //
-    //     onceRef.current = true;
-    //
-    //     //const socket = io("ws://localhost:80");
-    //     const socket = io("wss://ss.lidenar.com");
-    //     setSocket(socket);
-    //
-    //     // CHAT
-    //
-    //     socket.on("connect", () => {
-    //         console.log("Connected to socket server");
-    //         setName(`anon-${socket.id}`);
-    //         setConnected(true);
-    //         console.log("joining room", currentRoom);
-    //
-    //         socket.emit("join", currentRoom);
-    //     });
-    //
-    //     socket.on("message", (msg) => {
-    //         console.log("Message received AAA", msg);
-    //         msg.date = new Date(msg.date);
-    //         setMessages((messages) => [...messages, msg]);
-    //     });
-    //
-    //     socket.on("messages", (msgs) => {
-    //         console.log("Messages received BBB", msgs);
-    //         let messages = msgs.messages.map((msg) => {
-    //             msg.date = new Date(msg.date);
-    //             return msg;
-    //         });
-    //         setMessages(messages);
-    //
-    //     });
-    //
-    // }, []);
-    //
-    // const sendMessage = (e) => {
-    //     e.preventDefault();
-    //     socket?.emit("message", {
-    //         text: input,
-    //         room: currentRoom,
-    //         user_name: user.DISPLAYNAME,
-    //     });
-    //     setInput("");
-    // };
+        fetchData();
+    }, []);
+
+    const handleShowCoordinates = (position) => {
+        if (position) {
+            console.log("Coordenadas seleccionadas:", position);
+            // Puedes hacer algo con las coordenadas seleccionadas aquí, si es necesario
+            setDataCliente(position);
+
+        } else {
+            console.log("No se ha seleccionado ningún marcador.");
+        }
+    };
+
+
 
     return (
         <>
@@ -306,129 +190,142 @@ export default function ConsultClientForm() {
                     ]}
                 />
 
-                {user.ROLE != 'infinix' ? (
-                    <Grid container spacing={5}>
-                        <Grid item xs={12} md={6}>
-                            <Stack spacing={2}>
-                                <Block label="Cliente Razon Social">
-                                    <Autocomplete
-                                        size="small"
-                                        autoHighlight
-                                        popupIcon={null}
-                                        options={searchResults}
-                                        onInputChange={(event, value) => handleChangeSearch(value)}
-                                        getOptionLabel={(product) => product.Cliente}
-                                        noOptionsText={<SearchNotFound query={searchProducts}/>}
-                                        isOptionEqualToValue={(option, value) => option.ID === value.ID}
-                                        componentsProps={{
-                                            paper: {
-                                                sx: {
-                                                    '& .MuiAutocomplete-option': {
-                                                        px: `8px !important`,
-                                                    },
-                                                },
-                                            },
-                                        }}
-                                        renderInput={(params) => (
-                                            <CustomTextField
-                                                {...params}
 
-                                                placeholder="Buscar..."
-                                                onKeyUp={handleKeyUp}
-                                                InputProps={{
-                                                    ...params.InputProps,
-                                                    startAdornment: (
-                                                        <InputAdornment position="start">
-                                                            <Iconify icon="eva:search-fill"
-                                                                     sx={{ml: 1, color: 'text.disabled'}}/>
-                                                        </InputAdornment>
-                                                    ),
-                                                }}
-                                            />
-                                        )}
-                                        renderOption={(props, product, {inputValue}) => {
-                                            const {ID, Cliente} = product;
-                                            const matches = match(Cliente, inputValue);
-                                            const parts = parse(Cliente, matches);
+                <Box sx={{height: 280}}>
+                <DataGrid
+                    rows={dataClienteAll}
+                    columns={baseColumns}
+                    slots={{
+                        toolbar: CustomToolbar,
+                        noRowsOverlay: () => <EmptyContent title="No Data"/>,
+                        noResultsOverlay: () => <EmptyContent title="No results found"/>,
+                    }}
+                />
+                </Box>
 
-                                            return (
-                                                <li {...props}>
+                {/*{user.ROLE != 'infinix' ? (*/}
+                {/*    <Grid container spacing={5}>*/}
+                {/*        <Grid item xs={12} md={6}>*/}
+                {/*            <Stack spacing={2}>*/}
+                {/*                <Block label="Cliente Razon Social">*/}
+                {/*                    <Autocomplete*/}
+                {/*                        size="small"*/}
+                {/*                        autoHighlight*/}
+                {/*                        popupIcon={null}*/}
+                {/*                        options={searchResults}*/}
+                {/*                        onInputChange={(event, value) => handleChangeSearch(value)}*/}
+                {/*                        getOptionLabel={(product) => product.Cliente}*/}
+                {/*                        noOptionsText={<SearchNotFound query={searchProducts}/>}*/}
+                {/*                        isOptionEqualToValue={(option, value) => option.ID === value.ID}*/}
+                {/*                        componentsProps={{*/}
+                {/*                            paper: {*/}
+                {/*                                sx: {*/}
+                {/*                                    '& .MuiAutocomplete-option': {*/}
+                {/*                                        px: `8px !important`,*/}
+                {/*                                    },*/}
+                {/*                                },*/}
+                {/*                            },*/}
+                {/*                        }}*/}
+                {/*                        renderInput={(params) => (*/}
+                {/*                            <CustomTextField*/}
+                {/*                                {...params}*/}
 
+                {/*                                placeholder="Buscar..."*/}
+                {/*                                onKeyUp={handleKeyUp}*/}
+                {/*                                InputProps={{*/}
+                {/*                                    ...params.InputProps,*/}
+                {/*                                    startAdornment: (*/}
+                {/*                                        <InputAdornment position="start">*/}
+                {/*                                            <Iconify icon="eva:search-fill"*/}
+                {/*                                                     sx={{ml: 1, color: 'text.disabled'}}/>*/}
+                {/*                                        </InputAdornment>*/}
+                {/*                                    ),*/}
+                {/*                                }}*/}
+                {/*                            />*/}
+                {/*                        )}*/}
+                {/*                        renderOption={(props, product, {inputValue}) => {*/}
+                {/*                            const {ID, Cliente} = product;*/}
+                {/*                            const matches = match(Cliente, inputValue);*/}
+                {/*                            const parts = parse(Cliente, matches);*/}
 
-                                                    <AddressItem
-                                                        key={ID}
-                                                        address={product}
-                                                        onCreateBilling={() => onCreateBilling(product)}
-                                                    >
-                                                        {parts.map((part, index) => (
-                                                            <Typography
-                                                                key={index}
-                                                                component="span"
-                                                                variant="subtitle2"
-                                                                color={part.highlight ? 'primary' : 'textPrimary'}
-                                                            >
-                                                                {part.text}
-                                                            </Typography>
-                                                        ))}
-
-                                                    </AddressItem>
-
-                                                </li>
-                                            );
-                                        }}
-                                    />
-
-                                </Block>
-
-                            </Stack>
-                        </Grid>
-
-                    </Grid>
-
-                ) : null}
-
-                <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-                    <Grid container spacing={5}>
-                        <Grid item xs={12} md={6}>
-                            <Stack spacing={2}>
-                                <Block label="Cliente RUC/Cédula">
-                                    <RHFTextField name="ci_ruc"
-                                                  label="RUC/Cédula"
-                                                  onChange={(event) => {
-                                                      const inputValue = event.target.value.replace(/\D/g, ''); // Solo números
-                                                      if (/^\d{10,13}$/.test(inputValue)) {
-                                                          setValue('ci_ruc', inputValue, {shouldValidate: true});
-                                                      }
-                                                  }}
-                                                  InputProps={{
-                                                      type: 'number',
-                                                      pattern: '[0-9]*', // Asegura que solo se ingresen números
-                                                  }}
-                                    />
-
-                                </Block>
-
-                                <Block label="Acción">
-                                    <LoadingButton
-                                        fullWidth
-                                        color="success"
-                                        size="large"
-                                        type="submit"
-                                        variant="contained"
-                                        loading={isSubmitting}
-                                    >
-                                        Buscar
-                                    </LoadingButton>
-
-                                </Block>
-
-                            </Stack>
-                        </Grid>
+                {/*                            return (*/}
+                {/*                                <li {...props}>*/}
 
 
-                    </Grid>
+                {/*                                    <AddressItem*/}
+                {/*                                        key={ID}*/}
+                {/*                                        address={product}*/}
+                {/*                                        onCreateBilling={() => onCreateBilling(product)}*/}
+                {/*                                    >*/}
+                {/*                                        {parts.map((part, index) => (*/}
+                {/*                                            <Typography*/}
+                {/*                                                key={index}*/}
+                {/*                                                component="span"*/}
+                {/*                                                variant="subtitle2"*/}
+                {/*                                                color={part.highlight ? 'primary' : 'textPrimary'}*/}
+                {/*                                            >*/}
+                {/*                                                {part.text}*/}
+                {/*                                            </Typography>*/}
+                {/*                                        ))}*/}
 
-                </FormProvider>
+                {/*                                    </AddressItem>*/}
+
+                {/*                                </li>*/}
+                {/*                            );*/}
+                {/*                        }}*/}
+                {/*                    />*/}
+
+                {/*                </Block>*/}
+
+                {/*            </Stack>*/}
+                {/*        </Grid>*/}
+
+                {/*    </Grid>*/}
+
+                {/*) : null}*/}
+
+                {/*<FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>*/}
+                {/*    <Grid container spacing={5}>*/}
+                {/*        <Grid item xs={12} md={6}>*/}
+                {/*            <Stack spacing={2}>*/}
+                {/*                <Block label="Cliente RUC/Cédula">*/}
+                {/*                    <RHFTextField name="ci_ruc"*/}
+                {/*                                  label="RUC/Cédula"*/}
+                {/*                                  onChange={(event) => {*/}
+                {/*                                      const inputValue = event.target.value.replace(/\D/g, ''); // Solo números*/}
+                {/*                                      if (/^\d{10,13}$/.test(inputValue)) {*/}
+                {/*                                          setValue('ci_ruc', inputValue, {shouldValidate: true});*/}
+                {/*                                      }*/}
+                {/*                                  }}*/}
+                {/*                                  InputProps={{*/}
+                {/*                                      type: 'number',*/}
+                {/*                                      pattern: '[0-9]*', // Asegura que solo se ingresen números*/}
+                {/*                                  }}*/}
+                {/*                    />*/}
+
+                {/*                </Block>*/}
+
+                {/*                <Block label="Acción">*/}
+                {/*                    <LoadingButton*/}
+                {/*                        fullWidth*/}
+                {/*                        color="success"*/}
+                {/*                        size="large"*/}
+                {/*                        type="submit"*/}
+                {/*                        variant="contained"*/}
+                {/*                        loading={isSubmitting}*/}
+                {/*                    >*/}
+                {/*                        Buscar*/}
+                {/*                    </LoadingButton>*/}
+
+                {/*                </Block>*/}
+
+                {/*            </Stack>*/}
+                {/*        </Grid>*/}
+
+
+                {/*    </Grid>*/}
+
+                {/*</FormProvider>*/}
 
 
                 <Grid item xs={12} md={6}>
@@ -448,7 +345,13 @@ export default function ConsultClientForm() {
                                     <Label color="success">Límte de Crédito: {fCurrency(dataCliente.CreditLine)} </Label>
                                     <Label color="success">Límite de comprometido: {fCurrency(dataCliente.DebtLine)} </Label>
                                     <Label color="success">Pedidos Clientes: {fCurrency(dataCliente.OrdersBal)} </Label>
-                                    <Label color="success">Comentario: {dataCliente.Free_Text} </Label>
+
+                                        <p style={{color: '#1B806A' , backgroundColor: 'rgba(54, 179, 126, 0.16)'}}>
+                                            Comentario: {dataCliente.Free_Text}
+
+
+                                        </p>
+
                                 </>
 
                             ) : (
@@ -770,6 +673,17 @@ function MapComponent({markers}) {
         </InfoWindow>)}
 
     </GoogleMap>) : (<></>);
+}
+
+
+function CustomToolbar() {
+    return (
+        <GridToolbarContainer>
+            <GridToolbarQuickFilter/>
+            <Box sx={{flexGrow: 1}}/>
+
+        </GridToolbarContainer>
+    );
 }
 
 

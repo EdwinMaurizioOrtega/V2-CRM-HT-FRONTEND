@@ -176,6 +176,15 @@ const navConfig = [
     ],
   },
 
+  {
+    subheader: 'TOMEBAMBA',
+    items: [
+      { title: 'tienda', path: PATH_DASHBOARD.eCommerce.list },
+      { title: 'ordenes', path: PATH_DASHBOARD.invoice.list },
+
+    ],
+  },
+
   // DEMO MENU STATES
   {
     subheader: '-_-',

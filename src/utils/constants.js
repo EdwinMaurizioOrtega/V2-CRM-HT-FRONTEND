@@ -194,3 +194,42 @@ export const TIPO_PRECIO = [
         title: "EPP"
     }
 ]
+
+export const ROLE = [
+    {
+        id: 0,
+        title: "TM VENDEDOR"
+    },
+    {
+        id: 1,
+        title: "TM COMPRAS"
+    },
+    {
+        id: 2,
+        title: "TM EJECUTIVO SOPORTE"
+    },
+    {
+        id: 10,
+        title: "ADMIN"
+    },
+    {
+        id: 9,
+        title: "CREDITO"
+    },
+    {
+        id: 8,
+        title: "BODEGA"
+    },
+    {
+        id: 7,
+        title: "VENDEDOR"
+    },
+    {
+        id: 6,
+        title: "TIENDA"
+    },
+    {
+        id: 5,
+        title: "INFINIX"
+    },
+]

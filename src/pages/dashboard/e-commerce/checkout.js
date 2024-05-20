@@ -84,6 +84,70 @@ export default function EcommerceCheckoutPage() {
         dispatch(nextStep());
     };
 
+    const handleTomebambaNextStep = () => {
+
+        console.log("Crear Orden Tomebamba.")
+
+        //Saltarse a finalizar la orden.
+        dispatch(gotoStep(3));
+
+        //Cliente
+        dispatch(createBilling ({
+            Apellidos: null,
+            Balance: '124152.280000',
+            'Capacidad de Pago': '0.000000',
+            Celular: '0999147893',
+            Ciudad: 'CUENCA',
+            Cliente: 'IMPORTADORA TOMEBAMBA S.A.',
+            CreditLine: '120000.000000',
+            Cupo: '120000.000000',
+            DebtLine: '120000.000000',
+            Direccion: 'AV. ESPAÑA 17-30 Y TURUHUAICO',
+            ENVIO: '[{"CANTON":"CUENCA","CARDCODE":"CL0190003701001","CODE_SERVIENTREGA":"4","DIRECCION":"AV. ESPAÑA 17-30 Y TURUHUAICO","NAME_SERVIENTREGA":"CUENCA (AZUAY)","PROVINCIA":"AZUAY","TIPO":"MATRIZ","U_LS_LATITUD":"-2.8853418","U_LS_LONGITUD":"-78.9833596","ZIPCODE":"010105"}]',
+            Endeudamiento: '0.000000',
+            Free_Text: 'CLIENTE TIENE DEMANDAS EN EL 2015 Y 2016 POR CONTRAVENCIONES DE TRÁNSITO DE CUARTA CLASE, EN EL 2017 POR EL COBRO DE PAGARÉ A LA ORDEN,  EL 2018 POR DEFECTOS Y VICIOS OCULTOS Y POR  INDEMNIZACIÓN, REPARACIÓN, RESPOSICIÓN Y DEVOLUCIÓN POR GARANTÍAS DE LOS PRODUCTOS, EN EL 2022 POR INDEMNIZACIÓN POR DESPIDO INTEMPESTIVO Y EN EL 2023 UNA DEMANDA POR NULIDAD DE SENTENCIA. (02/04/2024)\r\rSEGUN WHATSAPP G.GENERAL APRUEBA VENTA DE 500 CHIPS (10/04/2024)',
+            GLN: null,
+            GroupNum: '4',
+            ID: 'CL0190003701001',
+            Lista: '6',
+            NOM_PADRE: null,
+            Nombres: null,
+            OrdersBal: '173877.250000',
+            PADRE: null,
+            Score: '0.000000',
+            SlpCode: '25',
+            SlpName: 'HENRY AGUILAR',
+            Tipo: 'Master Dealer',
+            U_SYP_CREDITO: '3',
+            U_SYP_DOCUMENTACION: '3',
+            ValidComm: null,
+            ZipCode: '010105'
+        }))
+
+        //Envio
+        dispatch(applyShipping(0))
+
+        //Servientrega
+        dispatch(applyServientrega({
+    CANTON: 'CUENCA',
+    CARDCODE: 'CL0190003701001',
+    CODE_SERVIENTREGA: '4',
+    DIRECCION: 'AV. ESPAÑA 17-30 Y TURUHUAICO',
+    NAME_SERVIENTREGA: 'CUENCA (AZUAY)',
+    PROVINCIA: 'AZUAY',
+    TIPO: 'MATRIZ',
+    U_LS_LATITUD: '-2.8853418',
+    U_LS_LONGITUD: '-78.9833596',
+    ZIPCODE: '010105'
+}))
+
+        //Bodegas
+        dispatch(applyWarehouse("019"))
+
+        //Opciones de pago
+        dispatch(applyMethod(4))
+    };
+
     const handleBackStep = () => {
         dispatch(backStep());
     };
@@ -207,6 +271,7 @@ export default function EcommerceCheckoutPage() {
                             <CheckoutCart
                                 checkout={checkout}
                                 onNextStep={handleNextStep}
+                                onTomebambaNextStep={handleTomebambaNextStep}
                                 onDeleteCart={handleDeleteCart}
                                 onApplyDiscount={handleApplyDiscount}
                                 onIncreaseQuantity={handleIncreaseQuantity}

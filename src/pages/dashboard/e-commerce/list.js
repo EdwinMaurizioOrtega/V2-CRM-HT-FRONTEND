@@ -131,10 +131,13 @@ export default function EcommerceProductListPage() {
           // Si hay una respuesta en la caché, se obtiene su contenido
           const cachedData = await response.json();
 
-          if (user.ROLE == 'infinix'){
+          if (user.ROLE === 'infinix'){
             const infinixProducts = cachedData.products.filter(product => product.MARCA === 'INFINIX');
             setProducts(infinixProducts);
-          }else {
+          } else if (user.ROLE === '0'){
+            const tomebambaProducts = cachedData.products.filter(product => product.CATEGORIA === 'CELULARES');
+            setProducts(tomebambaProducts);
+          } else {
             setProducts(cachedData.products);
           }
 
@@ -150,10 +153,13 @@ export default function EcommerceProductListPage() {
 
         // Si había una respuesta en la caché, los productos ya se establecieron en el estado
         // Si no había respuesta en la caché, ahora se establecen los productos con los datos de la respuesta de red
-        if (user.ROLE == 'infinix'){
+        if (user.ROLE === 'infinix'){
           const infinixProducts = data.products.filter(product => product.MARCA === 'INFINIX');
           setProducts(infinixProducts);
-        }else {
+        } else if (user.ROLE === '0'){
+          const tomebambaProducts = data.products.filter(product => product.CATEGORIA === 'CELULARES');
+          setProducts(tomebambaProducts);
+        } else {
           setProducts(data.products);
         }
         console.log("data: "+JSON.stringify(data));

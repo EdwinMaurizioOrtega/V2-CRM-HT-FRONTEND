@@ -9,6 +9,8 @@ import { useAuthContext } from '../../../auth/useAuthContext';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
 import { CustomAvatar } from '../../../components/custom-avatar';
+import Label from "../../../components/label";
+import {ROLE, TIPO_PRECIO} from "../../../utils/constants";
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +30,11 @@ const StyledRoot = styled('div')(({ theme }) => ({
 export default function NavAccount() {
   const { user } = useAuthContext();
 
+  function tipoRol(id_rol) {
+    const rolActual = ROLE.find(option => option.id == id_rol);
+    return rolActual ? rolActual.title : "Sin Rol.";
+  }
+
   return (
     <Link component={NextLink} href={PATH_DASHBOARD.user.account} underline="none" color="inherit">
       <StyledRoot>
@@ -39,8 +46,13 @@ export default function NavAccount() {
           </Typography>
 
           <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
-            {user?.ROLE}
+            {tipoRol(user?.ROLE)}
           </Typography>
+
+          <Label color="info">
+            {user?.COMPANY}
+          </Label>
+
         </Box>
       </StyledRoot>
     </Link>

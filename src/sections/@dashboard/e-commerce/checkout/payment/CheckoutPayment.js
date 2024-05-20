@@ -26,7 +26,7 @@ const DELIVERY_OPTIONS = [
         id: 48212,
         codigo: '06.04.15',
         value: 0,
-        title: 'RETIRO EN OFICINA',
+        title: 'GRATIS | RETIRO EN OFICINA',
         description: 'Entrega estándar (Gratis)',
     },
     {

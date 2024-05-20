@@ -31,6 +31,7 @@ import {ColorSinglePicker} from '../../../../components/color-utils';
 import FormProvider, {RHFSelect, RHFTextField} from '../../../../components/hook-form';
 import CustomTextField from "../../../../components/custom-input/CustomTextField";
 import {useSnackbar} from "../../../../components/snackbar";
+import {useAuthContext} from "../../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -163,21 +164,42 @@ export default function ProductDetailsSummary({
 
     const handleAddCart = async () => {
         // //console.log("values: "+ values.price.Price);
-        if (selectedPrice) {
 
-            try {
-                onAddCart({
-                    ...values,
-                    // colors: [values.colors],
-                    price: selectedPrice,
-                    subtotal: values.price.Price * values.quantity,
-                });
-            } catch (error) {
-                console.error(error);
-            }
+        console.log("user: " + JSON.stringify(user));
+
+        if (user.COMPANY === "TOMEBAMBA") {
+            const primerObjeto = pricelistproduct[0];
+            console.log("primerObjeto: " + JSON.stringify( primerObjeto));
+
+                try {
+                    onAddCart({
+                        ...values,
+                        // colors: [values.colors],
+                        price: primerObjeto,
+                        subtotal: values.price.Price * values.quantity,
+                    });
+                } catch (error) {
+                    console.error(error);
+                }
 
         } else {
-            alert("Te falto seleccionar un tipo de precio. 😅")
+
+            if (selectedPrice) {
+                try {
+                    onAddCart({
+                        ...values,
+                        // colors: [values.colors],
+                        price: selectedPrice,
+                        subtotal: values.price.Price * values.quantity,
+                    });
+                } catch (error) {
+                    console.error(error);
+                }
+
+            } else {
+                alert("Te falto seleccionar un tipo de precio. 😅")
+            }
+
         }
 
         //Distinto a Alphacel
@@ -312,6 +334,8 @@ export default function ProductDetailsSummary({
                     </Stack>
                 </Stack>
 
+                {user.COMPANY !== "TOMEBAMBA" &&
+
                 <Stack direction="row" justifyContent="space-between">
                     <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
                         Lista Precios
@@ -358,25 +382,25 @@ export default function ProductDetailsSummary({
                     )}
 
                 </Stack>
+                }
 
                 <Divider sx={{borderStyle: 'dashed'}}/>
 
                 <Stack direction="row" spacing={2}>
 
 
-                        <Button
-                            fullWidth
-                            disabled={isMaxQuantity}
-                            size="large"
-                            color="warning"
-                            variant="contained"
-                            startIcon={<Iconify icon="ic:round-add-shopping-cart"/>}
-                            onClick={handleAddCart}
-                            sx={{whiteSpace: 'nowrap'}}
-                        >
-                            Agregar
-                        </Button>
-
+                    <Button
+                        fullWidth
+                        disabled={isMaxQuantity}
+                        size="large"
+                        color="warning"
+                        variant="contained"
+                        startIcon={<Iconify icon="ic:round-add-shopping-cart"/>}
+                        onClick={handleAddCart}
+                        sx={{whiteSpace: 'nowrap'}}
+                    >
+                        Agregar
+                    </Button>
 
 
                     {/* <Button fullWidth size="large" type="submit" variant="contained"> */}

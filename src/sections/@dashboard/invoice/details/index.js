@@ -1019,9 +1019,16 @@ export default function InvoiceDetails({invoice}) {
                                             <TableCell align="left">Disponible</TableCell>
                                         ) : null
                                     }
-                                    <TableCell align="right">Precio unitario</TableCell>
-                                    <TableCell align="right">Total</TableCell>
-                                    <TableCell align="left">Acciones</TableCell>
+
+                                    {
+                                        user.COMPANY !== 'TOMEBAMBA' ? (
+                                            <>
+                                                <TableCell align="right">Precio unitario</TableCell>
+                                                <TableCell align="right">Total</TableCell>
+                                                <TableCell align="left">Acciones</TableCell>
+                                            </>
+                                        ) : null
+                                    }
                                 </TableRow>
                             </TableHead>
 
@@ -1069,74 +1076,89 @@ export default function InvoiceDetails({invoice}) {
 
                                             ) : null
                                         }
-                                        <TableCell align="right">{fCurrency(row.PRECIOUNITARIOVENTA)}</TableCell>
-                                        <TableCell
-                                            align="right">{fCurrency(row.PRECIOUNITARIOVENTA * row.CANTIDAD)}</TableCell>
 
-                                        <TableCell align="right">
-                                            <IconButton color={openPopover ? 'inherit' : 'default'}
-                                                        onClick={(event) => handleOpenPopover(event, row)}>
-                                                <Iconify icon="eva:more-vertical-fill"/>
-                                            </IconButton>
-                                        </TableCell>
+                                        {
+                                            user.COMPANY !== 'TOMEBAMBA' ? (
+                                                <>
+                                                    <TableCell
+                                                        align="right">{fCurrency(row.PRECIOUNITARIOVENTA)}</TableCell>
+                                                    <TableCell
+                                                        align="right">{fCurrency(row.PRECIOUNITARIOVENTA * row.CANTIDAD)}</TableCell>
+
+                                                    <TableCell align="right">
+                                                        <IconButton color={openPopover ? 'inherit' : 'default'}
+                                                                    onClick={(event) => handleOpenPopover(event, row)}>
+                                                            <Iconify icon="eva:more-vertical-fill"/>
+                                                        </IconButton>
+                                                    </TableCell>
+                                                </>
+                                            ) : null
+                                        }
+
                                     </TableRow>
 
                                 ))}
 
+                                {
+                                    user.COMPANY !== 'TOMEBAMBA' ? (
+                                        <>
+                                            <StyledRowResult>
+                                                <TableCell colSpan={3}/>
 
-                                <StyledRowResult>
-                                    <TableCell colSpan={3}/>
+                                                <TableCell align="right" sx={{typography: 'body1'}}>
+                                                    <Box sx={{mt: 2}}/>
+                                                    Subtotal
+                                                </TableCell>
 
-                                    <TableCell align="right" sx={{typography: 'body1'}}>
-                                        <Box sx={{mt: 2}}/>
-                                        Subtotal
-                                    </TableCell>
+                                                <TableCell align="right" width={120} sx={{typography: 'body1'}}>
+                                                    <Box sx={{mt: 2}}/>
+                                                    {fCurrency(subtotalTotal)}
+                                                </TableCell>
+                                            </StyledRowResult>
 
-                                    <TableCell align="right" width={120} sx={{typography: 'body1'}}>
-                                        <Box sx={{mt: 2}}/>
-                                        {fCurrency(subtotalTotal)}
-                                    </TableCell>
-                                </StyledRowResult>
+                                            {/* <StyledRowResult> */}
+                                            {/*   <TableCell colSpan={3} /> */}
 
-                                {/* <StyledRowResult> */}
-                                {/*   <TableCell colSpan={3} /> */}
+                                            {/*   <TableCell align="right" sx={{ typography: 'body1' }}> */}
+                                            {/*     Discount */}
+                                            {/*   </TableCell> */}
 
-                                {/*   <TableCell align="right" sx={{ typography: 'body1' }}> */}
-                                {/*     Discount */}
-                                {/*   </TableCell> */}
+                                            {/*   /!* <TableCell *!/ */}
+                                            {/*   /!*   align="right" *!/ */}
+                                            {/*   /!*   width={120} *!/ */}
+                                            {/*   /!*   sx={{ color: 'error.main', typography: 'body1' }} *!/ */}
+                                            {/*   /!* > *!/ */}
+                                            {/*   /!*   {discount && fCurrency(-discount)} *!/ */}
+                                            {/*   /!* </TableCell> *!/ */}
+                                            {/* </StyledRowResult> */}
 
-                                {/*   /!* <TableCell *!/ */}
-                                {/*   /!*   align="right" *!/ */}
-                                {/*   /!*   width={120} *!/ */}
-                                {/*   /!*   sx={{ color: 'error.main', typography: 'body1' }} *!/ */}
-                                {/*   /!* > *!/ */}
-                                {/*   /!*   {discount && fCurrency(-discount)} *!/ */}
-                                {/*   /!* </TableCell> *!/ */}
-                                {/* </StyledRowResult> */}
+                                            <StyledRowResult>
+                                                <TableCell colSpan={3}/>
 
-                                <StyledRowResult>
-                                    <TableCell colSpan={3}/>
+                                                <TableCell align="right" sx={{typography: 'body1'}}>
+                                                    IVA
+                                                </TableCell>
 
-                                    <TableCell align="right" sx={{typography: 'body1'}}>
-                                        IVA
-                                    </TableCell>
+                                                <TableCell align="right" width={120} sx={{typography: 'body1'}}>
+                                                    {fCurrency(ivaTotal)}
+                                                </TableCell>
+                                            </StyledRowResult>
 
-                                    <TableCell align="right" width={120} sx={{typography: 'body1'}}>
-                                        {fCurrency(ivaTotal)}
-                                    </TableCell>
-                                </StyledRowResult>
+                                            <StyledRowResult>
+                                                <TableCell colSpan={3}/>
 
-                                <StyledRowResult>
-                                    <TableCell colSpan={3}/>
+                                                <TableCell align="right" sx={{typography: 'h6'}}>
+                                                    Total
+                                                </TableCell>
 
-                                    <TableCell align="right" sx={{typography: 'h6'}}>
-                                        Total
-                                    </TableCell>
+                                                <TableCell align="right" width={140} sx={{typography: 'h6'}}>
+                                                    {fCurrency(totalConIva)}
+                                                </TableCell>
+                                            </StyledRowResult>
+                                        </>
+                                    ) : null
+                                }
 
-                                    <TableCell align="right" width={140} sx={{typography: 'h6'}}>
-                                        {fCurrency(totalConIva)}
-                                    </TableCell>
-                                </StyledRowResult>
                             </TableBody>
                         </Table>
                     </Scrollbar>

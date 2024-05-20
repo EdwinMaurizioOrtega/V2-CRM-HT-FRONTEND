@@ -208,7 +208,7 @@ export default function InvoiceTableRow({
             if (response.status === 200) {
 
                 //setTimeout(() => {
-                    router.reload();
+                router.reload();
                 //}, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
             }
 
@@ -242,7 +242,7 @@ export default function InvoiceTableRow({
             if (response.status === 200) {
 
                 //setTimeout(() => {
-                    router.reload();
+                router.reload();
                 //}, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
             }
 
@@ -258,8 +258,8 @@ export default function InvoiceTableRow({
 
         try {
             const response = await axios.put('/hanadb/api/orders/order/move_to_one', {
-                    ID_ORDER: ID,
-                    WAREHOUSE: BODEGA
+                ID_ORDER: ID,
+                WAREHOUSE: BODEGA
             });
 
             // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
@@ -325,6 +325,63 @@ export default function InvoiceTableRow({
 
     };
 
+
+    const orderAprobarEjecutivoSoporte = async () => {
+        console.log("Número de orden Tomebamba: " + ID);
+
+        try {
+            const response = await axios.put('/hanadb/api/orders/order/importadora_tomebamba_approve', {
+                ID_ORDER: ID,
+                STATUS: 13
+            });
+
+            // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
+            console.log('Cambiando estado');
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+
+                //setTimeout(() => {
+                router.reload();
+                //}, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
+            }
+
+        } catch (error) {
+            // Manejar el error de la petición DELETE aquí
+            console.error('Error al cambiar el status de la orden: ', error);
+        }
+
+    }
+
+    const orderAprobarComercial = async () => {
+        console.log("Número de orden Tomebamba: " + ID);
+
+        try {
+            const response = await axios.put('/hanadb/api/orders/order/importadora_tomebamba_approve', {
+                ID_ORDER: ID,
+                STATUS: 6
+            });
+
+            // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
+            console.log('Cambiando estado');
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+
+                //setTimeout(() => {
+                router.reload();
+                //}, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
+            }
+
+        } catch (error) {
+            // Manejar el error de la petición DELETE aquí
+            console.error('Error al cambiar el status de la orden:', error);
+        }
+
+    }
+
     return (
         <>
 
@@ -380,10 +437,12 @@ export default function InvoiceTableRow({
                         }
                     >
                         {
-                            (ESTADO === 8 ? 'Anulado' : '') ||
-                            (ESTADO === 6 ? 'Pendiende de aprobar' : '') ||
-                            (ESTADO === 0 ? 'Por Facturar' : '') ||
-                            (ESTADO === 1 ? 'Facturado' : '') ||
+                            (ESTADO === 8 ? 'LD: Anulado' : '') ||
+                            (ESTADO === 6 ? 'LD: Por Aprobar' : '') ||
+                            (ESTADO === 0 ? 'LD: Por Facturar' : '') ||
+                            (ESTADO === 1 ? 'LD: Facturado' : '') ||
+                            (ESTADO === 10 ? 'TM: Por Aprobar Ejecutivo Soporte' : '') ||
+                            (ESTADO === 13 ? 'TM: Por Aprobar Carlos Méndez' : '') ||
                             'default'
                         }
                     </Label>
@@ -568,6 +627,39 @@ export default function InvoiceTableRow({
                 {/*   <Iconify icon="eva:trash-2-outline" /> */}
                 {/*   Borrar */}
                 {/* </MenuItem> */}
+
+                <Divider sx={{borderStyle: 'dashed'}}/>
+
+                {ESTADO === 10 && user.ROLE === "2" ? (
+                    <MenuItem
+                        onClick={() => {
+                            orderAprobarEjecutivoSoporte();
+                            handleClosePopover();
+                        }}
+                    >
+                        <Iconify icon="eva:shopping-bag-outline"/>
+                        Aprobar Ejecutivo Soporte
+                    </MenuItem>
+
+                ) : null
+                }
+
+                <Divider sx={{borderStyle: 'dashed'}}/>
+
+                {ESTADO === 13 && user.ROLE === "1" ? (
+                    <MenuItem
+                        onClick={() => {
+                            orderAprobarComercial();
+                            handleClosePopover();
+                        }}
+                    >
+                        <Iconify icon="eva:shopping-bag-outline"/>
+                        Aprobar Comercial
+                    </MenuItem>
+
+                ) : null
+                }
+
             </MenuPopover>
 
             <ConfirmDialog
