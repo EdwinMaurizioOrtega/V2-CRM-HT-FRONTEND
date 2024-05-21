@@ -181,6 +181,7 @@ export default  function EcommerceProductDetailsPage() {
                 <>
                 <Container sx={{ my: 10 }}>
                     <Stack spacing={3}>
+
                         <Card>
                             <CardHeader title="Stock" />
                             <BasicTable code={name}
@@ -284,6 +285,9 @@ export default  function EcommerceProductDetailsPage() {
                             {/* ))} */}
                         </Box>
 
+                        {
+                            user.COMPANY !== 'TOMEBAMBA' ? (
+
                         <Card>
                             <Tabs
                                 value={currentTab}
@@ -313,6 +317,8 @@ export default  function EcommerceProductDetailsPage() {
                                     )
                             )}
                         </Card>
+                                ) : null
+                        }
                     </>
                 )}
 

@@ -2,7 +2,6 @@ import { paramCase } from 'change-case';
 import { useState, useEffect } from 'react';
 // next
 import Head from 'next/head';
-import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 // @mui
 import {
@@ -17,7 +16,6 @@ import {
 } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../../redux/store';
-import { getProducts } from '../../../redux/slices/product';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // layouts
@@ -50,20 +48,6 @@ const TABLE_HEAD = [
   { id: 'NOMBRE', label: 'Producto', align: 'left' },
   { id: 'CODIGO', label: 'Código', align: 'left' },
   { id: 'SKU', label: 'SKU', align: 'left' },
-  // { id: 'inventoryType', label: 'Stock', align: 'center', width: 180 },
-  // { id: 'price', label: 'Price', align: 'right' },
-  // { id: '' },
-];
-
-const STATUS_OPTIONS = [
-  { label: 'CELULARES', value: 'CELULARES' },
-  { label: 'ELECTRODOMÉSTICOS', value: 'ELECTRODOMÉSTICOS' },
-  { label: 'ACCESORIOS', value: 'ACCESORIOS' },
-  { label: 'BELLEZA', value: 'BELLEZA' },
-  { label: 'REPUESTOS', value: 'REPUESTOS' },
-  { label: 'ELECTROMENORES', value: 'ELECTROMENORES' },
-  { label: 'TECNOLOGIA', value: 'TECNOLOGIA' },
-  { label: 'VARIOS', value: 'VARIOS' },
 ];
 
 // ----------------------------------------------------------------------
@@ -114,9 +98,24 @@ export default function EcommerceProductListPage() {
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
-  // useEffect(() => {
-  //   dispatch(getProducts());
-  // }, [dispatch]);
+
+
+  let STATUS_OPTIONS;
+
+  if (user.COMPANY !== 'TOMEBAMBA') {
+    STATUS_OPTIONS = [
+      { label: 'CELULARES', value: 'CELULARES' },
+      { label: 'ELECTRODOMÉSTICOS', value: 'ELECTRODOMÉSTICOS' },
+      { label: 'ACCESORIOS', value: 'ACCESORIOS' },
+      { label: 'BELLEZA', value: 'BELLEZA' },
+      { label: 'REPUESTOS', value: 'REPUESTOS' },
+      { label: 'ELECTROMENORES', value: 'ELECTROMENORES' },
+      { label: 'TECNOLOGIA', value: 'TECNOLOGIA' },
+      { label: 'VARIOS', value: 'VARIOS' },
+    ];
+  } else {
+    STATUS_OPTIONS = [{ label: 'CELULARES', value: 'CELULARES' }];
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -272,16 +271,6 @@ export default function EcommerceProductListPage() {
             },
             { name: 'List' },
           ]}
-          // action={
-          //   <Button
-          //     component={NextLink}
-          //     href={PATH_DASHBOARD.eCommerce.new}
-          //     variant="contained"
-          //     startIcon={<Iconify icon="eva:plus-fill" />}
-          //   >
-          //     New Product
-          //   </Button>
-          // }
         />
 
         <Card>
