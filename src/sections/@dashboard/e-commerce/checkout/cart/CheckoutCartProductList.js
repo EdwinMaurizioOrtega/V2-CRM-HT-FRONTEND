@@ -18,6 +18,22 @@ const TABLE_HEAD = [
   { CODIGO: '' },
 ];
 
+const TABLE_HEAD_TM = [
+  { CODIGO: 'NOMBRE', label: 'Producto' },
+  { CODIGO: 'quantity', label: 'Cantidad' },
+  { CODIGO: '' },
+];
+
+// Función que decide qué tabla mostrar basada en el tipo de usuario
+function getTableHead(user) {
+  // Aquí puedes poner lógica para decidir qué tabla mostrar basada en el usuario
+  if (user && user.COMPANY !== "TOMEBAMBA") {
+    return TABLE_HEAD;
+  } else {
+    return TABLE_HEAD_TM;
+  }
+}
+
 // ----------------------------------------------------------------------
 
 CheckoutCartProductList.propTypes = {
@@ -32,12 +48,17 @@ export default function CheckoutCartProductList({
   onDelete,
   onIncreaseQuantity,
   onDecreaseQuantity,
+  user,
 }) {
+
+  const tableHead = getTableHead(user);
+
+
   return (
     <TableContainer sx={{ overflow: 'unset' }}>
       <Scrollbar>
         <Table sx={{ minWidth: 720 }}>
-          <TableHeadCustom headLabel={TABLE_HEAD} />
+          <TableHeadCustom headLabel={tableHead} />
 
           <TableBody>
             {products.map((row) => (
@@ -47,6 +68,7 @@ export default function CheckoutCartProductList({
                 onDelete={() => onDelete(row.CODIGO)}
                 onDecrease={() => onDecreaseQuantity(row.CODIGO)}
                 onIncrease={() => onIncreaseQuantity(row.CODIGO)}
+                user={user}
               />
             ))}
           </TableBody>

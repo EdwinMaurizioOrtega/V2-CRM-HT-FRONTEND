@@ -420,7 +420,7 @@ export default function InvoiceTableRow({
                 </TableCell>
                 <TableCell align="left">
                     {NUMEROFACTURAE4 && (
-                        <Tooltip title={NUMEROFACTURAE4} sx={{ maxWidth: 500 }}>
+                        <Tooltip title={NUMEROFACTURAE4} sx={{maxWidth: 500}}>
                             <Button color="inherit">🤔</Button>
                         </Tooltip>
                     )}
@@ -458,7 +458,17 @@ export default function InvoiceTableRow({
                     )
 
                 }</TableCell>
-                <TableCell align="left">{nameFormaPago(FORMADEPAGO)}</TableCell>
+
+                {user.ROLE !== '0' ? (
+                    user.ROLE !== '2' ? (
+                        <TableCell align="left">{nameFormaPago(FORMADEPAGO)}</TableCell>
+                    ) : (
+                        <TableCell align="left">-</TableCell>
+                    )
+                ) : (
+                    <TableCell align="left">-</TableCell>
+                )
+                }
 
                 <TableCell align="left">{CLIENTEID}</TableCell>
 
@@ -494,7 +504,6 @@ export default function InvoiceTableRow({
                     </Button>
 
                 </TableCell>
-
 
 
                 {/* { */}
@@ -712,7 +721,7 @@ export default function InvoiceTableRow({
                         <Button variant="contained" color="error" onClick={() => {
                             onRowOBS();
                         }}>
-                             Guardar.
+                            Guardar.
                         </Button>
                     </>
                 }

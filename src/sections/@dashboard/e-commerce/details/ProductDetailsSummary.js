@@ -202,8 +202,8 @@ export default function ProductDetailsSummary({
 
         }
 
-        //Distinto a Alphacel
-        if (user.EMPRESA != '0992264373001') {
+        //Solo para lidenar
+        if (user.COMPANY === 'HT') {
 
             const sumaDisponible = onStockValidate.reduce((total, producto) => total + Number(producto.DISPONIBLE), 0);
 

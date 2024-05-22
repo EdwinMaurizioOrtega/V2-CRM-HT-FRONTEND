@@ -19,7 +19,7 @@ CheckoutCartProduct.propTypes = {
   onIncrease: PropTypes.func,
 };
 
-export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncrease }) {
+export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncrease, user }) {
   const { NOMBRE, CODIGO, quantity, tipo_precio, size, price } = row;
 
     function namePriceType(pri) {
@@ -69,9 +69,12 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
         </Stack>
       </TableCell>
 
-        <TableCell>{namePriceType(price.PriceList)}</TableCell>
-
-      <TableCell>{fCurrency(price.Price)}</TableCell>
+        {  user.COMPANY !== "TOMEBAMBA" &&
+            <>
+            <TableCell>{namePriceType(price.PriceList)}</TableCell>
+            <TableCell>{fCurrency(price.Price)}</TableCell>
+            </>
+        }
 
       <TableCell>
         <Box sx={{ width: 96, textAlign: 'right' }}>
@@ -89,8 +92,9 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
         </Box>
       </TableCell>
 
-      <TableCell align="right">{fCurrency(price.Price * quantity)}</TableCell>
-
+        {  user.COMPANY !== "TOMEBAMBA" &&
+            <TableCell align="right">{fCurrency(price.Price * quantity)}</TableCell>
+        }
       <TableCell align="right">
         <IconButton onClick={onDelete}>
           <Iconify icon="eva:trash-2-outline" />

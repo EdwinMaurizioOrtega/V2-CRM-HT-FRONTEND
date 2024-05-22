@@ -836,6 +836,8 @@ export default function InvoiceDetails({invoice}) {
 
     };
 
+    //console.log("USUARIO: "+ JSON.stringify( user));
+
     return (
         <>
             {/* <InvoiceToolbar invoice={invoice} /> */}
@@ -884,109 +886,120 @@ export default function InvoiceDetails({invoice}) {
                         </Box>
                     </Grid>
 
-                    <Grid item xs={12} sm={6} sx={{mb: 5}}>
-                        <Typography paragraph variant="overline" sx={{color: 'text.disabled'}}>
-                            FACTURA A:
-                        </Typography>
-                        <Label color="success">{Cliente}</Label>
-                        <Typography variant="body2">CI/RUC: {CLIENTEID}</Typography>
-                        <Label color="success">{Ciudad}</Label>
-                        <Typography variant="body2">TIPO: {Tipo}</Typography>
-                        <Label color="success">Lista Precio: {tipoPrecio(Lista)}</Label>
-                        <Typography variant="body2">Saldo de Cuenta: {fCurrency(Balance)}</Typography>
-                        <Label color="success">DOCUMENTACIÓN: {documentacion(U_SYP_DOCUMENTACION)}</Label>
-                        <Typography variant="body2">Tipo de Crédito: {tipoCredito(U_SYP_CREDITO)}</Typography>
-                        <Label color="success">Condicion de Pago: {nameFormaPago(GroupNum)}</Label>
-                        <Typography variant="body2">Límte de Crédito: {fCurrency(CreditLine)}</Typography>
-                        <Label color="success">Límite de comprometido: {fCurrency(DebtLine)}</Label>
-                        <Typography variant="body2">Pedidos Clientes: {fCurrency(OrdersBal)}</Typography>
-                        <div style={{whiteSpace: 'pre-line', fontSize: '15px'}}>
+                    {user.ROLE !== '0' ? (
+                        user.ROLE !== '2' ? (
+                            <>
+
+                                <Grid item xs={12} sm={6} sx={{mb: 5}}>
+                                    <Typography paragraph variant="overline" sx={{color: 'text.disabled'}}>
+                                        FACTURA A:
+                                    </Typography>
+                                    <Label color="success">{Cliente}</Label>
+                                    <Typography variant="body2">CI/RUC: {CLIENTEID}</Typography>
+                                    <Label color="success">{Ciudad}</Label>
+                                    <Typography variant="body2">TIPO: {Tipo}</Typography>
+                                    <Label color="success">Lista Precio: {tipoPrecio(Lista)}</Label>
+                                    <Typography variant="body2">Saldo de Cuenta: {fCurrency(Balance)}</Typography>
+                                    <Label color="success">DOCUMENTACIÓN: {documentacion(U_SYP_DOCUMENTACION)}</Label>
+                                    <Typography variant="body2">Tipo de
+                                        Crédito: {tipoCredito(U_SYP_CREDITO)}</Typography>
+                                    <Label color="success">Condicion de Pago: {nameFormaPago(GroupNum)}</Label>
+                                    <Typography variant="body2">Límte de Crédito: {fCurrency(CreditLine)}</Typography>
+                                    <Label color="success">Límite de comprometido: {fCurrency(DebtLine)}</Label>
+                                    <Typography variant="body2">Pedidos Clientes: {fCurrency(OrdersBal)}</Typography>
+                                    <div style={{whiteSpace: 'pre-line', fontSize: '15px'}}>
                             <span>
                             Comentario: {insertLineBreaks(Free_Text, 40)}
                             </span>
-                        </div>
+                                    </div>
 
-                    </Grid>
-
-                    <Grid item xs={12} sm={6} sx={{mb: 5}}>
-                        <Typography paragraph variant="overline" sx={{color: 'text.disabled'}}>
-                            Orden de
-                        </Typography>
-
-                        <Typography variant="body2">{VENDEDOR}</Typography>
-
-                        <Typography variant="body2">{CITY}</Typography>
-
-                        {/* <Typography variant="body2">Phone: {invoiceFrom.phone}</Typography> */}
-                        <Typography variant="overline" sx={{color: 'text.disabled'}}>
-                            fecha de creación
-                        </Typography>
-
-                        <Typography variant="body2">{FECHACREACION}</Typography>
-
-                        <Typography variant="overline" sx={{color: 'text.disabled'}}>
-                            opciones
-                        </Typography>
-
-                        <Grid item xs={12} sm={5} sx={{mb: 1}}>
-
-                            {/* <Typography variant="body2">{fDate(dueDate)}</Typography> */}
-                            <Typography variant="body2">Bodega actual: {
-
-                                // Hipertronics
-                                user.EMPRESA == '0992537442001' ? (
-                                    nameWarehouse(BODEGA)
-                                ) : (
-                                    //Alphacell
-                                    nameWarehouseAlphacell(BODEGA)
-                                )
-
-                            }</Typography>
-
-                            {user.ROLE === "aprobador" &&
-
-                                <Autocomplete
-                                    fullWidth
-                                    options={
-                                        // Hipertronics
-                                        user.EMPRESA == '0992537442001' ? (
-                                            top100Films
-                                        ) : (
-                                            //Alphacell
-                                            top100FilmsAlphacell
-                                        )
-                                    }
-                                    getOptionLabel={(option) => option.title}
-                                    onChange={(event, value) => {
-                                        handleChangeWarehouse(event, value);
-                                    }} // Add onChange event handler
-                                    renderInput={(params) => <TextField {...params} label="-_-" margin="none"/>}
-                                />
-                            }
-
-                        </Grid>
-
-                        <Grid item xs={12} sm={7} sx={{mb: 1}}>
-
-                            <Typography variant="body2">Forma de pago
-                                actual: {nameFormaPago(FORMADEPAGO)}</Typography>
-
-                            {user.ROLE === "aprobador" &&
-                                <Autocomplete
-                                    fullWidth
-                                    options={PAYMENT_OPTIONS_V2}
-                                    getOptionLabel={(option) => option.title}
-                                    onChange={(event, value) => {
-                                        handleChangePayment(event, value);
-                                    }}
-                                    renderInput={(params) => <TextField {...params} label="-_-" margin="none"/>}
-                                />
-                            }
-
-                        </Grid>
+                                </Grid>
 
 
-                    </Grid>
+                                <Grid item xs={12} sm={6} sx={{mb: 5}}>
+                                    <Typography paragraph variant="overline" sx={{color: 'text.disabled'}}>
+                                        Orden de
+                                    </Typography>
+
+                                    <Typography variant="body2">{VENDEDOR}</Typography>
+
+                                    <Typography variant="body2">{CITY}</Typography>
+
+                                    {/* <Typography variant="body2">Phone: {invoiceFrom.phone}</Typography> */}
+                                    <Typography variant="overline" sx={{color: 'text.disabled'}}>
+                                        fecha de creación
+                                    </Typography>
+
+                                    <Typography variant="body2">{FECHACREACION}</Typography>
+
+                                    <Typography variant="overline" sx={{color: 'text.disabled'}}>
+                                        opciones
+                                    </Typography>
+
+                                    <Grid item xs={12} sm={5} sx={{mb: 1}}>
+
+                                        {/* <Typography variant="body2">{fDate(dueDate)}</Typography> */}
+                                        <Typography variant="body2">Bodega actual: {
+
+                                            // Hipertronics
+                                            user.EMPRESA == '0992537442001' ? (
+                                                nameWarehouse(BODEGA)
+                                            ) : (
+                                                //Alphacell
+                                                nameWarehouseAlphacell(BODEGA)
+                                            )
+
+                                        }</Typography>
+
+                                        {user.ROLE === "aprobador" &&
+
+                                            <Autocomplete
+                                                fullWidth
+                                                options={
+                                                    // Hipertronics
+                                                    user.EMPRESA == '0992537442001' ? (
+                                                        top100Films
+                                                    ) : (
+                                                        //Alphacell
+                                                        top100FilmsAlphacell
+                                                    )
+                                                }
+                                                getOptionLabel={(option) => option.title}
+                                                onChange={(event, value) => {
+                                                    handleChangeWarehouse(event, value);
+                                                }} // Add onChange event handler
+                                                renderInput={(params) => <TextField {...params} label="-_-"
+                                                                                    margin="none"/>}
+                                            />
+                                        }
+
+                                    </Grid>
+
+                                    <Grid item xs={12} sm={7} sx={{mb: 1}}>
+
+                                        <Typography variant="body2">Forma de pago
+                                            actual: {nameFormaPago(FORMADEPAGO)}</Typography>
+
+                                        {user.ROLE === "aprobador" &&
+                                            <Autocomplete
+                                                fullWidth
+                                                options={PAYMENT_OPTIONS_V2}
+                                                getOptionLabel={(option) => option.title}
+                                                onChange={(event, value) => {
+                                                    handleChangePayment(event, value);
+                                                }}
+                                                renderInput={(params) => <TextField {...params} label="-_-"
+                                                                                    margin="none"/>}
+                                            />
+                                        }
+
+                                    </Grid>
+
+
+                                </Grid>
+                            </>
+                        ) : null
+                    ) : null}
 
                     <Grid item xs={12} sm={6} sx={{mb: 5}}>
 
@@ -1009,7 +1022,12 @@ export default function InvoiceDetails({invoice}) {
                                 <TableRow>
                                     <TableCell width={40}>#</TableCell>
                                     <TableCell align="left">Descripción</TableCell>
-                                    <TableCell align="left">Tipo Precio</TableCell>
+                                    {user.ROLE !== '0' ? (
+                                        user.ROLE !== '2' ? (
+                                            <TableCell align="left">Tipo Precio</TableCell>
+                                        ) : null
+                                    ) : null
+                                    }
                                     <TableCell align="left">Comentario Precio</TableCell>
                                     <TableCell align="left">%Desc.</TableCell>
                                     <TableCell align="left">Cantidad</TableCell>
@@ -1020,14 +1038,15 @@ export default function InvoiceDetails({invoice}) {
                                         ) : null
                                     }
 
-                                    {
-                                        user.COMPANY !== 'TOMEBAMBA' ? (
+                                    {user.ROLE !== '0' ? (
+                                        user.ROLE !== '2' ? (
                                             <>
                                                 <TableCell align="right">Precio unitario</TableCell>
                                                 <TableCell align="right">Total</TableCell>
                                                 <TableCell align="left">Acciones</TableCell>
                                             </>
                                         ) : null
+                                    ) : null
                                     }
                                 </TableRow>
                             </TableHead>
@@ -1062,8 +1081,12 @@ export default function InvoiceDetails({invoice}) {
                                                 </Typography>
                                             </Box>
                                         </TableCell>
-
+                                        {user.ROLE !== '0' ? (
+                                                user.ROLE !== '2' ? (
                                         <TableCell align="left">{namePriceType(row.TIPOPRECIO)}</TableCell>
+                                                ) : null
+                                        ) : null
+                                        }
                                         <TableCell align="left">{row.COMENTARIOPRECIO}</TableCell>
                                         <TableCell align="left">{row.DISCOUNTPERCENTSAP}</TableCell>
                                         <TableCell align="left">{row.CANTIDAD}</TableCell>
@@ -1077,8 +1100,8 @@ export default function InvoiceDetails({invoice}) {
                                             ) : null
                                         }
 
-                                        {
-                                            user.COMPANY !== 'TOMEBAMBA' ? (
+                                        {user.ROLE !== '0' ? (
+                                            user.ROLE !== '2' ? (
                                                 <>
                                                     <TableCell
                                                         align="right">{fCurrency(row.PRECIOUNITARIOVENTA)}</TableCell>
@@ -1092,6 +1115,7 @@ export default function InvoiceDetails({invoice}) {
                                                         </IconButton>
                                                     </TableCell>
                                                 </>
+                                            ) : null
                                             ) : null
                                         }
 

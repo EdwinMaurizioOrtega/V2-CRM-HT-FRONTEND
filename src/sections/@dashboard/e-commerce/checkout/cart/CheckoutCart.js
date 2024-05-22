@@ -81,6 +81,7 @@ export default function CheckoutCart({
                             onDelete={onDeleteCart}
                             onIncreaseQuantity={onIncreaseQuantity}
                             onDecreaseQuantity={onDecreaseQuantity}
+                            user={user}
                         />
                     ) : (
                         <EmptyContent
@@ -102,14 +103,7 @@ export default function CheckoutCart({
             </Grid>
 
             <Grid item xs={12} md={4}>
-                <CheckoutSummary
-                    enableDiscount
-                    total={total}
-                    discount={discount}
-                    subtotal={subtotal}
-                    iva={iva}
-                    onApplyDiscount={onApplyDiscount}
-                />
+
 
                 {user.ROLE === '0' ? (
                     <>
@@ -145,6 +139,15 @@ export default function CheckoutCart({
                     </>
 
                 ) : (
+                    <>
+                    <CheckoutSummary
+                        enableDiscount
+                        total={total}
+                        discount={discount}
+                        subtotal={subtotal}
+                        iva={iva}
+                        onApplyDiscount={onApplyDiscount}
+                    />
                     <Button
                         fullWidth
                         size="large"
@@ -155,6 +158,7 @@ export default function CheckoutCart({
                     >
                         Finalizar compra
                     </Button>
+                    </>
                 )
                 }
             </Grid>
