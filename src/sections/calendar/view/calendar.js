@@ -37,6 +37,7 @@ import FormProvider, {RHFTextField, RHFSwitch} from '../../../components/hook-fo
 
 import {yupResolver} from "@hookform/resolvers/yup";
 import {Controller, useForm} from "react-hook-form";
+import {updateEvent} from "../../../redux/slices/calendar";
 
 // ----------------------------------------------------------------------
 
@@ -171,39 +172,47 @@ export default function CalendarView({onValorCambiado}) {
         setSelectedEventId(arg.event.id);
     };
 
-    const handleResizeEvent = ({event}) => {
-        try {
-            dispatch(
-                updateEvent(event.id, {
-                    allDay: event.allDay,
-                    start: event.start,
-                    end: event.end,
-                })
-            );
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    // const handleResizeEvent = ({event}) => {
+    //     try {
+    //         dispatch(
+    //             updateEvent(event.id, {
+    //                 allDay: event.allDay,
+    //                 start: event.start,
+    //                 end: event.end,
+    //             })
+    //         );
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // };
 
-    const handleDropEvent = ({event}) => {
-        try {
-            dispatch(
-                updateEvent(event.id, {
-                    allDay: event.allDay,
-                    start: event.start,
-                    end: event.end,
-                })
-            );
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    // const handleDropEvent = ({event}) => {
+    //     try {
+    //         dispatch(
+    //             updateEvent(event.id, {
+    //                 allDay: event.allDay,
+    //                 start: event.start,
+    //                 end: event.end,
+    //             })
+    //         );
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // };
 
     const handleCreateUpdateEvent = (newEvent) => {
+
+        console.log("Cerrar Agenda: "+JSON.stringify(newEvent));
+
         if (selectedEventId) {
+            //Actualizar
+            console.log("Actualizar: "+ JSON.stringify( selectedEventId ));
             dispatch(updateEvent(selectedEventId));
-            enqueueSnackbar('Update success!');
+            // Recargar la página
+            window.location.reload();
+            //enqueueSnackbar('Update success!');
         } else {
+            //Crear
             dispatch(createEvent(newEvent));
             enqueueSnackbar('Create success!');
         }
@@ -317,9 +326,7 @@ export default function CalendarView({onValorCambiado}) {
                         headerToolbar={false}
                         initialEvents={events}
                         select={handleSelectRange}
-                        eventDrop={handleDropEvent}
                         eventClick={handleSelectEvent}
-                        eventResize={handleResizeEvent}
                         height={isDesktop ? 720 : 'auto'}
                         plugins={[
                             listPlugin,

@@ -108,8 +108,7 @@ export function updateEvent(eventId) {
             console.log("responseStatus: " + response.status)
             if (response.status === 200) {
                 dispatch(slice.actions.updateEventSuccess(response.data.event));
-                // Recargar la página
-                window.location.reload();
+
             }
         } catch (error) {
             dispatch(slice.actions.hasError(error));
