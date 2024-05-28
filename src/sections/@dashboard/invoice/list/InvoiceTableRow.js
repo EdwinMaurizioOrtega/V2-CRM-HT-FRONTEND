@@ -11,7 +11,7 @@ import {
     MenuItem,
     TableCell,
     IconButton,
-    Typography, TextField, Tooltip,
+    Typography, TextField, Tooltip, Avatar,
 } from '@mui/material';
 // utils
 import {fDate} from '../../../../utils/formatTime';
@@ -400,9 +400,21 @@ export default function InvoiceTableRow({
 
                 <TableCell>
                     <Stack direction="row" alignItems="center" spacing={2}>
-                        {/* <CustomAvatar name={ID} /> */}
+                         {/*<CustomAvatar name={PHOTOURL} />*/}
 
-                        <div>
+                        {
+                            // Hipertronics
+                            CLIENTEID == 'CL0190003701001' ? (
+                                <Avatar src="/logo/logo_tomebamba.png" alt="1X"   />
+
+                            ) : (
+                                //Tomebamba
+                                <Avatar src="/logo/logo_single.svg" alt="1X"   />
+                            )
+
+                        }
+
+                        <div >
                             <Typography variant="subtitle2" noWrap>
                                 {VENDEDOR}
                             </Typography>
@@ -416,9 +428,10 @@ export default function InvoiceTableRow({
                                 {`INV-${ID}`}
                             </Link>
                         </div>
+
                     </Stack>
                 </TableCell>
-                <TableCell align="left">
+                <TableCell align="left" >
                     {NUMEROFACTURAE4 && (
                         <Tooltip title={NUMEROFACTURAE4} sx={{maxWidth: 500}}>
                             <Button color="inherit">🤔</Button>
