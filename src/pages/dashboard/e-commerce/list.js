@@ -120,7 +120,7 @@ export default function EcommerceProductListPage() {
   useEffect(() => {
     const fetchData = async () => {
 
-      console.log("ROLE: "+user.ROLE);
+      console.log("User: " + JSON.stringify(user));
 
       try {
         const cache = await caches.open('cache-crm');
@@ -134,7 +134,8 @@ export default function EcommerceProductListPage() {
             const infinixProducts = cachedData.products.filter(product => product.MARCA === 'INFINIX');
             setProducts(infinixProducts);
           } else if (user.ROLE === '0'){
-            const tomebambaProducts = cachedData.products.filter(product => product.CATEGORIA === 'CELULARES');
+            //Prpductos de la bodega CENTRO_DE_DISTRIBUCION_HT y categoria celulares
+            const tomebambaProducts = cachedData.products.filter(product => product.CATEGORIA === 'CELULARES' && product.CENTRO_DE_DISTRIBUCION_HT > 0);
             setProducts(tomebambaProducts);
           } else {
             setProducts(cachedData.products);
@@ -156,7 +157,8 @@ export default function EcommerceProductListPage() {
           const infinixProducts = data.products.filter(product => product.MARCA === 'INFINIX');
           setProducts(infinixProducts);
         } else if (user.ROLE === '0'){
-          const tomebambaProducts = data.products.filter(product => product.CATEGORIA === 'CELULARES');
+          //Prpductos de la bodega CENTRO_DE_DISTRIBUCION_HT y categoria celulares
+          const tomebambaProducts = data.products.filter(product => product.CATEGORIA === 'CELULARES' && product.CENTRO_DE_DISTRIBUCION_HT > 0);
           setProducts(tomebambaProducts);
         } else {
           setProducts(data.products);
