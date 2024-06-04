@@ -18,7 +18,7 @@ import {
     TableBody,
     Container,
     IconButton,
-    TableContainer, CircularProgress, Box,
+    TableContainer, CircularProgress, Box, TableCell,
 } from '@mui/material';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
@@ -518,7 +518,7 @@ export default function InvoiceListPage() {
                                 title="Total"
                                 total={tableData.length}
                                 percent={100}
-                                price={sumBy(tableData, (item) => Number(item.SUBTOTAL))}
+                                price={user.COMPANY !== 'TOMEBAMBA' && sumBy(tableData, (item) => Number(item.SUBTOTAL))}
                                 icon="solar:bill-list-bold-duotone"
                                 color={theme.palette.info.main}
                             />
@@ -527,7 +527,7 @@ export default function InvoiceListPage() {
                                 title="Por Aprobar"
                                 total={getLengthByStatus(6)}
                                 percent={getPercentByStatus(6)}
-                                price={getTotalPriceByStatus(6)}
+                                price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(6)}
                                 icon="solar:file-check-bold-duotone"
                                 color={theme.palette.success.main}
                             />
@@ -536,7 +536,7 @@ export default function InvoiceListPage() {
                                 title="Por Facturar"
                                 total={getLengthByStatus(0)}
                                 percent={getPercentByStatus(0)}
-                                price={getTotalPriceByStatus(0)}
+                                price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(0)}
                                 icon="solar:sort-by-time-bold-duotone"
                                 color={theme.palette.warning.main}
                             />
@@ -545,7 +545,7 @@ export default function InvoiceListPage() {
                                 title="Facturado"
                                 total={getLengthByStatus(1)}
                                 percent={getPercentByStatus(1)}
-                                price={getTotalPriceByStatus(1)}
+                                price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(1)}
                                 icon="solar:bell-bing-bold-duotone"
                                 color={theme.palette.error.main}
                             />
@@ -554,7 +554,7 @@ export default function InvoiceListPage() {
                                 title="Anulado"
                                 total={getLengthByStatus(8)}
                                 percent={getPercentByStatus(8)}
-                                price={getTotalPriceByStatus(8)}
+                                price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(8)}
                                 icon="solar:file-corrupted-bold-duotone"
                                 color={theme.palette.text.secondary}
                             />

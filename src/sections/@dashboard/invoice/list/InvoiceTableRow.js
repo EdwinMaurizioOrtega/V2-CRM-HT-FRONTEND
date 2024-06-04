@@ -400,21 +400,21 @@ export default function InvoiceTableRow({
 
                 <TableCell>
                     <Stack direction="row" alignItems="center" spacing={2}>
-                         {/*<CustomAvatar name={PHOTOURL} />*/}
+                        {/*<CustomAvatar name={PHOTOURL} />*/}
 
                         {
                             // Hipertronics
                             CLIENTEID == 'CL0190003701001' ? (
-                                <Avatar src="/logo/logo_tomebamba.png" alt="1X"   />
+                                <Avatar src="/logo/logo_tomebamba.png" alt="1X"/>
 
                             ) : (
                                 //Tomebamba
-                                <Avatar src="/logo/logo_single.svg" alt="1X"   />
+                                <Avatar src="/logo/logo_single.svg" alt="1X"/>
                             )
 
                         }
 
-                        <div >
+                        <div>
                             <Typography variant="subtitle2" noWrap>
                                 {VENDEDOR}
                             </Typography>
@@ -431,7 +431,7 @@ export default function InvoiceTableRow({
 
                     </Stack>
                 </TableCell>
-                <TableCell align="left" >
+                <TableCell align="left">
                     {NUMEROFACTURAE4 && (
                         <Tooltip title={NUMEROFACTURAE4} sx={{maxWidth: 500}}>
                             <Button color="inherit">🤔</Button>
@@ -653,32 +653,54 @@ export default function InvoiceTableRow({
                 <Divider sx={{borderStyle: 'dashed'}}/>
 
                 {ESTADO === 10 && user.ROLE === "2" ? (
-                    <MenuItem
-                        onClick={() => {
-                            orderAprobarEjecutivoSoporte();
-                            handleClosePopover();
-                        }}
-                    >
-                        <Iconify icon="eva:shopping-bag-outline"/>
-                        Aprobar Ejecutivo Soporte
-                    </MenuItem>
+                    <>
+                        <MenuItem
+                            onClick={() => {
+                                orderAprobarEjecutivoSoporte();
+                                handleClosePopover();
+                            }}
+                        >
+                            <Iconify icon="eva:shopping-bag-outline"/>
+                            Aprobar Ejec.S.
+                        </MenuItem>
 
+                        <MenuItem
+                            onClick={() => {
+                                handleOpenConfirmAnular();
+                                handleClosePopover();
+                            }}
+                        >
+                            <Iconify icon="eva:shopping-bag-outline"/>
+                            Anular Ejec.S.
+                        </MenuItem>
+                    </>
                 ) : null
                 }
 
                 <Divider sx={{borderStyle: 'dashed'}}/>
 
                 {ESTADO === 13 && user.ROLE === "1" ? (
-                    <MenuItem
-                        onClick={() => {
-                            orderAprobarComercial();
-                            handleClosePopover();
-                        }}
-                    >
-                        <Iconify icon="eva:shopping-bag-outline"/>
-                        Aprobar Comercial
-                    </MenuItem>
+                    <>
+                        <MenuItem
+                            onClick={() => {
+                                orderAprobarComercial();
+                                handleClosePopover();
+                            }}
+                        >
+                            <Iconify icon="eva:shopping-bag-outline"/>
+                            Aprobar Com..
+                        </MenuItem>
 
+                        <MenuItem
+                            onClick={() => {
+                                handleOpenConfirmAnular();
+                                handleClosePopover();
+                            }}
+                        >
+                            <Iconify icon="eva:shopping-bag-outline"/>
+                            Anular Com..
+                        </MenuItem>
+                    </>
                 ) : null
                 }
 

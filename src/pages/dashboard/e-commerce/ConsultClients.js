@@ -105,11 +105,11 @@ export default function ConsultClientForm() {
         {
             field: 'COMPANY', headerName: 'EMPRESA', width: 150, renderCell: (params) => {
                 return (<Button
-                        variant="contained"
-                        onClick={() => handleShowCoordinates(params.row)}
-                    >
-                        {(params.row.COMPANY)}
-                    </Button>);
+                    variant="contained"
+                    onClick={() => handleShowCoordinates(params.row)}
+                >
+                    {(params.row.COMPANY)}
+                </Button>);
             }
         }, {
             field: 'Cliente', headerName: 'CLIENTE', width: 500, // Ancho específico en píxeles
@@ -159,10 +159,10 @@ export default function ConsultClientForm() {
     const onSnackbarAction = (data, color, anchor) => {
         enqueueSnackbar(`${data}`, {
             variant: color, anchorOrigin: anchor, action: (key) => (<>
-                    <Button size="small" color="inherit" onClick={() => closeSnackbar(key)}>
-                        Cerrar
-                    </Button>
-                </>),
+                <Button size="small" color="inherit" onClick={() => closeSnackbar(key)}>
+                    Cerrar
+                </Button>
+            </>),
         });
     };
 
@@ -251,254 +251,235 @@ export default function ConsultClientForm() {
 
 
     return (<>
-            <Head>
-                <title> Catálogo: Productos | HT</title>
-            </Head>
-            <Container>
+        <Head>
+            <title> Catálogo: Productos | HT</title>
+        </Head>
+        <Container>
 
-                <CustomBreadcrumbs
-                    heading="Buscar Cliente v1.0"
-                    links={[{
-                        name: 'Dashboard', href: PATH_DASHBOARD.root,
-                    }, {
-                        name: 'SAP', href: PATH_DASHBOARD.eCommerce.catalogo,
-                    }, {name: 'Cliente'},]}
-                />
-
-
-                {/*<Box sx={{height: 280}}>*/}
-                {/*<DataGrid*/}
-                {/*    rows={dataClienteAll}*/}
-                {/*    columns={baseColumns}*/}
-                {/*    slots={{*/}
-                {/*        toolbar: CustomToolbar,*/}
-                {/*        noRowsOverlay: () => <EmptyContent title="No Data"/>,*/}
-                {/*        noResultsOverlay: () => <EmptyContent title="No results found"/>,*/}
-                {/*    }}*/}
-                {/*/>*/}
-                {/*</Box>*/}
+            <CustomBreadcrumbs
+                heading="Buscar Cliente v1.0"
+                links={[{
+                    name: 'Dashboard', href: PATH_DASHBOARD.root,
+                }, {
+                    name: 'SAP', href: PATH_DASHBOARD.eCommerce.catalogo,
+                }, {name: 'Cliente'},]}
+            />
 
 
-                {/*<Grid container spacing={5}>*/}
-                {/*    <Grid item xs={12} md={6}>*/}
-                {/*        <Stack spacing={2}>*/}
-                {/*            <Block label="Cliente Razon Social">*/}
-                {/*                <Autocomplete*/}
-                {/*                    size="small"*/}
-                {/*                    autoHighlight*/}
-                {/*                    popupIcon={null}*/}
-                {/*                    options={dataClienteAll}*/}
-                {/*                    onInputChange={(event, value) => handleChangeSearch(value)}*/}
-                {/*                    getOptionLabel={(product) => product.Cliente}*/}
-                {/*                    noOptionsText={<SearchNotFound query={searchProducts}/>}*/}
-                {/*                    isOptionEqualToValue={(option, value) => option.ID === value.ID}*/}
-                {/*                    componentsProps={{*/}
-                {/*                        paper: {*/}
-                {/*                            sx: {*/}
-                {/*                                '& .MuiAutocomplete-option': {*/}
-                {/*                                    px: `8px !important`,*/}
-                {/*                                },*/}
-                {/*                            },*/}
-                {/*                        },*/}
-                {/*                    }}*/}
-                {/*                    renderInput={(params) => (*/}
-                {/*                        <CustomTextField*/}
-                {/*                            {...params}*/}
-
-                {/*                            placeholder="Buscar..."*/}
-                {/*                            onKeyUp={handleKeyUp}*/}
-                {/*                            InputProps={{*/}
-                {/*                                ...params.InputProps,*/}
-                {/*                                startAdornment: (*/}
-                {/*                                    <InputAdornment position="start">*/}
-                {/*                                        <Iconify icon="eva:search-fill"*/}
-                {/*                                                 sx={{ml: 1, color: 'text.disabled'}}/>*/}
-                {/*                                    </InputAdornment>*/}
-                {/*                                ),*/}
-                {/*                            }}*/}
-                {/*                        />*/}
-                {/*                    )}*/}
-                {/*                    renderOption={(props, product, {inputValue}) => {*/}
-                {/*                        const {ID, Cliente} = product;*/}
-                {/*                        const matches = match(Cliente, inputValue);*/}
-                {/*                        const parts = parse(Cliente, matches);*/}
-
-                {/*                        return (*/}
-                {/*                            <li {...props}>*/}
+            {/*<Box sx={{height: 280}}>*/}
+            {/*<DataGrid*/}
+            {/*    rows={dataClienteAll}*/}
+            {/*    columns={baseColumns}*/}
+            {/*    slots={{*/}
+            {/*        toolbar: CustomToolbar,*/}
+            {/*        noRowsOverlay: () => <EmptyContent title="No Data"/>,*/}
+            {/*        noResultsOverlay: () => <EmptyContent title="No results found"/>,*/}
+            {/*    }}*/}
+            {/*/>*/}
+            {/*</Box>*/}
 
 
-                {/*                                <AddressItem*/}
-                {/*                                    key={ID}*/}
-                {/*                                    address={product}*/}
-                {/*                                    onCreateBilling={() => onCreateBilling(product)}*/}
-                {/*                                >*/}
-                {/*                                    {parts.map((part, index) => (*/}
-                {/*                                        <Typography*/}
-                {/*                                            key={index}*/}
-                {/*                                            component="span"*/}
-                {/*                                            variant="subtitle2"*/}
-                {/*                                            color={part.highlight ? 'primary' : 'textPrimary'}*/}
-                {/*                                        >*/}
-                {/*                                            {part.text}*/}
-                {/*                                        </Typography>*/}
-                {/*                                    ))}*/}
+            {/*<Grid container spacing={5}>*/}
+            {/*    <Grid item xs={12} md={6}>*/}
+            {/*        <Stack spacing={2}>*/}
+            {/*            <Block label="Cliente Razon Social">*/}
+            {/*                <Autocomplete*/}
+            {/*                    size="small"*/}
+            {/*                    autoHighlight*/}
+            {/*                    popupIcon={null}*/}
+            {/*                    options={dataClienteAll}*/}
+            {/*                    onInputChange={(event, value) => handleChangeSearch(value)}*/}
+            {/*                    getOptionLabel={(product) => product.Cliente}*/}
+            {/*                    noOptionsText={<SearchNotFound query={searchProducts}/>}*/}
+            {/*                    isOptionEqualToValue={(option, value) => option.ID === value.ID}*/}
+            {/*                    componentsProps={{*/}
+            {/*                        paper: {*/}
+            {/*                            sx: {*/}
+            {/*                                '& .MuiAutocomplete-option': {*/}
+            {/*                                    px: `8px !important`,*/}
+            {/*                                },*/}
+            {/*                            },*/}
+            {/*                        },*/}
+            {/*                    }}*/}
+            {/*                    renderInput={(params) => (*/}
+            {/*                        <CustomTextField*/}
+            {/*                            {...params}*/}
 
-                {/*                                </AddressItem>*/}
+            {/*                            placeholder="Buscar..."*/}
+            {/*                            onKeyUp={handleKeyUp}*/}
+            {/*                            InputProps={{*/}
+            {/*                                ...params.InputProps,*/}
+            {/*                                startAdornment: (*/}
+            {/*                                    <InputAdornment position="start">*/}
+            {/*                                        <Iconify icon="eva:search-fill"*/}
+            {/*                                                 sx={{ml: 1, color: 'text.disabled'}}/>*/}
+            {/*                                    </InputAdornment>*/}
+            {/*                                ),*/}
+            {/*                            }}*/}
+            {/*                        />*/}
+            {/*                    )}*/}
+            {/*                    renderOption={(props, product, {inputValue}) => {*/}
+            {/*                        const {ID, Cliente} = product;*/}
+            {/*                        const matches = match(Cliente, inputValue);*/}
+            {/*                        const parts = parse(Cliente, matches);*/}
 
-                {/*                            </li>*/}
-                {/*                        );*/}
-                {/*                    }}*/}
-                {/*                />*/}
+            {/*                        return (*/}
+            {/*                            <li {...props}>*/}
 
-                {/*            </Block>*/}
 
-                {/*        </Stack>*/}
-                {/*    </Grid>*/}
+            {/*                                <AddressItem*/}
+            {/*                                    key={ID}*/}
+            {/*                                    address={product}*/}
+            {/*                                    onCreateBilling={() => onCreateBilling(product)}*/}
+            {/*                                >*/}
+            {/*                                    {parts.map((part, index) => (*/}
+            {/*                                        <Typography*/}
+            {/*                                            key={index}*/}
+            {/*                                            component="span"*/}
+            {/*                                            variant="subtitle2"*/}
+            {/*                                            color={part.highlight ? 'primary' : 'textPrimary'}*/}
+            {/*                                        >*/}
+            {/*                                            {part.text}*/}
+            {/*                                        </Typography>*/}
+            {/*                                    ))}*/}
 
-                {/*</Grid>*/}
+            {/*                                </AddressItem>*/}
 
-                <Stack spacing={2}>
-                    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-                        <Grid container spacing={5}>
-                            <Grid item xs={12} md={12}>
-                                <Block label="Cliente RUC/Cédula">
-                                    <RHFTextField name="ci_ruc"
-                                                  label="RUC/Cédula"
-                                                  onChange={(event) => {
-                                                      const inputValue = event.target.value.replace(/\D/g, ''); // Solo números
-                                                      if (/^\d{10,13}$/.test(inputValue)) {
-                                                          setValue('ci_ruc', inputValue, {shouldValidate: true});
-                                                      }
-                                                  }}
-                                                  InputProps={{
-                                                      type: 'number', pattern: '[0-9]*', // Asegura que solo se ingresen números
-                                                  }}
-                                    />
+            {/*                            </li>*/}
+            {/*                        );*/}
+            {/*                    }}*/}
+            {/*                />*/}
 
-                                </Block>
+            {/*            </Block>*/}
 
-                                <Block label="Acción">
-                                    <LoadingButton
-                                        fullWidth
-                                        color="success"
-                                        size="large"
-                                        type="submit"
-                                        variant="contained"
-                                        loading={isSubmitting}
-                                    >
-                                        Buscar
-                                    </LoadingButton>
+            {/*        </Stack>*/}
+            {/*    </Grid>*/}
 
-                                </Block>
-                            </Grid>
+            {/*</Grid>*/}
+
+            <Stack spacing={2}>
+                <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+                    <Grid container spacing={5}>
+                        <Grid item xs={12} md={12}>
+                            <Block label="Cliente RUC/Cédula">
+                                <RHFTextField name="ci_ruc"
+                                              label="RUC/Cédula"
+                                              onChange={(event) => {
+                                                  const inputValue = event.target.value.replace(/\D/g, ''); // Solo números
+                                                  if (/^\d{10,13}$/.test(inputValue)) {
+                                                      setValue('ci_ruc', inputValue, {shouldValidate: true});
+                                                  }
+                                              }}
+                                              InputProps={{
+                                                  type: 'number', pattern: '[0-9]*', // Asegura que solo se ingresen números
+                                              }}
+                                />
+
+                            </Block>
+
+                            <Block label="Acción">
+                                <LoadingButton
+                                    fullWidth
+                                    color="success"
+                                    size="large"
+                                    type="submit"
+                                    variant="contained"
+                                    loading={isSubmitting}
+                                >
+                                    Buscar
+                                </LoadingButton>
+
+                            </Block>
                         </Grid>
-
-                    </FormProvider>
-                </Stack>
-
-                <Grid container spacing={2} style={{marginTop: '20px'}}>
-                    <Grid item xs={12} md={6}>
-                        <Stack spacing={2}>
-                            {searchResults.length > 0 ? (<Block label={searchResults[0].COMPANY}>
-
-
-                                    <>
-                                        <Label color="success">Tipo: {searchResults[0].Tipo} </Label>
-                                        <Label color="success">Vendedor: {searchResults[0].SlpName} </Label>
-                                        <Label color="success">Cliente: {searchResults[0].Cliente} </Label>
-                                        <Label color="success">Lista
-                                            Precio: {tipoPrecio(searchResults[0].Lista)} </Label>
-                                        <Label color="success">Saldo de
-                                            Cuenta: {fCurrency(searchResults[0].Balance)} </Label>
-                                        <Label
-                                            color="success">DOCUMENTACIÓN: {documentacion(searchResults[0].U_SYP_DOCUMENTACION)} </Label>
-                                        <Label color="success">Tipo de
-                                            Crédito: {tipoCredito(searchResults[0].U_SYP_CREDITO)} </Label>
-                                        <Label color="success">Condicion de
-                                            Pago: {nameFormaPago(searchResults[0].GroupNum)} </Label>
-                                        <Label color="success">Límte de
-                                            Crédito: {fCurrency(searchResults[0].CreditLine)} </Label>
-                                        <Label color="success">Límite de
-                                            comprometido: {fCurrency(searchResults[0].DebtLine)} </Label>
-                                        <Label color="success">Pedidos
-                                            Clientes: {fCurrency(searchResults[0].OrdersBal)} </Label>
-
-                                        <p style={{color: '#1B806A', backgroundColor: 'rgba(54, 179, 126, 0.16)'}}>
-                                            Comentario: {searchResults[0].Free_Text}
-
-
-                                        </p>
-
-                                        <Box
-                                            rowGap={1}
-                                            columnGap={1}
-                                        >
-                                            {dataCliente ? (<>
-                                                    <MapComponent markers={JSON.parse(dataCliente?.ENVIO)}/>
-                                                </>) : (<Label color="error">Cliente no encontrado</Label>)}
-
-
-                                        </Box>
-                                    </>
-                                </Block>
-
-                            ) : (<Label color="error">Cliente no encontrado</Label>)}
-
-                        </Stack>
                     </Grid>
 
+                </FormProvider>
+            </Stack>
 
-                    <Grid item xs={12} md={6}>
-                        <Stack spacing={2}>
-                            {searchResults.length > 1 ? (<Block label={searchResults[1].COMPANY}>
+            <Grid container spacing={2} style={{marginTop: '20px'}}>
+                <Grid item xs={12} md={6}>
+                    <Stack spacing={2}>
+                        {searchResults.length > 0 ? (<Block label={searchResults[0].COMPANY}>
+                            <>
+                                <Label color="success">Tipo: {searchResults[0].Tipo} </Label>
+                                <Label color="success">Vendedor: {searchResults[0].SlpName} </Label>
+                                <Label color="success">Cliente: {searchResults[0].Cliente} </Label>
+                                <Label color="success">Lista
+                                    Precio: {tipoPrecio(searchResults[0].Lista)} </Label>
+                                <Label color="success">Saldo de
+                                    Cuenta: {fCurrency(searchResults[0].Balance)} </Label>
+                                <Label
+                                    color="success">DOCUMENTACIÓN: {documentacion(searchResults[0].U_SYP_DOCUMENTACION)} </Label>
+                                <Label color="success">Tipo de
+                                    Crédito: {tipoCredito(searchResults[0].U_SYP_CREDITO)} </Label>
+                                <Label color="success">Condicion de
+                                    Pago: {nameFormaPago(searchResults[0].GroupNum)} </Label>
+                                <Label color="success">Límte de
+                                    Crédito: {fCurrency(searchResults[0].CreditLine)} </Label>
+                                <Label color="success">Límite de
+                                    comprometido: {fCurrency(searchResults[0].DebtLine)} </Label>
+                                <Label color="success">Pedidos
+                                    Clientes: {fCurrency(searchResults[0].OrdersBal)} </Label>
+                                <p style={{color: '#1B806A', backgroundColor: 'rgba(54, 179, 126, 0.16)'}}>
+                                    Comentario: {searchResults[0].Free_Text}
+                                </p>
+                                <Box
+                                    rowGap={1}
+                                    columnGap={1}
+                                >
+                                    {dataCliente ? (<>
+                                        <MapComponent markers={JSON.parse(dataCliente?.ENVIO)}/>
+                                    </>) : (<Label color="error">Cliente no encontrado</Label>)}
 
-                                    <>
-                                        <Label color="success">Tipo: {searchResults[1].Tipo} </Label>
-                                        <Label color="success">Vendedor: {searchResults[1].SlpName} </Label>
-                                        <Label color="success">Cliente: {searchResults[1].Cliente} </Label>
-                                        <Label color="success">Lista
-                                            Precio: {tipoPrecio(searchResults[1].Lista)} </Label>
-                                        <Label color="success">Saldo de
-                                            Cuenta: {fCurrency(searchResults[1].Balance)} </Label>
-                                        <Label
-                                            color="success">DOCUMENTACIÓN: {documentacion(searchResults[1].U_SYP_DOCUMENTACION)} </Label>
-                                        <Label color="success">Tipo de
-                                            Crédito: {tipoCredito(searchResults[1].U_SYP_CREDITO)} </Label>
-                                        <Label color="success">Condicion de
-                                            Pago: {nameFormaPago(searchResults[1].GroupNum)} </Label>
-                                        <Label color="success">Límte de
-                                            Crédito: {fCurrency(searchResults[1].CreditLine)} </Label>
-                                        <Label color="success">Límite de
-                                            comprometido: {fCurrency(searchResults[1].DebtLine)} </Label>
-                                        <Label color="success">Pedidos
-                                            Clientes: {fCurrency(searchResults[1].OrdersBal)} </Label>
-
-                                        <p style={{color: '#1B806A', backgroundColor: 'rgba(54, 179, 126, 0.16)'}}>
-                                            Comentario: {searchResults[1].Free_Text}
-
-                                        </p>
-
-                                        <Box
-                                            rowGap={1}
-                                            columnGap={1}
-                                        >
-                                            {dataCliente ? (<>
-                                                    <MapComponent markers={JSON.parse(dataCliente?.ENVIO)}/>
-                                                </>) : (<Label color="error">Cliente no encontrado</Label>)}
-
-
-                                        </Box>
-                                    </>
-                                </Block>
-
-                            ) : (<Label color="error">Cliente no encontrado</Label>)}
-
-                        </Stack>
-                    </Grid>
+                                </Box>
+                            </>
+                        </Block>) : (<Label color="error">Cliente no encontrado</Label>)}
+                    </Stack>
                 </Grid>
 
-            </Container>
-        </>);
+                <Grid item xs={12} md={6}>
+                    <Stack spacing={2}>
+                        {searchResults.length > 1 ? (<Block label={searchResults[1].COMPANY}>
+                                <>
+                                    <Label color="success">Tipo: {searchResults[1].Tipo} </Label>
+                                    <Label color="success">Vendedor: {searchResults[1].SlpName} </Label>
+                                    <Label color="success">Cliente: {searchResults[1].Cliente} </Label>
+                                    <Label color="success">Lista
+                                        Precio: {tipoPrecio(searchResults[1].Lista)} </Label>
+                                    <Label color="success">Saldo de
+                                        Cuenta: {fCurrency(searchResults[1].Balance)} </Label>
+                                    <Label
+                                        color="success">DOCUMENTACIÓN: {documentacion(searchResults[1].U_SYP_DOCUMENTACION)} </Label>
+                                    <Label color="success">Tipo de
+                                        Crédito: {tipoCredito(searchResults[1].U_SYP_CREDITO)} </Label>
+                                    <Label color="success">Condicion de
+                                        Pago: {nameFormaPago(searchResults[1].GroupNum)} </Label>
+                                    <Label color="success">Límte de
+                                        Crédito: {fCurrency(searchResults[1].CreditLine)} </Label>
+                                    <Label color="success">Límite de
+                                        comprometido: {fCurrency(searchResults[1].DebtLine)} </Label>
+                                    <Label color="success">Pedidos
+                                        Clientes: {fCurrency(searchResults[1].OrdersBal)} </Label>
+                                    <p style={{color: '#1B806A', backgroundColor: 'rgba(54, 179, 126, 0.16)'}}>
+                                        Comentario: {searchResults[1].Free_Text}
+                                    </p>
+                                    <Box
+                                        rowGap={1}
+                                        columnGap={1}
+                                    >
+                                        {dataCliente ? (<>
+                                            <MapComponent markers={JSON.parse(dataCliente?.ENVIO)}/>
+                                        </>) : (<Label color="error">Cliente no encontrado</Label>)}
+                                    </Box>
+                                </>
+                            </Block>
+                        ) : (<Label color="error">Cliente no encontrado</Label>)}
+                    </Stack>
+                </Grid>
+            </Grid>
+
+        </Container>
+    </>);
 }
 
 // ----------------------------------------------------------------------
@@ -509,16 +490,16 @@ Block.propTypes = {
 
 function Block({label = 'RHFTextField', sx, children}) {
     return (<Stack spacing={1} sx={{width: 1, ...sx}}>
-            <Typography
-                variant="caption"
-                sx={{
-                    textAlign: 'right', fontStyle: 'italic', color: 'text.disabled',
-                }}
-            >
-                {label}
-            </Typography>
-            {children}
-        </Stack>);
+        <Typography
+            variant="caption"
+            sx={{
+                textAlign: 'right', fontStyle: 'italic', color: 'text.disabled',
+            }}
+        >
+            {label}
+        </Typography>
+        {children}
+    </Stack>);
 }
 
 
@@ -533,52 +514,52 @@ function AddressItem({address, onCreateBilling}) {
                   sx={{
                       p: 3, mb: 3,
                   }}
+    >
+        <Stack
+            spacing={2}
+            alignItems={{
+                md: 'flex-end',
+            }}
+            direction={{
+                xs: 'column', md: 'row',
+            }}
         >
-            <Stack
-                spacing={2}
-                alignItems={{
-                    md: 'flex-end',
-                }}
-                direction={{
-                    xs: 'column', md: 'row',
-                }}
-            >
-                <Stack flexGrow={1} spacing={1}>
-                    <Stack direction="row" alignItems="center">
-                        <Typography variant="subtitle1">
-                            {receiver}
-                            {/* <Box component="span" sx={{ml: 0.5, typography: 'body2', color: 'text.secondary'}}> */}
-                            {/*     ({addressType}) */}
-                            {/* </Box> */}
-                        </Typography>
-
-                        {/* {isDefault && ( */}
-                        {/*     <Label color="info" sx={{ml: 1}}> */}
-                        {/*         Default */}
-                        {/*     </Label> */}
-                        {/* )} */}
-                    </Stack>
-
-                    <Typography variant="body2">{tipo}</Typography>
-
-                    <Typography variant="body2" sx={{color: 'text.secondary'}}>
-                        {id}
+            <Stack flexGrow={1} spacing={1}>
+                <Stack direction="row" alignItems="center">
+                    <Typography variant="subtitle1">
+                        {receiver}
+                        {/* <Box component="span" sx={{ml: 0.5, typography: 'body2', color: 'text.secondary'}}> */}
+                        {/*     ({addressType}) */}
+                        {/* </Box> */}
                     </Typography>
+
+                    {/* {isDefault && ( */}
+                    {/*     <Label color="info" sx={{ml: 1}}> */}
+                    {/*         Default */}
+                    {/*     </Label> */}
+                    {/* )} */}
                 </Stack>
 
-                {/* <Stack flexDirection="row" flexWrap="wrap" flexShrink={0}> */}
-                {/*     /!* {!isDefault && ( *!/ */}
-                {/*     /!*     <Button variant="outlined" size="small" color="inherit" sx={{mr: 1}}> *!/ */}
-                {/*     /!*         Borrar *!/ */}
-                {/*     /!*     </Button> *!/ */}
-                {/*     /!* )} *!/ */}
+                <Typography variant="body2">{tipo}</Typography>
 
-                {/*     <Button variant="outlined" size="small" onClick={onCreateBilling}> */}
-                {/*         Entregar a esta dirección */}
-                {/*     </Button> */}
-                {/* </Stack> */}
+                <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                    {id}
+                </Typography>
             </Stack>
-        </Card>);
+
+            {/* <Stack flexDirection="row" flexWrap="wrap" flexShrink={0}> */}
+            {/*     /!* {!isDefault && ( *!/ */}
+            {/*     /!*     <Button variant="outlined" size="small" color="inherit" sx={{mr: 1}}> *!/ */}
+            {/*     /!*         Borrar *!/ */}
+            {/*     /!*     </Button> *!/ */}
+            {/*     /!* )} *!/ */}
+
+            {/*     <Button variant="outlined" size="small" onClick={onCreateBilling}> */}
+            {/*         Entregar a esta dirección */}
+            {/*     </Button> */}
+            {/* </Stack> */}
+        </Stack>
+    </Card>);
 }
 
 
@@ -658,10 +639,10 @@ function MapComponent({markers}) {
 
 function CustomToolbar() {
     return (<GridToolbarContainer>
-            <GridToolbarQuickFilter/>
-            <Box sx={{flexGrow: 1}}/>
+        <GridToolbarQuickFilter/>
+        <Box sx={{flexGrow: 1}}/>
 
-        </GridToolbarContainer>);
+    </GridToolbarContainer>);
 }
 
 

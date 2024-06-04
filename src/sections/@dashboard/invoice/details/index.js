@@ -23,7 +23,7 @@ import {
     Alert,
     Container,
     Tooltip,
-    Dialog, DialogActions, InputAdornment, CircularProgress,
+    Dialog, DialogActions, InputAdornment, CircularProgress, ButtonGroup,
 } from '@mui/material';
 
 import Link from 'next/link';
@@ -838,6 +838,107 @@ export default function InvoiceDetails({invoice}) {
 
     //console.log("USUARIO: "+ JSON.stringify( user));
 
+    const orderAprobarEjecutivoSoporte = async () => {
+        console.log("Número de orden Tomebamba: " + ID);
+
+        try {
+            const response = await axios.put('/hanadb/api/orders/order/importadora_tomebamba_approve', {
+                ID_ORDER: ID,
+                STATUS: 13
+            });
+
+            // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
+            console.log('Cambiando estado');
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+
+                //setTimeout(() => {
+                router.reload();
+                //}, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
+            }
+
+        } catch (error) {
+            // Manejar el error de la petición DELETE aquí
+            console.error('Error al cambiar el status de la orden: ', error);
+        }
+
+    }
+
+    const orderAprobarComercial = async () => {
+        console.log("Número de orden Tomebamba: " + ID);
+
+        try {
+            const response = await axios.put('/hanadb/api/orders/order/importadora_tomebamba_approve', {
+                ID_ORDER: ID,
+                STATUS: 6
+            });
+
+            // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
+            console.log('Cambiando estado');
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+
+                //setTimeout(() => {
+                router.reload();
+                //}, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
+            }
+
+        } catch (error) {
+            // Manejar el error de la petición DELETE aquí
+            console.error('Error al cambiar el status de la orden:', error);
+        }
+
+    }
+
+    const [openConfirmAnular, setOpenConfirmAnular] = useState(false);
+
+
+    const handleOpenConfirmAnular = () => {
+        setOpenConfirmAnular(true);
+    };
+
+    const handleCloseConfirmAnular = () => {
+        setOpenConfirmAnular(false);
+    };
+
+    //Anúla una orden
+    const onAnularRow = async () => {
+        console.log("Número de orden: " + ID);
+        console.log("Observación anulación orden: " + valueNew);
+
+        try {
+            const response = await axios.put('/hanadb/api/orders/order/anular', {
+                params: {
+                    ID_ORDER: ID,
+                    OBSERVACION_ANULACION: valueNew,
+                    ID_USER: user.ID,
+                    empresa: user.EMPRESA
+                }
+            });
+
+            // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
+            console.log('Estado de orden anulado.');
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+
+                //setTimeout(() => {
+                router.reload();
+                //}, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
+            }
+
+        } catch (error) {
+            // Manejar el error de la petición DELETE aquí
+            console.error('Error al eliminar la orden:', error);
+        }
+
+    };
+
     return (
         <>
             {/* <InvoiceToolbar invoice={invoice} /> */}
@@ -845,25 +946,30 @@ export default function InvoiceDetails({invoice}) {
                 <Grid container>
                     <Grid item xs={12} sm={6} sx={{mb: 5}}>
                         <Image disabledEffect alt="logo" src="/logo/logo_full.svg" sx={{maxWidth: 120}}/>
-                        <PDFDownloadLink
-                            document={<PedidoInvoicePDF invoice={invoice}/>}
-                            fileName={`PEDIDO_CLIENTE_${invoice.ID}`}
-                            style={{textDecoration: 'none'}}
-                        >
-                            {({loading}) => (
-                                <Tooltip title="Descargar">
-                                    <IconButton
-                                        onClick={user.ROLE === "bodega" ? () => handleDownloadClick(ID) : undefined}
-                                    >
-                                        {loading ? (
-                                            <CircularProgress size={24} color="inherit"/>
-                                        ) : (
-                                            <Iconify icon="eva:download-fill"/>
-                                        )}
-                                    </IconButton>
-                                </Tooltip>
-                            )}
-                        </PDFDownloadLink>
+
+                        {user.COMPANY === 'HT' ? (
+                            <PDFDownloadLink
+                                document={<PedidoInvoicePDF invoice={invoice}/>}
+                                fileName={`PEDIDO_CLIENTE_${invoice.ID}`}
+                                style={{textDecoration: 'none'}}
+                            >
+                                {({loading}) => (
+                                    <Tooltip title="Descargar">
+                                        <IconButton
+                                            onClick={user.ROLE === "bodega" ? () => handleDownloadClick(ID) : undefined}
+                                        >
+                                            {loading ? (
+                                                <CircularProgress size={24} color="inherit"/>
+                                            ) : (
+                                                <Iconify icon="eva:download-fill"/>
+                                            )}
+                                        </IconButton>
+                                    </Tooltip>
+                                )}
+                            </PDFDownloadLink>
+                        ) : null
+                        }
+
                     </Grid>
 
 
@@ -883,6 +989,56 @@ export default function InvoiceDetails({invoice}) {
                             {/* </Label> */}
 
                             <Typography variant="h6">{`INV-${ID}`}</Typography>
+
+                            {ESTADO === 10 && user.ROLE === "2" ? (
+                                <Grid container direction="column" alignItems="right" spacing={1}>
+                                    <Grid item>
+                                        <Button
+                                            onClick={() => {
+                                                orderAprobarEjecutivoSoporte();
+                                            }}
+                                            variant="contained">
+                                            Aprobar Ejec.S.
+                                        </Button>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button
+                                            onClick={() => {
+                                                handleOpenConfirmAnular();
+                                                handleClosePopover();
+                                            }}
+                                            variant="contained">
+                                            Anular Ejec.S.
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            ) : null
+                            }
+
+                            {ESTADO === 13 && user.ROLE === "1" ? (
+                                <Grid container direction="column" alignItems="right" spacing={1}>
+                                    <Grid item>
+                                        <Button
+                                            onClick={() => {
+                                                orderAprobarComercial();
+                                            }}
+                                            variant="contained">
+                                            Aprobar Com..
+                                        </Button>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button
+                                            onClick={() => {
+                                                handleOpenConfirmAnular();
+                                                handleClosePopover();
+                                            }}
+                                            variant="contained">
+                                            Anular Com..
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            ) : null
+                            }
                         </Box>
                     </Grid>
 
@@ -1082,9 +1238,9 @@ export default function InvoiceDetails({invoice}) {
                                             </Box>
                                         </TableCell>
                                         {user.ROLE !== '0' ? (
-                                                user.ROLE !== '2' ? (
-                                        <TableCell align="left">{namePriceType(row.TIPOPRECIO)}</TableCell>
-                                                ) : null
+                                            user.ROLE !== '2' ? (
+                                                <TableCell align="left">{namePriceType(row.TIPOPRECIO)}</TableCell>
+                                            ) : null
                                         ) : null
                                         }
                                         <TableCell align="left">{row.COMENTARIOPRECIO}</TableCell>
@@ -1107,17 +1263,17 @@ export default function InvoiceDetails({invoice}) {
                                                         align="right">{fCurrency(row.PRECIOUNITARIOVENTA)}</TableCell>
                                                     <TableCell
                                                         align="right">{fCurrency(row.PRECIOUNITARIOVENTA * row.CANTIDAD)}</TableCell>
-
-                                                    <TableCell align="right">
-                                                        <IconButton color={openPopover ? 'inherit' : 'default'}
-                                                                    onClick={(event) => handleOpenPopover(event, row)}>
-                                                            <Iconify icon="eva:more-vertical-fill"/>
-                                                        </IconButton>
-                                                    </TableCell>
                                                 </>
                                             ) : null
-                                            ) : null
+                                        ) : null
                                         }
+
+                                        <TableCell align="right">
+                                            <IconButton color={openPopover ? 'inherit' : 'default'}
+                                                        onClick={(event) => handleOpenPopover(event, row)}>
+                                                <Iconify icon="eva:more-vertical-fill"/>
+                                            </IconButton>
+                                        </TableCell>
 
                                     </TableRow>
 
@@ -1424,7 +1580,44 @@ export default function InvoiceDetails({invoice}) {
             ) : null
             }
 
+
+            {user.ROLE === "2" || user.ROLE === "1" ? (
+
+                <MenuPopover
+                    open={openPopover}
+                    onClose={handleClosePopover}
+                    arrow="right-top"
+                    sx={{width: 160}}
+                >
+
+                    <MenuItem
+                        onClick={() => {
+                            handleOpenQty();
+                            handleClosePopover();
+                        }}
+                    >
+                        <Iconify icon="eva:edit-fill"/>
+                        Cantidad.
+                    </MenuItem>
+
+                    <MenuItem
+                        onClick={() => {
+                            handleOpenConfirm();
+                            handleClosePopover();
+                        }}
+                        sx={{color: 'error.main'}}
+                    >
+                        <Iconify icon="eva:trash-2-outline"/>
+                        Borrar
+                    </MenuItem>
+
+                </MenuPopover>
+            ) : null
+            }
+
             <ConfirmDialog
+
+
                 open={openPriceUnit}
                 onClose={handleClosePriceUnit}
                 title="Nuevo precio unitario"
@@ -1525,6 +1718,30 @@ export default function InvoiceDetails({invoice}) {
                 }
             />
 
+            <ConfirmDialog
+                open={openConfirmAnular}
+                onClose={handleCloseConfirmAnular}
+                title="Anular"
+                content="¿Estás seguro de que quieres anular la orden?"
+                action={
+                    <>
+                        <TextField
+                            label="Observaciones al anular."
+                            value={valueNew}
+                            onChange={handleChange}
+                        />
+
+                        <Button variant="contained" color="error" onClick={() => {
+                            onAnularRow();
+                        }}
+                        >
+                            Anular
+                        </Button>
+                    </>
+
+                }
+            />
+
 
         </>
     );
@@ -1566,3 +1783,5 @@ export const boxes = [
 const isCodigoAllowed = (codigo, bodega) => {
     return datos.some(item => item.CODIGO === codigo && item.BODEGA == bodega);
 };
+
+
