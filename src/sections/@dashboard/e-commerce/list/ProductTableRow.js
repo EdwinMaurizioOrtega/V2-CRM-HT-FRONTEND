@@ -41,6 +41,7 @@ export default function ProductTableRow({
                                             onDeleteRow,
                                             onEditRow,
                                             onViewRow,
+                                            userA,
                                         }) {
     const {NOMBRE, CODIGO, SKU, TOTAL, cover, createdAt, inventoryType, price, IMAGES, COD_ITSA} = row;
 
@@ -116,9 +117,20 @@ export default function ProductTableRow({
                 </TableCell>
 
                 {/* <TableCell>{fDate(createdAt)}</TableCell> */}
-                <TableCell>{CODIGO}</TableCell>
-                <TableCell>{SKU}</TableCell>
-                <TableCell>{COD_ITSA}</TableCell>
+
+                {userA.COMPANY === 'TOMEBAMBA' ? (
+                    <TableCell>{COD_ITSA}</TableCell>
+                ) : (
+                    <>
+                        <TableCell>{CODIGO}</TableCell>
+                        <TableCell>{SKU}</TableCell>
+
+                    </>
+
+                )
+
+                }
+
 
                 {/* <TableCell align="center"> */}
                 {/*     <Label */}

@@ -51,6 +51,22 @@ const TABLE_HEAD = [
   { id: 'COD_ITSA', label: 'ITSA', align: 'left' },
 ];
 
+const TABLE_HEAD_TM = [
+  { id: 'NOMBRE', label: 'Producto', align: 'left' },
+  { id: 'COD_ITSA', label: 'ITSA', align: 'left' },
+];
+
+// Función que decide qué tabla mostrar basada en el tipo de usuario
+function getTableHead(user) {
+  // Aquí puedes poner lógica para decidir qué tabla mostrar basada en el usuario
+  if (user && user.COMPANY !== "TOMEBAMBA") {
+    return TABLE_HEAD;
+  } else {
+    return TABLE_HEAD_TM;
+  }
+}
+
+
 // ----------------------------------------------------------------------
 
 EcommerceProductListPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -257,6 +273,8 @@ export default function EcommerceProductListPage() {
     setFilterStatus([]);
   };
 
+  const tableHead = getTableHead(user);
+
   return (
     <>
       <Head>
@@ -312,7 +330,7 @@ export default function EcommerceProductListPage() {
                 <TableHeadCustom
                   order={order}
                   orderBy={orderBy}
-                  headLabel={TABLE_HEAD}
+                  headLabel={tableHead}
                   rowCount={tableData.length}
                   numSelected={selected.length}
                   onSort={onSort}
@@ -337,6 +355,7 @@ export default function EcommerceProductListPage() {
                           onDeleteRow={() => handleDeleteRow(row.CODIGO)}
                           onEditRow={() => handleEditRow(row.CODIGO)}
                           onViewRow={() => handleViewRow(row.CODIGO)}
+                          userA={user}
                         />
                       ) : (
                         !isNotFound && <TableSkeleton key={index} sx={{ height: denseHeight }} />
