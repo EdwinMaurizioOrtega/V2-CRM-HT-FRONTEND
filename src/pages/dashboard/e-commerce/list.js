@@ -124,33 +124,33 @@ export default function EcommerceProductListPage() {
       console.log("User: " + JSON.stringify(user));
 
       try {
-        // const cache = await caches.open('cache-crm');
-        // const response = await cache.match(`${HOST_API_KEY}/hanadb/api/products/?empresa=${user.EMPRESA}`);
-        //
-        // if (response) {
-        //   // Si hay una respuesta en la caché, se obtiene su contenido
-        //   const cachedData = await response.json();
-        //
-        //   if (user.ROLE === 'infinix'){
-        //     const infinixProducts = cachedData.products.filter(product => product.MARCA === 'INFINIX');
-        //     setProducts(infinixProducts);
-        //   } else if (user.ROLE === '0'){
-        //     //Prpductos de la bodega CENTRO_DE_DISTRIBUCION_HT y categoria celulares
-        //     const tomebambaProducts = cachedData.products.filter(product => product.CATEGORIA === 'CELULARES' && product.CENTRO_DE_DISTRIBUCION_HT > 0);
-        //     setProducts(tomebambaProducts);
-        //   } else {
-        //     setProducts(cachedData.products);
-        //   }
-        //
-        //   console.log("cachedData: "+JSON.stringify(cachedData));
-        // }
+        const cache = await caches.open('cache-crm');
+        const response = await cache.match(`${HOST_API_KEY}/hanadb/api/products/?empresa=${user.EMPRESA}`);
+
+        if (response) {
+          // Si hay una respuesta en la caché, se obtiene su contenido
+          const cachedData = await response.json();
+
+          if (user.ROLE === 'infinix'){
+            const infinixProducts = cachedData.products.filter(product => product.MARCA === 'INFINIX');
+            setProducts(infinixProducts);
+          } else if (user.ROLE === '0'){
+            //Prpductos de la bodega CENTRO_DE_DISTRIBUCION_HT y categoria celulares
+            const tomebambaProducts = cachedData.products.filter(product => product.CATEGORIA === 'CELULARES' && product.CENTRO_DE_DISTRIBUCION_HT > 0);
+            setProducts(tomebambaProducts);
+          } else {
+            setProducts(cachedData.products);
+          }
+
+          console.log("cachedData: "+JSON.stringify(cachedData));
+        }
 
         // Independientemente de si hay una respuesta en la caché o no, se realiza la solicitud de red
         const networkResponse = await fetch(`${HOST_API_KEY}/hanadb/api/products/?empresa=${user.EMPRESA}`);
         const data = await networkResponse.json();
 
         // Se almacena la respuesta de red en la caché
-        //await cache.put(`${HOST_API_KEY}/hanadb/api/products/?empresa=${user.EMPRESA}`, new Response(JSON.stringify(data)));
+        await cache.put(`${HOST_API_KEY}/hanadb/api/products/?empresa=${user.EMPRESA}`, new Response(JSON.stringify(data)));
 
         // Si había una respuesta en la caché, los productos ya se establecieron en el estado
         // Si no había respuesta en la caché, ahora se establecen los productos con los datos de la respuesta de red
