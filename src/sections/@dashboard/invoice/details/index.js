@@ -947,7 +947,7 @@ export default function InvoiceDetails({invoice}) {
                     <Grid item xs={12} sm={6} sx={{mb: 5}}>
                         <Image disabledEffect alt="logo" src="/logo/logo_full.svg" sx={{maxWidth: 120}}/>
 
-                        {user.COMPANY === 'HT' ? (
+                        {user.COMPANY === 'HT' || user.COMPANY === 'ALPHACELL' ? (
                             <PDFDownloadLink
                                 document={<PedidoInvoicePDF invoice={invoice}/>}
                                 fileName={`PEDIDO_CLIENTE_${invoice.ID}`}
