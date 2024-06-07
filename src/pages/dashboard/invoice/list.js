@@ -256,12 +256,8 @@ export default function InvoiceListPage() {
                     console.log("Tomebamba: Vendedor")
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/vendedor?ven=${user.ID}&empresa=0992537442001`);
                     data = await response.json();
-                } else if (user.ROLE === "2") {
-                    console.log("Tomebamba: Ejecutivo Soporte")
-                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/tomebamba_credit?empresa=0992537442001&status=10, 13, 6, 0, 1, 8`);
-                    data = await response.json();
-                } else if (user.ROLE === "1") {
-                    console.log("Tomebamba: Compras - Carlos Mendez")
+                } else if (user.ROLE === "2" || user.ROLE === "1") {
+                    console.log("Tomebamba: Ejecutivo Soporte / Compras")
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/tomebamba_credit?empresa=0992537442001&status=10, 13, 6, 0, 1, 8`);
                     data = await response.json();
                 }

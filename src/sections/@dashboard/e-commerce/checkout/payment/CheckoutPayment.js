@@ -105,45 +105,51 @@ const WAREHOUSE_OPTIONS_ALPACELL = [
     {
         id: '001',
         value: '001',
-        title: 'BODEGA',
-        description: 'INVENTARIO.',
+        title: 'BODEGA MATRIZ',
+        description: 'GUAYAQUIL ALPHACELL',
     },
     {
-        id: '002',
-        value: '002',
-        title: 'MOVISTAR RESERVA',
-        description: 'ALMACEN',
+        id: '007',
+        value: '007',
+        title: 'BODEGA CDHT',
+        description: 'QUITO ALPHACELL',
     },
-    {
-        id: '003',
-        value: '003',
-        title: 'MOVISTAR ENTREGADO',
-        description: 'ALMACEN',
-    },
-    {
-        id: '004',
-        value: '004',
-        title: 'DEPRATI',
-        description: 'CONSIGNACIÓN',
-    },
-    {
-        id: '005',
-        value: '005',
-        title: 'CRESA CONSIGNACIÓN',
-        description: 'CONSIGNACIÓN',
-    },
-    {
-        id: '006',
-        value: '006',
-        title: 'COMPUTRONSA CONSIGNACIÓN',
-        description: 'CONSIGNACIÓN',
-    },
-    {
-        id: '099',
-        value: '099',
-        title: 'INVENTARIO TRANSITO IMPORTACIONES',
-        description: 'ALMACEN VIRTUAL',
-    },
+    // {
+    //     id: '002',
+    //     value: '002',
+    //     title: 'MOVISTAR RESERVA',
+    //     description: 'ALMACEN',
+    // },
+    // {
+    //     id: '003',
+    //     value: '003',
+    //     title: 'MOVISTAR ENTREGADO',
+    //     description: 'ALMACEN',
+    // },
+    // {
+    //     id: '004',
+    //     value: '004',
+    //     title: 'DEPRATI',
+    //     description: 'CONSIGNACIÓN',
+    // },
+    // {
+    //     id: '005',
+    //     value: '005',
+    //     title: 'CRESA CONSIGNACIÓN',
+    //     description: 'CONSIGNACIÓN',
+    // },
+    // {
+    //     id: '006',
+    //     value: '006',
+    //     title: 'COMPUTRONSA CONSIGNACIÓN',
+    //     description: 'CONSIGNACIÓN',
+    // },
+    // {
+    //     id: '099',
+    //     value: '099',
+    //     title: 'INVENTARIO TRANSITO IMPORTACIONES',
+    //     description: 'ALMACEN VIRTUAL',
+    // },
 ]
 
 const PAYMENT_OPTIONS = [
