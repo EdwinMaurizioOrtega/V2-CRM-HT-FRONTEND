@@ -46,6 +46,7 @@ export const FILTER_GENDER_OPTIONS = [
   { label: 'BLU', value: 'BLU'},
   { label: 'NOKIA', value: 'NOKIA'},
   { label: 'APPLE', value: 'APPLE'},
+  {label: 'MOTOROLA', value: 'MOTOROLA'},
   { label: 'VERYKOOL', value: 'VERYKOOL'},
   { label: 'HUAWEI', value: 'HUAWEI'},
   { label: 'XIAOMI', value: 'XIAOMI'},

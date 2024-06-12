@@ -85,6 +85,7 @@ const CATEGORIAS = [
     {label: 'TABLETS', value: '110'},
 ];
 
+
 export const MARCAS = [
     {label: 'SAMSUNG', value: '02'},
     {label: 'BLU', value: '03'},
@@ -92,6 +93,7 @@ export const MARCAS = [
     {label: 'TECNO', value: '20'},
     {label: 'HONOR', value: '22'},
     {label: 'INFINIX', value: '43'},
+    {label: 'MOTOROLA', value: '06'},
     {label: 'OPPO', value: '67'},
     {label: 'TCL', value: '64'},
     {label: 'KIESLECT', value: '10'},
