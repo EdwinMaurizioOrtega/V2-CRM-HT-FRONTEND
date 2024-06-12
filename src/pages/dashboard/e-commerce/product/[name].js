@@ -285,8 +285,8 @@ export default  function EcommerceProductDetailsPage() {
                             {/* ))} */}
                         </Box>
 
-                        {
-                            user.COMPANY !== 'TOMEBAMBA' ? (
+                        {/*{*/}
+                        {/*    user.COMPANY !== 'TOMEBAMBA' ? (*/}
 
                         <Card>
                             <Tabs
@@ -317,8 +317,8 @@ export default  function EcommerceProductDetailsPage() {
                                     )
                             )}
                         </Card>
-                                ) : null
-                        }
+                        {/*        ) : null*/}
+                        {/*}*/}
                     </>
                 )}
 
