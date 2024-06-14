@@ -4,7 +4,7 @@ import {Page, View, Text, Image, Document} from '@react-pdf/renderer';
 
 //
 import styles from './InvoiceStyle';
-import {Divider, Link} from "@mui/material";
+import {Divider, Link, TableCell} from "@mui/material";
 
 import React from 'react';
 import {fontWeight} from "@mui/system";
@@ -20,7 +20,7 @@ PedidoInvoicePDF.propTypes = {
 };
 
 
-export default function PedidoInvoicePDF({invoice}) {
+export default function PedidoInvoicePDF({invoice, user}) {
     // console.log("invoice: "+ JSON.stringify(invoice));
     // console.log("invoice: "+ JSON.stringify(invoice[0]));
     // console.log("invoice: "+ invoice.PEDIDO_PROV);
@@ -50,13 +50,25 @@ export default function PedidoInvoicePDF({invoice}) {
     } = invoice;
 
 
-    const ivaPorcentaje = 0.15; // Porcentaje de IVA (12% en Ecuador)
+    const ivaPorcentaje = 0.15; // Porcentaje de IVA (15% en Ecuador)
     let subtotalTotal = 0;
 
-    items.forEach((row) => {
-        const subtotal = row.PRECIOUNITARIOVENTA * row.CANTIDAD;
-        subtotalTotal += subtotal;
-    });
+    //TOMEBAMBA: VENDEDOR Y EJECUTIVO SOPORTE
+    if (user.ROLE === '0' || user.ROLE === '2') {
+
+        items.forEach((row) => {
+            const subtotal = row.TM_PRECIO_UNITARIO_VENTA * row.CANTIDAD;
+            subtotalTotal += subtotal;
+        });
+
+    } else {
+
+        items.forEach((row) => {
+            const subtotal = row.PRECIOUNITARIOVENTA * row.CANTIDAD;
+            subtotalTotal += subtotal;
+        });
+
+    }
 
     const ivaTotal = subtotalTotal * ivaPorcentaje;
     const totalConIva = subtotalTotal + ivaTotal;
@@ -186,7 +198,14 @@ export default function PedidoInvoicePDF({invoice}) {
                                 </View>
 
                                 <View style={styles.tableCell_3}>
-                                    <Text>{namePriceType(item.TIPOPRECIO)}</Text>
+
+                                    {user.ROLE === '0' || user.ROLE === '2' ? (
+                                        <Text>{namePriceType(item.TM_TIPO_PRECIO)}</Text>
+                                    ) : (
+                                        <Text>{namePriceType(item.TIPOPRECIO)}</Text>
+                                    )
+                                    }
+
                                 </View>
                                 <View style={styles.tableCell_3}>
                                     <Text>{item.COMENTARIOPRECIO}</Text>
@@ -202,12 +221,30 @@ export default function PedidoInvoicePDF({invoice}) {
                                 {/*<View style={[styles.tableCell_3, styles.alignRight]}>*/}
                                 {/*  <Text>{fCurrency(item.price * item.quantity)}</Text>*/}
                                 {/*</View>*/}
-                                <View style={styles.tableCell_3}>
-                                    <Text>{fCurrency(item.PRECIOUNITARIOVENTA)}</Text>
-                                </View>
-                                <View style={styles.tableCell_3}>
-                                    <Text>{fCurrency(item.PRECIOUNITARIOVENTA * item.CANTIDAD)}</Text>
-                                </View>
+
+                                {user.ROLE === '0' || user.ROLE === '2' ? (
+                                    <>
+                                    <View style={styles.tableCell_3}>
+                                        <Text>{fCurrency(item.TM_PRECIO_UNITARIO_VENTA)}</Text>
+                                    </View>
+                                    <View style={styles.tableCell_3}>
+                                        <Text>{fCurrency(item.TM_PRECIO_UNITARIO_VENTA * item.CANTIDAD)}</Text>
+                                    </View>
+                                    </>
+
+                                ) : (
+                                    <>
+                                    <View style={styles.tableCell_3}>
+                                        <Text>{fCurrency(item.PRECIOUNITARIOVENTA)}</Text>
+                                    </View>
+                                    <View style={styles.tableCell_3}>
+                                        <Text>{fCurrency(item.PRECIOUNITARIOVENTA * item.CANTIDAD)}</Text>
+                                    </View>
+                                    </>
+
+                                )
+                                }
+
                             </View>
                         ))}
 

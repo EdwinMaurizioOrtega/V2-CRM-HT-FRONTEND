@@ -533,13 +533,11 @@ export default function InvoiceDetails({invoice}) {
 
     }
 
-
-    const ivaPorcentaje = 0.15; // Porcentaje de IVA (12% en Ecuador)
+    const ivaPorcentaje = 0.15; // Porcentaje de IVA (15% en Ecuador)
     let subtotalTotal = 0;
 
     //TOMEBAMBA: VENDEDOR Y EJECUTIVO SOPORTE
     if (user.ROLE === '0' || user.ROLE === '2') {
-
 
         items.forEach((row) => {
             const subtotal = row.TM_PRECIO_UNITARIO_VENTA * row.CANTIDAD;
@@ -963,9 +961,9 @@ export default function InvoiceDetails({invoice}) {
                     <Grid item xs={12} sm={6} sx={{mb: 5}}>
                         <Image disabledEffect alt="logo" src="/logo/logo_full.svg" sx={{maxWidth: 120}}/>
 
-                        {user.COMPANY === 'HT' || user.COMPANY === 'ALPHACELL' ? (
+                        {/*{user.COMPANY === 'HT' || user.COMPANY === 'ALPHACELL' ? (*/}
                             <PDFDownloadLink
-                                document={<PedidoInvoicePDF invoice={invoice}/>}
+                                document={<PedidoInvoicePDF invoice={invoice} user={user}/>}
                                 fileName={`PEDIDO_CLIENTE_${invoice.ID}`}
                                 style={{textDecoration: 'none'}}
                             >
@@ -983,8 +981,7 @@ export default function InvoiceDetails({invoice}) {
                                     </Tooltip>
                                 )}
                             </PDFDownloadLink>
-                        ) : null
-                        }
+
 
                     </Grid>
 
