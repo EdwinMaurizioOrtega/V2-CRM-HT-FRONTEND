@@ -47,6 +47,7 @@ export default function ProductDetailsSummary({
                                                   product,
                                                   loading,
                                                   pricelistproduct,
+                                                  pricelisttomebambaproduct,
                                                   onAddCart,
                                                   onGotoStep,
                                                   user,
@@ -56,6 +57,7 @@ export default function ProductDetailsSummary({
     const {push} = useRouter();
 
     const [selectedPrice, setSelectedPrice] = useState(null);
+    const [selectedTomebambaPrice, setSelectedTomebambaPrice] = useState(null);
 
     const {
         CODIGO,
@@ -168,19 +170,26 @@ export default function ProductDetailsSummary({
         console.log("user: " + JSON.stringify(user));
 
         if (user.COMPANY === "TOMEBAMBA") {
-            const primerObjeto = pricelistproduct[0];
-            console.log("primerObjeto: " + JSON.stringify( primerObjeto));
+
+            if (selectedTomebambaPrice) {
+                const primerObjeto = pricelistproduct[0];
+                console.log("primerObjeto: " + JSON.stringify(primerObjeto));
 
                 try {
                     onAddCart({
                         ...values,
                         // colors: [values.colors],
                         price: primerObjeto,
+                        priceTomebamba: selectedTomebambaPrice,
                         subtotal: values.price.Price * values.quantity,
                     });
                 } catch (error) {
                     console.error(error);
                 }
+
+            } else {
+                alert("Te falto seleccionar un tipo de precio. 😅")
+            }
 
         } else {
 
@@ -334,54 +343,103 @@ export default function ProductDetailsSummary({
                     </Stack>
                 </Stack>
 
-                {user.COMPANY !== "TOMEBAMBA" &&
-
-                <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
-                        Lista Precios
-                    </Typography>
-
-
-                    {loading ? (
-                        <LoadingComponent/>
-                    ) : (
-
-                        <RHFSelect
-                            name="price"
-                            size="small"
-                            helperText={
-                                <Link underline="always" color="inherit">
-                                    Precio: {selectedPrice && (
-                                    <>{fCurrency(selectedPrice.Price)}</>
-                                )}
-                                </Link>
-                            }
-                            sx={{
-                                maxWidth: '60%',
-                                '& .MuiFormHelperText-root': {
-                                    mx: 0,
-                                    mt: 1,
-                                    textAlign: 'right',
-                                },
-                            }}
-                            onChange={(event) => setSelectedPrice(event.target.value)}
-                            value={selectedPrice}
-                        >
-
-                            {
-                                pricelistproduct.map((price) => (
-                                    <MenuItem key={price.PriceList} value={price}>
-                                        {price.ListName} | {fCurrency(price.Price)}+{fCurrency(price.Price * 0.15)} = {fCurrency(price.Price * 1.15)}
-                                    </MenuItem>
-
-                                ))}
+                {user.COMPANY !== "TOMEBAMBA" ? (
+                    <Stack direction="row" justifyContent="space-between">
+                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
+                            Lista Precios
+                        </Typography>
 
 
-                        </RHFSelect>
+                        {loading ? (
+                            <LoadingComponent/>
+                        ) : (
 
-                    )}
+                            <RHFSelect
+                                name="price"
+                                size="small"
+                                helperText={
+                                    <Link underline="always" color="inherit">
+                                        Precio: {selectedPrice && (
+                                        <>{fCurrency(selectedPrice.Price)}</>
+                                    )}
+                                    </Link>
+                                }
+                                sx={{
+                                    maxWidth: '60%',
+                                    '& .MuiFormHelperText-root': {
+                                        mx: 0,
+                                        mt: 1,
+                                        textAlign: 'right',
+                                    },
+                                }}
+                                onChange={(event) => setSelectedPrice(event.target.value)}
+                                value={selectedPrice}
+                            >
 
-                </Stack>
+                                {
+                                    pricelistproduct.map((price) => (
+                                        <MenuItem key={price.PriceList} value={price}>
+                                            {price.ListName} | {fCurrency(price.Price)}+{fCurrency(price.Price * 0.15)} = {fCurrency(price.Price * 1.15)}
+                                        </MenuItem>
+
+                                    ))}
+
+
+                            </RHFSelect>
+
+                        )}
+
+                    </Stack>
+
+                ) : (
+
+                    <Stack direction="row" justifyContent="space-between">
+                        <Typography variant="subtitle2" sx={{height: 40, lineHeight: '40px', flexGrow: 1}}>
+                            Tomebamba Price
+                        </Typography>
+
+                        {loading ? (
+                            <LoadingComponent/>
+                        ) : (
+
+                            <RHFSelect
+                                name="price"
+                                size="small"
+                                helperText={
+                                    <Link underline="always" color="inherit">
+                                        Precio: {selectedTomebambaPrice && (
+                                        <>{fCurrency(selectedTomebambaPrice.PRICE)}</>
+                                    )}
+                                    </Link>
+                                }
+                                sx={{
+                                    maxWidth: '60%',
+                                    '& .MuiFormHelperText-root': {
+                                        mx: 0,
+                                        mt: 1,
+                                        textAlign: 'right',
+                                    },
+                                }}
+                                onChange={(event) => setSelectedTomebambaPrice(event.target.value)}
+                                value={selectedTomebambaPrice}
+                            >
+
+                                {
+                                    pricelisttomebambaproduct.map((price) => (
+                                        <MenuItem key={price.PRICE_LIST} value={price}>
+                                            {price.LIST_NAME} | {fCurrency(price.PRICE)}+{fCurrency(price.PRICE * 0.15)} = {fCurrency(price.PRICE * 1.15)}
+                                        </MenuItem>
+
+                                    ))}
+
+
+                            </RHFSelect>
+
+                        )}
+
+                    </Stack>
+
+                )
                 }
 
                 <Divider sx={{borderStyle: 'dashed'}}/>

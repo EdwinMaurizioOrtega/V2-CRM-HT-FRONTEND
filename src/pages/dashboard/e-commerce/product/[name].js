@@ -36,6 +36,7 @@ import {fNumber} from "../../../../utils/formatNumber";
 import {useAuthContext} from "../../../../auth/useAuthContext";
 import BasicTable from "../../../../sections/_examples/mui/table/BasicTable";
 import {HOST_API_KEY} from "../../../../config-global";
+import {SYSTEM_ENTRYPOINTS} from "next/constants";
 
 // ----------------------------------------------------------------------
 
@@ -77,6 +78,7 @@ export default  function EcommerceProductDetailsPage() {
     //const {pricelistproduct, isLoading, checkout} = useSelector((state) => state.product);
     const { checkout } = useSelector((state) => state.product);
     const [pricelistproduct, setPricelistproduct] = useState([]);
+    const [pricelisttomebambaproduct, setPricelisttomebambaproduct] = useState([]);
 
     const [product, setProduct] = useState(null); // Initial state
 
@@ -129,6 +131,7 @@ export default  function EcommerceProductDetailsPage() {
         //V2
         async function fetchData() {
             if (name) {
+
                 try {
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/products/price_list_product?name=${name}&idUser=${user.ID}&empresa=${user.EMPRESA}`);
                     if (response.status === 200) {
@@ -143,12 +146,34 @@ export default  function EcommerceProductDetailsPage() {
                         setLoading(true);
                     }
 
+                    if (user.COMPANY === "TOMEBAMBA"){
+                        console.log("La empresa es Tomebamba...")
+
+                        const response = await fetch(`${HOST_API_KEY}/hanadb/api/products/price_list_tomebamba_product?code_product=${name}`);
+                        if (response.status === 200) {
+                            const data = await response.json();
+                            setPricelisttomebambaproduct(data.data);
+                            console.log("PriceListTomebambaProduct: "+JSON.stringify(data.data));
+
+                            // Eliminar el estado de carga aquí, ya que la respuesta es exitosa (código 200).
+                            setLoading(false);
+                        } else {
+                            // Mantener el estado de carga aquí, ya que la respuesta no fue exitosa (código diferente de 200).
+                            setLoading(true);
+                        }
+
+
+
+
+                    }
+
                 } catch (error) {
                     console.error('Error fetching data:', error);
                     setPricelistproduct([]);
                     // Eliminar el estado de carga en caso de error también.
                     setLoading(false);
                 }
+
             }
         }
 
@@ -241,6 +266,7 @@ export default  function EcommerceProductDetailsPage() {
                                     product={product}
                                     loading={loading}
                                     pricelistproduct={pricelistproduct}
+                                    pricelisttomebambaproduct={pricelisttomebambaproduct}
                                     cart={checkout.cart}
                                     onAddCart={handleAddCart}
                                     onGotoStep={handleGotoStep}

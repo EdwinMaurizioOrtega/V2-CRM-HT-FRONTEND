@@ -227,6 +227,7 @@ export default function InvoiceDetails({invoice}) {
     } = invoice;
 
     console.log("OBSERVACIONES: " + OBSERVACIONES)
+    console.log("Row Detail Order: " + JSON.stringify(items))
 
     const [observacionA, setObservacionA] = useState('Ninguno...');
 
@@ -1179,12 +1180,12 @@ export default function InvoiceDetails({invoice}) {
                                 <TableRow>
                                     <TableCell width={40}>#</TableCell>
                                     <TableCell align="left">Descripción</TableCell>
-                                    {user.ROLE !== '0' ? (
-                                        user.ROLE !== '2' ? (
-                                            <TableCell align="left">Tipo Precio</TableCell>
-                                        ) : null
-                                    ) : null
-                                    }
+                                    {/*{user.ROLE !== '0' ? (*/}
+                                    {/*    user.ROLE !== '2' ? (*/}
+                                    <TableCell align="left">Tipo Precio</TableCell>
+                                    {/*    ) : null*/}
+                                    {/*) : null*/}
+                                    {/*}*/}
                                     <TableCell align="left">Comentario Precio</TableCell>
                                     <TableCell align="left">%Desc.</TableCell>
                                     <TableCell align="left">Cantidad</TableCell>
@@ -1194,12 +1195,11 @@ export default function InvoiceDetails({invoice}) {
                                             <TableCell align="left">Disponible</TableCell>
                                         ) : null
                                     }
-
+                                    <TableCell align="right">Precio unitario</TableCell>
+                                    <TableCell align="right">Total</TableCell>
                                     {user.ROLE !== '0' ? (
                                         user.ROLE !== '2' ? (
                                             <>
-                                                <TableCell align="right">Precio unitario</TableCell>
-                                                <TableCell align="right">Total</TableCell>
                                                 <TableCell align="left">Acciones</TableCell>
                                             </>
                                         ) : null
@@ -1238,12 +1238,24 @@ export default function InvoiceDetails({invoice}) {
                                                 </Typography>
                                             </Box>
                                         </TableCell>
-                                        {user.ROLE !== '0' ? (
-                                            user.ROLE !== '2' ? (
-                                                <TableCell align="left">{namePriceType(row.TIPOPRECIO)}</TableCell>
-                                            ) : null
-                                        ) : null
+                                        {/*{user.ROLE !== '0' ? (*/}
+                                        {/*    user.ROLE !== '2' ? (*/}
+                                        {/*        <TableCell align="left">{namePriceType(row.TIPOPRECIO)}</TableCell>*/}
+                                        {/*    ) : null*/}
+                                        {/*) : null*/}
+                                        {/*}*/}
+
+
+                                        {user.ROLE === '0' || user.ROLE === '2' ? (
+
+                                            <TableCell align="left">{namePriceType(row.TM_TIPO_PRECIO)}</TableCell>
+
+                                        ) : (
+                                            <TableCell align="left">{namePriceType(row.TIPOPRECIO)}</TableCell>
+                                        )
                                         }
+
+
                                         <TableCell align="left">{row.COMENTARIOPRECIO}</TableCell>
                                         <TableCell align="left">{row.DISCOUNTPERCENTSAP}</TableCell>
                                         <TableCell align="left">{row.CANTIDAD}</TableCell>
@@ -1257,16 +1269,23 @@ export default function InvoiceDetails({invoice}) {
                                             ) : null
                                         }
 
-                                        {user.ROLE !== '0' ? (
-                                            user.ROLE !== '2' ? (
-                                                <>
-                                                    <TableCell
-                                                        align="right">{fCurrency(row.PRECIOUNITARIOVENTA)}</TableCell>
-                                                    <TableCell
-                                                        align="right">{fCurrency(row.PRECIOUNITARIOVENTA * row.CANTIDAD)}</TableCell>
-                                                </>
-                                            ) : null
-                                        ) : null
+                                        {user.ROLE === '0' || user.ROLE === '2' || user.ROLE === '1' ? (
+                                            <>
+                                                <TableCell
+                                                    align="right">{fCurrency(row.TM_PRECIO_UNITARIO_VENTA)}</TableCell>
+                                                <TableCell
+                                                    align="right">{fCurrency(row.TM_PRECIO_UNITARIO_VENTA * row.CANTIDAD)}</TableCell>
+                                            </>
+
+                                        ) : (
+                                            <>
+                                                <TableCell
+                                                    align="right">{fCurrency(row.PRECIOUNITARIOVENTA)}</TableCell>
+                                                <TableCell
+                                                    align="right">{fCurrency(row.PRECIOUNITARIOVENTA * row.CANTIDAD)}</TableCell>
+                                            </>
+
+                                        )
                                         }
 
                                         <TableCell align="right">

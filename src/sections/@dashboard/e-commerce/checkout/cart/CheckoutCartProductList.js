@@ -18,21 +18,21 @@ const TABLE_HEAD = [
   { CODIGO: '' },
 ];
 
-const TABLE_HEAD_TM = [
-  { CODIGO: 'NOMBRE', label: 'Producto' },
-  { CODIGO: 'quantity', label: 'Cantidad' },
-  { CODIGO: '' },
-];
+// const TABLE_HEAD_TM = [
+//   { CODIGO: 'NOMBRE', label: 'Producto' },
+//   { CODIGO: 'quantity', label: 'Cantidad' },
+//   { CODIGO: '' },
+// ];
 
 // Función que decide qué tabla mostrar basada en el tipo de usuario
-function getTableHead(user) {
-  // Aquí puedes poner lógica para decidir qué tabla mostrar basada en el usuario
-  if (user && user.COMPANY !== "TOMEBAMBA") {
-    return TABLE_HEAD;
-  } else {
-    return TABLE_HEAD_TM;
-  }
-}
+// function getTableHead(user) {
+//   // Aquí puedes poner lógica para decidir qué tabla mostrar basada en el usuario
+//   if (user && user.COMPANY !== "TOMEBAMBA") {
+//     return TABLE_HEAD;
+//   } else {
+//     return TABLE_HEAD_TM;
+//   }
+// }
 
 // ----------------------------------------------------------------------
 
@@ -51,14 +51,13 @@ export default function CheckoutCartProductList({
   user,
 }) {
 
-  const tableHead = getTableHead(user);
-
+  //const tableHead = getTableHead(user);
 
   return (
     <TableContainer sx={{ overflow: 'unset' }}>
       <Scrollbar>
         <Table sx={{ minWidth: 720 }}>
-          <TableHeadCustom headLabel={tableHead} />
+          <TableHeadCustom headLabel={TABLE_HEAD} />
 
           <TableBody>
             {products.map((row) => (
