@@ -533,13 +533,27 @@ export default function InvoiceDetails({invoice}) {
 
     }
 
+
     const ivaPorcentaje = 0.15; // Porcentaje de IVA (12% en Ecuador)
     let subtotalTotal = 0;
 
-    items.forEach((row) => {
-        const subtotal = row.PRECIOUNITARIOVENTA * row.CANTIDAD;
-        subtotalTotal += subtotal;
-    });
+    //TOMEBAMBA: VENDEDOR Y EJECUTIVO SOPORTE
+    if (user.ROLE === '0' || user.ROLE === '2') {
+
+
+        items.forEach((row) => {
+            const subtotal = row.TM_PRECIO_UNITARIO_VENTA * row.CANTIDAD;
+            subtotalTotal += subtotal;
+        });
+
+    } else {
+
+        items.forEach((row) => {
+            const subtotal = row.PRECIOUNITARIOVENTA * row.CANTIDAD;
+            subtotalTotal += subtotal;
+        });
+
+    }
 
     const ivaTotal = subtotalTotal * ivaPorcentaje;
     const totalConIva = subtotalTotal + ivaTotal;
@@ -1269,7 +1283,7 @@ export default function InvoiceDetails({invoice}) {
                                             ) : null
                                         }
 
-                                        {user.ROLE === '0' || user.ROLE === '2' || user.ROLE === '1' ? (
+                                        {user.ROLE === '0' || user.ROLE === '2' ? (
                                             <>
                                                 <TableCell
                                                     align="right">{fCurrency(row.TM_PRECIO_UNITARIO_VENTA)}</TableCell>
@@ -1299,9 +1313,9 @@ export default function InvoiceDetails({invoice}) {
 
                                 ))}
 
-                                {
-                                    user.COMPANY !== 'TOMEBAMBA' ? (
-                                        <>
+                                {/*{*/}
+                                {/*    user.COMPANY !== 'TOMEBAMBA' ? (*/}
+                                {/*        <>*/}
                                             <StyledRowResult>
                                                 <TableCell colSpan={3}/>
 
@@ -1355,9 +1369,9 @@ export default function InvoiceDetails({invoice}) {
                                                     {fCurrency(totalConIva)}
                                                 </TableCell>
                                             </StyledRowResult>
-                                        </>
-                                    ) : null
-                                }
+                                {/*        </>*/}
+                                {/*    ) : null*/}
+                                {/*}*/}
 
                             </TableBody>
                         </Table>

@@ -43,10 +43,11 @@ export default function CheckoutCartProduct({row, onDelete, onDecrease, onIncrea
 
     function nameTomebambaPriceType(pri) {
         const strings = {
-            1: "CONT 1",
-            2: "CONT 2",
-            3: "CONT 3",
-            4: "CONT 4",
+            0: "CONTADO",
+            1: "CONT 2",
+            2: "CONT 3",
+            3: "CONT 4",
+            4: "CONT 5",
 
         };
 
