@@ -20,7 +20,7 @@ PedidoInvoicePDF.propTypes = {
 };
 
 
-export default function PedidoInvoicePDF({invoice, user}) {
+export default function PedidoInvoicePDF({invoice, user, empresa}) {
     // console.log("invoice: "+ JSON.stringify(invoice));
     // console.log("invoice: "+ JSON.stringify(invoice[0]));
     // console.log("invoice: "+ invoice.PEDIDO_PROV);
@@ -49,24 +49,42 @@ export default function PedidoInvoicePDF({invoice, user}) {
         DOCNUM
     } = invoice;
 
-
     const ivaPorcentaje = 0.15; // Porcentaje de IVA (15% en Ecuador)
     let subtotalTotal = 0;
 
-    //TOMEBAMBA: VENDEDOR Y EJECUTIVO SOPORTE
-    if (user.ROLE === '0' || user.ROLE === '2') {
+    if (empresa === "LD") {
 
-        items.forEach((row) => {
-            const subtotal = row.TM_PRECIO_UNITARIO_VENTA * row.CANTIDAD;
-            subtotalTotal += subtotal;
-        });
+        //TOMEBAMBA: VENDEDOR Y EJECUTIVO SOPORTE
+        if (user.ROLE === '0' || user.ROLE === '2') {
 
-    } else {
+            items.forEach((row) => {
+                const subtotal = row.TM_PRECIO_UNITARIO_VENTA * row.CANTIDAD;
+                subtotalTotal += subtotal;
+            });
 
-        items.forEach((row) => {
-            const subtotal = row.PRECIOUNITARIOVENTA * row.CANTIDAD;
-            subtotalTotal += subtotal;
-        });
+        } else {
+
+            items.forEach((row) => {
+                const subtotal = row.PRECIOUNITARIOVENTA * row.CANTIDAD;
+                subtotalTotal += subtotal;
+            });
+
+        }
+
+    }
+
+    //PDF solo precios de Tomebamba
+    if (empresa === "TM") {
+
+        //TOMEBAMBA: Carlos Mendez
+        if (user.ROLE === '1') {
+
+            items.forEach((row) => {
+                const subtotal = row.TM_PRECIO_UNITARIO_VENTA * row.CANTIDAD;
+                subtotalTotal += subtotal;
+            });
+
+        }
 
     }
 
@@ -199,11 +217,20 @@ export default function PedidoInvoicePDF({invoice, user}) {
 
                                 <View style={styles.tableCell_3}>
 
-                                    {user.ROLE === '0' || user.ROLE === '2' ? (
-                                        <Text>{namePriceType(item.TM_TIPO_PRECIO)}</Text>
+                                    {empresa === "LD" ? (
+                                        user.ROLE === '0' || user.ROLE === '2' ? (
+                                            <Text>{namePriceType(item.TM_TIPO_PRECIO)}</Text>
+                                        ) : (
+                                            <Text>{namePriceType(item.TIPOPRECIO)}</Text>
+                                        )
+
                                     ) : (
-                                        <Text>{namePriceType(item.TIPOPRECIO)}</Text>
+
+                                        user.ROLE === '1' ? (
+                                            <Text>{namePriceType(item.TM_TIPO_PRECIO)}</Text>
+                                        ) : null
                                     )
+
                                     }
 
                                 </View>
@@ -222,25 +249,41 @@ export default function PedidoInvoicePDF({invoice, user}) {
                                 {/*  <Text>{fCurrency(item.price * item.quantity)}</Text>*/}
                                 {/*</View>*/}
 
-                                {user.ROLE === '0' || user.ROLE === '2' ? (
-                                    <>
-                                    <View style={styles.tableCell_3}>
-                                        <Text>{fCurrency(item.TM_PRECIO_UNITARIO_VENTA)}</Text>
-                                    </View>
-                                    <View style={styles.tableCell_3}>
-                                        <Text>{fCurrency(item.TM_PRECIO_UNITARIO_VENTA * item.CANTIDAD)}</Text>
-                                    </View>
-                                    </>
+                                {empresa === "LD" ? (
+
+                                    user.ROLE === '0' || user.ROLE === '2' ? (
+                                        <>
+                                            <View style={styles.tableCell_3}>
+                                                <Text>{fCurrency(item.TM_PRECIO_UNITARIO_VENTA)}</Text>
+                                            </View>
+                                            <View style={styles.tableCell_3}>
+                                                <Text>{fCurrency(item.TM_PRECIO_UNITARIO_VENTA * item.CANTIDAD)}</Text>
+                                            </View>
+                                        </>
+
+                                    ) : (
+                                        <>
+                                            <View style={styles.tableCell_3}>
+                                                <Text>{fCurrency(item.PRECIOUNITARIOVENTA)}</Text>
+                                            </View>
+                                            <View style={styles.tableCell_3}>
+                                                <Text>{fCurrency(item.PRECIOUNITARIOVENTA * item.CANTIDAD)}</Text>
+                                            </View>
+                                        </>
+
+                                    )
 
                                 ) : (
-                                    <>
-                                    <View style={styles.tableCell_3}>
-                                        <Text>{fCurrency(item.PRECIOUNITARIOVENTA)}</Text>
-                                    </View>
-                                    <View style={styles.tableCell_3}>
-                                        <Text>{fCurrency(item.PRECIOUNITARIOVENTA * item.CANTIDAD)}</Text>
-                                    </View>
-                                    </>
+                                    user.ROLE === '1' ? (
+                                        <>
+                                            <View style={styles.tableCell_3}>
+                                                <Text>{fCurrency(item.TM_PRECIO_UNITARIO_VENTA)}</Text>
+                                            </View>
+                                            <View style={styles.tableCell_3}>
+                                                <Text>{fCurrency(item.TM_PRECIO_UNITARIO_VENTA * item.CANTIDAD)}</Text>
+                                            </View>
+                                        </>
+                                    ) : null
 
                                 )
                                 }

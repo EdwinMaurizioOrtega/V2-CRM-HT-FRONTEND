@@ -962,29 +962,54 @@ export default function InvoiceDetails({invoice}) {
                         <Image disabledEffect alt="logo" src="/logo/logo_full.svg" sx={{maxWidth: 120}}/>
 
                         {/*{user.COMPANY === 'HT' || user.COMPANY === 'ALPHACELL' ? (*/}
-                            <PDFDownloadLink
-                                document={<PedidoInvoicePDF invoice={invoice} user={user}/>}
-                                fileName={`PEDIDO_CLIENTE_${invoice.ID}`}
-                                style={{textDecoration: 'none'}}
-                            >
-                                {({loading}) => (
-                                    <Tooltip title="Descargar">
-                                        <IconButton
-                                            onClick={user.ROLE === "bodega" ? () => handleDownloadClick(ID) : undefined}
-                                        >
-                                            {loading ? (
-                                                <CircularProgress size={24} color="inherit"/>
-                                            ) : (
-                                                <Iconify icon="eva:download-fill"/>
-                                            )}
-                                        </IconButton>
-                                    </Tooltip>
-                                )}
-                            </PDFDownloadLink>
+                        <PDFDownloadLink
+                            document={<PedidoInvoicePDF invoice={invoice} user={user} empresa="LD"/>}
+                            fileName={`PEDIDO_CLIENTE_${invoice.ID}`}
+                            style={{textDecoration: 'none'}}
+                        >
+                            {({loading}) => (
+                                <Tooltip title="Descargar LD">
+                                    <IconButton
+                                        onClick={user.ROLE === "bodega" ? () => handleDownloadClick(ID) : undefined}
+                                    >
+                                        {loading ? (
+                                            <CircularProgress size={24} color="inherit"/>
+                                        ) : (
+                                            <Iconify icon="eva:download-fill"/>
+                                        )}
+                                    </IconButton>
+                                </Tooltip>
+                            )}
+                        </PDFDownloadLink>
 
+
+                        {
+                        user.ROLE === '1' ? (
+
+                        <PDFDownloadLink
+                            document={<PedidoInvoicePDF invoice={invoice} user={user} empresa="TM"/>}
+                            fileName={`PEDIDO_CLIENTE_${invoice.ID}`}
+                            style={{textDecoration: 'none'}}
+                        >
+                            {({loading}) => (
+                                <Tooltip title="Descargar TM">
+                                    <IconButton
+                                        onClick={user.ROLE === "bodega" ? () => handleDownloadClick(ID) : undefined}
+                                    >
+                                        {loading ? (
+                                            <CircularProgress size={24} color="inherit"/>
+                                        ) : (
+                                            <Iconify icon="eva:download-fill"/>
+                                        )}
+                                    </IconButton>
+                                </Tooltip>
+                            )}
+                        </PDFDownloadLink>
+                        ) : null
+
+                        }
 
                     </Grid>
-
 
                     <Grid item xs={12} sm={6} sx={{mb: 5}}>
                         <Box sx={{textAlign: {sm: 'right'}}}>
@@ -1313,59 +1338,59 @@ export default function InvoiceDetails({invoice}) {
                                 {/*{*/}
                                 {/*    user.COMPANY !== 'TOMEBAMBA' ? (*/}
                                 {/*        <>*/}
-                                            <StyledRowResult>
-                                                <TableCell colSpan={3}/>
+                                <StyledRowResult>
+                                    <TableCell colSpan={3}/>
 
-                                                <TableCell align="right" sx={{typography: 'body1'}}>
-                                                    <Box sx={{mt: 2}}/>
-                                                    Subtotal
-                                                </TableCell>
+                                    <TableCell align="right" sx={{typography: 'body1'}}>
+                                        <Box sx={{mt: 2}}/>
+                                        Subtotal
+                                    </TableCell>
 
-                                                <TableCell align="right" width={120} sx={{typography: 'body1'}}>
-                                                    <Box sx={{mt: 2}}/>
-                                                    {fCurrency(subtotalTotal)}
-                                                </TableCell>
-                                            </StyledRowResult>
+                                    <TableCell align="right" width={120} sx={{typography: 'body1'}}>
+                                        <Box sx={{mt: 2}}/>
+                                        {fCurrency(subtotalTotal)}
+                                    </TableCell>
+                                </StyledRowResult>
 
-                                            {/* <StyledRowResult> */}
-                                            {/*   <TableCell colSpan={3} /> */}
+                                {/* <StyledRowResult> */}
+                                {/*   <TableCell colSpan={3} /> */}
 
-                                            {/*   <TableCell align="right" sx={{ typography: 'body1' }}> */}
-                                            {/*     Discount */}
-                                            {/*   </TableCell> */}
+                                {/*   <TableCell align="right" sx={{ typography: 'body1' }}> */}
+                                {/*     Discount */}
+                                {/*   </TableCell> */}
 
-                                            {/*   /!* <TableCell *!/ */}
-                                            {/*   /!*   align="right" *!/ */}
-                                            {/*   /!*   width={120} *!/ */}
-                                            {/*   /!*   sx={{ color: 'error.main', typography: 'body1' }} *!/ */}
-                                            {/*   /!* > *!/ */}
-                                            {/*   /!*   {discount && fCurrency(-discount)} *!/ */}
-                                            {/*   /!* </TableCell> *!/ */}
-                                            {/* </StyledRowResult> */}
+                                {/*   /!* <TableCell *!/ */}
+                                {/*   /!*   align="right" *!/ */}
+                                {/*   /!*   width={120} *!/ */}
+                                {/*   /!*   sx={{ color: 'error.main', typography: 'body1' }} *!/ */}
+                                {/*   /!* > *!/ */}
+                                {/*   /!*   {discount && fCurrency(-discount)} *!/ */}
+                                {/*   /!* </TableCell> *!/ */}
+                                {/* </StyledRowResult> */}
 
-                                            <StyledRowResult>
-                                                <TableCell colSpan={3}/>
+                                <StyledRowResult>
+                                    <TableCell colSpan={3}/>
 
-                                                <TableCell align="right" sx={{typography: 'body1'}}>
-                                                    IVA
-                                                </TableCell>
+                                    <TableCell align="right" sx={{typography: 'body1'}}>
+                                        IVA
+                                    </TableCell>
 
-                                                <TableCell align="right" width={120} sx={{typography: 'body1'}}>
-                                                    {fCurrency(ivaTotal)}
-                                                </TableCell>
-                                            </StyledRowResult>
+                                    <TableCell align="right" width={120} sx={{typography: 'body1'}}>
+                                        {fCurrency(ivaTotal)}
+                                    </TableCell>
+                                </StyledRowResult>
 
-                                            <StyledRowResult>
-                                                <TableCell colSpan={3}/>
+                                <StyledRowResult>
+                                    <TableCell colSpan={3}/>
 
-                                                <TableCell align="right" sx={{typography: 'h6'}}>
-                                                    Total
-                                                </TableCell>
+                                    <TableCell align="right" sx={{typography: 'h6'}}>
+                                        Total
+                                    </TableCell>
 
-                                                <TableCell align="right" width={140} sx={{typography: 'h6'}}>
-                                                    {fCurrency(totalConIva)}
-                                                </TableCell>
-                                            </StyledRowResult>
+                                    <TableCell align="right" width={140} sx={{typography: 'h6'}}>
+                                        {fCurrency(totalConIva)}
+                                    </TableCell>
+                                </StyledRowResult>
                                 {/*        </>*/}
                                 {/*    ) : null*/}
                                 {/*}*/}
