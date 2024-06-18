@@ -36,7 +36,7 @@ import {
     Autocomplete,
     List,
     ListItem,
-    ListItemText,
+    ListItemText, FormControl, RadioGroup, Radio, FormControlLabel,
 } from '@mui/material';
 import {useForm} from "react-hook-form";
 import {FormSchema} from "../../../sections/_examples/extra/form/schema";
@@ -125,35 +125,61 @@ export default function ConsultClientForm() {
 
         console.log('DATA', data);
 
-        const ci_ruc = data.ci_ruc || ""; // Si data.ci_ruc es undefined, asigna una cadena vacía
+        const searchTerm = data.searchTerm || ""; // Si data.ci_ruc es undefined, asigna una cadena vacía
 
-        if (ci_ruc.length == 10 || ci_ruc.length == 13) {
+        //Ruc/Cédula
+        if (data.tipo === "0") {
 
-            reset();
+            if (searchTerm.length === 10 || searchTerm.length === 13) {
 
-            // Buscar en dataClienteAll
-            const clientes = dataClienteAll.filter(cliente => cliente.ID === 'CL' + ci_ruc);
 
-            if (clientes) {
-                console.log('Cliente encontrado:', clientes);
-                // Aquí puedes hacer algo con el cliente encontrado
 
-                setSearchResults(clientes);
+                // Buscar en dataClienteAll
+                const clientes = dataClienteAll.filter(cliente => cliente.ID === 'CL' + searchTerm);
+
+                if (clientes) {
+                    console.log('Cliente encontrado:', clientes);
+                    // Aquí puedes hacer algo con el cliente encontrado
+
+                    setSearchResults(clientes);
+
+                } else {
+                    console.log('Cliente no encontrado con ci_ruc:', ci_ruc);
+                    // Aquí puedes manejar el caso cuando no se encuentra el cliente
+                }
+
+
 
             } else {
-                console.log('Cliente no encontrado con ci_ruc:', ci_ruc);
-                // Aquí puedes manejar el caso cuando no se encuentra el cliente
+                onSnackbarAction('Número de caracteres invalido.', 'default', {
+                    vertical: 'top', horizontal: 'center',
+                });
             }
 
-            reset();
+        }
 
-        } else {
-            onSnackbarAction('Número de caracteres invalido.', 'default', {
-                vertical: 'top', horizontal: 'center',
-            });
+        //Razón Social
+        if (data.tipo === "1") {
+
+
+
+                // Buscar en dataClienteAll
+                const clientes = dataClienteAll.filter(cliente => cliente.Cliente.includes(searchTerm));
+
+                if (clientes) {
+                    console.log('Cliente encontrado:', clientes);
+                    // Aquí puedes hacer algo con el cliente encontrado
+
+                    setSearchResults(clientes);
+
+                } else {
+                    console.log('Cliente no encontrado con ci_ruc:', ci_ruc);
+                    // Aquí puedes manejar el caso cuando no se encuentra el cliente
+                }
+
+
         }
     }
-
 
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const onSnackbarAction = (data, color, anchor) => {
@@ -257,7 +283,7 @@ export default function ConsultClientForm() {
         <Container>
 
             <CustomBreadcrumbs
-                heading="Buscar Cliente v1.0"
+                heading="Buscar Cliente v1.1"
                 links={[{
                     name: 'Dashboard', href: PATH_DASHBOARD.root,
                 }, {
@@ -362,19 +388,14 @@ export default function ConsultClientForm() {
                     <Grid container spacing={5}>
                         <Grid item xs={12} md={12}>
                             <Block label="Cliente RUC/Cédula">
-                                <RHFTextField name="ci_ruc"
+                                <RHFRadioGroup row spacing={4} name="tipo" options={GENDER_OPTION} />
+                                <RHFTextField name="searchTerm"
                                               label="RUC/Cédula"
                                               onChange={(event) => {
-                                                  const inputValue = event.target.value.replace(/\D/g, ''); // Solo números
-                                                  if (/^\d{10,13}$/.test(inputValue)) {
-                                                      setValue('ci_ruc', inputValue, {shouldValidate: true});
-                                                  }
-                                              }}
-                                              InputProps={{
-                                                  type: 'number', pattern: '[0-9]*', // Asegura que solo se ingresen números
+                                                  const inputValue = event.target.value.toUpperCase(); // Convertir a mayúsculas
+                                                  setValue('searchTerm', inputValue, { shouldValidate: true });
                                               }}
                                 />
-
                             </Block>
 
                             <Block label="Acción">
@@ -392,7 +413,6 @@ export default function ConsultClientForm() {
                             </Block>
                         </Grid>
                     </Grid>
-
                 </FormProvider>
             </Stack>
 
@@ -644,5 +664,11 @@ function CustomToolbar() {
 
     </GridToolbarContainer>);
 }
+
+const GENDER_OPTION = [
+    { label: 'Ruc/Cédula', value: '0' },
+    { label: 'Razón Social', value: '1' },
+
+];
 
 
