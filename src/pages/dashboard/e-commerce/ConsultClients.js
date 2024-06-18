@@ -132,8 +132,6 @@ export default function ConsultClientForm() {
 
             if (searchTerm.length === 10 || searchTerm.length === 13) {
 
-
-
                 // Buscar en dataClienteAll
                 const clientes = dataClienteAll.filter(cliente => cliente.ID === 'CL' + searchTerm);
 
@@ -144,10 +142,9 @@ export default function ConsultClientForm() {
                     setSearchResults(clientes);
 
                 } else {
-                    console.log('Cliente no encontrado con ci_ruc:', ci_ruc);
+                    console.log('Cliente no encontrado con ci_ruc:', searchTerm);
                     // Aquí puedes manejar el caso cuando no se encuentra el cliente
                 }
-
 
 
             } else {
@@ -161,20 +158,26 @@ export default function ConsultClientForm() {
         //Razón Social
         if (data.tipo === "1") {
 
-
-
                 // Buscar en dataClienteAll
                 const clientes = dataClienteAll.filter(cliente => cliente.Cliente.includes(searchTerm));
 
-                if (clientes) {
+                if (clientes.length === 2 || clientes.length === 1) {
                     console.log('Cliente encontrado:', clientes);
                     // Aquí puedes hacer algo con el cliente encontrado
 
                     setSearchResults(clientes);
 
-                } else {
-                    console.log('Cliente no encontrado con ci_ruc:', ci_ruc);
+                } else if (clientes.length > 2) {
+                    console.log('Se han encontrado mas de dos resultados.', searchTerm);
+                    onSnackbarAction('Se han encontrado mas de dos resultados.', 'default', {
+                        vertical: 'top', horizontal: 'center',
+                    });
                     // Aquí puedes manejar el caso cuando no se encuentra el cliente
+                } else if (clientes.length === 0) {
+                    console.log('Ningun cliente encontrado.', searchTerm);
+                        onSnackbarAction('Ningun cliente encontrado.', 'default', {
+                            vertical: 'top', horizontal: 'center',
+                        });
                 }
 
 
