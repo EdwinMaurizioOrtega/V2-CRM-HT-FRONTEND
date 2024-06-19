@@ -133,15 +133,25 @@ export default function ConsultClientForm() {
         const formattedDate = formatDate(currentDate);
 
 
+        let U_SYP_BPTD_TIPO = "";
+
+        if (data.id.length === 10) {
+            U_SYP_BPTD_TIPO = "C"
+        }
+
+        if (data.id.length === 13) {
+            U_SYP_BPTD_TIPO = "R"
+        }
+
         const payload = {
             CardName: `${data.nombre} ${data.apellido}`,
             CardCode: `CL${data.id}`,
             GroupCode: Number(data.tipo_cliente.CODE),
             SalesPersonCode: Number(data.vendedor.CODE),
-            U_SYP_BPTD: "R",
+            U_SYP_BPTD: `${U_SYP_BPTD_TIPO}`,
             FatherType: "cDelivery_sum",
             U_SYP_BPAP: data.nombre,
-            EmailAddress: user.EMPRESA,
+            EmailAddress: data.emmail,
             FederalTaxID: data.id,
             Cellular: data.telefono,
             U_LS_FECHA: `${formattedDate}`,
