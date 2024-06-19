@@ -89,6 +89,7 @@ const navConfig = [
           { title: 'carrito de compras', path: PATH_DASHBOARD.eCommerce.checkout },
           { title: 'Catálogo', path: PATH_DASHBOARD.eCommerce.catalogo },
           { title: 'Clientes', path: PATH_DASHBOARD.eCommerce.clientes },
+          { title: 'Crear Cliente', path: PATH_DASHBOARD.eCommerce.client },
 
         ],
       },
