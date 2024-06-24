@@ -43,7 +43,16 @@ const navConfig = [
     items: [
       { title: 'app', path: PATH_DASHBOARD.general.app, icon: ICONS.dashboard },
       // { title: 'ecommerce', path: PATH_DASHBOARD.general.ecommerce, icon: ICONS.ecommerce },
-      { title: 'analytics M.', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
+      { title: 'Power BI', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics,
+
+        children: [
+          { title: 'Gerencia', path: PATH_DASHBOARD.powerBI.gerencia },
+          { title: 'Administración', path: PATH_DASHBOARD.powerBI.gerencia },
+          { title: 'Vendedores', path: PATH_DASHBOARD.powerBI.gerencia },
+
+        ],
+
+      },
       // { title: 'banking', path: PATH_DASHBOARD.general.banking, icon: ICONS.banking },
       // { title: 'booking', path: PATH_DASHBOARD.general.booking, icon: ICONS.booking },
       // { title: 'file', path: PATH_DASHBOARD.general.file, icon: ICONS.file },

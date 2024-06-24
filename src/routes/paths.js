@@ -49,6 +49,15 @@ export const PATH_DASHBOARD = {
     booking: path(ROOTS_DASHBOARD, '/booking'),
     file: path(ROOTS_DASHBOARD, '/file'),
   },
+
+  powerBI: {
+    gerencia: path(ROOTS_DASHBOARD, '/gerencia-power-bi'),
+    ecommerce: path(ROOTS_DASHBOARD, '/ecommerce'),
+    analytics: path(ROOTS_DASHBOARD, '/analytics'),
+    banking: path(ROOTS_DASHBOARD, '/banking'),
+    booking: path(ROOTS_DASHBOARD, '/booking'),
+    file: path(ROOTS_DASHBOARD, '/file'),
+  },
   mail: {
     root: path(ROOTS_DASHBOARD, '/mail'),
     all: path(ROOTS_DASHBOARD, '/mail/all'),
