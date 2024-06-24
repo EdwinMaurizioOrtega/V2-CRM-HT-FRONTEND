@@ -51,7 +51,7 @@ export default function LoginLayout({ children, illustration, title }) {
                 zIndex: 9,
                 position: 'absolute',
                 mt: { xs: 1.5, md: 5 },
-                ml: { xs: 35, md: 15 },
+                ml: { xs: 20, md: 15 },
         }}
         />
 

@@ -43,7 +43,7 @@ const navConfig = [
     items: [
       { title: 'app', path: PATH_DASHBOARD.general.app, icon: ICONS.dashboard },
       // { title: 'ecommerce', path: PATH_DASHBOARD.general.ecommerce, icon: ICONS.ecommerce },
-      { title: 'Power BI', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics,
+      { title: 'Power BI', path: '#', icon: ICONS.analytics,
 
         children: [
           { title: 'Gerencia', path: PATH_DASHBOARD.powerBI.gerencia },
