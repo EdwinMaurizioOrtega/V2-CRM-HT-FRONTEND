@@ -27,6 +27,23 @@ export default function LoginLayout({ children, illustration, title }) {
       {/*  }}*/}
       {/*/>*/}
 
+        {/*<Box*/}
+        {/*    component="img"*/}
+        {/*    src="/logo/logo_single.svg"*/}
+        {/*    sx={{ width: 40, height: 40, cursor: 'pointer' }}*/}
+        {/*/>*/}
+
+        <Box
+            component="img"
+            src="/logo/logo_single.svg"
+            sx={{ width: 60, height: 'auto',
+                zIndex: 9,
+                position: 'absolute',
+                mt: { xs: 1.5, md: 4 },
+                ml: { xs: 2, md: 5 },
+            }}
+        />
+
         <Box
             component="img"
             src="/assets/illustrations/logoLight.png"
@@ -34,7 +51,7 @@ export default function LoginLayout({ children, illustration, title }) {
                 zIndex: 9,
                 position: 'absolute',
                 mt: { xs: 1.5, md: 5 },
-                ml: { xs: 2, md: 5 },
+                ml: { xs: 35, md: 15 },
         }}
         />
 
