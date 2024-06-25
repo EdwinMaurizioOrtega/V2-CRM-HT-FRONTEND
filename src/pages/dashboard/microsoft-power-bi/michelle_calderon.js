@@ -4,23 +4,23 @@ import Head from 'next/head';
 import { useTheme } from '@mui/material/styles';
 import {Grid, Container, Typography, Box} from '@mui/material';
 // layouts
-import DashboardLayout from '../../layouts/dashboard';
+import DashboardLayout from '../../../layouts/dashboard';
 // _mock_
-import { _analyticPost, _analyticOrderTimeline, _analyticTraffic } from '../../_mock/arrays';
+//import { _analyticPost, _analyticOrderTimeline, _analyticTraffic } from '../../_mock/arrays';
 // components
-import { useSettingsContext } from '../../components/settings';
+import { useSettingsContext } from '../../../components/settings';
 // sections
-import {
-  AnalyticsTasks,
-  AnalyticsNewsUpdate,
-  AnalyticsOrderTimeline,
-  AnalyticsCurrentVisits,
-  AnalyticsWebsiteVisits,
-  AnalyticsTrafficBySite,
-  AnalyticsWidgetSummary,
-  AnalyticsCurrentSubject,
-  AnalyticsConversionRates,
-} from '../../sections/@dashboard/general/analytics';
+// import {
+//   AnalyticsTasks,
+//   AnalyticsNewsUpdate,
+//   AnalyticsOrderTimeline,
+//   AnalyticsCurrentVisits,
+//   AnalyticsWebsiteVisits,
+//   AnalyticsTrafficBySite,
+//   AnalyticsWidgetSummary,
+//   AnalyticsCurrentSubject,
+//   AnalyticsConversionRates,
+// } from '../../../sections/@dashboard/general/analytics';
 
 // ----------------------------------------------------------------------
 
@@ -41,13 +41,13 @@ export default function GeneralAnalyticsPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
 
-        <Typography variant="h4" sx={{ mb: 5 }}>
-          Gerencia
-        </Typography>
+        {/*<Typography variant="h4" sx={{ mb: 5 }}>*/}
+        {/*  Gerencia*/}
+        {/*</Typography>*/}
 
         <Box
             component="iframe"
-            src="https://app.powerbi.com/view?r=eyJrIjoiMTcyNDc3ODYtYjFhMy00ZjE1LTllMWQtNGI3ODIyYzc1MzU2IiwidCI6Ijk2ZTEzNWRiLWZmZDItNDdiZS1iZDJlLWYxMjQ2MTY2YWZmZCIsImMiOjR9"
+            src="https://app.powerbi.com/view?r=eyJrIjoiZmI0YzEwNzUtNThiNy00ZWMxLWIzYTItZmYzZjBiNDUyNjcwIiwidCI6Ijk2ZTEzNWRiLWZmZDItNDdiZS1iZDJlLWYxMjQ2MTY2YWZmZCIsImMiOjR9"
             sx={{
               width: '100%',
               height: '1000px',

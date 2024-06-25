@@ -47,9 +47,12 @@ const navConfig = [
 
         children: [
           { title: 'Gerencia', path: PATH_DASHBOARD.powerBI.gerencia },
-          { title: 'Administración', path: PATH_DASHBOARD.powerBI.gerencia },
-          { title: 'Vendedores', path: PATH_DASHBOARD.powerBI.gerencia },
-
+          { title: 'Administrativo', path: PATH_DASHBOARD.powerBI.administrativo },
+          { title: 'Cartera', path: PATH_DASHBOARD.powerBI.cartera },
+          { title: 'Victor Quintero', path: PATH_DASHBOARD.powerBI.victor_quintero },
+          { title: 'David Granda', path: PATH_DASHBOARD.powerBI.david_granda },
+          { title: 'Alexandra Nuñez', path: PATH_DASHBOARD.powerBI.alexandra_nunez },
+          { title: 'Michelle Calderón', path: PATH_DASHBOARD.powerBI.michelle_calderon },
         ],
 
       },
@@ -135,7 +138,10 @@ const navConfig = [
         path: PATH_DASHBOARD.st.root,
         icon: ICONS.folder,
         children: [
-          { title: 'garantía', path: PATH_DASHBOARD.st.garantia },
+          { title: 'Validar Garantía', path: PATH_DASHBOARD.st.garantia },
+          { title: 'Ingresar Orden', path: PATH_DASHBOARD.st.garantia },
+          { title: 'Gestión Orden', path: PATH_DASHBOARD.st.garantia },
+          { title: 'Consultar Orden', path: PATH_DASHBOARD.st.garantia },
           // { title: 'post', path: PATH_DASHBOARD.blog.demoView },
           // { title: 'create', path: PATH_DASHBOARD.blog.new },
         ],
