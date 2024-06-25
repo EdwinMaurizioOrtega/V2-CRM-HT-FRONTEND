@@ -51,6 +51,7 @@ export const PATH_DASHBOARD = {
   },
 
   powerBI: {
+    root: path(ROOTS_DASHBOARD, '/microsoft-power-bi'),
     gerencia: path(ROOTS_DASHBOARD, '/microsoft-power-bi/gerencia-power-bi'),
     administrativo: path(ROOTS_DASHBOARD, '/microsoft-power-bi/administrativo'),
     cartera: path(ROOTS_DASHBOARD, '/microsoft-power-bi/cartera'),
