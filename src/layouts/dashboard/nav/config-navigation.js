@@ -140,7 +140,7 @@ const navConfig = [
         icon: ICONS.folder,
         children: [
           { title: 'Validar Garantía', path: PATH_DASHBOARD.st.garantia },
-          { title: 'Ingresar Orden', path: PATH_DASHBOARD.st.garantia },
+          { title: 'Ingresar Orden', path: PATH_DASHBOARD.st.ingresarOrden },
           { title: 'Gestión Orden', path: PATH_DASHBOARD.st.garantia },
           { title: 'Consultar Orden', path: PATH_DASHBOARD.st.garantia },
           // { title: 'post', path: PATH_DASHBOARD.blog.demoView },

@@ -120,6 +120,7 @@ export const PATH_DASHBOARD = {
   st: {
     root: path(ROOTS_DASHBOARD, '/st'),
     garantia: path(ROOTS_DASHBOARD, '/st/garantia'),
+    ingresarOrden: path(ROOTS_DASHBOARD, '/st/CrearOrden'),
   },
 };
 
