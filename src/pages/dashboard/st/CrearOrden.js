@@ -2,7 +2,7 @@ import React, {useEffect, useCallback, useState} from 'react';
 // next
 import Head from 'next/head';
 // @mui
-import {Grid, Button, Container, Stack, TextField, Card} from '@mui/material';
+import {Grid, Button, Container, Stack, TextField, Card, Switch, FormControlLabel} from '@mui/material';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
 // layouts
@@ -59,6 +59,14 @@ export default function GarantiaPage() {
     const [garantia, setGarantia] = useState(null);
 
     const {user} = useAuthContext();
+
+    //Para la sección de la Fecha de Creación y Fecha de Facturación
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleSwitchChange = (event) => {
+        setIsChecked(event.target.checked);
+        console.log(event.target.checked ? 'Activo' : 'Inactivo');
+    };
 
     const showImei = async (enteredName) => {
         if (enteredName.length === 15) {
@@ -134,25 +142,23 @@ export default function GarantiaPage() {
         console.log('DATA', data);
         //Enviar un correo electrónico + la creación de la guía
         const response = await axios.post('/hanadb/api/technical_service/create_warranty_sap', {
-            IMEI_SERIE: data.singleSelectTP,
-            GARANTIA_L1: data.garantia_revision_fisica,
-            CIUDAD_ORIGEN: data.ciudad_origen,
-            ID_VENDEDOR: data.multiSelectM,
-            NOMBRE_VENDEDOR: data.multiSelectM,
+            IMEI_SERIE: enteredName,
+            GARANTIA_L1: isChecked,
+            CIUDAD_ORIGEN: Number( data.ciudad_origen),
+            ID_VENDEDOR: Number(data.vendedor.CODE),
+            NOMBRE_VENDEDOR: data.vendedor.NOMBRE,
             INFO: garantia,
+            ID_USUARIO: Number( user.ID)
         });
 
         if (response.status === 200) {
             console.log(response);
             // La solicitud PUT se realizó correctamente
-            setDataCatalog(response.data.catalogo)
+            //setDataCatalog(response.data.catalogo)
         } else {
             // La solicitud POST no se realizó correctamente
             console.error('Error en la solicitud POST:', response.status);
         }
-
-
-
 
     }
 
@@ -246,7 +252,10 @@ export default function GarantiaPage() {
                                         ChipProps={{size: 'small'}}
                                     />
 
-                                    <RHFRadioGroup row spacing={4} name="garantia_revision_fisica" options={GENDER_OPTION} />
+
+                                    <FormControlLabel
+                                        control={<Switch checked={isChecked} onChange={handleSwitchChange}/>}
+                                        label="Garantía (Revisión Física)"/>
 
                                     <RHFRadioGroup row spacing={4} name="ciudad_origen" options={CIUDAD_ORIGEN} />
                                     <LoadingButton
