@@ -18,7 +18,7 @@ import {
     TableBody,
     Container,
     IconButton,
-    TableContainer, CircularProgress, Box, TableCell,
+    TableContainer, CircularProgress, Box, TableCell, FormGroup, FormControlLabel, Switch,
 } from '@mui/material';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
@@ -62,6 +62,7 @@ import {HOST_API_KEY} from "../../../config-global";
 
 import CustomDateRangePicker, {useDateRangePicker} from 'src/components/custom-date-range-picker';
 import ComponentBlock from "../../../sections/_examples/component-block";
+import {Block} from "../../../sections/_examples/Block";
 
 
 // ----------------------------------------------------------------------
@@ -119,7 +120,6 @@ export default function InvoiceListPage() {
     //const { orders, isLoading } = useSelector((state) => state.orders_status);
     const [orders, setOrders] = useState([]);
 
-
     const {themeStretch} = useSettingsContext();
 
     const {push} = useRouter();
@@ -156,8 +156,16 @@ export default function InvoiceListPage() {
     const [filterEndDate, setFilterEndDate] = useState(null);
 
     const [filterStartDate, setFilterStartDate] = useState(null);
+
     const [currentUser, setCurrentUser] = useState(null);
 
+    //Para la sección de la Fecha de Creación y Fecha de Facturación
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleSwitchChange = (event) => {
+        setIsChecked(event.target.checked);
+        console.log(event.target.checked ? 'Activo' : 'Inactivo');
+    };
 
     // useEffect(async () => {
     //
@@ -239,7 +247,7 @@ export default function InvoiceListPage() {
 
 
                 if (user.ROLE === "admin") {
-                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/admin?empresa=${user.EMPRESA}&fecha_inicio=${fDateCustom(rangeInputPicker.startDate)}&fecha_fin=${fDateCustom(rangeInputPicker.endDate)}`);
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/admin?empresa=${user.EMPRESA}&fecha_inicio=${fDateCustom(rangeInputPicker.startDate)}&fecha_fin=${fDateCustom(rangeInputPicker.endDate)}&switch_dates=${isChecked}`);
                     data = await response.json();
                 } else if (user.ROLE === "vendedor" || user.ROLE === "infinix") {
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/vendedor?ven=${user.ID}&empresa=${user.EMPRESA}`);
@@ -463,29 +471,36 @@ export default function InvoiceListPage() {
                         },
                     ]}
                     action={
-                      // <Button
-                      //   component={NextLink}
-                      //   href={PATH_DASHBOARD.invoice.new}
-                      //   variant="contained"
-                      //   startIcon={<Iconify icon="eva:plus-fill" />}
-                      // >
-                      //   New Invoice
-                      // </Button>
-                      <>
-                          {user.ROLE === "admin" && <Button variant="contained" onClick={rangeInputPicker.onOpen}>
-                              Rango
-                          </Button>
-                          }
-                          <CustomDateRangePicker
-                              open={rangeInputPicker.open}
-                              startDate={rangeInputPicker.startDate}
-                              endDate={rangeInputPicker.endDate}
-                              onChangeStartDate={rangeInputPicker.onChangeStartDate}
-                              onChangeEndDate={rangeInputPicker.onChangeEndDate}
-                              onClose={rangeInputPicker.onClose}
-                              error={rangeInputPicker.error}
-                          />
-                      </>
+                        // <Button
+                        //   component={NextLink}
+                        //   href={PATH_DASHBOARD.invoice.new}
+                        //   variant="contained"
+                        //   startIcon={<Iconify icon="eva:plus-fill" />}
+                        // >
+                        //   New Invoice
+                        // </Button>
+                        <>
+                            {user.ROLE === "admin" && (
+                                <>
+                                    <FormControlLabel
+                                        control={<Switch checked={isChecked} onChange={handleSwitchChange}/>}
+                                        label="Fact."/>
+                                    <Button variant="contained" onClick={rangeInputPicker.onOpen}>
+                                        Rango
+                                    </Button>
+                                </>
+                            )
+                            }
+                            <CustomDateRangePicker
+                                open={rangeInputPicker.open}
+                                startDate={rangeInputPicker.startDate}
+                                endDate={rangeInputPicker.endDate}
+                                onChangeStartDate={rangeInputPicker.onChangeStartDate}
+                                onChangeEndDate={rangeInputPicker.onChangeEndDate}
+                                onClose={rangeInputPicker.onClose}
+                                error={rangeInputPicker.error}
+                            />
+                        </>
 
 
                     }
@@ -496,13 +511,13 @@ export default function InvoiceListPage() {
                 }}
                 >
                     {user.ROLE === "admin" &&
-                    <Stack sx={{typography: 'body2', mt: 3}} alignItems="center">
-                        <div>
-                            <strong>Inicio: </strong> {fDate(rangeInputPicker.startDate)}
-                            {' - '}
-                            <strong>Fin: </strong> {fDate(rangeInputPicker.endDate)}
-                        </div>
-                    </Stack>
+                        <Stack sx={{typography: 'body2', mt: 3}} alignItems="center">
+                            <div>
+                                <strong>Inicio: </strong> {fDate(rangeInputPicker.startDate)}
+                                {' - '}
+                                <strong>Fin: </strong> {fDate(rangeInputPicker.endDate)}
+                            </div>
+                        </Stack>
                     }
                     <Scrollbar>
                         <Stack

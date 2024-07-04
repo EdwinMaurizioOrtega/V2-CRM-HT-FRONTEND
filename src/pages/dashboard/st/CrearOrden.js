@@ -133,6 +133,26 @@ export default function GarantiaPage() {
 
         console.log('DATA', data);
         //Enviar un correo electrónico + la creación de la guía
+        const response = await axios.post('/hanadb/api/technical_service/create_warranty_sap', {
+            IMEI_SERIE: data.singleSelectTP,
+            GARANTIA_L1: data.garantia_revision_fisica,
+            CIUDAD_ORIGEN: data.ciudad_origen,
+            ID_VENDEDOR: data.multiSelectM,
+            NOMBRE_VENDEDOR: data.multiSelectM,
+            INFO: garantia,
+        });
+
+        if (response.status === 200) {
+            console.log(response);
+            // La solicitud PUT se realizó correctamente
+            setDataCatalog(response.data.catalogo)
+        } else {
+            // La solicitud POST no se realizó correctamente
+            console.error('Error en la solicitud POST:', response.status);
+        }
+
+
+
 
     }
 
@@ -226,8 +246,9 @@ export default function GarantiaPage() {
                                         ChipProps={{size: 'small'}}
                                     />
 
-                                    <RHFRadioGroup row spacing={4} name="tipo" options={GENDER_OPTION} />
+                                    <RHFRadioGroup row spacing={4} name="garantia_revision_fisica" options={GENDER_OPTION} />
 
+                                    <RHFRadioGroup row spacing={4} name="ciudad_origen" options={CIUDAD_ORIGEN} />
                                     <LoadingButton
                                         fullWidth
                                         color="success"
@@ -256,5 +277,14 @@ export default function GarantiaPage() {
 const GENDER_OPTION = [
     { label: 'Dentro de Garantía (Revisión Física)', value: '0' },
     { label: 'Fuera de Garantía (Revisión Física)', value: '1' },
+
+];
+
+const CIUDAD_ORIGEN = [
+    {value: 0, label: 'GUAYAQUIL (GUAYAS)'  },
+    {value: 1, label: 'QUITO (PICHINCHA)'  },
+    {value: 4, label: 'CUENCA (AZUAY)'  },
+    {value: 13, label: 'MANTA (MANABI)'  },
+
 
 ];
