@@ -797,7 +797,7 @@ function nameWarehouseAlphacell(ware) {
         "004": "DEPRATI",
         "005": "CRESA CONSIGNACIÓN",
         "006": "COMPUTRONSA CONSIGNACIÓN",
-        "007": "BODEGA CDHT",
+        "007": "BODEGA CDHT QUITO",
         "099": "INVENTARIO TRANSITO IMPORTACIONES"
     };
 

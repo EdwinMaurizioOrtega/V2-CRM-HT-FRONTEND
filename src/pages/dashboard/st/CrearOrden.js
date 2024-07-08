@@ -147,6 +147,7 @@ export default function GarantiaPage() {
             CIUDAD_ORIGEN: Number( data.ciudad_origen),
             ID_VENDEDOR: Number(data.vendedor.CODE),
             NOMBRE_VENDEDOR: data.vendedor.NOMBRE,
+            EMAIL: data.vendedor.EMAIL,
             INFO: garantia,
             ID_USUARIO: Number( user.ID)
         });
