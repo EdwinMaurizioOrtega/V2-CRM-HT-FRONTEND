@@ -253,12 +253,13 @@ export default function GarantiaPage() {
                                         ChipProps={{size: 'small'}}
                                     />
 
-
+                                    <h2>Garantía (Revisión Física</h2>
                                     <FormControlLabel
                                         control={<Switch checked={isChecked} onChange={handleSwitchChange}/>}
                                         label="Garantía (Revisión Física)"/>
+                                    <h2>Ciudad Origen</h2>
+                                    <RHFRadioGroup row spacing={4} name="ciudad_origen" options={CIUDAD_ORIGEN}/>
 
-                                    <RHFRadioGroup row spacing={4} name="ciudad_origen" options={CIUDAD_ORIGEN} />
                                     <LoadingButton
                                         fullWidth
                                         color="success"
@@ -291,8 +292,8 @@ const GENDER_OPTION = [
 ];
 
 const CIUDAD_ORIGEN = [
-    {value: 0, label: 'GUAYAQUIL (GUAYAS)'  },
-    {value: 1, label: 'QUITO (PICHINCHA)'  },
+    {value: 1, label: 'GUAYAQUIL (GUAYAS)'  },
+    {value: 2, label: 'QUITO (PICHINCHA)'  },
     {value: 4, label: 'CUENCA (AZUAY)'  },
     {value: 13, label: 'MANTA (MANABI)'  },
 

@@ -141,7 +141,7 @@ const navConfig = [
         children: [
           { title: 'Validar Garantía', path: PATH_DASHBOARD.st.garantia },
           { title: 'Ingresar Orden', path: PATH_DASHBOARD.st.ingresarOrden },
-          { title: 'Gestión Orden', path: PATH_DASHBOARD.st.garantia },
+          { title: 'Gestión Orden', path: PATH_DASHBOARD.st.gestionOrden },
           { title: 'Consultar Orden', path: PATH_DASHBOARD.st.garantia },
           // { title: 'post', path: PATH_DASHBOARD.blog.demoView },
           // { title: 'create', path: PATH_DASHBOARD.blog.new },
