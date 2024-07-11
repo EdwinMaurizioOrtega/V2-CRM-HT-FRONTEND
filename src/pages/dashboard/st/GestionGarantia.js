@@ -2,7 +2,19 @@ import React, {useEffect, useCallback, useState} from 'react';
 // next
 import Head from 'next/head';
 // @mui
-import {Grid, Button, Container, Stack, TextField, Box, Card, CardHeader, CardContent, Typography} from '@mui/material';
+import {
+    Grid,
+    Button,
+    Container,
+    Stack,
+    TextField,
+    Box,
+    Card,
+    CardHeader,
+    CardContent,
+    Typography,
+    IconButton
+} from '@mui/material';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
 // layouts
@@ -12,6 +24,8 @@ import DashboardLayout from '../../../layouts/dashboard';
 import {useSnackbar} from '../../../components/snackbar';
 
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
 
 
 // ----------------------------------------------------------------------
@@ -107,7 +121,7 @@ export default function GarantiaPage() {
         formData.append('file_data', file);
         formData.append('id_order', row.ID_ORDEN);
 
-        fetch('http://localhost:7070/hanadb/api/technical_service/api_upload_file_to_dropbox', {
+        fetch(`${HOST_API_KEY}/hanadb/api/technical_service/api_upload_file_to_dropbox`, {
             method: 'POST',
             body: formData,
         })
@@ -217,6 +231,31 @@ export default function GarantiaPage() {
 
                 );
             }
+        },
+        {field: 'URL_DROPBOX',
+            headerName: 'URL_DROPBOX',
+            flex: 1,
+            minWidth: 160,
+            renderCell: (params) => {
+                if (params.value === null || params.value === undefined) {
+                    return null; // Si params.value es null o undefined, no renderizar nada
+                }
+
+                const url = params.value;
+                const modifiedUrl = url.slice(0, -4) + 'raw=1'; // Reemplaza los últimos 4 caracteres por 'edwin'
+
+                return (
+                    <IconButton
+                        component="a"
+                        href={modifiedUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="Ver enlace"
+                    >
+                        <VisibilityIcon />
+                    </IconButton>
+                );
+            },
         },
         //
     ]
