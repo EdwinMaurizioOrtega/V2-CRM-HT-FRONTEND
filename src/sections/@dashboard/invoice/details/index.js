@@ -486,6 +486,7 @@ export default function InvoiceDetails({invoice}) {
             "005": "CRESA CONSIGNACIÓN",
             "006": "COMPUTRONSA CONSIGNACIÓN",
             "007": "BODEGA CDHT QUITO",
+            "009": "GUAYAQUIL SERVIENTREGA",
             "099": "INVENTARIO TRANSITO IMPORTACIONES"
         };
 
@@ -1821,6 +1822,7 @@ export const top100FilmsAlphacell = [
     {title: 'CRESA CONSIGNACIÓN', id: "005"},
     {title: 'COMPUTRONSA CONSIGNACIÓN', id: "006"},
     {title: 'BODEGA CDHT QUITO', id: "007"},
+    {title: 'GUAYAQUIL SERVIENTREGA', id: "009"},
     {title: 'INVENTARIO TRANSITO IMPORTACIONES', id: "099"}
 ]
 

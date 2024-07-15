@@ -305,6 +305,8 @@ function getTextFromCodigoAlphacell(rowCodigo) {
             return "COMPUTRONSA CONSIGNACIÓN";
         case '007':
             return "BODEGA CDHT QUITO";
+        case '009':
+            return "GUAYAQUIL SERVIENTREGA";
         case '099':
             return "INVENTARIO TRANSITO IMPORTACIONES";
         default:

@@ -114,6 +114,12 @@ const WAREHOUSE_OPTIONS_ALPACELL = [
         title: 'BODEGA CDHT',
         description: 'QUITO ALPHACELL',
     },
+    {
+        id: '009',
+        value: '009',
+        title: 'GUAYAQUIL SERVIENTREGA',
+        description: 'GUAYAQUIL SERVIENTREGA',
+    },
     // {
     //     id: '002',
     //     value: '002',

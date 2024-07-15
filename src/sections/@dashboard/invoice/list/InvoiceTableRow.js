@@ -798,6 +798,7 @@ function nameWarehouseAlphacell(ware) {
         "005": "CRESA CONSIGNACIÓN",
         "006": "COMPUTRONSA CONSIGNACIÓN",
         "007": "BODEGA CDHT QUITO",
+        "009": "GUAYAQUIL SERVIENTREGA",
         "099": "INVENTARIO TRANSITO IMPORTACIONES"
     };
 
