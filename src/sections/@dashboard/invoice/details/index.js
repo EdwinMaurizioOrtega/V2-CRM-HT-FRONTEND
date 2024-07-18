@@ -63,7 +63,7 @@ import {PDFDownloadLink} from "@react-pdf/renderer";
 import PedidoInvoicePDF from "./PedidoInvoicePDF";
 import {DOCUMENTACION, PAYMENT_OPTIONS_V2, TIPO_CREDITO, TIPO_PRECIO} from "../../../../utils/constants";
 
-import datos from '/data/datos.json'; // Ajusta la ruta según la ubicación de tu archivo JSON
+//import datos from '/data/datos.json'; // Ajusta la ruta según la ubicación de tu archivo JSON
 
 
 // ----------------------------------------------------------------------
@@ -1259,9 +1259,9 @@ export default function InvoiceDetails({invoice}) {
                                             <Box sx={{maxWidth: 560}}>
                                                 <Typography
                                                     variant="subtitle2"
-                                                    sx={{
-                                                        backgroundColor: isCodigoAllowed(row.PRODUCTO_ID, BODEGA) ? 'pink' : 'inherit'
-                                                    }}
+                                                    // sx={{
+                                                    //     backgroundColor: isCodigoAllowed(row.PRODUCTO_ID, BODEGA) ? 'pink' : 'inherit'
+                                                    // }}
                                                 >
                                                     {row.NOMBRE !== null ? row.NOMBRE : 'VALOR DEL ENVIO'}
                                                 </Typography>
@@ -1839,8 +1839,8 @@ export const boxes = [
 ]
 
 // Función para verificar si un código está presente en el JSON
-const isCodigoAllowed = (codigo, bodega) => {
-    return datos.some(item => item.CODIGO === codigo && item.BODEGA == bodega);
-};
+// const isCodigoAllowed = (codigo, bodega) => {
+//     return datos.some(item => item.CODIGO === codigo && item.BODEGA == bodega);
+// };
 
 
