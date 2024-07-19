@@ -57,7 +57,7 @@ export default function GarantiaPage() {
         const BuscarPorRango = async () => {
 
             try {
-                const response = await axios.get('/hanadb/api/technical_service/get_oders_technical_service?status=0');
+                const response = await axios.get('/hanadb/api/technical_service/get_oders_technical_service?status=1');
 
                 if (response.status === 200) {
                     console.log(response);
@@ -86,66 +86,25 @@ export default function GarantiaPage() {
 
     }, []);
 
-    const [selectedFile, setSelectedFile] = useState(null);
 
-    const handleFileChange = (event, row) => {
-        const file = event.target.files[0];
-        // setSelectedFile(file);
-
-        if (file) {
-            handleFileUpload(file, row);
-        }
-    };
-
-    const handleFileUpload = (file, row) => {
-
+    const handleShowCrearNotaCredito = async (row) => {
 
         // Aquí puedes manejar la carga del archivo, por ejemplo, enviándolo a un servidor
-        console.log('Archivo seleccionado:', file);
         console.log('Número de orden:', row.ID_ORDEN);
 
-        // Ejemplo de envío a un servidor (reemplaza con tu lógica)
-        const formData = new FormData();
-        formData.append('file', file);
+        // Actualizar una orden.
+        const response = await axios.post('/hanadb/api/technical_service/api_save_url_file', {
+            ID_ORDER: Number(row.ID_ORDEN),
+            IMEI: row.IMEI,
+        });
 
-        fetch(`https://imagen.hipertronics.us/ht/cloud/upload_web_files`, {
-            method: 'POST',
-            body: formData,
-        })
-            .then(response => {
-                if (response.status === 200) {
-                    return response.json();  // Convertir la respuesta a JSON si el estado es 200
-                } else {
-                    throw new Error('Failed to upload file');  // Lanzar un error si el estado no es 200
-                }
-            })
-            .then(async data => {
-                if (data.status === 'success') {
-                    console.log('Archivo subido con éxito. Enlace:', data.link);
+        console.log("Orden actualizada correctamente.");
+        console.log("Código de estado:", response.status);
 
-                    // Actualizar una orden.
-                    const response = await axios.put('/hanadb/api/technical_service/api_save_url_file', {
-                        ID_ORDER: Number(row.ID_ORDEN),
-                        URL: data.link,
-
-                    });
-
-                    console.log("Orden actualizada correctamente.");
-                    console.log("Código de estado:", response.status);
-
-                    // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
-                    if (response.status === 200) {
-                        router.reload();
-                    }
-
-
-                } else {
-                    console.error('Error en la respuesta del servidor:', data);
-                }
-            })
-            .catch(error => {
-                console.error('Error al cargar el archivo:', error);
-            });
+        // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+        if (response.status === 200) {
+            router.reload();
+        }
 
 
     };
@@ -193,37 +152,6 @@ export default function GarantiaPage() {
             minWidth: 160,
         },
         {
-            field: 'pdf',
-            headerName: 'REPORTE TALLER',
-            width: 200,
-            renderCell: (params) => {
-                return (
-                    // <Button
-                    //     variant="contained"
-                    //     onClick={() => handleShowCoordinates(params.row)}
-                    // >
-                    //    CARGAR PDF
-                    // </Button>
-
-
-                    <CardContent>
-                        <Button
-                            variant="contained"
-                            component="label"
-                            startIcon={<CloudUploadIcon />}
-                        >
-                            Archivo
-                            <input
-                                type="file"
-                                hidden
-                                onChange={(event) => handleFileChange(event, params.row)}
-                            />
-                        </Button>
-                    </CardContent>
-                );
-            }
-        },
-        {
             field: 'si',
             headerName: 'APLICA NOTA CRÉDITO',
             width: 250,
@@ -232,17 +160,11 @@ export default function GarantiaPage() {
                     <>
                         <Button
                             variant="contained"
-                            onClick={() => handleShowSiAplicaNotaCredito(params.row)}
+                            onClick={() => handleShowCrearNotaCredito(params.row)}
                         >
-                            SI
+                            Crear NC
                         </Button>
 
-                        <Button
-                            variant="contained"
-                            onClick={() => handleShowNoAplicaNotaCredito(params.row)}
-                        >
-                            NO
-                        </Button>
                     </>
 
                 );
@@ -276,34 +198,7 @@ export default function GarantiaPage() {
         //
     ]
 
-    const handleShowSiAplicaNotaCredito = async (data) => {
-        //Enviar a la páguina de creación de la nota de credito
-        if (data) {
-            console.log("Fila seleccionada:", data);
-            // Puedes hacer algo con las coordenadas seleccionadas aquí, si es necesario
-
-            // Actualizar una orden.
-            const response = await axios.put('/hanadb/api/technical_service/update_status_order_technical', {
-                ID_ORDER: Number(data.ID_ORDEN),
-
-            });
-
-            console.log("Orden actualizada correctamente.");
-            console.log("Código de estado:", response.status);
-
-            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
-            if (response.status === 200) {
-                router.reload();
-            }
-
-
-        } else {
-            console.log("No se ha seleccionado ningún marcador.");
-        }
-    };
-
-    const handleShowNoAplicaNotaCredito = (data) => {
-        //Enviar un correo electrónico.
+    const handleShowSiAplicaNotaCredito = (data) => {
         if (data) {
             console.log("Fila seleccionada:", data);
             // Puedes hacer algo con las coordenadas seleccionadas aquí, si es necesario
@@ -337,7 +232,7 @@ export default function GarantiaPage() {
 
             <Container maxWidth={themeStretch ? false : 'lg'}>
                 <CustomBreadcrumbs
-                    heading="Gestión Orden"
+                    heading="Crear Nota Crédito SAP"
                     links={[
                         {
                             name: 'Dashboard',
@@ -348,7 +243,7 @@ export default function GarantiaPage() {
                             href: PATH_DASHBOARD.blog.root,
                         },
                         {
-                            name: 'Garantía',
+                            name: 'Nota Crédito SAP',
                         },
                     ]}
                 />
