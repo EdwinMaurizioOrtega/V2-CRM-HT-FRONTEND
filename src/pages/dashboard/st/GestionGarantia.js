@@ -187,8 +187,14 @@ export default function GarantiaPage() {
             minWidth: 160,
         },
         {
-            field: 'DISPLAYNAME',
-            headerName: 'DISPLAYNAME',
+            field: 'NAME_EMPLEADO_X_FACTURACION',
+            headerName: 'EMPLEADO_X_FACTURACION',
+            flex: 1,
+            minWidth: 160,
+        },
+        {
+            field: 'USUARIO_CREACION_ORDEN',
+            headerName: 'USUARIO_CREACION_ORDEN',
             flex: 1,
             minWidth: 160,
         },
@@ -302,11 +308,32 @@ export default function GarantiaPage() {
         }
     };
 
-    const handleShowNoAplicaNotaCredito = (data) => {
+    const handleShowNoAplicaNotaCredito = async (data) => {
         //Enviar un correo electrónico.
         if (data) {
             console.log("Fila seleccionada:", data);
             // Puedes hacer algo con las coordenadas seleccionadas aquí, si es necesario
+
+
+            // Aquí puedes manejar la carga del archivo, por ejemplo, enviándolo a un servidor
+            console.log('Número de orden:', data.ID_ORDEN);
+
+            // Actualizar una orden.
+            const response = await axios.post('/hanadb/api/technical_service/no_aplica_nota_credito_sap', {
+                ID_ORDER: Number(data.ID_ORDEN),
+                IMEI: data.IMEI_SERIE,
+                EMAIL_EMPLEADO_X_FACTURACION: data.EMAIL_EMPLEADO_X_FACTURACION,
+                URL_DROPBOX: data.URL_DROPBOX,
+            });
+
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+                console.log("Orden actualizada correctamente.");
+                router.reload();
+            }
+
 
         } else {
             console.log("No se ha seleccionado ningún marcador.");

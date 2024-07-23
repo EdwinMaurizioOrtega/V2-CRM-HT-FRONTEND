@@ -145,9 +145,10 @@ export default function GarantiaPage() {
             IMEI_SERIE: enteredName,
             GARANTIA_L1: isChecked,
             CIUDAD_ORIGEN: Number( data.ciudad_origen),
-            ID_VENDEDOR: Number(data.vendedor.CODE),
-            NOMBRE_VENDEDOR: data.vendedor.NOMBRE,
-            EMAIL: data.vendedor.EMAIL,
+            // CODE_EMPLEADO_X_FACTURACION: Number(data.CODE_EMPLEADO_X_FACTURACION),
+            // NAME_EMPLEADO_X_FACTURACION: data.NAME_EMPLEADO_X_FACTURACION,
+            // EMAIL_EMPLEADO_X_FACTURACION: data.EMAIL_EMPLEADO_X_FACTURACION,
+            // EMAIL_CLIENTE: data.EMAIL,
             INFO: garantia,
             ID_USUARIO: Number( user.ID)
         });
@@ -208,17 +209,22 @@ export default function GarantiaPage() {
                                 </Button>
 
 
-                                <h2>Garantia Por Factura:</h2>
+                                <h3>Garantia Por Factura:</h3>
                                 <span>{garantia?.garantia}</span>
                                 <br></br>
-                                <h2>Cliente:</h2>
+                                <h3>Cliente:</h3>
 
                                 <span>{garantia?.data.COD_CLIENTE}</span>
                                 <span>{garantia?.data.NOM_CLIENTE}</span>
                                 <span>{garantia?.data.FECHA_VENTA}</span>
                                 <span>{garantia?.data.MARCA}</span>
                                 <br></br>
-                                <h2>Taller:</h2>
+                                <h3>Empleado Ventas X Facturación:</h3>
+
+                                <span>{garantia?.data.NAME_EMPLEADO_X_FACTURACION}</span>
+                                <span>{garantia?.data.EMAIL_EMPLEADO_X_FACTURACION}</span>
+                                <br></br>
+                                <h3>Taller:</h3>
                                 <span>{garantia?.taller.empresa}</span>
                                 <span>{garantia?.taller.direccion}</span>
                                 <span>{garantia?.taller.persona_contacto}</span>
@@ -243,21 +249,21 @@ export default function GarantiaPage() {
 
                                 <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
 
-                                    <RHFAutocomplete
-                                        name="vendedor"
-                                        label="Vendedor"
-                                        single
-                                        freeSolo
-                                        options={dataEmpladosVenta}
-                                        getOptionLabel={(option) => option.NOMBRE}
-                                        ChipProps={{size: 'small'}}
-                                    />
+                                    {/* <RHFAutocomplete */}
+                                    {/*     name="vendedor" */}
+                                    {/*     label="Vendedor" */}
+                                    {/*     single */}
+                                    {/*     freeSolo */}
+                                    {/*     options={dataEmpladosVenta} */}
+                                    {/*     getOptionLabel={(option) => option.NOMBRE} */}
+                                    {/*     ChipProps={{size: 'small'}} */}
+                                    {/* /> */}
 
-                                    <h2>Garantía (Revisión Física</h2>
+                                    <h3>Garantía (Revisión Física</h3>
                                     <FormControlLabel
                                         control={<Switch checked={isChecked} onChange={handleSwitchChange}/>}
                                         label="Garantía (Revisión Física)"/>
-                                    <h2>Ciudad Origen</h2>
+                                    <h3>Ciudad Origen</h3>
                                     <RHFRadioGroup row spacing={4} name="ciudad_origen" options={CIUDAD_ORIGEN}/>
 
                                     <LoadingButton

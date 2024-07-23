@@ -187,30 +187,18 @@ export default function GarantiaPage() {
             minWidth: 160,
         },
         {
-            field: 'DISPLAYNAME',
-            headerName: 'DISPLAYNAME',
+            field: 'NAME_EMPLEADO_X_FACTURACION',
+            headerName: 'EMPLEADO_X_FACTURACION',
             flex: 1,
             minWidth: 160,
         },
         {
-            field: 'si',
-            headerName: 'APLICA NOTA CRÉDITO',
-            width: 250,
-            renderCell: (params) => {
-                return (
-                    <>
-                        <Button
-                            variant="contained"
-                            onClick={() => handleShowSiAplicaNotaCredito(params.row)}
-                        >
-                            Crear NC
-                        </Button>
-
-                    </>
-
-                );
-            }
+            field: 'USUARIO_CREACION_ORDEN',
+            headerName: 'USUARIO_CREACION_ORDEN',
+            flex: 1,
+            minWidth: 160,
         },
+
         {field: 'URL_DROPBOX',
             headerName: 'URL_DROPBOX',
             flex: 1,
