@@ -216,7 +216,7 @@ export default function GarantiaPage() {
                         <Button
                             variant="contained"
                             component="label"
-                            startIcon={<CloudUploadIcon />}
+                            startIcon={<CloudUploadIcon/>}
                         >
                             Archivo
                             <input
@@ -263,7 +263,7 @@ export default function GarantiaPage() {
 
                         <Button
                             variant="contained"
-                            onClick={() => handleShowNoAplicaNotaCredito(params.row)}
+                            onClick={() => handleShowReparacionEnTaller(params.row)}
                         >
                             REPARACIÓN EN TALLER
                         </Button>
@@ -272,7 +272,8 @@ export default function GarantiaPage() {
                 );
             }
         },
-        {field: 'URL_DROPBOX',
+        {
+            field: 'URL_DROPBOX',
             headerName: 'URL_DROPBOX',
             flex: 1,
             minWidth: 160,
@@ -292,7 +293,7 @@ export default function GarantiaPage() {
                         rel="noopener noreferrer"
                         title="Ver enlace"
                     >
-                        <VisibilityIcon />
+                        <VisibilityIcon/>
                     </IconButton>
                 );
             },
@@ -358,6 +359,14 @@ export default function GarantiaPage() {
         }
     };
 
+    const handleShowReparacionEnTaller = async (data) => {
+        if (data) {
+            console.log("Fila seleccionada:", data);
+        } else {
+            console.log("No se ha detectado ningun dato");
+        }
+    }
+
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const onSnackbarAction = (data, color, anchor) => {
         enqueueSnackbar(`${data}`, {
@@ -402,16 +411,16 @@ export default function GarantiaPage() {
                     <Grid item xs={12} md={12}>
                         <Card sx={{p: 3}}>
                             <Stack spacing={3}>
-                                    <DataGrid
-                                        rows={businessPartners}
-                                        columns={baseColumns}
-                                        pagination
-                                        slots={{
-                                            toolbar: CustomToolbar,
-                                            noRowsOverlay: () => <EmptyContent title="No Data"/>,
-                                            noResultsOverlay: () => <EmptyContent title="No results found"/>,
-                                        }}
-                                    />
+                                <DataGrid
+                                    rows={businessPartners}
+                                    columns={baseColumns}
+                                    pagination
+                                    slots={{
+                                        toolbar: CustomToolbar,
+                                        noRowsOverlay: () => <EmptyContent title="No Data"/>,
+                                        noResultsOverlay: () => <EmptyContent title="No results found"/>,
+                                    }}
+                                />
                             </Stack>
                         </Card>
                     </Grid>
