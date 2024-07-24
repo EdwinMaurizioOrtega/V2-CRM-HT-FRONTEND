@@ -36,13 +36,12 @@ const ICONS = {
 };
 
 const navConfig = [
-    // GENERAL
+    // 0 - GENERAL
     // ----------------------------------------------------------------------
     {
         subheader: 'overview',
         items: [
             {title: 'app', path: PATH_DASHBOARD.general.app, icon: ICONS.dashboard},
-            // { title: 'ecommerce', path: PATH_DASHBOARD.general.ecommerce, icon: ICONS.ecommerce },
             {
                 title: 'Power BI',
                 path: PATH_DASHBOARD.powerBI.root,
@@ -58,9 +57,6 @@ const navConfig = [
                 ],
 
             },
-            // { title: 'banking', path: PATH_DASHBOARD.general.banking, icon: ICONS.banking },
-            // { title: 'booking', path: PATH_DASHBOARD.general.booking, icon: ICONS.booking },
-            // { title: 'file', path: PATH_DASHBOARD.general.file, icon: ICONS.file },
             {
                 title: 'calendar M.',
                 path: PATH_DASHBOARD.calendar,
@@ -69,7 +65,7 @@ const navConfig = [
         ],
     },
 
-    // MANAGEMENT
+    // 1 - MANAGEMENT
     // ----------------------------------------------------------------------
     {
         subheader: 'management',
@@ -80,12 +76,6 @@ const navConfig = [
                 path: PATH_DASHBOARD.user.root,
                 icon: ICONS.user,
                 children: [
-                    //{ title: 'perfil', path: PATH_DASHBOARD.user.profile },
-                    // { title: 'cards', path: PATH_DASHBOARD.user.cards },
-                    //{ title: 'lista', path: PATH_DASHBOARD.user.list },
-                    //{ title: 'crear', path: PATH_DASHBOARD.user.new },
-                    // { title: 'edit', path: PATH_DASHBOARD.user.demoEdit },
-                    // { title: 'cuenta', path: PATH_DASHBOARD.user.account },
                     {title: 'Tracking', path: PATH_DASHBOARD.user.tracking},
                 ],
             },
@@ -116,9 +106,6 @@ const navConfig = [
                 children: [
                     {title: 'Lista', path: PATH_DASHBOARD.invoice.list},
                     {title: 'IMEIs', path: PATH_DASHBOARD.invoice.sap},
-                    // { title: 'details', path: PATH_DASHBOARD.invoice.demoView },
-                    // { title: 'create', path: PATH_DASHBOARD.invoice.new },
-                    // { title: 'edit', path: PATH_DASHBOARD.invoice.demoEdit },
                 ],
             },
 
@@ -130,7 +117,6 @@ const navConfig = [
                 children: [
                     {title: 'Mayoristas', path: PATH_DASHBOARD.gestion.mayorista},
                     {title: 'C. Finales', path: PATH_DASHBOARD.gestion.cfinal},
-                    // { title: 'create', path: PATH_DASHBOARD.blog.new },
                 ],
             },
 
@@ -138,6 +124,7 @@ const navConfig = [
         ],
     },
 
+    // 2 -
     // APP
     // ----------------------------------------------------------------------
     {
@@ -146,31 +133,12 @@ const navConfig = [
             {title: 'tienda', path: PATH_DASHBOARD.eCommerce.list, icon: ICONS.calendar,},
             {title: 'Clientes', path: PATH_DASHBOARD.eCommerce.clientes, icon: ICONS.kanban,},
             {title: 'Lista', path: PATH_DASHBOARD.invoice.list, icon: ICONS.banking,},
-
-            // {
-            //   title: 'mail',
-            //   path: PATH_DASHBOARD.mail.root,
-            //   icon: ICONS.mail,
-            //   info: <Label color="error">+32</Label>,
-            // },
-            // {
-            //   title: 'chat',
-            //   path: PATH_DASHBOARD.chat.root,
-            //   icon: ICONS.chat,
-            // },
-            // {
-            //   title: 'calendar',
-            //   path: PATH_DASHBOARD.calendar,
-            //   icon: ICONS.calendar,
-            // },
-            // {
-            //   title: 'kanban',
-            //   path: PATH_DASHBOARD.kanban,
-            //   icon: ICONS.kanban,
-            // },
         ],
     },
 
+    // 3 -
+    // APP
+    // ----------------------------------------------------------------------
     {
         subheader: 'ALPHACELL',
         items: [
@@ -181,6 +149,9 @@ const navConfig = [
         ],
     },
 
+    // 4 -
+    // APP
+    // ----------------------------------------------------------------------
     {
         subheader: 'TOMEBAMBA',
         items: [
@@ -190,6 +161,9 @@ const navConfig = [
         ],
     },
 
+    // 5 -
+    // APP
+    // ----------------------------------------------------------------------
     {
         subheader: 'Servicio Técnico',
         items: [
@@ -207,86 +181,12 @@ const navConfig = [
         subheader: '-_-',
         items: [
             {
-                // default roles : All roles can see this entry.
-                // roles: ['user'] Only users can see this item.
-                // roles: ['admin'] Only admin can see this item.
-                // roles: ['admin', 'manager'] Only admin/manager can see this item.
-                // Reference from 'src/guards/RoleBasedGuard'.
                 title: 'item_by_roles',
                 path: PATH_DASHBOARD.permissionDenied,
                 icon: ICONS.lock,
                 roles: ['admin'],
                 caption: 'only_admin_can_see_this_item',
             },
-            // {
-            //   title: 'menu_level',
-            //   path: '#/dashboard/menu_level',
-            //   icon: ICONS.menuItem,
-            //   children: [
-            //     {
-            //       title: 'menu_level_2a',
-            //       path: '#/dashboard/menu_level/menu_level_2a',
-            //     },
-            //     {
-            //       title: 'menu_level_2b',
-            //       path: '#/dashboard/menu_level/menu_level_2b',
-            //       children: [
-            //         {
-            //           title: 'menu_level_3a',
-            //           path: '#/dashboard/menu_level/menu_level_2b/menu_level_3a',
-            //         },
-            //         {
-            //           title: 'menu_level_3b',
-            //           path: '#/dashboard/menu_level/menu_level_2b/menu_level_3b',
-            //           children: [
-            //             {
-            //               title: 'menu_level_4a',
-            //               path: '#/dashboard/menu_level/menu_level_2b/menu_level_3b/menu_level_4a',
-            //             },
-            //             {
-            //               title: 'menu_level_4b',
-            //               path: '#/dashboard/menu_level/menu_level_2b/menu_level_3b/menu_level_4b',
-            //             },
-            //           ],
-            //         },
-            //       ],
-            //     },
-            //   ],
-            // },
-            // {
-            //   title: 'item_disabled',
-            //   path: '#disabled',
-            //   icon: ICONS.disabled,
-            //   disabled: true,
-            // },
-            //
-            // {
-            //   title: 'item_label',
-            //   path: '#label',
-            //   icon: ICONS.label,
-            //   info: (
-            //     <Label color="info" startIcon={<Iconify icon="eva:email-fill" />}>
-            //       NEW
-            //     </Label>
-            //   ),
-            // },
-            // {
-            //   title: 'item_caption',
-            //   path: '#caption',
-            //   icon: ICONS.menuItem,
-            //   caption:
-            //     'Quisque malesuada placerat nisl. In hac habitasse platea dictumst. Cras id dui. Pellentesque commodo eros a enim. Morbi mollis tellus ac sapien.',
-            // },
-            // {
-            //   title: 'item_external_link',
-            //   path: 'https://www.google.com/',
-            //   icon: ICONS.external,
-            // },
-            // {
-            //   title: 'blank',
-            //   path: PATH_DASHBOARD.blank,
-            //   icon: ICONS.blank,
-            // },
         ],
     },
 ];
