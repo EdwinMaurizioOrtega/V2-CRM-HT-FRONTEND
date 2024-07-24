@@ -134,20 +134,19 @@ const navConfig = [
                 ],
             },
 
-            //
-            {
-                title: 'Servicio Técnico',
-                path: PATH_DASHBOARD.st.root,
-                icon: ICONS.folder,
-                children: [
-                    {title: 'Validar Garantía', path: PATH_DASHBOARD.st.garantia},
-                    {title: 'Ingresar Orden', path: PATH_DASHBOARD.st.ingresarOrden},
-                    {title: 'Gestión Orden', path: PATH_DASHBOARD.st.gestionOrden},
-                    {title: 'Crear NC SAP', path: PATH_DASHBOARD.st.crearNC},
-                    {title: 'Reporte ST', path: PATH_DASHBOARD.st.reporteOrden},
-                    // { title: 'create', path: PATH_DASHBOARD.blog.new },
-                ],
-            },
+
+        ],
+    },
+
+    {
+        subheader: 'Servicio Técnico',
+        items: [
+            {title: 'Ingresar Orden', path: PATH_DASHBOARD.st.ingresarOrden, icon: ICONS.kanban},
+            {title: 'Servientrega', path: PATH_DASHBOARD.st.garantia, icon: ICONS.kanban},
+            {title: 'Gestión Orden', path: PATH_DASHBOARD.st.gestionOrden, icon: ICONS.kanban},
+            {title: 'Crear NC SAP', path: PATH_DASHBOARD.st.crearNC, icon: ICONS.kanban},
+            {title: 'Reporte ST', path: PATH_DASHBOARD.st.reporteOrden, icon: ICONS.kanban},
+            // { title: 'create', path: PATH_DASHBOARD.blog.new },
         ],
     },
 
