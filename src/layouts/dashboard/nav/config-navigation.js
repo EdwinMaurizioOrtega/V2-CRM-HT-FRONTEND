@@ -124,8 +124,7 @@ const navConfig = [
         ],
     },
 
-    // 2 -
-    // APP
+    // 2 - INFINIX
     // ----------------------------------------------------------------------
     {
         subheader: 'INFINIX',
@@ -136,8 +135,7 @@ const navConfig = [
         ],
     },
 
-    // 3 -
-    // APP
+    // 3 - ALPHACELL
     // ----------------------------------------------------------------------
     {
         subheader: 'ALPHACELL',
@@ -149,8 +147,7 @@ const navConfig = [
         ],
     },
 
-    // 4 -
-    // APP
+    // 4 - TOMEBAMBA
     // ----------------------------------------------------------------------
     {
         subheader: 'TOMEBAMBA',
@@ -161,11 +158,10 @@ const navConfig = [
         ],
     },
 
-    // 5 -
-    // APP
+    // 5 - SERVICIO TÉCNICO
     // ----------------------------------------------------------------------
     {
-        subheader: 'Servicio Técnico',
+        subheader: 'SERVICIO TÉCNICO',
         items: [
             {title: 'Ingresar Orden', path: PATH_DASHBOARD.st.ingresarOrden, icon: ICONS.kanban},
             {title: 'Servientrega', path: PATH_DASHBOARD.st.garantia, icon: ICONS.kanban},
