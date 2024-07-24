@@ -87,9 +87,6 @@ const navConfig = [
                 icon: ICONS.cart,
                 children: [
                     {title: 'tienda', path: PATH_DASHBOARD.eCommerce.list},
-                    // { title: 'product', path: PATH_DASHBOARD.eCommerce.demoView },
-                    // { title: 'list', path: PATH_DASHBOARD.eCommerce.list },
-                    // { title: 'create', path: PATH_DASHBOARD.eCommerce.new },
                     {title: 'carrito de compras', path: PATH_DASHBOARD.eCommerce.checkout},
                     {title: 'Catálogo', path: PATH_DASHBOARD.eCommerce.catalogo},
                     {title: 'Clientes', path: PATH_DASHBOARD.eCommerce.clientes},
@@ -140,10 +137,10 @@ const navConfig = [
     {
         subheader: 'ALPHACELL',
         items: [
-            {title: 'tienda', path: PATH_DASHBOARD.eCommerce.list},
-            {title: 'ordenes', path: PATH_DASHBOARD.invoice.list},
-            {title: 'Catálogo', path: PATH_DASHBOARD.eCommerce.catalogo},
-            {title: 'Tracking', path: PATH_DASHBOARD.user.tracking},
+            {title: 'tienda', path: PATH_DASHBOARD.eCommerce.list, icon: ICONS.analytics},
+            {title: 'ordenes', path: PATH_DASHBOARD.invoice.list, icon: ICONS.analytics},
+            {title: 'Catálogo', path: PATH_DASHBOARD.eCommerce.catalogo, icon: ICONS.analytics},
+            {title: 'Tracking', path: PATH_DASHBOARD.user.tracking, icon: ICONS.analytics},
         ],
     },
 
@@ -152,8 +149,8 @@ const navConfig = [
     {
         subheader: 'TOMEBAMBA',
         items: [
-            {title: 'tienda', path: PATH_DASHBOARD.eCommerce.list},
-            {title: 'ordenes', path: PATH_DASHBOARD.invoice.list},
+            {title: 'tienda', path: PATH_DASHBOARD.eCommerce.list, icon: ICONS.analytics},
+            {title: 'ordenes', path: PATH_DASHBOARD.invoice.list, icon: ICONS.analytics},
 
         ],
     },
