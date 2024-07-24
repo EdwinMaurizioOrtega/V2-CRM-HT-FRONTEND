@@ -144,19 +144,34 @@ export default function GarantiaPage() {
         const response = await axios.post('/hanadb/api/technical_service/create_warranty_sap', {
             IMEI_SERIE: enteredName,
             GARANTIA_L1: isChecked,
-            CIUDAD_ORIGEN: Number( data.ciudad_origen),
+            CIUDAD_ORIGEN: Number(data.ciudad_origen),
             // CODE_EMPLEADO_X_FACTURACION: Number(data.CODE_EMPLEADO_X_FACTURACION),
             // NAME_EMPLEADO_X_FACTURACION: data.NAME_EMPLEADO_X_FACTURACION,
             // EMAIL_EMPLEADO_X_FACTURACION: data.EMAIL_EMPLEADO_X_FACTURACION,
             // EMAIL_CLIENTE: data.EMAIL,
             INFO: garantia,
-            ID_USUARIO: Number( user.ID)
+            ID_USUARIO: Number(user.ID)
         });
 
         if (response.status === 200) {
             console.log(response);
             // La solicitud PUT se realizó correctamente
             //setDataCatalog(response.data.catalogo)
+
+            const pdfDecode = response.data.guia_pdf;
+            console.log("pdfDecode: "+ pdfDecode)
+
+            const byteCharacters = atob(pdfDecode);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const pdfBlob = new Blob([byteArray], {type: 'application/pdf'});
+            const pdfUrl = URL.createObjectURL(pdfBlob);
+            window.open(pdfUrl, '_blank');
+
+            console.log("Se ha creado la guia correctamente")
         } else {
             // La solicitud POST no se realizó correctamente
             console.error('Error en la solicitud POST:', response.status);
@@ -292,16 +307,16 @@ export default function GarantiaPage() {
 // ----------------------------------------------------------------------
 
 const GENDER_OPTION = [
-    { label: 'Dentro de Garantía (Revisión Física)', value: '0' },
-    { label: 'Fuera de Garantía (Revisión Física)', value: '1' },
+    {label: 'Dentro de Garantía (Revisión Física)', value: '0'},
+    {label: 'Fuera de Garantía (Revisión Física)', value: '1'},
 
 ];
 
 const CIUDAD_ORIGEN = [
-    {value: 1, label: 'GUAYAQUIL (GUAYAS)'  },
-    {value: 2, label: 'QUITO (PICHINCHA)'  },
-    {value: 4, label: 'CUENCA (AZUAY)'  },
-    {value: 13, label: 'MANTA (MANABI)'  },
+    {value: 1, label: 'GUAYAQUIL (GUAYAS)'},
+    {value: 2, label: 'QUITO (PICHINCHA)'},
+    {value: 4, label: 'CUENCA (AZUAY)'},
+    {value: 13, label: 'MANTA (MANABI)'},
 
 
 ];

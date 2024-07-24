@@ -242,12 +242,30 @@ export default function GarantiaPage() {
                         >
                             SI
                         </Button>
+                    </>
+
+                );
+            }
+        },
+        {
+            field: 'no',
+            headerName: 'NO APLICA NOTA CRÉDITO',
+            width: 550,
+            renderCell: (params) => {
+                return (
+                    <>
+                        <Button
+                            variant="contained"
+                            onClick={() => handleShowNoAplicaNotaCredito(params.row)}
+                        >
+                            FUERA DE GARANTÍA
+                        </Button>
 
                         <Button
                             variant="contained"
                             onClick={() => handleShowNoAplicaNotaCredito(params.row)}
                         >
-                            NO
+                            REPARACIÓN EN TALLER
                         </Button>
                     </>
 
