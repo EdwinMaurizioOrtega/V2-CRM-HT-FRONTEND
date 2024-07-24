@@ -138,18 +138,6 @@ const navConfig = [
         ],
     },
 
-    {
-        subheader: 'Servicio Técnico',
-        items: [
-            {title: 'Ingresar Orden', path: PATH_DASHBOARD.st.ingresarOrden, icon: ICONS.kanban},
-            {title: 'Servientrega', path: PATH_DASHBOARD.st.garantia, icon: ICONS.kanban},
-            {title: 'Gestión Orden', path: PATH_DASHBOARD.st.gestionOrden, icon: ICONS.kanban},
-            {title: 'Crear NC SAP', path: PATH_DASHBOARD.st.crearNC, icon: ICONS.kanban},
-            {title: 'Reporte ST', path: PATH_DASHBOARD.st.reporteOrden, icon: ICONS.kanban},
-            // { title: 'create', path: PATH_DASHBOARD.blog.new },
-        ],
-    },
-
     // APP
     // ----------------------------------------------------------------------
     {
@@ -199,6 +187,18 @@ const navConfig = [
             {title: 'tienda', path: PATH_DASHBOARD.eCommerce.list},
             {title: 'ordenes', path: PATH_DASHBOARD.invoice.list},
 
+        ],
+    },
+
+    {
+        subheader: 'Servicio Técnico',
+        items: [
+            {title: 'Ingresar Orden', path: PATH_DASHBOARD.st.ingresarOrden, icon: ICONS.kanban},
+            {title: 'Servientrega', path: PATH_DASHBOARD.st.garantia, icon: ICONS.kanban},
+            {title: 'Gestión Orden', path: PATH_DASHBOARD.st.gestionOrden, icon: ICONS.kanban},
+            {title: 'Crear NC SAP', path: PATH_DASHBOARD.st.crearNC, icon: ICONS.kanban},
+            {title: 'Reporte ST', path: PATH_DASHBOARD.st.reporteOrden, icon: ICONS.kanban},
+            // { title: 'create', path: PATH_DASHBOARD.blog.new },
         ],
     },
 
