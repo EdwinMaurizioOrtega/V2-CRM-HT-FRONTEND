@@ -69,7 +69,7 @@ export default function GarantiaPage() {
     };
 
     const showImei = async (enteredName) => {
-        if (enteredName.length === 15) {
+        if (enteredName.length === 15 || enteredName.length === 11) {
             try {
                 console.log(`IMEI A CONSULTAR: ${enteredName}`);
                 console.log("Buscando en el sistema Facturacion PAC");
@@ -211,10 +211,10 @@ export default function GarantiaPage() {
 
                                 <TextField type="text" className="form-control email"
                                            name="email" id="email2"
-                                           placeholder="IMEI" required
+                                           placeholder="IMEI/SERIE" required
 
                                            onChange={e => {
-                                               setEnteredName(e.currentTarget.value);
+                                               setEnteredName(e.currentTarget.value.toUpperCase());
                                            }}
                                 />
                                 <Button variant="contained" onClick={() => {

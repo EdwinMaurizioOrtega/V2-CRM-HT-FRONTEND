@@ -114,6 +114,10 @@ export const PAYMENT_OPTIONS_V2 = [
     {
         id: 30,
         title: "CRÉDITO 2 DÍAS"
+    },
+    {
+        id: 32,
+        title: "CRÉDITO 60-90 DÍAS."
     }
 ];
 
