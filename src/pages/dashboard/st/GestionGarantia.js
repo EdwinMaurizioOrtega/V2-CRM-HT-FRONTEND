@@ -203,30 +203,36 @@ export default function GarantiaPage() {
             headerName: 'REPORTE TALLER',
             width: 200,
             renderCell: (params) => {
-                return (
-                    // <Button
-                    //     variant="contained"
-                    //     onClick={() => handleShowCoordinates(params.row)}
-                    // >
-                    //    CARGAR PDF
-                    // </Button>
+
+                if (params.row.URL_DROPBOX !== null) {
+                    return 'Archivo cargado.'; // o algún otro contenido si lo deseas
+                } else {
+
+                    return (
+                        // <Button
+                        //     variant="contained"
+                        //     onClick={() => handleShowCoordinates(params.row)}
+                        // >
+                        //    CARGAR PDF
+                        // </Button>
 
 
-                    <CardContent>
-                        <Button
-                            variant="contained"
-                            component="label"
-                            startIcon={<CloudUploadIcon/>}
-                        >
-                            Archivo
-                            <input
-                                type="file"
-                                hidden
-                                onChange={(event) => handleFileChange(event, params.row)}
-                            />
-                        </Button>
-                    </CardContent>
-                );
+                        <CardContent>
+                            <Button
+                                variant="contained"
+                                component="label"
+                                startIcon={<CloudUploadIcon/>}
+                            >
+                                Archivo
+                                <input
+                                    type="file"
+                                    hidden
+                                    onChange={(event) => handleFileChange(event, params.row)}
+                                />
+                            </Button>
+                        </CardContent>
+                    );
+                }
             }
         },
         {

@@ -34,6 +34,7 @@ import FormProvider, {
 } from '../../../components/hook-form';
 import {LoadingButton} from "@mui/lab";
 import {useForm} from "react-hook-form";
+import {useRouter} from "next/router";
 
 // ----------------------------------------------------------------------
 
@@ -49,6 +50,8 @@ export default function GarantiaPage() {
         //resolver: yupResolver(FormSchemaAAAAAA),
         //defaultValues,
     });
+
+    const router = useRouter();
 
     const {
         watch, reset, control, setValue, handleSubmit, formState: {isSubmitting},
@@ -171,7 +174,10 @@ export default function GarantiaPage() {
             const pdfUrl = URL.createObjectURL(pdfBlob);
             window.open(pdfUrl, '_blank');
 
-            console.log("Se ha creado la guia correctamente")
+            alert("Se ha creado la guia correctamente")
+
+            router.reload();
+
         } else {
             // La solicitud POST no se realizó correctamente
             console.error('Error en la solicitud POST:', response.status);
