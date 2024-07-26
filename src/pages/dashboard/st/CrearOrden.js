@@ -82,7 +82,7 @@ export default function GarantiaPage() {
                     setGarantia(data);
                 } else {
                     console.log(`Status ${responseFull.status}: Hubo un problema en la consulta.`);
-                    setGarantia("NO FACTURADO EN LIDENAR");
+                    alert("IMEI NO FACTURADO EN LIDENAR");
                 }
             } catch (error) {
                 console.error("Error en la consulta:", error);

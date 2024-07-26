@@ -1,8 +1,8 @@
-import {useEffect, useCallback, useState} from 'react';
+import React, {useEffect, useCallback, useState} from 'react';
 // next
 import Head from 'next/head';
 // @mui
-import {Grid, Button, Container, Stack, TextField} from '@mui/material';
+import {Grid, Button, Container, Stack, TextField, Card} from '@mui/material';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
 // layouts
@@ -13,7 +13,7 @@ import {useSnackbar} from '../../../components/snackbar';
 
 // ----------------------------------------------------------------------
 
-import { HOST_API_KEY } from '../../../config-global';
+import {HOST_API_KEY} from '../../../config-global';
 import {useSettingsContext} from "../../../components/settings";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
 import {useAuthContext} from "../../../auth/useAuthContext";
@@ -28,59 +28,67 @@ export default function GarantiaPage() {
     const {themeStretch} = useSettingsContext();
 
     const [enteredName, setEnteredName] = useState(''); //INIT TO EMPTY
-    const [garantia, setGarantia] = useState('');
 
-    const [marca, setMarca] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const {user} = useAuthContext();
-
-    // const showImei = async enteredName => {
-    //
-    //     if (enteredName.length === 15) {
-    //         console.log("IMEI A CONSULTAR: " + enteredName);
-    //         //PAC
-    //         console.log("Buscando en el sistema Facturacion PAC")
-    //         const responseFull = await fetch(`${HOST_API_KEY}/api/crm-ht/garantia_imei_pac_sap?id=${enteredName}`);
-    //         console.log(responseFull)
-    //         console.log("Status 200: " + responseFull.status)
-    //         let jsonFull = await responseFull.json();
-    //
-    //         //Retornamos el objeto
-    //         setGarantia(jsonFull.message);
-    //         setMarca(jsonFull.marca);
-    //
-    //     } else {
-    //         // toast.current.show({severity: 'error', summary: 'Mensaje de error', detail: 'El IMEI debe tener 15 dígitos.', life: 3000});
-    //         onSnackbarAction('El IMEI debe tener 15 dígitos.', 'default', {
-    //             vertical: 'top',
-    //             horizontal: 'center',
-    //         })
-    //     }
-    //
-    // }
-
-    const showImei = async (enteredName) => {
-        if (enteredName.length === 15) {
+    const showImei = async (guia) => {
+        if (guia.length === 9) {
             try {
-                console.log(`IMEI A CONSULTAR: ${enteredName}`);
-                console.log("Buscando en el sistema Facturacion PAC");
 
-                const responseFull = await fetch(`${HOST_API_KEY}/api/crm-ht/garantia_imei_pac_sap?id=${enteredName}&empresa=${user.EMPRESA}`);
-                console.log(" responseFull: "+ JSON.stringify( responseFull));
+                setIsLoading(true); // Set loading to true when starting the fetch
 
-                if (responseFull.status === 200) {
-                    const { garantia, marca } = await responseFull.json();
-                    setGarantia(garantia);
-                    setMarca(marca);
-                } else {
-                    console.log(`Status ${responseFull.status}: Hubo un problema en la consulta.`);
-                    setGarantia("NO FACTURADO EN LIDENAR");
-                }
+                console.log("Guia: " + guia);
+                var dataToSend = {
+                    num_guia: guia
+                };
+
+                //console.log("dataToSend: "+JSON.stringify(dataToSend));
+
+                // URL del servidor al que deseas enviar los datos
+                const url = `${HOST_API_KEY}/hanadb/api/orders/order/ServiEntrega/GuiasWeb`;
+
+                // Configuración de la solicitud
+                const requestOptions = {
+                    method: "POST", // Método de la solicitud (POST en este caso)
+                    headers: {
+                        "Content-Type": "application/json", // Tipo de contenido de los datos enviados (JSON en este caso)
+                    },
+                    body: JSON.stringify(dataToSend), // Convertir el objeto en una cadena JSON y usarlo como cuerpo de la solicitud
+                };
+
+                // Realizar la solicitud Fetch
+                fetch(url, requestOptions)
+                    .then((response) => response.json()) // Convertir la respuesta en formato JSON
+                    .then((data) => {
+                        // Aquí puedes manejar la respuesta del servidor (data)
+                        console.log("Respuesta del servidor:", data);
+
+                        var pdfDecode = data.base64File;
+
+                        const byteCharacters = atob(pdfDecode);
+                        const byteNumbers = new Array(byteCharacters.length);
+                        for (let i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        const byteArray = new Uint8Array(byteNumbers);
+                        const pdfBlob = new Blob([byteArray], {type: 'application/pdf'});
+                        const pdfUrl = URL.createObjectURL(pdfBlob);
+                        window.open(pdfUrl, '_blank');
+
+
+                    })
+                    .catch((error) => {
+                        // Aquí puedes manejar errores en la solicitud
+                        console.error("Error en la solicitud:", error);
+                    })
+                    .finally(() => {
+                        setIsLoading(false); // Set loading to false regardless of success or error
+                    });
             } catch (error) {
                 console.error("Error en la consulta:", error);
             }
         } else {
-            onSnackbarAction('El IMEI debe tener 15 dígitos.', 'default', {
+            onSnackbarAction('El IMEI debe tener 9 dígitos.', 'default', {
                 vertical: 'top',
                 horizontal: 'center',
             });
@@ -88,10 +96,8 @@ export default function GarantiaPage() {
     };
 
 
-
-
-
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+
     const onSnackbarAction = (data, color, anchor) => {
         enqueueSnackbar(`${data}`, {
             variant: color,
@@ -115,104 +121,49 @@ export default function GarantiaPage() {
 
             <Container maxWidth={themeStretch ? false : 'lg'}>
                 <CustomBreadcrumbs
-                    heading="Validar Garantía Lidenar - Hipertronics"
+                    heading="Reimprimir Guia Servientrega"
                     links={[
                         {
                             name: 'Dashboard',
                             href: PATH_DASHBOARD.root,
                         },
                         {
-                            name: 'Servicio Técnico',
+                            name: 'Servientrega',
                             href: PATH_DASHBOARD.blog.root,
                         },
                         {
-                            name: 'Garantía',
+                            name: 'Guia Servientrega',
                         },
                     ]}
                 />
 
                 <Grid container spacing={3}>
-                    <div className="grid">
+                    <Grid item xs={12} md={12}>
+                        <Card sx={{p: 3}}>
+                            <Stack spacing={3}>
 
-                        <div className="col-12 md:col-12">
-                            <div className="card p-fluid">
+                                <TextField type="text" className="form-control email"
+                                           name="email" id="email2"
+                                           placeholder="NUM. GUIA" required
 
-                                 <div className="App" style={{display: "contents"}}>
+                                           onChange={e => {
+                                               setEnteredName(e.currentTarget.value.toUpperCase());
+                                           }}
+                                />
+                                <Button variant="contained"
+                                        disabled={isLoading} // Disable the button while loading
+                                        onClick={() => {
+                                    showImei(enteredName)
+                                }}>
 
-                                <div className="input-wrapper input-wrapper-inline input-wrapper-round">
-                                    <TextField type="text" className="form-control email" name="email" id="email2"
-                                               placeholder="IMEI here..." required
+                                    {isLoading ? 'Cargando...' : 'BUSCAR'}
+                                </Button>
 
-                                               onChange={e => {
-                                                   setEnteredName(e.currentTarget.value);
-                                               }}
-                                    />
-                                    <Button className="btn btn-dark"
-
-                                            onClick={() => {
-                                                showImei(enteredName)
-                                            }}
-                                    >BUSCAR</Button>
-                                </div>
-                                <h5>{garantia}</h5>
-
-                                {
-                                    marca && marca == 'SAMSUNG' ? (
-                                        <div className="align-content-center">
-
-                                            <h2>Brand Image Telecomunicaciones</h2>
-                                            <br></br>
-                                            <span>
-                                    Teléfonos de contacto: +593 99 110 5322  / +593 98 119 3615</span> <br></br>
-                                            <span>
-                                Cuenca
-                                Luis Cordero 10-32 y Gran Colombia,
-                                Guayaquil.
-                                Francisco de Orellana y A. Bordes Najera.
-                            </span>
-
-                                        </div>
-                                    ) : null
-                                }
-
-
-                                {
-
-                                    marca && marca != 'SAMSUNG' ? (
-
-                                        <div className="align-content-center">
-
-
-                                            <h2>Otras marcas</h2>
-
-
-                                            <br></br>
-                                            <span>
-                                    Teléfonos de contacto: +593 99 110 5322  / +593 98 119 3615</span> <br></br>
-                                            <span>
-                                Cuenca
-                                Luis Cordero 10-32 y Gran Colombia,
-                                Guayaquil.
-                                Francisco de Orellana y A. Bordes Najera.
-                            </span>
-
-                                        </div>
-
-
-                                    ) : null
-
-
-                                }
-
-                            </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
+                            </Stack>
+                        </Card>
+                    </Grid>
                 </Grid>
+
             </Container>
         </>
     );
