@@ -36,7 +36,7 @@ export default function AboutHero() {
       <Container component={MotionContainer}>
         <StyledContent>
           <TextAnimate
-            text="Who"
+            text="¿Quiénes"
             sx={{
               color: 'primary.main',
             }}
@@ -46,8 +46,7 @@ export default function AboutHero() {
           <br />
 
           <Stack spacing={2} display="inline-flex" direction="row" sx={{ color: 'common.white' }}>
-            <TextAnimate text="we" />
-            <TextAnimate text="are?" />
+            <TextAnimate text="somos?" />
           </Stack>
 
           <m.div variants={varFade().inRight}>
@@ -59,8 +58,8 @@ export default function AboutHero() {
                 fontWeight: 'fontWeightMedium',
               }}
             >
-              Let&apos;s work together and
-              <br /> make awesome site easily
+              Somos una empresa dedicada a liderar el mercado
+              <br /> innovador y tecnológico en el Ecuador.
             </Typography>
           </m.div>
         </StyledContent>

@@ -76,7 +76,7 @@ export default function AboutWhat() {
           <Grid item xs={12} md={6} lg={5}>
             <m.div variants={varFade().inRight}>
               <Typography variant="h2" sx={{ mb: 3 }}>
-                What is minimal?
+                ¿HIPERTRONICS?
               </Typography>
             </m.div>
 
@@ -86,10 +86,7 @@ export default function AboutWhat() {
                   color: theme.palette.mode === 'light' ? 'text.secondary' : 'common.white',
                 }}
               >
-                Our theme is the most advanced and user-friendly theme you will find on the market,
-                we have documentation and video to help set your site really easily, pre-installed
-                demos you can import in one click and everything from the theme options to page
-                content can be edited from the front-end. This is the theme you are looking for.
+                Nuestra empresa se dedica a la distribución de celulares, accesorios y dispositivos tecnológicos en Ecuador.
               </Typography>
             </m.div>
 
@@ -101,16 +98,16 @@ export default function AboutWhat() {
               ))}
             </Box>
 
-            <m.div variants={varFade().inRight}>
-              <Button
-                variant="outlined"
-                color="inherit"
-                size="large"
-                endIcon={<Iconify icon="ic:round-arrow-right-alt" width={24} />}
-              >
-                Check out our work
-              </Button>
-            </m.div>
+            {/* <m.div variants={varFade().inRight}> */}
+            {/*   <Button */}
+            {/*     variant="outlined" */}
+            {/*     color="inherit" */}
+            {/*     size="large" */}
+            {/*     endIcon={<Iconify icon="ic:round-arrow-right-alt" width={24} />} */}
+            {/*   > */}
+            {/*     Check out our work */}
+            {/*   </Button> */}
+            {/* </m.div> */}
           </Grid>
         </Grid>
       </Container>

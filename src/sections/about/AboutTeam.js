@@ -58,7 +58,7 @@ export default function AboutTeam() {
 
       <m.div variants={varFade().inUp}>
         <Typography variant="h2" sx={{ my: 3 }}>
-          Great team is the key
+            Un gran equipo es la clave
         </Typography>
       </m.div>
 
