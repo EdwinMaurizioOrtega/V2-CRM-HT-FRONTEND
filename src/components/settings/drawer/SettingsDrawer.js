@@ -43,7 +43,7 @@ export default function SettingsDrawer() {
   const [open, setOpen] = useState(false);
 
   const handleToggle = () => {
-    setOpen(!open);
+    window.open('https://wa.me/593939991111', '_blank');
   };
 
   const handleClose = () => {

@@ -60,12 +60,13 @@ export default function Header() {
                         underline="none"
                         sx={{ml: 1}}
                     >
-                        <Label color="info"> Versión 2024 </Label>
+                        {/* <Label color="info"> Versión 2024 </Label> */}
                     </Link>
 
                     <Box sx={{flexGrow: 1}}/>
 
-                    {/* {isDesktop && <NavDesktop isOffset={isOffset} data={navConfig} />} */}
+                    {isDesktop && <NavDesktop isOffset={isOffset} data={navConfig} />}
+
                     <Stack alignItems="center" direction={{xs: 'row', md: 'row-reverse'}}>
                         {/* <Button variant="contained" rel="noopener" href={PATH_MINIMAL_ON_STORE}> */}
                         {/*   Vendedores */}
@@ -74,7 +75,7 @@ export default function Header() {
                         <LoginButton/>
 
 
-                        {/* {!isDesktop && <NavMobile isOffset={isOffset} data={navConfig}/>} */}
+                        {!isDesktop && <NavMobile isOffset={isOffset} data={navConfig}/>}
                     </Stack>
                 </Container>
             </Toolbar>

@@ -40,17 +40,17 @@ export default function NavList({ item }) {
         <Collapse in={open} unmountOnExit>
           <NavSectionVertical
             data={children}
-            sx={{
-              '& .MuiList-root:last-of-type .MuiListItemButton-root': {
-                height: 160,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                bgcolor: 'background.neutral',
-                backgroundRepeat: 'no-repeat',
-                backgroundImage: 'url(/assets/illustrations/illustration_dashboard.png)',
-                '& > *:not(.MuiTouchRipple-root)': { display: 'none' },
-              },
-            }}
+            // sx={{
+            //   '& .MuiList-root:last-of-type .MuiListItemButton-root': {
+            //     height: 160,
+            //     backgroundSize: 'cover',
+            //     backgroundPosition: 'center',
+            //     bgcolor: 'background.neutral',
+            //     backgroundRepeat: 'no-repeat',
+            //     backgroundImage: 'url(/assets/illustrations/illustration_dashboard.png)',
+            //     '& > *:not(.MuiTouchRipple-root)': { display: 'none' },
+            //   },
+            // }}
           />
         </Collapse>
       )}

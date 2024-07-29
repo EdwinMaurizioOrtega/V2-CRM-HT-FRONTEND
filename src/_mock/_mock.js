@@ -52,11 +52,11 @@ const _mock = {
   },
   image: {
     cover: (index) =>
-      `https://api-dev-minimal-v4.vercel.app/assets/images/covers/cover_${index + 1}.jpg`,
+      `https://novicompu.vtexassets.com/assets/vtex.file-manager-graphql/images/d86912b5-c2e3-46d6-9b29-234dfa7270fc___8d31091d51693157751b1a1ca55a4ad5.png`,
     product: (index) =>
-      `https://api-dev-minimal-v4.vercel.app/assets/images/products/product_${index + 1}.jpg`,
+      `https://novicompu.vtexassets.com/assets/vtex.file-manager-graphql/images/d86912b5-c2e3-46d6-9b29-234dfa7270fc___8d31091d51693157751b1a1ca55a4ad5.png`,
     avatar: (index) =>
-      `https://api-dev-minimal-v4.vercel.app/assets/images/avatars/avatar_${index + 1}.jpg`,
+      `https://novicompu.vtexassets.com/assets/vtex.file-manager-graphql/images/d86912b5-c2e3-46d6-9b29-234dfa7270fc___8d31091d51693157751b1a1ca55a4ad5.png`,
   },
 };
 

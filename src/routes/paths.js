@@ -128,7 +128,7 @@ export const PATH_DASHBOARD = {
 };
 
 export const PATH_DOCS = {
-  root: 'https://docs.minimals.cc',
+  root: '/',
   changelog: 'https://docs.minimals.cc/changelog',
 };
 

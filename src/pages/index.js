@@ -20,6 +20,7 @@ import {
     HomeHugePackElements,
 } from '../sections/home';
 import {useEffect, useState} from "react";
+import DemoCarouselsPage from "./components/extra/carousel";
 
 // ----------------------------------------------------------------------
 
@@ -75,7 +76,8 @@ export default function HomePage() {
 
              {/*<ScrollProgress />*/}
 
-            <HomeHero/>
+            {/* <HomeHero/> */}
+            <DemoCarouselsPage/>
 
             {/*{result !== null && (*/}
             {/*    <p>El resultado de la función WebAssembly es: {result}</p>*/}
