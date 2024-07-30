@@ -2,7 +2,7 @@ import React, {useEffect, useCallback, useState} from 'react';
 // next
 import Head from 'next/head';
 // @mui
-import {Grid, Button, Container, Stack, TextField, Card, Switch, FormControlLabel} from '@mui/material';
+import {Grid, Button, Container, Stack, TextField, Card, Switch, FormControlLabel, FormControl} from '@mui/material';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
 // layouts
@@ -148,6 +148,7 @@ export default function GarantiaPage() {
             IMEI_SERIE: enteredName,
             GARANTIA_L1: isChecked,
             CIUDAD_ORIGEN: Number(data.ciudad_origen),
+            OBS_VENDEDOR: data.obs,
             // CODE_EMPLEADO_X_FACTURACION: Number(data.CODE_EMPLEADO_X_FACTURACION),
             // NAME_EMPLEADO_X_FACTURACION: data.NAME_EMPLEADO_X_FACTURACION,
             // EMAIL_EMPLEADO_X_FACTURACION: data.EMAIL_EMPLEADO_X_FACTURACION,
@@ -280,12 +281,26 @@ export default function GarantiaPage() {
                                     {/*     ChipProps={{size: 'small'}} */}
                                     {/* /> */}
 
-                                    <h3>Garantía (Revisión Física</h3>
+                                    <h3>Garantía (Revisión Física)</h3>
                                     <FormControlLabel
                                         control={<Switch checked={isChecked} onChange={handleSwitchChange}/>}
                                         label="Garantía (Revisión Física)"/>
+
+                                    <h3>Observación del Vendedor</h3>
+                                    <RHFTextField name="obs"
+                                                  label="Observación del Vendedor"
+                                                  multiline
+                                                  rows={3}
+                                                  required
+                                    />
+
                                     <h3>Ciudad Origen</h3>
-                                    <RHFRadioGroup row spacing={4} name="ciudad_origen" options={CIUDAD_ORIGEN}/>
+                                    <RHFRadioGroup row
+                                                   spacing={4}
+                                                   name="ciudad_origen"
+                                                   options={CIUDAD_ORIGEN}
+                                                   required
+                                    />
 
                                     <LoadingButton
                                         fullWidth

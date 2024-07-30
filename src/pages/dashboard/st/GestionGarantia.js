@@ -304,7 +304,13 @@ export default function GarantiaPage() {
                 );
             },
         },
-        //
+        {
+            field: 'OBS_VENDEDOR',
+            headerName: 'OBS_VENDEDOR',
+            flex: 1,
+            minWidth: 550,
+
+        },
     ]
 
     const handleShowSiAplicaNotaCredito = async (data) => {
