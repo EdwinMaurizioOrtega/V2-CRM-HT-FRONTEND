@@ -72,7 +72,7 @@ export default function GarantiaPage() {
     };
 
     const showImei = async (enteredName) => {
-        if (enteredName.length === 15 || enteredName.length === 11) {
+        if (enteredName.length === 15 || enteredName.length === 11 || enteredName.length === 14) {
             try {
                 console.log(`IMEI A CONSULTAR: ${enteredName}`);
                 console.log("Buscando en el sistema Facturacion PAC");
