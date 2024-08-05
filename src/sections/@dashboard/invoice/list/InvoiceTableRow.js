@@ -11,7 +11,7 @@ import {
     MenuItem,
     TableCell,
     IconButton,
-    Typography, TextField, Tooltip, Avatar,
+    Typography, TextField, Tooltip, Avatar, CardContent,
 } from '@mui/material';
 // utils
 import {fDate} from '../../../../utils/formatTime';
@@ -28,6 +28,8 @@ import {PATH_DASHBOARD} from "../../../../routes/paths";
 import axios from "../../../../utils/axios";
 import {useRouter} from "next/router";
 import {PAYMENT_OPTIONS_V2} from "../../../../utils/constants";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 
 // ----------------------------------------------------------------------
@@ -81,7 +83,8 @@ export default function InvoiceTableRow({
         NUMEROGUIA,
         FECHA_IMPRESION,
         NUMEROFACTURALIDENAR,
-        NUMEROFACTURAE4
+        NUMEROFACTURAE4,
+        URL_INVOICE_SELLER
     } = row;
 
     const router = useRouter();
@@ -382,6 +385,66 @@ export default function InvoiceTableRow({
 
     }
 
+    //Cargar una imagen
+    const handleFileChange = (event, ID_ORDEN) => {
+        const file = event.target.files[0];
+        if (file) {
+            handleFileUpload(file, ID_ORDEN);
+        }
+    };
+
+    const handleFileUpload = (file, ID_ORDEN) => {
+
+        // Aquí puedes manejar la carga del archivo, por ejemplo, enviándolo a un servidor
+        console.log('Archivo seleccionado:', file);
+        console.log('Número de orden:', ID_ORDEN);
+
+        // Ejemplo de envío a un servidor (reemplaza con tu lógica)
+        const formData = new FormData();
+        formData.append('file', file);
+
+        fetch(`https://imagen.hipertronics.us/ht/cloud/upload_web_files`, {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();  // Convertir la respuesta a JSON si el estado es 200
+                } else {
+                    throw new Error('Failed to upload file');  // Lanzar un error si el estado no es 200
+                }
+            })
+            .then(async data => {
+                if (data.status === 'success') {
+                    console.log('Archivo subido con éxito. Enlace:', data.link);
+
+                    // Actualizar una orden.
+                    const response = await axios.put('/hanadb/api/orders/api_save_url_file', {
+                        ID_ORDER: Number(ID_ORDEN),
+                        URL: data.link,
+
+                    });
+
+                    console.log("Orden actualizada correctamente.");
+                    console.log("Código de estado:", response.status);
+
+                    // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+                    if (response.status === 200) {
+                        router.reload();
+                    }
+
+
+                } else {
+                    console.error('Error en la respuesta del servidor:', data);
+                }
+            })
+            .catch(error => {
+                console.error('Error al cargar el archivo:', error);
+            });
+
+
+    };
+
     return (
         <>
 
@@ -507,33 +570,74 @@ export default function InvoiceTableRow({
 
                 <TableCell align="center" sx={{textTransform: 'capitalize'}}>
 
-                    <Button
-                        variant="text"
-                        onClick={() => VerGuia(NUMEROGUIA)}
-                        sx={{color: 'text.disabled', cursor: 'pointer'}}
-                        disabled={isLoading} // Disable the button while loading
-                    >
-                        {isLoading ? 'Cargando...' : NUMEROGUIA}
-                    </Button>
+                    {NUMEROGUIA === '000000000' ? (
+                        URL_INVOICE_SELLER !== null ? (
+                            <>
+                                <IconButton
+                                    component="a"
+                                    href={URL_INVOICE_SELLER}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    sx={{ml: 1}}
+                                >
+                                    <VisibilityIcon/>
+                                </IconButton>
+                            </>
+                        ) : (
+                            <CardContent>
+                                <Button
+                                    variant="contained"
+                                    component="label"
+                                    startIcon={<CloudUploadIcon/>}
+                                >
+                                    Factura
+                                    <input
+                                        type="file"
+                                        hidden
+                                        onChange={(event) => handleFileChange(event, ID)}
+                                    />
+                                </Button>
+                            </CardContent>
+                        )
+                    ) : (
+                        <>
+                            <Button
+                                variant="text"
+                                onClick={() => VerGuia(NUMEROGUIA)}
+                                sx={{color: 'text.disabled', cursor: 'pointer'}}
+                                disabled={isLoading} // Disable the button while loading
+                            >
+                                {isLoading ? 'Cargando...' : NUMEROGUIA}
+                            </Button>
+                        </>
+                    )}
 
                 </TableCell>
 
 
-                {/* { */}
-                {/*     user.ROLE === "aprobador" || user.ROLE === "bodega" ? ( */}
+                {/* { */
+                }
+                {/*     user.ROLE === "aprobador" || user.ROLE === "bodega" ? ( */
+                }
                 <TableCell align="center" sx={{textTransform: 'capitalize'}}>
                     {DOCNUM}
                 </TableCell>
-                {/* //     ) : null */}
-                {/* // */}
-                {/* // } */}
+                {/* //     ) : null */
+                }
+                {/* // */
+                }
+                {/* // } */
+                }
                 <TableCell align="left">{FECHACREACION}</TableCell>
                 <TableCell align="left">{FECHAAPROBO}</TableCell>
                 <TableCell align="left">{FECHAFACTURACION}</TableCell>
                 <TableCell align="left">{NUMEROFACTURALIDENAR}</TableCell>
-                {/* <TableCell align="left"> */}
-                {/*     <Button variant="contained" onClick={handleImprimir}>Imprimir</Button> */}
-                {/* </TableCell> */}
+                {/* <TableCell align="left"> */
+                }
+                {/*     <Button variant="contained" onClick={handleImprimir}>Imprimir</Button> */
+                }
+                {/* </TableCell> */
+                }
 
             </TableRow>
 

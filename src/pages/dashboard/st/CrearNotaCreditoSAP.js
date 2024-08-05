@@ -2,7 +2,18 @@ import React, {useEffect, useState} from 'react';
 // next
 import Head from 'next/head';
 // @mui
-import {Box, Button, Card, CardContent, Container, Grid, IconButton, Stack} from '@mui/material';
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Container,
+    Grid,
+    IconButton,
+    InputAdornment,
+    Stack,
+    TextField, Tooltip
+} from '@mui/material';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
 // layouts
@@ -31,6 +42,9 @@ import {
 } from "@mui/x-data-grid";
 import axios from "../../../utils/axios";
 import {useRouter} from "next/router";
+import Iconify from "../../../components/iconify";
+import {RHFTextField} from "../../../components/hook-form";
+import {InfoIcon} from "../../../theme/overrides/CustomIcons";
 
 // ----------------------------------------------------------------------
 
@@ -91,23 +105,37 @@ export default function GarantiaPage() {
 
         // Aquí puedes manejar la carga del archivo, por ejemplo, enviándolo a un servidor
         console.log('Número de orden:', row.ID_ORDEN);
+        console.log(precioProducto); // Imprime el valor del TextField
 
-        // Actualizar una orden.
-        const response = await axios.post('/hanadb/api/technical_service/api_save_url_file', {
-            ID_ORDER: Number(row.ID_ORDEN),
-            IMEI: row.IMEI,
-        });
+        if (precioProducto) {
 
-        console.log("Orden actualizada correctamente.");
-        console.log("Código de estado:", response.status);
+            // Actualizar una orden.
+            const response = await axios.post('/hanadb/api/technical_service/create_nota_credito_warranty_sap', {
+                ID_ORDER: Number(row.ID_ORDEN),
+                IMEI: row.IMEI_SERIE,
+                PRICE_EXCL_IVA: precioProducto,
+            });
 
-        // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
-        if (response.status === 200) {
-            router.reload();
+            console.log("Orden actualizada correctamente.");
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            // if (response.status === 200) {
+            //     router.reload();
+            // } else {
+                alert(JSON.stringify(response.data))
+            //}
+
+        } else {
+            alert("Por favor ingrese un precio para la nota de crédito válido.")
         }
 
-
+        //Limpiamos este campo.
+        setPrecioProducto('')
     };
+
+    // Estado para el valor del TextField
+    const [precioProducto, setPrecioProducto] = useState('');
 
     const baseColumns = [
 
@@ -160,23 +188,45 @@ export default function GarantiaPage() {
         {
             field: 'si',
             headerName: 'APLICA NOTA CRÉDITO',
-            width: 250,
+            width: 450,
             renderCell: (params) => {
                 return (
                     <>
-                        <Button
-                            variant="contained"
-                            onClick={() => handleShowCrearNotaCredito(params.row)}
-                        >
-                            Crear NC
-                        </Button>
+                        {/* <Button */}
+                        {/*     variant="contained" */}
+                        {/*     onClick={() => handleShowCrearNotaCredito(params.row)} */}
+                        {/* > */}
+                        {/*     Crear NC */}
+                        {/* </Button> */}
+
+                        <TextField
+                            name="precioProducto"
+                            label="Precio Producto Excluido IVA (126.00)"
+                            value={precioProducto} // Valor del TextField desde el estado
+                            onChange={(e) => setPrecioProducto(e.target.value)} // Actualiza el estado cuando cambia el valor
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <Stack direction="row" spacing={1} alignItems="center">
+                                            <Button variant="outlined" size="small"
+                                                    onClick={() => handleShowCrearNotaCredito(params.row)}
+                                            >
+                                                Crear NC
+                                            </Button>
+                                        </Stack>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            sx={{width: 385}} // Establece el ancho del TextField
+                        />
 
                     </>
 
                 );
             }
         },
-        {field: 'URL_DROPBOX',
+        {
+            field: 'URL_DROPBOX',
             headerName: 'URL_DROPBOX',
             flex: 1,
             minWidth: 160,
@@ -196,7 +246,7 @@ export default function GarantiaPage() {
                         rel="noopener noreferrer"
                         title="Ver enlace"
                     >
-                        <VisibilityIcon />
+                        <VisibilityIcon/>
                     </IconButton>
                 );
             },
@@ -258,16 +308,17 @@ export default function GarantiaPage() {
                     <Grid item xs={12} md={12}>
                         <Card sx={{p: 3}}>
                             <Stack spacing={3}>
-                                    <DataGrid
-                                        rows={businessPartners}
-                                        columns={baseColumns}
-                                        pagination
-                                        slots={{
-                                            toolbar: CustomToolbar,
-                                            noRowsOverlay: () => <EmptyContent title="No Data"/>,
-                                            noResultsOverlay: () => <EmptyContent title="No results found"/>,
-                                        }}
-                                    />
+                                <DataGrid
+                                    rows={businessPartners}
+                                    columns={baseColumns}
+                                    pagination
+                                    rowHeight={100} // Define la altura de las filas
+                                    slots={{
+                                        toolbar: CustomToolbar,
+                                        noRowsOverlay: () => <EmptyContent title="No Data"/>,
+                                        noResultsOverlay: () => <EmptyContent title="No results found"/>,
+                                    }}
+                                />
                             </Stack>
                         </Card>
                     </Grid>
