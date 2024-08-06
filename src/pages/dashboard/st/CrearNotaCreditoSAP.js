@@ -7,11 +7,11 @@ import {
     Button,
     Card,
     CardContent,
-    Container,
+    Container, FormControlLabel,
     Grid,
     IconButton,
     InputAdornment,
-    Stack,
+    Stack, Switch,
     TextField, Tooltip
 } from '@mui/material';
 // routes
@@ -100,12 +100,35 @@ export default function GarantiaPage() {
 
     }, []);
 
+    // Estado para manejar el valor del TextField y del Switch por fila
+    const [textFieldValues, setTextFieldValues] = useState({});
+    const [switchStates, setSwitchStates] = useState({});
+
+    // Manejador del cambio del Switch
+    const handleSwitchChange = (id) => (event) => {
+        setSwitchStates((prevStates) => ({
+            ...prevStates,
+            [id]: event.target.checked
+        }));
+    };
+
+    // Manejador del cambio del TextField
+    const handleTextFieldChange = (id) => (event) => {
+        setTextFieldValues((prevValues) => ({
+            ...prevValues,
+            [id]: event.target.value
+        }));
+    };
 
     const handleShowCrearNotaCredito = async (row) => {
 
-        // Aquí puedes manejar la carga del archivo, por ejemplo, enviándolo a un servidor
-        console.log('Número de orden:', row.ID_ORDEN);
-        console.log(precioProducto); // Imprime el valor del TextField
+        const { id } = row;
+        const switchState = switchStates[id] || false;
+        const precioProducto = textFieldValues[id] || '';
+
+        console.log('Crear NC para:', row);
+        console.log('Estado del Switch para esta fila:', switchState);
+        console.log('Valor del TextField para esta fila:', precioProducto);
 
         if (precioProducto) {
 
@@ -114,28 +137,33 @@ export default function GarantiaPage() {
                 ID_ORDER: Number(row.ID_ORDEN),
                 IMEI: row.IMEI_SERIE,
                 PRICE_EXCL_IVA: precioProducto,
+                INACTIVO: switchState,
             });
 
             console.log("Orden actualizada correctamente.");
             console.log("Código de estado:", response.status);
 
-            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
-            // if (response.status === 200) {
-            //     router.reload();
-            // } else {
+
+            // Limpiar los campos
+            setTextFieldValues((prevValues) => {
+                const updatedValues = { ...prevValues };
+                delete updatedValues[id]; // Elimina el valor del TextField para esta fila
+                return updatedValues;
+            });
+
+            setSwitchStates((prevStates) => {
+                const updatedStates = { ...prevStates };
+                delete updatedStates[id]; // Elimina el estado del Switch para esta fila
+                return updatedStates;
+            });
+
                 alert(JSON.stringify(response.data))
-            //}
 
         } else {
             alert("Por favor ingrese un precio para la nota de crédito válido.")
         }
 
-        //Limpiamos este campo.
-        setPrecioProducto('')
     };
-
-    // Estado para el valor del TextField
-    const [precioProducto, setPrecioProducto] = useState('');
 
     const baseColumns = [
 
@@ -194,8 +222,11 @@ export default function GarantiaPage() {
         {
             field: 'si',
             headerName: 'APLICA NOTA CRÉDITO',
-            width: 450,
+            width: 650,
             renderCell: (params) => {
+
+                const { id } = params.row; // Obtén el ID de la fila
+
                 return (
                     <>
                         {/* <Button */}
@@ -208,8 +239,8 @@ export default function GarantiaPage() {
                         <TextField
                             name="precioProducto"
                             label="Precio Producto Excluido IVA (126.00)"
-                            value={precioProducto} // Valor del TextField desde el estado
-                            onChange={(e) => setPrecioProducto(e.target.value)} // Actualiza el estado cuando cambia el valor
+                            value={textFieldValues[id] || ''} // Valor del TextField desde el estado
+                            onChange={handleTextFieldChange(id)} // Actualiza el estado cuando cambia el valor
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
@@ -219,11 +250,16 @@ export default function GarantiaPage() {
                                             >
                                                 Crear NC
                                             </Button>
+                                            <Switch
+                                                checked={switchStates[id] || false} // Usa el estado específico de la fila
+                                                onChange={handleSwitchChange(id)}
+                                            />
+                                            <label htmlFor={`switch-${id}`}>RRHH</label>
                                         </Stack>
                                     </InputAdornment>
                                 ),
                             }}
-                            sx={{width: 385}} // Establece el ancho del TextField
+                            sx={{width: 525}} // Establece el ancho del TextField
                         />
 
                     </>

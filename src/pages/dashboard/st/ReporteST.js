@@ -230,6 +230,12 @@ export default function GarantiaPage() {
                 );
             },
         },
+        {
+            field: 'NOTA_CREDITO',
+            headerName: 'NOTA_CREDITO',
+            flex: 1,
+            minWidth: 160,
+        },
         //
     ]
 
