@@ -150,6 +150,12 @@ export default function GarantiaPage() {
             minWidth: 160,
         },
         {
+            field: 'CARD_CODE',
+            headerName: 'CARD_CODE',
+            flex: 1,
+            minWidth: 160,
+        },
+        {
             field: 'FECHA_CREACION',
             headerName: 'FECHA_CREACION',
             flex: 1,
