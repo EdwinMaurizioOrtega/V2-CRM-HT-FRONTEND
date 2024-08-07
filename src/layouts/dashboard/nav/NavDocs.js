@@ -166,7 +166,7 @@ export default function NavDocs() {
 
         </div>
 
-        <Button href="https://chat.whatsapp.com/JSLQG7XaGCT1wq7wLNbWJl" target="_blank" rel="noopener"
+        <Button href="https://wa.me/593939991111" target="_blank" rel="noopener"
                 variant="contained">
             WhatsApp
             {/* {`${translate('docs.documentation')}`} */}

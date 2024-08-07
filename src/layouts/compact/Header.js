@@ -45,7 +45,7 @@ export default function Header({ isOffset }) {
       >
         <Logo />
 
-        <Link component={NextLink} href="https://chat.whatsapp.com/JSLQG7XaGCT1wq7wLNbWJl" variant="subtitle2" color="inherit">
+        <Link component={NextLink} href="https://wa.me/593939991111" variant="subtitle2" color="inherit">
             ¿Necesitas ayuda?
         </Link>
       </Toolbar>
