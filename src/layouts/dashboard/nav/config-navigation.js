@@ -151,7 +151,7 @@ const navConfig = [
         items: [
             {title: 'tienda', path: PATH_DASHBOARD.eCommerce.list, icon: ICONS.analytics},
             {title: 'ordenes', path: PATH_DASHBOARD.invoice.list, icon: ICONS.analytics},
-
+            {title: 'catalogo', path: PATH_DASHBOARD.eCommerce.tomebamba_catalogo, icon: ICONS.analytics},
         ],
     },
 
