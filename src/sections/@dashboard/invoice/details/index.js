@@ -63,8 +63,8 @@ import {PDFDownloadLink} from "@react-pdf/renderer";
 import PedidoInvoicePDF from "./PedidoInvoicePDF";
 import {DOCUMENTACION, PAYMENT_OPTIONS_V2, TIPO_CREDITO, TIPO_PRECIO} from "../../../../utils/constants";
 
-//import datos from '/data/datos.json'; // Ajusta la ruta según la ubicación de tu archivo JSON
-
+import datos from '/data/datos.json'; // Ajusta la ruta según la ubicación de tu archivo JSON
+import datos_promo from '/data/promo.json'; // JSON Promoción
 
 // ----------------------------------------------------------------------
 
@@ -1262,6 +1262,9 @@ export default function InvoiceDetails({invoice}) {
                                                     // sx={{
                                                     //     backgroundColor: isCodigoAllowed(row.PRODUCTO_ID, BODEGA) ? 'pink' : 'inherit'
                                                     // }}
+                                                    sx={{
+                                                        backgroundColor: isCodigoAllowedPromocion(row.PRODUCTO_ID),
+                                                    }}
                                                 >
                                                     {row.NOMBRE !== null ? row.NOMBRE : 'VALOR DEL ENVIO'}
                                                 </Typography>
@@ -1843,4 +1846,9 @@ export const boxes = [
 //     return datos.some(item => item.CODIGO === codigo && item.BODEGA == bodega);
 // };
 
+//V2
+const isCodigoAllowedPromocion = (codigo) => {
+    const promo = datos_promo.find(item => item.CODIGO === codigo);
+    return promo ? promo.COLOR : "inherit";
+};
 
