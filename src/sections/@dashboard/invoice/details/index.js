@@ -628,7 +628,8 @@ export default function InvoiceDetails({invoice}) {
             console.log("Empleado Entregar: " + JSON.stringify( empleadoEntregar))
 
             if (valueGuia === '000000000' && empleadoEntregar === '') {
-                alert("Seleccionar un empleado es obligatorio.")
+                alert("Seleccionar un empleado es obligatorio cuando la guía es => 000000000")
+                return;
             }
 
             if (empleadoEntregar !== '') {
