@@ -41,7 +41,7 @@ import InvoiceToolbar from './InvoiceToolbar';
 import Iconify from "../../../../components/iconify";
 import MenuPopover from "../../../../components/menu-popover";
 import ConfirmDialog from "../../../../components/confirm-dialog";
-import {RHFTextField} from "../../../../components/hook-form";
+import {RHFAutocomplete, RHFTextField} from "../../../../components/hook-form";
 import {useTable} from "../../../../components/table";
 import axios from "../../../../utils/axios";
 import {Block} from "../../../_examples/Block";
@@ -129,6 +129,7 @@ export default function InvoiceDetails({invoice}) {
     const [valueGuia, setValueGuia] = useState('');
     const [valueFactura, setValueFactura] = useState('');
     const [valueValorFactura, setValueValorFactura] = useState('');
+    const [empleadoEntregar, setEmpleadoEntregar] = useState('');
 
     const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -231,6 +232,8 @@ export default function InvoiceDetails({invoice}) {
 
     const [observacionA, setObservacionA] = useState('Ninguno...');
 
+    const [showAutocomplete, setShowAutocomplete] = useState(false);
+
     useEffect(() => {
         // Aquí se ejecuta después del montaje del componente
         setObservacionA(OBSERVACIONES !== '' ? OBSERVACIONES : 'Ninguno...');
@@ -248,6 +251,15 @@ export default function InvoiceDetails({invoice}) {
     const handleChangeGuia = (event) => {
         setValueGuia(event.target.value);
         // console.log(`Nuevo precio unitario ${valueNew}`);
+
+        //Comprobar si el valor del campo tiene exactamente 9 ceros. Si es así, se actualiza el estado showAutocomplete para mostrar el Autocomplete.
+        // Determinar si se debe mostrar el Autocomplete
+        if (/^0{9}$/.test(event.target.value)) {
+            setShowAutocomplete(true);
+        } else {
+            setShowAutocomplete(false);
+        }
+
     };
 
     const handleChangeFactura = (event) => {
@@ -257,6 +269,11 @@ export default function InvoiceDetails({invoice}) {
 
     const handleChangeValorFactura = (event) => {
         setValueValorFactura(event.target.value);
+        // console.log(`Nuevo precio unitario ${valueNew}`);
+    };
+
+    const handleChangeEmpleadoEntregar = (event, newValue) => {
+        setEmpleadoEntregar(newValue);
         // console.log(`Nuevo precio unitario ${valueNew}`);
     };
 
@@ -600,8 +617,37 @@ export default function InvoiceDetails({invoice}) {
     const handleChangePedidoFactura = async () => {
 
         // console.log(ID);
-        // console.log('Filanalizar pedido.');
+         console.log(JSON.stringify(user));
 
+        //=========For All Companys=========
+        let idEmpleadoEntregar = 0;
+        let estadoInvoice = 1
+
+        if (user.COMPANY === 'HT') {
+
+            console.log("Empleado Entregar: " + JSON.stringify( empleadoEntregar))
+
+            if (valueGuia === '000000000' && empleadoEntregar === '') {
+                alert("Seleccionar un empleado es obligatorio.")
+            }
+
+            if (empleadoEntregar !== '') {
+                idEmpleadoEntregar = empleadoEntregar.CODE
+                //Facturado - Pendiente de cargar evidencia vendedor
+                estadoInvoice = 22;
+            }
+
+            if (valueGuia !== '000000000') {
+                idEmpleadoEntregar = 0;
+                estadoInvoice = 1
+            }
+
+            console.log("ID empleado seleccionado: "+idEmpleadoEntregar)
+        }
+
+
+
+        //Enviamos los datos al servidor,
         if (valueGuia.length === 9) {
 
             if (valueFactura.length === 17) {
@@ -617,7 +663,9 @@ export default function InvoiceDetails({invoice}) {
                             NUMERO_FACTURA: `${valueFactura}`,
                             VALOR_FACTURA: `${valueValorFactura}`,
                             NUMERO_GUIA: `${valueGuia}`,
-                            empresa: user.EMPRESA
+                            empresa: user.EMPRESA,
+                            IDUSUARIOENTREGARA: Number(idEmpleadoEntregar),
+                            ESTADO: Number(estadoInvoice),
                         });
 
 
@@ -647,6 +695,7 @@ export default function InvoiceDetails({invoice}) {
         } else {
             enqueueSnackbar('El número de guía debe tener 9 caracteres.', {variant: 'error'})
         }
+
     }
 
 
@@ -756,14 +805,34 @@ export default function InvoiceDetails({invoice}) {
     useEffect(() => {
 
         const fetchData = async () => {
+            // try {
+            //     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/order/ServiEntrega/ciudades`);
+            //     const result = await response.json();
+            //     setDataCities(result.data);
+            //     console.log(dataCities);
+            // } catch (error) {
+            //     console.log('error', error);
+            // }
+
+
+            //Empleado ventas
             try {
-                const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/order/ServiEntrega/ciudades`);
-                const result = await response.json();
-                setDataCities(result.data);
-                console.log(dataCities);
+                const response = await axios.get(`${HOST_API_KEY}/hanadb/api/customers/get_crm_empleados_venta`);
+
+                if (response.status === 200) {
+                    console.log("DATA: " + JSON.stringify(response.data.data));
+                    // La solicitud PUT se realizó correctamente
+                    setDataEmpleadosVenta(response.data.data);
+                } else {
+                    // La solicitud POST no se realizó correctamente
+                    console.error('Error en la solicitud POST:', response.status);
+                }
+
             } catch (error) {
-                console.log('error', error);
+                console.error('Error al obtener los datos:', error);
             }
+
+
         };
 
         fetchData();
@@ -954,6 +1023,10 @@ export default function InvoiceDetails({invoice}) {
 
     };
 
+
+    const [dataEmpladosVenta, setDataEmpleadosVenta] = useState([]);
+
+
     return (
         <>
             {/* <InvoiceToolbar invoice={invoice} /> */}
@@ -985,28 +1058,28 @@ export default function InvoiceDetails({invoice}) {
 
 
                         {
-                        user.ROLE === '1' ? (
+                            user.ROLE === '1' ? (
 
-                        <PDFDownloadLink
-                            document={<PedidoInvoicePDF invoice={invoice} user={user} empresa="TM"/>}
-                            fileName={`PEDIDO_CLIENTE_${invoice.ID}`}
-                            style={{textDecoration: 'none'}}
-                        >
-                            {({loading}) => (
-                                <Tooltip title="Descargar TM">
-                                    <IconButton
-                                        onClick={user.ROLE === "bodega" ? () => handleDownloadClick(ID) : undefined}
-                                    >
-                                        {loading ? (
-                                            <CircularProgress size={24} color="inherit"/>
-                                        ) : (
-                                            <Iconify icon="eva:download-fill"/>
-                                        )}
-                                    </IconButton>
-                                </Tooltip>
-                            )}
-                        </PDFDownloadLink>
-                        ) : null
+                                <PDFDownloadLink
+                                    document={<PedidoInvoicePDF invoice={invoice} user={user} empresa="TM"/>}
+                                    fileName={`PEDIDO_CLIENTE_${invoice.ID}`}
+                                    style={{textDecoration: 'none'}}
+                                >
+                                    {({loading}) => (
+                                        <Tooltip title="Descargar TM">
+                                            <IconButton
+                                                onClick={user.ROLE === "bodega" ? () => handleDownloadClick(ID) : undefined}
+                                            >
+                                                {loading ? (
+                                                    <CircularProgress size={24} color="inherit"/>
+                                                ) : (
+                                                    <Iconify icon="eva:download-fill"/>
+                                                )}
+                                            </IconButton>
+                                        </Tooltip>
+                                    )}
+                                </PDFDownloadLink>
+                            ) : null
 
                         }
 
@@ -1481,6 +1554,23 @@ export default function InvoiceDetails({invoice}) {
                                 value={valueValorFactura}
                                 onChange={handleChangeValorFactura}
                             />
+
+                            {showAutocomplete && user.COMPANY === 'HT' && (
+                                <Autocomplete
+                                    name="vendedor"
+                                    label="Vendedor"
+                                    single
+                                    freeSolo
+                                    options={dataEmpladosVenta}
+                                    getOptionLabel={(option) => option.NOMBRE || ''}
+                                    renderInput={(params) => <TextField {...params} label="Entregar a: "
+                                                                        margin="none"/>}
+                                    onChange={(event, newValue) => handleChangeEmpleadoEntregar(event, newValue)}
+
+                                />
+
+                            )}
+
                             <Button variant="contained" color="success"
                                     onClick={() => !loading && handleChangePedidoFactura()} disabled={loading}>
                                 {loading ? 'GUARDANDO...' : ' Guardar Factura'}
@@ -1493,89 +1583,90 @@ export default function InvoiceDetails({invoice}) {
             </Card>
 
 
-            {user.ROLE === "bodega" &&
-                <Card sx={{pt: 5, px: 5}}>
-                    <Grid item xs={12} sm={6} sx={{mb: 5}}>
-                        <Box sx={{textAlign: {sm: 'left'}}}>
-                            <Typography variant="h4">SERVIENTREGA</Typography>
-                        </Box>
-                    </Grid>
+            {/* {user.ROLE === "bodega" && */}
+            {/*     <Card sx={{pt: 5, px: 5}}> */}
+            {/*         <Grid item xs={12} sm={6} sx={{mb: 5}}> */}
+            {/*             <Box sx={{textAlign: {sm: 'left'}}}> */}
+            {/*                 <Typography variant="h4">SERVIENTREGA</Typography> */}
+            {/*             </Box> */}
+            {/*         </Grid> */}
 
 
-                    <Masonry columns={{xs: 1, sm: 2, md: 3}} spacing={3}>
-                        <Block title="Ciudad Origen">
-                            <Autocomplete
-                                fullWidth
-                                options={dataCities}
-                                getOptionLabel={(option) => option.nombre}
-                                renderInput={(params) => <TextField {...params} label="Origen"/>}
-                                onChange={(event, value) => {
-                                    handleCityChangeOrigen(event, value);
-                                }}
-                                sx={{mb: 2}}
-                            />
+            {/*         <Masonry columns={{xs: 1, sm: 2, md: 3}} spacing={3}> */}
+            {/*             <Block title="Ciudad Origen"> */}
+            {/*                 <Autocomplete */}
+            {/*                     fullWidth */}
+            {/*                     options={dataCities} */}
+            {/*                     getOptionLabel={(option) => option.nombre} */}
+            {/*                     renderInput={(params) => <TextField {...params} label="Origen"/>} */}
+            {/*                     onChange={(event, value) => { */}
+            {/*                         handleCityChangeOrigen(event, value); */}
+            {/*                     }} */}
+            {/*                     sx={{mb: 2}} */}
+            {/*                 /> */}
 
-                            {/* <Autocomplete */}
-                            {/*     fullWidth */}
-                            {/*     disableClearable */}
-                            {/*     options={dataCities} */}
-                            {/*     getOptionLabel={(option) => option.nombre} */}
-                            {/*     renderInput={(params) => ( */}
-                            {/*         <TextField */}
-                            {/*             {...params} */}
-                            {/*             label="Destino" */}
-                            {/*             InputProps={{...params.InputProps, type: 'search'}} */}
-                            {/*         /> */}
-                            {/*     )} */}
-                            {/*     onChange={(event, value) => { */}
-                            {/*         handleCityChangeDestino(event, value); */}
-                            {/*     }} */}
+            {/*                 /!* <Autocomplete *!/ */}
+            {/*                 /!*     fullWidth *!/ */}
+            {/*                 /!*     disableClearable *!/ */}
+            {/*                 /!*     options={dataCities} *!/ */}
+            {/*                 /!*     getOptionLabel={(option) => option.nombre} *!/ */}
+            {/*                 /!*     renderInput={(params) => ( *!/ */}
+            {/*                 /!*         <TextField *!/ */}
+            {/*                 /!*             {...params} *!/ */}
+            {/*                 /!*             label="Destino" *!/ */}
+            {/*                 /!*             InputProps={{...params.InputProps, type: 'search'}} *!/ */}
+            {/*                 /!*         /> *!/ */}
+            {/*                 /!*     )} *!/ */}
+            {/*                 /!*     onChange={(event, value) => { *!/ */}
+            {/*                 /!*         handleCityChangeDestino(event, value); *!/ */}
+            {/*                 /!*     }} *!/ */}
 
-                            {/* /> */}
-                        </Block>
+            {/*                 /!* /> *!/ */}
+            {/*             </Block> */}
 
-                        <Block title="Bultos - Cajas">
-                            <Autocomplete
-                                fullWidth
-                                freeSolo
-                                options={boxes}
-                                getOptionLabel={(option) => option.title}
-                                renderInput={(params) => <TextField {...params} label="Número"/>}
-                                onChange={(event, value) => {
-                                    handleCityChangeBoxes(event, value);
-                                }}
-                                sx={{mb: 2}}
-                            />
+            {/*             <Block title="Bultos - Cajas"> */}
+            {/*                 <Autocomplete */}
+            {/*                     fullWidth */}
+            {/*                     freeSolo */}
+            {/*                     options={boxes} */}
+            {/*                     getOptionLabel={(option) => option.title} */}
+            {/*                     renderInput={(params) => <TextField {...params} label="Número"/>} */}
+            {/*                     onChange={(event, value) => { */}
+            {/*                         handleCityChangeBoxes(event, value); */}
+            {/*                     }} */}
+            {/*                     sx={{mb: 2}} */}
+            {/*                 /> */}
 
-                        </Block>
+            {/*             </Block> */}
 
-                        <Block title="Creación">
-                            <Button variant="contained" color="success"
-                                    onClick={() => handleServiEntrega()}>
-                                SERVIENTREGA
-                            </Button>
+            {/*             <Block title="Creación"> */}
+            {/*                 <Button variant="contained" color="success" */}
+            {/*                         onClick={() => handleServiEntrega()}> */}
+            {/*                     SERVIENTREGA */}
+            {/*                 </Button> */}
 
-                        </Block>
+            {/*             </Block> */}
 
-                    </Masonry>
+            {/*         </Masonry> */}
 
 
-                    {/* <Tooltip title="View"> */}
-                    {/*     <IconButton onClick={openPDFInNewTab}> <Iconify icon="solar:eye-bold"/></IconButton> */}
-                    {/* </Tooltip> */}
+            {/*         /!* <Tooltip title="View"> *!/ */}
+            {/*         /!*     <IconButton onClick={openPDFInNewTab}> <Iconify icon="solar:eye-bold"/></IconButton> *!/ */}
+            {/*         /!* </Tooltip> *!/ */}
 
-                    {decodedString ? (
-                        <Tooltip title="View">
-                            <IconButton onClick={openPDFInNewTab}>
-                                <Iconify icon="solar:eye-bold"/>
-                            </IconButton>
-                        </Tooltip>
-                    ) : (
-                        <p>¡La guía aun no esta creada.!</p>
-                    )}
+            {/*         {decodedString ? ( */}
+            {/*             <Tooltip title="View"> */}
+            {/*                 <IconButton onClick={openPDFInNewTab}> */}
+            {/*                     <Iconify icon="solar:eye-bold"/> */}
+            {/*                 </IconButton> */}
+            {/*             </Tooltip> */}
+            {/*         ) : ( */}
+            {/*             <p>¡La guía aun no esta creada.!</p> */}
+            {/*         )} */}
 
-                </Card>
-            }
+            {/*     </Card> */}
+            {/* } */}
+
 
             {user.ROLE === "aprobador" ? (
 

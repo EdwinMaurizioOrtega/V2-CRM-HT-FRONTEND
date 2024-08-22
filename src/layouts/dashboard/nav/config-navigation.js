@@ -103,6 +103,8 @@ const navConfig = [
                 children: [
                     {title: 'Lista', path: PATH_DASHBOARD.invoice.list},
                     {title: 'IMEIs', path: PATH_DASHBOARD.invoice.sap},
+                    {title: 'Cargar Evidencia', path: PATH_DASHBOARD.invoice.cargar_evidencia},
+                    {title: 'Validar Evidencia', path: PATH_DASHBOARD.invoice.validar_evidencia},
                 ],
             },
 

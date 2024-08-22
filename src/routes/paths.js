@@ -100,6 +100,8 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/invoice'),
     list: path(ROOTS_DASHBOARD, '/invoice/list'),
     sap: path(ROOTS_DASHBOARD, '/invoice/imeis'),
+    cargar_evidencia: path(ROOTS_DASHBOARD, '/invoice/cargar_evidencia'),
+    validar_evidencia: path(ROOTS_DASHBOARD, '/invoice/validar_evidencia'),
     new: path(ROOTS_DASHBOARD, '/invoice/new'),
     view: (id) => path(ROOTS_DASHBOARD, `/invoice/${id}`),
     edit: (id) => path(ROOTS_DASHBOARD, `/invoice/${id}/edit`),

@@ -585,18 +585,7 @@ export default function InvoiceTableRow({
                             </>
                         ) : (
                             <CardContent>
-                                <Button
-                                    variant="contained"
-                                    component="label"
-                                    startIcon={<CloudUploadIcon/>}
-                                >
-                                    Factura
-                                    <input
-                                        type="file"
-                                        hidden
-                                        onChange={(event) => handleFileChange(event, ID)}
-                                    />
-                                </Button>
+                                <Label>Pend. Evidencia</Label>
                             </CardContent>
                         )
                     ) : (
