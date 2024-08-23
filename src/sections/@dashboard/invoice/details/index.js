@@ -629,7 +629,7 @@ export default function InvoiceDetails({invoice}) {
 
             if (valueGuia === '000000000' && empleadoEntregar === '') {
                 alert("Seleccionar un empleado es obligatorio cuando la guía es => 000000000")
-                return;
+                return; // Stop the execution of the function if the condition is met
             }
 
             if (empleadoEntregar !== '') {

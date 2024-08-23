@@ -1,18 +1,27 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 // next
 import Head from 'next/head';
 // @mui
-import {Box, Button, Card, CardContent, Container, Grid, IconButton, Stack} from '@mui/material';
+import {
+    Box,
+    Button,
+    Card,
+    Container,
+    Dialog, DialogActions,
+    DialogContent,
+    DialogTitle,
+    Grid,
+    Stack
+} from '@mui/material';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
-
 // sections
 import {useSnackbar} from '../../../components/snackbar';
-
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
+
 
 
 // ----------------------------------------------------------------------
@@ -40,11 +49,6 @@ EvidenciaPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function EvidenciaPage() {
     const {themeStretch} = useSettingsContext();
-
-    const [enteredName, setEnteredName] = useState(''); //INIT TO EMPTY
-    const [garantia, setGarantia] = useState('');
-
-    const [marca, setMarca] = useState('');
 
     const {user} = useAuthContext();
 
@@ -150,6 +154,57 @@ export default function EvidenciaPage() {
 
     };
 
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+    const [photo, setPhoto] = useState(null);
+    const videoRef = useRef(null);
+    const canvasRef = useRef(null);
+
+    const [selectedRow, setSelectedRow] = useState(null);
+
+    const startCamera = async () => {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        videoRef.current.srcObject = stream;
+        videoRef.current.play();
+    };
+
+    const capturePhoto = () => {
+        const context = canvasRef.current.getContext('2d');
+        context.drawImage(videoRef.current, 0, 0, 794, 1123);
+        // Convertir el canvas a una URL de imagen y actualizar el estado con la foto capturada
+        const imageURL = canvasRef.current.toDataURL('image/png');
+        setPhoto(imageURL);
+
+        // Crear un archivo a partir del Blob generado
+        canvasRef.current.toBlob((blob) => {
+            if (blob && selectedRow) {
+                const file = new File([blob], "captured_image.png", { type: "image/png" });
+                handleFileChange({ target: { files: [file] } }, selectedRow);
+            }
+        }, 'image/png');
+
+    };
+
+    const stopCamera = () => {
+        const stream = videoRef.current.srcObject;
+        if (stream) {
+            const tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
+        }
+        videoRef.current.srcObject = null;
+
+    };
+
+    const handleOpenDialog = (row) => {
+        setDialogOpen(true);
+        setSelectedRow(row); // Guardar la fila seleccionada
+
+    };
+
+    const handleCloseDialog = () => {
+        setDialogOpen(false);
+    };
+
     const baseColumns = [
 
         {
@@ -212,89 +267,42 @@ export default function EvidenciaPage() {
             renderCell: (params) => {
 
                 return (
-                    <Button
-                        variant="contained"
-                        component="label"
-                        startIcon={<CloudUploadIcon/>}
-                    >
-                        Factura
-                        <input
-                            type="file"
-                            hidden
-                            onChange={(event) => handleFileChange(event, params.row)}
-                        />
-                    </Button>
+
+                        <Button
+                            variant="contained"
+                            component="label"
+                            startIcon={<CloudUploadIcon/>}
+                        >
+                            Factura
+                            <input
+                                type="file"
+                                hidden
+                                onChange={(event) => handleFileChange(event, params.row)}
+                            />
+                        </Button>
 
                 );
             },
         },
+        {
+            field: 'UPLOAD EVIDENCIA_V2',
+            headerName: 'UPLOAD EVIDENCIA_V2',
+            flex: 1,
+            minWidth: 160,
+            renderCell: (params) => (
+                <Button variant="contained" color="primary"
+                        onClick={() => handleOpenDialog(params.row)}
+                        startIcon={<CameraAltIcon />}
+                >
+                    Factura
+                </Button>
+            ),
+        },
     ]
 
-    const handleShowSiAplicaNotaCredito = async (data) => {
-        //Enviar a la páguina de creación de la nota de credito
-        if (data) {
-            console.log("Fila seleccionada:", data);
-            // Puedes hacer algo con las coordenadas seleccionadas aquí, si es necesario
-
-            // Actualizar una orden.
-            const response = await axios.put('/hanadb/api/technical_service/update_status_order_technical', {
-                ID_ORDER: Number(data.ID_ORDEN),
-
-            });
-
-            console.log("Orden actualizada correctamente.");
-            console.log("Código de estado:", response.status);
-
-            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
-            if (response.status === 200) {
-                router.reload();
-            }
 
 
-        } else {
-            console.log("No se ha seleccionado ningún marcador.");
-        }
-    };
 
-    const handleShowNoAplicaNotaCredito = async (data) => {
-        //Enviar un correo electrónico.
-        if (data) {
-            console.log("Fila seleccionada:", data);
-            // Puedes hacer algo con las coordenadas seleccionadas aquí, si es necesario
-
-
-            // Aquí puedes manejar la carga del archivo, por ejemplo, enviándolo a un servidor
-            console.log('Número de orden:', data.ID_ORDEN);
-
-            // Actualizar una orden.
-            const response = await axios.post('/hanadb/api/technical_service/no_aplica_nota_credito_sap', {
-                ID_ORDER: Number(data.ID_ORDEN),
-                IMEI: data.IMEI_SERIE,
-                EMAIL_EMPLEADO_X_FACTURACION: data.EMAIL_EMPLEADO_X_FACTURACION,
-                URL_DROPBOX: data.URL_DROPBOX,
-            });
-
-            console.log("Código de estado:", response.status);
-
-            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
-            if (response.status === 200) {
-                console.log("Orden actualizada correctamente.");
-                router.reload();
-            }
-
-
-        } else {
-            console.log("No se ha seleccionado ningún marcador.");
-        }
-    };
-
-    const handleShowReparacionEnTaller = async (data) => {
-        if (data) {
-            console.log("Fila seleccionada:", data);
-        } else {
-            console.log("No se ha detectado ningun dato");
-        }
-    }
 
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const onSnackbarAction = (data, color, anchor) => {
@@ -350,6 +358,18 @@ export default function EvidenciaPage() {
                                         noResultsOverlay: () => <EmptyContent title="No results found"/>,
                                     }}
                                 />
+
+
+                                <VideoCaptureDialog
+                                    open={dialogOpen}
+                                    handleClose={handleCloseDialog}
+                                    videoRef={videoRef}
+                                    canvasRef={canvasRef}
+                                    photo={photo}
+                                    startCamera={startCamera}
+                                    stopCamera={stopCamera}
+                                    capturePhoto={capturePhoto}
+                                />
                             </Stack>
                         </Card>
                     </Grid>
@@ -373,3 +393,25 @@ function CustomToolbar() {
         </GridToolbarContainer>
     );
 }
+
+
+const VideoCaptureDialog = ({ open, handleClose, videoRef, canvasRef, photo, startCamera, stopCamera, capturePhoto }) => {
+    return (
+        <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+            <DialogTitle>Video Capture</DialogTitle>
+            <DialogContent>
+                <div style={{width: '794px', height: '1123px', position: 'relative'}}>
+                    <video ref={videoRef} width="794" height="1123"/>
+                    <canvas ref={canvasRef} width="794" height="1123" style={{display: 'none'}}/>
+                    {photo && <img src={photo} alt="Captured"/>}
+                </div>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={startCamera}>Iniciar Cámara</Button>
+                <Button onClick={capturePhoto}>Capturar Foto</Button>
+                <Button onClick={stopCamera}>Detener Cámara</Button>
+                <Button onClick={handleClose}>Cerrar</Button>
+            </DialogActions>
+        </Dialog>
+    );
+};
