@@ -163,14 +163,13 @@ export default function ValidarEvidenciaPage() {
                 const path = PATH_DASHBOARD.invoice.view(id);
 
                 return (
-                    <Link
-                        noWrap
-                        variant="body2"
+                    <Button
+                        variant="text"
                         onClick={() => push(path)} // Usa una función anónima para manejar el evento de clic
-                        sx={{ color: 'text.disabled', cursor: 'pointer' }}
+                        sx={{ color: 'text.disabled', textTransform: 'none' }}
                     >
                         {`INV-${id}`} {/* Muestra el ID con el prefijo */}
-                    </Link>
+                    </Button>
                 );
             }
         },
