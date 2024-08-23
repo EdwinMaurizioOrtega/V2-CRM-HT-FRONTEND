@@ -6,12 +6,11 @@ import {
     Box,
     Button,
     Card,
-    CardContent,
     Container,
     Grid,
     IconButton,
-    InputAdornment,
-    Stack, Switch,
+    InputAdornment, Link,
+    Stack,
     TextField
 } from '@mui/material';
 // routes
@@ -24,7 +23,6 @@ import {useSnackbar} from '../../../components/snackbar';
 
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-
 
 // ----------------------------------------------------------------------
 import {useSettingsContext} from "../../../components/settings";
@@ -52,16 +50,13 @@ ValidarEvidenciaPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLay
 export default function ValidarEvidenciaPage() {
     const {themeStretch} = useSettingsContext();
 
-    const [enteredName, setEnteredName] = useState(''); //INIT TO EMPTY
-    const [garantia, setGarantia] = useState('');
-
-    const [marca, setMarca] = useState('');
-
     const {user} = useAuthContext();
 
     const router = useRouter();
 
     const [businessPartners, setBusinessPartners] = useState([]);
+
+    const {push} = useRouter();
 
     useEffect(() => {
 
@@ -96,8 +91,6 @@ export default function ValidarEvidenciaPage() {
         BuscarPorRango()
 
     }, []);
-
-    const [selectedFile, setSelectedFile] = useState(null);
 
     const handleValidFileChange = async (row) => {
 
@@ -165,12 +158,39 @@ export default function ValidarEvidenciaPage() {
             headerName: 'ID_ORDEN',
             flex: 1,
             minWidth: 160,
+            renderCell: (params) => {
+                const id = params.row.ID; // Accede al ID de la fila
+                const path = PATH_DASHBOARD.invoice.view(id);
+
+                return (
+                    <Link
+                        noWrap
+                        variant="body2"
+                        onClick={() => push(path)} // Usa una función anónima para manejar el evento de clic
+                        sx={{ color: 'text.disabled', cursor: 'pointer' }}
+                    >
+                        {`INV-${id}`} {/* Muestra el ID con el prefijo */}
+                    </Link>
+                );
+            }
         },
         {
             field: 'CLIENTEID',
             headerName: 'CARD_CODE',
             flex: 1,
             minWidth: 160,
+        },
+        {
+            field: 'Cliente',
+            headerName: 'CLIENTE',
+            flex: 1,
+            minWidth: 360,
+        },
+        {
+            field: 'VENDEDOR',
+            headerName: 'VENDEDOR',
+            flex: 1,
+            minWidth: 360,
         },
         {
             field: 'ESTADO',
@@ -205,6 +225,12 @@ export default function ValidarEvidenciaPage() {
         {
             field: 'COMENTARIOENTREGA',
             headerName: 'COMENTARIOENTREGA',
+            flex: 1,
+            minWidth: 360,
+        },
+        {
+            field: 'NOMBREUSUARIOENTREGARA',
+            headerName: 'ENTREGADO POR',
             flex: 1,
             minWidth: 360,
         },
@@ -288,72 +314,6 @@ export default function ValidarEvidenciaPage() {
 
     ]
 
-    const handleShowSiAplicaNotaCredito = async (data) => {
-        //Enviar a la páguina de creación de la nota de credito
-        if (data) {
-            console.log("Fila seleccionada:", data);
-            // Puedes hacer algo con las coordenadas seleccionadas aquí, si es necesario
-
-            // Actualizar una orden.
-            const response = await axios.put('/hanadb/api/technical_service/update_status_order_technical', {
-                ID_ORDER: Number(data.ID_ORDEN),
-
-            });
-
-            console.log("Orden actualizada correctamente.");
-            console.log("Código de estado:", response.status);
-
-            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
-            if (response.status === 200) {
-                router.reload();
-            }
-
-
-        } else {
-            console.log("No se ha seleccionado ningún marcador.");
-        }
-    };
-
-    const handleShowNoAplicaNotaCredito = async (data) => {
-        //Enviar un correo electrónico.
-        if (data) {
-            console.log("Fila seleccionada:", data);
-            // Puedes hacer algo con las coordenadas seleccionadas aquí, si es necesario
-
-
-            // Aquí puedes manejar la carga del archivo, por ejemplo, enviándolo a un servidor
-            console.log('Número de orden:', data.ID_ORDEN);
-
-            // Actualizar una orden.
-            const response = await axios.post('/hanadb/api/technical_service/no_aplica_nota_credito_sap', {
-                ID_ORDER: Number(data.ID_ORDEN),
-                IMEI: data.IMEI_SERIE,
-                EMAIL_EMPLEADO_X_FACTURACION: data.EMAIL_EMPLEADO_X_FACTURACION,
-                URL_DROPBOX: data.URL_DROPBOX,
-            });
-
-            console.log("Código de estado:", response.status);
-
-            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
-            if (response.status === 200) {
-                console.log("Orden actualizada correctamente.");
-                router.reload();
-            }
-
-
-        } else {
-            console.log("No se ha seleccionado ningún marcador.");
-        }
-    };
-
-    const handleShowReparacionEnTaller = async (data) => {
-        if (data) {
-            console.log("Fila seleccionada:", data);
-        } else {
-            console.log("No se ha detectado ningun dato");
-        }
-    }
-
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const onSnackbarAction = (data, color, anchor) => {
         enqueueSnackbar(`${data}`, {
@@ -368,7 +328,6 @@ export default function ValidarEvidenciaPage() {
             ),
         });
     };
-
 
     return (
         <>

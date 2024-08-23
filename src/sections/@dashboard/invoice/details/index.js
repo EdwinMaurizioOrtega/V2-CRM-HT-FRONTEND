@@ -621,6 +621,7 @@ export default function InvoiceDetails({invoice}) {
 
         //=========For All Companys=========
         let idEmpleadoEntregar = 0;
+        let nombreUsuarioEntregara = '';
         let estadoInvoice = 1
 
         if (user.COMPANY === 'HT') {
@@ -634,12 +635,14 @@ export default function InvoiceDetails({invoice}) {
 
             if (empleadoEntregar !== '') {
                 idEmpleadoEntregar = empleadoEntregar.CODE
+                nombreUsuarioEntregara = empleadoEntregar.NOMBRE
                 //Facturado - Pendiente de cargar evidencia vendedor
                 estadoInvoice = 22;
             }
 
             if (valueGuia !== '000000000') {
                 idEmpleadoEntregar = 0;
+                nombreUsuarioEntregara = '';
                 estadoInvoice = 1
             }
 
@@ -666,6 +669,7 @@ export default function InvoiceDetails({invoice}) {
                             NUMERO_GUIA: `${valueGuia}`,
                             empresa: user.EMPRESA,
                             IDUSUARIOENTREGARA: Number(idEmpleadoEntregar),
+                            NOMBREUSUARIOENTREGARA: nombreUsuarioEntregara,
                             ESTADO: Number(estadoInvoice),
                         });
 

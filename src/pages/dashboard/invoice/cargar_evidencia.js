@@ -10,7 +10,7 @@ import {
     Dialog, DialogActions,
     DialogContent,
     DialogTitle,
-    Grid,
+    Grid, Link,
     Stack
 } from '@mui/material';
 // routes
@@ -216,12 +216,39 @@ export default function EvidenciaPage() {
             headerName: 'ID_ORDEN',
             flex: 1,
             minWidth: 160,
+            renderCell: (params) => {
+                const id = params.row.ID; // Accede al ID de la fila
+                const path = PATH_DASHBOARD.invoice.view(id);
+
+                return (
+                    <Link
+                        noWrap
+                        variant="body2"
+                        onClick={() => push(path)} // Usa una función anónima para manejar el evento de clic
+                        sx={{ color: 'text.disabled', cursor: 'pointer' }}
+                    >
+                        {`INV-${id}`} {/* Muestra el ID con el prefijo */}
+                    </Link>
+                );
+            }
         },
         {
             field: 'CLIENTEID',
             headerName: 'CARD_CODE',
             flex: 1,
             minWidth: 160,
+        },
+        {
+            field: 'Cliente',
+            headerName: 'CLIENTE',
+            flex: 1,
+            minWidth: 360,
+        },
+        {
+            field: 'VENDEDOR',
+            headerName: 'VENDEDOR',
+            flex: 1,
+            minWidth: 360,
         },
         {
             field: 'ESTADO',
