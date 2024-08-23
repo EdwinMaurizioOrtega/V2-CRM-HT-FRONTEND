@@ -284,20 +284,20 @@ export default function EvidenciaPage() {
                 );
             },
         },
-        {
-            field: 'UPLOAD EVIDENCIA_V2',
-            headerName: 'UPLOAD EVIDENCIA_V2',
-            flex: 1,
-            minWidth: 160,
-            renderCell: (params) => (
-                <Button variant="contained" color="primary"
-                        onClick={() => handleOpenDialog(params.row)}
-                        startIcon={<CameraAltIcon />}
-                >
-                    Factura
-                </Button>
-            ),
-        },
+        // {
+        //     field: 'UPLOAD EVIDENCIA_V2',
+        //     headerName: 'UPLOAD EVIDENCIA_V2',
+        //     flex: 1,
+        //     minWidth: 160,
+        //     renderCell: (params) => (
+        //         <Button variant="contained" color="primary"
+        //                 onClick={() => handleOpenDialog(params.row)}
+        //                 startIcon={<CameraAltIcon />}
+        //         >
+        //             Factura
+        //         </Button>
+        //     ),
+        // },
     ]
 
 
