@@ -11,7 +11,7 @@ import {
     DialogContent,
     DialogTitle,
     Grid, Link,
-    Stack
+    Stack, Typography
 } from '@mui/material';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
@@ -256,6 +256,21 @@ export default function EvidenciaPage() {
             headerName: 'ESTADO',
             flex: 1,
             minWidth: 250,
+            renderCell: (params) => {
+                const { value } = params;
+                // Usar switch-case para determinar qué mostrar basado en el valor
+                const renderEstado = () => {
+                    switch (value) {
+                        case 22:
+                            return <Typography color="success.main">Pend. Cargar Evidencia</Typography>;
+                        default:
+                            return <Typography color="textSecondary">Desconocido</Typography>;
+                    }
+                };
+
+                return renderEstado();
+            },
+
         },
         {
             field: 'NUMEROGUIA',
@@ -268,12 +283,6 @@ export default function EvidenciaPage() {
             headerName: 'NUMEROFACTURALIDENAR',
             flex: 1,
             minWidth: 260,
-        },
-        {
-            field: 'GUIA_SERVIENTREGA',
-            headerName: 'GUIA_SERVIENTREGA',
-            flex: 1,
-            minWidth: 160,
         },
         {
             field: 'FECHAFACTURACION',
@@ -380,6 +389,7 @@ export default function EvidenciaPage() {
                                     rows={businessPartners}
                                     columns={baseColumns}
                                     pagination
+                                    pageSize={10} // Número de filas por página
                                     slots={{
                                         toolbar: CustomToolbar,
                                         noRowsOverlay: () => <EmptyContent title="No Data"/>,
