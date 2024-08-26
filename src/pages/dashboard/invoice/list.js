@@ -329,13 +329,18 @@ export default function InvoiceListPage() {
 
     const getPercentByStatus = (status) => (getLengthByStatus(status) / tableData.length) * 100;
 
-    const TABS = [
-        {value: 'all', label: 'Total', color: 'info', count: tableData.length},
-        {value: 6, label: 'Pendiente de aprobar', color: 'success', count: getLengthByStatus(6)},
-        {value: 0, label: 'Pendiente de Facturar', color: 'warning', count: getLengthByStatus(0)},
-        {value: 1, label: 'Facturado', color: 'error', count: getLengthByStatus(1)},
-        {value: 8, label: 'Anulado', color: 'default', count: getLengthByStatus(8)},
-    ];
+    // const TABS = [
+    //     {value: 'all', label: 'Total', color: 'info', count: tableData.length},
+    //     {value: 6, label: 'Pendiente de aprobar', color: 'success', count: getLengthByStatus(6)},
+    //     {value: 0, label: 'Pendiente de Facturar', color: 'warning', count: getLengthByStatus(0)},
+    //     {value: 22, label: 'Pend. Cargar Evidencia', color: 'info', count: getLengthByStatus(22)},
+    //     {value: 23, label: 'Pend. Validar Cartera', color: 'info', count: getLengthByStatus(23)},
+    //     {value: 1, label: 'Facturado', color: 'error', count: getLengthByStatus(1)},
+    //     {value: 8, label: 'Anulado', color: 'default', count: getLengthByStatus(8)},
+    // ];
+
+    // Obtener las pestañas basadas en el usuario
+    const TABS = getTabs(user, tableData, getLengthByStatus);
 
     const handleOpenConfirm = () => {
         setOpenConfirm(true);
@@ -861,4 +866,30 @@ function parseCustomDate(dateString) {
     const [hour, minute, second] = timePart.split(':');
     const formattedDateString = `${month} ${day} ${year} ${hour}:${minute}:${second}`;
     return new Date(formattedDateString);
+}
+
+const getTabs = (user, tableData, getLengthByStatus) => {
+
+    if (user.COMPANY === 'HT') {
+        return [
+            {value: 'all', label: 'Total', color: 'info', count: tableData.length},
+            {value: 6, label: 'Pendiente de aprobar', color: 'success', count: getLengthByStatus(6)},
+            {value: 0, label: 'Pendiente de Facturar', color: 'warning', count: getLengthByStatus(0)},
+            {value: 22, label: 'F/Pend. Cargar Evidencia', color: 'info', count: getLengthByStatus(22)},
+            {value: 23, label: 'F/Pend. Validar Cartera', color: 'info', count: getLengthByStatus(23)},
+            {value: 1, label: 'Fact./Entregado', color: 'error', count: getLengthByStatus(1)},
+            {value: 8, label: 'Anulado', color: 'default', count: getLengthByStatus(8)},
+        ];
+
+    } else {
+        return [
+            {value: 'all', label: 'Total', color: 'info', count: tableData.length},
+            {value: 6, label: 'Pendiente de aprobar', color: 'success', count: getLengthByStatus(6)},
+            {value: 0, label: 'Pendiente de Facturar', color: 'warning', count: getLengthByStatus(0)},
+            {value: 1, label: 'Facturado', color: 'error', count: getLengthByStatus(1)},
+            {value: 8, label: 'Anulado', color: 'default', count: getLengthByStatus(8)},
+        ];
+    }
+
+
 }

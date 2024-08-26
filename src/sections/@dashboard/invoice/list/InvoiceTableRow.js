@@ -508,6 +508,8 @@ export default function InvoiceTableRow({
                             (ESTADO === 8 && 'error') ||
                             (ESTADO === 6 && 'success') ||
                             (ESTADO === 0 && 'warning') ||
+                            (ESTADO === 22 && 'info') ||
+                            (ESTADO === 23 && 'info') ||
                             (ESTADO === 1 && 'error') ||
                             'default'
                         }
@@ -516,6 +518,8 @@ export default function InvoiceTableRow({
                             (ESTADO === 8 ? 'LD: Anulado' : '') ||
                             (ESTADO === 6 ? 'LD: Por Aprobar' : '') ||
                             (ESTADO === 0 ? 'LD: Por Facturar' : '') ||
+                            (ESTADO === 22 ? 'LD: F/Pend. Cargar Evidencia' : '') ||
+                            (ESTADO === 23 ? 'LD: F/Pend. Validar Cartera' : '') ||
                             (ESTADO === 1 ? 'LD: Facturado' : '') ||
                             (ESTADO === 10 ? 'TM: Por Aprobar Ejecutivo Soporte' : '') ||
                             (ESTADO === 13 ? 'TM: Por Aprobar Carlos Méndez' : '') ||
@@ -585,7 +589,7 @@ export default function InvoiceTableRow({
                             </>
                         ) : (
                             <CardContent>
-                                <Label>Pend. Evidencia</Label>
+                                <Label>{NUMEROGUIA}</Label>
                             </CardContent>
                         )
                     ) : (

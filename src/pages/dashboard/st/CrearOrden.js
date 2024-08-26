@@ -65,11 +65,18 @@ export default function GarantiaPage() {
 
     //Para la sección de la Fecha de Creación y Fecha de Facturación
     const [isChecked, setIsChecked] = useState(false);
+    const [isCheckedGuia, setIsCheckedGuia] = useState(false);
 
     const handleSwitchChange = (event) => {
         setIsChecked(event.target.checked);
         console.log(event.target.checked ? 'Activo' : 'Inactivo');
     };
+
+    const handleSwitchChangeGuia = (event) => {
+        setIsCheckedGuia(event.target.checked);
+        console.log(event.target.checked ? 'Activo' : 'Inactivo');
+    };
+
 
     const showImei = async (enteredName) => {
         if (enteredName.length === 15 || enteredName.length === 11 || enteredName.length === 14) {
@@ -154,7 +161,8 @@ export default function GarantiaPage() {
             // EMAIL_EMPLEADO_X_FACTURACION: data.EMAIL_EMPLEADO_X_FACTURACION,
             // EMAIL_CLIENTE: data.EMAIL,
             INFO: garantia,
-            ID_USUARIO: Number(user.ID)
+            ID_USUARIO: Number(user.ID),
+            create_guide: isCheckedGuia
         });
 
         if (response.status === 200) {
@@ -162,22 +170,32 @@ export default function GarantiaPage() {
             // La solicitud PUT se realizó correctamente
             //setDataCatalog(response.data.catalogo)
 
-            const pdfDecode = response.data.guia_pdf;
-            console.log("pdfDecode: "+ pdfDecode)
+            if (response.data.guia_pdf) {
+                const pdfDecode = response.data.guia_pdf;
+                console.log("pdfDecode: " + pdfDecode)
 
-            const byteCharacters = atob(pdfDecode);
-            const byteNumbers = new Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) {
-                byteNumbers[i] = byteCharacters.charCodeAt(i);
+                const byteCharacters = atob(pdfDecode);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const pdfBlob = new Blob([byteArray], {type: 'application/pdf'});
+                const pdfUrl = URL.createObjectURL(pdfBlob);
+                window.open(pdfUrl, '_blank');
+
+                alert("Se ha creado la guia correctamente")
+
+                router.reload();
+
+            } else {
+                // Manejo del caso en el que `guia_pdf` está vacío o indefinido
+                console.error("Datos guardados correctamente. Sin Guia Servientrega");
+                alert("Datos guardados correctamente.");
+
+                router.reload();
+
             }
-            const byteArray = new Uint8Array(byteNumbers);
-            const pdfBlob = new Blob([byteArray], {type: 'application/pdf'});
-            const pdfUrl = URL.createObjectURL(pdfBlob);
-            window.open(pdfUrl, '_blank');
-
-            alert("Se ha creado la guia correctamente")
-
-            router.reload();
 
         } else {
             // La solicitud POST no se realizó correctamente
@@ -267,7 +285,7 @@ export default function GarantiaPage() {
                         <Card sx={{p: 3}}>
 
                             <Stack spacing={3}>
-                                <h2>Crear Orden + Guía</h2>
+                                <h2>Crear Orden (Datos Adicionales)</h2>
 
                                 <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
 
@@ -293,6 +311,12 @@ export default function GarantiaPage() {
                                                   rows={3}
                                                   required
                                     />
+
+                                    <h2>Crear Guía Servientrega</h2>
+
+                                    <FormControlLabel
+                                        control={<Switch checked={isCheckedGuia} onChange={handleSwitchChangeGuia}/>}
+                                        label="Crear Guia"/>
 
                                     <h3>Ciudad Origen</h3>
                                     <RHFRadioGroup row
