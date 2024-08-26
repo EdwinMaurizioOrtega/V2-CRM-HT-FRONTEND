@@ -558,7 +558,7 @@ export default function InvoiceListPage() {
                             />
 
                             <InvoiceAnalytic
-                                title="Facturado"
+                                title="Fact/Entreg."
                                 total={getLengthByStatus(1)}
                                 percent={getPercentByStatus(1)}
                                 price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(1)}
