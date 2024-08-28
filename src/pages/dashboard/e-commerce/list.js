@@ -148,7 +148,8 @@ export default function EcommerceProductListPage() {
           const cachedData = await response.json();
 
           if (user.ROLE === 'infinix'){
-            const infinixProducts = cachedData.products.filter(product => product.MARCA === 'INFINIX');
+            const targetBrands = ['INFINIX', 'GENERICO'];
+            const infinixProducts = cachedData.products.filter(product => targetBrands.includes(product.MARCA));
             setProducts(infinixProducts);
           } else if (user.ROLE === '0'){
             //Prpductos de la bodega CENTRO_DE_DISTRIBUCION_HT y categoria celulares
@@ -171,7 +172,8 @@ export default function EcommerceProductListPage() {
         // Si había una respuesta en la caché, los productos ya se establecieron en el estado
         // Si no había respuesta en la caché, ahora se establecen los productos con los datos de la respuesta de red
         if (user.ROLE === 'infinix'){
-          const infinixProducts = data.products.filter(product => product.MARCA === 'INFINIX');
+          const targetBrands = ['INFINIX', 'GENERICO'];
+          const infinixProducts = data.products.filter(product => targetBrands.includes(product.MARCA));
           setProducts(infinixProducts);
         } else if (user.ROLE === '0'){
           //Prpductos de la bodega CENTRO_DE_DISTRIBUCION_HT y categoria celulares
