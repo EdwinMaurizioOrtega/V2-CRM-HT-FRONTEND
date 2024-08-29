@@ -2,7 +2,18 @@ import React, {useEffect, useState} from 'react';
 // next
 import Head from 'next/head';
 // @mui
-import {Box, Button, Card, CardContent, Container, Grid, IconButton, Stack} from '@mui/material';
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Container,
+    Grid,
+    IconButton,
+    InputAdornment,
+    Stack, Switch,
+    TextField
+} from '@mui/material';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
 // layouts
@@ -13,7 +24,6 @@ import {useSnackbar} from '../../../components/snackbar';
 
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-
 
 // ----------------------------------------------------------------------
 import {useSettingsContext} from "../../../components/settings";
@@ -31,6 +41,7 @@ import {
 } from "@mui/x-data-grid";
 import axios from "../../../utils/axios";
 import {useRouter} from "next/router";
+import {Label} from "@mui/icons-material";
 
 // ----------------------------------------------------------------------
 
@@ -150,6 +161,16 @@ export default function GarantiaPage() {
 
     };
 
+    const [textFieldValues, setTextFieldValues] = useState({});
+
+    // Manejador del cambio del TextField
+    const handleTextFieldChange = (id) => (event) => {
+        setTextFieldValues((prevValues) => ({
+            ...prevValues,
+            [id]: event.target.value
+        }));
+    };
+
     const baseColumns = [
 
         {
@@ -190,7 +211,57 @@ export default function GarantiaPage() {
             field: 'GUIA_SERVIENTREGA',
             headerName: 'GUIA_SERVIENTREGA',
             flex: 1,
-            minWidth: 160,
+            minWidth: 460,
+            // renderCell: (params) => {
+            //     return (
+            //         <>
+            //
+            //             {params.row.GUIA_SERVIENTREGA}
+            //
+            //             <Button
+            //                 variant="contained"
+            //                 onClick={() => handleShowActualizarGuiaReparacionEnTaller(params.row.ID_ORDEN)}
+            //             >
+            //                 Actualizar
+            //             </Button>
+            //         </>
+            //
+            //     );
+            // }
+
+            renderCell: (params) => {
+
+                const {id} = params.row; // Obtén el ID de la fila
+
+                return (
+                    <>
+                        {params.row.GUIA_SERVIENTREGA}
+
+                        <TextField
+                            name="precioProducto"
+                            label="Guia (Nueve dígitos)"
+                            value={textFieldValues[id] || ''} // Valor del TextField desde el estado
+                            onChange={handleTextFieldChange(id)} // Actualiza el estado cuando cambia el valor
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <Stack direction="row" spacing={1} alignItems="center">
+                                            <Button variant="outlined" size="small"
+                                                    onClick={() => handleShowActualizarGuiaReparacionEnTaller(params.row)}
+                                            >
+                                                Actualizar Guia
+                                            </Button>
+                                        </Stack>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            sx={{width: 325}} // Establece el ancho del TextField
+                        />
+
+                    </>
+
+                );
+            }
         },
         {
             field: 'NAME_EMPLEADO_X_FACTURACION',
@@ -380,6 +451,32 @@ export default function GarantiaPage() {
     const handleShowReparacionEnTaller = async (data) => {
         if (data) {
             console.log("Fila seleccionada:", data);
+        } else {
+            console.log("No se ha detectado ningun dato");
+        }
+    }
+
+    const handleShowActualizarGuiaReparacionEnTaller = async (row) => {
+        const {id} = row;
+        const nuevaGuiaServientrega = textFieldValues[id] || '';
+        if (row && nuevaGuiaServientrega) {
+            console.log("Fila seleccionada:", row);
+
+            // Actualizar una orden.
+            const response = await axios.put('/hanadb/api/technical_service/update_new_guia_order_technical', {
+                ID_ORDER: Number(row.ID_ORDEN),
+                COMMENT: nuevaGuiaServientrega,
+
+            });
+
+            console.log("Orden actualizada correctamente.");
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+                router.reload();
+            }
+
         } else {
             console.log("No se ha detectado ningun dato");
         }
