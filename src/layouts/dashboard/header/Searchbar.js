@@ -167,7 +167,7 @@ function Searchbar() {
                   inputProps={params.inputProps}
                   fullWidth
                   autoFocus
-                  placeholder="Search..."
+                  placeholder="Buscar menús..."
                   onKeyUp={handleKeyUp}
                   startAdornment={
                     <InputAdornment position="start">

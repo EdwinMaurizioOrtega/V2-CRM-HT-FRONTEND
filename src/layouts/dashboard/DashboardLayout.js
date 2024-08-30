@@ -14,6 +14,7 @@ import Header from './header';
 import NavMini from './nav/NavMini';
 import NavVertical from './nav/NavVertical';
 import NavHorizontal from './nav/NavHorizontal';
+import {useAuthContext} from "../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -39,6 +40,8 @@ export default function DashboardLayout({ children }) {
   const handleClose = () => {
     setOpen(false);
   };
+
+    const {user} = useAuthContext();
 
   const renderNavVertical = <NavVertical openNav={open} onCloseNav={handleClose} />;
 
@@ -84,7 +87,8 @@ export default function DashboardLayout({ children }) {
             minHeight: { lg: 1 },
           }}
         >
-          {renderNavVertical}
+
+          { user?.EMPRESA && renderNavVertical}
 
           <Main>{children}</Main>
         </Box>

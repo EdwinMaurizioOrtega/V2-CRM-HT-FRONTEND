@@ -36,7 +36,7 @@ export default function NavAccount() {
   }
 
   return (
-    <Link component={NextLink} href={PATH_DASHBOARD.user.account} underline="none" color="inherit">
+    // <Link component={NextLink} href={PATH_DASHBOARD.user.account} underline="none" color="inherit">
       <StyledRoot>
         <CustomAvatar src={user?.PHOTOURL} alt={user?.DISPLAYNAME} name={user?.DISPLAYNAME} />
 
@@ -55,6 +55,6 @@ export default function NavAccount() {
 
         </Box>
       </StyledRoot>
-    </Link>
+    // </Link>
   );
 }

@@ -49,6 +49,15 @@ const reducer = (state, action) => {
             user: null,
         };
     }
+    if (action.type === 'UPDATE_USER') {
+        return {
+            ...state,
+            user: {
+                ...state.user,
+                ...action.payload,
+            },
+        };
+    }
 
     return state;
 };
@@ -79,11 +88,15 @@ export function AuthProvider({children}) {
 
                 const {user} = response.data;
 
+                // Recupera el usuario del localStorage si existe
+                const storedUser = localStorage.getItem('user');
+                const initialUser = storedUser ? JSON.parse(storedUser) : user;
+
                 dispatch({
                     type: 'INITIAL',
                     payload: {
                         isAuthenticated: true,
-                        user,
+                        user: initialUser,
                     },
                 });
             } else {
@@ -112,9 +125,9 @@ export function AuthProvider({children}) {
     }, [initialize]);
 
     // LOGIN
-    const login = useCallback(async (empresa, email, password) => {
+    const login = useCallback(async (email, password) => {
         const response = await axios.post('/hanadb/api/account/login', {
-            empresa,
+            // empresa,
             email,
             password,
         });
@@ -156,10 +169,26 @@ export function AuthProvider({children}) {
     // LOGOUT
     const logout = useCallback(() => {
         setSession(null);
+        // Eliminar el token y el usuario del localStorage
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('user');
         dispatch({
             type: 'LOGOUT',
         });
     }, []);
+
+    // AuthProvider.js
+    const updateUser = useCallback((updatedFields) => {
+        localStorage.setItem('user', JSON.stringify({
+            ...state.user,
+            ...updatedFields,
+        }));
+        dispatch({
+            type: 'UPDATE_USER',
+            payload: updatedFields,
+        });
+    }, [state.user]);
+
 
     const memoizedValue = useMemo(
         () => ({
@@ -170,8 +199,10 @@ export function AuthProvider({children}) {
             login,
             register,
             logout,
+            updateUser, // Add the new updateUser method
+
         }),
-        [state.isAuthenticated, state.isInitialized, state.user, login, logout, register]
+        [state.isAuthenticated, state.isInitialized, state.user, login, logout, register, updateUser]
     );
 
     return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;

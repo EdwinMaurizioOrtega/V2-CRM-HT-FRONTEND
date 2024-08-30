@@ -2,7 +2,17 @@
 import Head from 'next/head';
 // @mui
 import {useTheme} from '@mui/material/styles';
-import {Container, Grid, Stack, Button} from '@mui/material';
+import {
+    Container,
+    Grid,
+    Stack,
+    Button,
+    FormControl,
+    RadioGroup,
+    FormControlLabel,
+    Radio,
+    FormLabel, Typography, Box
+} from '@mui/material';
 // auth
 import {useAuthContext} from '../../auth/useAuthContext';
 // layouts
@@ -33,8 +43,11 @@ import {
 // assets
 import {SeoIllustration} from '../../assets/illustrations';
 import Link from "next/link";
-import {useEffect} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {io} from "socket.io-client";
+import {Block} from "../../sections/_examples/Block";
+
+import React from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -43,11 +56,30 @@ GeneralAppPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 // ----------------------------------------------------------------------
 
 export default function GeneralAppPage() {
-    const {user} = useAuthContext();
+
+    const {user, updateUser} = useAuthContext();
 
     const theme = useTheme();
 
     const {themeStretch} = useSettingsContext();
+
+    const [selectedValue, setSelectedValue] = useState(''); // Estado inicial sin valor
+
+    // Sincroniza el estado con el valor de EMPRESA del contexto
+    useEffect(() => {
+        if (user?.EMPRESA) {
+            setSelectedValue(user.EMPRESA);
+        }
+    }, [user]);
+
+    // Maneja el cambio de selección en el RadioGroup
+    const handleChange = (event) => {
+        const newValue = event.target.value;
+        setSelectedValue(newValue);
+
+        // Lógica para cambiar EMPRESA basado en la selección
+        updateUser({EMPRESA: newValue});
+    };
 
     return (
         <>
@@ -73,8 +105,70 @@ export default function GeneralAppPage() {
                                     }}
                                 />
                             }
-                            action={<Button href="/dashboard/e-commerce/list/" variant="contained">TIENDA</Button>}
+                            action={
+
+
+                                <Box
+                                    sx={{
+                                        textAlign: 'center',
+                                        mx: 'auto', // Center horizontally
+                                        my: 2, // Add margin top and bottom
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                    }}
+                                >
+
+
+
+
+                                            <Typography variant="h4" component="h4" gutterBottom>
+                                                <Box component="span" sx={{color: 'red', fontWeight: 'bold'}}>
+                                                    ¡ALERTA!
+                                                </Box>
+                                                {' '}
+                                                SELECCIONE UNA EMPRESA
+                                            </Typography>
+
+                                            <FormControl component="fieldset" sx={{mb: 2}}>
+                                                <RadioGroup row value={selectedValue} onChange={handleChange}>
+
+                                                    {user?.COMPANY === 'HT' || user?.COMPANY === 'INFINIX' || user?.COMPANY === 'TOMEBAMBA' ? (
+                                                        <FormControlLabel
+                                                            value="0992537442001"
+                                                            control={<Radio/>}
+                                                            label="HIPERTRONICS"
+                                                        />
+                                                    ) : null}
+
+                                                    {user?.COMPANY === 'ALPHACELL' || user?.COMPANY === 'HT' ? (
+                                                        <FormControlLabel
+                                                            value="0992264373001"
+                                                            control={<Radio size="small"/>}
+                                                            label="ALPHACELL"
+                                                        />
+                                                    ) : null}
+                                                </RadioGroup>
+                                            </FormControl>
+
+                                            <Typography variant="h5" component="h5" gutterBottom>
+                                                ¡EMPRESA EN LA QUE VAS A TRABAJAR!
+                                            </Typography>
+                                            <Typography component="span">
+                                                RUC: {`${user?.EMPRESA || 'Ninguno'}`}
+                                            </Typography>
+
+
+
+                                    <Button href="/dashboard/e-commerce/list/" variant="contained" sx={{mt: 2}}>
+                                        TIENDA
+                                    </Button>
+                                </Box>
+
+                            }
                         />
+
+
                     </Grid>
 
                     {/*   <Grid item xs={12} md={4}> */}

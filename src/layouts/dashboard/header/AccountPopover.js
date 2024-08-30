@@ -18,17 +18,21 @@ import { IconButtonAnimate } from '../../../components/animate';
 
 const OPTIONS = [
   {
+    label: 'App',
+    linkTo: PATH_DASHBOARD.general.app,
+  },
+  {
     label: 'Home',
     linkTo: '/',
   },
-  {
-    label: 'Perfil',
-    linkTo: PATH_DASHBOARD.user.profile,
-  },
-  {
-    label: 'Configuración',
-    linkTo: PATH_DASHBOARD.user.account,
-  },
+  // {
+  //   label: 'Perfil',
+  //   linkTo: PATH_DASHBOARD.user.profile,
+  // },
+  // {
+  //   label: 'Configuración',
+  //   linkTo: PATH_DASHBOARD.user.account,
+  // },
 ];
 
 // ----------------------------------------------------------------------

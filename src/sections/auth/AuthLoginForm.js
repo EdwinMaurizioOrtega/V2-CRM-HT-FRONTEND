@@ -30,10 +30,10 @@ import {Block} from "../_examples/Block";
 
 // ----------------------------------------------------------------------
 
-const EMPRESAS = [
-    {id: '0992537442001', title: 'Hipertronics'},
-    {id: '0992264373001', title: 'Alphacell'}
-]
+// const EMPRESAS = [
+//     {id: '0992537442001', title: 'Hipertronics'},
+//     {id: '0992264373001', title: 'Alphacell'}
+// ]
 
 export default function AuthLoginForm() {
     const {login} = useAuthContext();
@@ -41,13 +41,13 @@ export default function AuthLoginForm() {
     const [showPassword, setShowPassword] = useState(false);
 
     const LoginSchema = Yup.object().shape({
-        empresa: Yup.string().required('Se requiere una empresa'),
+        // empresa: Yup.string().required('Se requiere una empresa'),
         email: Yup.string().required('Email is required').email('Email must be a valid email address'),
         password: Yup.string().required('Password is required'),
     });
 
     const defaultValues = {
-        empresa: '',
+        // empresa: '',
         email: '',
         password: '',
     };
@@ -67,28 +67,7 @@ export default function AuthLoginForm() {
     const onSubmit = async (data) => {
 
         try {
-
-            var listaAccessOnlyInfinix = [
-                "infinix@infinix.com",
-                "ricardojose.86@hotmail.com",
-                "justhynjonayker@gmail.com",
-                "bernardopanda@hotmail.com",
-                "darwin79uquillas@gmail.com",
-                "alexa_pi02@hotmail.es",
-                "criseliza_valdez96@hotmail.com",
-                "javi24chimbolema@gmail.com",
-                "imarchan9067@gmail.com"
-            ];
-
-            // Verificar si data.email está en listaAccessOnlyInfinix
-            if (listaAccessOnlyInfinix.includes(data.email)) {
-                // Si está en la lista, usar el email el input
-                await login('0992537442001', data.email, data.password);
-            } else {
-                // Si no está en la lista, proceder con el login normal
-                await login(data.empresa, data.email, data.password);
-            }
-
+            await login(data.email, data.password);
         } catch (error) {
             console.error(error);
             reset();
@@ -103,16 +82,6 @@ export default function AuthLoginForm() {
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={3}>
                 {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
-
-                <RHFSelect name="empresa" label="Empresa">
-                    <MenuItem value="">None</MenuItem>
-                    <Divider sx={{borderStyle: 'dashed'}}/>
-                    {EMPRESAS.map((option) => (
-                        <MenuItem key={option.id} value={option.id}>
-                            {option.title}
-                        </MenuItem>
-                    ))}
-                </RHFSelect>
 
                 <RHFTextField name="email" label="Email" autoComplete="off"/>
 
