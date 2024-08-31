@@ -119,9 +119,6 @@ export default function GeneralAppPage() {
                                     }}
                                 >
 
-
-
-
                                             <Typography variant="h4" component="h4" gutterBottom>
                                                 <Box component="span" sx={{color: 'red', fontWeight: 'bold'}}>
                                                     ¡ALERTA!
