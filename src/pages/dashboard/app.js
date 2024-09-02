@@ -155,11 +155,12 @@ export default function GeneralAppPage() {
                                                 RUC: {`${user?.EMPRESA || 'Ninguno'}`}
                                             </Typography>
 
+                                    {user?.EMPRESA && (
+                                        <Button href="/dashboard/e-commerce/list/" variant="contained" sx={{mt: 2}}>
+                                            TIENDA
+                                        </Button>
+                                    )}
 
-
-                                    <Button href="/dashboard/e-commerce/list/" variant="contained" sx={{mt: 2}}>
-                                        TIENDA
-                                    </Button>
                                 </Box>
 
                             }
