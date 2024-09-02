@@ -1,7 +1,7 @@
 // next
 import NextLink from 'next/link';
 // @mui
-import {Alert, Tooltip, Stack, Typography, Link, Box, AlertTitle, Button} from '@mui/material';
+import {Alert, Tooltip, Stack, Typography, Link, Box, AlertTitle, Button, CircularProgress} from '@mui/material';
 // auth
 import {useAuthContext} from '../../auth/useAuthContext';
 // layouts
@@ -24,8 +24,12 @@ export default function Login() {
     const [longitude, setLongitude] = useState(null);
     const [error, setError] = useState(null);
     const [showLoginForm, setShowLoginForm] = useState(false);
+    const [loading, setLoading] = useState(false); // Estado de carga
+
 
     const requestGeolocation = () => {
+        setLoading(true); // Mostrar el indicador de carga
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
@@ -34,16 +38,22 @@ export default function Login() {
                     setLongitude(position.coords.longitude);
                     setError(null); // Limpiar cualquier error anterior
                     setShowLoginForm(true); // Mostrar el formulario de inicio de sesión
+                    setLoading(false); // Ocultar el indicador de carga
+
 
                 },
                 (error) => {
                     console.error('Error getting geolocation:', error);
                     setError('Para acceder al contenido, por favor activa la geolocalización.');
+                    setLoading(false); // Ocultar el indicador de carga
+
                 }
             );
         } else {
             console.error('Geolocation is not supported by this browser.');
             setError('La geolocalización no es compatible con este navegador.');
+            setLoading(false); // Ocultar el indicador de carga
+
         }
     };
 
@@ -94,8 +104,12 @@ export default function Login() {
                         {/*   Use email : <strong>sistemas@hipertronics.us</strong> / password :<strong> ,2023;MongoDB</strong> */}
                         {/* </Alert> */}
 
-                        {showLoginForm ? (
-                            <AuthLoginForm/>
+                        {loading ? (
+                            <Stack alignItems="center" justifyContent="center" sx={{ height: '100px' }}>
+                                <CircularProgress />
+                            </Stack>
+                        ) : showLoginForm ? (
+                            <AuthLoginForm />
                         ) : (
                             <>
 
