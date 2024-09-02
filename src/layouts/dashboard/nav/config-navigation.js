@@ -91,6 +91,7 @@ const navConfig = [
                     {title: 'Catálogo', path: PATH_DASHBOARD.eCommerce.catalogo},
                     {title: 'Clientes', path: PATH_DASHBOARD.eCommerce.clientes},
                     {title: 'Crear Cliente', path: PATH_DASHBOARD.eCommerce.client},
+                    {title: 'Imágenes', path: PATH_DASHBOARD.eCommerce.images},
 
                 ],
             },
