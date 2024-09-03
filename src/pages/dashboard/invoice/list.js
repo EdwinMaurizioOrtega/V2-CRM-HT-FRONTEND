@@ -91,6 +91,7 @@ const TABLE_HEAD = [
     // {id: 'status', label: 'Vendedor', align: 'left'},
     {id: 'CITY', label: 'Ciudad Vendedor', align: 'left'},
     {id: 'NUMEROGUIA', label: 'Servientrega', align: 'left'},
+    {id: 'NOMBREUSUARIOENTREGARA', label: 'ENTREGAR', align: 'left'},
 
     {id: 'DOCNUM', label: 'OV SAP', align: 'left'},
     {id: 'FECHACREACION', label: 'Creación', align: 'left'},

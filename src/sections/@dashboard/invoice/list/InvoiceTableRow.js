@@ -84,7 +84,8 @@ export default function InvoiceTableRow({
         FECHA_IMPRESION,
         NUMEROFACTURALIDENAR,
         NUMEROFACTURAE4,
-        URL_INVOICE_SELLER
+        URL_INVOICE_SELLER,
+        NOMBREUSUARIOENTREGARA
     } = row;
 
     const router = useRouter();
@@ -607,7 +608,9 @@ export default function InvoiceTableRow({
 
                 </TableCell>
 
-
+                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                    {NOMBREUSUARIOENTREGARA}
+                </TableCell>
                 {/* { */
                 }
                 {/*     user.ROLE === "aprobador" || user.ROLE === "bodega" ? ( */
