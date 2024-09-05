@@ -558,6 +558,16 @@ export default function InvoiceListPage() {
                                 color={theme.palette.warning.main}
                             />
 
+                            {user.COMPANY === 'HT' && <InvoiceAnalytic
+                                title="F/Pend.Cargar Evidencia."
+                                total={getLengthByStatus(22)}
+                                percent={getPercentByStatus(22)}
+                                price={getTotalPriceByStatus(22)}
+                                icon="solar:bell-bing-bold-duotone"
+                                color={theme.palette.error.main}
+                            />
+                            }
+
                             <InvoiceAnalytic
                                 title="Fact/Entreg."
                                 total={getLengthByStatus(1)}
