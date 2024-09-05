@@ -339,7 +339,7 @@ export default function GarantiaPage() {
                     <>
                         <Button
                             variant="contained"
-                            onClick={() => handleShowNoAplicaNotaCredito(params.row)}
+                            onClick={() => handleShowFueraDeGarantia(params.row)}
                         >
                             FUERA DE GARANTÍA
                         </Button>
@@ -416,18 +416,17 @@ export default function GarantiaPage() {
         }
     };
 
-    const handleShowNoAplicaNotaCredito = async (data) => {
+    const handleShowFueraDeGarantia = async (data) => {
         //Enviar un correo electrónico.
         if (data) {
             console.log("Fila seleccionada:", data);
             // Puedes hacer algo con las coordenadas seleccionadas aquí, si es necesario
 
-
             // Aquí puedes manejar la carga del archivo, por ejemplo, enviándolo a un servidor
             console.log('Número de orden:', data.ID_ORDEN);
 
             // Actualizar una orden.
-            const response = await axios.post('/hanadb/api/technical_service/no_aplica_nota_credito_sap', {
+            const response = await axios.post('/hanadb/api/technical_service/imei_fuera_de_garantia', {
                 ID_ORDER: Number(data.ID_ORDEN),
                 IMEI: data.IMEI_SERIE,
                 EMAIL_EMPLEADO_X_FACTURACION: data.EMAIL_EMPLEADO_X_FACTURACION,
@@ -449,10 +448,33 @@ export default function GarantiaPage() {
     };
 
     const handleShowReparacionEnTaller = async (data) => {
+        //Enviar un correo electrónico.
         if (data) {
             console.log("Fila seleccionada:", data);
+            // Puedes hacer algo con las coordenadas seleccionadas aquí, si es necesario
+
+            // Aquí puedes manejar la carga del archivo, por ejemplo, enviándolo a un servidor
+            console.log('Número de orden:', data.ID_ORDEN);
+
+            // Actualizar una orden.
+            const response = await axios.post('/hanadb/api/technical_service/imei_reparacion_en_taller', {
+                ID_ORDER: Number(data.ID_ORDEN),
+                IMEI: data.IMEI_SERIE,
+                EMAIL_EMPLEADO_X_FACTURACION: data.EMAIL_EMPLEADO_X_FACTURACION,
+                URL_DROPBOX: data.URL_DROPBOX,
+            });
+
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+                console.log("Orden actualizada correctamente.");
+                router.reload();
+            }
+
+
         } else {
-            console.log("No se ha detectado ningun dato");
+            console.log("No se ha seleccionado ningún marcador.");
         }
     }
 

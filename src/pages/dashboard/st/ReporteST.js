@@ -2,18 +2,13 @@ import React, {useEffect, useState} from 'react';
 // next
 import Head from 'next/head';
 // @mui
-import {Box, Button, Card, CardContent, Container, Grid, IconButton, Stack} from '@mui/material';
+import {Box, Card, Container, Grid, IconButton, Stack} from '@mui/material';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
 
-// sections
-import {useSnackbar} from '../../../components/snackbar';
-
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-
 
 // ----------------------------------------------------------------------
 import {useSettingsContext} from "../../../components/settings";
@@ -41,11 +36,6 @@ GarantiaPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function GarantiaPage() {
     const {themeStretch} = useSettingsContext();
 
-    const [enteredName, setEnteredName] = useState(''); //INIT TO EMPTY
-    const [garantia, setGarantia] = useState('');
-
-    const [marca, setMarca] = useState('');
-
     const {user} = useAuthContext();
 
     const router = useRouter();
@@ -57,7 +47,7 @@ export default function GarantiaPage() {
         const BuscarPorRango = async () => {
 
             try {
-                const response = await axios.get('/hanadb/api/technical_service/get_oders_technical_service?status=2');
+                const response = await axios.get('/hanadb/api/technical_service/get_oders_technical_service?status=2, 3');
 
                 if (response.status === 200) {
                     console.log(response);
@@ -86,69 +76,6 @@ export default function GarantiaPage() {
 
     }, []);
 
-    const [selectedFile, setSelectedFile] = useState(null);
-
-    const handleFileChange = (event, row) => {
-        const file = event.target.files[0];
-        // setSelectedFile(file);
-
-        if (file) {
-            handleFileUpload(file, row);
-        }
-    };
-
-    const handleFileUpload = (file, row) => {
-
-
-        // Aquí puedes manejar la carga del archivo, por ejemplo, enviándolo a un servidor
-        console.log('Archivo seleccionado:', file);
-        console.log('Número de orden:', row.ID_ORDEN);
-
-        // Ejemplo de envío a un servidor (reemplaza con tu lógica)
-        const formData = new FormData();
-        formData.append('file', file);
-
-        fetch(`https://imagen.hipertronics.us/ht/cloud/upload_web_files`, {
-            method: 'POST',
-            body: formData,
-        })
-            .then(response => {
-                if (response.status === 200) {
-                    return response.json();  // Convertir la respuesta a JSON si el estado es 200
-                } else {
-                    throw new Error('Failed to upload file');  // Lanzar un error si el estado no es 200
-                }
-            })
-            .then(async data => {
-                if (data.status === 'success') {
-                    console.log('Archivo subido con éxito. Enlace:', data.link);
-
-                    // Actualizar una orden.
-                    const response = await axios.put('/hanadb/api/technical_service/api_save_url_file', {
-                        ID_ORDER: Number(row.ID_ORDEN),
-                        URL: data.link,
-
-                    });
-
-                    console.log("Orden actualizada correctamente.");
-                    console.log("Código de estado:", response.status);
-
-                    // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
-                    if (response.status === 200) {
-                        router.reload();
-                    }
-
-
-                } else {
-                    console.error('Error en la respuesta del servidor:', data);
-                }
-            })
-            .catch(error => {
-                console.error('Error al cargar el archivo:', error);
-            });
-
-
-    };
 
     const baseColumns = [
 
@@ -236,44 +163,13 @@ export default function GarantiaPage() {
             flex: 1,
             minWidth: 160,
         },
-        //
+        {
+            field: 'NO_APLICA_NOTA_CREDITO',
+            headerName: 'NO_APLICA_NOTA_CREDITO',
+            flex: 1,
+            minWidth: 260,
+        },
     ]
-
-    const handleShowSiAplicaNotaCredito = (data) => {
-        if (data) {
-            console.log("Fila seleccionada:", data);
-            // Puedes hacer algo con las coordenadas seleccionadas aquí, si es necesario
-
-        } else {
-            console.log("No se ha seleccionado ningún marcador.");
-        }
-    };
-
-    const handleShowNoAplicaNotaCredito = (data) => {
-        if (data) {
-            console.log("Fila seleccionada:", data);
-            // Puedes hacer algo con las coordenadas seleccionadas aquí, si es necesario
-
-        } else {
-            console.log("No se ha seleccionado ningún marcador.");
-        }
-    };
-
-    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
-    const onSnackbarAction = (data, color, anchor) => {
-        enqueueSnackbar(`${data}`, {
-            variant: color,
-            anchorOrigin: anchor,
-            action: (key) => (
-                <>
-                    <Button size="small" color="inherit" onClick={() => closeSnackbar(key)}>
-                        Cerrar
-                    </Button>
-                </>
-            ),
-        });
-    };
-
 
     return (
         <>
