@@ -51,7 +51,7 @@ const navConfig = [
                     {title: 'Administrativo', path: PATH_DASHBOARD.powerBI.administrativo},
                     {title: 'Cartera', path: PATH_DASHBOARD.powerBI.cartera},
 
-                    {title: 'Vendedor', path: PATH_DASHBOARD.powerBI.vendedor},
+                    // {title: 'Vendedor', path: PATH_DASHBOARD.powerBI.vendedor},
 
                     // {title: 'David Granda', path: PATH_DASHBOARD.powerBI.david_granda},
                     // {title: 'Alexandra Nuñez', path: PATH_DASHBOARD.powerBI.alexandra_nunez},
@@ -88,6 +88,7 @@ const navConfig = [
                 path: PATH_DASHBOARD.eCommerce.root,
                 icon: ICONS.cart,
                 children: [
+                    {title: 'Power BI', path: PATH_DASHBOARD.powerBI.vendedor},
                     {title: 'tienda', path: PATH_DASHBOARD.eCommerce.list},
                     {title: 'carrito de compras', path: PATH_DASHBOARD.eCommerce.checkout},
                     {title: 'Catálogo', path: PATH_DASHBOARD.eCommerce.catalogo},
