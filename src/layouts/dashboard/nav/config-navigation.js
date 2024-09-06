@@ -50,10 +50,12 @@ const navConfig = [
                     {title: 'Gerencia', path: PATH_DASHBOARD.powerBI.gerencia},
                     {title: 'Administrativo', path: PATH_DASHBOARD.powerBI.administrativo},
                     {title: 'Cartera', path: PATH_DASHBOARD.powerBI.cartera},
-                    {title: 'Victor Quintero', path: PATH_DASHBOARD.powerBI.victor_quintero},
-                    {title: 'David Granda', path: PATH_DASHBOARD.powerBI.david_granda},
-                    {title: 'Alexandra Nuñez', path: PATH_DASHBOARD.powerBI.alexandra_nunez},
-                    {title: 'Michelle Calderón', path: PATH_DASHBOARD.powerBI.michelle_calderon},
+
+                    {title: 'Vendedor', path: PATH_DASHBOARD.powerBI.vendedor},
+
+                    // {title: 'David Granda', path: PATH_DASHBOARD.powerBI.david_granda},
+                    // {title: 'Alexandra Nuñez', path: PATH_DASHBOARD.powerBI.alexandra_nunez},
+                    // {title: 'Michelle Calderón', path: PATH_DASHBOARD.powerBI.michelle_calderon},
                 ],
 
             },

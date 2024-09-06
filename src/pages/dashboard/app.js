@@ -138,7 +138,7 @@ export default function GeneralAppPage() {
                                                         />
                                                     ) : null}
 
-                                                    {user?.COMPANY === 'ALPHACELL' || user?.COMPANY === 'HT' ? (
+                                                    {user?.COMPANY === 'ALPHACELL' ? (
                                                         <FormControlLabel
                                                             value="0992264373001"
                                                             control={<Radio size="small"/>}

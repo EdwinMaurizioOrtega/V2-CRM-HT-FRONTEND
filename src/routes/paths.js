@@ -55,10 +55,10 @@ export const PATH_DASHBOARD = {
     gerencia: path(ROOTS_DASHBOARD, '/microsoft-power-bi/gerencia-power-bi'),
     administrativo: path(ROOTS_DASHBOARD, '/microsoft-power-bi/administrativo'),
     cartera: path(ROOTS_DASHBOARD, '/microsoft-power-bi/cartera'),
-    victor_quintero: path(ROOTS_DASHBOARD, '/microsoft-power-bi/victor_quintero'),
-    david_granda: path(ROOTS_DASHBOARD, '/microsoft-power-bi/david_granda'),
-    alexandra_nunez: path(ROOTS_DASHBOARD, '/microsoft-power-bi/alexandra_nunez'),
-    michelle_calderon: path(ROOTS_DASHBOARD, '/microsoft-power-bi/michelle_calderon'),
+    vendedor: path(ROOTS_DASHBOARD, '/microsoft-power-bi/vendedor'),
+    // david_granda: path(ROOTS_DASHBOARD, '/microsoft-power-bi/david_granda'),
+    // alexandra_nunez: path(ROOTS_DASHBOARD, '/microsoft-power-bi/alexandra_nunez'),
+    // michelle_calderon: path(ROOTS_DASHBOARD, '/microsoft-power-bi/michelle_calderon'),
 
   },
   mail: {
