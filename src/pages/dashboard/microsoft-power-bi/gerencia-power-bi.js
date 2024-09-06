@@ -47,7 +47,7 @@ export default function GeneralAnalyticsPage() {
 
         <Box
             component="iframe"
-            src="https://app.powerbi.com/view?r=eyJrIjoiMTcyNDc3ODYtYjFhMy00ZjE1LTllMWQtNGI3ODIyYzc1MzU2IiwidCI6Ijk2ZTEzNWRiLWZmZDItNDdiZS1iZDJlLWYxMjQ2MTY2YWZmZCIsImMiOjR9"
+            src="https://app.powerbi.com/view?r=eyJrIjoiYzdjZTliNTMtYjViMi00YzczLWFkMDgtYjQ0ZTE2ZTNiMTJjIiwidCI6Ijk2ZTEzNWRiLWZmZDItNDdiZS1iZDJlLWYxMjQ2MTY2YWZmZCIsImMiOjR9"
             sx={{
               width: '100%',
               height: '1000px',
