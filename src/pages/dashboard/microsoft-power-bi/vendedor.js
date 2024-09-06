@@ -87,7 +87,7 @@ export default function GeneralAnalyticsPage() {
   return (
     <>
       <Head>
-        <title> Gerencia: Power BI</title>
+        <title> Vendedor: Power BI</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
