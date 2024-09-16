@@ -11,7 +11,7 @@ import {
     MenuItem,
     TableCell,
     IconButton,
-    Typography, TextField, Tooltip, Avatar, CardContent,
+    Typography, TextField, Tooltip, Avatar, CardContent, Autocomplete, Box,
 } from '@mui/material';
 // utils
 import {fDate} from '../../../../utils/formatTime';
@@ -27,7 +27,7 @@ import {HOST_API_KEY} from "../../../../config-global";
 import {PATH_DASHBOARD} from "../../../../routes/paths";
 import axios from "../../../../utils/axios";
 import {useRouter} from "next/router";
-import {PAYMENT_OPTIONS_V2} from "../../../../utils/constants";
+import {PAYMENT_OPTIONS_V2, TABULAR_ANULAR_PEDIDOS} from "../../../../utils/constants";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
@@ -189,38 +189,52 @@ export default function InvoiceTableRow({
         // console.log(`Nuevo precio unitario ${valueNew}`);
     };
 
+    const [tabAnular, setTabAnular] = useState(null);
+
+    // Maneja el cambio en Autocomplete
+    const handleAutocompleteChangeTabAnular = (event, newValue) => {
+        setTabAnular(newValue); // Usa el valor directamente
+    };
+
 //Anúla una orden
     const onAnularRow = async () => {
         console.log("Número de orden: " + ID);
-        console.log("Observación anulación orden: " + valueNew);
+        //console.log("Observación anulación orden: " + valueNew);
 
-        try {
-            const response = await axios.put('/hanadb/api/orders/order/anular', {
-                params: {
-                    ID_ORDER: ID,
-                    OBSERVACION_ANULACION: valueNew,
-                    ID_USER: user.ID,
-                    empresa: user.EMPRESA
+        if (tabAnular !== null) {
+
+            console.log("Anular: "+tabAnular.title);
+
+            try {
+                const response = await axios.put('/hanadb/api/orders/order/anular', {
+                    params: {
+                        ID_ORDER: ID,
+                        OBSERVACION_ANULACION: tabAnular.title,
+                        ID_USER: user.ID,
+                        empresa: user.EMPRESA
+                    }
+                });
+
+                // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
+                console.log('Estado de orden anulado.');
+                console.log("Código de estado:", response.status);
+
+                // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+                if (response.status === 200) {
+
+                    //setTimeout(() => {
+                    router.reload();
+                    //}, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
                 }
-            });
 
-            // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
-            console.log('Estado de orden anulado.');
-            console.log("Código de estado:", response.status);
-
-            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
-            if (response.status === 200) {
-
-                //setTimeout(() => {
-                router.reload();
-                //}, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
+            } catch (error) {
+                // Manejar el error de la petición DELETE aquí
+                console.error('Error al eliminar la orden:', error);
             }
 
-        } catch (error) {
-            // Manejar el error de la petición DELETE aquí
-            console.error('Error al eliminar la orden:', error);
+        } else {
+            alert("Seleccione una opción de la lista de anulación.")
         }
-
     };
 
 
@@ -813,12 +827,25 @@ export default function InvoiceTableRow({
                 content="¿Estás seguro de que quieres anular la orden?"
                 action={
                     <>
-                        <TextField
-                            label="Observaciones al anular."
-                            value={valueNew}
-                            onChange={handleChange}
-                        />
-
+                        <Box sx={{width: '100%'}}>
+                            <Autocomplete
+                                fullWidth
+                                options={TABULAR_ANULAR_PEDIDOS}
+                                getOptionLabel={(option) => option.title}
+                                onChange={handleAutocompleteChangeTabAnular}
+                                renderInput={(params) => <TextField {...params} label="Tabulación"
+                                                                    margin="none"/>}
+                            />
+                            {/* <TextField */}
+                            {/*     label="Observaciones al anular." */}
+                            {/*     multiline */}
+                            {/*     rows={4}  // Adjust the number of rows as needed */}
+                            {/*     fullWidth */}
+                            {/*     margin="normal" */}
+                            {/*     value={valueNew} */}
+                            {/*     onChange={handleChange} */}
+                            {/* /> */}
+                        </Box>
                         <Button variant="contained" color="error" onClick={() => {
                             onAnularRow();
                         }}
@@ -826,7 +853,6 @@ export default function InvoiceTableRow({
                             Anular
                         </Button>
                     </>
-
                 }
             />
 

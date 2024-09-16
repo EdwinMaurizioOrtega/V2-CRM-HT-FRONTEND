@@ -23,7 +23,7 @@ export default function ConfirmDialog({ title, content, action, open, onClose, .
         {action}
 
         <Button variant="outlined" color="inherit" onClick={onClose}>
-          Cancel
+          Cancelar
         </Button>
       </DialogActions>
     </Dialog>

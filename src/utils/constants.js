@@ -237,3 +237,42 @@ export const ROLE = [
         title: "INFINIX"
     },
 ]
+
+export const TABULAR_ANULAR_PEDIDOS = [
+    {
+        id: 1,
+        title: "Cliente cancela pedido."
+    },
+    {
+        id: 2,
+        title: "Venta contado - falta de pago."
+    },
+    {
+        id: 3,
+        title: "Cartera vencida."
+    },
+    {
+        id: 4,
+        title: "Excede el cupo."
+    },
+    {
+        id: 5,
+        title: "Por cambio de productos."
+    },
+    {
+        id: 6,
+        title: "Por falta de stock."
+    },
+    {
+        id: 7,
+        title: "Por cambio de precios."
+    },
+    {
+        id: 8,
+        title: "Cliente solicita que facturen a otro RUC/Cédula."
+    },
+    {
+        id: 9,
+        title: "Forma de pago incorrecta."
+    },
+]
