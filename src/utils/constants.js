@@ -265,7 +265,7 @@ export const TABULAR_ANULAR_PEDIDOS = [
     },
     {
         id: 7,
-        title: "Por cambio de precios."
+        title: "Por cambio de precios o modelo."
     },
     {
         id: 8,
@@ -274,5 +274,9 @@ export const TABULAR_ANULAR_PEDIDOS = [
     {
         id: 9,
         title: "Forma de pago incorrecta."
+    },
+    {
+        id: 10,
+        title: "No cargarón promociones."
     },
 ]
