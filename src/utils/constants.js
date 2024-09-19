@@ -279,4 +279,8 @@ export const TABULAR_ANULAR_PEDIDOS = [
         id: 10,
         title: "No cargarón promociones."
     },
+    {
+        id: 11,
+        title: "Falta documentar (chq.)."
+    },
 ]
