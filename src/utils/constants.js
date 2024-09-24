@@ -236,6 +236,11 @@ export const ROLE = [
         id: 5,
         title: "INFINIX"
     },
+    {
+        id: 31,
+        title: "CLIENTE"
+    },
+
 ]
 
 export const TABULAR_ANULAR_PEDIDOS = [

@@ -1306,7 +1306,7 @@ export default function InvoiceDetails({invoice}) {
                                     <TableCell align="left">Cantidad</TableCell>
 
                                     {
-                                        user.ROLE === 'aprobador' ? (
+                                        user.ROLE === "9" ? (
                                             <TableCell align="left">Disponible</TableCell>
                                         ) : null
                                     }
@@ -1378,7 +1378,7 @@ export default function InvoiceDetails({invoice}) {
                                         <TableCell align="left">{row.DISCOUNTPERCENTSAP}</TableCell>
                                         <TableCell align="left">{row.CANTIDAD}</TableCell>
                                         {
-                                            user.ROLE === 'aprobador' ? (
+                                            user.ROLE === "9" ? (
                                                 <TableCell align="left"
                                                            style={{backgroundColor: Number(row.DISPONIBLE_POR_BODEGA) <= 0 ? 'rgba(255, 0, 0, 0.08)' : 'rgba(0, 171, 85, 0.08)'}}>
 
