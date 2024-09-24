@@ -1049,7 +1049,7 @@ export default function InvoiceDetails({invoice}) {
                             {({loading}) => (
                                 <Tooltip title="Descargar LD">
                                     <IconButton
-                                        onClick={user.ROLE === "bodega" ? () => handleDownloadClick(ID) : undefined}
+                                        onClick={user.ROLE === "8" ? () => handleDownloadClick(ID) : undefined}
                                     >
                                         {loading ? (
                                             <CircularProgress size={24} color="inherit"/>
@@ -1073,7 +1073,7 @@ export default function InvoiceDetails({invoice}) {
                                     {({loading}) => (
                                         <Tooltip title="Descargar TM">
                                             <IconButton
-                                                onClick={user.ROLE === "bodega" ? () => handleDownloadClick(ID) : undefined}
+                                                onClick={user.ROLE === "8" ? () => handleDownloadClick(ID) : undefined}
                                             >
                                                 {loading ? (
                                                     <CircularProgress size={24} color="inherit"/>
@@ -1224,7 +1224,7 @@ export default function InvoiceDetails({invoice}) {
 
                                         }</Typography>
 
-                                        {user.ROLE === "aprobador" &&
+                                        {user.ROLE === "9" &&
 
                                             <Autocomplete
                                                 fullWidth
@@ -1253,7 +1253,7 @@ export default function InvoiceDetails({invoice}) {
                                         <Typography variant="body2">Forma de pago
                                             actual: {nameFormaPago(FORMADEPAGO)}</Typography>
 
-                                        {user.ROLE === "aprobador" &&
+                                        {user.ROLE === "9" &&
                                             <Autocomplete
                                                 fullWidth
                                                 options={PAYMENT_OPTIONS_V2}
@@ -1516,7 +1516,7 @@ export default function InvoiceDetails({invoice}) {
 
                 <Divider sx={{mt: 5}}/>
 
-                {user.ROLE === "aprobador" &&
+                {user.ROLE === "9" &&
                     <Grid container>
                         <Grid item xs={12} md={12} sx={{py: 3, textAlign: 'center'}}>
                             {/* <Button onClick={enviarOrdenSAP}>CREAR ORDEN DE VENTA SAP</Button> */}
@@ -1528,7 +1528,7 @@ export default function InvoiceDetails({invoice}) {
                     </Grid>
                 }
 
-                {user.ROLE === "bodega" &&
+                {user.ROLE === "8" &&
                     <Grid container>
                         <Grid item xs={12} md={12} sx={{py: 6}}>
 
@@ -1588,7 +1588,7 @@ export default function InvoiceDetails({invoice}) {
             </Card>
 
 
-            {/* {user.ROLE === "bodega" && */}
+            {/* {user.ROLE === "8" && */}
             {/*     <Card sx={{pt: 5, px: 5}}> */}
             {/*         <Grid item xs={12} sm={6} sx={{mb: 5}}> */}
             {/*             <Box sx={{textAlign: {sm: 'left'}}}> */}
@@ -1673,7 +1673,7 @@ export default function InvoiceDetails({invoice}) {
             {/* } */}
 
 
-            {user.ROLE === "aprobador" ? (
+            {user.ROLE === "9" ? (
 
                 <MenuPopover
                     open={openPopover}

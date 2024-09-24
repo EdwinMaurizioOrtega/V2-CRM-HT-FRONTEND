@@ -464,7 +464,7 @@ export default function InvoiceTableRow({
         <>
 
             <TableRow hover selected={selected}
-                      style={{backgroundColor: user.ROLE === "bodega" && FECHA_IMPRESION != null ? '#ffdab9' : 'transparent',}}
+                      style={{backgroundColor: user.ROLE === "8" && FECHA_IMPRESION != null ? '#ffdab9' : 'transparent',}}
             >
                 {/* <TableCell padding="checkbox"> */}
                 {/*     <Checkbox checked={selected} onClick={onSelectRow}/> */}
@@ -627,7 +627,7 @@ export default function InvoiceTableRow({
                 </TableCell>
                 {/* { */
                 }
-                {/*     user.ROLE === "aprobador" || user.ROLE === "bodega" ? ( */
+                {/*     user.ROLE === "9" || user.ROLE === "8" ? ( */
                 }
                 <TableCell align="center" sx={{textTransform: 'capitalize'}}>
                     {DOCNUM}
@@ -670,7 +670,7 @@ export default function InvoiceTableRow({
                 <Divider sx={{borderStyle: 'dashed'}}/>
 
 
-                {ESTADO === 0 && user.ROLE === "aprobador" ? (
+                {ESTADO === 0 && user.ROLE === "9" ? (
                     <MenuItem
                         onClick={() => {
                             sendOrderToBagRow();
@@ -684,7 +684,7 @@ export default function InvoiceTableRow({
                 ) : null
                 }
 
-                {ESTADO === 6 && user.ROLE === "aprobador" ? (
+                {ESTADO === 6 && user.ROLE === "9" ? (
                     <MenuItem
                         onClick={() => {
                             handleOpenOBS();
@@ -698,7 +698,7 @@ export default function InvoiceTableRow({
                 ) : null
                 }
 
-                {ESTADO === 8 && user.ROLE === "aprobador" ? (
+                {ESTADO === 8 && user.ROLE === "9" ? (
                     <MenuItem
                         onClick={() => {
                             sendOrderToBagRow();
@@ -712,7 +712,7 @@ export default function InvoiceTableRow({
                 ) : null
                 }
 
-                {ESTADO === 0 && user.ROLE === "aprobador" ? (
+                {ESTADO === 0 && user.ROLE === "9" ? (
                     <MenuItem
                         onClick={() => {
                             sendOrderMoveToOneInWarehouse();
@@ -728,7 +728,7 @@ export default function InvoiceTableRow({
 
                 <Divider sx={{borderStyle: 'dashed'}}/>
 
-                {ESTADO === 6 && user.ROLE === "aprobador" ? (
+                {ESTADO === 6 && user.ROLE === "9" ? (
                     <MenuItem
                         onClick={() => {
                             handleOpenConfirmAnular();

@@ -174,7 +174,7 @@ export default function InvoiceListPage() {
     //   console.log(user.ROLE);
     //
     //   // Perfil vendedor
-    //   if (user.ROLE === "vendedor") {
+    //   if (user.ROLE === "7") {
     //     const idVendedor = user.ID;
     //     // Mostramos todos los estados para el rol del vendedor
     //     //dispatch(getOrdersAllStatusByVendedor(idVendedor));
@@ -195,7 +195,7 @@ export default function InvoiceListPage() {
     //
     //   // Perfil aprobacion
     //
-    //   if (user.ROLE === "aprobador") {
+    //   if (user.ROLE === "9") {
     //     // Enviar el estado 6 para consultar las ordenes pendientes de factuaración.
     //     //dispatch(getOrders(6));
     //
@@ -214,7 +214,7 @@ export default function InvoiceListPage() {
     //
     //   // Perfil bodega
     //
-    //   if (user.ROLE === "bodega") {
+    //   if (user.ROLE === "8") {
     //     console.log(user.WAREHOUSE);
     //     const bodegaSAP = user.WAREHOUSE;
     //
@@ -247,16 +247,16 @@ export default function InvoiceListPage() {
                 let data = [];
 
 
-                if (user.ROLE === "admin") {
+                if (user.ROLE === "10") {
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/admin?empresa=${user.EMPRESA}&fecha_inicio=${fDateCustom(rangeInputPicker.startDate)}&fecha_fin=${fDateCustom(rangeInputPicker.endDate)}&switch_dates=${isChecked}`);
                     data = await response.json();
-                } else if (user.ROLE === "vendedor" || user.ROLE === "infinix") {
+                } else if (user.ROLE === "7" || user.ROLE === "5") {
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/vendedor?ven=${user.ID}&empresa=${user.EMPRESA}`);
                     data = await response.json();
-                } else if (user.ROLE === "aprobador") {
+                } else if (user.ROLE === "9") {
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/credit?empresa=${user.EMPRESA}`);
                     data = await response.json();
-                } else if (user.ROLE === "bodega") {
+                } else if (user.ROLE === "8") {
                     console.log(user.WAREHOUSE);
                     const bodegaSAP = user.WAREHOUSE;
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/bodega?bod=${bodegaSAP}&empresa=${user.EMPRESA}`);
@@ -486,7 +486,7 @@ export default function InvoiceListPage() {
                         //   New Invoice
                         // </Button>
                         <>
-                            {user.ROLE === "admin" && (
+                            {user.ROLE === "10" && (
                                 <>
                                     <FormControlLabel
                                         control={<Switch checked={isChecked} onChange={handleSwitchChange}/>}
@@ -516,7 +516,7 @@ export default function InvoiceListPage() {
                     mb: {xs: 3, md: 5},
                 }}
                 >
-                    {user.ROLE === "admin" &&
+                    {user.ROLE === "10" &&
                         <Stack sx={{typography: 'body2', mt: 3}} alignItems="center">
                             <div>
                                 <strong>Inicio: </strong> {fDate(rangeInputPicker.startDate)}
@@ -806,7 +806,7 @@ function applyFilter({
 
         //console.log("user_user:"+ user)
 
-        if (currentUser.ROLE === "bodega") {
+        if (currentUser.ROLE === "8") {
 
             //CDHT
             if (currentUser.WAREHOUSE === "019") {
