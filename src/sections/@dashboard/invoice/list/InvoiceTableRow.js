@@ -728,7 +728,7 @@ export default function InvoiceTableRow({
 
                 <Divider sx={{borderStyle: 'dashed'}}/>
 
-                {ESTADO === 6 && user.ROLE === "9" ? (
+                {(ESTADO === 6 || ESTADO === 22) && user.ROLE === "9" ? (
                     <MenuItem
                         onClick={() => {
                             handleOpenConfirmAnular();
