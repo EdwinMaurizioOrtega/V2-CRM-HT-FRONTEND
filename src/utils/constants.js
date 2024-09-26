@@ -288,4 +288,8 @@ export const TABULAR_ANULAR_PEDIDOS = [
         id: 11,
         title: "Falta documentar (chq.)."
     },
+    {
+        id: 12,
+        title: "Anulación factura en SAP."
+    },
 ]
