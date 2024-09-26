@@ -204,7 +204,6 @@ export default function InvoiceTableRow({
         if (tabAnular !== null) {
 
             console.log("Anular: "+tabAnular.title);
-
             try {
                 const response = await axios.put('/hanadb/api/orders/order/anular', {
                     params: {
