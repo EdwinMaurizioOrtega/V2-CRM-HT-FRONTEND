@@ -72,7 +72,7 @@ export default function DemoCarouselsPage() {
                     <Card>
                         <CardHeader title="Promociones Exclusivas"
                                     subheader="En todoo el mes de Octubre"
-                                    style={{ textAlign: 'center' }}
+                                    style={{textAlign: 'center'}}
                         />
                         <CardContent>
                             <CarouselThumbnail data={_carouselSsectionTwo}/>
@@ -108,7 +108,7 @@ export default function DemoCarouselsPage() {
                         <Card>
                             <CardHeader title="Nuestros clientes"
                                         subheader="Computron, TIA, Jaher, RM, etc."
-                                        style={{ textAlign: 'center' }}
+                                        style={{textAlign: 'center'}}
                             />
                             <CardContent>
                                 <CarouselBasic3 data={_carouselsCustomers}/>
@@ -175,19 +175,31 @@ const _carouselSsectionTwo = [
     {
         id: 1,
         title: 'SAMSUNG',
-        image: '/assets/images/home/section-two/1.jpg',
+        image: '/assets/images/home/section-two/banner_1.png',
         description: 'Distribuidor autorizado',
 
     },
     {
         id: 2,
         title: 'INFINIX',
-        image: '/assets/images/home/section-two/2.jpg',
+        image: '/assets/images/home/section-two/banner_2.png',
         description: 'Distribuidor autorizado',
 
     },
+    {
+        id: 1,
+        title: 'SAMSUNG',
+        image: '/assets/images/home/section-two/banner_1.png',
+        description: 'Distribuidor autorizado',
 
+    },
+    {
+        id: 2,
+        title: 'INFINIX',
+        image: '/assets/images/home/section-two/banner_2.png',
+        description: 'Distribuidor autorizado',
 
+    },
 ]
 
 
