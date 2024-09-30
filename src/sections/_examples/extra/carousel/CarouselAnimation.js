@@ -118,7 +118,7 @@ function CarouselItem({ item, isActive }) {
 
         <m.div variants={varFade().inRight}>
           <Button variant="contained" sx={{ mt: 3 }}
-                  href={item.url}
+                  href={item.link}
                   target="_blank"
           >
             Ver Productos
