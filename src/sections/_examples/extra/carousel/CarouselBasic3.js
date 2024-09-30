@@ -1,73 +1,82 @@
 import PropTypes from 'prop-types';
-import { useRef } from 'react';
+import {useRef} from 'react';
 // @mui
-import { useTheme } from '@mui/material/styles';
-import { Box } from '@mui/material';
+import {useTheme} from '@mui/material/styles';
+import {Box} from '@mui/material';
 // components
 import Image from '../../../../components/image';
-import Carousel, { CarouselDots, CarouselArrows } from '../../../../components/carousel';
+import Carousel, {CarouselDots, CarouselArrows} from '../../../../components/carousel';
 
 // ----------------------------------------------------------------------
 
 CarouselBasic3.propTypes = {
-  data: PropTypes.array,
+    data: PropTypes.array,
 };
 
-export default function CarouselBasic3({ data }) {
-  const theme = useTheme();
+export default function CarouselBasic3({data}) {
+    const theme = useTheme();
 
-  const carouselRef = useRef(null);
+    const carouselRef = useRef(null);
 
-  const carouselSettings = {
-    dots: true,
-    arrows: false,
-    autoplay: true,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    rtl: Boolean(theme.direction === 'rtl'),
-    ...CarouselDots({
-      rounded: true,
-      sx: { mt: 3 },
-    }),
-  };
+    const carouselSettings = {
+        dots: true,
+        arrows: false,
+        autoplay: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        rtl: Boolean(theme.direction === 'rtl'),
+        ...CarouselDots({
+            rounded: true,
+            sx: {mt: 3},
+        }),
+    };
 
-  const handlePrev = () => {
-    carouselRef.current?.slickPrev();
-  };
+    const handlePrev = () => {
+        carouselRef.current?.slickPrev();
+    };
 
-  const handleNext = () => {
-    carouselRef.current?.slickNext();
-  };
+    const handleNext = () => {
+        carouselRef.current?.slickNext();
+    };
 
-  return (
-    <Box
-      sx={{
-        position: 'relative',
-        '& .slick-list': {
-          borderRadius: 2,
-          boxShadow: theme.customShadows.z16,
-        },
-      }}
-    >
-      <CarouselArrows filled shape="rounded" onNext={handleNext} onPrevious={handlePrev}>
-        <Carousel ref={carouselRef} {...carouselSettings}>
-          {data.map((item) => (
-            <CarouselItem key={item.id} item={item} />
-          ))}
-        </Carousel>
-      </CarouselArrows>
-    </Box>
-  );
+    return (
+        <Box
+            sx={{
+                position: 'relative',
+                // height: '420px', // Altura fija
+                '& .slick-list': {
+                    borderRadius: 2,
+                    boxShadow: theme.customShadows.z16,
+                },
+            }}
+        >
+            <CarouselArrows filled shape="rounded" onNext={handleNext} onPrevious={handlePrev}>
+                <Carousel ref={carouselRef} {...carouselSettings}>
+                    {data.map((item) => (
+
+                        <CarouselItem key={item.id} item={item}>
+                        </CarouselItem>
+
+                    ))}
+                </Carousel>
+            </CarouselArrows>
+        </Box>
+    );
 }
 
 // ----------------------------------------------------------------------
 
 CarouselItem.propTypes = {
-  item: PropTypes.object,
+    item: PropTypes.object,
 };
 
-function CarouselItem({ item }) {
-  const { image, title } = item;
+function CarouselItem({item}) {
+    const {image, title, link} = item;
 
-  return <Image alt={title} src={image} ratio="1/1" />;
+    return (
+        <a href={link} target="_blank">
+        <Image alt={title} src={image} ratio="21/9"/>
+    </a>
+    );
+
 }

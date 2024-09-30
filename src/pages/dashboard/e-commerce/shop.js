@@ -5,7 +5,7 @@ import {useForm} from 'react-hook-form';
 // next
 import Head from 'next/head';
 // @mui
-import {Container, Typography, Stack} from '@mui/material';
+import {Container, Typography, Stack, TextField} from '@mui/material';
 // redux
 import {useDispatch, useSelector} from '../../../redux/store';
 import {getProducts} from '../../../redux/slices/product';
@@ -27,6 +27,7 @@ import {
 } from '../../../sections/@dashboard/e-commerce/shop';
 import CartWidget from '../../../sections/@dashboard/e-commerce/CartWidget';
 import {HOST_API_KEY} from "../../../config-global";
+import {useAuthContext} from "../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -35,6 +36,8 @@ EcommerceShopPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout
 // ----------------------------------------------------------------------
 
 export default function EcommerceShopPage() {
+
+    const {user} = useAuthContext();
 
     const {themeStretch} = useSettingsContext();
 
@@ -83,31 +86,16 @@ export default function EcommerceShopPage() {
     // }, [dispatch]);
     //
 
-
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const cache = await caches.open('cache-crm');
-                const response = await cache.match(`${HOST_API_KEY}/hanadb/api/products/`);
-
-                if (response) {
-                    // Si hay una respuesta en la caché, se obtiene su contenido
-                    const cachedData = await response.json();
-                    setProducts(cachedData.products);
-                    console.log(cachedData);
-                }
 
                 // Independientemente de si hay una respuesta en la caché o no, se realiza la solicitud de red
-                const networkResponse = await fetch(`${HOST_API_KEY}/hanadb/api/products/`);
+                const networkResponse = await fetch(`${HOST_API_KEY}/hanadb/api/products/?empresa=${user.EMPRESA}`);
                 const data = await networkResponse.json();
-
-                // Se almacena la respuesta de red en la caché
-                await cache.put(`${HOST_API_KEY}/hanadb/api/products/`, new Response(JSON.stringify(data)));
-
-                // Si había una respuesta en la caché, los productos ya se establecieron en el estado
-                // Si no había respuesta en la caché, ahora se establecen los productos con los datos de la respuesta de red
                 setProducts(data.products);
-                console.log(data);
+                console.log("products: "+data);
+
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
             }
@@ -128,6 +116,14 @@ export default function EcommerceShopPage() {
     const handleCloseFilter = () => {
         setOpenFilter(false);
     };
+
+    const [searchTerm, setSearchTerm] = useState('');
+
+    // Filtrar los productos según el término de búsqueda
+    const filteredProducts = dataFiltered.filter(product =>
+        product.NOMBRE.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
 
     return (
         <>
@@ -156,7 +152,7 @@ export default function EcommerceShopPage() {
                         justifyContent="space-between"
                         sx={{mb: 2}}
                     >
-                        <ShopProductSearch/>
+                        {/* <ShopProductSearch/> */}
 
                         <Stack direction="row" spacing={1} flexShrink={0} sx={{my: 1}}>
                             <ShopFilterDrawer
@@ -169,6 +165,15 @@ export default function EcommerceShopPage() {
 
                             {/* <ShopProductSort /> */}
                         </Stack>
+
+
+                        <TextField
+                            label="Buscar productos..."
+                            variant="outlined"
+                            fullWidth
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
                     </Stack>
 
                     <Stack sx={{mb: 3}}>
@@ -184,7 +189,7 @@ export default function EcommerceShopPage() {
                         )}
                     </Stack>
 
-                    <ShopProductList products={dataFiltered} loading={!products.length && isDefault}/>
+                    <ShopProductList products={filteredProducts} loading={!products.length && isDefault}/>
 
                     <CartWidget totalItems={checkout.totalItems}/>
                 </Container>

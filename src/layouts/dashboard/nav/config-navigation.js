@@ -175,6 +175,19 @@ const navConfig = [
         ],
     },
 
+
+    // 6 - CLIENTES
+    // ----------------------------------------------------------------------
+    {
+        subheader: 'CLIENTES',
+        items: [
+            {title: 'tienda', path: PATH_DASHBOARD.eCommerce.shop, icon: ICONS.analytics},
+            {title: 'ordenes', path: PATH_DASHBOARD.invoice.list, icon: ICONS.analytics},
+            {title: 'dashboard', path: PATH_DASHBOARD.eCommerce.tomebamba_catalogo, icon: ICONS.analytics},
+        ],
+    },
+
+
     // DEMO MENU STATES
     {
         subheader: '-_-',

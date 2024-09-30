@@ -24,15 +24,6 @@ import {
 
 // ----------------------------------------------------------------------
 
-const _carouselsExample = [...Array(5)].map((_, index) => ({
-    id: _mock.id(index),
-    title: _mock.text.title(index),
-    image: _mock.image.cover(index),
-    description: _mock.text.description(index),
-}));
-
-// ----------------------------------------------------------------------
-
 DemoCarouselsPage.getLayout = (page) => <MainLayout>{page}</MainLayout>;
 
 // ----------------------------------------------------------------------
@@ -70,22 +61,28 @@ export default function DemoCarouselsPage() {
                 <Stack spacing={3}>
                     <Card>
                         <CardHeader
-                            // title="Carousel Animation"
+                            title="Distribuidor Autorizado"
+                            subheader="Samsung, Infinix, Xiaomi y BLU"
                         />
                         <CardContent>
-                            <CarouselAnimation data={_carouselsExample}/>
+                            <CarouselAnimation data={_carouselSsectionOne}/>
                         </CardContent>
                     </Card>
 
                     <Card>
-                        <CardHeader title="Promociones Exclusivas"/>
+                        <CardHeader title="Promociones Exclusivas"
+                                    subheader="En todoo el mes de Octubre"
+                                    style={{ textAlign: 'center' }}
+                        />
                         <CardContent>
-                            <CarouselThumbnail data={_carouselsExample}/>
+                            <CarouselThumbnail data={_carouselSsectionTwo}/>
                         </CardContent>
                     </Card>
 
                     <Card>
-                        <CardHeader title="Lo más vendido" subheader="Customs shape & icon button"/>
+                        <CardHeader title="Lo más vendido"
+                                    subheader="Próximamente mas stock"
+                        />
                         <CardContent>
                             <CarouselCenterMode data={_carouselsExample}/>
                         </CardContent>
@@ -93,7 +90,7 @@ export default function DemoCarouselsPage() {
                 </Stack>
 
                 <Stack spacing={3}>
-                    <Masonry columns={{xs: 1, md: 2}} spacing={3}>
+                    <Masonry columns={{xs: 1}} spacing={3}>
                         {/* <Card> */}
                         {/*     <CardHeader title="Carousel Basic 1"/> */}
                         {/*     <CardContent> */}
@@ -101,17 +98,20 @@ export default function DemoCarouselsPage() {
                         {/*     </CardContent> */}
                         {/* </Card> */}
 
-                        <Card>
-                            <CardHeader title="Categorias"/>
-                            <CardContent>
-                                <CarouselBasic2 data={_carouselsExample}/>
-                            </CardContent>
-                        </Card>
+                        {/* <Card> */}
+                        {/*     <CardHeader title="Categorias"/> */}
+                        {/*     <CardContent> */}
+                        {/*         <CarouselBasic2 data={_carouselsExample}/> */}
+                        {/*     </CardContent> */}
+                        {/* </Card> */}
 
                         <Card>
-                            <CardHeader title="Marcas"/>
+                            <CardHeader title="Nuestros clientes"
+                                        subheader="Computron, TIA, Jaher, RM, etc."
+                                        style={{ textAlign: 'center' }}
+                            />
                             <CardContent>
-                                <CarouselBasic3 data={_carouselsExample}/>
+                                <CarouselBasic3 data={_carouselsCustomers}/>
                             </CardContent>
                         </Card>
 
@@ -128,3 +128,96 @@ export default function DemoCarouselsPage() {
         </>
     );
 }
+
+
+// ----------------------------------------------------------------------
+
+const _carouselsExample = [...Array(5)].map((_, index) => ({
+    id: _mock.id(index),
+    title: _mock.text.title(index),
+    image: _mock.image.cover(index),
+    description: _mock.text.description(index),
+}));
+
+const _carouselSsectionOne = [
+    {
+        id: 1,
+        title: 'SAMSUNG',
+        image: '/assets/images/home/section-one/banner1.jpg',
+        description: 'Distribuidor autorizado',
+        link: 'https://mecompras.ec/16-samsung',
+    },
+    {
+        id: 2,
+        title: 'INFINIX',
+        image: '/assets/images/home/section-one/banner2.jpg',
+        description: 'Distribuidor autorizado',
+        link: 'https://mecompras.ec/17-infinix',
+    },
+    {
+        id: 3,
+        title: 'XIAOMI',
+        image: '/assets/images/home/section-one/banner3.jpg',
+        description: 'Distribuidor autorizado',
+        link: 'https://mecompras.ec/',
+    },
+    {
+        id: 4,
+        title: 'BLU',
+        image: '/assets/images/home/section-one/banner4.jpg',
+        description: 'Distribuidor autorizado',
+        link: 'https://mecompras.ec/',
+    },
+
+]
+
+const _carouselSsectionTwo = [
+    {
+        id: 1,
+        title: 'SAMSUNG',
+        image: '/assets/images/home/section-two/1.jpg',
+        description: 'Distribuidor autorizado',
+
+    },
+    {
+        id: 2,
+        title: 'INFINIX',
+        image: '/assets/images/home/section-two/2.jpg',
+        description: 'Distribuidor autorizado',
+
+    },
+
+
+]
+
+
+const _carouselsCustomers = [
+    {
+        id: 1,
+        title: 'a',
+        image: '/assets/images/home/customers/computron.jpg',
+        description: 'a',
+        url: 'https://www.computron.com.ec/',
+    },
+    {
+        id: 2,
+        title: 'b',
+        image: '/assets/images/home/customers/tia.jpg',
+        description: 'b',
+        url: 'https://mecompras.ec/',
+    },
+    {
+        id: 3,
+        title: 'c',
+        image: '/assets/images/home/customers/jaher.jpg',
+        description: 'c',
+        url: 'https://mecompras.ec/',
+    },
+    {
+        id: 4,
+        title: 'd',
+        image: '/assets/images/home/customers/rm.jpg',
+        description: 'd',
+        url: 'https://mecompras.ec/',
+    },
+]

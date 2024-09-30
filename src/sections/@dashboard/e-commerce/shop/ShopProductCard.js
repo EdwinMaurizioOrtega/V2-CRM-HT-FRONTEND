@@ -122,7 +122,6 @@ export default function ShopProductCard({product}) {
 
                 <Label
                     variant="filled"
-
                     sx={{
                         top: 16,
                         right: 16,
@@ -131,39 +130,34 @@ export default function ShopProductCard({product}) {
                         textTransform: 'uppercase',
                     }}
                 >
-                    SALE
+                    OFERTA
                 </Label>
 
-
-                {/* <Fab */}
-                {/*     color="warning" */}
-                {/*     size="medium" */}
-                {/*     className="add-cart-btn" */}
-                {/*     onClick={handleAddCart} */}
-                {/*     sx={{ */}
-                {/*         right: 16, */}
-                {/*         bottom: 16, */}
-                {/*         zIndex: 9, */}
-                {/*         opacity: 0, */}
-                {/*         position: 'absolute', */}
-                {/*         transition: (theme) => */}
-                {/*             theme.transitions.create('all', { */}
-                {/*                 easing: theme.transitions.easing.easeInOut, */}
-                {/*                 duration: theme.transitions.duration.shorter, */}
-                {/*             }), */}
-                {/*     }} */}
-                {/* > */}
-                {/*     <Iconify icon="ic:round-add-shopping-cart"/> */}
-                {/* </Fab> */}
-
-                {/* <Image alt={NOMBRE} src={jsonArrayImages?.map((img) => img.URL)} ratio="1/1" sx={{borderRadius: 1.5}}/> */}
+                <Fab
+                    color="warning"
+                    size="medium"
+                    className="add-cart-btn"
+                    onClick={handleAddCart}
+                    sx={{
+                        right: 16,
+                        bottom: 16,
+                        zIndex: 9,
+                        opacity: 0,
+                        position: 'absolute',
+                        transition: (theme) =>
+                            theme.transitions.create('all', {
+                                easing: theme.transitions.easing.easeInOut,
+                                duration: theme.transitions.duration.shorter,
+                            }),
+                    }}
+                >
+                    <Iconify icon="ic:round-add-shopping-cart"/>
+                </Fab>
 
                 {jsonArrayImages && jsonArrayImages.length > 0 ? (
-                    // Mostrar las imágenes si existen
-                    jsonArrayImages.map((img, index) => (
-                        <Image key={index} alt={NOMBRE} src={img.URL} ratio="1/1" sx={{borderRadius: 1.5}} />
-                    ))
-                ) : (
+                    <Image alt={NOMBRE} src={jsonArrayImages?.[0]?.URL} ratio="1/1" sx={{borderRadius: 1.5}}/>
+
+                    ) : (
                     // Mostrar una imagen alternativa en caso contrario
                     <img src="/assets/images/sin_imagen.jpg" alt="Imagen alternativa" />
                 )}
@@ -177,9 +171,9 @@ export default function ShopProductCard({product}) {
                 <Stack direction="row" alignItems="center" justifyContent="space-between">
                     {/* <ColorPreview colors={colors} /> */}
 
-                    <Stack direction="row" spacing={0.5} sx={{typography: 'subtitle1'}}>
-                        Stock:&nbsp;<Box component="span">{fNumber(TOTAL)}</Box>
-                    </Stack>
+                    {/* <Stack direction="row" spacing={0.5} sx={{typography: 'subtitle1'}}> */}
+                    {/*     Stock:&nbsp;<Box component="span">{fNumber(TOTAL)}</Box> */}
+                    {/* </Stack> */}
                     <Stack direction="row" spacing={0.5} sx={{typography: 'subtitle1'}}>
                         SAP:&nbsp;<Box component="span">{CODIGO}</Box>
                     </Stack>

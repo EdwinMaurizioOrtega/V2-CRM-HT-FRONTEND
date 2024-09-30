@@ -75,7 +75,7 @@ function CarouselItem({ item, isActive }) {
 
   return (
     <Paper sx={{ position: 'relative' }}>
-      <Image alt={title} src={image} ratio="16/9" />
+      <Image alt={title} src={image} ratio="21/9" />
 
       <Box
         sx={{
@@ -117,8 +117,11 @@ function CarouselItem({ item, isActive }) {
         </m.div>
 
         <m.div variants={varFade().inRight}>
-          <Button variant="contained" sx={{ mt: 3 }}>
-            View More
+          <Button variant="contained" sx={{ mt: 3 }}
+                  href={item.url}
+                  target="_blank"
+          >
+            Ver Productos
           </Button>
         </m.div>
       </CardContent>
