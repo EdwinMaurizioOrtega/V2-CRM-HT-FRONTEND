@@ -59,34 +59,32 @@ export default function DemoCarouselsPage() {
 
             <Container sx={{my: 10}}>
                 <Stack spacing={3}>
-                    <Card>
+
                         <CardHeader
                             title="Distribuidor Autorizado"
                             subheader="Samsung, Infinix, Xiaomi y BLU"
                         />
-                        <CardContent>
-                            <CarouselAnimation data={_carouselSsectionOne}/>
-                        </CardContent>
-                    </Card>
 
-                    <Card>
+                            <CarouselAnimation data={_carouselSsectionOne}/>
+
+
+
+
                         <CardHeader title="Promociones Exclusivas"
                                     subheader="En todoo el mes de Octubre"
                                     style={{textAlign: 'center'}}
                         />
-                        <CardContent>
-                            <CarouselThumbnail data={_carouselSsectionTwo}/>
-                        </CardContent>
-                    </Card>
 
-                    <Card>
+                            <CarouselThumbnail data={_carouselSsectionTwo}/>
+
+
                         <CardHeader title="Lo más vendido"
                                     subheader="Próximamente mas stock"
                         />
-                        <CardContent>
+
                             <CarouselCenterMode data={_carouselsExample}/>
-                        </CardContent>
-                    </Card>
+
+
                 </Stack>
 
                 <Stack spacing={3}>
@@ -105,15 +103,15 @@ export default function DemoCarouselsPage() {
                         {/*     </CardContent> */}
                         {/* </Card> */}
 
-                        <Card>
+
                             <CardHeader title="Nuestros clientes"
                                         subheader="Computron, TIA, Jaher, RM, etc."
                                         style={{textAlign: 'center'}}
                             />
-                            <CardContent>
+
                                 <CarouselBasic3 data={_carouselsCustomers}/>
-                            </CardContent>
-                        </Card>
+
+
 
                         {/* <Card> */}
                         {/*     <CardHeader title="Carousel Basic 4"/> */}
