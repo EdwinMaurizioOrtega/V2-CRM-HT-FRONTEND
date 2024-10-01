@@ -133,26 +133,26 @@ export default function ShopProductCard({product}) {
                     OFERTA
                 </Label>
 
-                <Fab
-                    color="warning"
-                    size="medium"
-                    className="add-cart-btn"
-                    onClick={handleAddCart}
-                    sx={{
-                        right: 16,
-                        bottom: 16,
-                        zIndex: 9,
-                        opacity: 0,
-                        position: 'absolute',
-                        transition: (theme) =>
-                            theme.transitions.create('all', {
-                                easing: theme.transitions.easing.easeInOut,
-                                duration: theme.transitions.duration.shorter,
-                            }),
-                    }}
-                >
-                    <Iconify icon="ic:round-add-shopping-cart"/>
-                </Fab>
+                {/* <Fab */}
+                {/*     color="warning" */}
+                {/*     size="medium" */}
+                {/*     className="add-cart-btn" */}
+                {/*     onClick={handleAddCart} */}
+                {/*     sx={{ */}
+                {/*         right: 16, */}
+                {/*         bottom: 16, */}
+                {/*         zIndex: 9, */}
+                {/*         opacity: 0, */}
+                {/*         position: 'absolute', */}
+                {/*         transition: (theme) => */}
+                {/*             theme.transitions.create('all', { */}
+                {/*                 easing: theme.transitions.easing.easeInOut, */}
+                {/*                 duration: theme.transitions.duration.shorter, */}
+                {/*             }), */}
+                {/*     }} */}
+                {/* > */}
+                {/*     <Iconify icon="ic:round-add-shopping-cart"/> */}
+                {/* </Fab> */}
 
                 {jsonArrayImages && jsonArrayImages.length > 0 ? (
                     <Image alt={NOMBRE} src={jsonArrayImages?.[0]?.URL} ratio="1/1" sx={{borderRadius: 1.5}}/>
@@ -171,9 +171,9 @@ export default function ShopProductCard({product}) {
                 <Stack direction="row" alignItems="center" justifyContent="space-between">
                     {/* <ColorPreview colors={colors} /> */}
 
-                    {/* <Stack direction="row" spacing={0.5} sx={{typography: 'subtitle1'}}> */}
-                    {/*     Stock:&nbsp;<Box component="span">{fNumber(TOTAL)}</Box> */}
-                    {/* </Stack> */}
+                    <Stack direction="row" spacing={0.5} sx={{typography: 'subtitle1'}}>
+                        Stock:&nbsp;<Box component="span">{fNumber(TOTAL)}</Box>
+                    </Stack>
                     <Stack direction="row" spacing={0.5} sx={{typography: 'subtitle1'}}>
                         SAP:&nbsp;<Box component="span">{CODIGO}</Box>
                     </Stack>

@@ -91,7 +91,7 @@ export default function EcommerceShopPage() {
             try {
 
                 // Independientemente de si hay una respuesta en la caché o no, se realiza la solicitud de red
-                const networkResponse = await fetch(`${HOST_API_KEY}/hanadb/api/products/?empresa=${user.EMPRESA}`);
+                const networkResponse = await fetch(`${HOST_API_KEY}/hanadb/api/products/customers`);
                 const data = await networkResponse.json();
                 setProducts(data.products);
                 console.log("products: "+data);

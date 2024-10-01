@@ -130,12 +130,51 @@ export default function DemoCarouselsPage() {
 
 // ----------------------------------------------------------------------
 
-const _carouselsExample = [...Array(5)].map((_, index) => ({
-    id: _mock.id(index),
-    title: _mock.text.title(index),
-    image: _mock.image.cover(index),
-    description: _mock.text.description(index),
-}));
+// const _carouselsExample = [...Array(5)].map((_, index) => ({
+//     id: _mock.id(index),
+//     title: _mock.text.title(index),
+//     image: _mock.image.cover(index),
+//     description: _mock.text.description(index),
+// }));
+
+const _carouselsExample = [
+    {
+        id: 1,
+        title: 'SAMSUNG',
+        image: 'https://imagen.hipertronics.us/ht/cloud/uploads/2024/10/lfntrWP7nrU2dVopQfrc.png',
+        description: 'Distribuidor autorizado',
+        link: 'https://mecompras.ec/16-samsung',
+    },
+    {
+        id: 2,
+        title: 'INFINIX',
+        image: 'https://imagen.hipertronics.us/ht/cloud/uploads/2024/10/Wydq4p9k0rZMAqcdejaA.png',
+        description: 'Distribuidor autorizado',
+        link: 'https://mecompras.ec/17-infinix',
+    },
+    {
+        id: 3,
+        title: 'SAMSUNG',
+        image: 'https://imagen.hipertronics.us/ht/cloud/uploads/2024/10/RK4z8SThlge9c2Lme8L1.png',
+        description: 'Distribuidor autorizado',
+        link: 'https://mecompras.ec/16-samsung',
+    },
+    {
+        id: 4,
+        title: 'INFINIX',
+        image: 'https://imagen.hipertronics.us/ht/cloud/uploads/2024/09/FebPSq4U46xMixDU1HiA.png',
+        description: 'Distribuidor autorizado',
+        link: 'https://mecompras.ec/17-infinix',
+    },
+    {
+        id: 5,
+        title: 'INFINIX',
+        image: 'https://imagen.hipertronics.us/ht/cloud/uploads/2024/09/I4XA6M6w305dRDcRtBJ3.png',
+        description: 'Distribuidor autorizado',
+        link: 'https://mecompras.ec/17-infinix',
+    }
+
+]
 
 const _carouselSsectionOne = [
     {
