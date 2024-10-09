@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import sumBy from 'lodash/sumBy';
 // next
 import Head from 'next/head';
-import NextLink from 'next/link';
 import {useRouter} from 'next/router';
 // @mui
 import {alpha, useTheme} from '@mui/material/styles';
@@ -18,21 +17,18 @@ import {
     TableBody,
     Container,
     IconButton,
-    TableContainer, CircularProgress, Box, TableCell, FormGroup, FormControlLabel, Switch,
+    TableContainer, FormControlLabel, Switch,
 } from '@mui/material';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
 // utils
-import {fDate, fDateCustom, fTimestamp} from '../../../utils/formatTime';
-// _mock_
-import {_invoices} from '../../../_mock/arrays';
+import {fDate, fDateCustom} from '../../../utils/formatTime';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
 // components
 import Label from '../../../components/label';
 import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
-import ConfirmDialog from '../../../components/confirm-dialog';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import {useSettingsContext} from '../../../components/settings';
 import {
@@ -42,28 +38,15 @@ import {
     TableNoData,
     TableEmptyRows,
     TableHeadCustom,
-    TableSelectedAction,
     TablePaginationCustom,
 } from '../../../components/table';
 // sections
 import InvoiceAnalytic from '../../../sections/@dashboard/invoice/InvoiceAnalytic';
 import {InvoiceTableRow, InvoiceTableToolbar} from '../../../sections/@dashboard/invoice/list';
-import user, {getUsers} from "../../../redux/slices/user";
-import {useDispatch, useSelector} from "../../../redux/store";
-import {
-    getOrders,
-    getOrdersAllStatus,
-    getOrdersAllStatusByVendedor,
-    getOrdersByBodega
-} from "../../../redux/slices/order";
+import {useDispatch} from "../../../redux/store";
 import {useAuthContext} from "../../../auth/useAuthContext";
-import axios from "../../../utils/axios";
 import {HOST_API_KEY} from "../../../config-global";
-
 import CustomDateRangePicker, {useDateRangePicker} from 'src/components/custom-date-range-picker';
-import ComponentBlock from "../../../sections/_examples/component-block";
-import {Block} from "../../../sections/_examples/Block";
-
 
 // ----------------------------------------------------------------------
 
@@ -324,7 +307,7 @@ export default function InvoiceListPage() {
     const getTotalPriceByStatus = (status) =>
         sumBy(
             tableData.filter((item) => item.ESTADO === status),
-            (item) => Number(item.SUBTOTAL)  // Convertir SUBTOTAL a número
+            (item) => parseFloat(item.SUBTOTAL)  // Convertir SUBTOTAL a número
 
         );
 
