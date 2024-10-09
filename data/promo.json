@@ -1,4 +1,4 @@
- [
+[
   {
     "CODIGO": "12.60.198",
     "COLOR": "green"
@@ -11,17 +11,14 @@
     "CODIGO": "12.60.194",
     "COLOR": "green"
   },
-   {
-     "CODIGO": "12.60.157",
-     "COLOR": "green"
-   },
-   {
-     "CODIGO": "12.60.184",
-     "COLOR": "green"
-   },
-
-
-
+  {
+    "CODIGO": "12.60.157",
+    "COLOR": "green"
+  },
+  {
+    "CODIGO": "12.60.184",
+    "COLOR": "green"
+  },
   {
     "CODIGO": "12.02.489",
     "COLOR": "orange"
@@ -54,16 +51,20 @@
     "CODIGO": "12.02.22",
     "COLOR": "orange"
   },
-   {
-     "CODIGO": "12.02.507",
-     "COLOR": "orange"
-   },
-   {
-     "CODIGO": "12.02.508",
-     "COLOR": "orange"
-   },
-   {
-     "CODIGO": "14.01.05",
-     "COLOR": "orange"
-   }
+  {
+    "CODIGO": "12.02.507",
+    "COLOR": "orange"
+  },
+  {
+    "CODIGO": "12.02.508",
+    "COLOR": "orange"
+  },
+  {
+    "CODIGO": "14.01.05",
+    "COLOR": "orange"
+  },
+  {
+    "CODIGO": "12.02.494",
+    "COLOR": "orange"
+  }
 ]
