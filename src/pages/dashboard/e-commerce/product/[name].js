@@ -64,7 +64,7 @@ EcommerceProductDetailsPage.getLayout = (page) => <DashboardLayout>{page}</Dashb
 
 // ----------------------------------------------------------------------
 
-export default  function EcommerceProductDetailsPage() {
+export default function EcommerceProductDetailsPage() {
     const {themeStretch} = useSettingsContext();
 
     const {user} = useAuthContext();
@@ -76,7 +76,7 @@ export default  function EcommerceProductDetailsPage() {
     const dispatch = useDispatch();
 
     //const {pricelistproduct, isLoading, checkout} = useSelector((state) => state.product);
-    const { checkout } = useSelector((state) => state.product);
+    const {checkout} = useSelector((state) => state.product);
     const [pricelistproduct, setPricelistproduct] = useState([]);
     const [pricelisttomebambaproduct, setPricelisttomebambaproduct] = useState([]);
 
@@ -146,27 +146,15 @@ export default  function EcommerceProductDetailsPage() {
             if (name) {
 
                 try {
-                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/products/price_list_product?name=${name}&idUser=${user.ID}&empresa=${user.EMPRESA}`);
-                    if (response.status === 200) {
-                        const data = await response.json();
-                        setPricelistproduct(data.data);
-                        console.log("pricelistproduct: "+JSON.stringify(pricelistproduct));
 
-                        // Eliminar el estado de carga aquí, ya que la respuesta es exitosa (código 200).
-                        setLoading(false);
-                    } else {
-                        // Mantener el estado de carga aquí, ya que la respuesta no fue exitosa (código diferente de 200).
-                        setLoading(true);
-                    }
+                    //Clientes mayoristas
+                    if (user.ROLE === "31") {
 
-                    if (user.COMPANY === "TOMEBAMBA"){
-                        console.log("La empresa es Tomebamba...")
-
-                        const response = await fetch(`${HOST_API_KEY}/hanadb/api/products/price_list_tomebamba_product?code_product=${name}`);
+                        const response = await fetch(`${HOST_API_KEY}/hanadb/api/products/customer_price_list_product?card_code=${user.CARD_CODE}&code_product=${name}`);
                         if (response.status === 200) {
                             const data = await response.json();
-                            setPricelisttomebambaproduct(data.data);
-                            console.log("PriceListTomebambaProduct: "+JSON.stringify(data.data));
+                            setPricelistproduct(data.data);
+                            console.log("pricelistproduct: " + JSON.stringify(pricelistproduct));
 
                             // Eliminar el estado de carga aquí, ya que la respuesta es exitosa (código 200).
                             setLoading(false);
@@ -174,8 +162,36 @@ export default  function EcommerceProductDetailsPage() {
                             // Mantener el estado de carga aquí, ya que la respuesta no fue exitosa (código diferente de 200).
                             setLoading(true);
                         }
+                    } else {
+                        const response = await fetch(`${HOST_API_KEY}/hanadb/api/products/price_list_product?name=${name}&idUser=${user.ID}&empresa=${user.EMPRESA}`);
+                        if (response.status === 200) {
+                            const data = await response.json();
+                            setPricelistproduct(data.data);
+                            console.log("pricelistproduct: " + JSON.stringify(pricelistproduct));
 
+                            // Eliminar el estado de carga aquí, ya que la respuesta es exitosa (código 200).
+                            setLoading(false);
+                        } else {
+                            // Mantener el estado de carga aquí, ya que la respuesta no fue exitosa (código diferente de 200).
+                            setLoading(true);
+                        }
+                    }
 
+                    if (user.COMPANY === "TOMEBAMBA") {
+                        console.log("La empresa es Tomebamba...")
+
+                        const response = await fetch(`${HOST_API_KEY}/hanadb/api/products/price_list_tomebamba_product?code_product=${name}`);
+                        if (response.status === 200) {
+                            const data = await response.json();
+                            setPricelisttomebambaproduct(data.data);
+                            console.log("PriceListTomebambaProduct: " + JSON.stringify(data.data));
+
+                            // Eliminar el estado de carga aquí, ya que la respuesta es exitosa (código 200).
+                            setLoading(false);
+                        } else {
+                            // Mantener el estado de carga aquí, ya que la respuesta no fue exitosa (código diferente de 200).
+                            setLoading(true);
+                        }
 
 
                     }
@@ -206,7 +222,7 @@ export default  function EcommerceProductDetailsPage() {
     const [resultado, setResultado] = useState(null);
 
     const functionStock = (dato) => {
-        console.log("dato: "+ dato);
+        console.log("dato: " + dato);
         setResultado(dato);
     }
 
@@ -217,18 +233,18 @@ export default  function EcommerceProductDetailsPage() {
             component: product ?
 
                 <>
-                <Container sx={{ my: 10 }}>
-                    <Stack spacing={3}>
+                    <Container sx={{my: 10}}>
+                        <Stack spacing={3}>
 
-                        <Card>
-                            <CardHeader title="Stock" />
-                            <BasicTable code={name}
-                                        validateStock={functionStock}
-                            />
-                        </Card>
+                            <Card>
+                                <CardHeader title="Stock"/>
+                                <BasicTable code={name}
+                                            validateStock={functionStock}
+                                />
+                            </Card>
 
-                    </Stack>
-                </Container>
+                        </Stack>
+                    </Container>
 
                 </> : null
 
@@ -327,37 +343,42 @@ export default  function EcommerceProductDetailsPage() {
                         {/*{*/}
                         {/*    user.COMPANY !== 'TOMEBAMBA' ? (*/}
 
-                        <Card>
-                            <Tabs
-                                value={currentTab}
-                                onChange={(event, newValue) => setCurrentTab(newValue)}
-                                sx={{px: 3, bgcolor: 'background.neutral'}}
-                            >
-                                {TABS.map((tab) => (
-                                    <Tab key={tab.value} value={tab.value} label={tab.label}/>
-                                ))}
-                            </Tabs>
+                        {user.ROLE !== '31' && (
 
-                            <Divider/>
+                                <Card>
+                                    <Tabs
+                                        value={currentTab}
+                                        onChange={(event, newValue) => setCurrentTab(newValue)}
+                                        sx={{px: 3, bgcolor: 'background.neutral'}}
+                                    >
+                                        {TABS.map((tab) => (
+                                            <Tab key={tab.value} value={tab.value} label={tab.label}/>
+                                        ))}
+                                    </Tabs>
 
-                            {TABS.map(
-                                (tab) =>
-                                    tab.value === currentTab && (
-                                        <Box
-                                            key={tab.value}
-                                            sx={{
-                                                ...(currentTab === 'description' && {
-                                                    p: 3,
-                                                }),
-                                            }}
-                                        >
-                                            {tab.component}
-                                        </Box>
-                                    )
-                            )}
-                        </Card>
-                        {/*        ) : null*/}
-                        {/*}*/}
+                                    <Divider/>
+
+                                    {TABS.map(
+                                        (tab) =>
+                                            tab.value === currentTab && (
+                                                <Box
+                                                    key={tab.value}
+                                                    sx={{
+                                                        ...(currentTab === 'description' && {
+                                                            p: 3,
+                                                        }),
+                                                    }}
+                                                >
+                                                    {tab.component}
+                                                </Box>
+                                            )
+                                    )}
+                                </Card>
+
+
+                        )}
+
+
                     </>
                 )}
 

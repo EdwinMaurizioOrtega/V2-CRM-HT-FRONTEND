@@ -288,7 +288,8 @@ export default function InvoiceDetails({invoice}) {
             const response = await axios.put('/hanadb/api/orders/order/detail/priceunit', {
                 ID_DETALLE_ORDEN: selected.ID,
                 NEW_PRICE_UNIT: valueNew,
-                empresa: user.EMPRESA
+                empresa: user.EMPRESA,
+                id_order: ID
             });
 
             console.log("Orden actualizada correctamente.");
@@ -344,7 +345,8 @@ export default function InvoiceDetails({invoice}) {
             const response = await axios.put('/hanadb/api/orders/order/detail/quantity', {
                 ID_DETALLE_ORDEN: selected.ID,
                 NEW_QUANTITY: valueNew,
-                empresa: user.EMPRESA
+                empresa: user.EMPRESA,
+                id_order: ID
             });
 
             console.log("Orden actualizada correctamente.");
@@ -372,7 +374,8 @@ export default function InvoiceDetails({invoice}) {
             const response = await axios.put('/hanadb/api/orders/order/detail/discount', {
                 ID_DETALLE_ORDEN: selected.ID,
                 NEW_DISCOUNT: valueNew,
-                empresa: user.EMPRESA
+                empresa: user.EMPRESA,
+                id_order: ID
             });
 
             console.log("Orden actualizada correctamente.");
@@ -394,8 +397,9 @@ export default function InvoiceDetails({invoice}) {
         try {
             const response = await axios.delete('/hanadb/api/orders/order/detail/delete', {
                 params: {
-                    ID: selected.ID,
-                    empresa: user.EMPRESA
+                    ID_DETALLE_ORDEN: selected.ID,
+                    empresa: user.EMPRESA,
+                    id_order: ID
                 }
             });
 

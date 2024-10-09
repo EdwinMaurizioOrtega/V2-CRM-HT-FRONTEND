@@ -212,7 +212,7 @@ export default function ProductDetailsSummary({
         }
 
         //Solo para lidenar
-        if (user.COMPANY === 'HT') {
+        if (user.COMPANY === 'HT' && user.ROLE !== '31') {
 
             const sumaDisponible = onStockValidate.reduce((total, producto) => total + Number(producto.DISPONIBLE), 0);
 
@@ -324,7 +324,7 @@ export default function ProductDetailsSummary({
 
                 <Stack direction="row" justifyContent="space-between">
                     <Typography variant="subtitle2" sx={{height: 36, lineHeight: '36px'}}>
-                        Comentario
+                         {user.ROLE === '31' ? 'Precio sugerido' : 'Comentario'}
                     </Typography>
 
                     <Stack spacing={1}>

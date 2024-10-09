@@ -173,7 +173,6 @@ const _carouselsExample = [
         description: 'Distribuidor autorizado',
         link: 'https://mecompras.ec/17-infinix',
     }
-
 ]
 
 const _carouselSsectionOne = [
