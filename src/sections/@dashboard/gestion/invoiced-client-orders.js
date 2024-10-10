@@ -130,7 +130,7 @@ export default function InvoicedClientOrders({userID, currentPartner, open, onCl
             renderCell: (params) => params.row.BODEGA == "002" && "MAYORISTA CUENCA"
                 || params.row.BODEGA == "019" && "C. DISTRIBUCIÓN HT"
                 || params.row.BODEGA == "006" && "MAYORISTA QUITO"
-                || params.row.BODEGA == "015" && "MAYORISTA GUAYAQUIL"
+                || params.row.BODEGA == "030" && "MAYORISTA COLÓN"
                 || params.row.BODEGA == "024" && "MAYORISTA MANTA"
         },
         {
