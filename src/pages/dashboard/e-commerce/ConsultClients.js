@@ -1,19 +1,9 @@
 import PropTypes from 'prop-types';
-import React, {useState, useCallback, useEffect, useRef, useLayoutEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 // form
-import {yupResolver} from '@hookform/resolvers/yup';
 import FormProvider, {
-    RHFEditor,
-    RHFSelect,
-    RHFUpload,
-    RHFSwitch,
-    RHFSlider,
-    RHFCheckbox,
     RHFTextField,
     RHFRadioGroup,
-    RHFMultiSelect,
-    RHFAutocomplete,
-    RHFMultiCheckbox,
 } from '../../../components/hook-form';
 
 import axios from '../../../utils/axios';
@@ -21,58 +11,29 @@ import axios from '../../../utils/axios';
 import {
     Grid,
     Stack,
-    Divider,
-    MenuItem,
-    Backdrop,
-    TextField,
     Typography,
-    IconButton,
-    InputAdornment,
-    CircularProgress,
     Container,
     Card,
     Box,
     Button,
-    Autocomplete,
-    List,
-    ListItem,
-    ListItemText, FormControl, RadioGroup, Radio, FormControlLabel,
 } from '@mui/material';
 import {useForm} from "react-hook-form";
-import {FormSchema} from "../../../sections/_examples/extra/form/schema";
 import DashboardLayout from "../../../layouts/dashboard";
 import {LoadingButton} from "@mui/lab";
 import {PATH_DASHBOARD} from "../../../routes/paths";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
 import Head from "next/head";
-import * as Yup from "yup";
 import {
-    DataGrid,
-    GridToolbar,
-    GridToolbarColumnsButton,
     GridToolbarContainer,
-    GridToolbarDensitySelector,
-    GridToolbarExport,
-    GridToolbarFilterButton,
     GridToolbarQuickFilter
 } from "@mui/x-data-grid";
-import * as XLSX from "xlsx";
-import SearchNotFound from "../../../components/search-not-found";
-import {CustomTextField} from "../../../components/custom-input";
-import Iconify from "../../../components/iconify";
-import match from "autosuggest-highlight/match";
-import parse from "autosuggest-highlight/parse";
 import {useAuthContext} from "../../../auth/useAuthContext";
 import Label from "../../../components/label";
 import {fCurrency} from "../../../utils/formatNumber";
 import {useSnackbar} from "../../../components/snackbar";
 import {DOCUMENTACION, PAYMENT_OPTIONS_V2, TIPO_CREDITO, TIPO_PRECIO} from "../../../utils/constants";
-import {io} from "socket.io-client";
 import {GoogleMap, InfoWindow, Marker, useJsApiLoader} from "@react-google-maps/api";
-import EmptyContent from "../../../components/empty-content";
 import {HOST_API_KEY} from "../../../config-global";
-
-// ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
 
