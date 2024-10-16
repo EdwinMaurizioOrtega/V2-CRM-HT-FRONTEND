@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import {sum} from 'lodash';// next
+import {sum} from 'lodash';
+// next
 import NextLink from 'next/link';
 // @mui
 import {Grid, Card, Button, CardHeader, Typography, Stack, TextField} from '@mui/material';
@@ -8,13 +9,11 @@ import {PATH_DASHBOARD} from '../../../../../routes/paths';
 // components
 import Iconify from '../../../../../components/iconify';
 import EmptyContent from '../../../../../components/empty-content';
-//
 import CheckoutSummary from '../CheckoutSummary';
 import CheckoutCartProductList from './CheckoutCartProductList';
 import {applyComment, resetCart} from "../../../../../redux/slices/product";
 import {dispatch} from "../../../../../redux/store";
 import {useAuthContext} from "../../../../../auth/useAuthContext";
-import {RHFTextField} from "../../../../../components/hook-form";
 import React from "react";
 
 // ----------------------------------------------------------------------
@@ -104,7 +103,6 @@ export default function CheckoutCart({
 
             <Grid item xs={12} md={4}>
 
-
                 {user.ROLE === '0' ? (
                     <>
                         <Stack spacing={1}>
@@ -140,24 +138,24 @@ export default function CheckoutCart({
 
                 ) : (
                     <>
-                    <CheckoutSummary
-                        enableDiscount
-                        total={total}
-                        discount={discount}
-                        subtotal={subtotal}
-                        iva={iva}
-                        onApplyDiscount={onApplyDiscount}
-                    />
-                    <Button
-                        fullWidth
-                        size="large"
-                        type="submit"
-                        variant="contained"
-                        disabled={!cart.length}
-                        onClick={onNextStep}
-                    >
-                        Finalizar compra
-                    </Button>
+                        <CheckoutSummary
+                            enableDiscount
+                            total={total}
+                            discount={discount}
+                            subtotal={subtotal}
+                            iva={iva}
+                            onApplyDiscount={onApplyDiscount}
+                        />
+                        <Button
+                            fullWidth
+                            size="large"
+                            type="submit"
+                            variant="contained"
+                            disabled={!cart.length}
+                            onClick={onNextStep}
+                        >
+                            Finalizar compra
+                        </Button>
                     </>
                 )
                 }
