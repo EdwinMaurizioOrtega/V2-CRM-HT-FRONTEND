@@ -271,6 +271,10 @@ export default function InvoiceTableRow({
 
     };
 
+    const sendOrderApproveSeller = async () => {
+        console.log("Vendedor...");
+    }
+
     const sendOrderMoveToOneInWarehouse = async () => {
         console.log("Número de orden: " + ID);
 
@@ -670,6 +674,16 @@ export default function InvoiceTableRow({
 
                 <Divider sx={{borderStyle: 'dashed'}}/>
 
+                {ESTADO === 15 && ['7', '10'].includes(user.ROLE) && <MenuItem
+                        onClick={() => {
+                            sendOrderApproveSeller();
+                            handleClosePopover();
+                        }}
+                    >
+                        <Iconify icon="eva:shopping-bag-outline"/>
+                        Aprobar V.
+                    </MenuItem>
+                }
 
                 {ESTADO === 0 && user.ROLE === "9" ? (
                     <MenuItem

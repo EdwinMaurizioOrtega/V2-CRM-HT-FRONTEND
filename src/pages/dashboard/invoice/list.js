@@ -557,7 +557,7 @@ export default function InvoiceListPage() {
                                 color={theme.palette.warning.main}
                             />
 
-                            {user.COMPANY === 'HT' && <InvoiceAnalytic
+                            {user.COMPANY === 'HT' && user.ROLE !== '31' && <InvoiceAnalytic
                                 title="F/Pend.Cargar Evidencia."
                                 total={getLengthByStatus(22)}
                                 percent={getPercentByStatus(22)}
@@ -881,16 +881,29 @@ function parseCustomDate(dateString) {
 const getTabs = (user, tableData, getLengthByStatus) => {
 
     if (user.COMPANY === 'HT') {
-        return [
-            {value: 'all', label: 'Total', color: 'info', count: tableData.length},
-            {value: 15, label: 'Pendiente Aprobar Vendedor', color: 'success', count: getLengthByStatus(15)},
-            {value: 6, label: 'Pendiente Aprobar Crédito', color: 'success', count: getLengthByStatus(6)},
-            {value: 0, label: 'Pendiente Facturar', color: 'warning', count: getLengthByStatus(0)},
-            {value: 22, label: 'F/Pend. Cargar Evidencia', color: 'info', count: getLengthByStatus(22)},
-            {value: 23, label: 'F/Pend. Validar Cartera', color: 'info', count: getLengthByStatus(23)},
-            {value: 1, label: 'Fact./Entregado', color: 'error', count: getLengthByStatus(1)},
-            {value: 8, label: 'Anulado', color: 'default', count: getLengthByStatus(8)},
-        ];
+
+        if (user.ROLE === '31'){
+            return [
+                {value: 'all', label: 'Total', color: 'info', count: tableData.length},
+                {value: 15, label: 'Pendiente Aprobar Vendedor', color: 'success', count: getLengthByStatus(15)},
+                {value: 6, label: 'Pendiente Aprobar Crédito', color: 'success', count: getLengthByStatus(6)},
+                {value: 0, label: 'Pendiente Facturar', color: 'warning', count: getLengthByStatus(0)},
+                {value: 1, label: 'Fact./Entregado', color: 'error', count: getLengthByStatus(1)},
+                {value: 8, label: 'Anulado', color: 'default', count: getLengthByStatus(8)},
+            ];
+        } else {
+
+            return [
+                {value: 'all', label: 'Total', color: 'info', count: tableData.length},
+                {value: 15, label: 'Pendiente Aprobar Vendedor', color: 'success', count: getLengthByStatus(15)},
+                {value: 6, label: 'Pendiente Aprobar Crédito', color: 'success', count: getLengthByStatus(6)},
+                {value: 0, label: 'Pendiente Facturar', color: 'warning', count: getLengthByStatus(0)},
+                {value: 22, label: 'F/Pend. Cargar Evidencia', color: 'info', count: getLengthByStatus(22)},
+                {value: 23, label: 'F/Pend. Validar Cartera', color: 'info', count: getLengthByStatus(23)},
+                {value: 1, label: 'Fact./Entregado', color: 'error', count: getLengthByStatus(1)},
+                {value: 8, label: 'Anulado', color: 'default', count: getLengthByStatus(8)},
+            ];
+        }
 
     } else {
         return [
