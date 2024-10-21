@@ -30,6 +30,7 @@ CheckoutCart.propTypes = {
 export default function CheckoutCart({
                                          checkout,
                                          onTomebambaNextStep,
+                                         onCustomerNextStep,
                                          onNextStep,
                                          onApplyDiscount,
                                          onDeleteCart,
@@ -103,7 +104,7 @@ export default function CheckoutCart({
 
             <Grid item xs={12} md={4}>
 
-                {user.ROLE === '0' ? (
+                {user.ROLE === '0' || user.ROLE === '31' ? (
                     <>
                         <Stack spacing={1}>
                             <TextField
@@ -129,9 +130,9 @@ export default function CheckoutCart({
                             type="submit"
                             variant="contained"
                             disabled={!cart.length}
-                            onClick={onTomebambaNextStep}
+                            onClick={user.ROLE === '0' ? onTomebambaNextStep : onCustomerNextStep}
                         >
-                            Tomebamba
+                            {user.ROLE === '0' ? 'Tomebamba' : 'Finalizar'}
                         </Button>
 
                     </>

@@ -229,28 +229,35 @@ export default function InvoiceListPage() {
             try {
                 let data = [];
 
-
                 if (user.ROLE === "10") {
+                    //10 => Admin
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/admin?empresa=${user.EMPRESA}&fecha_inicio=${fDateCustom(rangeInputPicker.startDate)}&fecha_fin=${fDateCustom(rangeInputPicker.endDate)}&switch_dates=${isChecked}`);
                     data = await response.json();
                 } else if (user.ROLE === "7" || user.ROLE === "5") {
+                    //7 => Vendedor 5 => Infinix
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/vendedor?ven=${user.ID}&empresa=${user.EMPRESA}`);
                     data = await response.json();
                 } else if (user.ROLE === "9") {
+                    //9 => Credito
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/credit?empresa=${user.EMPRESA}`);
                     data = await response.json();
                 } else if (user.ROLE === "8") {
-                    console.log(user.WAREHOUSE);
+                    //8 => Bodega
+                    //console.log(user.WAREHOUSE);
                     const bodegaSAP = user.WAREHOUSE;
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/bodega?bod=${bodegaSAP}&empresa=${user.EMPRESA}`);
                     data = await response.json();
                 } else if (user.ROLE === "0") {
-                    console.log("Tomebamba: Vendedor")
+                    //0 => Tomebamba: Vendedor
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/vendedor?ven=${user.ID}&empresa=0992537442001`);
                     data = await response.json();
                 } else if (user.ROLE === "2" || user.ROLE === "1") {
-                    console.log("Tomebamba: Ejecutivo Soporte / Compras")
+                    //2 => Tomebamba: Ejecutivo Soporte 1 => Compras
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/tomebamba_credit?empresa=0992537442001&status=10, 13, 6, 0, 1, 8`);
+                    data = await response.json();
+                } else if (user.ROLE === "31") {
+                    //31 => Cliente Mayorista
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/cliente?cli_id=${user.CARD_CODE}`);
                     data = await response.json();
                 }
 
@@ -524,7 +531,16 @@ export default function InvoiceListPage() {
                             />
 
                             <InvoiceAnalytic
-                                title="Por Aprobar"
+                                title="Por Aprobar Vendedor"
+                                total={getLengthByStatus(15)}
+                                percent={getPercentByStatus(15)}
+                                price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(15)}
+                                icon="solar:file-check-bold-duotone"
+                                color={theme.palette.success.main}
+                            />
+
+                            <InvoiceAnalytic
+                                title="Por Aprobar Crédito"
                                 total={getLengthByStatus(6)}
                                 percent={getPercentByStatus(6)}
                                 price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(6)}
@@ -867,8 +883,9 @@ const getTabs = (user, tableData, getLengthByStatus) => {
     if (user.COMPANY === 'HT') {
         return [
             {value: 'all', label: 'Total', color: 'info', count: tableData.length},
-            {value: 6, label: 'Pendiente de aprobar', color: 'success', count: getLengthByStatus(6)},
-            {value: 0, label: 'Pendiente de Facturar', color: 'warning', count: getLengthByStatus(0)},
+            {value: 15, label: 'Pendiente Aprobar Vendedor', color: 'success', count: getLengthByStatus(15)},
+            {value: 6, label: 'Pendiente Aprobar Crédito', color: 'success', count: getLengthByStatus(6)},
+            {value: 0, label: 'Pendiente Facturar', color: 'warning', count: getLengthByStatus(0)},
             {value: 22, label: 'F/Pend. Cargar Evidencia', color: 'info', count: getLengthByStatus(22)},
             {value: 23, label: 'F/Pend. Validar Cartera', color: 'info', count: getLengthByStatus(23)},
             {value: 1, label: 'Fact./Entregado', color: 'error', count: getLengthByStatus(1)},

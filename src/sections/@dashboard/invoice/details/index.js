@@ -16,49 +16,30 @@ import {
     IconButton,
     MenuItem,
     Button,
-    Stack,
     TextField,
     Autocomplete,
-    Snackbar,
-    Alert,
-    Container,
     Tooltip,
-    Dialog, DialogActions, InputAdornment, CircularProgress, ButtonGroup,
+    CircularProgress,
 } from '@mui/material';
 
 import Link from 'next/link';
 // utils
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {fDate} from '../../../../utils/formatTime';
-import {fCurrency, fNumber, fNumberSin} from '../../../../utils/formatNumber';
+import {fCurrency, fNumberSin} from '../../../../utils/formatNumber';
 // components
 import Label from '../../../../components/label';
 import Image from '../../../../components/image';
 import Scrollbar from '../../../../components/scrollbar';
-//
-import InvoiceToolbar from './InvoiceToolbar';
 import Iconify from "../../../../components/iconify";
 import MenuPopover from "../../../../components/menu-popover";
 import ConfirmDialog from "../../../../components/confirm-dialog";
-import {RHFAutocomplete, RHFTextField} from "../../../../components/hook-form";
-import {useTable} from "../../../../components/table";
 import axios from "../../../../utils/axios";
-import {Block} from "../../../_examples/Block";
 import {useAuthContext} from "../../../../auth/useAuthContext";
-
 import React from 'react';
 import {useSnackbar} from "../../../../components/snackbar";
-import {PATH_DASHBOARD} from "../../../../routes/paths";
-
-import {default as alias_axios} from 'axios';
-import https from 'https';
-import {Space_Grotesk, Space_Mono} from "@next/font/google";
-import CustomBreadcrumbs from "../../../../components/custom-breadcrumbs";
-import {Masonry} from "@mui/lab";
 import {HOST_API_KEY} from "../../../../config-global";
 import {useBoolean} from "../../../../hooks/use-boolean";
-import InvoicePDF from "./InvoicePDF";
 import {PDFDownloadLink} from "@react-pdf/renderer";
 import PedidoInvoicePDF from "./PedidoInvoicePDF";
 import {DOCUMENTACION, PAYMENT_OPTIONS_V2, TIPO_CREDITO, TIPO_PRECIO} from "../../../../utils/constants";
@@ -111,8 +92,6 @@ function insertLineBreaks(text, maxLength) {
 
 
 export default function InvoiceDetails({invoice}) {
-
-    const view = useBoolean();
 
     console.log("InvoiceDetail: " + JSON.stringify(invoice));
 
@@ -256,6 +235,9 @@ export default function InvoiceDetails({invoice}) {
         // Determinar si se debe mostrar el Autocomplete
         if (/^0{9}$/.test(event.target.value)) {
             setShowAutocomplete(true);
+            if (CLIENTEID === 'CL1791251237001'){
+                setShowAutocomplete(false);
+            }
         } else {
             setShowAutocomplete(false);
         }
@@ -633,8 +615,14 @@ export default function InvoiceDetails({invoice}) {
             console.log("Empleado Entregar: " + JSON.stringify( empleadoEntregar))
 
             if (valueGuia === '000000000' && empleadoEntregar === '') {
-                alert("Seleccionar un empleado es obligatorio cuando la guía es => 000000000")
-                return; // Stop the execution of the function if the condition is met
+                if (valueGuia === '000000000' && CLIENTEID === 'CL1791251237001') {
+                    idEmpleadoEntregar = 0;
+                    nombreUsuarioEntregara = '';
+                    estadoInvoice = 1
+                } else {
+                    alert("Seleccionar un empleado es obligatorio cuando la guía es => 000000000")
+                    return; // Stop the execution of the function if the condition is met
+                }
             }
 
             if (empleadoEntregar !== '') {

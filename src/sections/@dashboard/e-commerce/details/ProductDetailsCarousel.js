@@ -137,6 +137,22 @@ export default function ProductDetailsCarousel({ product }) {
     carousel2.current?.slickNext();
   };
 
+  const handleShare = (img) => {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Check out this image!',
+        text: 'Aquí tienes una imagen interesante.',
+        url: img, // Comparte la URL de la imagen
+        // Puedes agregar otros campos como `files` si tu navegador lo permite, pero esto varía según la compatibilidad.
+      })
+          .then(() => console.log('Image shared successfully'))
+          .catch((error) => console.error('Error sharing image:', error));
+    } else {
+      console.error('Sharing is not supported on this browser.');
+    }
+  };
+
+
   const renderLargeImg = (
     <Box sx={{ mb: 3, borderRadius: 2, overflow: 'hidden', position: 'relative' }}>
       <Carousel {...carouselSettings1} asNavFor={nav2} ref={carousel1}>
@@ -146,8 +162,8 @@ export default function ProductDetailsCarousel({ product }) {
             alt="product"
             src={img.URL}
             ratio="1/1"
-            onClick={() => handleOpenLightbox(img)}
-            sx={{ cursor: 'zoom-in' }}
+            onClick={() => handleShare(img.URL)}
+            // sx={{ cursor: 'zoom-in' }}
           />
         ))}
       </Carousel>

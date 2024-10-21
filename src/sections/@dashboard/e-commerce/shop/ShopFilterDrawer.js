@@ -5,84 +5,79 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { alpha } from '@mui/material/styles';
 import {
   Box,
-  Radio,
   Stack,
   Input,
   Badge,
   Button,
   Drawer,
-  Rating,
   Divider,
   IconButton,
   Typography,
-  RadioGroup,
-  FormControlLabel,
 } from '@mui/material';
 // config
 import { NAV } from '../../../../config-global';
 // components
 import Iconify from '../../../../components/iconify';
 import Scrollbar from '../../../../components/scrollbar';
-import { ColorMultiPicker } from '../../../../components/color-utils';
-import { RHFMultiCheckbox, RHFRadioGroup, RHFSlider } from '../../../../components/hook-form';
+import { RHFMultiCheckbox, RHFRadioGroup } from '../../../../components/hook-form';
 
 // ----------------------------------------------------------------------
 
-export const FILTER_CATEGORY_OPTIONS = [
-  // { label: 'Todo', value: 'Todo' },
-  { label: 'CELULARES', value: 'CELULARES' },
-  { label: 'ELECTRODOMÉSTICOS', value: 'ELECTRODOMÉSTICOS' },
-  { label: 'ACCESORIOS', value: 'ACCESORIOS' },
-  { label: 'BELLEZA', value: 'BELLEZA' },
-  { label: 'REPUESTOS', value: 'REPUESTOS' },
-  { label: 'ELECTROMENORES', value: 'ELECTROMENORES' },
-  { label: 'TECNOLOGIA', value: 'TECNOLOGIA' },
-  { label: 'VARIOS', value: 'VARIOS' },
-];
+// export const FILTER_CATEGORY_OPTIONS = [
+//   // { label: 'Todo', value: 'Todo' },
+//   { label: 'CELULARES', value: 'CELULARES' },
+//   { label: 'ELECTRODOMÉSTICOS', value: 'ELECTRODOMÉSTICOS' },
+//   { label: 'ACCESORIOS', value: 'ACCESORIOS' },
+//   { label: 'BELLEZA', value: 'BELLEZA' },
+//   { label: 'REPUESTOS', value: 'REPUESTOS' },
+//   { label: 'ELECTROMENORES', value: 'ELECTROMENORES' },
+//   { label: 'TECNOLOGIA', value: 'TECNOLOGIA' },
+//   { label: 'VARIOS', value: 'VARIOS' },
+// ];
 
-export const FILTER_GENDER_OPTIONS = [
-  { label: 'LG', value: 'LG'},
-  { label: 'SAMSUNG', value: 'SAMSUNG'},
-  { label: 'BLU', value: 'BLU'},
-  { label: 'NOKIA', value: 'NOKIA'},
-  { label: 'APPLE', value: 'APPLE'},
-  {label: 'MOTOROLA', value: 'MOTOROLA'},
-  { label: 'VERYKOOL', value: 'VERYKOOL'},
-  { label: 'HUAWEI', value: 'HUAWEI'},
-  { label: 'XIAOMI', value: 'XIAOMI'},
-  { label: 'TECNO', value: 'TECNO'},
-  { label: 'HONOR', value: 'HONOR'},
-  { label: 'BAZZUKA', value: 'BAZZUKA'},
-  { label: 'BLACK&DECKER', value: 'BLACK&DECKER'},
-  { label: 'CONAIR', value: 'CONAIR'},
-  { label: 'DUREX', value: 'DUREX'},
-  { label: 'EPSON', value: 'EPSON'},
-  { label: 'FAST HAIR STRAIGHTENER', value: 'FAST HAIR STRAIGHTENER'},
-  { label: 'LENOVO', value: 'LENOVO'},
-  { label: 'GO BIKE', value: 'GO BIKE'},
-  { label: 'HACEB', value: 'HACEB'},
-  { label: 'HP', value: 'HP'},
-  { label: 'INNOVA', value: 'INNOVA'},
-  { label: 'KOMBO', value: 'KOMBO'},
-  { label: 'INFINIX', value: 'INFINIX'},
-  { label: 'REMINGTON', value: 'REMINGTON'},
-  { label: 'SANKEY', value: 'SANKEY'},
-  { label: 'WAHL', value: 'WAHL'},
-  { label: 'ZEROSTOCKS', value: 'ZEROSTOCKS'},
-  { label: 'KINGSTON', value: 'KINGSTON'},
-  { label: 'SANDISK', value: 'SANDISK'},
-  { label: 'PARLANTE', value: 'PARLANTE'},
-  { label: 'CABLE', value: 'CABLE'},
-  { label: 'CARGADOR', value: 'CARGADOR'},
-  { label: 'AUDIFONO', value: 'AUDIFONO'},
-  { label: 'GAME', value: 'GAME'},
-  { label: 'HUMIFICADOR', value: 'HUMIFICADOR'},
-  { label: 'GENERICO', value: 'GENERICO'},
-  { label: 'SEAGETE', value: 'SEAGETE'},
-  { label: 'CLARO', value: 'CLARO'},
-  { label: 'VARIOS', value: 'VARIOS'},
-  { label: 'TCL', value: 'TCL'},
-];
+// export const FILTER_GENDER_OPTIONS = [
+//   { label: 'LG', value: 'LG'},
+//   { label: 'SAMSUNG', value: 'SAMSUNG'},
+//   { label: 'BLU', value: 'BLU'},
+//   { label: 'NOKIA', value: 'NOKIA'},
+//   { label: 'APPLE', value: 'APPLE'},
+//   {label: 'MOTOROLA', value: 'MOTOROLA'},
+//   { label: 'VERYKOOL', value: 'VERYKOOL'},
+//   { label: 'HUAWEI', value: 'HUAWEI'},
+//   { label: 'XIAOMI', value: 'XIAOMI'},
+//   { label: 'TECNO', value: 'TECNO'},
+//   { label: 'HONOR', value: 'HONOR'},
+//   { label: 'BAZZUKA', value: 'BAZZUKA'},
+//   { label: 'BLACK&DECKER', value: 'BLACK&DECKER'},
+//   { label: 'CONAIR', value: 'CONAIR'},
+//   { label: 'DUREX', value: 'DUREX'},
+//   { label: 'EPSON', value: 'EPSON'},
+//   { label: 'FAST HAIR STRAIGHTENER', value: 'FAST HAIR STRAIGHTENER'},
+//   { label: 'LENOVO', value: 'LENOVO'},
+//   { label: 'GO BIKE', value: 'GO BIKE'},
+//   { label: 'HACEB', value: 'HACEB'},
+//   { label: 'HP', value: 'HP'},
+//   { label: 'INNOVA', value: 'INNOVA'},
+//   { label: 'KOMBO', value: 'KOMBO'},
+//   { label: 'INFINIX', value: 'INFINIX'},
+//   { label: 'REMINGTON', value: 'REMINGTON'},
+//   { label: 'SANKEY', value: 'SANKEY'},
+//   { label: 'WAHL', value: 'WAHL'},
+//   { label: 'ZEROSTOCKS', value: 'ZEROSTOCKS'},
+//   { label: 'KINGSTON', value: 'KINGSTON'},
+//   { label: 'SANDISK', value: 'SANDISK'},
+//   { label: 'PARLANTE', value: 'PARLANTE'},
+//   { label: 'CABLE', value: 'CABLE'},
+//   { label: 'CARGADOR', value: 'CARGADOR'},
+//   { label: 'AUDIFONO', value: 'AUDIFONO'},
+//   { label: 'GAME', value: 'GAME'},
+//   { label: 'HUMIFICADOR', value: 'HUMIFICADOR'},
+//   { label: 'GENERICO', value: 'GENERICO'},
+//   { label: 'SEAGETE', value: 'SEAGETE'},
+//   { label: 'CLARO', value: 'CLARO'},
+//   { label: 'VARIOS', value: 'VARIOS'},
+//   { label: 'TCL', value: 'TCL'},
+// ];
 
 export const FILTER_RATING_OPTIONS = ['up4Star', 'up3Star', 'up2Star', 'up1Star'];
 
@@ -107,7 +102,7 @@ ShopFilterDrawer.propTypes = {
   onResetFilter: PropTypes.func,
 };
 
-export default function ShopFilterDrawer({ open, onOpen, onClose, isDefault, onResetFilter }) {
+export default function ShopFilterDrawer({ open, onOpen, onClose, isDefault, onResetFilter, FILTER_CATEGORY_OPTIONS, FILTER_BRAND_OPTIONS }) {
   const { control } = useFormContext();
 
   const marksLabel = [...Array(21)].map((_, index) => {
@@ -173,7 +168,7 @@ export default function ShopFilterDrawer({ open, onOpen, onClose, isDefault, onR
 
             <Stack spacing={1}>
               <Typography variant="subtitle1"> Marca </Typography>
-              <RHFMultiCheckbox name="gender" options={FILTER_GENDER_OPTIONS} sx={{ width: 1 }} />
+              <RHFMultiCheckbox name="gender" options={FILTER_BRAND_OPTIONS} sx={{ width: 1 }} />
             </Stack>
 
             {/* <Stack spacing={1}> */}

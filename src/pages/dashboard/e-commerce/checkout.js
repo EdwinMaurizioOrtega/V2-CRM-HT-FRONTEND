@@ -58,6 +58,8 @@ export default function EcommerceCheckoutPage() {
 
     const {user} = useAuthContext();
 
+    console.log('user: '+JSON.stringify( user));
+
     const {themeStretch} = useSettingsContext();
 
     const dispatch = useDispatch();
@@ -92,7 +94,7 @@ export default function EcommerceCheckoutPage() {
         dispatch(gotoStep(3));
 
         //Cliente
-        dispatch(createBilling ({
+        dispatch(createBilling({
             Apellidos: null,
             Balance: '124152.280000',
             'Capacidad de Pago': '0.000000',
@@ -129,17 +131,42 @@ export default function EcommerceCheckoutPage() {
 
         //Servientrega
         dispatch(applyServientrega({
-    CANTON: 'CUENCA',
-    CARDCODE: 'CL0190003701001',
-    CODE_SERVIENTREGA: '4',
-    DIRECCION: 'AV. ESPAÑA 17-30 Y TURUHUAICO',
-    NAME_SERVIENTREGA: 'CUENCA (AZUAY)',
-    PROVINCIA: 'AZUAY',
-    TIPO: 'MATRIZ',
-    U_LS_LATITUD: '-2.8853418',
-    U_LS_LONGITUD: '-78.9833596',
-    ZIPCODE: '010105'
-}))
+            CANTON: 'CUENCA',
+            CARDCODE: 'CL0190003701001',
+            CODE_SERVIENTREGA: '4',
+            DIRECCION: 'AV. ESPAÑA 17-30 Y TURUHUAICO',
+            NAME_SERVIENTREGA: 'CUENCA (AZUAY)',
+            PROVINCIA: 'AZUAY',
+            TIPO: 'MATRIZ',
+            U_LS_LATITUD: '-2.8853418',
+            U_LS_LONGITUD: '-78.9833596',
+            ZIPCODE: '010105'
+        }))
+
+        //Bodegas
+        dispatch(applyWarehouse("019"))
+
+        //Opciones de pago
+        dispatch(applyMethod(4))
+    };
+
+    const handleCustomerNextStep = () => {
+
+        console.log("Crear Orden Customer Mayorista.")
+
+        //Saltarse a finalizar la orden.
+        dispatch(gotoStep(3));
+
+        //Cliente
+        dispatch(createBilling({
+            ID: user.CARD_CODE,
+        }))
+
+        //Envio
+        dispatch(applyShipping(0))
+
+        //Servientrega
+        dispatch(applyServientrega())
 
         //Bodegas
         dispatch(applyWarehouse("019"))
@@ -264,7 +291,7 @@ export default function EcommerceCheckoutPage() {
                 {/* <Button variant="contained" onClick={vaciarcarrito}>Vaciar Carrito</Button> */}
 
                 {completed ? (
-                        <CheckoutOrderComplete loading={loading} open={completed} onReset={handleReset}/>
+                    <CheckoutOrderComplete loading={loading} open={completed} onReset={handleReset}/>
                 ) : (
                     <>
                         {activeStep === 0 && (
@@ -272,6 +299,7 @@ export default function EcommerceCheckoutPage() {
                                 checkout={checkout}
                                 onNextStep={handleNextStep}
                                 onTomebambaNextStep={handleTomebambaNextStep}
+                                onCustomerNextStep={handleCustomerNextStep}
                                 onDeleteCart={handleDeleteCart}
                                 onApplyDiscount={handleApplyDiscount}
                                 onIncreaseQuantity={handleIncreaseQuantity}

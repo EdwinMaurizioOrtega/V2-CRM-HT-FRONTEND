@@ -47,7 +47,6 @@ export default function EcommerceShopPage() {
     //cache
     const [products, setProducts] = useState([]);
 
-
     const [openFilter, setOpenFilter] = useState(false);
 
     const defaultValues = {
@@ -86,6 +85,9 @@ export default function EcommerceShopPage() {
     // }, [dispatch]);
     //
 
+    const [FILTER_CATEGORY_OPTIONS, SET_FILTER_CATEGORY_OPTIONS] = useState([]);
+    const [FILTER_BRAND_OPTIONS, SET_FILTER_BRAND_OPTIONS] = useState([]);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -94,7 +96,31 @@ export default function EcommerceShopPage() {
                 const networkResponse = await fetch(`${HOST_API_KEY}/hanadb/api/products/customers`);
                 const data = await networkResponse.json();
                 setProducts(data.products);
-                console.log("products: "+data);
+                console.log("products: "+JSON.stringify(data));
+
+                // Extraer categorías y marcas únicas
+                const uniqueCategories = [...new Set(data.products.map(product => product.CATEGORIA))];
+                const uniqueBrands = [...new Set(data.products.map(product => product.MARCA))];
+
+                // Crear el objeto FILTER_CATEGORY_OPTIONS y FILTER_BRAND_OPTIONS
+                const categoryOptions = uniqueCategories.map(category => ({
+                    label: category,
+                    value: category,
+                }));
+
+                const brandOptions = uniqueBrands.map(brand => ({
+                    label: brand,
+                    value: brand,
+                }));
+
+                // Actualizar el estado
+                SET_FILTER_CATEGORY_OPTIONS(categoryOptions);
+                SET_FILTER_BRAND_OPTIONS(brandOptions);
+
+                // Imprimir en consola
+                console.log("FILTER_CATEGORY_OPTIONS:", categoryOptions);
+                console.log("FILTER_BRAND_OPTIONS:", brandOptions);
+
 
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
@@ -161,6 +187,8 @@ export default function EcommerceShopPage() {
                                 onOpen={handleOpenFilter}
                                 onClose={handleCloseFilter}
                                 onResetFilter={handleResetFilter}
+                                FILTER_CATEGORY_OPTIONS={FILTER_CATEGORY_OPTIONS}
+                                FILTER_BRAND_OPTIONS={FILTER_BRAND_OPTIONS}
                             />
 
                             {/* <ShopProductSort /> */}
