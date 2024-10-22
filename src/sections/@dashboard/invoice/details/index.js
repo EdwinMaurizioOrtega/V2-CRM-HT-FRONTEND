@@ -1245,7 +1245,7 @@ export default function InvoiceDetails({invoice}) {
                                         <Typography variant="body2">Forma de pago
                                             actual: {nameFormaPago(FORMADEPAGO)}</Typography>
 
-                                        {user.ROLE === "9" || (ESTADO === 15 && ['7', '10'].includes(user.ROLE)) &&
+                                        {(user.ROLE === "9" || (ESTADO === 15 && ['7', '10'].includes(user.ROLE))) && (
                                             <Autocomplete
                                                 fullWidth
                                                 options={PAYMENT_OPTIONS_V2}
@@ -1256,7 +1256,7 @@ export default function InvoiceDetails({invoice}) {
                                                 renderInput={(params) => <TextField {...params} label="-_-"
                                                                                     margin="none"/>}
                                             />
-                                        }
+                                        )}
 
                                     </Grid>
 
