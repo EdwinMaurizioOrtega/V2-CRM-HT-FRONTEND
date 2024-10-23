@@ -2,41 +2,28 @@ import {useEffect, useState} from 'react';
 // next
 import Head from 'next/head';
 import {useRouter} from 'next/router';
-// @mui
-import {alpha} from '@mui/material/styles';
 import {Box, Tab, Tabs, Card, Grid, Divider, Container, Typography, Stack, CardHeader} from '@mui/material';
 // redux
 import {useDispatch, useSelector} from '../../../../redux/store';
 import {
-    clearPriceListProduct,
-    getProduct,
     addToCart,
     gotoStep,
-    getPriceListProduct,
-    getClearPriceListProduct
 } from '../../../../redux/slices/product';
 // routes
 import {PATH_DASHBOARD} from '../../../../routes/paths';
 // layouts
 import DashboardLayout from '../../../../layouts/dashboard';
-// components
-import Iconify from '../../../../components/iconify';
-import Markdown from '../../../../components/markdown';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 import {useSettingsContext} from '../../../../components/settings';
-import {SkeletonProductDetails} from '../../../../components/skeleton';
 // sections
 import {
     ProductDetailsSummary,
-    ProductDetailsReview,
     ProductDetailsCarousel,
 } from '../../../../sections/@dashboard/e-commerce/details';
 import CartWidget from '../../../../sections/@dashboard/e-commerce/CartWidget';
-import {fNumber} from "../../../../utils/formatNumber";
 import {useAuthContext} from "../../../../auth/useAuthContext";
 import BasicTable from "../../../../sections/_examples/mui/table/BasicTable";
 import {HOST_API_KEY} from "../../../../config-global";
-import {SYSTEM_ENTRYPOINTS} from "next/constants";
 
 // ----------------------------------------------------------------------
 
@@ -258,8 +245,6 @@ export default function EcommerceProductDetailsPage() {
 
     return (
         <>
-
-
             <Head>
                 <title>{`Ecommerce: ${product?.NOMBRE || ''} | HT`}</title>
             </Head>
@@ -268,14 +253,17 @@ export default function EcommerceProductDetailsPage() {
                 <CustomBreadcrumbs
                     heading="Product Details"
                     links={[
-                        {name: 'Dashboard', href: PATH_DASHBOARD.root},
                         {
-                            name: 'E-Commerce',
-                            href: PATH_DASHBOARD.eCommerce.root,
+                            name: 'Dashboard',
+                            href: PATH_DASHBOARD.root
                         },
                         {
-                            name: 'Shop',
-                            href: PATH_DASHBOARD.eCommerce.list,
+                            name: 'E-Commerce',
+                            href: user.ROLE !== '31' ? PATH_DASHBOARD.eCommerce.list : PATH_DASHBOARD.eCommerce.shop,
+                        },
+                        {
+                            name: user.ROLE !== '31' ? 'List' : 'Shop',
+                            href: user.ROLE !== '31' ? PATH_DASHBOARD.eCommerce.list : PATH_DASHBOARD.eCommerce.shop,
                         },
                         {name: product?.NOMBRE},
                     ]}
@@ -345,35 +333,35 @@ export default function EcommerceProductDetailsPage() {
 
                         {user.ROLE !== '31' && (
 
-                                <Card>
-                                    <Tabs
-                                        value={currentTab}
-                                        onChange={(event, newValue) => setCurrentTab(newValue)}
-                                        sx={{px: 3, bgcolor: 'background.neutral'}}
-                                    >
-                                        {TABS.map((tab) => (
-                                            <Tab key={tab.value} value={tab.value} label={tab.label}/>
-                                        ))}
-                                    </Tabs>
+                            <Card>
+                                <Tabs
+                                    value={currentTab}
+                                    onChange={(event, newValue) => setCurrentTab(newValue)}
+                                    sx={{px: 3, bgcolor: 'background.neutral'}}
+                                >
+                                    {TABS.map((tab) => (
+                                        <Tab key={tab.value} value={tab.value} label={tab.label}/>
+                                    ))}
+                                </Tabs>
 
-                                    <Divider/>
+                                <Divider/>
 
-                                    {TABS.map(
-                                        (tab) =>
-                                            tab.value === currentTab && (
-                                                <Box
-                                                    key={tab.value}
-                                                    sx={{
-                                                        ...(currentTab === 'description' && {
-                                                            p: 3,
-                                                        }),
-                                                    }}
-                                                >
-                                                    {tab.component}
-                                                </Box>
-                                            )
-                                    )}
-                                </Card>
+                                {TABS.map(
+                                    (tab) =>
+                                        tab.value === currentTab && (
+                                            <Box
+                                                key={tab.value}
+                                                sx={{
+                                                    ...(currentTab === 'description' && {
+                                                        p: 3,
+                                                    }),
+                                                }}
+                                            >
+                                                {tab.component}
+                                            </Box>
+                                        )
+                                )}
+                            </Card>
 
 
                         )}

@@ -181,9 +181,11 @@ const navConfig = [
     {
         subheader: 'CLIENTES',
         items: [
+            {title: 'dashboard', path: PATH_DASHBOARD.root, icon: ICONS.analytics},
             {title: 'tienda', path: PATH_DASHBOARD.eCommerce.shop, icon: ICONS.analytics},
             {title: 'ordenes', path: PATH_DASHBOARD.invoice.list, icon: ICONS.analytics},
-            {title: 'dashboard', path: PATH_DASHBOARD.eCommerce.tomebamba_catalogo, icon: ICONS.analytics},
+            {title: 'Servicio Técnico', path: PATH_DASHBOARD.st.ingresarOrden, icon: ICONS.analytics},
+            {title: 'Programa HT Recompensas', path: PATH_DASHBOARD.customer.root, icon: ICONS.analytics},
         ],
     },
 

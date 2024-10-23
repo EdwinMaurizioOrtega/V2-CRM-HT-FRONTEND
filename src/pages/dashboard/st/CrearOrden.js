@@ -221,7 +221,7 @@ export default function GarantiaPage() {
                         },
                         {
                             name: 'Servicio Técnico',
-                            href: PATH_DASHBOARD.blog.root,
+                            href: PATH_DASHBOARD.st.ingresarOrden,
                         },
                         {
                             name: 'Crear Orden',
@@ -278,8 +278,8 @@ export default function GarantiaPage() {
                     </Grid>
 
                 </Grid>
-
-
+                {/* Para los clientes mayoristas. */}
+                {user.ROLE !== '31'  &&
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={12}>
                         <Card sx={{p: 3}}>
@@ -344,6 +344,7 @@ export default function GarantiaPage() {
                         </Card>
                     </Grid>
                 </Grid>
+                }
             </Container>
         </>
     );

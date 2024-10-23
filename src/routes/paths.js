@@ -129,6 +129,9 @@ export const PATH_DASHBOARD = {
     crearNC: path(ROOTS_DASHBOARD, '/st/CrearNotaCreditoSAP'),
     reporteOrden: path(ROOTS_DASHBOARD, '/st/ReporteST'),
   },
+  customer: {
+    root: path(ROOTS_DASHBOARD, '/customer'),
+  }
 };
 
 export const PATH_DOCS = {

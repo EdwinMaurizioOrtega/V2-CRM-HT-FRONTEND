@@ -8,7 +8,6 @@ import Head from 'next/head';
 import {Container, Typography, Stack, TextField} from '@mui/material';
 // redux
 import {useDispatch, useSelector} from '../../../redux/store';
-import {getProducts} from '../../../redux/slices/product';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
 // layouts
@@ -19,11 +18,8 @@ import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import {useSettingsContext} from '../../../components/settings';
 // sections
 import {
-    ShopTagFiltered,
-    ShopProductSort,
     ShopProductList,
     ShopFilterDrawer,
-    ShopProductSearch,
 } from '../../../sections/@dashboard/e-commerce/shop';
 import CartWidget from '../../../sections/@dashboard/e-commerce/CartWidget';
 import {HOST_API_KEY} from "../../../config-global";
@@ -37,11 +33,7 @@ EcommerceShopPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout
 
 export default function EcommerceShopPage() {
 
-    const {user} = useAuthContext();
-
     const {themeStretch} = useSettingsContext();
-
-    const dispatch = useDispatch();
 
     const {checkout} = useSelector((state) => state.product);
     //cache
@@ -96,7 +88,7 @@ export default function EcommerceShopPage() {
                 const networkResponse = await fetch(`${HOST_API_KEY}/hanadb/api/products/customers`);
                 const data = await networkResponse.json();
                 setProducts(data.products);
-                console.log("products: "+JSON.stringify(data));
+                console.log("products: " + JSON.stringify(data));
 
                 // Extraer categorías y marcas únicas
                 const uniqueCategories = [...new Set(data.products.map(product => product.CATEGORIA))];
@@ -162,12 +154,17 @@ export default function EcommerceShopPage() {
                     <CustomBreadcrumbs
                         heading="Tienda"
                         links={[
-                            {name: 'Dashboard', href: PATH_DASHBOARD.root},
+                            {
+                                name: 'Dashboard',
+                                href: PATH_DASHBOARD.root
+                            },
                             {
                                 name: 'E-Commerce',
-                                href: PATH_DASHBOARD.eCommerce.root,
+                                href: PATH_DASHBOARD.eCommerce.shop,
                             },
-                            {name: 'Shop'},
+                            {
+                                name: 'Shop'
+                            },
                         ]}
                     />
 

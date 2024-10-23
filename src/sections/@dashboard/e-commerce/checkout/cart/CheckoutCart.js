@@ -94,7 +94,7 @@ export default function CheckoutCart({
 
                 <Button
                     component={NextLink}
-                    href={PATH_DASHBOARD.eCommerce.root}
+                    href={user.ROLE === '31' ? PATH_DASHBOARD.eCommerce.shop : PATH_DASHBOARD.eCommerce.list}
                     color="inherit"
                     startIcon={<Iconify icon="eva:arrow-ios-back-fill"/>}
                 >

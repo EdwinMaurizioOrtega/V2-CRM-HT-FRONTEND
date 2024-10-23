@@ -60,29 +60,25 @@ const SERVICE_OPTIONS = [
 
 const TABLE_HEAD = [
     {id: 'detalle', label: 'Detalle', align: 'left'},
-
     {id: 'ID', label: 'Orden', align: 'left'},
     {id: 'NUMEROFACTURAE4', label: 'NOTA', align: 'left'},
     {id: 'ESTADO', label: 'Estado', align: 'left'},
-    {id: 'BODEGA', label: 'Bodega', align: 'left'},
-    {id: 'FORMADEPAGO', label: 'FPago', align: 'left'},
+    // {id: 'BODEGA', label: 'Bodega', align: 'left'},
+    // {id: 'FORMADEPAGO', label: 'FPago', align: 'left'},
     {id: 'CLIENTEID', label: 'CI/RUC', align: 'left'},
     {id: 'Cliente', label: 'R.Social', align: 'center', width: 140},
     {id: 'Celular', label: 'Celular', align: 'center', width: 140},
-    {id: 'Tipo', label: 'Tipo Cliente', align: 'left'},
+    // {id: 'Tipo', label: 'Tipo Cliente', align: 'left'},
     {id: 'Ciudad', label: 'Ciudad Cliente', align: 'left'},
-    // {id: 'status', label: 'Vendedor', align: 'left'},
     {id: 'CITY', label: 'Ciudad Vendedor', align: 'left'},
     {id: 'NUMEROGUIA', label: 'Servientrega', align: 'left'},
-    {id: 'NOMBREUSUARIOENTREGARA', label: 'ENTREGAR', align: 'left'},
-
-    {id: 'DOCNUM', label: 'OV SAP', align: 'left'},
+    // {id: 'NOMBREUSUARIOENTREGARA', label: 'ENTREGAR', align: 'left'},
+    // {id: 'DOCNUM', label: 'OV SAP', align: 'left'},
     {id: 'FECHACREACION', label: 'Creación', align: 'left'},
     {id: 'FECHAAPROBO', label: 'Aprobación', align: 'left'},
     {id: 'FECHAFACTURACION', label: 'Facturación', align: 'left'},
     {id: 'NUMEROFACTURALIDENAR', label: 'Nro. Factura', align: 'left'},
 ];
-
 // ----------------------------------------------------------------------
 
 InvoiceListPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -150,6 +146,23 @@ export default function InvoiceListPage() {
         setIsChecked(event.target.checked);
         console.log(event.target.checked ? 'Activo' : 'Inactivo');
     };
+
+    // Filtrar la tabla según el rol del usuario
+    const filteredTableHead = [
+        ...TABLE_HEAD.slice(0, 4), // Incluye las primeras 4 columnas
+        ...(user && user.ROLE !== '31' ? [
+            { id: 'BODEGA', label: 'Bodega', align: 'left' }, // Incluir "Bodega" si el rol no es '31'
+            { id: 'FORMADEPAGO', label: 'FPago', align: 'left' } // Incluir "FPago" si el rol no es '31'
+        ] : []),
+        ...TABLE_HEAD.slice(4, 7), // Incluye las columnas desde el índice 4 hasta el 7 (que incluye 'CLIENTEID', 'Cliente', 'Celular')
+        ...(user && user.ROLE !== '31' ? [{ id: 'Tipo', label: 'Tipo Cliente', align: 'left' }] : []), // Incluir "Tipo" si el rol no es '31'
+        ...TABLE_HEAD.slice(7, 10), // Incluye las columnas desde el índice 7 hasta el 10 (que incluye 'Ciudad', 'CITY', 'NUMEROGUIA')
+        ...(user && user.ROLE !== '31' ? [
+            { id: 'NOMBREUSUARIOENTREGARA', label: 'ENTREGAR', align: 'left' },
+            { id: 'DOCNUM', label: 'OV SAP', align: 'left' },
+        ] : []), // Incluir "ENTREGAR" y "OV SAP" si el rol no es '31'
+        ...TABLE_HEAD.slice(10) // Incluye el resto de las columnas
+    ];
 
     // useEffect(async () => {
     //
@@ -681,7 +694,7 @@ export default function InvoiceListPage() {
                                 <TableHeadCustom
                                     order={order}
                                     orderBy={orderBy}
-                                    headLabel={TABLE_HEAD}
+                                    headLabel={filteredTableHead}
                                     rowCount={tableData.length}
                                     // numSelected={selected.length}
                                     onSort={onSort}

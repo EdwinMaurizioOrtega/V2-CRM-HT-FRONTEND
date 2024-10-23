@@ -235,7 +235,7 @@ export default function InvoiceDetails({invoice}) {
         // Determinar si se debe mostrar el Autocomplete
         if (/^0{9}$/.test(event.target.value)) {
             setShowAutocomplete(true);
-            if (CLIENTEID === 'CL1791251237001'){
+            if (CLIENTEID === 'CL1791251237001') {
                 setShowAutocomplete(false);
             }
         } else {
@@ -603,7 +603,7 @@ export default function InvoiceDetails({invoice}) {
     const handleChangePedidoFactura = async () => {
 
         // console.log(ID);
-         console.log(JSON.stringify(user));
+        console.log(JSON.stringify(user));
 
         //=========For All Companys=========
         let idEmpleadoEntregar = 0;
@@ -612,7 +612,7 @@ export default function InvoiceDetails({invoice}) {
 
         if (user.COMPANY === 'HT') {
 
-            console.log("Empleado Entregar: " + JSON.stringify( empleadoEntregar))
+            console.log("Empleado Entregar: " + JSON.stringify(empleadoEntregar))
 
             if (valueGuia === '000000000' && empleadoEntregar === '') {
                 if (valueGuia === '000000000' && CLIENTEID === 'CL1791251237001') {
@@ -638,9 +638,8 @@ export default function InvoiceDetails({invoice}) {
                 estadoInvoice = 1
             }
 
-            console.log("ID empleado seleccionado: "+idEmpleadoEntregar)
+            console.log("ID empleado seleccionado: " + idEmpleadoEntregar)
         }
-
 
 
         //Enviamos los datos al servidor,
@@ -1161,17 +1160,25 @@ export default function InvoiceDetails({invoice}) {
                                     </Typography>
                                     <Label color="success">{Cliente}</Label>
                                     <Typography variant="body2">CI/RUC: {CLIENTEID}</Typography>
-                                    <Label color="success">{Ciudad}</Label>
-                                    <Typography variant="body2">TIPO: {Tipo}</Typography>
-                                    <Label color="success">Lista Precio: {tipoPrecio(Lista)}</Label>
-                                    <Typography variant="body2">Saldo de Cuenta: {fCurrency(Balance)}</Typography>
-                                    <Label color="success">DOCUMENTACIÓN: {documentacion(U_SYP_DOCUMENTACION)}</Label>
-                                    <Typography variant="body2">Tipo de
-                                        Crédito: {tipoCredito(U_SYP_CREDITO)}</Typography>
-                                    <Label color="success">Condicion de Pago: {nameFormaPago(GroupNum)}</Label>
-                                    <Typography variant="body2">Límte de Crédito: {fCurrency(CreditLine)}</Typography>
-                                    <Label color="success">Límite de comprometido: {fCurrency(DebtLine)}</Label>
-                                    <Typography variant="body2">Pedidos Clientes: {fCurrency(OrdersBal)}</Typography>
+                                    {user.ROLE !== '31' ? (
+                                        <>
+                                            <Label color="success">{Ciudad}</Label>
+                                            <Typography variant="body2">TIPO: {Tipo}</Typography>
+                                            <Label color="success">Lista Precio: {tipoPrecio(Lista)}</Label>
+                                            <Typography variant="body2">Saldo de
+                                                Cuenta: {fCurrency(Balance)}</Typography>
+                                            <Label
+                                                color="success">DOCUMENTACIÓN: {documentacion(U_SYP_DOCUMENTACION)}</Label>
+                                            <Typography variant="body2">Tipo de
+                                                Crédito: {tipoCredito(U_SYP_CREDITO)}</Typography>
+                                            <Label color="success">Condicion de Pago: {nameFormaPago(GroupNum)}</Label>
+                                            <Typography variant="body2">Límte de
+                                                Crédito: {fCurrency(CreditLine)}</Typography>
+                                            <Label color="success">Límite de comprometido: {fCurrency(DebtLine)}</Label>
+                                            <Typography variant="body2">Pedidos
+                                                Clientes: {fCurrency(OrdersBal)}</Typography>
+                                        </>
+                                    ) : null}
                                     <div style={{whiteSpace: 'pre-line', fontSize: '15px'}}>
                             <span>
                             Comentario: {insertLineBreaks(Free_Text, 40)}
@@ -1179,7 +1186,6 @@ export default function InvoiceDetails({invoice}) {
                                     </div>
 
                                 </Grid>
-
 
                                 <Grid item xs={12} sm={6} sx={{mb: 5}}>
                                     <Typography paragraph variant="overline" sx={{color: 'text.disabled'}}>
@@ -1201,66 +1207,69 @@ export default function InvoiceDetails({invoice}) {
                                         opciones
                                     </Typography>
 
-                                    <Grid item xs={12} sm={5} sx={{mb: 1}}>
+                                    {user.ROLE !== '31' ? (
+                                        <>
+                                            <Grid item xs={12} sm={5} sx={{mb: 1}}>
 
-                                        {/* <Typography variant="body2">{fDate(dueDate)}</Typography> */}
-                                        <Typography variant="body2">Bodega actual: {
+                                                {/* <Typography variant="body2">{fDate(dueDate)}</Typography> */}
+                                                <Typography variant="body2">Bodega actual: {
 
-                                            // Hipertronics
-                                            user.EMPRESA == '0992537442001' ? (
-                                                nameWarehouse(BODEGA)
-                                            ) : (
-                                                //Alphacell
-                                                nameWarehouseAlphacell(BODEGA)
-                                            )
-
-                                        }</Typography>
-
-                                        {user.ROLE === "9" &&
-
-                                            <Autocomplete
-                                                fullWidth
-                                                options={
                                                     // Hipertronics
                                                     user.EMPRESA == '0992537442001' ? (
-                                                        top100Films
+                                                        nameWarehouse(BODEGA)
                                                     ) : (
                                                         //Alphacell
-                                                        top100FilmsAlphacell
+                                                        nameWarehouseAlphacell(BODEGA)
                                                     )
+
+                                                }</Typography>
+
+                                                {user.ROLE === "9" &&
+
+                                                    <Autocomplete
+                                                        fullWidth
+                                                        options={
+                                                            // Hipertronics
+                                                            user.EMPRESA == '0992537442001' ? (
+                                                                top100Films
+                                                            ) : (
+                                                                //Alphacell
+                                                                top100FilmsAlphacell
+                                                            )
+                                                        }
+                                                        getOptionLabel={(option) => option.title}
+                                                        onChange={(event, value) => {
+                                                            handleChangeWarehouse(event, value);
+                                                        }} // Add onChange event handler
+                                                        renderInput={(params) => <TextField {...params} label="-_-"
+                                                                                            margin="none"/>}
+                                                    />
                                                 }
-                                                getOptionLabel={(option) => option.title}
-                                                onChange={(event, value) => {
-                                                    handleChangeWarehouse(event, value);
-                                                }} // Add onChange event handler
-                                                renderInput={(params) => <TextField {...params} label="-_-"
-                                                                                    margin="none"/>}
-                                            />
-                                        }
 
-                                    </Grid>
+                                            </Grid>
 
-                                    <Grid item xs={12} sm={7} sx={{mb: 1}}>
+                                            <Grid item xs={12} sm={7} sx={{mb: 1}}>
 
-                                        <Typography variant="body2">Forma de pago
-                                            actual: {nameFormaPago(FORMADEPAGO)}</Typography>
+                                                <Typography variant="body2">Forma de pago
+                                                    actual: {nameFormaPago(FORMADEPAGO)}</Typography>
 
-                                        {(user.ROLE === "9" || (ESTADO === 15 && ['7', '10'].includes(user.ROLE))) && (
-                                            <Autocomplete
-                                                fullWidth
-                                                options={PAYMENT_OPTIONS_V2}
-                                                getOptionLabel={(option) => option.title}
-                                                onChange={(event, value) => {
-                                                    handleChangePayment(event, value);
-                                                }}
-                                                renderInput={(params) => <TextField {...params} label="-_-"
-                                                                                    margin="none"/>}
-                                            />
-                                        )}
+                                                {(user.ROLE === "9" || (ESTADO === 15 && ['7', '10'].includes(user.ROLE))) && (
+                                                    <Autocomplete
+                                                        fullWidth
+                                                        options={PAYMENT_OPTIONS_V2}
+                                                        getOptionLabel={(option) => option.title}
+                                                        onChange={(event, value) => {
+                                                            handleChangePayment(event, value);
+                                                        }}
+                                                        renderInput={(params) => <TextField {...params} label="-_-"
+                                                                                            margin="none"/>}
+                                                    />
+                                                )}
 
-                                    </Grid>
+                                            </Grid>
 
-
+                                        </>) : null
+                                    }
                                 </Grid>
                             </>
                         ) : null

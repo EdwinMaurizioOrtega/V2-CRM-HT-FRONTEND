@@ -6,31 +6,23 @@ import {
     Stack,
     Button,
     Divider,
-    Checkbox,
     TableRow,
     MenuItem,
     TableCell,
     IconButton,
     Typography, TextField, Tooltip, Avatar, CardContent, Autocomplete, Box,
 } from '@mui/material';
-// utils
-import {fDate} from '../../../../utils/formatTime';
-import {fCurrency, fNumberSin} from '../../../../utils/formatNumber';
 // components
 import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
-import {CustomAvatar} from '../../../../components/custom-avatar';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import {useAuthContext} from "../../../../auth/useAuthContext";
 import {HOST_API_KEY} from "../../../../config-global";
-import {PATH_DASHBOARD} from "../../../../routes/paths";
 import axios from "../../../../utils/axios";
 import {useRouter} from "next/router";
 import {PAYMENT_OPTIONS_V2, TABULAR_ANULAR_PEDIDOS} from "../../../../utils/constants";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-
 
 // ----------------------------------------------------------------------
 
@@ -203,7 +195,7 @@ export default function InvoiceTableRow({
 
         if (tabAnular !== null) {
 
-            console.log("Anular: "+tabAnular.title);
+            console.log("Anular: " + tabAnular.title);
 
             try {
                 const response = await axios.put('/hanadb/api/orders/order/anular', {
@@ -273,6 +265,27 @@ export default function InvoiceTableRow({
 
     const sendOrderApproveSeller = async () => {
         console.log("Vendedor...");
+        try {
+            const response = await axios.put('/hanadb/api/orders/order/approve_seller', {
+                ID_ORDER: ID,
+            });
+
+            // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
+            console.log('Cambiando estado');
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+
+                //setTimeout(() => {
+                router.reload();
+                //}, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
+            }
+
+        } catch (error) {
+            // Manejar el error de la petición DELETE aquí
+            console.error('Error al cambiar el status de la orden:', error);
+        }
     }
 
     const sendOrderMoveToOneInWarehouse = async () => {
@@ -547,27 +560,33 @@ export default function InvoiceTableRow({
                         }
                     </Label>
                 </TableCell>
+                {user.ROLE !== '31' ? (
+                    <TableCell align="left">{
+                        // Hipertronics
+                        user.EMPRESA == '0992537442001' ? (
+                            nameWarehouse(BODEGA)
+                        ) : (
+                            //Alphacell
+                            nameWarehouseAlphacell(BODEGA)
+                        )
 
-                <TableCell align="left">{
-                    // Hipertronics
-                    user.EMPRESA == '0992537442001' ? (
-                        nameWarehouse(BODEGA)
-                    ) : (
-                        //Alphacell
-                        nameWarehouseAlphacell(BODEGA)
-                    )
+                    }</TableCell>
+                ) : null
+                }
 
-                }</TableCell>
 
-                {user.ROLE !== '0' ? (
-                    user.ROLE !== '2' ? (
-                        <TableCell align="left">{nameFormaPago(FORMADEPAGO)}</TableCell>
-                    ) : (
-                        <TableCell align="left">-</TableCell>
-                    )
-                ) : (
-                    <TableCell align="left">-</TableCell>
-                )
+                {
+                    user.ROLE !== '31' ? (
+                        user.ROLE !== '0' ? (
+                            user.ROLE !== '2' ? (
+                                <TableCell align="left">{nameFormaPago(FORMADEPAGO)}</TableCell>
+                            ) : (
+                                <TableCell align="left">-</TableCell>
+                            )
+                        ) : (
+                            <TableCell align="left">-</TableCell>
+                        )
+                    ) : null
                 }
 
                 <TableCell align="left">{CLIENTEID}</TableCell>
@@ -577,9 +596,13 @@ export default function InvoiceTableRow({
                 <TableCell align="center" sx={{textTransform: 'capitalize'}}>
                     {Celular}
                 </TableCell>
-                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
-                    {Tipo}
-                </TableCell>
+                {
+                    user.ROLE !== '31' ? (
+                        <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                            {Tipo}
+                        </TableCell>
+                    ) : null
+                }
                 <TableCell align="center" sx={{textTransform: 'capitalize'}}>
                     {Ciudad}
                 </TableCell>
@@ -627,16 +650,21 @@ export default function InvoiceTableRow({
 
                 </TableCell>
 
-                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
-                    {NOMBREUSUARIOENTREGARA}
-                </TableCell>
-                {/* { */
-                }
-                {/*     user.ROLE === "9" || user.ROLE === "8" ? ( */
-                }
-                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
-                    {DOCNUM}
-                </TableCell>
+                {
+                    user.ROLE !== '31' ? (
+                        <>
+                            <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                                {NOMBREUSUARIOENTREGARA}
+                            </TableCell>
+                            {/* { */
+                            }
+                            {/*     user.ROLE === "9" || user.ROLE === "8" ? ( */
+                            }
+                            <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                                {DOCNUM}
+                            </TableCell>
+                        </>
+                    ) : null}
                 {/* //     ) : null */
                 }
                 {/* // */
@@ -675,14 +703,14 @@ export default function InvoiceTableRow({
                 <Divider sx={{borderStyle: 'dashed'}}/>
 
                 {ESTADO === 15 && ['7', '10'].includes(user.ROLE) && <MenuItem
-                        onClick={() => {
-                            sendOrderApproveSeller();
-                            handleClosePopover();
-                        }}
-                    >
-                        <Iconify icon="eva:shopping-bag-outline"/>
-                        Aprobar V.
-                    </MenuItem>
+                    onClick={() => {
+                        sendOrderApproveSeller();
+                        handleClosePopover();
+                    }}
+                >
+                    <Iconify icon="eva:shopping-bag-outline"/>
+                    Aprobar V.
+                </MenuItem>
                 }
 
                 {ESTADO === 0 && user.ROLE === "9" ? (
