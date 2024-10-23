@@ -137,19 +137,71 @@ export default function ProductDetailsCarousel({ product }) {
     carousel2.current?.slickNext();
   };
 
-  const handleShare = (img) => {
-    if (navigator.share) {
-      navigator.share({
-        title: 'Check out this image!',
-        text: 'Aquí tienes una imagen interesante.',
-        url: img, // Comparte la URL de la imagen
-        // Puedes agregar otros campos como `files` si tu navegador lo permite, pero esto varía según la compatibilidad.
-      })
-          .then(() => console.log('Image shared successfully'))
-          .catch((error) => console.error('Error sharing image:', error));
-    } else {
-      console.error('Sharing is not supported on this browser.');
-    }
+  const handleShare = (url) => {
+    console.log('Compartiendo:', url);
+
+    const image = new window.Image();
+    image.crossOrigin = 'Anonymous'; // Establecer CORS para la imagen
+    image.src = url;
+
+    const watermark = new window.Image(); // Crear una nueva instancia para la marca de agua
+    watermark.src = '/logo/logo-ht.png'; // Ruta de la imagen de la marca de agua
+
+    // Esperar a que ambas imágenes se carguen
+    let imagesLoaded = 0;
+
+    const checkImagesLoaded = () => {
+      imagesLoaded++;
+      if (imagesLoaded === 2) {
+        drawImages();
+      }
+    };
+
+    image.onload = checkImagesLoaded;
+    watermark.onload = checkImagesLoaded;
+
+    const drawImages = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      canvas.width = image.width;
+      canvas.height = image.height;
+
+      // Establecer fondo blanco
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(image, 0, 0);
+
+      // Calcular la posición de la marca de agua (ajusta según sea necesario)
+      const watermarkWidth = 100; // Ancho de la marca de agua
+      const watermarkHeight = 50; // Alto de la marca de agua
+      const x = canvas.width - watermarkWidth - 10; // Posición en X (10px de margen)
+      const y = canvas.height - watermarkHeight - 10; // Posición en Y (10px de margen)
+
+      // Dibujar la imagen de la marca de agua con opacidad
+      ctx.globalAlpha = 0.5; // Ajustar la opacidad de la marca de agua
+      ctx.drawImage(watermark, x, y, watermarkWidth, watermarkHeight); // Dibujar la marca de agua
+      ctx.globalAlpha = 1.0; // Restablecer la opacidad
+
+      // Crear un enlace para descargar la imagen procesada
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      link.download = product.CODIGO + '.png';
+
+      // Simular un clic en el enlace
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
+    // Manejo de errores
+    image.onerror = (err) => {
+      console.error('Error al cargar la imagen:', err);
+    };
+
+    watermark.onerror = (err) => {
+      console.error('Error al cargar la marca de agua:', err);
+    };
   };
 
 
