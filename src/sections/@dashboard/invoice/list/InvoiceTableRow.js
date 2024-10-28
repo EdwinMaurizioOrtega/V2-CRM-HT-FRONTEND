@@ -713,7 +713,7 @@ export default function InvoiceTableRow({
                 </MenuItem>
                 }
 
-                {ESTADO === 0 && user.ROLE === "9" ? (
+                {[0, 1, 8, 22, 23].includes(ESTADO) && user.ROLE === "9" ? (
                     <MenuItem
                         onClick={() => {
                             sendOrderToBagRow();
@@ -741,19 +741,19 @@ export default function InvoiceTableRow({
                 ) : null
                 }
 
-                {ESTADO === 8 && user.ROLE === "9" ? (
-                    <MenuItem
-                        onClick={() => {
-                            sendOrderToBagRow();
-                            handleClosePopover();
-                        }}
-                    >
-                        <Iconify icon="eva:shopping-bag-outline"/>
-                        Regre. Cartera
-                    </MenuItem>
+                {/* {ESTADO === 8 && user.ROLE === "9" ? ( */}
+                {/*     <MenuItem */}
+                {/*         onClick={() => { */}
+                {/*             sendOrderToBagRow(); */}
+                {/*             handleClosePopover(); */}
+                {/*         }} */}
+                {/*     > */}
+                {/*         <Iconify icon="eva:shopping-bag-outline"/> */}
+                {/*         Regre. Cartera */}
+                {/*     </MenuItem> */}
 
-                ) : null
-                }
+                {/* ) : null */}
+                {/* } */}
 
                 {ESTADO === 0 && user.ROLE === "9" ? (
                     <MenuItem
