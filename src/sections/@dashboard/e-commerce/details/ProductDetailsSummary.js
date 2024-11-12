@@ -379,7 +379,15 @@ export default function ProductDetailsSummary({
                                 {
                                     pricelistproduct.map((price) => (
                                         <MenuItem key={price.PriceList} value={price}>
-                                            {price.ListName} | {fCurrency(price.Price)}+{fCurrency(price.Price * 0.15)} = {fCurrency(price.Price * 1.15)}
+                                            {price.ListName} | {fCurrency(price.Price)}+
+                                            {CODIGO !== '15.60.09' ?
+                                                fCurrency(price.Price * 0.15)
+                                                : 0
+                                            }
+                                            = { CODIGO !== '15.60.09' ?
+                                            fCurrency(price.Price * 1.15)
+                                            :  fCurrency(price.Price)
+                                        }
                                         </MenuItem>
 
                                     ))}
