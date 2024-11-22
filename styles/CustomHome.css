@@ -664,18 +664,18 @@ main {
                     }
 
                     /* Pseudo-elemento para la línea debajo del texto cuando está activo */
-                    a.active::after {
-                        content: ''; /* Se necesita para crear un pseudo-elemento */
-                        position: absolute;
-                        left: 0;
-                        bottom: 4px; /* Ajusta la distancia entre la línea y el texto */
-                        width: 75%; /* La línea ocupa todo el ancho del enlace */
-                        height: 2px; /* Altura de la línea */
-                        background-color: black; /* Color de la línea */
-                        transform: translateX(20%); /* Desplaza la línea hacia la izquierda para centrarla */
-                        transition: width 0.3s ease-out; /* Animación para expandir la línea */
+                    /*a.active::after {*/
+                    /*    content: ''; !* Se necesita para crear un pseudo-elemento *!*/
+                    /*    position: absolute;*/
+                    /*    left: 0;*/
+                    /*    bottom: 4px; !* Ajusta la distancia entre la línea y el texto *!*/
+                    /*    width: 75%; !* La línea ocupa todo el ancho del enlace *!*/
+                    /*    height: 2px; !* Altura de la línea *!*/
+                    /*    background-color: black; !* Color de la línea *!*/
+                    /*    transform: translateX(20%); !* Desplaza la línea hacia la izquierda para centrarla *!*/
+                    /*    transition: width 0.3s ease-out; !* Animación para expandir la línea *!*/
 
-                    }
+                    /*}*/
 
                     /* Cuando el enlace tiene la clase active, la línea se dibuja desde el centro */
                     a.active::after {
