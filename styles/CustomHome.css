@@ -764,7 +764,76 @@ main {
 
     }
 
-    /*// =============== TV Sounds ================*/
+    .explore{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        max-width: 1441px;
+        margin: 0 auto 0;
+        font-family: 'SamsungOne', arial, sans-serif;
+        font-weight: bold;
+        h2{
+            font-size: 2.5vw;
+            font-family: 'SamsungSharpSans', arial, sans-serif;
+        }
+        .explore-con{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: 2%;
+            a{
+                display: flex;
+                img{
+                    border-radius: 20px;
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .questions{
+                width: 49%;
+                div{
+                    padding: 2% 0;
+                    cursor: pointer;
+
+                    p{
+                        font-size: 21px;
+                        font-family: 'SamsungSharpSans', arial, sans-serif;
+                    }
+                    button{
+                        background-color: transparent;
+                        border: none;
+                        outline: none;
+                        font-size: 14px;
+                        border-bottom: 2px solid;
+                        display: none;
+                        margin-top: 4%;
+                        cursor: pointer;
+                        padding: 2%;
+                        transition: 0.7s;
+
+                    }
+                    &:hover{
+                        border-top: 2px solid;
+                        border-bottom: 1px solid;
+
+                        button{
+                            display: block;
+
+                            &:hover{
+                                background-color: black;
+                                color: white;
+                                border-radius: 10px;
+                                transition: 0.7s;
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 }
 
@@ -937,6 +1006,50 @@ main {
                 }
             }
 
+        }
+
+
+        .explore{
+            padding: 7% 3% 0 3%;
+
+            h2{
+                font-family: 'SamsungSharpSans', arial, sans-serif;
+                font-weight: bold;
+                font-size: 38px;
+                text-align: center;
+            }
+            .explore-con{
+                flex-direction: column;
+                align-items: center;
+                a{
+                    width: 100%;
+                }
+                .questions{
+                    width: 100%;
+                    display: flex;
+                    flex-wrap: wrap;
+                    div{
+                        width: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        p{
+                            font-size: 4vw;
+                            text-align: center;
+
+                        }
+                        button{
+                            border: 1px black solid;
+                            border-radius:10px;
+                            font-size: 3vw;
+                            width: 40%;
+                            font-family: 'SamsungOne',arial,sans-serif;
+
+                        }
+                    }
+
+                }
+            }
         }
 
     }

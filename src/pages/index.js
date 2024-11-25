@@ -132,6 +132,39 @@ export default function HomePage() {
     const imageNameDesktopHome = getImageNameDesktopHome(activeTabTres);
     const imageNameMobileHome = getImageNameMobileHome(activeTabTres);
 
+
+    useEffect(() => {
+        // Seleccionar todos los elementos interactivos dentro de .questions
+        const questionItems = document.querySelectorAll('.questions div');
+        // Seleccionar la imagen principal
+        const dynamicImage = document.getElementById('dynamicImage');
+
+        // Verificar si la imagen existe
+        if (!dynamicImage) return;
+
+        // Agregar eventos de hover (mouseover y mouseout) a cada elemento
+        questionItems.forEach((item) => {
+            item.addEventListener('mouseover', () => {
+                const newImageSrc = item.getAttribute('data-img');
+                if (newImageSrc) dynamicImage.src = newImageSrc;
+            });
+
+            item.addEventListener('mouseout', () => {
+                // Restaurar la imagen original al salir del hover
+                dynamicImage.src = "/images/co15_half-teasher-list-2_pc_684x6841.jpg";
+            });
+        });
+
+        // Limpiar los eventos al desmontar el componente
+        return () => {
+            questionItems.forEach((item) => {
+                item.removeEventListener('mouseover', () => {});
+                item.removeEventListener('mouseout', () => {});
+            });
+        };
+    }, []);
+
+
     return (
         <>
             <Head>
@@ -829,7 +862,7 @@ export default function HomePage() {
                 </div>
 
                 {/* Cuarta seccion */}
-                <div id="tv" class="tv">
+                <div id="tv" className="tv">
 
                     <a className={isMobile ? "mobile-mo" : "mobile-desk"}>
                         <img src={isMobile ? imageNameMobileTV : imageNameDesktopTV} alt=""/>
@@ -981,7 +1014,7 @@ export default function HomePage() {
                 </div>
 
                 {/* Quinta seccion */}
-                <div id="home" class="home">
+                <div id="home" className="home">
 
                     <a className={isMobile ? "mobile-mo" : "mobile-desk"}>
                         <img src={isMobile ? imageNameMobileHome : imageNameDesktopHome} alt=""/>
@@ -1099,6 +1132,35 @@ export default function HomePage() {
                             </div>
                         </div>
 
+                    </div>
+                </div>
+
+                {/* Sexta seecion */}
+                <div className="explore">
+                    <h2>Explore #Hipertronics</h2>
+                    <div className="explore-con">
+                        <a >
+                            <img id="dynamicImage" src="/images/co15_half-teasher-list-2_pc_684x6841.jpg"
+                                 alt="Imagen principal"/>
+                        </a>
+                        <div className="questions">
+                            <div data-img="/images/co15_half-teasher-list-2_pc_684x6841.jpg">
+                            <p>01. Descubre cómo nuestra AI te empodera</p>
+                                <button>Conoce más</button>
+                            </div>
+                            <div data-img="/images/global0029_home-explore-banner_pc_684x684.webp">
+                                <p>02. Sostenibilidad para las generaciones futuras y dirigida por ellas</p>
+                                <button>Conoce más</button>
+                            </div>
+                            <div data-img="/images/da0055_home_explore_banner_pc_684x684.jpg">
+                                <p>03. Rollos de repollo con salsa de tomate</p>
+                                <button>Conoce más</button>
+                            </div>
+                            <div data-img="/images/home_smart-home_684x684_pc.webp">
+                                <p>04. ¡Tu Casa Inteligente te está esperando!</p>
+                                <button>Conoce más</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

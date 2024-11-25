@@ -49,7 +49,7 @@ export default function AboutVision() {
 
       <m.div variants={varFade().inUp}>
         <Typography variant="h3" sx={{ textAlign: 'center', maxWidth: 800, mx: 'auto' }}>
-            Nuestara Visión: Liderar el mercado electrónico impactando la vida de nuestros clientes a través de la tecnología y servicio. Mejorar la experiencia de nuestros proveedores a través de las diferentes plataformas ONLINE construyendo una marca en donde las personas puedan depositar su confianza.
+            Nuestra Visión: Liderar el mercado electrónico impactando la vida de nuestros clientes a través de la tecnología y servicio. Mejorar la experiencia de nuestros proveedores a través de las diferentes plataformas ONLINE construyendo una marca en donde las personas puedan depositar su confianza.
         </Typography>
       </m.div>
     </Container>
