@@ -31,10 +31,10 @@ export default function HomePage() {
 
     const slides = [
         {
-            desktopImage: '/images/Black_Friday_desktop-3.jpg',
-            mobileImage: '/images/Black_Friday_mo-3.jpg',
+            desktopImage: '/images/PCD-Header-PC-BLACK-WEEKS-V2.webp',
+            mobileImage: '/images/PCD-Header-MO-BLACK-WEEKS-V2.webp',
             title: 'Black Friday',
-            description: 'Aprovecha las mejores ofertas para todos',
+            description: 'Llévate tus productos favoritos  antes del 01/12 con hasta un 50% de dto.',
             style: {color: 'white'},
         },
         {
@@ -190,7 +190,7 @@ export default function HomePage() {
                             <div className="baner-text" style={slide.style}>
                                 <div className="baner-text-con">
                                     <h1 className="text-title">{slide.title}</h1>
-                                    {/* <p>{slide.description}</p> */}
+                                    <p>{slide.description}</p>
                                     <div className="baner-btn">
                                         <a className="anchor-info">Más información</a>
                                         <button className="button-comprar">Comprar ahora</button>
@@ -307,22 +307,30 @@ export default function HomePage() {
                             <div className="left">
                                 <a className={isMobile ? "left-mo" : "left-desk"}>
                                     <img
-                                        src={isMobile ? "/images/S24FE_Merchandising_624x352_mo.jpeg" : "/images/S24FE_Merchandising_684x684_pc.jpeg"}
+                                        src={isMobile ? "/images/Large-Tile-MO-BLACK-FRIDAY.webp" : "/images/Large-Tile-PC-BLACK-FRIDAY.webp"}
                                         alt=""
                                     />
                                 </a>
 
                                 <div className="p-text">
-                                    <h3>Galaxy S24 FE</h3>
+                                    <h3 style={{
+                                        color: "white"
+                                    }}>En Black Friday, ¡hasta 50% dto.!</h3>
                                     <div className="text-animation">
                                         {/* <small>Enjoy the season of gifting with amazing discounts up tp 59% off */}
                                         {/* </small> */}
-                                        <button className="button-comprar">Comprar ahora
+                                        <button className="button-comprar"
+                                        style={{
+                                            backgroundColor: 'white',
+                                            color: 'black',
+                                        }}
+                                        >Comprar ahora
                                             <svg className="custom-svg" viewBox="0 0 96 96"
-                                                 xmlns="http://www.w3.org/2000/svg">
+                                                 xmlns="http://www.w3.org/2000/svg"
+                                            >
                                                 <path
                                                     d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z"
-                                                    fill="white"
+                                                    fill="black"
                                                 ></path>
                                             </svg>
                                         </button>
@@ -995,9 +1003,17 @@ export default function HomePage() {
                             </li>
                             <li>
                                 <button className={activeTabTres === 'mobile_cinco' ? 'active' : ''}
+                                        style={{
+                                            color: 'white',
+                                            border: activeTabTres === 'mobile_cinco' ? '2px dotted white' : 'none',
+                                        }}
                                         onClick={() => handleTabClickSecTres('mobile_cinco')}>
                                     The Frame
-                                    <span className="tab__item-line"></span>
+                                    <span className="tab__item-line"
+                                          style={{
+                                              background: 'white',
+                                          }}
+                                    ></span>
                                 </button>
                             </li>
                         </ul>
