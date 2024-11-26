@@ -317,7 +317,15 @@ export default function HomePage() {
                                     <div className="text-animation">
                                         {/* <small>Enjoy the season of gifting with amazing discounts up tp 59% off */}
                                         {/* </small> */}
-                                        <button className="button-comprar">Comprar ahora</button>
+                                        <button className="button-comprar">Comprar ahora
+                                            <svg className="custom-svg" viewBox="0 0 96 96"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z"
+                                                    fill="white"
+                                                ></path>
+                                            </svg>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -333,7 +341,15 @@ export default function HomePage() {
                                         <div className="text-animation">
                                             {/* <small>Enjoy 0% installment plan and free delivery</small> */}
                                             {!isMobile &&
-                                                <button>Comprar ahora</button>
+                                                <button>Comprar ahora
+                                                    <svg className="custom-svg" viewBox="0 0 96 96"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z"
+                                                            fill="white"
+                                                        ></path>
+                                                    </svg>
+                                                </button>
                                             }
                                         </div>
                                     </div>
@@ -343,11 +359,19 @@ export default function HomePage() {
                                     <a><img src="/images/Watch-Ultra_160x160_pc.webp" alt=""/></a>
                                     <h4>Nuevo</h4>
                                     <div className="p-text">
-                                        <h3>Galaxy Watch Ultra</h3>
+                                    <h3>Galaxy Watch Ultra</h3>
                                         <div className="text-animation">
                                             {/* <small>Just for you this Ramadan</small> */}
                                             {!isMobile &&
-                                                <button>Comprar ahora</button>
+                                                <button>Comprar ahora
+                                                    <svg className="custom-svg" viewBox="0 0 96 96"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z"
+                                                            fill="white"
+                                                        ></path>
+                                                    </svg>
+                                                </button>
                                             }
                                         </div>
                                     </div>
@@ -357,11 +381,19 @@ export default function HomePage() {
                                     <a><img src="/images/T_combo_desktop_160X160.png" alt=""/></a>
                                     <h4>Nuevo</h4>
                                     <div className="p-text">
-                                        <h3>Bespoke AI Laundry Combo</h3>
+                                    <h3>Bespoke AI Laundry Combo</h3>
                                         <div className="text-animation">
                                             {/* <small>With 48H delivery and flexible payment options*</small> */}
                                             {!isMobile &&
-                                                <button>Comprar ahora</button>
+                                                <button>Comprar ahora
+                                                    <svg className="custom-svg" viewBox="0 0 96 96"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z"
+                                                            fill="white"
+                                                        ></path>
+                                                    </svg>
+                                                </button>
                                             }
                                         </div>
                                     </div>
@@ -371,12 +403,20 @@ export default function HomePage() {
                                     <a><img src="/images/Odyssey_desktop_160X160.png" alt=""/></a>
                                     <h4>Nuevo</h4>
                                     <div className="p-text">
-                                        <h3>Odyssey OLED G8</h3>
+                                    <h3>Odyssey OLED G8</h3>
                                         <div className="text-animation">
                                             {/* <small>Enjoy the season of gifting with amazing discounts up tp 59% */}
                                             {/*     off</small> */}
                                             {!isMobile &&
-                                                <button>Comprar ahora</button>
+                                                <button>Comprar ahora
+                                                    <svg className="custom-svg" viewBox="0 0 96 96"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z"
+                                                            fill="white"
+                                                        ></path>
+                                                    </svg>
+                                                </button>
                                             }
                                         </div>
                                     </div>
@@ -388,7 +428,7 @@ export default function HomePage() {
                         <div className={`tab-content ${activeTab === 'mobile' ? 'active' : ''}`}>
                             <div className="left">
                                 <a className={isMobile ? "left-mo" : "left-desk"}>
-                                    <img
+                                <img
                                         src={isMobile ? "/images/HOME_Q6_Merchandising_624x352_mo_LTR.webp" : "/images/HOME_Q6_Merchandising_684x684_pc.webp"}
                                         alt=""
                                     />
@@ -780,7 +820,11 @@ export default function HomePage() {
                                         }}
                                         onClick={() => handleTabClickSecTres('mobile_cinco')}>
                                     Galaxy Watch Ultra
-                                    <span className="tab__item-line"></span>
+                                    <span className="tab__item-line"
+                                    style={{
+                                        background: 'white'
+                                    }}
+                                    ></span>
                                 </button>
                             </li>
                         </ul>
@@ -885,56 +929,72 @@ export default function HomePage() {
                     <div className="mobile-list">
                         <h1 className="text-block-container__headline"
                             style={{
-                                color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                color: 'white',
                             }}
                         >TV & AV</h1>
                         <ul className="horizontal-scroll">
                             <li>
                                 <button className={activeTabTres === 'mobile_uno' ? 'active' : ''}
                                         style={{
-                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                            color: 'white',
+                                            border: activeTabTres === 'mobile_uno' ? '2px dotted white' : 'none' ,
                                         }}
                                         onClick={() => handleTabClickSecTres('mobile_uno')}>
                                     Samsung AI TV
-                                    <span className="tab__item-line"></span>
+                                    <span className="tab__item-line"
+                                          style={{
+                                              background: 'white',
+                                          }}
+                                    ></span>
                                 </button>
                             </li>
                             <li>
                                 <button className={activeTabTres === 'mobile_dos' ? 'active' : ''}
                                         style={{
-                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                            color: 'white',
+                                            border: activeTabTres === 'mobile_dos' ? '2px dotted white' : 'none' ,
                                         }}
                                         onClick={() => handleTabClickSecTres('mobile_dos')}>
                                     Neo QLED 8K
-                                    <span className="tab__item-line"></span>
+                                    <span className="tab__item-line"
+                                          style={{
+                                              background: 'white',
+                                          }}
+                                    ></span>
                                 </button>
                             </li>
                             <li>
                                 <button className={activeTabTres === 'mobile_tres' ? 'active' : ''}
                                         style={{
-                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                            color: 'white',
+                                            border: activeTabTres === 'mobile_tres' ? '2px dotted white' : 'none',
                                         }}
                                         onClick={() => handleTabClickSecTres('mobile_tres')}>
                                     Neo QLED
-                                    <span className="tab__item-line"></span>
+                                    <span className="tab__item-line"
+                                          style={{
+                                              background: 'white',
+                                          }}
+                                    ></span>
                                 </button>
                             </li>
                             <li>
                                 <button className={activeTabTres === 'mobile_cuatro' ? 'active' : ''}
                                         style={{
-                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                            color: 'white',
+                                            border: activeTabTres === 'mobile_cuatro' ? '2px dotted white' : 'none',
                                         }}
                                         onClick={() => handleTabClickSecTres('mobile_cuatro')}>
                                     OLED
-                                    <span className="tab__item-line"></span>
+                                    <span className="tab__item-line"
+                                          style={{
+                                              background: 'white',
+                                          }}
+                                    ></span>
                                 </button>
                             </li>
                             <li>
                                 <button className={activeTabTres === 'mobile_cinco' ? 'active' : ''}
-                                        style={{
-                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                            border: activeTabTres === 'mobile_cinco' ? '2px dotted white' : '',
-                                        }}
                                         onClick={() => handleTabClickSecTres('mobile_cinco')}>
                                     The Frame
                                     <span className="tab__item-line"></span>
@@ -945,10 +1005,14 @@ export default function HomePage() {
                     <div className="mobile-list-bottom">
                         <div className={`tab-content ${activeTabTres === 'mobile_uno' ? 'active' : ''}`}>
 
-                            <h2>Galaxy Z Fold6</h2>
+                            <h2 style={{
+                                color: 'white',
+                            }}>Eleva cada momento</h2>
                             {/* <p>Get free Galaxy Buds Pro worth AED 739 with every purchase</p> */}
                             <div className="mobile-btn">
-                                <a>Más información</a>
+                                <a style={{
+                                    color: 'white',
+                                }}>Más información</a>
                                 <a>Comprar ahora
                                     <svg className="custom-svg" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -961,10 +1025,14 @@ export default function HomePage() {
                         </div>
                         <div className={`tab-content ${activeTabTres === 'mobile_dos' ? 'active' : ''}`}>
 
-                            <h2>Galaxy Z Flip6</h2>
+                            <h2 style={{
+                                color: 'white',
+                            }}>Neo QLED 8K</h2>
                             {/* <p>Get free Galaxy Buds Pro worth AED 739 with every purchase</p> */}
                             <div className="mobile-btn">
-                                <a>Más información</a>
+                                <a style={{
+                                    color: 'white',
+                                }}>Más información</a>
                                 <a>Comprar ahora
                                     <svg className="custom-svg" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -977,10 +1045,14 @@ export default function HomePage() {
                         </div>
                         <div className={`tab-content ${activeTabTres === 'mobile_tres' ? 'active' : ''}`}>
 
-                            <h2>Galaxy S24 FE</h2>
+                            <h2 style={{
+                                color: 'white',
+                            }}>Neo QLED</h2>
                             {/* <p>Get free Galaxy Buds Pro worth AED 739 with every purchase</p> */}
                             <div className="mobile-btn">
-                                <a>Más información</a>
+                                <a style={{
+                                    color: 'white',
+                                }}>Más información</a>
                                 <a>Comprar ahora
                                     <svg className="custom-svg" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -993,10 +1065,14 @@ export default function HomePage() {
                         </div>
                         <div className={`tab-content ${activeTabTres === 'mobile_cuatro' ? 'active' : ''}`}>
 
-                            <h2>Serie Galaxy Tab S10</h2>
+                            <h2 style={{
+                                color: 'white',
+                            }}>OLED</h2>
                             {/* <p>Get free Galaxy Buds Pro worth AED 739 with every purchase</p> */}
                             <div className="mobile-btn">
-                                <a>Más información</a>
+                                <a style={{
+                                    color: 'white',
+                                }}>Más información</a>
                                 <a>Comprar ahora
                                     <svg className="custom-svg" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -1010,15 +1086,10 @@ export default function HomePage() {
                         <div className={`tab-content ${activeTabTres === 'mobile_cinco' ? 'active' : ''}`}>
 
                             <h2
-                                style={{
-                                    color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                }}
-                            >Galaxy Watch Ultra</h2>
+                            >The Frame</h2>
                             {/* <p>Get free Galaxy Buds Pro worth AED 739 with every purchase</p> */}
                             <div className="mobile-btn">
-                                <a style={{
-                                    color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                }}>Más información</a>
+                                <a >Más información</a>
                                 <a>Comprar ahora
                                     <svg className="custom-svg" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -1092,8 +1163,8 @@ export default function HomePage() {
                     <div className="mobile-list-bottom">
                         <div className={`tab-content ${activeTabTres === 'mobile_uno' ? 'active' : ''}`}>
 
-                            <h2>Galaxy Z Fold6</h2>
-                            {/* <p>Get free Galaxy Buds Pro worth AED 739 with every purchase</p> */}
+                            <h2>Bespoke AI Laundry Combo</h2>
+                            <p>El lavado y secado perfecto en 98 min con AI</p>
                             <div className="mobile-btn">
                                 <a>Más información</a>
                                 <a>Comprar ahora
@@ -1108,8 +1179,8 @@ export default function HomePage() {
                         </div>
                         <div className={`tab-content ${activeTabTres === 'mobile_dos' ? 'active' : ''}`}>
 
-                            <h2>Galaxy Z Flip6</h2>
-                            {/* <p>Get free Galaxy Buds Pro worth AED 739 with every purchase</p> */}
+                            <h2>Bespoke AI ™</h2>
+                            <p>Las convenientes soluciones de AI te brindan más tiempo libre y más ahorro de energía.</p>
                             <div className="mobile-btn">
                                 <a>Más información</a>
                                 <a>Comprar ahora
@@ -1124,8 +1195,8 @@ export default function HomePage() {
                         </div>
                         <div className={`tab-content ${activeTabTres === 'mobile_tres' ? 'active' : ''}`}>
 
-                            <h2>Galaxy S24 FE</h2>
-                            {/* <p>Get free Galaxy Buds Pro worth AED 739 with every purchase</p> */}
+                            <h2>Family Hub</h2>
+                            <p>Nuevos productos con AI</p>
                             <div className="mobile-btn">
                                 <a>Más información</a>
                                 <a>Comprar ahora
@@ -1140,8 +1211,8 @@ export default function HomePage() {
                         </div>
                         <div className={`tab-content ${activeTabTres === 'mobile_cuatro' ? 'active' : ''}`}>
 
-                            <h2>Serie Galaxy Tab S10</h2>
-                            {/* <p>Get free Galaxy Buds Pro worth AED 739 with every purchase</p> */}
+                            <h2>Top Mount Freezer</h2>
+                            <p>Nuevos productos con AI</p>
                             <div className="mobile-btn">
                                 <a>Más información</a>
                                 <a>Comprar ahora

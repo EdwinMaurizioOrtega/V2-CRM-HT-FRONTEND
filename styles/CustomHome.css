@@ -370,18 +370,42 @@ main {
                             }
 
                             button {
+                                /*background-color: black;*/
+                                /*border: none;*/
+                                /*outline: none;*/
+                                /*color: white;*/
+                                /*font-size: 14px;*/
+                                /*!*padding: 3%;*!*/
+                                /*border-radius: 20px;*/
+                                /*margin-bottom: 3%;*/
+                                /*transform: translateY(300%);*/
+                                /*transition: 0.7s;*/
+                                /*font-weight: bold;*/
+                                /*cursor: pointer;*/
                                 background-color: black;
                                 border: none;
                                 outline: none;
                                 color: white;
                                 font-size: 14px;
-                                /*padding: 3%;*/
                                 border-radius: 20px;
+                                padding: 10px 24px 11px 24px;
                                 margin-bottom: 3%;
                                 transform: translateY(300%);
                                 transition: 0.7s;
                                 font-weight: bold;
                                 cursor: pointer;
+                                font-family: 'SamsungOne-600', arial, sans-serif;
+                                line-height: 19px;
+                                white-space: nowrap;
+
+
+                                svg {
+                                    width: 16px;
+                                    height: 16px;
+                                    flex-shrink: 0;
+                                    margin-left: 4px;
+
+                                }
                             }
                         }
 
@@ -507,6 +531,14 @@ main {
                                     font-family: 'SamsungOne-600', arial, sans-serif;
                                     line-height: 19px;
                                     white-space: nowrap;
+
+                                    svg {
+                                        width: 16px;
+                                        height: 16px;
+                                        flex-shrink: 0;
+                                        margin-left: 4px;
+
+                                    }
                                 }
                             }
 
