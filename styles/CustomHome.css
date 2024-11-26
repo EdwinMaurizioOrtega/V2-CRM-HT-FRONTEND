@@ -21,220 +21,221 @@
 
 main {
 
+    /* ================================== SECCIÓN 1 ================================== */
     .baner {
         position: relative;
         width: 100%;
         overflow: hidden;
         max-width: 1441px;
         margin: 100px auto 100px;
-    }
 
-    .slide {
-        position: absolute;
-        width: 100%;
-        transition: opacity 1s ease;
-        opacity: 0;
-    }
 
-    .slide.active {
-        opacity: 1;
-        position: relative;
-    }
-
-    .baner-desk img,
-    .baner-mobile img {
-        width: 100%;
-        height: auto;
-    }
-
-    .baner-text {
-        position: absolute;
-        bottom: 40%;
-        left: 5%;
-        color: black;
-    }
-
-    /* Estilos solo para dispositivos de escritorio */
-    @media (max-width: 768px) {
-        .baner-text {
-            bottom: 65%;
+        .slide {
+            position: absolute;
             width: 100%;
-            text-align: center;
-            left: auto;
+            transition: opacity 1s ease;
+            opacity: 0;
         }
-    }
 
-    /*Mayor a esta resolución*/
-    @media (min-width: 769px) {
-        .baner-text-con {
-            width: 620px;
+        .slide.active {
+            opacity: 1;
+            position: relative;
         }
-    }
 
-    .text-title {
-        font-size: 48px;
-        font-weight: bold;
-        font-family: 'SamsungSharpSans', arial, sans-serif;
-        line-height: 1.2;
-        word-wrap: break-word;
-    }
+        .baner-desk img,
+        .baner-mobile img {
+            width: 100%;
+            height: auto;
+        }
 
-    /* Estilos solo para dispositivos de escritorio */
-    @media (max-width: 768px) {
+        .baner-text {
+            position: absolute;
+            bottom: 40%;
+            left: 5%;
+            color: black;
+        }
+
+        /* For Movil */
+        @media (max-width: 768px) {
+            .baner-text {
+                bottom: 65%;
+                width: 100%;
+                text-align: center;
+                left: auto;
+            }
+        }
+
+        /* For Desktop */
+        @media (min-width: 769px) {
+            .baner-text-con {
+                width: 620px;
+            }
+        }
+
         .text-title {
-            font-size: 38px;
+            font-size: 48px;
+            font-weight: bold;
+            font-family: 'SamsungSharpSans', arial, sans-serif;
+            line-height: 1.2;
+            word-wrap: break-word;
+        }
+
+        /* For Mobile */
+        @media (max-width: 768px) {
+            .text-title {
+                font-size: 38px;
+            }
+        }
+
+
+        .baner-btn button {
+            margin-right: 10px;
+            cursor: pointer;
+            background-color: black;
+            color: white;
+            border: none;
+            transition: background-color 0.3s;
+
+            font-family: SamsungSharpSans, arial, sans-serif;
+        }
+
+        .button-comprar {
+            border-radius: 20px;
+            margin-left: 20px;
+            font-family: SamsungSharpSans, arial, sans-serif;
+            padding: 7px 24px 11px 24px;
+            font-weight: bold;
+
+        }
+
+        .anchor-info {
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 19px;
+            white-space: nowrap;
+            font-family: SamsungOne, arial, sans-serif;
+            text-decoration: none; /* Eliminar el subrayado predeterminado */
+            position: relative;
+        }
+
+        .anchor-info::after {
+            content: '';
+            display: block;
+            height: 2px; /* Altura del subrayado */
+            background: currentColor; /* Color del subrayado */
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -3px; /* Distancia entre el texto y el subrayado */
+        }
+
+        .baner-btn button:hover {
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        /* Botones de navegación */
+
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 30px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: none;
+            z-index: 1;
+        }
+
+        .prev:hover, .next:hover {
+            background-color: rgba(0, 0, 0, 0.7); /* Color de fondo al pasar el ratón */
+        }
+
+        .prev {
+            left: 10px;
+            width: 40px; /* Ancho del círculo */
+            height: 40px; /* Alto del círculo, igual al ancho para mantenerlo redondo */
+            border-radius: 50%; /* Hace que el botón sea un círculo */
+            background-color: rgba(0, 0, 0, 0.5); /* Color de fondo con algo de transparencia */
+            color: white; /* Color del texto (flecha) */
+            border: none; /* Sin borde */
+            display: flex; /* Centra el contenido */
+            align-items: center; /* Centra verticalmente */
+            justify-content: center; /* Centra horizontalmente */
+            cursor: pointer; /* Cambia el cursor a una mano */
+            transition: background-color 0.3s; /* Efecto de transición */
+        }
+
+        .next {
+            right: 10px;
+            width: 40px; /* Ancho del círculo */
+            height: 40px; /* Alto del círculo, igual al ancho para mantenerlo redondo */
+            border-radius: 50%; /* Hace que el botón sea un círculo */
+            background-color: rgba(0, 0, 0, 0.5); /* Color de fondo con algo de transparencia */
+            color: white; /* Color del texto (flecha) */
+            border: none; /* Sin borde */
+            display: flex; /* Centra el contenido */
+            align-items: center; /* Centra verticalmente */
+            justify-content: center; /* Centra horizontalmente */
+            cursor: pointer; /* Cambia el cursor a una mano */
+            transition: background-color 0.3s; /* Efecto de transición */
+        }
+
+        /* Línea de navegación */
+
+        .indicator {
+            position: absolute;
+            left: 0;
+            bottom: 50px; /* Ajusta la separación desde la parte inferior */
+            width: 100%;
+            height: 2px;
+            /*background: rgba(0, 0, 0, 0.2);*/
+            display: flex;
+            padding: 0 100px; /* Espacio de padding en los lados izquierdo y derecho */
+            align-items: center;
+        }
+
+        .dot {
+            flex: 1;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: background-color 0.3s;
+            margin-right: 16px;
+        }
+
+        .dot.active {
+            background: #717171;
+        }
+
+        /* Controls Play and Pause */
+
+        .indicator__controls {
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .indicator__controls svg {
+            fill: black; /* Establecer el color rojo para ambos íconos */
+            width: 15px; /* Tamaño del ícono (ajusta según tus necesidades) */
+            height: 15px; /* Tamaño del ícono (ajusta según tus necesidades) */
+        }
+
+        .play, .pause {
+            display: none; /* Ocultar ambos por defecto */
+        }
+
+        .indicator__controls--play .play {
+            display: block; /* Mostrar el ícono de play */
+        }
+
+        .indicator__controls--play.paused .pause {
+            display: block; /* Mostrar el ícono de pause si está en pausa */
         }
     }
 
-
-    .baner-btn button {
-        margin-right: 10px;
-        cursor: pointer;
-        background-color: black;
-        color: white;
-        border: none;
-        transition: background-color 0.3s;
-
-        font-family: SamsungSharpSans, arial, sans-serif;
-    }
-
-    .button-comprar {
-        border-radius: 20px;
-        margin-left: 20px;
-        font-family: SamsungSharpSans, arial, sans-serif;
-        padding: 7px 24px 11px 24px;
-        font-weight: bold;
-
-    }
-
-    .anchor-info {
-        font-size: 14px;
-        font-weight: bold;
-        line-height: 19px;
-        white-space: nowrap;
-        font-family: SamsungOne, arial, sans-serif;
-        text-decoration: none; /* Eliminar el subrayado predeterminado */
-        position: relative;
-    }
-
-    .anchor-info::after {
-        content: '';
-        display: block;
-        height: 2px; /* Altura del subrayado */
-        background: currentColor; /* Color del subrayado */
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: -3px; /* Distancia entre el texto y el subrayado */
-    }
-
-    .baner-btn button:hover {
-        background-color: rgba(0, 0, 0, 0.9);
-    }
-
-    /* Botones de navegación */
-
-    .prev, .next {
-        cursor: pointer;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 30px;
-        color: white;
-        background-color: rgba(0, 0, 0, 0.5);
-        border: none;
-        z-index: 1;
-    }
-
-    .prev:hover, .next:hover {
-        background-color: rgba(0, 0, 0, 0.7); /* Color de fondo al pasar el ratón */
-    }
-
-    .prev {
-        left: 10px;
-        width: 40px; /* Ancho del círculo */
-        height: 40px; /* Alto del círculo, igual al ancho para mantenerlo redondo */
-        border-radius: 50%; /* Hace que el botón sea un círculo */
-        background-color: rgba(0, 0, 0, 0.5); /* Color de fondo con algo de transparencia */
-        color: white; /* Color del texto (flecha) */
-        border: none; /* Sin borde */
-        display: flex; /* Centra el contenido */
-        align-items: center; /* Centra verticalmente */
-        justify-content: center; /* Centra horizontalmente */
-        cursor: pointer; /* Cambia el cursor a una mano */
-        transition: background-color 0.3s; /* Efecto de transición */
-    }
-
-    .next {
-        right: 10px;
-        width: 40px; /* Ancho del círculo */
-        height: 40px; /* Alto del círculo, igual al ancho para mantenerlo redondo */
-        border-radius: 50%; /* Hace que el botón sea un círculo */
-        background-color: rgba(0, 0, 0, 0.5); /* Color de fondo con algo de transparencia */
-        color: white; /* Color del texto (flecha) */
-        border: none; /* Sin borde */
-        display: flex; /* Centra el contenido */
-        align-items: center; /* Centra verticalmente */
-        justify-content: center; /* Centra horizontalmente */
-        cursor: pointer; /* Cambia el cursor a una mano */
-        transition: background-color 0.3s; /* Efecto de transición */
-    }
-
-    /* Línea de navegación */
-
-    .indicator {
-        position: absolute;
-        left: 0;
-        bottom: 50px; /* Ajusta la separación desde la parte inferior */
-        width: 100%;
-        height: 2px;
-        /*background: rgba(0, 0, 0, 0.2);*/
-        display: flex;
-        padding: 0 100px; /* Espacio de padding en los lados izquierdo y derecho */
-        align-items: center;
-    }
-
-    .dot {
-        flex: 1;
-        height: 100%;
-        background: rgba(255, 255, 255, 0.3);
-        transition: background-color 0.3s;
-        margin-right: 16px;
-    }
-
-    .dot.active {
-        background: #717171;
-    }
-
-    /* Controls Play and Pause */
-
-    .indicator__controls {
-        position: relative;
-        background: none;
-        border: none;
-        cursor: pointer;
-    }
-
-    .indicator__controls svg {
-        fill: black; /* Establecer el color rojo para ambos íconos */
-        width: 15px; /* Tamaño del ícono (ajusta según tus necesidades) */
-        height: 15px; /* Tamaño del ícono (ajusta según tus necesidades) */
-    }
-
-    .play, .pause {
-        display: none; /* Ocultar ambos por defecto */
-    }
-
-    .indicator__controls--play .play {
-        display: block; /* Mostrar el ícono de play */
-    }
-
-    .indicator__controls--play.paused .pause {
-        display: block; /* Mostrar el ícono de pause si está en pausa */
-    }
-
-
-    /* ================================== SECCIÓN DOS ================================== */
+    /* ================================== SECCIÓN 2 ================================== */
     .month-pick {
 
         display: flex;
@@ -271,6 +272,7 @@ main {
         }
 
         /* Estilo para la pestaña activa */
+
         ul li a.active {
             color: black;
             border-bottom: 2px solid;
@@ -546,25 +548,59 @@ main {
             }
         }
 
+
+        .text-block-container__headline {
+            position: relative;
+            width: 100%;
+            max-width: 1392px;
+            margin: 0 auto;
+            font-family: 'SamsungSharpSans', arial, sans-serif;
+            font-size: 38px;
+            font-weight: bold;
+            line-height: 1.2;
+            overflow: visible;
+            word-break: keep-all;
+            text-align: center;
+            text-overflow: clip;
+        }
+
+        .scroll-container {
+            width: 100%; /* Ajusta según el espacio que necesites */
+            overflow-x: scroll; /* Permite el desplazamiento horizontal */
+            white-space: nowrap; /* Evita que los elementos se envuelvan */
+            scrollbar-width: none; /* Oculta la barra de desplazamiento en Firefox */
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            /*align-items: center;*/
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            display: none; /* Oculta la barra de desplazamiento en Chrome, Safari y Edge */
+        }
+
+        .horizontal-scroll {
+            display: inline-flex; /* Hace que los elementos de la lista se alineen horizontalmente */
+            /*gap: 10px; !* Espacio entre elementos *!*/
+        }
+
+        .horizontal-scroll li {
+            display: inline-block;
+            /*padding: 10px;*/
+            /*background-color: #f0f0f0;*/
+            /*border: 1px solid #ddd;*/
+        }
+
+        /* Estilos solo para dispositivos de escritorio */
+        @media (min-width: 768px) {
+            .scroll-container {
+                align-items: center; /* Aplica el centrado solo en pantallas de escritorio */
+            }
+        }
+
     }
 
-    .text-block-container__headline {
-        position: relative;
-        width: 100%;
-        max-width: 1392px;
-        margin: 0 auto;
-        font-family: 'SamsungSharpSans', arial, sans-serif;
-        font-size: 38px;
-        font-weight: bold;
-        line-height: 1.2;
-        overflow: visible;
-        word-break: keep-all;
-        text-align: center;
-        text-overflow: clip;
-    }
-
-
-    /* ================================== SECCIÓN TRES ================================== */
+    /* ================================== SECCIÓN 3, 4, 5 ================================== */
     .mobile, .tv, .home {
         display: flex;
         flex-direction: column;
@@ -764,6 +800,7 @@ main {
 
     }
 
+    /* ================================== SECCIÓN 6 ================================== */
     .explore{
         display: flex;
         flex-direction: column;
@@ -837,46 +874,12 @@ main {
 
 }
 
-.scroll-container {
-    width: 100%; /* Ajusta según el espacio que necesites */
-    overflow-x: scroll; /* Permite el desplazamiento horizontal */
-    white-space: nowrap; /* Evita que los elementos se envuelvan */
-    scrollbar-width: none; /* Oculta la barra de desplazamiento en Firefox */
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    /*align-items: center;*/
-}
-
-.scroll-container::-webkit-scrollbar {
-    display: none; /* Oculta la barra de desplazamiento en Chrome, Safari y Edge */
-}
-
-.horizontal-scroll {
-    display: inline-flex; /* Hace que los elementos de la lista se alineen horizontalmente */
-    /*gap: 10px; !* Espacio entre elementos *!*/
-}
-
-.horizontal-scroll li {
-    display: inline-block;
-    /*padding: 10px;*/
-    /*background-color: #f0f0f0;*/
-    /*border: 1px solid #ddd;*/
-}
-
-/* Estilos solo para dispositivos de escritorio */
-@media (min-width: 768px) {
-    .scroll-container {
-        align-items: center; /* Aplica el centrado solo en pantallas de escritorio */
-    }
-}
-
-/* Estilos solo para dispositivos de móviles */
+/* Only Mobile */
 @media (max-width: 768px) {
 
     main {
 
-        /* ================================== SECCIÓN DOS ================================== */
+        /* ================================== SECCIÓN 2 ================================== */
         .month-pick {
             padding: 7% 3% 0 3%;
 
@@ -904,7 +907,6 @@ main {
                             top: 0;
                             left: auto;
                             width: 50%;
-                            height: auto;
                             padding-top: 10%;
                             font-family: 'SamsungOne', arial, sans-serif;
 
@@ -969,7 +971,7 @@ main {
             }
         }
 
-        /* ================================== SECCIÓN TRES ================================== */
+        /* ================================== SECCIÓN 3, 4, 5 ================================== */
         .mobile, .tv, .home {
             .mobile-list {
                 ul {
@@ -1008,7 +1010,7 @@ main {
 
         }
 
-
+        /* ================================== SECCIÓN 6 ================================== */
         .explore{
             padding: 7% 3% 0 3%;
 
