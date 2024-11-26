@@ -55,7 +55,7 @@ main {
             color: black;
         }
 
-        /* For Movil */
+        /* For Mobile */
         @media (max-width: 768px) {
             .baner-text {
                 bottom: 65%;
@@ -591,7 +591,7 @@ main {
             /*border: 1px solid #ddd;*/
         }
 
-        /* Estilos solo para dispositivos de escritorio */
+        /* For Desktop */
         @media (min-width: 768px) {
             .scroll-container {
                 align-items: center; /* Aplica el centrado solo en pantallas de escritorio */
