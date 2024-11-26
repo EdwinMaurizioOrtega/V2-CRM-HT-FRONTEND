@@ -256,44 +256,49 @@ export default function HomePage() {
                     <div className="scroll-container">
                         <ul className="horizontal-scroll">
                             <li>
-                                <a
+                                <button
                                     className={activeTab === 'ramadan' ? 'active' : ''}
                                     onClick={() => handleTabClick('ramadan')}
                                 >
                                     Destacados
-                                </a>
+                                    <span className="tab__item-line"></span>
+                                </button>
                             </li>
                             <li>
-                                <a
+                                <button
                                     className={activeTab === 'mobile' ? 'active' : ''}
                                     onClick={() => handleTabClick('mobile')}
                                 >
                                     Mobile
-                                </a>
+                                    <span className="tab__item-line"></span>
+                                </button>
                             </li>
                             <li>
-                                <a
+                                <button
                                     className={activeTab === 'tv' ? 'active' : ''}
                                     onClick={() => handleTabClick('tv')}
                                 >
                                     TV & AV
-                                </a>
+                                    <span className="tab__item-line"></span>
+                                </button>
                             </li>
                             <li>
-                                <a
+                                <button
                                     className={activeTab === 'home' ? 'active' : ''}
                                     onClick={() => handleTabClick('home')}
                                 >
                                     Línea Blanca
-                                </a>
+                                    <span className="tab__item-line"></span>
+                                </button>
                             </li>
                             <li>
-                                <a
+                                <button
                                     className={activeTab === 'monitors' ? 'active' : ''}
                                     onClick={() => handleTabClick('monitors')}
                                 >
                                     Monitores
-                                </a>
+                                    <span className="tab__item-line"></span>
+                                </button>
                             </li>
                         </ul>
                     </div>
@@ -724,50 +729,59 @@ export default function HomePage() {
                         >Mobile</h1>
                         <ul className="horizontal-scroll">
                             <li>
-                                <a className={activeTabTres === 'mobile_uno' ? 'active' : ''}
-                                   style={{
-                                       color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                   }}
-                                   onClick={() => handleTabClickSecTres('mobile_uno')}>
+                                <button className={activeTabTres === 'mobile_uno' ? 'active' : ''}
+                                        style={{
+                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                        }}
+                                        onClick={() => handleTabClickSecTres('mobile_uno')}>
                                     Galaxy Z Fold6
-                                </a>
+                                    <span className="tab__item-line"></span>
+
+                                </button>
                             </li>
                             <li>
-                                <a className={activeTabTres === 'mobile_dos' ? 'active' : ''}
-                                   style={{
-                                       color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                   }}
-                                   onClick={() => handleTabClickSecTres('mobile_dos')}>
+                                <button className={activeTabTres === 'mobile_dos' ? 'active' : ''}
+                                        style={{
+                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                        }}
+                                        onClick={() => handleTabClickSecTres('mobile_dos')}>
                                     Galaxy Z Flip6
-                                </a>
+                                    <span className="tab__item-line"></span>
+
+                                </button>
                             </li>
                             <li>
-                                <a className={activeTabTres === 'mobile_tres' ? 'active' : ''}
-                                   style={{
-                                       color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                   }}
-                                   onClick={() => handleTabClickSecTres('mobile_tres')}>
+                                <button className={activeTabTres === 'mobile_tres' ? 'active' : ''}
+                                        style={{
+                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                        }}
+                                        onClick={() => handleTabClickSecTres('mobile_tres')}>
                                     Galaxy S24 FE
-                                </a>
+                                    <span className="tab__item-line"></span>
+
+                                </button>
                             </li>
                             <li>
-                                <a className={activeTabTres === 'mobile_cuatro' ? 'active' : ''}
-                                   style={{
-                                       color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                   }}
-                                   onClick={() => handleTabClickSecTres('mobile_cuatro')}>
+                                <button className={activeTabTres === 'mobile_cuatro' ? 'active' : ''}
+                                        style={{
+                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                        }}
+                                        onClick={() => handleTabClickSecTres('mobile_cuatro')}>
                                     Serie Galaxy Tab S10
-                                </a>
+                                    <span className="tab__item-line"></span>
+
+                                </button>
                             </li>
                             <li>
-                                <a className={activeTabTres === 'mobile_cinco' ? 'active' : ''}
-                                   style={{
-                                       color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                       border: activeTabTres === 'mobile_cinco' ? '2px dotted white' : '',
-                                   }}
-                                   onClick={() => handleTabClickSecTres('mobile_cinco')}>
+                                <button className={activeTabTres === 'mobile_cinco' ? 'active' : ''}
+                                        style={{
+                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                            border: activeTabTres === 'mobile_cinco' ? '2px dotted white' : '',
+                                        }}
+                                        onClick={() => handleTabClickSecTres('mobile_cinco')}>
                                     Galaxy Watch Ultra
-                                </a>
+                                    <span className="tab__item-line"></span>
+                                </button>
                             </li>
                         </ul>
                     </div>
@@ -876,50 +890,55 @@ export default function HomePage() {
                         >TV & AV</h1>
                         <ul className="horizontal-scroll">
                             <li>
-                                <a className={activeTabTres === 'mobile_uno' ? 'active' : ''}
-                                   style={{
-                                       color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                   }}
-                                   onClick={() => handleTabClickSecTres('mobile_uno')}>
+                                <button className={activeTabTres === 'mobile_uno' ? 'active' : ''}
+                                        style={{
+                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                        }}
+                                        onClick={() => handleTabClickSecTres('mobile_uno')}>
                                     Samsung AI TV
-                                </a>
+                                    <span className="tab__item-line"></span>
+                                </button>
                             </li>
                             <li>
-                                <a className={activeTabTres === 'mobile_dos' ? 'active' : ''}
-                                   style={{
-                                       color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                   }}
-                                   onClick={() => handleTabClickSecTres('mobile_dos')}>
+                                <button className={activeTabTres === 'mobile_dos' ? 'active' : ''}
+                                        style={{
+                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                        }}
+                                        onClick={() => handleTabClickSecTres('mobile_dos')}>
                                     Neo QLED 8K
-                                </a>
+                                    <span className="tab__item-line"></span>
+                                </button>
                             </li>
                             <li>
-                                <a className={activeTabTres === 'mobile_tres' ? 'active' : ''}
-                                   style={{
-                                       color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                   }}
-                                   onClick={() => handleTabClickSecTres('mobile_tres')}>
+                                <button className={activeTabTres === 'mobile_tres' ? 'active' : ''}
+                                        style={{
+                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                        }}
+                                        onClick={() => handleTabClickSecTres('mobile_tres')}>
                                     Neo QLED
-                                </a>
+                                    <span className="tab__item-line"></span>
+                                </button>
                             </li>
                             <li>
-                                <a className={activeTabTres === 'mobile_cuatro' ? 'active' : ''}
-                                   style={{
-                                       color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                   }}
-                                   onClick={() => handleTabClickSecTres('mobile_cuatro')}>
+                                <button className={activeTabTres === 'mobile_cuatro' ? 'active' : ''}
+                                        style={{
+                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                        }}
+                                        onClick={() => handleTabClickSecTres('mobile_cuatro')}>
                                     OLED
-                                </a>
+                                    <span className="tab__item-line"></span>
+                                </button>
                             </li>
                             <li>
-                                <a className={activeTabTres === 'mobile_cinco' ? 'active' : ''}
-                                   style={{
-                                       color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                       border: activeTabTres === 'mobile_cinco' ? '2px dotted white' : '',
-                                   }}
-                                   onClick={() => handleTabClickSecTres('mobile_cinco')}>
+                                <button className={activeTabTres === 'mobile_cinco' ? 'active' : ''}
+                                        style={{
+                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                            border: activeTabTres === 'mobile_cinco' ? '2px dotted white' : '',
+                                        }}
+                                        onClick={() => handleTabClickSecTres('mobile_cinco')}>
                                     The Frame
-                                </a>
+                                    <span className="tab__item-line"></span>
+                                </button>
                             </li>
                         </ul>
                     </div>
@@ -1028,40 +1047,44 @@ export default function HomePage() {
                         >Línea Blanca</h1>
                         <ul className="horizontal-scroll">
                             <li>
-                                <a className={activeTabTres === 'mobile_uno' ? 'active' : ''}
-                                   style={{
-                                       color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                   }}
-                                   onClick={() => handleTabClickSecTres('mobile_uno')}>
+                                <button className={activeTabTres === 'mobile_uno' ? 'active' : ''}
+                                        style={{
+                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                        }}
+                                        onClick={() => handleTabClickSecTres('mobile_uno')}>
                                     Bespoke AI Laundry Combo
-                                </a>
+                                    <span className="tab__item-line"></span>
+                                </button>
                             </li>
                             <li>
-                                <a className={activeTabTres === 'mobile_dos' ? 'active' : ''}
-                                   style={{
-                                       color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                   }}
-                                   onClick={() => handleTabClickSecTres('mobile_dos')}>
+                                <button className={activeTabTres === 'mobile_dos' ? 'active' : ''}
+                                        style={{
+                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                        }}
+                                        onClick={() => handleTabClickSecTres('mobile_dos')}>
                                     Bespoke AI ™
-                                </a>
+                                    <span className="tab__item-line"></span>
+                                </button>
                             </li>
                             <li>
-                                <a className={activeTabTres === 'mobile_tres' ? 'active' : ''}
-                                   style={{
-                                       color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                   }}
-                                   onClick={() => handleTabClickSecTres('mobile_tres')}>
+                                <button className={activeTabTres === 'mobile_tres' ? 'active' : ''}
+                                        style={{
+                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                        }}
+                                        onClick={() => handleTabClickSecTres('mobile_tres')}>
                                     Family Hub
-                                </a>
+                                    <span className="tab__item-line"></span>
+                                </button>
                             </li>
                             <li>
-                                <a className={activeTabTres === 'mobile_cuatro' ? 'active' : ''}
-                                   style={{
-                                       color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                   }}
-                                   onClick={() => handleTabClickSecTres('mobile_cuatro')}>
+                                <button className={activeTabTres === 'mobile_cuatro' ? 'active' : ''}
+                                        style={{
+                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                        }}
+                                        onClick={() => handleTabClickSecTres('mobile_cuatro')}>
                                     Top Mount Freezer
-                                </a>
+                                    <span className="tab__item-line"></span>
+                                </button>
                             </li>
 
                         </ul>

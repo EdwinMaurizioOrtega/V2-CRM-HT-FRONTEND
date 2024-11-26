@@ -254,34 +254,36 @@ main {
         ul li {
             display: inline-block;
             margin-right: 48px;
+
+
         }
 
-        ul li a {
+        ul li button {
             text-decoration: none;
             color: black;
             font-size: 18px;
-            /*padding: 10px 20px;*/
-            background-color: white;
-            transition: background-color 0.3s ease;
             font-family: 'SamsungOne-600', arial, sans-serif;
             font-weight: bold;
+            border: none;
+            background: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column; /* Apila los elementos de arriba hacia abajo */
+            align-items: center; /* Centra los elementos horizontalmente */
         }
 
-        ul li a:hover {
-            background-color: white;
+        ul li button.active {
+            border: 2px dotted black; /* Borde punteado alrededor */
+            border-radius: 40px; /* Esquinas redondeadas */
+            padding: 3px 10px; /* Espaciado interno */
+
         }
 
         /* Estilo para la pestaña activa */
-
-        ul li a.active {
-            color: black;
-            border-bottom: 2px solid;
-        }
-
-        /* Contenido de las pestañas */
-
-        .pick-con {
-            /*margin-top: 20px;*/
+        ul li button.active span {
+            background-color: #000;
+            width: 100%;
+            height: 2px;
         }
 
         .tab-content {
@@ -671,51 +673,32 @@ main {
                     list-style: none; /* Quita los puntos de la lista */
                     padding: 0 10px;
 
-                    a {
-                        color: black;
+                    button {
                         text-decoration: none;
+                        color: black;
                         font-size: 18px;
-                        cursor: pointer;
-                        white-space: nowrap; /* Evita el salto de línea */
-                        font-family: 'SamsungSharpSans', arial, sans-serif;
+                        font-family: 'SamsungOne-600', arial, sans-serif;
                         font-weight: bold;
+                        border: none;
+                        background: none;
+                        cursor: pointer;
+                        display: flex;
+                        flex-direction: column; /* Apila los elementos de arriba hacia abajo */
+                        align-items: center; /* Centra los elementos horizontalmente */
                     }
-
-
 
                     /* Estilo para la pestaña activa */
-                    a.active {
-                        text-decoration: none;
-                        color: black;
-                        display: inline-block;
-                        padding: 3px 10px; /* Espaciado interno */
-                        text-align: center;
-                        font-weight: bold;
+                    button.active {
                         border: 2px dotted black; /* Borde punteado alrededor */
                         border-radius: 40px; /* Esquinas redondeadas */
-                        position: relative; /* Necesario para el pseudo-elemento */
-
-
-
+                        padding: 3px 10px; /* Espaciado interno */
                     }
 
-                    /* Pseudo-elemento para la línea debajo del texto cuando está activo */
-                    /*a.active::after {*/
-                    /*    content: ''; !* Se necesita para crear un pseudo-elemento *!*/
-                    /*    position: absolute;*/
-                    /*    left: 0;*/
-                    /*    bottom: 4px; !* Ajusta la distancia entre la línea y el texto *!*/
-                    /*    width: 75%; !* La línea ocupa todo el ancho del enlace *!*/
-                    /*    height: 2px; !* Altura de la línea *!*/
-                    /*    background-color: black; !* Color de la línea *!*/
-                    /*    transform: translateX(20%); !* Desplaza la línea hacia la izquierda para centrarla *!*/
-                    /*    transition: width 0.3s ease-out; !* Animación para expandir la línea *!*/
-
-                    /*}*/
-
-                    /* Cuando el enlace tiene la clase active, la línea se dibuja desde el centro */
-                    a.active::after {
-                        width: 75%; /* La línea ocupa el 75% del ancho del enlace */
+                    /* Estilo para la pestaña activa */
+                   button.active span {
+                        background-color: #000;
+                        width: 100%;
+                        height: 2px;
                     }
 
                 }
