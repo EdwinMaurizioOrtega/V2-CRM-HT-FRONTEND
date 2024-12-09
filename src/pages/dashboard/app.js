@@ -130,21 +130,37 @@ export default function GeneralAppPage() {
                                             <FormControl component="fieldset" sx={{mb: 2}}>
                                                 <RadioGroup row value={selectedValue} onChange={handleChange}>
 
-                                                    {user?.COMPANY === 'HT' || user?.COMPANY === 'INFINIX' || user?.COMPANY === 'TOMEBAMBA' ? (
-                                                        <FormControlLabel
-                                                            value="0992537442001"
-                                                            control={<Radio/>}
-                                                            label="HIPERTRONICS"
-                                                        />
+                                                    { user?.COMPANY === 'HT' ? (
+                                                        <>
+                                                            <FormControlLabel
+                                                                value="0992537442001"
+                                                                control={<Radio/>}
+                                                                label="HIPERTRONICS"
+                                                            />
+                                                            <FormControlLabel
+                                                                value="1792161037001"
+                                                                control={<Radio/>}
+                                                                label="MOVILCELISTIC"
+                                                            />
+                                                        </>
                                                     ) : null}
 
-                                                    {user?.COMPANY === 'ALPHACELL' ? (
+                                                    { user?.COMPANY === 'INFINIX' || user?.COMPANY === 'TOMEBAMBA' ? (
+                                                            <FormControlLabel
+                                                                value="0992537442001"
+                                                                control={<Radio/>}
+                                                                label="HIPERTRONICS"
+                                                            />
+                                                    ) : null}
+
+                                                    { user?.COMPANY === 'ALPHACELL' ? (
                                                         <FormControlLabel
                                                             value="0992264373001"
                                                             control={<Radio size="small"/>}
                                                             label="ALPHACELL"
                                                         />
                                                     ) : null}
+
                                                 </RadioGroup>
                                             </FormControl>
 

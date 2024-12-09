@@ -55,6 +55,7 @@ export default function EcommerceProductDetailsPage() {
     const {themeStretch} = useSettingsContext();
 
     const {user} = useAuthContext();
+    console.log("user_data: "+ JSON.stringify( user));
 
     const {
         query: {name},

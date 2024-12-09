@@ -49,7 +49,7 @@ const reducer = (state, action) => {
             user: null,
         };
     }
-    if (action.type === 'UPDATE_USER') {
+    if (action.type === 'ADD_NEW_VALUE_TO_USER') {
         return {
             ...state,
             user: {
@@ -179,12 +179,19 @@ export function AuthProvider({children}) {
 
     // AuthProvider.js
     const updateUser = useCallback((updatedFields) => {
-        localStorage.setItem('user', JSON.stringify({
+
+        const updatedUser = {
             ...state.user,
             ...updatedFields,
-        }));
+        };
+
+        // Guarda el usuario actualizado en localStorage
+        if (storageAvailable) {
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+        }
+
         dispatch({
-            type: 'UPDATE_USER',
+            type: 'ADD_NEW_VALUE_TO_USER',
             payload: updatedFields,
         });
     }, [state.user]);

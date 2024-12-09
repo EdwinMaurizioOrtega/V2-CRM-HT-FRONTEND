@@ -166,11 +166,11 @@ const navConfig = [
     {
         subheader: 'SERVICIO TÉCNICO',
         items: [
-            {title: 'Ingresar Orden', path: PATH_DASHBOARD.st.ingresarOrden, icon: ICONS.kanban},
-            {title: 'Servientrega', path: PATH_DASHBOARD.st.garantia, icon: ICONS.kanban},
-            {title: 'Gestión Orden', path: PATH_DASHBOARD.st.gestionOrden, icon: ICONS.kanban},
-            {title: 'Crear NC SAP', path: PATH_DASHBOARD.st.crearNC, icon: ICONS.kanban},
-            {title: 'Reporte ST', path: PATH_DASHBOARD.st.reporteOrden, icon: ICONS.kanban},
+            {title: 'Ingresar Orden', path: PATH_DASHBOARD.st.ingresarOrden, icon: ICONS.external},
+            {title: 'Servientrega', path: PATH_DASHBOARD.st.garantia, icon: ICONS.folder},
+            {title: 'Gestión Orden', path: PATH_DASHBOARD.st.gestionOrden, icon: ICONS.file},
+            {title: 'Crear NC SAP', path: PATH_DASHBOARD.st.crearNC, icon: ICONS.blank},
+            {title: 'Reporte ST', path: PATH_DASHBOARD.st.reporteOrden, icon: ICONS.disabled},
             // { title: 'create', path: PATH_DASHBOARD.blog.new },
         ],
     },
@@ -182,13 +182,26 @@ const navConfig = [
         subheader: 'CLIENTES',
         items: [
             {title: 'dashboard', path: PATH_DASHBOARD.root, icon: ICONS.analytics},
-            {title: 'tienda', path: PATH_DASHBOARD.eCommerce.shop, icon: ICONS.analytics},
-            {title: 'ordenes', path: PATH_DASHBOARD.invoice.list, icon: ICONS.analytics},
-            {title: 'Servicio Técnico', path: PATH_DASHBOARD.st.ingresarOrden, icon: ICONS.analytics},
-            {title: 'Programa HT Recompensas', path: PATH_DASHBOARD.customer.root, icon: ICONS.analytics},
+            {title: 'tienda', path: PATH_DASHBOARD.eCommerce.shop, icon: ICONS.cart},
+            {title: 'ordenes', path: PATH_DASHBOARD.invoice.list, icon: ICONS.booking},
+            {title: 'Servicio Técnico', path: PATH_DASHBOARD.st.ingresarOrden, icon: ICONS.chat},
+            {title: 'Programa HT Recompensas', path: PATH_DASHBOARD.customer.root, icon: ICONS.banking},
         ],
     },
 
+    // 7 - CRÉDITO PVP
+    // ----------------------------------------------------------------------
+    {
+        subheader: 'CRÉDITO PVP',
+        items: [
+            {title: 'Cliente', path: PATH_DASHBOARD.blank, icon: ICONS.analytics},
+            {title: 'Equifax', path: PATH_DASHBOARD.blank, icon: ICONS.blog},
+            {title: 'Perfil Económico', path: PATH_DASHBOARD.blank, icon: ICONS.cart},
+            {title: 'Referencias', path: PATH_DASHBOARD.blank, icon: ICONS.file},
+            {title: 'Productos', path: PATH_DASHBOARD.blank, icon: ICONS.user},
+            {title: 'Documentos Imprimir', path: PATH_DASHBOARD.blank, icon: ICONS.banking},
+        ],
+    },
 
     // DEMO MENU STATES
     {

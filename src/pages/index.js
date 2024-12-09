@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import MainLayout from '../layouts/main';
 import {useEffect, useRef, useState} from "react";
+import Link from "next/link";
 
 // ----------------------------------------------------------------------
 
@@ -36,6 +37,7 @@ export default function HomePage() {
             title: 'Black Friday',
             description: 'Llévate tus productos favoritos  antes del 01/12 con hasta un 50% de dto.',
             style: {color: 'white'},
+            destinationUrl: '/dashboard/e-commerce/product/10.03.108'
         },
         {
             desktopImage: '/images/New-Desktop_GalaxyS24-FE.webp',
@@ -43,6 +45,7 @@ export default function HomePage() {
             title: 'Galaxy S24 FE',
             description: '',
             style: {color: 'black'},
+            destinationUrl: '',
         },
         {
             desktopImage: '/images/Tele-desktop.webp',
@@ -50,6 +53,7 @@ export default function HomePage() {
             title: '¿Buscas una TV para disfrutar de tu contenido favorito?',
             description: '',
             style: {color: 'black'},
+            destinationUrl: '',
         },
         {
             desktopImage: '/images/New-Desktop_GalaxTabS10.jpg',
@@ -57,6 +61,7 @@ export default function HomePage() {
             title: 'Serie Galaxy Tab S10',
             description: 'El nuevo estándar de tabletas premium',
             style: {color: 'black'},
+            destinationUrl: '',
         },
         {
             desktopImage: '/images/New-Desktop_GalaxyWatchUltra.webp',
@@ -64,6 +69,7 @@ export default function HomePage() {
             title: 'Galaxy Watch Ultra',
             description: '',
             style: {color: 'white'},
+            destinationUrl: '',
         },
 
     ];
@@ -193,7 +199,9 @@ export default function HomePage() {
                                     <p>{slide.description}</p>
                                     <div className="baner-btn">
                                         <a className="anchor-info">Más información</a>
-                                        <button className="button-comprar">Comprar ahora</button>
+                                        <Link href="/dashboard/e-commerce/product/10.03.108">
+                                            <button className="button-comprar">Comprar ahora</button>
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
