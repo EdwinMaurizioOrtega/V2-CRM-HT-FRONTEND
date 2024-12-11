@@ -114,7 +114,7 @@ export default function HomePage() {
     };
 
 
-    const [activeTab, setActiveTab] = useState('ramadan'); // El estado para controlar la pestaña activa
+    const [activeTab, setActiveTab] = useState('mobile'); // El estado para controlar la pestaña activa
 
     const handleTabClick = (tabName) => {
         setActiveTab(tabName); // Cambiar la pestaña activa
@@ -263,21 +263,21 @@ export default function HomePage() {
                     <h2 className="text-block-container__headline">Últimas Ofertas</h2>
                     <div className="scroll-container">
                         <ul className="horizontal-scroll">
-                            <li>
-                                <button
-                                    className={activeTab === 'ramadan' ? 'active' : ''}
-                                    onClick={() => handleTabClick('ramadan')}
-                                >
-                                    Destacados
-                                    <span className="tab__item-line"></span>
-                                </button>
-                            </li>
+                            {/* <li> */}
+                            {/*     <button */}
+                            {/*         className={activeTab === 'ramadan' ? 'active' : ''} */}
+                            {/*         onClick={() => handleTabClick('ramadan')} */}
+                            {/*     > */}
+                            {/*         Destacados */}
+                            {/*         <span className="tab__item-line"></span> */}
+                            {/*     </button> */}
+                            {/* </li> */}
                             <li>
                                 <button
                                     className={activeTab === 'mobile' ? 'active' : ''}
                                     onClick={() => handleTabClick('mobile')}
                                 >
-                                    Mobile
+                                    Infinix
                                     <span className="tab__item-line"></span>
                                 </button>
                             </li>
@@ -286,7 +286,7 @@ export default function HomePage() {
                                     className={activeTab === 'tv' ? 'active' : ''}
                                     onClick={() => handleTabClick('tv')}
                                 >
-                                    TV & AV
+                                    Samsung
                                     <span className="tab__item-line"></span>
                                 </button>
                             </li>
@@ -295,7 +295,7 @@ export default function HomePage() {
                                     className={activeTab === 'home' ? 'active' : ''}
                                     onClick={() => handleTabClick('home')}
                                 >
-                                    Línea Blanca
+                                    Xiaomi
                                     <span className="tab__item-line"></span>
                                 </button>
                             </li>
@@ -304,154 +304,154 @@ export default function HomePage() {
                                     className={activeTab === 'monitors' ? 'active' : ''}
                                     onClick={() => handleTabClick('monitors')}
                                 >
-                                    Monitores
+                                    BLU
                                     <span className="tab__item-line"></span>
                                 </button>
                             </li>
                         </ul>
                     </div>
                     <div className="pick-con">
-                        <div className={`tab-content ${activeTab === 'ramadan' ? 'active' : ''}`}>
-                            <div className="left">
-                                <a className={isMobile ? "left-mo" : "left-desk"}>
-                                    <img
-                                        src={isMobile ? "/images/Large-Tile-MO-BLACK-FRIDAY.webp" : "/images/Large-Tile-PC-BLACK-FRIDAY.webp"}
-                                        alt=""
-                                    />
-                                </a>
+                        {/* <div className={`tab-content ${activeTab === 'ramadan' ? 'active' : ''}`}> */}
+                        {/*     <div className="left"> */}
+                        {/*         <a className={isMobile ? "left-mo" : "left-desk"}> */}
+                        {/*             <img */}
+                        {/*                 src={isMobile ? "/images/Large-Tile-MO-BLACK-FRIDAY.webp" : "/images/Large-Tile-PC-BLACK-FRIDAY.webp"} */}
+                        {/*                 alt="" */}
+                        {/*             /> */}
+                        {/*         </a> */}
 
-                                <div className="p-text">
-                                    <h3 style={{
-                                        color: "white"
-                                    }}>En Black Friday, ¡hasta 50% dto.!</h3>
-                                    <div className="text-animation">
-                                        {/* <small>Enjoy the season of gifting with amazing discounts up tp 59% off */}
-                                        {/* </small> */}
-                                        <button className="button-comprar"
-                                        style={{
-                                            backgroundColor: 'white',
-                                            color: 'black',
-                                        }}
-                                        >Comprar ahora
-                                            <svg className="custom-svg" viewBox="0 0 96 96"
-                                                 xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z"
-                                                    fill="black"
-                                                ></path>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="right">
-                                {/* <-- one --> */}
-                                <div className="one">
-                                    <a>
-                                        <img src="/images/TabS10_160x160_pc.webp" alt=""/>
-                                    </a>
-                                    <h4>Nuevo</h4>
-                                    <div className="p-text">
-                                        <h3>Serie Galaxy Tab S10</h3>
-                                        <div className="text-animation">
-                                            {/* <small>Enjoy 0% installment plan and free delivery</small> */}
-                                            {!isMobile &&
-                                                <button>Comprar ahora
-                                                    <svg className="custom-svg" viewBox="0 0 96 96"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z"
-                                                            fill="white"
-                                                        ></path>
-                                                    </svg>
-                                                </button>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                                {/* <-- two --> */}
-                                <div className="two">
-                                    <a><img src="/images/Watch-Ultra_160x160_pc.webp" alt=""/></a>
-                                    <h4>Nuevo</h4>
-                                    <div className="p-text">
-                                    <h3>Galaxy Watch Ultra</h3>
-                                        <div className="text-animation">
-                                            {/* <small>Just for you this Ramadan</small> */}
-                                            {!isMobile &&
-                                                <button>Comprar ahora
-                                                    <svg className="custom-svg" viewBox="0 0 96 96"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z"
-                                                            fill="white"
-                                                        ></path>
-                                                    </svg>
-                                                </button>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                                {/* <-- three --> */}
-                                <div className="three">
-                                    <a><img src="/images/T_combo_desktop_160X160.png" alt=""/></a>
-                                    <h4>Nuevo</h4>
-                                    <div className="p-text">
-                                    <h3>Bespoke AI Laundry Combo</h3>
-                                        <div className="text-animation">
-                                            {/* <small>With 48H delivery and flexible payment options*</small> */}
-                                            {!isMobile &&
-                                                <button>Comprar ahora
-                                                    <svg className="custom-svg" viewBox="0 0 96 96"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z"
-                                                            fill="white"
-                                                        ></path>
-                                                    </svg>
-                                                </button>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                                {/* <-- four --> */}
-                                <div className="four">
-                                    <a><img src="/images/Odyssey_desktop_160X160.png" alt=""/></a>
-                                    <h4>Nuevo</h4>
-                                    <div className="p-text">
-                                    <h3>Odyssey OLED G8</h3>
-                                        <div className="text-animation">
-                                            {/* <small>Enjoy the season of gifting with amazing discounts up tp 59% */}
-                                            {/*     off</small> */}
-                                            {!isMobile &&
-                                                <button>Comprar ahora
-                                                    <svg className="custom-svg" viewBox="0 0 96 96"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z"
-                                                            fill="white"
-                                                        ></path>
-                                                    </svg>
-                                                </button>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        {/*         <div className="p-text"> */}
+                        {/*             <h3 style={{ */}
+                        {/*                 color: "white" */}
+                        {/*             }}>En Black Friday, ¡hasta 50% dto.!</h3> */}
+                        {/*             <div className="text-animation"> */}
+                        {/*                 /!* <small>Enjoy the season of gifting with amazing discounts up tp 59% off *!/ */}
+                        {/*                 /!* </small> *!/ */}
+                        {/*                 <button className="button-comprar" */}
+                        {/*                 style={{ */}
+                        {/*                     backgroundColor: 'white', */}
+                        {/*                     color: 'black', */}
+                        {/*                 }} */}
+                        {/*                 >Comprar ahora */}
+                        {/*                     <svg className="custom-svg" viewBox="0 0 96 96" */}
+                        {/*                          xmlns="http://www.w3.org/2000/svg" */}
+                        {/*                     > */}
+                        {/*                         <path */}
+                        {/*                             d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z" */}
+                        {/*                             fill="black" */}
+                        {/*                         ></path> */}
+                        {/*                     </svg> */}
+                        {/*                 </button> */}
+                        {/*             </div> */}
+                        {/*         </div> */}
+                        {/*     </div> */}
+                        {/*     <div className="right"> */}
+                        {/*         /!* <-- one --> *!/ */}
+                        {/*         <div className="one"> */}
+                        {/*             <a> */}
+                        {/*                 <img src="/images/TabS10_160x160_pc.webp" alt=""/> */}
+                        {/*             </a> */}
+                        {/*             <h4>Nuevo</h4> */}
+                        {/*             <div className="p-text"> */}
+                        {/*                 <h3>Serie Galaxy Tab S10</h3> */}
+                        {/*                 <div className="text-animation"> */}
+                        {/*                     /!* <small>Enjoy 0% installment plan and free delivery</small> *!/ */}
+                        {/*                     {!isMobile && */}
+                        {/*                         <button>Comprar ahora */}
+                        {/*                             <svg className="custom-svg" viewBox="0 0 96 96" */}
+                        {/*                                  xmlns="http://www.w3.org/2000/svg"> */}
+                        {/*                                 <path */}
+                        {/*                                     d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z" */}
+                        {/*                                     fill="white" */}
+                        {/*                                 ></path> */}
+                        {/*                             </svg> */}
+                        {/*                         </button> */}
+                        {/*                     } */}
+                        {/*                 </div> */}
+                        {/*             </div> */}
+                        {/*         </div> */}
+                        {/*         /!* <-- two --> *!/ */}
+                        {/*         <div className="two"> */}
+                        {/*             <a><img src="/images/Watch-Ultra_160x160_pc.webp" alt=""/></a> */}
+                        {/*             <h4>Nuevo</h4> */}
+                        {/*             <div className="p-text"> */}
+                        {/*             <h3>Galaxy Watch Ultra</h3> */}
+                        {/*                 <div className="text-animation"> */}
+                        {/*                     /!* <small>Just for you this Ramadan</small> *!/ */}
+                        {/*                     {!isMobile && */}
+                        {/*                         <button>Comprar ahora */}
+                        {/*                             <svg className="custom-svg" viewBox="0 0 96 96" */}
+                        {/*                                  xmlns="http://www.w3.org/2000/svg"> */}
+                        {/*                                 <path */}
+                        {/*                                     d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z" */}
+                        {/*                                     fill="white" */}
+                        {/*                                 ></path> */}
+                        {/*                             </svg> */}
+                        {/*                         </button> */}
+                        {/*                     } */}
+                        {/*                 </div> */}
+                        {/*             </div> */}
+                        {/*         </div> */}
+                        {/*         /!* <-- three --> *!/ */}
+                        {/*         <div className="three"> */}
+                        {/*             <a><img src="/images/T_combo_desktop_160X160.png" alt=""/></a> */}
+                        {/*             <h4>Nuevo</h4> */}
+                        {/*             <div className="p-text"> */}
+                        {/*             <h3>Bespoke AI Laundry Combo</h3> */}
+                        {/*                 <div className="text-animation"> */}
+                        {/*                     /!* <small>With 48H delivery and flexible payment options*</small> *!/ */}
+                        {/*                     {!isMobile && */}
+                        {/*                         <button>Comprar ahora */}
+                        {/*                             <svg className="custom-svg" viewBox="0 0 96 96" */}
+                        {/*                                  xmlns="http://www.w3.org/2000/svg"> */}
+                        {/*                                 <path */}
+                        {/*                                     d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z" */}
+                        {/*                                     fill="white" */}
+                        {/*                                 ></path> */}
+                        {/*                             </svg> */}
+                        {/*                         </button> */}
+                        {/*                     } */}
+                        {/*                 </div> */}
+                        {/*             </div> */}
+                        {/*         </div> */}
+                        {/*         /!* <-- four --> *!/ */}
+                        {/*         <div className="four"> */}
+                        {/*             <a><img src="/images/Odyssey_desktop_160X160.png" alt=""/></a> */}
+                        {/*             <h4>Nuevo</h4> */}
+                        {/*             <div className="p-text"> */}
+                        {/*             <h3>Odyssey OLED G8</h3> */}
+                        {/*                 <div className="text-animation"> */}
+                        {/*                     /!* <small>Enjoy the season of gifting with amazing discounts up tp 59% *!/ */}
+                        {/*                     /!*     off</small> *!/ */}
+                        {/*                     {!isMobile && */}
+                        {/*                         <button>Comprar ahora */}
+                        {/*                             <svg className="custom-svg" viewBox="0 0 96 96" */}
+                        {/*                                  xmlns="http://www.w3.org/2000/svg"> */}
+                        {/*                                 <path */}
+                        {/*                                     d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z" */}
+                        {/*                                     fill="white" */}
+                        {/*                                 ></path> */}
+                        {/*                             </svg> */}
+                        {/*                         </button> */}
+                        {/*                     } */}
+                        {/*                 </div> */}
+                        {/*             </div> */}
+                        {/*         </div> */}
+                        {/*     </div> */}
 
-                        </div>
+                        {/* </div> */}
 
                         <div className={`tab-content ${activeTab === 'mobile' ? 'active' : ''}`}>
                             <div className="left">
                                 <a className={isMobile ? "left-mo" : "left-desk"}>
                                 <img
-                                        src={isMobile ? "/images/HOME_Q6_Merchandising_624x352_mo_LTR.webp" : "/images/HOME_Q6_Merchandising_684x684_pc.webp"}
+                                        src={isMobile ? "/images/10.43.111-mbl.png" : "/images/10.43.111.png"}
                                         alt=""
                                     />
                                 </a>
 
                                 <div className="p-text">
-                                    <h3>Galaxy Z Fold6</h3>
+                                    <h3>HOT 50 PRO SLEEK BLACK</h3>
                                     <div className="text-animation">
                                         {/* <small>Enjoy the season of gifting with amazing discounts up tp 59% off */}
                                         {/* </small> */}
@@ -463,11 +463,11 @@ export default function HomePage() {
                                 {/* <-- one --> */}
                                 <div className="one">
                                     <a>
-                                        <img src="/images/Home_E3_Merchandising_160x160_pc.webp" alt=""/>
+                                        <img src="/images/10.43.109.png" alt=""/>
                                     </a>
                                     <h4>Nuevo</h4>
                                     <div className="p-text">
-                                        <h3>Serie Galaxy Tab S10</h3>
+                                        <h3>SMART 9 NEO TITANIUM</h3>
                                         <div className="text-animation">
                                             {/* <small>Enjoy 0% installment plan and free delivery</small> */}
                                             {!isMobile &&
@@ -478,10 +478,10 @@ export default function HomePage() {
                                 </div>
                                 {/* <-- two --> */}
                                 <div className="two">
-                                    <a><img src="/images/S24FE_160x160_pc.webp" alt=""/></a>
+                                    <a><img src="/images/10.43.110.png" alt=""/></a>
                                     <h4>Nuevo</h4>
                                     <div className="p-text">
-                                        <h3>Galaxy Watch Ultra</h3>
+                                        <h3>SMART 9 MINT GREEN</h3>
                                         <div className="text-animation">
                                             {/* <small>Just for you this Ramadan</small> */}
                                             {!isMobile &&
@@ -492,10 +492,10 @@ export default function HomePage() {
                                 </div>
                                 {/* <-- three --> */}
                                 <div className="three">
-                                    <a><img src="/images/TabS10_160x160_pc.webp" alt=""/></a>
+                                    <a><img src="/images/10.43.120.png" alt=""/></a>
                                     <h4>Nuevo</h4>
                                     <div className="p-text">
-                                        <h3>Bespoke AI Laundry Combo</h3>
+                                        <h3>SMART 9HD METALLIC BLACK</h3>
                                         <div className="text-animation">
                                             {/* <small>With 48H delivery and flexible payment options*</small> */}
                                             {!isMobile &&
@@ -506,10 +506,10 @@ export default function HomePage() {
                                 </div>
                                 {/* <-- four --> */}
                                 <div className="four">
-                                    <a><img src="/images/Watch-Ultra_160x160_pc.webp" alt=""/></a>
+                                    <a><img src="/images/10.43.122.png" alt=""/></a>
                                     <h4>Nuevo</h4>
                                     <div className="p-text">
-                                        <h3>Odyssey OLED G8</h3>
+                                        <h3>SMART 9HD MINT GREEN</h3>
                                         <div className="text-animation">
                                             {/* <small>Enjoy the season of gifting with amazing discounts up tp 59% */}
                                             {/*     off</small> */}
@@ -526,13 +526,13 @@ export default function HomePage() {
                             <div className="left">
                                 <a className={isMobile ? "left-mo" : "left-desk"}>
                                     <img
-                                        src={isMobile ? "/images/TV-HOME_B6_Merchandising_624x352_mo_LTR.jpg" : "/images/TV-HOME_B6_Merchandising_684x684_pc.jpg"}
+                                        src={isMobile ? "/images/10.02.191-mbl.png" : "/images/10.02.191.png"}
                                         alt=""
                                     />
                                 </a>
 
                                 <div className="p-text">
-                                    <h3>The Frame</h3>
+                                    <h3>A06 (4+128GB) LIGHT BLUE</h3>
                                     <div className="text-animation">
                                         {/* <small>Enjoy the season of gifting with amazing discounts up tp 59% off */}
                                         {/* </small> */}
@@ -546,11 +546,11 @@ export default function HomePage() {
                                 {/* <-- one --> */}
                                 <div className="one">
                                     <a>
-                                        <img src="/images/HW-Q990B-movi-v2.webp" alt=""/>
+                                        <img src="/images/10.02.141.png" alt=""/>
                                     </a>
                                     <h4>Nuevo</h4>
                                     <div className="p-text">
-                                        <h3>Serie Galaxy Tab S10</h3>
+                                        <h3>A05 (4+128GB) SILVER</h3>
                                         <div className="text-animation">
                                             {/* <small>Enjoy 0% installment plan and free delivery</small> */}
                                             {!isMobile &&
@@ -561,10 +561,10 @@ export default function HomePage() {
                                 </div>
                                 {/* <-- two --> */}
                                 <div className="two">
-                                    <a><img src="/images/HW-S800B-movil-v2.webp" alt=""/></a>
+                                    <a><img src="/images/10.02.152.png" alt=""/></a>
                                     <h4>Nuevo</h4>
                                     <div className="p-text">
-                                        <h3>Galaxy Watch Ultra</h3>
+                                        <h3>A15 (6+128GB) BLACK</h3>
                                         <div className="text-animation">
                                             {/* <small>Just for you this Ramadan</small> */}
                                             {!isMobile &&
@@ -575,10 +575,10 @@ export default function HomePage() {
                                 </div>
                                 {/* <-- three --> */}
                                 <div className="three">
-                                    <a><img src="/images/QN800C_192x192.png" alt=""/></a>
+                                    <a><img src="/images/10.02.151.png" alt=""/></a>
                                     <h4>Nuevo</h4>
                                     <div className="p-text">
-                                        <h3>Bespoke AI Laundry Combo</h3>
+                                        <h3>A15 (6+128GB) LIGHT BLUE</h3>
                                         <div className="text-animation">
                                             {/* <small>With 48H delivery and flexible payment options*</small> */}
                                             {!isMobile &&
@@ -589,10 +589,10 @@ export default function HomePage() {
                                 </div>
                                 {/* <-- four --> */}
                                 <div className="four">
-                                    <a><img src="/images/QN85C_192x192.png" alt=""/></a>
+                                    <a><img src="/images/10.02.202.png" alt=""/></a>
                                     <h4>Nuevo</h4>
                                     <div className="p-text">
-                                        <h3>Odyssey OLED G8</h3>
+                                        <h3>A15 (4+128GB) BLACK</h3>
                                         <div className="text-animation">
                                             {/* <small>Enjoy the season of gifting with amazing discounts up tp 59% */}
                                             {/*     off</small> */}
@@ -609,13 +609,13 @@ export default function HomePage() {
                             <div className="left">
                                 <a className={isMobile ? "left-mo" : "left-desk"}>
                                     <img
-                                        src={isMobile ? "/images/Large-Tile-MO-DA-Pre-order.jpg" : "/images/Large-Tile-PC-DA-Pre-order.jpg"}
+                                        src={isMobile ? "/images/10.19.163-mbl.png" : "/images/10.19.163.png"}
                                         alt=""
                                     />
                                 </a>
 
                                 <div className="p-text">
-                                    <h3>Bespoke AI</h3>
+                                    <h3>REDMI A3 MIDNIGHT BLACK</h3>
                                     <div className="text-animation">
                                         {/* <small>Enjoy the season of gifting with amazing discounts up tp 59% off */}
                                         {/* </small> */}
@@ -627,11 +627,11 @@ export default function HomePage() {
                                 {/* <-- one --> */}
                                 <div className="one">
                                     <a>
-                                        <img src="/images/Family_Hub_desktop_160X160.png" alt=""/>
+                                        <img src="/images/10.19.133.png" alt=""/>
                                     </a>
                                     <h4>Nuevo</h4>
                                     <div className="p-text">
-                                        <h3>Bespoke Family Hub</h3>
+                                        <h3>XIAOMI 12 5G (8+256GB) BLUE</h3>
                                         <div className="text-animation">
                                             {/* <small>Enjoy 0% installment plan and free delivery</small> */}
                                             {!isMobile &&
@@ -642,10 +642,10 @@ export default function HomePage() {
                                 </div>
                                 {/* <-- two --> */}
                                 <div className="two">
-                                    <a><img src="/images/T_combo_desktop_160X160.webp" alt=""/></a>
+                                    <a><img src="/images/10.19.164.png" alt=""/></a>
                                     <h4>Nuevo</h4>
                                     <div className="p-text">
-                                        <h3>Bespoke AI Laundry Combo</h3>
+                                        <h3>XIAOMI REDMI A3 (4+128GB) STAR BLUE</h3>
                                         <div className="text-animation">
                                             {/* <small>Just for you this Ramadan</small> */}
                                             {!isMobile &&
@@ -656,10 +656,10 @@ export default function HomePage() {
                                 </div>
                                 {/* <-- three --> */}
                                 <div className="three">
-                                    <a><img src="/images/Kitchen_192X192.webp" alt=""/></a>
+                                    <a><img src="/images/10.19.128.png" alt=""/></a>
                                     <h4>Nuevo</h4>
                                     <div className="p-text">
-                                        <h3>Cocina Bespoke</h3>
+                                        <h3>XIAOMI 12 5G (8+256GB) GRAY</h3>
                                         <div className="text-animation">
                                             {/* <small>With 48H delivery and flexible payment options*</small> */}
                                             {!isMobile &&
@@ -670,10 +670,10 @@ export default function HomePage() {
                                 </div>
                                 {/* <-- four --> */}
                                 <div className="four">
-                                    <a><img src="/images/Dishawasher_192x192.png" alt=""/></a>
+                                    <a><img src="/images/10.19.176.png" alt=""/></a>
                                     <h4>Nuevo</h4>
                                     <div className="p-text">
-                                        <h3>Lavaplatos Bespoke</h3>
+                                        <h3>XIAOMI REDMI 14C AZUL ASTRAL</h3>
                                         <div className="text-animation">
                                             {/* <small>Enjoy the season of gifting with amazing discounts up tp 59% */}
                                             {/*     off</small> */}
@@ -690,13 +690,13 @@ export default function HomePage() {
                             <div className="left">
                                 <a className={isMobile ? "left-mo" : "left-desk"}>
                                     <img
-                                        src={isMobile ? "/images/OLEDG8_HOME_B6_Merchandising_624x352_mo_LTR-.webp" : "/images/OLEDG8_HOME_B6_Merchandising_684x684_pc.jpg"}
+                                        src={isMobile ? "/images/10.03.110-mbl.png" : "/images/10.03.110.png"}
                                         alt=""
                                     />
                                 </a>
 
                                 <div className="p-text">
-                                    <h3>Odyssey OLED G8</h3>
+                                    <h3>BLU C9 LTE (2+64GB) PURPLE</h3>
                                     <div className="text-animation">
                                         {/* <small>Enjoy the season of gifting with amazing discounts up tp 59% off */}
                                         {/* </small> */}
@@ -708,11 +708,11 @@ export default function HomePage() {
                                 {/* <-- one --> */}
                                 <div className="one">
                                     <a>
-                                        <img src="/images/G6mobile_192X192.webp" alt=""/>
+                                        <img src="/images/10.03.95.png" alt=""/>
                                     </a>
                                     <h4>Nuevo</h4>
                                     <div className="p-text">
-                                        <h3>Odyssey OLED G6</h3>
+                                        <h3>C5L MAX (3+32GB) BLUE</h3>
                                         <div className="text-animation">
                                             {/* <small>Enjoy 0% installment plan and free delivery</small> */}
                                             {!isMobile &&
@@ -723,10 +723,10 @@ export default function HomePage() {
                                 </div>
                                 {/* <-- two --> */}
                                 <div className="two">
-                                    <a><img src="/images/M7mobile_192X192.webp" alt=""/></a>
+                                    <a><img src="/images/10.03.112.png" alt=""/></a>
                                     <h4>Nuevo</h4>
                                     <div className="p-text">
-                                        <h3>Smart Monitor M7</h3>
+                                        <h3>C9 LTE (2+64GB) GREEN</h3>
                                         <div className="text-animation">
                                             {/* <small>Just for you this Ramadan</small> */}
                                             {!isMobile &&
@@ -737,10 +737,10 @@ export default function HomePage() {
                                 </div>
                                 {/* <-- three --> */}
                                 <div className="three">
-                                    <a><img src="/images/S7mobile_192X192.png" alt=""/></a>
+                                    <a><img src="/images/10.03.108.png" alt=""/></a>
                                     <h4>Nuevo</h4>
                                     <div className="p-text">
-                                        <h3>ViewFinity S7</h3>
+                                        <h3>C9 LTE (2+64GB) BLACK</h3>
                                         <div className="text-animation">
                                             {/* <small>With 48H delivery and flexible payment options*</small> */}
                                             {!isMobile &&
@@ -751,10 +751,10 @@ export default function HomePage() {
                                 </div>
                                 {/* <-- four --> */}
                                 <div className="four">
-                                    <a><img src="/images/M8mobile_192X192.webp" alt=""/></a>
+                                    <a><img src="/images/10.03.111.png" alt=""/></a>
                                     <h4>Nuevo</h4>
                                     <div className="p-text">
-                                        <h3>Smart Monitor M8</h3>
+                                        <h3>BLU C9 LTE (2+64GB) WHITE</h3>
                                         <div className="text-animation">
                                             {/* <small>Enjoy the season of gifting with amazing discounts up tp 59% */}
                                             {/*     off</small> */}
