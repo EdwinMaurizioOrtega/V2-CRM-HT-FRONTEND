@@ -344,7 +344,7 @@ main {
                         overflow: hidden;
 
                         h3 {
-                            font-size: 25px;
+                            font-size: 24px;
                             width: 30%;
                             text-align: center;
                             color: black;
@@ -489,7 +489,7 @@ main {
                             overflow: hidden;
 
                             h3 {
-                                font-size: 1.2vw;
+                                font-size: 1vw;
                                 width: 90%;
                                 text-align: center;
                                 color: black;
@@ -966,8 +966,9 @@ main {
                             }
 
                             .p-text {
+                                bottom: 5px;
                                 h3 {
-                                    font-size: 12px;
+                                    font-size: 14px;
                                 }
 
                                 .text-animation {
