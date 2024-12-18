@@ -169,30 +169,72 @@ export default function ProductDetailsSummary({
 
         console.log("user: " + JSON.stringify(user));
 
-        if (user.COMPANY === "TOMEBAMBA") {
+        //Hipertronics
+        if (user.EMPRESA === '0992537442001') {
 
-            if (selectedTomebambaPrice) {
-                const primerObjeto = pricelistproduct[0];
-                console.log("primerObjeto: " + JSON.stringify(primerObjeto));
+            if (user.COMPANY === "TOMEBAMBA") {
 
-                try {
-                    onAddCart({
-                        ...values,
-                        // colors: [values.colors],
-                        price: primerObjeto,
-                        priceTomebamba: selectedTomebambaPrice,
-                        subtotal: values.price.Price * values.quantity,
-                    });
-                } catch (error) {
-                    console.error(error);
+                if (selectedTomebambaPrice) {
+                    const primerObjeto = pricelistproduct[0];
+                    console.log("primerObjeto: " + JSON.stringify(primerObjeto));
+
+                    try {
+                        onAddCart({
+                            ...values,
+                            // colors: [values.colors],
+                            price: primerObjeto,
+                            priceTomebamba: selectedTomebambaPrice,
+                            subtotal: values.price.Price * values.quantity,
+                        });
+                    } catch (error) {
+                        console.error(error);
+                    }
+
+                } else {
+                    alert("Te falto seleccionar un tipo de precio. 😅")
                 }
 
             } else {
-                alert("Te falto seleccionar un tipo de precio. 😅")
+
+                if (selectedPrice) {
+                    try {
+                        onAddCart({
+                            ...values,
+                            // colors: [values.colors],
+                            price: selectedPrice,
+                            subtotal: values.price.Price * values.quantity,
+                        });
+                    } catch (error) {
+                        console.error(error);
+                    }
+
+                } else {
+                    alert("Te falto seleccionar un tipo de precio. 😅")
+                }
+
             }
 
-        } else {
+            //Solo para lidenar
+            if (user.COMPANY === 'HT' && user.ROLE !== '31') {
 
+                const sumaDisponible = onStockValidate.reduce((total, producto) => total + Number(producto.DISPONIBLE), 0);
+
+                if (sumaDisponible >= values.quantity) {
+                    alert("🙂Stock disponible. ✅")
+
+                } else {
+                    alert(`😤El stock disponible ${sumaDisponible} ✅ es menor al número ${values.quantity} 🙄 de unidades ingresadas.😮‍💨
+                        ${onStockValidate[0].BODEGA == '019' ? " CD-HT" : null}  ${Number(onStockValidate[0].DISPONIBLE)}
+                        ${onStockValidate[1].BODEGA == '002' ? "CUENCA" : null}  ${Number(onStockValidate[1].DISPONIBLE)}
+                        ${onStockValidate[2].BODEGA == '024' ? " MANTA" : null}  ${Number(onStockValidate[2].DISPONIBLE)}
+                        ${onStockValidate[3].BODEGA == '030' ? " COLÓN" : null}  ${Number(onStockValidate[3].DISPONIBLE)}
+                        `);
+                }
+            }
+        }
+
+        //MovilCelistic
+        if (user.EMPRESA === '1792161037001') {
             if (selectedPrice) {
                 try {
                     onAddCart({
@@ -207,26 +249,6 @@ export default function ProductDetailsSummary({
 
             } else {
                 alert("Te falto seleccionar un tipo de precio. 😅")
-            }
-
-        }
-
-        //Solo para lidenar
-        if (user.COMPANY === 'HT' && user.ROLE !== '31') {
-
-            const sumaDisponible = onStockValidate.reduce((total, producto) => total + Number(producto.DISPONIBLE), 0);
-
-            if (sumaDisponible >= values.quantity) {
-                alert("🙂Stock disponible. ✅")
-
-            } else {
-                alert(`😤El stock disponible ${sumaDisponible} ✅ es menor al número ${values.quantity} 🙄 de unidades ingresadas.😮‍💨
-        ${onStockValidate[0].BODEGA == '019' ? " CD-HT" : null}  ${Number(onStockValidate[0].DISPONIBLE)}
-        ${onStockValidate[1].BODEGA == '002' ? "CUENCA" : null}  ${Number(onStockValidate[1].DISPONIBLE)}
-        ${onStockValidate[2].BODEGA == '024' ? " MANTA" : null}  ${Number(onStockValidate[2].DISPONIBLE)}
-        ${onStockValidate[3].BODEGA == '030' ? " COLÓN" : null}  ${Number(onStockValidate[3].DISPONIBLE)}
-        `);
-
             }
         }
 
@@ -324,7 +346,7 @@ export default function ProductDetailsSummary({
 
                 <Stack direction="row" justifyContent="space-between">
                     <Typography variant="subtitle2" sx={{height: 36, lineHeight: '36px'}}>
-                         {user.ROLE === '31' ? 'Precio sugerido' : 'Comentario'}
+                        {user.ROLE === '31' ? 'Precio sugerido' : 'Comentario'}
                     </Typography>
 
                     <Stack spacing={1}>
@@ -384,9 +406,9 @@ export default function ProductDetailsSummary({
                                                 fCurrency(price.Price * 0.15)
                                                 : 0
                                             }
-                                            = { CODIGO !== '15.60.09' ?
+                                            = {CODIGO !== '15.60.09' ?
                                             fCurrency(price.Price * 1.15)
-                                            :  fCurrency(price.Price)
+                                            : fCurrency(price.Price)
                                         }
                                         </MenuItem>
 

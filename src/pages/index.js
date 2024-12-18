@@ -782,7 +782,7 @@ export default function HomePage() {
                             style={{
                                 color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
                             }}
-                        >Mobile</h1>
+                        >Infinix</h1>
                         <ul className="horizontal-scroll">
                             <li>
                                 <button className={activeTabTres === 'mobile_uno' ? 'active' : ''}
@@ -790,7 +790,7 @@ export default function HomePage() {
                                             color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
                                         }}
                                         onClick={() => handleTabClickSecTres('mobile_uno')}>
-                                    Galaxy Z Fold6
+                                    HOT 50 PRO
                                     <span className="tab__item-line"></span>
 
                                 </button>
@@ -848,7 +848,7 @@ export default function HomePage() {
                     <div className="mobile-list-bottom">
                         <div className={`tab-content ${activeTabTres === 'mobile_uno' ? 'active' : ''}`}>
 
-                            <h2>Galaxy Z Fold6</h2>
+                            <h2>HOT 50 PRO SLEEK BLACK</h2>
                             {/* <p>Get free Galaxy Buds Pro worth AED 739 with every purchase</p> */}
                             <div className="mobile-btn">
                                 <a>Más información</a>
@@ -1292,7 +1292,7 @@ const getImageNameDesktop = (currentImage) => {
     switch (currentImage) {
         case 'mobile_uno':
             // Aquí defines las condiciones para esta imagen
-            return '/images/New-HOME_Q6_MX-KV_1440x810_pc_LATIN.jpg';
+            return '/images/10.43.111-desk.png';
         case 'mobile_dos':
             // Aquí defines otras condiciones
             return '/images/New-HOME_B6_MX-KV_1440x810_pc_LATIN.jpg';
@@ -1315,7 +1315,7 @@ const getImageNameMobile = (currentImage) => {
     switch (currentImage) {
         case 'mobile_uno':
             // Aquí defines las condiciones para esta imagen
-            return '/images/New-HOME_Q6_MX-KV_720x1280_mo_LATIN.jpg';
+            return '/images/10.43.111-mbl1.png';
         case 'mobile_dos':
             // Aquí defines otras condiciones
             return '/images/New-HOME_B6_MX-KV_720x1280_mo_LATIN.jpg';

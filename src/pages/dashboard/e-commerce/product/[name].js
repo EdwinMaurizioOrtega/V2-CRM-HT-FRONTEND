@@ -225,7 +225,7 @@ export default function EcommerceProductDetailsPage() {
                         <Stack spacing={3}>
 
                             <Card>
-                                <CardHeader title="Stock"/>
+                                <CardHeader title="Stockk"/>
                                 <BasicTable code={name}
                                             validateStock={functionStock}
                                 />

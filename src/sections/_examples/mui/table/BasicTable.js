@@ -131,7 +131,7 @@ export default function BasicTable({code, validateStock}) {
 
                                 {
                                     // Hipertronics
-                                    user.EMPRESA == '0992537442001' ? (
+                                    user.EMPRESA == '0992537442001' && (
 
                                         user.COMPANY === 'TOMEBAMBA' ? (
                                             stockProduct
@@ -216,11 +216,30 @@ export default function BasicTable({code, validateStock}) {
 
                                         )
 
-                                    ) : (
-                                        //Alphacell
+                                    )
+
+                                }
+
+                                {user.EMPRESA == '0992537442001' && (
+                                    //Alphacell
+                                    stockProduct.map((row) => (
+                                        <TableRow key={row.BODEGA}>
+                                            <TableCell>{getTextFromCodigoAlphacell(row.BODEGA)}</TableCell>
+                                            <TableCell align="right">{fNumber(row.CANTIDAD)}</TableCell>
+                                            <TableCell align="right">{fNumber(row.RESERVADO)}</TableCell>
+                                            <TableCell align="right">{fNumber(row.DISPONIBLE)}</TableCell>
+                                            <TableCell align="right">{row.CODIGO}</TableCell>
+                                        </TableRow>
+                                    ))
+                                )
+
+                                }
+                                {
+                                    user.EMPRESA == '1792161037001' && (
+                                        //MovilCelistic
                                         stockProduct.map((row) => (
                                             <TableRow key={row.BODEGA}>
-                                                <TableCell>{getTextFromCodigoAlphacell(row.BODEGA)}</TableCell>
+                                                <TableCell>{getTextFromCodigoMovilCelistic(row.BODEGA)}</TableCell>
                                                 <TableCell align="right">{fNumber(row.CANTIDAD)}</TableCell>
                                                 <TableCell align="right">{fNumber(row.RESERVADO)}</TableCell>
                                                 <TableCell align="right">{fNumber(row.DISPONIBLE)}</TableCell>
@@ -229,6 +248,7 @@ export default function BasicTable({code, validateStock}) {
                                         ))
                                     )
                                 }
+
 
                             </TableBody>
                         </Table>
@@ -318,3 +338,22 @@ function getTextFromCodigoAlphacell(rowCodigo) {
 //     functionStock(data)
 //     console.log(data);
 // }
+
+function getTextFromCodigoMovilCelistic(rowCodigo) {
+    switch (rowCodigo) {
+        case 'T1CARACO':
+            return "CARACOL XIAOMI TERMINALES";
+        case 'T1MACHAL':
+            return "MACHALA XIAOMI TERMINALES";
+        case 'T2CARACO':
+            return "CARACOL XIAOMI ELECTRODOMESTICOS";
+        case 'T2MACHAL':
+            return "MACHALA XIAOMI ELECTRODOMESTICOS";
+        case 'T3CARACO':
+            return "CARACOL XIAOMI ACCESORIOS";
+        case 'T3MACHAL':
+            return "MACHALA XIAOMI ACCESORIOS";
+        default:
+            return "...";
+    }
+}
