@@ -779,16 +779,16 @@ export default function HomePage() {
 
                     <div className="mobile-list">
                         <h1 className="text-block-container__headline"
-                            style={{
-                                color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                            }}
+                            // style={{
+                            //     color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                            // }}
                         >Infinix</h1>
                         <ul className="horizontal-scroll">
                             <li>
                                 <button className={activeTabTres === 'mobile_uno' ? 'active' : ''}
-                                        style={{
-                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                        }}
+                                        // style={{
+                                        //     color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                        // }}
                                         onClick={() => handleTabClickSecTres('mobile_uno')}>
                                     HOT 50 PRO
                                     <span className="tab__item-line"></span>
@@ -797,49 +797,49 @@ export default function HomePage() {
                             </li>
                             <li>
                                 <button className={activeTabTres === 'mobile_dos' ? 'active' : ''}
-                                        style={{
-                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                        }}
+                                        // style={{
+                                        //     color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                        // }}
                                         onClick={() => handleTabClickSecTres('mobile_dos')}>
-                                    Galaxy Z Flip6
+                                    SMART 9HD MINT GREEN
                                     <span className="tab__item-line"></span>
 
                                 </button>
                             </li>
                             <li>
                                 <button className={activeTabTres === 'mobile_tres' ? 'active' : ''}
-                                        style={{
-                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                        }}
+                                        // style={{
+                                        //     color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                        // }}
                                         onClick={() => handleTabClickSecTres('mobile_tres')}>
-                                    Galaxy S24 FE
+                                    SMART 9HD METALLIC BLACK
                                     <span className="tab__item-line"></span>
 
                                 </button>
                             </li>
                             <li>
                                 <button className={activeTabTres === 'mobile_cuatro' ? 'active' : ''}
-                                        style={{
-                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                        }}
+                                        // style={{
+                                        //     color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                        // }}
                                         onClick={() => handleTabClickSecTres('mobile_cuatro')}>
-                                    Serie Galaxy Tab S10
+                                    SMART 9 MINT GREEN
                                     <span className="tab__item-line"></span>
 
                                 </button>
                             </li>
                             <li>
                                 <button className={activeTabTres === 'mobile_cinco' ? 'active' : ''}
-                                        style={{
-                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                            border: activeTabTres === 'mobile_cinco' ? '2px dotted white' : '',
-                                        }}
+                                        // style={{
+                                        //     color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                        //     border: activeTabTres === 'mobile_cinco' ? '2px dotted white' : '',
+                                        // }}
                                         onClick={() => handleTabClickSecTres('mobile_cinco')}>
-                                    Galaxy Watch Ultra
+                                    SMART 9 NEO TITANIUM
                                     <span className="tab__item-line"
-                                    style={{
-                                        background: 'white'
-                                    }}
+                                    // style={{
+                                    //     background: 'white'
+                                    // }}
                                     ></span>
                                 </button>
                             </li>
@@ -864,7 +864,7 @@ export default function HomePage() {
                         </div>
                         <div className={`tab-content ${activeTabTres === 'mobile_dos' ? 'active' : ''}`}>
 
-                            <h2>Galaxy Z Flip6</h2>
+                            <h2>SMART 9HD MINT GREEN</h2>
                             {/* <p>Get free Galaxy Buds Pro worth AED 739 with every purchase</p> */}
                             <div className="mobile-btn">
                                 <a>Más información</a>
@@ -880,7 +880,7 @@ export default function HomePage() {
                         </div>
                         <div className={`tab-content ${activeTabTres === 'mobile_tres' ? 'active' : ''}`}>
 
-                            <h2>Galaxy S24 FE</h2>
+                            <h2>SMART 9HD METALLIC</h2>
                             {/* <p>Get free Galaxy Buds Pro worth AED 739 with every purchase</p> */}
                             <div className="mobile-btn">
                                 <a>Más información</a>
@@ -896,7 +896,7 @@ export default function HomePage() {
                         </div>
                         <div className={`tab-content ${activeTabTres === 'mobile_cuatro' ? 'active' : ''}`}>
 
-                            <h2>Serie Galaxy Tab S10</h2>
+                            <h2>SMART 9 MINT GREEN</h2>
                             {/* <p>Get free Galaxy Buds Pro worth AED 739 with every purchase</p> */}
                             <div className="mobile-btn">
                                 <a>Más información</a>
@@ -913,15 +913,17 @@ export default function HomePage() {
                         <div className={`tab-content ${activeTabTres === 'mobile_cinco' ? 'active' : ''}`}>
 
                             <h2
-                                style={{
-                                    color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                }}
-                            >Galaxy Watch Ultra</h2>
+                                // style={{
+                                //     color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                // }}
+                            >SMART 9 NEO TITANIUM</h2>
                             {/* <p>Get free Galaxy Buds Pro worth AED 739 with every purchase</p> */}
                             <div className="mobile-btn">
-                                <a style={{
-                                    color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                }}>Más información</a>
+                                <a
+                                //     style={{
+                                //     color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
+                                // }}
+                                >Más información</a>
                                 <a>Comprar ahora
                                     <svg className="custom-svg" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -1295,19 +1297,19 @@ const getImageNameDesktop = (currentImage) => {
             return '/images/10.43.111-desk.png';
         case 'mobile_dos':
             // Aquí defines otras condiciones
-            return '/images/New-HOME_B6_MX-KV_1440x810_pc_LATIN.jpg';
+            return '/images/10.43.122-desk.png';
         case 'mobile_tres':
             // Aquí defines otras condiciones
-            return '/images/New-HOME_R12_MX-KV_1440X810_pc.jpg';
+            return '/images/10.43.120-desk.png';
         case 'mobile_cuatro':
             // Aquí defines otras condiciones
-            return '/images/NewGBM-HOME_TS10-Series_MX-KV_1440x810_pc.jpg';
+            return '/images/10.43.110-desk.png';
         case 'mobile_cinco':
             // Aquí defines otras condiciones
-            return '/images/New-HOME_TS10-Series_MX-KV_1440x810_pc.jpg';
+            return '/images/10.43.109-desk.png';
         default:
             // Imagen por defecto
-            return '/images/New-HOME_Q6_MX-KV_1440x810_pc_LATIN.jpg';
+            return '/images/10.43.111-desk.png';
     }
 };
 
@@ -1318,19 +1320,19 @@ const getImageNameMobile = (currentImage) => {
             return '/images/10.43.111-mbl1.png';
         case 'mobile_dos':
             // Aquí defines otras condiciones
-            return '/images/New-HOME_B6_MX-KV_720x1280_mo_LATIN.jpg';
+            return '/images/10.43.122-mbl.png';
         case 'mobile_tres':
             // Aquí defines otras condiciones
-            return '/images/New-HOME_R12_MX-KV_720X1280_mo.jpg';
+            return '/images/10.43.120-mbl.png';
         case 'mobile_cuatro':
             // Aquí defines otras condiciones
-            return '/images/New-HOME_TS10-Series_MX-KV_720x1280_mo.jpg';
+            return '/images/10.43.110-mbl.png';
         case 'mobile_cinco':
             // Aquí defines otras condiciones
-            return '/images/nEW-HOME_GBM-KV_WatchUltra_1440x810_MO_MX.jpg';
+            return '/images/10.43.109-mbl.png';
         default:
             // Imagen por defecto
-            return '/images/New-HOME_Q6_MX-KV_720x1280_mo_LATIN.jpg';
+            return '/images/10.43.111-mbl1.png';
     }
 };
 
