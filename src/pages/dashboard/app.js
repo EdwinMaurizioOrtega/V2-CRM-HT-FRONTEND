@@ -161,6 +161,14 @@ export default function GeneralAppPage() {
                                                         />
                                                     ) : null}
 
+                                                    { user?.COMPANY === 'MC' ? (
+                                                        <FormControlLabel
+                                                            value="1792161037001"
+                                                            control={<Radio/>}
+                                                            label="MOVILCELISTIC"
+                                                        />
+                                                    ) : null}
+
                                                 </RadioGroup>
                                             </FormControl>
 
