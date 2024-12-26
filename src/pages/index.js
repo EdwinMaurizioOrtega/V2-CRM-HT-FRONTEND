@@ -946,83 +946,48 @@ export default function HomePage() {
 
                     <div className="mobile-list">
                         <h1 className="text-block-container__headline"
-                            style={{
-                                color: 'white',
-                            }}
-                        >TV & AV</h1>
+                        >SAMSUNG</h1>
                         <ul className="horizontal-scroll">
                             <li>
                                 <button className={activeTabTres === 'mobile_uno' ? 'active' : ''}
-                                        style={{
-                                            color: 'white',
-                                            border: activeTabTres === 'mobile_uno' ? '2px dotted white' : 'none' ,
-                                        }}
                                         onClick={() => handleTabClickSecTres('mobile_uno')}>
                                     Samsung AI TV
                                     <span className="tab__item-line"
-                                          style={{
-                                              background: 'white',
-                                          }}
                                     ></span>
                                 </button>
                             </li>
                             <li>
                                 <button className={activeTabTres === 'mobile_dos' ? 'active' : ''}
-                                        style={{
-                                            color: 'white',
-                                            border: activeTabTres === 'mobile_dos' ? '2px dotted white' : 'none' ,
-                                        }}
+
                                         onClick={() => handleTabClickSecTres('mobile_dos')}>
                                     Neo QLED 8K
                                     <span className="tab__item-line"
-                                          style={{
-                                              background: 'white',
-                                          }}
+
                                     ></span>
                                 </button>
                             </li>
                             <li>
                                 <button className={activeTabTres === 'mobile_tres' ? 'active' : ''}
-                                        style={{
-                                            color: 'white',
-                                            border: activeTabTres === 'mobile_tres' ? '2px dotted white' : 'none',
-                                        }}
                                         onClick={() => handleTabClickSecTres('mobile_tres')}>
                                     Neo QLED
                                     <span className="tab__item-line"
-                                          style={{
-                                              background: 'white',
-                                          }}
                                     ></span>
                                 </button>
                             </li>
                             <li>
                                 <button className={activeTabTres === 'mobile_cuatro' ? 'active' : ''}
-                                        style={{
-                                            color: 'white',
-                                            border: activeTabTres === 'mobile_cuatro' ? '2px dotted white' : 'none',
-                                        }}
                                         onClick={() => handleTabClickSecTres('mobile_cuatro')}>
                                     OLED
                                     <span className="tab__item-line"
-                                          style={{
-                                              background: 'white',
-                                          }}
                                     ></span>
                                 </button>
                             </li>
                             <li>
                                 <button className={activeTabTres === 'mobile_cinco' ? 'active' : ''}
-                                        style={{
-                                            color: 'white',
-                                            border: activeTabTres === 'mobile_cinco' ? '2px dotted white' : 'none',
-                                        }}
+
                                         onClick={() => handleTabClickSecTres('mobile_cinco')}>
                                     The Frame
                                     <span className="tab__item-line"
-                                          style={{
-                                              background: 'white',
-                                          }}
                                     ></span>
                                 </button>
                             </li>
@@ -1031,14 +996,10 @@ export default function HomePage() {
                     <div className="mobile-list-bottom">
                         <div className={`tab-content ${activeTabTres === 'mobile_uno' ? 'active' : ''}`}>
 
-                            <h2 style={{
-                                color: 'white',
-                            }}>Eleva cada momento</h2>
+                            <h2 >Eleva cada momento</h2>
                             {/* <p>Get free Galaxy Buds Pro worth AED 739 with every purchase</p> */}
                             <div className="mobile-btn">
-                                <a style={{
-                                    color: 'white',
-                                }}>Más información</a>
+                                <a >Más información</a>
                                 <a>Comprar ahora
                                     <svg className="custom-svg" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -1051,14 +1012,10 @@ export default function HomePage() {
                         </div>
                         <div className={`tab-content ${activeTabTres === 'mobile_dos' ? 'active' : ''}`}>
 
-                            <h2 style={{
-                                color: 'white',
-                            }}>Neo QLED 8K</h2>
+                            <h2 >Neo QLED 8K</h2>
                             {/* <p>Get free Galaxy Buds Pro worth AED 739 with every purchase</p> */}
                             <div className="mobile-btn">
-                                <a style={{
-                                    color: 'white',
-                                }}>Más información</a>
+                                <a >Más información</a>
                                 <a>Comprar ahora
                                     <svg className="custom-svg" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -1071,14 +1028,10 @@ export default function HomePage() {
                         </div>
                         <div className={`tab-content ${activeTabTres === 'mobile_tres' ? 'active' : ''}`}>
 
-                            <h2 style={{
-                                color: 'white',
-                            }}>Neo QLED</h2>
+                            <h2 >Neo QLED</h2>
                             {/* <p>Get free Galaxy Buds Pro worth AED 739 with every purchase</p> */}
                             <div className="mobile-btn">
-                                <a style={{
-                                    color: 'white',
-                                }}>Más información</a>
+                                <a >Más información</a>
                                 <a>Comprar ahora
                                     <svg className="custom-svg" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -1091,14 +1044,10 @@ export default function HomePage() {
                         </div>
                         <div className={`tab-content ${activeTabTres === 'mobile_cuatro' ? 'active' : ''}`}>
 
-                            <h2 style={{
-                                color: 'white',
-                            }}>OLED</h2>
+                            <h2 >OLED</h2>
                             {/* <p>Get free Galaxy Buds Pro worth AED 739 with every purchase</p> */}
                             <div className="mobile-btn">
-                                <a style={{
-                                    color: 'white',
-                                }}>Más información</a>
+                                <a >Más información</a>
                                 <a>Comprar ahora
                                     <svg className="custom-svg" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -1138,16 +1087,10 @@ export default function HomePage() {
 
                     <div className="mobile-list">
                         <h1 className="text-block-container__headline"
-                            style={{
-                                color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                            }}
-                        >Línea Blanca</h1>
+                        >XIAOMI</h1>
                         <ul className="horizontal-scroll">
                             <li>
                                 <button className={activeTabTres === 'mobile_uno' ? 'active' : ''}
-                                        style={{
-                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                        }}
                                         onClick={() => handleTabClickSecTres('mobile_uno')}>
                                     Bespoke AI Laundry Combo
                                     <span className="tab__item-line"></span>
@@ -1155,9 +1098,6 @@ export default function HomePage() {
                             </li>
                             <li>
                                 <button className={activeTabTres === 'mobile_dos' ? 'active' : ''}
-                                        style={{
-                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                        }}
                                         onClick={() => handleTabClickSecTres('mobile_dos')}>
                                     Bespoke AI ™
                                     <span className="tab__item-line"></span>
@@ -1165,9 +1105,6 @@ export default function HomePage() {
                             </li>
                             <li>
                                 <button className={activeTabTres === 'mobile_tres' ? 'active' : ''}
-                                        style={{
-                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                        }}
                                         onClick={() => handleTabClickSecTres('mobile_tres')}>
                                     Family Hub
                                     <span className="tab__item-line"></span>
@@ -1175,9 +1112,6 @@ export default function HomePage() {
                             </li>
                             <li>
                                 <button className={activeTabTres === 'mobile_cuatro' ? 'active' : ''}
-                                        style={{
-                                            color: activeTabTres === 'mobile_cinco' ? 'white' : 'inherit',
-                                        }}
                                         onClick={() => handleTabClickSecTres('mobile_cuatro')}>
                                     Top Mount Freezer
                                     <span className="tab__item-line"></span>
@@ -1341,21 +1275,21 @@ const getImageNameDesktopTV = (currentImage) => {
     switch (currentImage) {
         case 'mobile_uno':
             // Aquí defines las condiciones para esta imagen
-            return '/images/Desktop_AI-Neo-QLED--Pre-order-GBM.jpg';
+            return '/images/10.02.141-desk1.png';
         case 'mobile_dos':
             // Aquí defines otras condiciones
-            return '/images/NeoQLED8K_GBM_PC.jpg';
+            return '/images/10.02.152-desk.png';
         case 'mobile_tres':
             // Aquí defines otras condiciones
-            return '/images/NeoQLED4K_GBM_PC.jpg';
+            return '/images/10.02.191-desk.png';
         case 'mobile_cuatro':
             // Aquí defines otras condiciones
-            return '/images/OLED_GBM_PC.jpg';
+            return '/images/10.02.151-desk.png';
         case 'mobile_cinco':
             // Aquí defines otras condiciones
-            return '/images/TheFrame_GBM_PC.jpg'
+            return '/images/10.02.202-desk.png'
             // Imagen por defecto
-            return '/images/Desktop_AI-Neo-QLED--Pre-order-GBM.jpg';
+            return '/images/10.02.141-desk1.png'
     }
 };
 
@@ -1363,22 +1297,21 @@ const getImageNameMobileTV = (currentImage) => {
     switch (currentImage) {
         case 'mobile_uno':
             // Aquí defines las condiciones para esta imagen
-            return '/images/AI-MO_GBM_NeoQLED_2023_Pre-order.jpg';
+            return '/images/10.02.141-mbl.png';
         case 'mobile_dos':
             // Aquí defines otras condiciones
-            return '/images/NeoQLED8K_GBM_MO.jpg';
+            return '/images/10.02.152-mbl.png';
         case 'mobile_tres':
             // Aquí defines otras condiciones
-            return '/images/NeoQLED4K_GBM_MO.jpg';
+            return '/images/10.02.191-mbl1.png';
         case 'mobile_cuatro':
             // Aquí defines otras condiciones
-            return '/images/OLED_GBM_MO.jpg';
+            return '/images/10.02.151-mbl.png';
         case 'mobile_cinco':
             // Aquí defines otras condiciones
-            return '/images/TheFrame_GBM_MO.jpeg';
-        default:
+            return '/images/10.02.202-mbl.png'
             // Imagen por defecto
-            return '/images/AI-MO_GBM_NeoQLED_2023_Pre-order.jpg';
+            return '/images/10.02.141-mbl.png';
     }
 };
 
@@ -1387,19 +1320,19 @@ const getImageNameDesktopHome = (currentImage) => {
     switch (currentImage) {
         case 'mobile_uno':
             // Aquí defines las condiciones para esta imagen
-            return '/images/T-combo-GBM3.jpg';
+            return '/images/10.19.163-desk.png';
         case 'mobile_dos':
             // Aquí defines otras condiciones
-            return '/images/BespokeAI-Launch-GBM.jpg';
+            return '/images/10.19.164-desk.png';
         case 'mobile_tres':
             // Aquí defines otras condiciones
-            return '/images/Desktop-Family-Hub.jpg';
+            return '/images/10.19.128-desk.png';
         case 'mobile_cuatro':
             // Aquí defines otras condiciones
-            return '/images/TMF-desktop.jpg';
+            return '/images/10.19.176-desk.png';
         default:
             // Imagen por defecto
-            return '/images/T-combo-GBM3.jpg';
+            return '/images/10.19.163-desk.png';
     }
 };
 
@@ -1407,18 +1340,18 @@ const getImageNameMobileHome = (currentImage) => {
     switch (currentImage) {
         case 'mobile_uno':
             // Aquí defines las condiciones para esta imagen
-            return '/images/GBM-T-combo-mobile4.jpg';
+            return '/images/10.19.163-mbl1.png';
         case 'mobile_dos':
             // Aquí defines otras condiciones
-            return '/images/AI-MO_GBM_BespokeAI_Launch.jpg';
+            return '/images/10.19.164-mbl.png';
         case 'mobile_tres':
             // Aquí defines otras condiciones
-            return '/images/MO-Family-Hub.jpg';
+            return '/images/10.19.128-mbl.png';
         case 'mobile_cuatro':
             // Aquí defines otras condiciones
-            return '/images/GBM-TMF-mobile.jpg';
+            return '/images/10.19.176-mbl.png';
         default:
             // Imagen por defecto
-            return '/images/GBM-T-combo-mobile4.jpg';
+            return '/images/10.19.163-mbl1.pngg';
     }
 };
