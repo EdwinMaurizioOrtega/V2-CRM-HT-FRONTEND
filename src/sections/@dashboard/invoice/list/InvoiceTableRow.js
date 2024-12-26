@@ -23,6 +23,7 @@ import axios from "../../../../utils/axios";
 import {useRouter} from "next/router";
 import {PAYMENT_OPTIONS_V2, TABULAR_ANULAR_PEDIDOS} from "../../../../utils/constants";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import {top100FilmsMovilCelistic} from "../details";
 
 // ----------------------------------------------------------------------
 
@@ -562,12 +563,15 @@ export default function InvoiceTableRow({
                 </TableCell>
                 {user.ROLE !== '31' ? (
                     <TableCell align="left">{
-                        // Hipertronics
-                        user.EMPRESA == '0992537442001' ? (
-                            nameWarehouse(BODEGA)
+
+                        user.EMPRESA === '0992537442001' ? (
+                            nameWarehouse(BODEGA) // Hipertronics
+                        ) : user.EMPRESA === '0992264373001' ? (
+                            nameWarehouseAlphacell(BODEGA) // Alphacell
+                        ) : user.EMPRESA === '1792161037001' ? (
+                            nameWarehouseMovilCelistic(BODEGA) // MovilCelistic
                         ) : (
-                            //Alphacell
-                            nameWarehouseAlphacell(BODEGA)
+                            'No disponible' // Caso por defecto
                         )
 
                     }</TableCell>
@@ -969,6 +973,20 @@ function nameWarehouseAlphacell(ware) {
         "007": "BODEGA CDHT QUITO",
         "009": "GUAYAQUIL SERVIENTREGA",
         "099": "INVENTARIO TRANSITO IMPORTACIONES"
+    };
+
+    const bodegaActual = strings[ware];
+    return bodegaActual || "Bodega no definida.";
+
+}
+
+function nameWarehouseMovilCelistic(ware) {
+    console.log(`Bodega: ${ware}`);
+    const strings = {
+        "DISTLF": "CARAPUNGO - DISTRIBUIDOR TELEFONOS",
+        "T1MACHAL": "MACHALA - XIAOMI TERMINALES",
+        "T1CUENCA": "CUENCA - XIAOMI TERMINALES",
+        "T1CARACO": "QUITO - XIAOMI TERMINALES"
     };
 
     const bodegaActual = strings[ware];

@@ -498,6 +498,20 @@ export default function InvoiceDetails({invoice}) {
 
     }
 
+    function nameWarehouseMovilCelistic(ware) {
+        console.log(`Bodega: ${ware}`);
+        const strings = {
+            "DISTLF": "CARAPUNGO - DISTRIBUIDOR TELEFONOS",
+            "T1MACHAL": "MACHALA - XIAOMI TERMINALES",
+            "T1CUENCA": "CUENCA - XIAOMI TERMINALES",
+            "T1CARACO": "QUITO - XIAOMI TERMINALES"
+        };
+
+        const bodegaActual = strings[ware];
+        return bodegaActual || "Bodega no definida.";
+
+    }
+
     function nameFormaPago(pay) {
         const payActual = PAYMENT_OPTIONS_V2.find(option => option.id == pay);
         return payActual ? payActual.title : "Pago no definido.";
@@ -1213,15 +1227,15 @@ export default function InvoiceDetails({invoice}) {
 
                                                 {/* <Typography variant="body2">{fDate(dueDate)}</Typography> */}
                                                 <Typography variant="body2">Bodega actual: {
-
-                                                    // Hipertronics
-                                                    user.EMPRESA == '0992537442001' ? (
-                                                        nameWarehouse(BODEGA)
+                                                    user.EMPRESA === '0992537442001' ? (
+                                                        nameWarehouse(BODEGA) // Hipertronics
+                                                    ) : user.EMPRESA === '0992264373001' ? (
+                                                        nameWarehouseAlphacell(BODEGA) // Alphacell
+                                                    ) : user.EMPRESA === '1792161037001' ? (
+                                                        nameWarehouseMovilCelistic(BODEGA) // MovilCelistic
                                                     ) : (
-                                                        //Alphacell
-                                                        nameWarehouseAlphacell(BODEGA)
+                                                        'No disponible' // Caso por defecto
                                                     )
-
                                                 }</Typography>
 
                                                 {user.ROLE === "9" &&
@@ -1232,9 +1246,13 @@ export default function InvoiceDetails({invoice}) {
                                                             // Hipertronics
                                                             user.EMPRESA == '0992537442001' ? (
                                                                 top100Films
-                                                            ) : (
+                                                            ) : user.EMPRESA === '0992264373001' ? (
                                                                 //Alphacell
                                                                 top100FilmsAlphacell
+                                                            ) : user.EMPRESA === '1792161037001' ? (
+                                                                top100FilmsMovilCelistic // MovilCelistic
+                                                            ) : (
+                                                                'No disponible' // Caso por defecto
                                                             )
                                                         }
                                                         getOptionLabel={(option) => option.title}
@@ -1924,6 +1942,13 @@ export const top100FilmsAlphacell = [
     {title: 'BODEGA CDHT QUITO', id: "007"},
     {title: 'GUAYAQUIL SERVIENTREGA', id: "009"},
     {title: 'INVENTARIO TRANSITO IMPORTACIONES', id: "099"}
+]
+
+export const top100FilmsMovilCelistic = [
+    {title: 'CARAPUNGO - DISTRIBUIDOR TELEFONOS', id: "DISTLF"},
+    {title: 'MACHALA - XIAOMI TERMINALES', id: "T1MACHAL"},
+    {title: 'CUENCA - XIAOMI TERMINALES', id: "T1CUENCA"},
+    {title: 'QUITO - XIAOMI TERMINALES', id: "T1CARACO"}
 ]
 
 export const boxes = [

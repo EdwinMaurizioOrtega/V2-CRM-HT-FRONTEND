@@ -120,43 +120,35 @@ const WAREHOUSE_OPTIONS_ALPACELL = [
         title: 'GUAYAQUIL SERVIENTREGA',
         description: 'GUAYAQUIL SERVIENTREGA',
     },
-    // {
-    //     id: '002',
-    //     value: '002',
-    //     title: 'MOVISTAR RESERVA',
-    //     description: 'ALMACEN',
-    // },
-    // {
-    //     id: '003',
-    //     value: '003',
-    //     title: 'MOVISTAR ENTREGADO',
-    //     description: 'ALMACEN',
-    // },
-    // {
-    //     id: '004',
-    //     value: '004',
-    //     title: 'DEPRATI',
-    //     description: 'CONSIGNACIÓN',
-    // },
-    // {
-    //     id: '005',
-    //     value: '005',
-    //     title: 'CRESA CONSIGNACIÓN',
-    //     description: 'CONSIGNACIÓN',
-    // },
-    // {
-    //     id: '006',
-    //     value: '006',
-    //     title: 'COMPUTRONSA CONSIGNACIÓN',
-    //     description: 'CONSIGNACIÓN',
-    // },
-    // {
-    //     id: '099',
-    //     value: '099',
-    //     title: 'INVENTARIO TRANSITO IMPORTACIONES',
-    //     description: 'ALMACEN VIRTUAL',
-    // },
 ]
+
+const WAREHOUSE_OPTIONS_MOVILCELISTIC = [
+    {
+        id: 'DISTLF',
+        value: 'DISTLF',
+        title: 'DISTRIBUIDOR TELEFONOS',
+        description: 'CARAPUNGO',
+    },
+    {
+        id: 'T1MACHAL',
+        value: 'T1MACHAL',
+        title: 'XIAOMI TERMINALES',
+        description: 'MACHALA',
+    },
+    {
+        id: 'T1CUENCA',
+        value: 'T1CUENCA',
+        title: 'XIAOMI TERMINALES',
+        description: 'CUENCA',
+    },
+    {
+        id: 'T1CARACO',
+        value: 'T1CARACO',
+        title: 'XIAOMI TERMINALES',
+        description: 'QUITO',
+    },
+]
+
 
 const PAYMENT_OPTIONS = [
     {
@@ -315,7 +307,7 @@ export default function CheckoutPayment({
         formState: {isSubmitting},
     } = methods;
 
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
 
     const onSnackbarAction = (data, color, anchor) => {
         enqueueSnackbar(`${data}`, {
@@ -371,6 +363,19 @@ export default function CheckoutPayment({
         }
     };
 
+    const warehouseOptions = (() => {
+        if (user.EMPRESA === '0992537442001') {
+            return WAREHOUSE_OPTIONS; // Hipertronics
+        }
+        if (user.EMPRESA === '0992264373001') {
+            return WAREHOUSE_OPTIONS_ALPACELL; // Alphacell
+        }
+        if (user.EMPRESA === '1792161037001') {
+            return WAREHOUSE_OPTIONS_MOVILCELISTIC; // MovilCelistic
+        }
+        return []; // Opciones por defecto si no coincide con ninguna empresa
+    })();
+
     return (
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={3}>
@@ -379,15 +384,10 @@ export default function CheckoutPayment({
                                       onApplyShipping={onApplyShipping} onApplyServientrega={onApplyServientrega}
                                       deliveryOptions={DELIVERY_OPTIONS}/>
 
-                    <CheckoutWarehouse onApplyWarehouse={onApplyWarehouse} warehouseOptions={
-                        // Hipertronics
-                        user.EMPRESA == '0992537442001' ? (
-                        WAREHOUSE_OPTIONS
-                        ) : (
-                            // Alphacell
-                            WAREHOUSE_OPTIONS_ALPACELL
-                        )
-                    }/>
+                    <CheckoutWarehouse
+                        onApplyWarehouse={onApplyWarehouse}
+                        warehouseOptions={warehouseOptions}
+                    />
 
                     <CheckoutPaymentMethods onApplyMethod={onApplyMethod} paymentOptions={PAYMENT_OPTIONS}
                                             sx={{my: 3}}
