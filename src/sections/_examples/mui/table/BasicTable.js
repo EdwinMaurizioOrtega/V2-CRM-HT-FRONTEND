@@ -341,8 +341,8 @@ function getTextFromCodigoAlphacell(rowCodigo) {
 
 function getTextFromCodigoMovilCelistic(rowCodigo) {
     switch (rowCodigo) {
-        case 'T1CARACO':
-            return "CARACOL XIAOMI TERMINALES";
+        case 'DISTLF':
+            return "CENTRO DISTRIBUCION MOVILCELISTIC";
         // case 'T1MACHAL':
         //     return "MACHALA XIAOMI TERMINALES";
         // case 'T2CARACO':
