@@ -126,27 +126,27 @@ const WAREHOUSE_OPTIONS_MOVILCELISTIC = [
     {
         id: 'DISTLF',
         value: 'DISTLF',
-        title: 'DISTRIBUIDOR TELEFONOS',
+        title: 'CENTRO DISTRIBUCION MOVILCELISTIC',
         description: 'CARAPUNGO',
     },
-    {
-        id: 'T1MACHAL',
-        value: 'T1MACHAL',
-        title: 'XIAOMI TERMINALES',
-        description: 'MACHALA',
-    },
-    {
-        id: 'T1CUENCA',
-        value: 'T1CUENCA',
-        title: 'XIAOMI TERMINALES',
-        description: 'CUENCA',
-    },
-    {
-        id: 'T1CARACO',
-        value: 'T1CARACO',
-        title: 'XIAOMI TERMINALES',
-        description: 'QUITO',
-    },
+    // {
+    //     id: 'T1MACHAL',
+    //     value: 'T1MACHAL',
+    //     title: 'XIAOMI TERMINALES',
+    //     description: 'MACHALA',
+    // },
+    // {
+    //     id: 'T1CUENCA',
+    //     value: 'T1CUENCA',
+    //     title: 'XIAOMI TERMINALES',
+    //     description: 'CUENCA',
+    // },
+    // {
+    //     id: 'T1CARACO',
+    //     value: 'T1CARACO',
+    //     title: 'XIAOMI TERMINALES',
+    //     description: 'QUITO',
+    // },
 ]
 
 

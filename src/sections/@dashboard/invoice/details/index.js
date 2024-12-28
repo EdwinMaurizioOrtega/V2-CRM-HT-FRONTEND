@@ -501,10 +501,10 @@ export default function InvoiceDetails({invoice}) {
     function nameWarehouseMovilCelistic(ware) {
         console.log(`Bodega: ${ware}`);
         const strings = {
-            "DISTLF": "CARAPUNGO - DISTRIBUIDOR TELEFONOS",
-            "T1MACHAL": "MACHALA - XIAOMI TERMINALES",
-            "T1CUENCA": "CUENCA - XIAOMI TERMINALES",
-            "T1CARACO": "QUITO - XIAOMI TERMINALES"
+            "DISTLF": "CARAPUNGO - CENTRO DISTRIBUCION MOVILCELISTIC",
+            // "T1MACHAL": "MACHALA - XIAOMI TERMINALES",
+            // "T1CUENCA": "CUENCA - XIAOMI TERMINALES",
+            // "T1CARACO": "QUITO - XIAOMI TERMINALES"
         };
 
         const bodegaActual = strings[ware];
@@ -1945,10 +1945,10 @@ export const top100FilmsAlphacell = [
 ]
 
 export const top100FilmsMovilCelistic = [
-    {title: 'CARAPUNGO - DISTRIBUIDOR TELEFONOS', id: "DISTLF"},
-    {title: 'MACHALA - XIAOMI TERMINALES', id: "T1MACHAL"},
-    {title: 'CUENCA - XIAOMI TERMINALES', id: "T1CUENCA"},
-    {title: 'QUITO - XIAOMI TERMINALES', id: "T1CARACO"}
+    {title: 'CARAPUNGO - CENTRO DISTRIBUCION MOVILCELISTIC', id: "DISTLF"},
+    // {title: 'MACHALA - XIAOMI TERMINALES', id: "T1MACHAL"},
+    // {title: 'CUENCA - XIAOMI TERMINALES', id: "T1CUENCA"},
+    // {title: 'QUITO - XIAOMI TERMINALES', id: "T1CARACO"}
 ]
 
 export const boxes = [

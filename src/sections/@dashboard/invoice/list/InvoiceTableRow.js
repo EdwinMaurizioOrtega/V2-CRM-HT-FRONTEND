@@ -983,10 +983,10 @@ function nameWarehouseAlphacell(ware) {
 function nameWarehouseMovilCelistic(ware) {
     console.log(`Bodega: ${ware}`);
     const strings = {
-        "DISTLF": "CARAPUNGO - DISTRIBUIDOR TELEFONOS",
-        "T1MACHAL": "MACHALA - XIAOMI TERMINALES",
-        "T1CUENCA": "CUENCA - XIAOMI TERMINALES",
-        "T1CARACO": "QUITO - XIAOMI TERMINALES"
+        "DISTLF": "CARAPUNGO - CENTRO DISTRIBUCION MOVILCELISTIC",
+        // "T1MACHAL": "MACHALA - XIAOMI TERMINALES",
+        // "T1CUENCA": "CUENCA - XIAOMI TERMINALES",
+        // "T1CARACO": "QUITO - XIAOMI TERMINALES"
     };
 
     const bodegaActual = strings[ware];
