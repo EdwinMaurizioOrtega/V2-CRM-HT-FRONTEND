@@ -343,16 +343,18 @@ function getTextFromCodigoMovilCelistic(rowCodigo) {
     switch (rowCodigo) {
         case 'DISTLF':
             return "CENTRO DISTRIBUCION MOVILCELISTIC";
-        // case 'T1MACHAL':
-        //     return "MACHALA XIAOMI TERMINALES";
-        // case 'T2CARACO':
-        //     return "CARACOL XIAOMI ELECTRODOMESTICOS";
-        // case 'T2MACHAL':
-        //     return "MACHALA XIAOMI ELECTRODOMESTICOS";
-        // case 'T3CARACO':
-        //     return "CARACOL XIAOMI ACCESORIOS";
-        // case 'T3MACHAL':
-        //     return "MACHALA XIAOMI ACCESORIOS";
+        case 'T1CARACO':
+            return "CARACOL XIAOMI TERMINALES";
+        case 'T1MACHAL':
+            return "MACHALA XIAOMI TERMINALES";
+        case 'T2CARACO':
+            return "CARACOL XIAOMI ELECTRODOMESTICOS";
+        case 'T2MACHAL':
+            return "MACHALA XIAOMI ELECTRODOMESTICOS";
+        case 'T3CARACO':
+            return "CARACOL XIAOMI ACCESORIOS";
+        case 'T3MACHAL':
+            return "MACHALA XIAOMI ACCESORIOS";
         default:
             return "...";
     }
