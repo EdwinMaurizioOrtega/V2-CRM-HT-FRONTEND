@@ -139,48 +139,97 @@ export default function EcommerceProductListPage() {
             console.log("User: " + JSON.stringify(user));
 
             try {
-                const cache = await caches.open('cache-crm');
-                const response = await cache.match(`${HOST_API_KEY}/hanadb/api/products/?empresa=${user.EMPRESA}`);
 
-                if (response) {
-                    // Si hay una respuesta en la caché, se obtiene su contenido
-                    const cachedData = await response.json();
+                //MovilCelistic
+                if (user.EMPRESA === '1792161037001') {
+                    const cache = await caches.open('cache-crm');
+                    const response = await cache.match(`${HOST_API_KEY}/hanadb/api/products/mc`);
 
+                    if (response) {
+                        // Si hay una respuesta en la caché, se obtiene su contenido
+                        const cachedData = await response.json();
+
+                        if (user.ROLE === 'infinix') {
+                            const targetBrands = ['INFINIX', 'GENERICO'];
+                            const infinixProducts = cachedData.products.filter(product => targetBrands.includes(product.MARCA));
+                            setProducts(infinixProducts);
+                        } else if (user.ROLE === '0') {
+                            //Prpductos de la bodega CENTRO_DE_DISTRIBUCION_HT y categoria celulares
+                            const tomebambaProducts = cachedData.products.filter(product => product.CATEGORIA === 'CELULARES' && product.CENTRO_DE_DISTRIBUCION_HT > 0);
+                            setProducts(tomebambaProducts);
+                        } else {
+                            setProducts(cachedData.products);
+                        }
+
+                        console.log("cachedData: " + JSON.stringify(cachedData));
+                    }
+
+                    // Independientemente de si hay una respuesta en la caché o no, se realiza la solicitud de red
+                    const networkResponse = await fetch(`${HOST_API_KEY}/hanadb/api/products/mc`);
+                    const data = await networkResponse.json();
+
+                    // Se almacena la respuesta de red en la caché
+                    await cache.put(`${HOST_API_KEY}/hanadb/api/products/mc`, new Response(JSON.stringify(data)));
+
+                    // Si había una respuesta en la caché, los productos ya se establecieron en el estado
+                    // Si no había respuesta en la caché, ahora se establecen los productos con los datos de la respuesta de red
                     if (user.ROLE === 'infinix') {
                         const targetBrands = ['INFINIX', 'GENERICO'];
-                        const infinixProducts = cachedData.products.filter(product => targetBrands.includes(product.MARCA));
+                        const infinixProducts = data.products.filter(product => targetBrands.includes(product.MARCA));
                         setProducts(infinixProducts);
                     } else if (user.ROLE === '0') {
                         //Prpductos de la bodega CENTRO_DE_DISTRIBUCION_HT y categoria celulares
-                        const tomebambaProducts = cachedData.products.filter(product => product.CATEGORIA === 'CELULARES' && product.CENTRO_DE_DISTRIBUCION_HT > 0);
+                        const tomebambaProducts = data.products.filter(product => product.CATEGORIA === 'CELULARES' && product.CENTRO_DE_DISTRIBUCION_HT > 0);
                         setProducts(tomebambaProducts);
                     } else {
-                        setProducts(cachedData.products);
+                        setProducts(data.products);
+                    }
+                } else {
+                    // Otras empresas
+                    const cache = await caches.open('cache-crm');
+                    const response = await cache.match(`${HOST_API_KEY}/hanadb/api/products/?empresa=${user.EMPRESA}`);
+
+                    if (response) {
+                        // Si hay una respuesta en la caché, se obtiene su contenido
+                        const cachedData = await response.json();
+
+                        if (user.ROLE === 'infinix') {
+                            const targetBrands = ['INFINIX', 'GENERICO'];
+                            const infinixProducts = cachedData.products.filter(product => targetBrands.includes(product.MARCA));
+                            setProducts(infinixProducts);
+                        } else if (user.ROLE === '0') {
+                            //Prpductos de la bodega CENTRO_DE_DISTRIBUCION_HT y categoria celulares
+                            const tomebambaProducts = cachedData.products.filter(product => product.CATEGORIA === 'CELULARES' && product.CENTRO_DE_DISTRIBUCION_HT > 0);
+                            setProducts(tomebambaProducts);
+                        } else {
+                            setProducts(cachedData.products);
+                        }
+
+                        console.log("cachedData: " + JSON.stringify(cachedData));
                     }
 
-                    console.log("cachedData: " + JSON.stringify(cachedData));
+                    // Independientemente de si hay una respuesta en la caché o no, se realiza la solicitud de red
+                    const networkResponse = await fetch(`${HOST_API_KEY}/hanadb/api/products/?empresa=${user.EMPRESA}`);
+                    const data = await networkResponse.json();
+
+                    // Se almacena la respuesta de red en la caché
+                    await cache.put(`${HOST_API_KEY}/hanadb/api/products/?empresa=${user.EMPRESA}`, new Response(JSON.stringify(data)));
+
+                    // Si había una respuesta en la caché, los productos ya se establecieron en el estado
+                    // Si no había respuesta en la caché, ahora se establecen los productos con los datos de la respuesta de red
+                    if (user.ROLE === 'infinix') {
+                        const targetBrands = ['INFINIX', 'GENERICO'];
+                        const infinixProducts = data.products.filter(product => targetBrands.includes(product.MARCA));
+                        setProducts(infinixProducts);
+                    } else if (user.ROLE === '0') {
+                        //Prpductos de la bodega CENTRO_DE_DISTRIBUCION_HT y categoria celulares
+                        const tomebambaProducts = data.products.filter(product => product.CATEGORIA === 'CELULARES' && product.CENTRO_DE_DISTRIBUCION_HT > 0);
+                        setProducts(tomebambaProducts);
+                    } else {
+                        setProducts(data.products);
+                    }
                 }
 
-                // Independientemente de si hay una respuesta en la caché o no, se realiza la solicitud de red
-                const networkResponse = await fetch(`${HOST_API_KEY}/hanadb/api/products/?empresa=${user.EMPRESA}`);
-                const data = await networkResponse.json();
-
-                // Se almacena la respuesta de red en la caché
-                await cache.put(`${HOST_API_KEY}/hanadb/api/products/?empresa=${user.EMPRESA}`, new Response(JSON.stringify(data)));
-
-                // Si había una respuesta en la caché, los productos ya se establecieron en el estado
-                // Si no había respuesta en la caché, ahora se establecen los productos con los datos de la respuesta de red
-                if (user.ROLE === 'infinix') {
-                    const targetBrands = ['INFINIX', 'GENERICO'];
-                    const infinixProducts = data.products.filter(product => targetBrands.includes(product.MARCA));
-                    setProducts(infinixProducts);
-                } else if (user.ROLE === '0') {
-                    //Prpductos de la bodega CENTRO_DE_DISTRIBUCION_HT y categoria celulares
-                    const tomebambaProducts = data.products.filter(product => product.CATEGORIA === 'CELULARES' && product.CENTRO_DE_DISTRIBUCION_HT > 0);
-                    setProducts(tomebambaProducts);
-                } else {
-                    setProducts(data.products);
-                }
                 console.log("data: " + JSON.stringify(data));
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
