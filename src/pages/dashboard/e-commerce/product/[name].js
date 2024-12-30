@@ -86,18 +86,13 @@ export default function EcommerceProductDetailsPage() {
             try {
                 if (name) {
 
-                    //Perfil cliente mayorista en HT
-                    if (user.ROLE === "31") {
-                        // Independientemente de si hay una respuesta en la caché o no, se realiza la solicitud de red
-                        const networkResponse = await fetch(`${HOST_API_KEY}/hanadb/api/products/customers`);
-                        const data = await networkResponse.json();
-                        const searchResultsAux = data.products.filter(product => product.CODIGO === name.trim());
-                        setProduct(searchResultsAux[0]);
 
-                    } else {
+                    //MovilCelistic
+                    if (user.EMPRESA === '1792161037001') {
+
                         //Otro perfil de cualquier compañia.
                         const cache = await caches.open('cache-crm');
-                        const response = await cache.match(`${HOST_API_KEY}/hanadb/api/products/?empresa=${user.EMPRESA}`);
+                        const response = await cache.match(`${HOST_API_KEY}/hanadb/api/products/mc`);
 
                         if (response) {
                             const cachedData = await response.json();
@@ -106,6 +101,29 @@ export default function EcommerceProductDetailsPage() {
                             console.log('Producto encontrado en la caché:', searchResultsAux[0]);
                         }
 
+                    } else {
+
+                        //Perfil cliente mayorista en HT
+                        if (user.ROLE === "31") {
+                            // Independientemente de si hay una respuesta en la caché o no, se realiza la solicitud de red
+                            const networkResponse = await fetch(`${HOST_API_KEY}/hanadb/api/products/customers`);
+                            const data = await networkResponse.json();
+                            const searchResultsAux = data.products.filter(product => product.CODIGO === name.trim());
+                            setProduct(searchResultsAux[0]);
+
+                        } else {
+                            //Otro perfil de cualquier compañia.
+                            const cache = await caches.open('cache-crm');
+                            const response = await cache.match(`${HOST_API_KEY}/hanadb/api/products/?empresa=${user.EMPRESA}`);
+
+                            if (response) {
+                                const cachedData = await response.json();
+                                const searchResultsAux = cachedData.products.filter(product => product.CODIGO === name.trim());
+                                setProduct(searchResultsAux[0]);
+                                console.log('Producto encontrado en la caché:', searchResultsAux[0]);
+                            }
+
+                        }
                     }
                 }
             } catch (error) {
