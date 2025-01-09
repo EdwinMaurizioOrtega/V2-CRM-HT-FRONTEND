@@ -251,16 +251,15 @@ export default function GarantiaPage() {
 
                                 <h3>Garantia Por Factura:</h3>
                                 <span>{garantia?.garantia}</span>
+                                <span>{garantia?.data.NOM_PRODUCTO}</span>
+                                <span>{garantia?.data.MARCA}</span>
                                 <br></br>
                                 <h3>Cliente:</h3>
-
                                 <span>{garantia?.data.COD_CLIENTE}</span>
                                 <span>{garantia?.data.NOM_CLIENTE}</span>
                                 <span>{garantia?.data.FECHA_VENTA}</span>
-                                <span>{garantia?.data.MARCA}</span>
                                 <br></br>
                                 <h3>Empleado Ventas X Facturación:</h3>
-
                                 <span>{garantia?.data.NAME_EMPLEADO_X_FACTURACION}</span>
                                 <span>{garantia?.data.EMAIL_EMPLEADO_X_FACTURACION}</span>
                                 <br></br>
