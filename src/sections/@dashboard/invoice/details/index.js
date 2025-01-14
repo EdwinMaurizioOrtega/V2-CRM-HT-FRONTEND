@@ -203,7 +203,8 @@ export default function InvoiceDetails({invoice}) {
         OrdersBal,
         Free_Text,
         OBSERVACIONESB,
-        OBSERVACIONES
+        OBSERVACIONES,
+        DOCNUM
     } = invoice;
 
     console.log("OBSERVACIONES: " + OBSERVACIONES)
@@ -1110,7 +1111,7 @@ export default function InvoiceDetails({invoice}) {
                             {/*   {status} */}
                             {/* </Label> */}
 
-                            <Typography variant="h6">{`INV-${ID}`}</Typography>
+                            <Typography variant="h6">{`INV-${ID}`} {`OV-${DOCNUM}`}</Typography>
 
                             {ESTADO === 10 && user.ROLE === "2" ? (
                                 <Grid container direction="column" alignItems="right" spacing={1}>
