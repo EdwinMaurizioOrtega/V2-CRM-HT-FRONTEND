@@ -47,6 +47,7 @@ import {useDispatch} from "../../../redux/store";
 import {useAuthContext} from "../../../auth/useAuthContext";
 import {HOST_API_KEY} from "../../../config-global";
 import CustomDateRangePicker, {useDateRangePicker} from 'src/components/custom-date-range-picker';
+import {AppCompanyWork} from "../../../sections/@dashboard/general/app";
 
 // ----------------------------------------------------------------------
 
@@ -283,7 +284,7 @@ export default function InvoiceListPage() {
         }
 
         fetchData();
-    }, [user, orders]);
+    }, [user]);
 
 
     useEffect(() => {
@@ -519,6 +520,9 @@ export default function InvoiceListPage() {
                     mb: {xs: 3, md: 5},
                 }}
                 >
+
+                    <AppCompanyWork/>
+
                     {user.ROLE === "10" &&
                         <Stack sx={{typography: 'body2', mt: 3}} alignItems="center">
                             <div>

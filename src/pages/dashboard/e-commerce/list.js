@@ -41,6 +41,7 @@ import ConfirmDialog from '../../../components/confirm-dialog';
 import {ProductTableRow, ProductTableToolbar} from '../../../sections/@dashboard/e-commerce/list';
 import {useAuthContext} from "../../../auth/useAuthContext";
 import {HOST_API_KEY} from "../../../config-global";
+import {AppCompanyWork} from "../../../sections/@dashboard/general/app";
 
 // ----------------------------------------------------------------------
 
@@ -237,7 +238,7 @@ export default function EcommerceProductListPage() {
         };
 
         fetchData();
-    }, []);
+    }, [user]);
 
     useEffect(() => {
         if (products.length) {
@@ -346,6 +347,8 @@ export default function EcommerceProductListPage() {
                         {name: 'List'},
                     ]}
                 />
+
+                <AppCompanyWork/>
 
                 <Card>
                     <ProductTableToolbar
