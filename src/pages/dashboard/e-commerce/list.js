@@ -147,6 +147,7 @@ export default function EcommerceProductListPage() {
                     const networkResponse = await fetch(`${HOST_API_KEY}/hanadb/api/products/mc`);
                     const data = await networkResponse.json();
                     setProducts(data.products);
+                    //console.log("data: " + JSON.stringify(data));
 
                 }
 
@@ -178,6 +179,7 @@ export default function EcommerceProductListPage() {
                     // Independientemente de si hay una respuesta en la caché o no, se realiza la solicitud de red
                     const networkResponse = await fetch(`${HOST_API_KEY}/hanadb/api/products/?empresa=${user.EMPRESA}`);
                     const data = await networkResponse.json();
+                    //console.log("data: " + JSON.stringify(data));
 
                     // Se almacena la respuesta de red en la caché
                     await cache.put(`${HOST_API_KEY}/hanadb/api/products/?empresa=${user.EMPRESA}`, new Response(JSON.stringify(data)));
@@ -197,7 +199,6 @@ export default function EcommerceProductListPage() {
                     }
                 }
 
-                console.log("data: " + JSON.stringify(data));
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
             }
