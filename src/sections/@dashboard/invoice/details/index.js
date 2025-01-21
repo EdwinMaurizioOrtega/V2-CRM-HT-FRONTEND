@@ -939,7 +939,8 @@ export default function InvoiceDetails({invoice}) {
         try {
             const response = await axios.put('/hanadb/api/orders/order/importadora_tomebamba_approve', {
                 ID_ORDER: ID,
-                STATUS: 13
+                STATUS: 13,
+                empresa: user.EMPRESA,
             });
 
             // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
@@ -967,7 +968,8 @@ export default function InvoiceDetails({invoice}) {
         try {
             const response = await axios.put('/hanadb/api/orders/order/importadora_tomebamba_approve', {
                 ID_ORDER: ID,
-                STATUS: 6
+                STATUS: 6,
+                empresa: user.EMPRESA,
             });
 
             // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor

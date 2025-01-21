@@ -38,21 +38,22 @@ export default function AppCompanyWork({title, subheader, tableData, tableLabels
             }}
         >
 
-            {(user?.ROLE === '9' || user?.ROLE === '10' || user?.ROLE === '8' || user?.ROLE === '7') && (
-                <Typography sx={{fontSize: '25px'}}>
-                    <Box component="span" sx={{color: 'red'}}>
-                        ¡ALERTA!
-                    </Box>
-                    {' Esta es una  '}
-                    <Box component="span" sx={{fontWeight: 'bold'}}>
-                        versión preliminar
-                    </Box>, que estará disponible próximamente.
-                </Typography>
-            )}
+            {/* {(user?.ROLE === '9' || user?.ROLE === '10' || user?.ROLE === '8' || user?.ROLE === '7') && ( */}
+            {/*     <Typography sx={{fontSize: '25px'}}> */}
+            {/*         <Box component="span" sx={{color: 'red'}}> */}
+            {/*             ¡ALERTA! */}
+            {/*         </Box> */}
+            {/*         {' Esta es una  '} */}
+            {/*         <Box component="span" sx={{fontWeight: 'bold'}}> */}
+            {/*             versión preliminar */}
+            {/*         </Box>, que estará disponible próximamente. */}
+            {/*     </Typography> */}
+            {/* )} */}
+
             <FormControl component="fieldset" sx={{mb: 2}}>
                 <RadioGroup row value={selectedValue} onChange={handleChange}>
 
-                    {user?.COMPANY === 'HT' ? (
+                    { (user?.COMPANY === 'HT' || user?.COMPANY === 'TOMEBAMBA') && (
                         <>
                             <FormControlLabel
                                 value="0992537442001"
@@ -86,7 +87,7 @@ export default function AppCompanyWork({title, subheader, tableData, tableLabels
                                 }
                             />
                         </>
-                    ) : null}
+                    ) }
 
                     {/* {user?.COMPANY === 'INFINIX' || user?.COMPANY === 'TOMEBAMBA' ? ( */}
                     {/*     <FormControlLabel */}

@@ -235,21 +235,49 @@ export default function ProductDetailsSummary({
 
         //MovilCelistic
         if (user.EMPRESA === '1792161037001') {
-            if (selectedPrice) {
-                try {
-                    onAddCart({
-                        ...values,
-                        // colors: [values.colors],
-                        price: selectedPrice,
-                        subtotal: values.price.Price * values.quantity,
-                    });
-                } catch (error) {
-                    console.error(error);
+
+            if (user.COMPANY === "TOMEBAMBA") {
+
+                if (selectedTomebambaPrice) {
+                    const primerObjeto = pricelistproduct[0];
+                    console.log("primerObjeto: " + JSON.stringify(primerObjeto));
+
+                    try {
+                        onAddCart({
+                            ...values,
+                            // colors: [values.colors],
+                            price: primerObjeto,
+                            priceTomebamba: selectedTomebambaPrice,
+                            subtotal: values.price.Price * values.quantity,
+                        });
+                    } catch (error) {
+                        console.error(error);
+                    }
+
+                } else {
+                    alert("Te falto seleccionar un tipo de precio. 😅")
                 }
 
             } else {
-                alert("Te falto seleccionar un tipo de precio. 😅")
+                //Otras empresas
+                if (selectedPrice) {
+                    try {
+                        onAddCart({
+                            ...values,
+                            // colors: [values.colors],
+                            price: selectedPrice,
+                            subtotal: values.price.Price * values.quantity,
+                        });
+                    } catch (error) {
+                        console.error(error);
+                    }
+
+                } else {
+                    alert("Te falto seleccionar un tipo de precio. 😅")
+                }
+
             }
+
         }
 
         //console.log("onStockValidate: "+JSON.stringify( onStockValidate));

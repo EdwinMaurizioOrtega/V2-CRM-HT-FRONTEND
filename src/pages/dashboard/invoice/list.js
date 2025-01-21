@@ -263,11 +263,11 @@ export default function InvoiceListPage() {
                     data = await response.json();
                 } else if (user.ROLE === "0") {
                     //0 => Tomebamba: Vendedor
-                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/vendedor?ven=${user.ID}&empresa=0992537442001`);
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/vendedor?ven=${user.ID}&empresa=${user.EMPRESA}`);
                     data = await response.json();
                 } else if (user.ROLE === "2" || user.ROLE === "1") {
                     //2 => Tomebamba: Ejecutivo Soporte 1 => Compras
-                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/tomebamba_credit?empresa=0992537442001&status=10, 13, 6, 0, 1, 8`);
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/tomebamba_credit?empresa=${user.EMPRESA}&status=10, 13, 6, 0, 1, 8`);
                     data = await response.json();
                 } else if (user.ROLE === "31") {
                     //31 => Cliente Mayorista
