@@ -144,10 +144,28 @@ export default function EcommerceProductListPage() {
                 //MovilCelistic
                 if (user.EMPRESA === '1792161037001') {
 
+                    const cache = await caches.open('cache-crm');
+                    const response = await cache.match(`${HOST_API_KEY}/hanadb/api/products/mc`);
+
+                    if (response) {
+                        // Si hay una respuesta en la caché, se obtiene su contenido
+                        const cachedData = await response.json();
+                        setProducts(cachedData.products);
+                        console.log("cachedData: " + JSON.stringify(cachedData));
+                    }
+
+                    // Independientemente de si hay una respuesta en la caché o no, se realiza la solicitud de red
                     const networkResponse = await fetch(`${HOST_API_KEY}/hanadb/api/products/mc`);
                     const data = await networkResponse.json();
-                    setProducts(data.products);
                     //console.log("data: " + JSON.stringify(data));
+
+                    // Se almacena la respuesta de red en la caché
+                    await cache.put(`${HOST_API_KEY}/hanadb/api/products/mc`, new Response(JSON.stringify(data)));
+
+                    // Si había una respuesta en la caché, los productos ya se establecieron en el estado
+                    // Si no había respuesta en la caché, ahora se establecen los productos con los datos de la respuesta de red
+                    setProducts(data.products);
+
 
                 }
 
