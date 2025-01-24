@@ -63,7 +63,7 @@ export default function ValidarEvidenciaPage() {
         const BuscarPorRango = async () => {
 
             try {
-                const response = await axios.get(`/hanadb/api/orders/get_invoices_for_upload_evidencia_by_status?status=23`);
+                const response = await axios.get(`/hanadb/api/orders/get_invoices_for_upload_evidencia_by_status?status=23&empresa=${user.EMPRESA}`);
 
                 if (response.status === 200) {
                     console.log(response);
@@ -99,7 +99,7 @@ export default function ValidarEvidenciaPage() {
             ID_ORDER: Number(row.ID),
             STATUS: Number(1),
             COMMENT: '',
-
+            empresa: user.EMPRESA,
         });
 
         console.log("Orden actualizada correctamente.");
@@ -123,6 +123,7 @@ export default function ValidarEvidenciaPage() {
             ID_ORDER: Number(row.ID),
             STATUS: Number(22),
             COMMENT: commentInconsistenciaEvidencia,
+            empresa: user.EMPRESA,
         });
 
         console.log("Orden actualizada correctamente.");

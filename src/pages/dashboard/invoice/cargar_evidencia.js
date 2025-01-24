@@ -20,11 +20,6 @@ import DashboardLayout from '../../../layouts/dashboard';
 // sections
 import {useSnackbar} from '../../../components/snackbar';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
-
-
-
-// ----------------------------------------------------------------------
 import {useSettingsContext} from "../../../components/settings";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
 import {useAuthContext} from "../../../auth/useAuthContext";
@@ -63,7 +58,7 @@ export default function EvidenciaPage() {
         const BuscarPorRango = async () => {
 
             try {
-                const response = await axios.get(`/hanadb/api/orders/get_invoices_for_upload_evidencia_by_usuario?user_id=${user.ID}`);
+                const response = await axios.get(`/hanadb/api/orders/get_invoices_for_upload_evidencia_by_usuario?user_id=${user.ID}&empresa=${user.EMPRESA}`);
 
                 if (response.status === 200) {
                     console.log(response);
@@ -133,7 +128,7 @@ export default function EvidenciaPage() {
                     const response = await axios.put('/hanadb/api/orders/api_save_url_file', {
                         ID_ORDER: Number(row.ID),
                         URL: data.link,
-
+                        empresa: user.EMPRESA,
                     });
 
                     console.log("Orden actualizada correctamente.");
