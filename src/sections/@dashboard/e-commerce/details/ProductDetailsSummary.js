@@ -175,6 +175,7 @@ export default function ProductDetailsSummary({
             if (user.COMPANY === "TOMEBAMBA") {
 
                 if (selectedTomebambaPrice) {
+                    //Para LIDENAR el precio por defecto es el NE
                     const primerObjeto = pricelistproduct[0];
                     console.log("primerObjeto: " + JSON.stringify(primerObjeto));
 
@@ -239,7 +240,8 @@ export default function ProductDetailsSummary({
             if (user.COMPANY === "TOMEBAMBA") {
 
                 if (selectedTomebambaPrice) {
-                    const primerObjeto = pricelistproduct[0];
+                    //Para MC el precio por defecto es el C30
+                    const primerObjeto = pricelistproduct[1];
                     console.log("primerObjeto: " + JSON.stringify(primerObjeto));
 
                     try {

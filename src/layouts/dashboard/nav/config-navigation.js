@@ -109,6 +109,7 @@ const navConfig = [
                     {title: 'IMEIs', path: PATH_DASHBOARD.invoice.sap},
                     {title: 'Cargar Evidencia', path: PATH_DASHBOARD.invoice.cargar_evidencia},
                     {title: 'Validar Evidencia', path: PATH_DASHBOARD.invoice.validar_evidencia},
+                    {title: 'SAP Series', path: PATH_DASHBOARD.invoice.series},
                 ],
             },
 
