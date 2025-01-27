@@ -220,32 +220,54 @@ export default function BasicTable({code, validateStock}) {
 
                                 }
 
-                                {user.EMPRESA == '0992537442001' && (
-                                    //Alphacell
-                                    stockProduct.map((row) => (
-                                        <TableRow key={row.BODEGA}>
-                                            <TableCell>{getTextFromCodigoAlphacell(row.BODEGA)}</TableCell>
-                                            <TableCell align="right">{fNumber(row.CANTIDAD)}</TableCell>
-                                            <TableCell align="right">{fNumber(row.RESERVADO)}</TableCell>
-                                            <TableCell align="right">{fNumber(row.DISPONIBLE)}</TableCell>
-                                            <TableCell align="right">{row.CODIGO}</TableCell>
-                                        </TableRow>
-                                    ))
-                                )
+                                {/* {user.EMPRESA === '0992264373001' && ( */}
+                                {/*     //Alphacell */}
+                                {/*     stockProduct.map((row) => ( */}
+                                {/*         <TableRow key={row.BODEGA}> */}
+                                {/*             <TableCell>{getTextFromCodigoAlphacell(row.BODEGA)}</TableCell> */}
+                                {/*             <TableCell align="right">{fNumber(row.CANTIDAD)}</TableCell> */}
+                                {/*             <TableCell align="right">{fNumber(row.RESERVADO)}</TableCell> */}
+                                {/*             <TableCell align="right">{fNumber(row.DISPONIBLE)}</TableCell> */}
+                                {/*             <TableCell align="right">{row.CODIGO}</TableCell> */}
+                                {/*         </TableRow> */}
+                                {/*     )) */}
+                                {/*     ) */}
+                                {/* } */}
 
-                                }
                                 {
-                                    user.EMPRESA == '1792161037001' && (
+                                    user.EMPRESA === '1792161037001' && (
                                         //MovilCelistic
-                                        stockProduct.map((row) => (
-                                            <TableRow key={row.BODEGA}>
-                                                <TableCell>{getTextFromCodigoMovilCelistic(row.BODEGA)}</TableCell>
-                                                <TableCell align="right">{fNumber(row.CANTIDAD)}</TableCell>
-                                                <TableCell align="right">{fNumber(row.RESERVADO)}</TableCell>
-                                                <TableCell align="right">{fNumber(row.DISPONIBLE)}</TableCell>
-                                                <TableCell align="right">{row.CODIGO}</TableCell>
-                                            </TableRow>
-                                        ))
+
+                                        user.COMPANY === 'TOMEBAMBA' ? (
+                                                stockProduct
+                                                    .filter((row) => row.BODEGA === 'DISTLF')
+                                                    .map((filteredRow) => (
+                                                            <TableRow key={filteredRow.BODEGA}>
+                                                                <TableCell>{getTextFromCodigoMovilCelistic(filteredRow.BODEGA)}</TableCell>
+                                                                <TableCell
+                                                                    align="right">{fNumber(filteredRow.CANTIDAD)}</TableCell>
+                                                                <TableCell
+                                                                    align="right">{fNumber(filteredRow.RESERVADO)}</TableCell>
+                                                                <TableCell
+                                                                    align="right">{fNumber(filteredRow.DISPONIBLE)}</TableCell>
+                                                                <TableCell align="right">{filteredRow.CODIGO}</TableCell>
+                                                            </TableRow>
+                                                        )
+                                                    )
+
+                                            ) : (
+
+                                            stockProduct.map((row) => (
+                                                <TableRow key={row.BODEGA}>
+                                                    <TableCell>{getTextFromCodigoMovilCelistic(row.BODEGA)}</TableCell>
+                                                    <TableCell align="right">{fNumber(row.CANTIDAD)}</TableCell>
+                                                    <TableCell align="right">{fNumber(row.RESERVADO)}</TableCell>
+                                                    <TableCell align="right">{fNumber(row.DISPONIBLE)}</TableCell>
+                                                    <TableCell align="right">{row.CODIGO}</TableCell>
+                                                </TableRow>
+                                            ))
+                                        )
+
                                     )
                                 }
 
