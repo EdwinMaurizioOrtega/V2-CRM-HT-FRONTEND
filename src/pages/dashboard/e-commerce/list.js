@@ -333,7 +333,7 @@ export default function EcommerceProductListPage() {
                     ]}
                 />
 
-                <AppCompanyWork/>
+                {/* <AppCompanyWork/> */}
 
                 <Card>
                     <ProductTableToolbar

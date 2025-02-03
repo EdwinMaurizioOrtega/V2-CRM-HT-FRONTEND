@@ -294,7 +294,7 @@ export default function SeriesPage() {
                             <Stack spacing={3}>
                                 <TextField type="text" className="form-control email"
                                            name="email" id="email2"
-                                           placeholder="IMEI/SERIE" required
+                                           placeholder="Orden de Venta" required
                                            onChange={e => {
                                                setNroOrdenVenta(e.currentTarget.value.toUpperCase());
                                            }}
