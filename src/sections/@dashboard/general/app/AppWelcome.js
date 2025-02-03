@@ -59,14 +59,18 @@ export default function AppWelcome({ title, description, action, img, ...other }
     <StyledRoot {...other}>
       <Stack
         flexGrow={1}
-        justifyContent="center"
-        alignItems={{ xs: 'center', md: 'flex-start' }}
         sx={{
           pl: 5,
           py: { xs: 5, md: 0 },
           pr: { xs: 5, md: 0 },
-          textAlign: { xs: 'center', md: 'left' },
+          textAlign: 'center',
+          mx: 'auto', // Center horizontally
+          my: 2, // Add margin top and bottom
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
+
       >
         <Typography paragraph variant="h4" sx={{ whiteSpace: 'pre-line' }}>
           {title}

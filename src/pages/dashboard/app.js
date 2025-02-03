@@ -48,6 +48,7 @@ import {io} from "socket.io-client";
 import {Block} from "../../sections/_examples/Block";
 
 import React from 'react';
+import {StyledSectionBg} from "../../layouts/login/styles";
 
 // ----------------------------------------------------------------------
 
@@ -105,6 +106,7 @@ export default function GeneralAppPage() {
                                     }}
                                 />
                             }
+
                             action={
 
 
@@ -188,8 +190,8 @@ export default function GeneralAppPage() {
                                 </Box>
 
                             }
-                        />
 
+                        />
 
                     </Grid>
 

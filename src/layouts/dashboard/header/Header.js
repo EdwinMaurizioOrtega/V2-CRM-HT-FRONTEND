@@ -19,6 +19,8 @@ import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
 import ContactsPopover from './ContactsPopover';
 import NotificationsPopover from './NotificationsPopover';
+import {_workspaces} from "../../nav-config-workspace";
+import {WorkspacesPopover} from "../../components/workspaces-popover";
 
 // ----------------------------------------------------------------------
 
@@ -50,6 +52,11 @@ export default function Header({ onOpenNav }) {
       )}
 
       {/* <Searchbar /> */}
+
+        <WorkspacesPopover
+            data={_workspaces}
+            sx={{ color: 'var(--layout-nav-text-primary-color)' }}
+        />
 
       <Stack
         flexGrow={1}
