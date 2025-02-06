@@ -197,7 +197,7 @@ export default function SeriesPage() {
         try {
             const response = await axios.post(`/hanadb/api/orders/sap/parchar_series_sap_orden_venta`, {
                 empresa: user.EMPRESA,
-                doc_entry: Number(nroOrdenVenta),
+                doc_entry: Number(businessPartners?.doc_entry),
                 line_num: Number(selected.row.line_num),
                 // Convertir cada número a string P@ssw0rd
                 lista_series: listaDeStrings,
@@ -208,6 +208,7 @@ export default function SeriesPage() {
             if (response.status === 200) {
                 console.log(response);
                 console.log("hola.......");
+                alert(  JSON.stringify( response.data));
             } else {
                 // La solicitud POST no se realizó correctamente
                 console.error('Error en la solicitud POST:', response.status);
