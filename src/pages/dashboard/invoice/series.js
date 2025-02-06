@@ -197,10 +197,12 @@ export default function SeriesPage() {
         try {
             const response = await axios.post(`/hanadb/api/orders/sap/parchar_series_sap_orden_venta`, {
                 empresa: user.EMPRESA,
-                doc_entry: Number(selected.row.line_num),
-                line_num: Number(nroOrdenVenta),
+                doc_entry: Number(nroOrdenVenta),
+                line_num: Number(selected.row.line_num),
                 // Convertir cada número a string P@ssw0rd
                 lista_series: listaDeStrings,
+                whs_code: selected.row.warehouse_code,
+                item_code: selected.row.item_code,
             });
 
             if (response.status === 200) {

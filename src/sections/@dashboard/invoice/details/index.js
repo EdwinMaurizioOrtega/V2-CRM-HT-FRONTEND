@@ -503,8 +503,8 @@ export default function InvoiceDetails({invoice}) {
         console.log(`Bodega: ${ware}`);
         const strings = {
             "DISTLF": "CARAPUNGO - CENTRO DISTRIBUCION MOVILCELISTIC",
-            // "T1MACHAL": "MACHALA - XIAOMI TERMINALES",
-            // "T1CUENCA": "CUENCA - XIAOMI TERMINALES",
+            "003": "MACHALA - MAYORISTAS MOVILCELISTIC MACHALA",
+            "004": "CUENCA - MAYORISTAS MOVILCELISTIC CUENCA",
             // "T1CARACO": "QUITO - XIAOMI TERMINALES"
         };
 
@@ -1949,8 +1949,8 @@ export const top100FilmsAlphacell = [
 
 export const top100FilmsMovilCelistic = [
     {title: 'CARAPUNGO - CENTRO DISTRIBUCION MOVILCELISTIC', id: "DISTLF"},
-    // {title: 'MACHALA - XIAOMI TERMINALES', id: "T1MACHAL"},
-    // {title: 'CUENCA - XIAOMI TERMINALES', id: "T1CUENCA"},
+    {title: 'MACHALA - MAYORISTAS MOVILCELISTIC MACHALA', id: "003"},
+    {title: 'CUENCA - MAYORISTAS MOVILCELISTIC CUENCA', id: "004"},
     // {title: 'QUITO - XIAOMI TERMINALES', id: "T1CARACO"}
 ]
 

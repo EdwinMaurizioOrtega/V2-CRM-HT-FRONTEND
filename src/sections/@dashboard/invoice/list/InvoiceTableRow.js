@@ -984,8 +984,8 @@ function nameWarehouseMovilCelistic(ware) {
     console.log(`Bodega: ${ware}`);
     const strings = {
         "DISTLF": "CARAPUNGO - CENTRO DISTRIBUCION MOVILCELISTIC",
-        // "T1MACHAL": "MACHALA - XIAOMI TERMINALES",
-        // "T1CUENCA": "CUENCA - XIAOMI TERMINALES",
+        "003": "MACHALA - MAYORISTAS MOVILCELISTIC MACHALA",
+        "004": "CUENCA - MAYORISTAS MOVILCELISTIC CUENCA",
         // "T1CARACO": "QUITO - XIAOMI TERMINALES"
     };
 

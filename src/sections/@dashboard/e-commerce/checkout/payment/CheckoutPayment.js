@@ -129,18 +129,18 @@ const WAREHOUSE_OPTIONS_MOVILCELISTIC = [
         title: 'CENTRO DISTRIBUCION MOVILCELISTIC',
         description: 'CARAPUNGO',
     },
-    // {
-    //     id: 'T1MACHAL',
-    //     value: 'T1MACHAL',
-    //     title: 'XIAOMI TERMINALES',
-    //     description: 'MACHALA',
-    // },
-    // {
-    //     id: 'T1CUENCA',
-    //     value: 'T1CUENCA',
-    //     title: 'XIAOMI TERMINALES',
-    //     description: 'CUENCA',
-    // },
+    {
+        id: '003',
+        value: '003',
+        title: 'MAYORISTAS MOVILCELISTIC MACHALA',
+        description: 'MACHALA',
+    },
+    {
+        id: '004',
+        value: '004',
+        title: 'MAYORISTAS MOVILCELISTIC CUENCA',
+        description: 'CUENCA',
+    },
     // {
     //     id: 'T1CARACO',
     //     value: 'T1CARACO',
