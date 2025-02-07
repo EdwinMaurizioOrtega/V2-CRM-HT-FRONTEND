@@ -72,8 +72,13 @@ const BODEGAS_ALPHACELL = [
     {value: '001', label: 'BODEGA'},
 ];
 
+const BODEGAS_MOVILCELISTIC = [
+    {value: 'DISTLF', label: 'CENTRO DISTRIBUCION MOVILCELISTIC'},
+    {value: '003', label: 'MAYORISTAS MOVILCELISTIC MACHALA'},
+    {value: '004', label: 'MAYORISTAS MOVILCELISTIC CUENCA'},
+];
 
-const CATEGORIAS = [
+const CATEGORIAS_HT = [
     {label: 'CELULARES', value: '108'},
     {label: 'ELECTRODOMÉSTICOS', value: '111'},
     {label: 'ACCESORIOS', value: '109'},
@@ -85,8 +90,12 @@ const CATEGORIAS = [
     {label: 'TABLETS', value: '110'},
 ];
 
+const CATEGORIAS_MC = [
+    {label: 'CELULARES', value: '105'},
+    {label: 'ACCESORIOS', value: '107'},
+];
 
-export const MARCAS = [
+export const MARCAS_HT = [
     {label: 'SAMSUNG', value: '02'},
     {label: 'BLU', value: '03'},
     {label: 'XIAOMI', value: '19'},
@@ -131,6 +140,10 @@ export const MARCAS = [
     {label: 'SEAGETE', value: '61'},
     {label: 'VARIOS', value: '63'},
 ];
+
+export const MARCAS_MC = [
+    {label: 'XIAOMI', value: '71'},
+]
 
 export const defaultValues = {
     //
@@ -265,7 +278,7 @@ export default function CatalogoForm() {
             <Head>
                 <title> Catálogo: Productos | HT</title>
             </Head>
-            <Container >
+            <Container>
 
                 <CustomBreadcrumbs
                     heading="Generar catálogo."
@@ -371,7 +384,7 @@ export default function CatalogoForm() {
                                         label="Selección multiple"
                                         options={
 
-                                            user.EMPRESA === '0992264373001' ? BODEGAS_ALPHACELL : BODEGAS
+                                            user.EMPRESA === '1792161037001' ? BODEGAS_MOVILCELISTIC : BODEGAS
 
                                         }
                                     />
@@ -388,7 +401,7 @@ export default function CatalogoForm() {
                                         checkbox
                                         name="multiSelectC"
                                         label="Selección multiple"
-                                        options={CATEGORIAS}
+                                        options={ user.EMPRESA === '1792161037001' ? CATEGORIAS_MC : CATEGORIAS_HT}
                                     />
                                 </Block>
 
@@ -398,7 +411,7 @@ export default function CatalogoForm() {
                                         checkbox
                                         name="multiSelectM"
                                         label="Selección multiple"
-                                        options={MARCAS}
+                                        options={user.EMPRESA === '1792161037001' ? MARCAS_MC : MARCAS_HT}
                                     />
                                 </Block>
                                 <LoadingButton
@@ -469,35 +482,35 @@ function ExcelDownload({data, client}) {
 
     const {user} = useAuthContext();
 
-    console.log("data: "+data);
-    console.log("client: "+JSON.stringify( client));
+    console.log("data: " + data);
+    console.log("client: " + JSON.stringify(client));
 
     const handleExportToExcel = () => {
         const wb = XLSX.utils.book_new();
 
         // Crear una nueva hoja de trabajo vacía con la fila de texto
-        const ws = XLSX.utils.aoa_to_sheet([["CLIENTE: "+client.Cliente ]]);
+        const ws = XLSX.utils.aoa_to_sheet([["CLIENTE: " + client.Cliente]]);
 
         // Combinar tres columnas (A, B, C) para centrar el texto
-        ws['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 2 } }];
+        ws['!merges'] = [{s: {r: 0, c: 0}, e: {r: 0, c: 2}}];
 
         // Establecer estilo para centrar el texto
-        ws['A1'].s = { alignment: { horizontal: 'center' } };
+        ws['A1'].s = {alignment: {horizontal: 'center'}};
 
         // Ajustar la anchura de la columna para la columna "Nombre"
-        ws['!cols'] = [{ wch: 10 }, { wch: 75 }, { wch: 10 }];
+        ws['!cols'] = [{wch: 10}, {wch: 75}, {wch: 10}];
 
         // Crear una segunda fila con un texto de ejemplo
         const segundaFila = [["VENDEDOR: " + user.DISPLAYNAME]]; // Puedes ajustar el texto según tus necesidades
-        XLSX.utils.sheet_add_aoa(ws, [segundaFila], { origin: 'A2' });
+        XLSX.utils.sheet_add_aoa(ws, [segundaFila], {origin: 'A2'});
         // Combinar tres columnas (A, B, C) para centrar el texto
-        ws['!merges'] = [{ s: { r: 1, c: 0 }, e: { r: 1, c: 2 } }];
+        ws['!merges'] = [{s: {r: 1, c: 0}, e: {r: 1, c: 2}}];
 
         // Establecer estilo para centrar el texto
-        ws['A2'].s = { alignment: { horizontal: 'center' } };
+        ws['A2'].s = {alignment: {horizontal: 'center'}};
 
         // Ajustar la anchura de la columna para la columna "Nombre"
-        ws['!cols'] = [{ wch: 10 }, { wch: 75 }, { wch: 10 }];
+        ws['!cols'] = [{wch: 10}, {wch: 75}, {wch: 10}];
 
         // Agregar los datos JSON a la hoja de trabajo según el mapeo
         XLSX.utils.sheet_add_json(
@@ -514,8 +527,8 @@ function ExcelDownload({data, client}) {
             {origin: 'A3'}
         );
 
-        for(let R = 3; R <= 25; ++R) {
-            for(let C = 1; C <= 6; ++C) {
+        for (let R = 3; R <= 25; ++R) {
+            for (let C = 1; C <= 6; ++C) {
                 const cell_address = {c: C, r: R};
                 /* if an A1-style address is needed, encode the address */
                 var cell_ref = XLSX.utils.encode_cell(cell_address);
@@ -525,14 +538,14 @@ function ExcelDownload({data, client}) {
 
                 // Crear un estilo de borde negro
                 var borderStyle = {
-                    top: { style: "thin", color: { rgb: "000000" } }, // Negro
-                    right: { style: "thin", color: { rgb: "000000" } }, // Negro
-                    bottom: { style: "thin", color: { rgb: "000000" } }, // Negro
-                    left: { style: "thin", color: { rgb: "000000" } } // Negro
+                    top: {style: "thin", color: {rgb: "000000"}}, // Negro
+                    right: {style: "thin", color: {rgb: "000000"}}, // Negro
+                    bottom: {style: "thin", color: {rgb: "000000"}}, // Negro
+                    left: {style: "thin", color: {rgb: "000000"}} // Negro
                 };
 
                 // Aplicar el estilo de borde a la celda
-                cell.s = { border: borderStyle };
+                cell.s = {border: borderStyle};
             }
         }
 
@@ -554,7 +567,7 @@ function ExcelDownload({data, client}) {
             password: 'miPassword',    // Establecer la contraseña
         };
 
-        XLSX.utils.book_append_sheet(wb, ws, `${client.Cliente}`);
+        XLSX.utils.book_append_sheet(wb, ws, `${client.Cliente}`.substring(0, 31));
         XLSX.writeFile(wb, `${client.Cliente}.xlsx`);
     };
 
