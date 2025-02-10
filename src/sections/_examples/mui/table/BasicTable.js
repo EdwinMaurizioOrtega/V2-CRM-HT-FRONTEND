@@ -365,6 +365,10 @@ function getTextFromCodigoMovilCelistic(rowCodigo) {
     switch (rowCodigo) {
         case 'DISTLF':
             return "CENTRO DISTRIBUCION MOVILCELISTIC";
+        case '003':
+            return "MAYORISTAS MOVILCELISTIC MACHALA";
+        case '004':
+            return "MAYORISTAS MOVILCELISTIC CUENCA";
         case 'T1CARACO':
             return "CARACOL XIAOMI TERMINALES";
         case 'T1CUENCA':
