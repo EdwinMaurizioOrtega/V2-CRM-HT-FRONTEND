@@ -13,7 +13,7 @@ import {
     Stack,
     SvgIcon, TextareaAutosize,
     TextField,
-    Typography, Dialog, DialogContent, Toolbar, AppBar
+    Typography, Dialog, DialogContent, Toolbar, AppBar, LinearProgress
 } from '@mui/material';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
@@ -56,16 +56,22 @@ export default function SeriesPage() {
 
     const [businessPartners, setBusinessPartners] = useState([]);
 
-    const [selected, setSelected] = useState(false);
+    const [selected, setSelected] = useState(null);
 
     const [openChangeProduct, setOpenChangeProduct] = useState(false);
 
     const [valueNew, setValueNew] = useState('');
 
+    const [buttonDisabled, setButtonDisabled] = useState(false);
+
+    const [textArrayCount, setTextArrayCount] = useState(0);
+    const [uniqueTextArrayCount, setUniqueTextArrayCount] = useState(0);
+    const [loading, setLoading] = useState(true); // Estado para controlar el loading
+
     const FileCopySvgIcon = (props) => (
         <SvgIcon {...props}>
             <path fill-rule="evenodd" clip-rule="evenodd"
-                  d="M12 4C10.8954 4 10 4.89543 10 6H14C14 4.89543 13.1046 4 12 4ZM8.53513 4C9.22675 2.8044 10.5194 2 12 2C13.4806 2 14.7733 2.8044 15.4649 4H17C18.6569 4 20 5.34315 20 7V19C20 20.6569 18.6569 22 17 22H7C5.34315 22 4 20.6569 4 19V7C4 5.34315 5.34315 4 7 4H8.53513ZM8 6H7C6.44772 6 6 6.44772 6 7V19C6 19.5523 6.44772 20 7 20H17C17.5523 20 18 19.5523 18 19V7C18 6.44772 17.5523 6 17 6H16C16 7.10457 15.1046 8 14 8H10C8.89543 8 8 7.10457 8 6Z"
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
                   fill="currentColor"></path>
         </SvgIcon>
     );
@@ -80,9 +86,12 @@ export default function SeriesPage() {
         setOpenChangeProduct(false);
     };
 
-    const handleChange = (event) => {
+    const handleTextChange = (event) => {
+        const inputText = event.target.value;
+        const textArray = inputText.split('\n').map((item) => item.trim());
+        setTextArrayCount(textArray.length);
         setValueNew(event.target.value);
-        // console.log(`Nuevo precio unitario ${valueNew}`);
+        //setText(textArray.join('\n'));
     };
 
     const baseColumns = [
@@ -131,12 +140,12 @@ export default function SeriesPage() {
                 return (
 
                     <Button
-                        variant="contained"
                         component="label"
                         startIcon={<CloudUploadIcon/>}
                         onClick={() => {
                             handleOpenChangeProduct(params);
                         }}
+
                     >
                         CARGAR SERIES
 
@@ -150,6 +159,7 @@ export default function SeriesPage() {
     const F_OrdenVenta = async (nroOrdenVenta) => {
 
         console.log('nroOrdenVenta: ' + nroOrdenVenta);
+        setLoading(true); // Activa el loading
 
         try {
             const response = await axios.post(`/hanadb/api/orders/sap/get_orden_venta`, {
@@ -169,6 +179,8 @@ export default function SeriesPage() {
 
         } catch (error) {
             console.error('Error fetching data:', error);
+        } finally {
+            setLoading(false); // Desactiva el loading (tanto en éxito como en error)
         }
 
 
@@ -223,18 +235,26 @@ export default function SeriesPage() {
 
     const handleClearClick = () => {
         setValueNew('');
-
+        setTextArrayCount(0);
+        setUniqueTextArrayCount(0);
+        setButtonDisabled(false); // Asegúrate de habilitar el botón después de limpiar.
     };
 
     const handlePrintClick = () => {
 
+        setButtonDisabled(true);
+
         const textArray = valueNew.split('\n').map((item) => item.trim()).filter(Boolean); // Eliminar líneas vacías
+
+        setTextArrayCount(textArray.length);
 
         const uniqueTextArray = [...new Set(textArray)]; // Eliminar duplicados usando un Set
 
         var validIMEIs = uniqueTextArray.filter(function (imei) {
             return luhn_validate(imei);
         });
+
+        setUniqueTextArrayCount(validIMEIs.length); // Contar solo los IMEIs válidos
 
         const validatedIMEIs = validIMEIs.join(',\n');
 
@@ -325,7 +345,10 @@ export default function SeriesPage() {
                                         toolbar: CustomToolbar,
                                         noRowsOverlay: () => <EmptyContent title="No Data"/>,
                                         noResultsOverlay: () => <EmptyContent title="No results found"/>,
+                                        loadingOverlay: LinearProgress, // Usa LinearProgress como indicador de carga
+
                                     }}
+                                    loading={loading} // Activa el loading
                                 />
                             </Stack>
                         </Card>
@@ -343,7 +366,7 @@ export default function SeriesPage() {
                             <IconButton color="inherit" edge="start" onClick={handleCloseChangeProduct}>
                                 <Iconify icon="eva:close-fill"/>
                             </IconButton>
-                            <IconButton color="inherit" onClick={handlePrintClick}>
+                            <IconButton color="inherit" onClick={handlePrintClick} disabled={buttonDisabled}>
                                 <FileCopySvgIcon/>
                             </IconButton>
                             <Button autoFocus color="inherit" onClick={() => {
@@ -363,14 +386,49 @@ export default function SeriesPage() {
 
                     >
 
+                        <Box
+                            sx={{
+                                display: 'flex', // Alinea los elementos horizontalmente
+                                alignItems: 'center', // Centra verticalmente los elementos
+                            }}
+                        >
+                            <Typography variant="body1" sx={{ marginRight: '10px' }}>
+                                Líneas ingresadas: {textArrayCount}
+                            </Typography>
+                            <Typography
+                                variant="body1"
+                                sx={{
+                                    marginRight: '10px',
+                                    color: 'red',
+                                    fontSize: '40px',
+                                    fontWeight: 'bold',
+                                }}
+                            >
+                                Válidos: {uniqueTextArrayCount}
+                            </Typography>
+                            <Typography
+                                variant="body1"
+                                sx={{
+                                    marginRight: '10px',
+                                    color: 'green',
+                                    fontSize: '40px',
+                                    fontWeight: 'bold',
+                                }}
+                            >
+                                === {selected?.row.quantity} se requieren.
+                            </Typography>
+                        </Box>
+
                         <TextField
                             rows={100}
                             fullWidth
                             multiline
                             label="Lista IMEIs SAP"
                             value={valueNew}
-                            onChange={handleChange}
+                            onChange={handleTextChange}
                             sx={{width: '100%'}} // Esto asegura que el TextField ocupe todo el ancho
+                            disabled={buttonDisabled}
+
                         />
 
                     </DialogContent>
