@@ -130,7 +130,7 @@ export default function SeriesPage() {
             field: 'CARGAR SERIES',
             headerName: 'CARGAR SERIES',
             flex: 1,
-            minWidth: 160,
+            minWidth: 180,
             renderCell: (params) => {
 
                 return (
