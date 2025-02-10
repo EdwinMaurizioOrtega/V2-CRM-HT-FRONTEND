@@ -99,12 +99,14 @@ export default function SeriesPage() {
         {
             field: 'id',
             hide: true,
+            flex: 1,
+            minWidth: 25,
         },
         {
             field: 'line_num',
             headerName: 'line_num',
             flex: 1,
-            minWidth: 100,
+            minWidth: 80,
         },
         {
             field: 'item_code',
@@ -113,22 +115,16 @@ export default function SeriesPage() {
             minWidth: 100,
         },
         {
-            field: 'item_description',
-            headerName: 'item_description',
-            flex: 1,
-            minWidth: 660,
-        },
-        {
             field: 'quantity',
             headerName: 'quantity',
             flex: 1,
-            minWidth: 60,
+            minWidth: 80,
         },
         {
             field: 'warehouse_code',
             headerName: 'warehouse_code',
             flex: 1,
-            minWidth: 60,
+            minWidth: 105,
         },
         {
             field: 'CARGAR SERIES',
@@ -153,6 +149,12 @@ export default function SeriesPage() {
 
                 );
             },
+        },
+        {
+            field: 'item_description',
+            headerName: 'item_description',
+            flex: 1,
+            minWidth: 660,
         },
     ]
 
