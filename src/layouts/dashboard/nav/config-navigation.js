@@ -204,6 +204,16 @@ const navConfig = [
         ],
     },
 
+    // 8 - RRHH
+    // ----------------------------------------------------------------------
+    {
+        subheader: 'RRHH',
+        items: [
+            {title: 'Marcar', path: PATH_DASHBOARD.rrhh.marcar, icon: ICONS.analytics},
+            {title: 'Reporte', path: PATH_DASHBOARD.rrhh.reporte_rrhh, icon: ICONS.blog},
+        ],
+    },
+
     // DEMO MENU STATES
     {
         subheader: '-_-',

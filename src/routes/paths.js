@@ -130,6 +130,11 @@ export const PATH_DASHBOARD = {
     crearNC: path(ROOTS_DASHBOARD, '/st/CrearNotaCreditoSAP'),
     reporteOrden: path(ROOTS_DASHBOARD, '/st/ReporteST'),
   },
+  rrhh: {
+    root: path(ROOTS_DASHBOARD, '/rrhh'),
+    marcar: path(ROOTS_DASHBOARD, '/rrhh/Marcar'),
+    reporte_rrhh: path(ROOTS_DASHBOARD, '/rrhh/ReporteRRHH'),
+  },
   customer: {
     root: path(ROOTS_DASHBOARD, '/customer'),
   }
