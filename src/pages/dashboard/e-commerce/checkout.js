@@ -143,8 +143,15 @@ export default function EcommerceCheckoutPage() {
             ZIPCODE: '010105'
         }))
 
-        //Bodegas
-        dispatch(applyWarehouse("019"))
+
+        // Bodegas
+        if (user.EMPRESA === '0992537442001') {
+            //Lidenar
+            dispatch(applyWarehouse("019"));
+        } else {
+            //MC
+            dispatch(applyWarehouse("DISTLF"));
+        }
 
         //Opciones de pago
         dispatch(applyMethod(4))
