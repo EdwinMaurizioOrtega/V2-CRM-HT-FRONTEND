@@ -135,13 +135,17 @@ export const PATH_DASHBOARD = {
     marcar: path(ROOTS_DASHBOARD, '/rrhh/Marcar'),
     reporte_rrhh: path(ROOTS_DASHBOARD, '/rrhh/ReporteRRHH'),
   },
+  credito: {
+    root: path(ROOTS_DASHBOARD, '/credito'),
+    cargar: path(ROOTS_DASHBOARD, '/credito/cargar_archivos_credito'),
+  },
   customer: {
     root: path(ROOTS_DASHBOARD, '/customer'),
   }
 };
 
 export const PATH_DOCS = {
-  root: '/',
+  root: '/Resolución No. SCVS-INMV-DNAR-2025-00002813 LIDENAR IIEOLP-firmado.pdf',
   changelog: 'https://docs.minimals.cc/changelog',
 };
 
