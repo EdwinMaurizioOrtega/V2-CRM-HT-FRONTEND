@@ -145,7 +145,7 @@ export const PATH_DASHBOARD = {
 };
 
 export const PATH_DOCS = {
-  root: '/Resolución No. SCVS-INMV-DNAR-2025-00002813 LIDENAR IIEOLP-firmado.pdf',
+  root: '/Resolucion-No-SCVS-INMV-DNAR-2025-00002813-LIDENAR-IIEOLP-firmado.pdf',
   changelog: 'https://docs.minimals.cc/changelog',
 };
 
