@@ -569,7 +569,7 @@ export default function InvoiceTableRow({
                         ) : user.EMPRESA === '0992264373001' ? (
                             nameWarehouseAlphacell(BODEGA) // Alphacell
                         ) : user.EMPRESA === '1792161037001' ? (
-                            nameWarehouseMovilCelistic(BODEGA) // MovilCelistic
+                            BODEGA // MovilCelistic
                         ) : (
                             'No disponible' // Caso por defecto
                         )

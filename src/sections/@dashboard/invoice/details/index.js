@@ -204,7 +204,8 @@ export default function InvoiceDetails({invoice}) {
         Free_Text,
         OBSERVACIONESB,
         OBSERVACIONES,
-        DOCNUM
+        DOCNUM,
+        DISCOUNT
     } = invoice;
 
     console.log("OBSERVACIONES: " + OBSERVACIONES)
@@ -356,6 +357,34 @@ export default function InvoiceDetails({invoice}) {
             // Actualizar una orden.
             const response = await axios.put('/hanadb/api/orders/order/detail/discount', {
                 ID_DETALLE_ORDEN: selected.ID,
+                NEW_DISCOUNT: valueNew,
+                empresa: user.EMPRESA,
+                id_order: ID
+            });
+
+            console.log("Orden actualizada correctamente.");
+            console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+                router.reload();
+            }
+
+        } catch (error) {
+            // Manejar el error de la petición PUT aquí
+            console.error('Error al actualizar la orden:', error);
+        }
+
+    }
+
+    const handleChangeLevelOrderDiscount = async () => {
+
+        // console.log(selected.ID);
+        // console.log(valueNew);
+
+        try {
+            // Actualizar una orden.
+            const response = await axios.put('/hanadb/api/orders/order/discount', {
                 NEW_DISCOUNT: valueNew,
                 empresa: user.EMPRESA,
                 id_order: ID
@@ -572,8 +601,8 @@ export default function InvoiceDetails({invoice}) {
 
     }
 
-    const ivaTotal = subtotalTotal * ivaPorcentaje;
-    const totalConIva = subtotalTotal + ivaTotal;
+    const ivaTotal = (subtotalTotal - DISCOUNT) * ivaPorcentaje;
+    const totalConIva = (subtotalTotal - DISCOUNT) + ivaTotal;
 
     console.log('Subtotal: ', subtotalTotal);
     console.log('IVA: ', ivaTotal);
@@ -1450,27 +1479,47 @@ export default function InvoiceDetails({invoice}) {
                                         Subtotal
                                     </TableCell>
 
+
+
                                     <TableCell align="right" width={120} sx={{typography: 'body1'}}>
                                         <Box sx={{mt: 2}}/>
                                         {fCurrency(subtotalTotal)}
                                     </TableCell>
+
                                 </StyledRowResult>
 
-                                {/* <StyledRowResult> */}
-                                {/*   <TableCell colSpan={3} /> */}
+                                <StyledRowResult>
+                                  <TableCell colSpan={3} />
 
-                                {/*   <TableCell align="right" sx={{ typography: 'body1' }}> */}
-                                {/*     Discount */}
-                                {/*   </TableCell> */}
+                                  <TableCell align="right" sx={{ typography: 'body1' }}>
+                                    Discount
+                                  </TableCell>
 
-                                {/*   /!* <TableCell *!/ */}
-                                {/*   /!*   align="right" *!/ */}
-                                {/*   /!*   width={120} *!/ */}
-                                {/*   /!*   sx={{ color: 'error.main', typography: 'body1' }} *!/ */}
-                                {/*   /!* > *!/ */}
-                                {/*   /!*   {discount && fCurrency(-discount)} *!/ */}
-                                {/*   /!* </TableCell> *!/ */}
-                                {/* </StyledRowResult> */}
+                                  <TableCell
+                                    align="right"
+                                    width={120}
+                                    sx={{ color: 'error.main', typography: 'body1' }}
+                                  >
+                                    {DISCOUNT && fCurrency(-DISCOUNT)}
+
+                                      {user.ROLE === '9' && (
+                                      <Box display="flex" alignItems="center" gap={2}>
+                                          <TextField
+                                              value={valueNew}
+                                              onChange={handleChange}
+                                              sx={{ width: 75 }} // 🔥 Establece el ancho en 10px
+                                          />
+                                          <Button variant="contained" color="error" onClick={() => {
+                                              handleChangeLevelOrderDiscount();
+                                          }}>
+                                              ❤️
+                                          </Button>
+                                      </Box>
+                                          )
+                                      }
+
+                                  </TableCell>
+                                </StyledRowResult>
 
                                 <StyledRowResult>
                                     <TableCell colSpan={3}/>

@@ -214,6 +214,17 @@ const navConfig = [
         ],
     },
 
+    // 9 - GENERAR DOCUMENTOS CREDITO
+    // ----------------------------------------------------------------------
+    {
+        subheader: 'CREADOR DOCUMENTOS ONLINE',
+        items: [
+            {title: 'GENERAR', path: PATH_DASHBOARD.credito.cargar, icon: ICONS.analytics},
+            {title: 'ESTADOS', path: PATH_DASHBOARD.rrhh.reporte_rrhh, icon: ICONS.blog},
+            {title: 'FIRMADOS', path: PATH_DASHBOARD.rrhh.reporte_rrhh, icon: ICONS.blog},
+        ],
+    },
+
     // DEMO MENU STATES
     {
         subheader: '-_-',
