@@ -93,6 +93,7 @@ const CATEGORIAS_HT = [
 const CATEGORIAS_MC = [
     {label: 'CELULARES', value: '105'},
     {label: 'ACCESORIOS', value: '107'},
+    {label: 'ELECTRODOMESTICOS', value: '110'},
 ];
 
 export const MARCAS_HT = [

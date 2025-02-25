@@ -3,7 +3,18 @@ import {useEffect, useState} from 'react';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 // @mui
-import {Grid, Container, Button} from '@mui/material';
+import {
+    Grid,
+    Container,
+    Button,
+    Typography,
+    Box,
+    Modal,
+    Checkbox,
+    FormControlLabel,
+    Autocomplete,
+    TextField
+} from '@mui/material';
 // routes
 import {format} from "date-fns";
 import {PATH_DASHBOARD} from '../../../routes/paths';
@@ -42,6 +53,7 @@ import {
 // utils
 import axios from "../../../utils/axios";
 import {useAuthContext} from "../../../auth/useAuthContext";
+import {Block} from "../../../sections/_examples/Block";
 
 // ----------------------------------------------------------------------
 
@@ -58,7 +70,7 @@ export default function EcommerceCheckoutPage() {
 
     const {user} = useAuthContext();
 
-    console.log('user: '+JSON.stringify( user));
+    console.log('user: ' + JSON.stringify(user));
 
     const {themeStretch} = useSettingsContext();
 
@@ -71,6 +83,11 @@ export default function EcommerceCheckoutPage() {
     const completed = activeStep === STEPS.length;
 
     const [loading, setLoading] = useState(false);
+
+    const [selectedOptions, setSelectedOptions] = useState([]);
+
+    const [otroMotivo, setOtroMotivo] = useState("");
+
 
     useEffect(() => {
         dispatch(getCart(cart));
@@ -210,8 +227,15 @@ export default function EcommerceCheckoutPage() {
 
     const handleCreateBilling = (address) => {
         dispatch(createBilling(address));
-        dispatch(nextStep());
+        // dispatch(nextStep());
+        console.log(address);
+        if (address.TIENE_PLATAFORMA_CREDITO === 'NO') {
+            handleOpen();
+        } else {
+            dispatch(nextStep());
+        }
     };
+
 // Comentario envío.
     const handleApplyComment = (value) => {
         dispatch(applyComment(value));
@@ -269,6 +293,58 @@ export default function EcommerceCheckoutPage() {
     // const vaciarcarrito = () => {
     //     dispatch(resetCart());
     // }
+
+    const [open, setOpen] = useState(false);
+
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+
+    const handleSave = async () => {
+
+        console.log('DataX', checkout.billing.ID);
+
+        console.log("Opciones seleccionadas:", selectedOptions);
+        if (selectedOptions.some((option) => option.id === 6)) {
+            console.log("Motivo de 'Otro':", otroMotivo);
+        }
+
+        const otroSeleccionado = selectedOptions.some((option) => option.title === "Otro");
+
+        if (otroSeleccionado) {
+            console.log("Motivo de 'Otro':", otroMotivo);
+        }
+
+        try {
+
+            const response = await axios.post('/hanadb/api/orders/save_credit_platforms_selected_customer', {
+                empresa: user.EMPRESA,
+                card_code: checkout.billing.ID, // La cédula del cliente
+                selected_options: selectedOptions,
+                reason: otroSeleccionado ? otroMotivo : null,
+            });
+
+            console.log('Status: ', response.status);
+            if (response.status === 200) {
+                console.log('La solicitud devolvió un estado 200.');
+                handleClose();
+                dispatch(nextStep());
+            } else {
+                console.log('La solicitud no devolvió un estado 200.');
+                // Realizar alguna acción adicional en caso de que el estado de respuesta no sea 201
+            }
+        } catch (error) {
+            console.log('Error al crear la orden:', error);
+            // Manejar el error al crear la orden
+        }
+
+    };
+
+
+    const handleDespuesSave = async () => {
+        dispatch(nextStep());
+        handleClose()
+    }
 
     return (
         <>
@@ -334,9 +410,79 @@ export default function EcommerceCheckoutPage() {
                                 onReset={handleReset}
                             />
                         )}
+
+
+                        <Modal open={open} onClose={handleClose}>
+                            <Box
+                                sx={{
+                                    position: "absolute",
+                                    top: "50%",
+                                    left: "50%",
+                                    transform: "translate(-50%, -50%)",
+                                    width: 600,
+                                    bgcolor: "background.paper",
+                                    borderRadius: 2,
+                                    boxShadow: 24,
+                                    p: 4,
+                                }}
+                            >
+                                <Typography variant="h6"> EL CLIENTE CON QUE PLATAFORMA DE CRÉDITO TRABAJA</Typography>
+
+                                <Autocomplete
+                                    fullWidth
+                                    multiple
+                                    options={plataformas_de_credito}
+                                    disableCloseOnSelect
+                                    getOptionLabel={(option) => option.title}
+                                    onChange={(_, newValue) => setSelectedOptions(newValue)}
+                                    renderOption={(props, option, {selected}) => (
+                                        <li {...props}>
+                                            <Checkbox checked={selected}/>
+                                            {option.title}
+                                        </li>
+                                    )}
+                                    renderInput={(params) => (
+                                        <TextField {...params} label="Opciones"/>
+                                    )}
+                                />
+
+                                {/* Input adicional si se selecciona "Otro" */}
+                                {selectedOptions.some((option) => option.id === 6) && (
+                                    <TextField
+                                        fullWidth
+                                        margin="normal"
+                                        label="Motivo (si seleccionó 'Otro')"
+                                        value={otroMotivo}
+                                        onChange={(e) => setOtroMotivo(e.target.value)}
+                                    />
+                                )}
+
+                                <Box sx={{display: "flex", justifyContent: "space-between", mt: 2}}>
+                                    <Button onClick={handleClose} variant="outlined">
+                                        Cancelar
+                                    </Button>
+                                    <Button onClick={handleDespuesSave} variant="outlined">
+                                        Contestar después
+                                    </Button>
+                                    <Button onClick={handleSave} variant="contained">
+                                        Guardar
+                                    </Button>
+                                </Box>
+                            </Box>
+                        </Modal>
+
                     </>
                 )}
             </Container>
         </>
     );
 }
+
+export const plataformas_de_credito = [
+    {title: 'Ninguna', id: 1},
+    {title: 'PayJoy', id: 2},
+    {title: 'HappyPay', id: 3},
+    {title: 'Uphone', id: 4},
+    {title: 'Propio', id: 5},
+    {title: 'Otro', id: 6}
+];

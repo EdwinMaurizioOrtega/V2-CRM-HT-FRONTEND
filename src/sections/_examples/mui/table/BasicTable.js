@@ -302,11 +302,11 @@ function getTextFromCodigo(rowCodigo) {
         case '006':
             return "MAYORISTAS_QUITO";
         case '015':
-            return "MAYORISTAS_GUAYAQUIL";
+            return "INACTIVA";
         case '024':
             return "MAYORISTAS_MANTA";
         case '030':
-            return "COLON";
+            return "MAYORISTAS_GUAYAQUIL";
         case '009':
             return "SAMSUNG_BAHIA";
         case '014':
