@@ -147,6 +147,16 @@ export default function GeneralAppPage() {
                                                         </>
                                                     ) : null}
 
+                                                    { user?.COMPANY === 'NU' ? (
+                                                        <>
+                                                            <FormControlLabel
+                                                                value="0195102971001"
+                                                                control={<Radio/>}
+                                                                label="NAILUP"
+                                                            />
+                                                        </>
+                                                    ) : null}
+
                                                     { user?.COMPANY === 'INFINIX' || user?.COMPANY === 'TOMEBAMBA' ? (
                                                             <FormControlLabel
                                                                 value="0992537442001"
