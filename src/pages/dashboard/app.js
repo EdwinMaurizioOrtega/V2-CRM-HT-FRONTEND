@@ -191,7 +191,7 @@ export default function GeneralAppPage() {
                                                 RUC: {`${user?.EMPRESA || 'Ninguno'}`}
                                             </Typography>
 
-                                    {user?.EMPRESA && (
+                                    {user?.COMPANY !== 'NU' && (
                                         <Button href="/dashboard/e-commerce/list/" variant="contained" sx={{mt: 2}}>
                                             TIENDA
                                         </Button>

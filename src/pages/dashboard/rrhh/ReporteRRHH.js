@@ -44,6 +44,7 @@ export default function ReporteRRhhPage() {
     // Define las columnas para el DataGrid
     const baseColumns = [
         { field: 'ID', headerName: 'ID', width: 90 },
+        { field: 'COMPANY', headerName: 'EMPRESA', width: 100 },
         { field: 'USER_ID', headerName: 'User ID', width: 100 },
         { field: 'MARKED_DATE', headerName: 'Marked Date', width: 100 },
         { field: 'MARKED_TIME', headerName: 'Marked Time', width: 100 },
