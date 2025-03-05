@@ -84,7 +84,7 @@ export default function GarantiaPage() {
                 console.log(`IMEI A CONSULTAR: ${enteredName}`);
                 console.log("Buscando en el sistema Facturacion PAC");
 
-                const responseFull = await fetch(`${HOST_API_KEY}/hanadb/api/technical_service/garantia_imei_sap?imei=${enteredName}`);
+                const responseFull = await fetch(`${HOST_API_KEY}/hanadb/api/technical_service/garantia_imei_sap?imei=${enteredName}&empresa=${user.EMPRESA}`);
                 console.log(" responseFull: " + JSON.stringify(responseFull));
 
                 if (responseFull.status === 200) {
@@ -162,7 +162,8 @@ export default function GarantiaPage() {
             // EMAIL_CLIENTE: data.EMAIL,
             INFO: garantia,
             ID_USUARIO: Number(user.ID),
-            create_guide: isCheckedGuia
+            create_guide: isCheckedGuia,
+            empresa: user.EMPRESA,
         });
 
         if (response.status === 200) {

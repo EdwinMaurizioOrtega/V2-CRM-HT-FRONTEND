@@ -71,7 +71,7 @@ export default function GarantiaPage() {
         const BuscarPorRango = async () => {
 
             try {
-                const response = await axios.get('/hanadb/api/technical_service/get_oders_technical_service?status=1');
+                const response = await axios.get(`/hanadb/api/technical_service/get_oders_technical_service?status=1&empresa=${user.EMPRESA}`);
 
                 if (response.status === 200) {
                     console.log(response);
@@ -138,6 +138,7 @@ export default function GarantiaPage() {
                 IMEI: row.IMEI_SERIE,
                 PRICE_EXCL_IVA: precioProducto,
                 INACTIVO: switchState,
+                empresa: user.EMPRESA,
             });
 
             console.log("Orden actualizada correctamente.");

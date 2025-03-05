@@ -47,7 +47,7 @@ export default function GarantiaPage() {
         const BuscarPorRango = async () => {
 
             try {
-                const response = await axios.get('/hanadb/api/technical_service/get_oders_technical_service?status=2, 3, 4');
+                const response = await axios.get(`/hanadb/api/technical_service/get_oders_technical_service?status=2, 3, 4&empresa=${user.EMPRESA}`);
 
                 if (response.status === 200) {
                     console.log(response);

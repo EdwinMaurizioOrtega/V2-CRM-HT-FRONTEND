@@ -68,7 +68,7 @@ export default function GarantiaPage() {
         const BuscarPorRango = async () => {
 
             try {
-                const response = await axios.get('/hanadb/api/technical_service/get_oders_technical_service?status=0');
+                const response = await axios.get(`/hanadb/api/technical_service/get_oders_technical_service?status=0&empresa=${user.EMPRESA}`);
 
                 if (response.status === 200) {
                     console.log(response);
@@ -138,7 +138,7 @@ export default function GarantiaPage() {
                     const response = await axios.put('/hanadb/api/technical_service/api_save_url_file', {
                         ID_ORDER: Number(row.ID_ORDEN),
                         URL: data.link,
-
+                        empresa: user.EMPRESA,
                     });
 
                     console.log("Orden actualizada correctamente.");
@@ -399,7 +399,7 @@ export default function GarantiaPage() {
             // Actualizar una orden.
             const response = await axios.put('/hanadb/api/technical_service/update_status_order_technical', {
                 ID_ORDER: Number(data.ID_ORDEN),
-
+                empresa: user.EMPRESA,
             });
 
             console.log("Orden actualizada correctamente.");
@@ -431,6 +431,7 @@ export default function GarantiaPage() {
                 IMEI: data.IMEI_SERIE,
                 EMAIL_EMPLEADO_X_FACTURACION: data.EMAIL_EMPLEADO_X_FACTURACION,
                 URL_DROPBOX: data.URL_DROPBOX,
+                empresa: user.EMPRESA,
             });
 
             console.log("Código de estado:", response.status);
@@ -462,6 +463,7 @@ export default function GarantiaPage() {
                 IMEI: data.IMEI_SERIE,
                 EMAIL_EMPLEADO_X_FACTURACION: data.EMAIL_EMPLEADO_X_FACTURACION,
                 URL_DROPBOX: data.URL_DROPBOX,
+                empresa: user.EMPRESA,
             });
 
             console.log("Código de estado:", response.status);
@@ -488,7 +490,7 @@ export default function GarantiaPage() {
             const response = await axios.put('/hanadb/api/technical_service/update_new_guia_order_technical', {
                 ID_ORDER: Number(row.ID_ORDEN),
                 COMMENT: nuevaGuiaServientrega,
-
+                empresa: user.EMPRESA,
             });
 
             console.log("Orden actualizada correctamente.");

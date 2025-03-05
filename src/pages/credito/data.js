@@ -136,7 +136,6 @@ export default function DataPage() {
                     const response = await axios.post('/hanadb/api/products/save_url_img_product', {
                         COD_PROD: cod,
                         URL: data.link,
-
                     });
 
                     console.log("Orden actualizada correctamente.");
@@ -227,20 +226,20 @@ export default function DataPage() {
                                                     onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'planilla_servicio_basico')}
                                                     onDelete={() => setValue('planilla_servicio_basico', null, {shouldValidate: true})}
                                                 />
-                                                <Stack direction="row" spacing={1} alignItems="center">
-                                                    <Button
-                                                        variant="contained"
-                                                        component="label"
-                                                        startIcon={<CloudUploadIcon/>}
-                                                    >
-                                                        Archivo
-                                                        <input
-                                                            type="file"
-                                                            hidden
-                                                            onChange={(event) => handleFileChange(event, 'planilla_servicio_basico')}
-                                                        />
-                                                    </Button>
-                                                </Stack>
+                                                {/* <Stack direction="row" spacing={1} alignItems="center"> */}
+                                                {/*     <Button */}
+                                                {/*         variant="contained" */}
+                                                {/*         component="label" */}
+                                                {/*         startIcon={<CloudUploadIcon/>} */}
+                                                {/*     > */}
+                                                {/*         Archivo */}
+                                                {/*         <input */}
+                                                {/*             type="file" */}
+                                                {/*             hidden */}
+                                                {/*             onChange={(event) => handleFileChange(event, 'planilla_servicio_basico')} */}
+                                                {/*         /> */}
+                                                {/*     </Button> */}
+                                                {/* </Stack> */}
                                             </Block>
 
                                             <Block label="Escritura Constitucion de la Empresa.">
