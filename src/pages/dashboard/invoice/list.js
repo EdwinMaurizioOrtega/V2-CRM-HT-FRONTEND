@@ -404,9 +404,8 @@ export default function InvoiceListPage() {
     };
 
     const handleViewRow = (id) => {
-        //push(PATH_DASHBOARD.invoice.view(id));
-        window.open(PATH_DASHBOARD.invoice.view(id), '_blank', 'noopener,noreferrer');
-
+        push(PATH_DASHBOARD.invoice.view(id));
+        //window.open(PATH_DASHBOARD.invoice.view(id), '_blank', 'noopener,noreferrer');
     };
 
     const handleResetFilter = () => {

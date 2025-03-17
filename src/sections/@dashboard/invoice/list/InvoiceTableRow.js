@@ -24,6 +24,7 @@ import {useRouter} from "next/router";
 import {PAYMENT_OPTIONS_V2, TABULAR_ANULAR_PEDIDOS} from "../../../../utils/constants";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import {top100FilmsMovilCelistic} from "../details";
+import {PATH_DASHBOARD} from "../../../../routes/paths";
 
 // ----------------------------------------------------------------------
 
@@ -478,6 +479,10 @@ export default function InvoiceTableRow({
 
     };
 
+    const handleViewRowBlank = () => {
+        window.open(PATH_DASHBOARD.invoice.view(ID), '_blank', 'noopener,noreferrer');
+    };
+
     return (
         <>
 
@@ -696,7 +701,7 @@ export default function InvoiceTableRow({
             >
                 <MenuItem
                     onClick={() => {
-                        onViewRow();
+                        handleViewRowBlank();
                         handleClosePopover();
                     }}
                 >
