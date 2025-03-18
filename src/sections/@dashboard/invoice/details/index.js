@@ -1348,6 +1348,7 @@ export default function InvoiceDetails({invoice}) {
                                     <TableCell align="left">Descripción</TableCell>
                                     {/*{user.ROLE !== '0' ? (*/}
                                     {/*    user.ROLE !== '2' ? (*/}
+                                    {user.ROLE === "9" && <TableCell align="left">Costo</TableCell>}
                                     <TableCell align="left">Tipo Precio</TableCell>
                                     {/*    ) : null*/}
                                     {/*) : null*/}
@@ -1414,6 +1415,7 @@ export default function InvoiceDetails({invoice}) {
                                         {/*) : null*/}
                                         {/*}*/}
 
+                                        {user.ROLE === "9" && <TableCell align="left">{fCurrency(row.COSTO)}</TableCell>}
 
                                         {user.ROLE === '0' || user.ROLE === '2' ? (
 
@@ -1423,7 +1425,6 @@ export default function InvoiceDetails({invoice}) {
                                             <TableCell align="left">{namePriceType(row.TIPOPRECIO)}</TableCell>
                                         )
                                         }
-
 
                                         <TableCell align="left">{row.COMENTARIOPRECIO}</TableCell>
                                         <TableCell align="left">{row.DISCOUNTPERCENTSAP}</TableCell>
