@@ -941,7 +941,8 @@ export default function InvoiceDetails({invoice}) {
         try {
             const response = await axios.put('/hanadb/api/orders/order/imprimir', {
                 params: {
-                    ID: id
+                    ID: id,
+                    empresa: user?.EMPRESA
                 }
             });
 
