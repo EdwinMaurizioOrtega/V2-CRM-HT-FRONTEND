@@ -517,7 +517,9 @@ export default function InvoiceTableRow({
 
                         <div>
                             <Typography variant="subtitle2" noWrap>
-                                {VENDEDOR}
+                                {VENDEDOR.split(" ").map((word, index) =>
+                                    index === 2 ? <><br />{word} </> : word + " "
+                                )}
                             </Typography>
 
                             <Link
