@@ -152,15 +152,15 @@ export default function InvoiceListPage() {
     const filteredTableHead = [
         ...TABLE_HEAD.slice(0, 4), // Incluye las primeras 4 columnas
         ...(user && user.ROLE !== '31' ? [
-            { id: 'BODEGA', label: 'Bodega', align: 'left' }, // Incluir "Bodega" si el rol no es '31'
-            { id: 'FORMADEPAGO', label: 'FPago', align: 'left' } // Incluir "FPago" si el rol no es '31'
+            {id: 'BODEGA', label: 'Bodega', align: 'left'}, // Incluir "Bodega" si el rol no es '31'
+            {id: 'FORMADEPAGO', label: 'FPago', align: 'left'} // Incluir "FPago" si el rol no es '31'
         ] : []),
         ...TABLE_HEAD.slice(4, 7), // Incluye las columnas desde el índice 4 hasta el 7 (que incluye 'CLIENTEID', 'Cliente', 'Celular')
-        ...(user && user.ROLE !== '31' ? [{ id: 'Tipo', label: 'Tipo Cliente', align: 'left' }] : []), // Incluir "Tipo" si el rol no es '31'
+        ...(user && user.ROLE !== '31' ? [{id: 'Tipo', label: 'Tipo Cliente', align: 'left'}] : []), // Incluir "Tipo" si el rol no es '31'
         ...TABLE_HEAD.slice(7, 10), // Incluye las columnas desde el índice 7 hasta el 10 (que incluye 'Ciudad', 'CITY', 'NUMEROGUIA')
         ...(user && user.ROLE !== '31' ? [
-            { id: 'NOMBREUSUARIOENTREGARA', label: 'ENTREGAR', align: 'left' },
-            { id: 'DOCNUM', label: 'OV SAP', align: 'left' },
+            {id: 'NOMBREUSUARIOENTREGARA', label: 'ENTREGAR', align: 'left'},
+            {id: 'DOCNUM', label: 'OV SAP', align: 'left'},
         ] : []), // Incluir "ENTREGAR" y "OV SAP" si el rol no es '31'
         ...TABLE_HEAD.slice(10) // Incluye el resto de las columnas
     ];
@@ -543,7 +543,10 @@ export default function InvoiceListPage() {
                                 title="Total"
                                 total={tableData.length}
                                 percent={100}
-                                price={user.COMPANY !== 'TOMEBAMBA' && sumBy(tableData, (item) => Number(item.SUBTOTAL))}
+                                //price={user.COMPANY !== 'TOMEBAMBA' && sumBy(tableData, (item) => Number(item.SUBTOTAL))}
+                                price={user.COMPANY !== 'TOMEBAMBA' && sumBy(
+                                    tableData.filter((item) => item.ESTADO === 6 || item.ESTADO === 1 || item.ESTADO === 0 || item.ESTADO === 22),
+                                    (item) => Number(item.SUBTOTAL))}
                                 icon="solar:bill-list-bold-duotone"
                                 color={theme.palette.info.main}
                             />
@@ -900,7 +903,7 @@ const getTabs = (user, tableData, getLengthByStatus) => {
 
     if (user.COMPANY === 'HT') {
 
-        if (user.ROLE === '31'){
+        if (user.ROLE === '31') {
             return [
                 {value: 'all', label: 'Total', color: 'info', count: tableData.length},
                 {value: 15, label: 'Pendiente Aprobar Vendedor', color: 'success', count: getLengthByStatus(15)},
