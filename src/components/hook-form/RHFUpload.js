@@ -104,7 +104,7 @@ export function RHFUpload({name, multiple, helperText, ...other}) {
                                sx={{width: '100%'}}
                     >
                         <Upload
-                            accept={{'image/*': []}}
+                            accept={{'image/*': [], 'application/pdf': [] }}
                             file={field.value}
                             error={!!error}
                             helperText={

@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 // next
 import Head from 'next/head';
 // @mui
@@ -7,7 +7,6 @@ import {Grid, Button, Container, Stack, TextField, Card, Switch, FormControlLabe
 import {PATH_DASHBOARD} from '../../../routes/paths';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
-
 // sections
 import {useSnackbar} from '../../../components/snackbar';
 
@@ -20,17 +19,8 @@ import {useAuthContext} from "../../../auth/useAuthContext";
 import axios from "../../../utils/axios";
 
 import FormProvider, {
-    RHFEditor,
-    RHFSelect,
-    RHFUpload,
-    RHFSwitch,
-    RHFSlider,
-    RHFCheckbox,
     RHFTextField,
     RHFRadioGroup,
-    RHFMultiSelect,
-    RHFAutocomplete,
-    RHFMultiCheckbox,
 } from '../../../components/hook-form';
 import {LoadingButton} from "@mui/lab";
 import {useForm} from "react-hook-form";
@@ -79,7 +69,7 @@ export default function GarantiaPage() {
 
 
     const showImei = async (enteredName) => {
-        if (enteredName.length === 16 ||enteredName.length === 15 || enteredName.length === 11 || enteredName.length === 14 || enteredName.length === 10) {
+        if (enteredName.length === 16 || enteredName.length === 15 || enteredName.length === 11 || enteredName.length === 14 || enteredName.length === 10) {
             try {
                 console.log(`IMEI A CONSULTAR: ${enteredName}`);
                 console.log("Buscando en el sistema Facturacion PAC");
@@ -149,58 +139,86 @@ export default function GarantiaPage() {
 
     const onSubmit = async (data) => {
 
-        console.log('DATA', data);
-        //Enviar un correo electrónico + la creación de la guía
-        const response = await axios.post('/hanadb/api/technical_service/create_warranty_sap', {
-            IMEI_SERIE: enteredName,
-            GARANTIA_L1: isChecked,
-            CIUDAD_ORIGEN: Number(data.ciudad_origen),
-            OBS_VENDEDOR: data.obs,
-            // CODE_EMPLEADO_X_FACTURACION: Number(data.CODE_EMPLEADO_X_FACTURACION),
-            // NAME_EMPLEADO_X_FACTURACION: data.NAME_EMPLEADO_X_FACTURACION,
-            // EMAIL_EMPLEADO_X_FACTURACION: data.EMAIL_EMPLEADO_X_FACTURACION,
-            // EMAIL_CLIENTE: data.EMAIL,
-            INFO: garantia,
-            ID_USUARIO: Number(user.ID),
-            create_guide: isCheckedGuia,
-            empresa: user.EMPRESA,
-        });
 
-        if (response.status === 200) {
-            console.log(response);
-            // La solicitud PUT se realizó correctamente
-            //setDataCatalog(response.data.catalogo)
+        try {
+            console.log("hola");
 
-            if (response.data.guia_pdf) {
-                const pdfDecode = response.data.guia_pdf;
-                console.log("pdfDecode: " + pdfDecode)
+            console.log('DATA', data);
+            console.log('EMPRESA', user.EMPRESA);
+            console.log('enteredName', enteredName);
+            console.log('isChecked', isChecked);
+            console.log('garantia', garantia);
+            console.log('isCheckedGuia', isCheckedGuia);
+            //Enviar un correo electrónico + la creación de la guía
+            const response = await axios.post('/hanadb/api/technical_service/create_warranty_sap', {
+                IMEI_SERIE: enteredName,
+                GARANTIA_L1: isChecked,
+                CIUDAD_ORIGEN: Number(data.ciudad_origen),
+                OBS_VENDEDOR: data.obs,
+                // CODE_EMPLEADO_X_FACTURACION: Number(data.CODE_EMPLEADO_X_FACTURACION),
+                // NAME_EMPLEADO_X_FACTURACION: data.NAME_EMPLEADO_X_FACTURACION,
+                // EMAIL_EMPLEADO_X_FACTURACION: data.EMAIL_EMPLEADO_X_FACTURACION,
+                // EMAIL_CLIENTE: data.EMAIL,
+                INFO: garantia,
+                ID_USUARIO: Number(user.ID),
+                create_guide: isCheckedGuia,
+                empresa: user.EMPRESA,
+            });
 
-                const byteCharacters = atob(pdfDecode);
-                const byteNumbers = new Array(byteCharacters.length);
-                for (let i = 0; i < byteCharacters.length; i++) {
-                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+            console.log("response status: " + response.status);
+
+            if (response.status === 200) {
+                console.log(response);
+                // La solicitud PUT se realizó correctamente
+                //setDataCatalog(response.data.catalogo)
+
+                if (response.data.guia_pdf) {
+                    const pdfDecode = response.data.guia_pdf;
+                    console.log("pdfDecode: " + pdfDecode)
+
+                    const byteCharacters = atob(pdfDecode);
+                    const byteNumbers = new Array(byteCharacters.length);
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    const byteArray = new Uint8Array(byteNumbers);
+                    const pdfBlob = new Blob([byteArray], {type: 'application/pdf'});
+                    const pdfUrl = URL.createObjectURL(pdfBlob);
+                    window.open(pdfUrl, '_blank');
+
+                    alert("Se ha creado la guia correctamente")
+
+                    router.reload();
+
+                } else {
+                    // Manejo del caso en el que `guia_pdf` está vacío o indefinido
+                    console.error("Datos guardados correctamente. Sin Guia Servientrega");
+                    alert("Datos guardados correctamente.");
+
+                    router.reload();
+
                 }
-                const byteArray = new Uint8Array(byteNumbers);
-                const pdfBlob = new Blob([byteArray], {type: 'application/pdf'});
-                const pdfUrl = URL.createObjectURL(pdfBlob);
-                window.open(pdfUrl, '_blank');
-
-                alert("Se ha creado la guia correctamente")
-
-                router.reload();
 
             } else {
-                // Manejo del caso en el que `guia_pdf` está vacío o indefinido
-                console.error("Datos guardados correctamente. Sin Guia Servientrega");
-                alert("Datos guardados correctamente.");
-
-                router.reload();
-
+                // La solicitud POST no se realizó correctamente
+                console.error('Error en la solicitud POST:', response.status);
             }
 
-        } else {
-            // La solicitud POST no se realizó correctamente
-            console.error('Error en la solicitud POST:', response.status);
+        } catch (error) {
+            console.error('Error al enviar la solicitud:', error);
+
+            if (error.response) {
+                // El servidor respondió con un estado de error
+                console.error('Status:', error.response.status);
+                console.error('Data:', error.response.data);
+                console.error('Headers:', error.response.headers);
+            } else if (error.request) {
+                // La solicitud fue realizada pero no se recibió respuesta
+                console.error('Request:', error.request);
+            } else {
+                // Algo pasó al configurar la solicitud
+                console.error('Mensaje de error:', error.message);
+            }
         }
 
     }
@@ -279,71 +297,72 @@ export default function GarantiaPage() {
 
                 </Grid>
                 {/* Para los clientes mayoristas. */}
-                {user.ROLE !== '31'  &&
-                <Grid container spacing={3}>
-                    <Grid item xs={12} md={12}>
-                        <Card sx={{p: 3}}>
+                {user.ROLE !== '31' &&
+                    <Grid container spacing={3}>
+                        <Grid item xs={12} md={12}>
+                            <Card sx={{p: 3}}>
 
-                            <Stack spacing={3}>
-                                <h2>Crear Orden (Datos Adicionales)</h2>
+                                <Stack spacing={3}>
+                                    <h2>Crear Orden (Datos Adicionales)</h2>
 
-                                <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+                                    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
 
-                                    {/* <RHFAutocomplete */}
-                                    {/*     name="vendedor" */}
-                                    {/*     label="Vendedor" */}
-                                    {/*     single */}
-                                    {/*     freeSolo */}
-                                    {/*     options={dataEmpladosVenta} */}
-                                    {/*     getOptionLabel={(option) => option.NOMBRE} */}
-                                    {/*     ChipProps={{size: 'small'}} */}
-                                    {/* /> */}
+                                        {/* <RHFAutocomplete */}
+                                        {/*     name="vendedor" */}
+                                        {/*     label="Vendedor" */}
+                                        {/*     single */}
+                                        {/*     freeSolo */}
+                                        {/*     options={dataEmpladosVenta} */}
+                                        {/*     getOptionLabel={(option) => option.NOMBRE} */}
+                                        {/*     ChipProps={{size: 'small'}} */}
+                                        {/* /> */}
 
-                                    <h3>Garantía (Revisión Física)</h3>
-                                    <FormControlLabel
-                                        control={<Switch checked={isChecked} onChange={handleSwitchChange}/>}
-                                        label="Garantía (Revisión Física)"/>
+                                        <h3>Garantía (Revisión Física)</h3>
+                                        <FormControlLabel
+                                            control={<Switch checked={isChecked} onChange={handleSwitchChange}/>}
+                                            label="Garantía (Revisión Física)"/>
 
-                                    <h3>Observación del Vendedor</h3>
-                                    <RHFTextField name="obs"
-                                                  label="Observación del Vendedor"
-                                                  multiline
-                                                  rows={3}
-                                                  required
-                                    />
+                                        <h3>Observación del Vendedor</h3>
+                                        <RHFTextField name="obs"
+                                                      label="Observación del Vendedor"
+                                                      multiline
+                                                      rows={3}
+                                                      required
+                                        />
 
-                                    <h2>Crear Guía Servientrega</h2>
+                                        <h2>Crear Guía Servientrega</h2>
 
-                                    <FormControlLabel
-                                        control={<Switch checked={isCheckedGuia} onChange={handleSwitchChangeGuia}/>}
-                                        label="Crear Guia"/>
+                                        <FormControlLabel
+                                            control={<Switch checked={isCheckedGuia}
+                                                             onChange={handleSwitchChangeGuia}/>}
+                                            label="Crear Guia"/>
 
-                                    <h3>Ciudad Origen</h3>
-                                    <RHFRadioGroup row
-                                                   spacing={4}
-                                                   name="ciudad_origen"
-                                                   options={CIUDAD_ORIGEN}
-                                                   required
-                                    />
+                                        <h3>Ciudad Origen</h3>
+                                        <RHFRadioGroup row
+                                                       spacing={4}
+                                                       name="ciudad_origen"
+                                                       options={CIUDAD_ORIGEN}
+                                                       required
+                                        />
 
-                                    <LoadingButton
-                                        fullWidth
-                                        color="success"
-                                        size="large"
-                                        type="submit"
-                                        variant="contained"
-                                        loading={isSubmitting}
-                                    >
-                                        Crear Orden + Guía
-                                    </LoadingButton>
+                                        <LoadingButton
+                                            fullWidth
+                                            color="success"
+                                            size="large"
+                                            type="submit"
+                                            variant="contained"
+                                            loading={isSubmitting}
+                                        >
+                                            Crear Orden + Guía
+                                        </LoadingButton>
 
-                                </FormProvider>
+                                    </FormProvider>
 
 
-                            </Stack>
-                        </Card>
+                                </Stack>
+                            </Card>
+                        </Grid>
                     </Grid>
-                </Grid>
                 }
             </Container>
         </>

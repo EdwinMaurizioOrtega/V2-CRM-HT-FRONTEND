@@ -8,8 +8,6 @@ import {PATH_DASHBOARD} from '../../../routes/paths';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
 
-import VisibilityIcon from '@mui/icons-material/Visibility';
-
 // ----------------------------------------------------------------------
 import {useSettingsContext} from "../../../components/settings";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";

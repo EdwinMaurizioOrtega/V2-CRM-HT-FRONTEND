@@ -460,6 +460,46 @@ export default function ConsultClientForm() {
                         ) : (<Label color="error">Cliente no encontrado</Label>)}
                     </Stack>
                 </Grid>
+
+                {/* <Grid item xs={12} md={6}> */}
+                {/*     <Stack spacing={2}> */}
+                {/*         {searchResults.length > 1 ? (<Block label={searchResults[2].COMPANY}> */}
+                {/*                 <> */}
+                {/*                     <Label color="success">Tipo: {searchResults[2].Tipo} </Label> */}
+                {/*                     <Label color="success">Vendedor: {searchResults[2].SlpName} </Label> */}
+                {/*                     <Label color="success">Cliente: {searchResults[2].Cliente} </Label> */}
+                {/*                     <Label color="success">Lista */}
+                {/*                         Precio: {tipoPrecio(searchResults[2].Lista)} </Label> */}
+                {/*                     <Label color="success">Saldo de */}
+                {/*                         Cuenta: {fCurrency(searchResults[2].Balance)} </Label> */}
+                {/*                     <Label */}
+                {/*                         color="success">DOCUMENTACIÓN: {documentacion(searchResults[2].U_SYP_DOCUMENTACION)} </Label> */}
+                {/*                     <Label color="success">Tipo de */}
+                {/*                         Crédito: {tipoCredito(searchResults[2].U_SYP_CREDITO)} </Label> */}
+                {/*                     <Label color="success">Condicion de */}
+                {/*                         Pago: {nameFormaPago(searchResults[2].GroupNum)} </Label> */}
+                {/*                     <Label color="success">Límte de */}
+                {/*                         Crédito: {fCurrency(searchResults[2].CreditLine)} </Label> */}
+                {/*                     <Label color="success">Límite de */}
+                {/*                         comprometido: {fCurrency(searchResults[2].DebtLine)} </Label> */}
+                {/*                     <Label color="success">Pedidos */}
+                {/*                         Clientes: {fCurrency(searchResults[2].OrdersBal)} </Label> */}
+                {/*                     <p style={{color: '#1B806A', backgroundColor: 'rgba(54, 179, 126, 0.16)'}}> */}
+                {/*                         Comentario: {searchResults[2].Free_Text} */}
+                {/*                     </p> */}
+                {/*                     <Box */}
+                {/*                         rowGap={1} */}
+                {/*                         columnGap={1} */}
+                {/*                     > */}
+                {/*                         {dataCliente ? (<> */}
+                {/*                             <MapComponent markers={JSON.parse(dataCliente?.ENVIO)}/> */}
+                {/*                         </>) : (<Label color="error">Cliente no encontrado</Label>)} */}
+                {/*                     </Box> */}
+                {/*                 </> */}
+                {/*             </Block> */}
+                {/*         ) : (<Label color="error">Cliente no encontrado</Label>)} */}
+                {/*     </Stack> */}
+                {/* </Grid> */}
             </Grid>
 
         </Container>
