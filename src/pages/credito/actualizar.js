@@ -578,10 +578,10 @@ export default function DataPage() {
         console.log("id_documento: " + id_documento);
 
         const response = await axios.delete('/hanadb/api/customers/eliminar_documento_prospecto_cartera', {
-
-            columna: columna_eliminar,
-            id_documento: id_documento,
-
+            params: {
+                columna: columna_eliminar,
+                id_documento: id_documento,
+            }
         });
 
         console.log("response status: " + response.status);
@@ -855,6 +855,12 @@ export default function DataPage() {
                                                                 Abrir
                                                             </Button>
                                                             <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                console.log("Eliminando...")
+                                                                EliminarDocumento("ESCRITURA_CONSTITUCION")
+                                                            }}>
+                                                                Eliminar
+                                                            </Button>
                                                         </>
                                                     ) : (
                                                         <>
@@ -894,6 +900,13 @@ export default function DataPage() {
                                                                 Abrir
                                                             </Button>
                                                             <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                console.log("Eliminando...")
+                                                                EliminarDocumento("RUC_UPLOAD")
+                                                            }}>
+                                                                Eliminar
+                                                            </Button>
                                                         </>
                                                     ) : (
                                                         <>
@@ -928,6 +941,12 @@ export default function DataPage() {
                                                                 Abrir
                                                             </Button>
                                                             <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                console.log("Eliminando...")
+                                                                EliminarDocumento("CEDULA_IDENTIDAD")
+                                                            }}>
+                                                                Eliminar
+                                                            </Button>
                                                         </>
                                                     ) : (
                                                         <>
@@ -970,6 +989,12 @@ export default function DataPage() {
                                                                 Abrir
                                                             </Button>
                                                             <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                console.log("Eliminando...")
+                                                                EliminarDocumento("ESTADOS_FINANCIEROS")
+                                                            }}>
+                                                                Eliminar
+                                                            </Button>
                                                         </>
                                                     ) : (
                                                         <>
@@ -1011,6 +1036,12 @@ export default function DataPage() {
                                                                 Abrir
                                                             </Button>
                                                             <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                console.log("Eliminando...")
+                                                                EliminarDocumento("NOMBRAMIENTO_REPRESENTANTE")
+                                                            }}>
+                                                                Eliminar
+                                                            </Button>
                                                         </>
                                                     ) : (
                                                         <>
@@ -1052,6 +1083,12 @@ export default function DataPage() {
                                                                 Abrir
                                                             </Button>
                                                             <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                console.log("Eliminando...")
+                                                                EliminarDocumento("DECLARACION_IMPUESTOS")
+                                                            }}>
+                                                                Eliminar
+                                                            </Button>
                                                         </>
                                                     ) : (
                                                         <>
@@ -1093,6 +1130,12 @@ export default function DataPage() {
                                                                 Abrir
                                                             </Button>
                                                             <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                console.log("Eliminando...")
+                                                                EliminarDocumento("CERTIFICADO_BANCARIO")
+                                                            }}>
+                                                                Eliminar
+                                                            </Button>
                                                         </>
                                                     ) : (
                                                         <>
@@ -1128,6 +1171,12 @@ export default function DataPage() {
                                                                 Abrir
                                                             </Button>
                                                             <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                console.log("Eliminando...")
+                                                                EliminarDocumento("FOTO_LOCAL_GEOREFERENCIA")
+                                                            }}>
+                                                                Eliminar
+                                                            </Button>
                                                         </>
                                                     ) : (
                                                         <>

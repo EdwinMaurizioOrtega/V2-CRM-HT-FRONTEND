@@ -219,9 +219,9 @@ const navConfig = [
     {
         subheader: 'CREADOR DOCUMENTOS ONLINE',
         items: [
-            {title: 'GENERAR', path: PATH_DASHBOARD.credito.cargar, icon: ICONS.analytics},
-            {title: 'ESTADOS', path: PATH_DASHBOARD.rrhh.reporte_rrhh, icon: ICONS.blog},
-            {title: 'FIRMADOS', path: PATH_DASHBOARD.rrhh.reporte_rrhh, icon: ICONS.blog},
+            {title: 'Validar', path: PATH_DASHBOARD.credito.cargar, icon: ICONS.analytics},
+            {title: 'Estados', path: PATH_DASHBOARD.rrhh.reporte_rrhh, icon: ICONS.blog},
+            {title: 'Consultar', path: PATH_DASHBOARD.rrhh.reporte_rrhh, icon: ICONS.blog},
         ],
     },
 

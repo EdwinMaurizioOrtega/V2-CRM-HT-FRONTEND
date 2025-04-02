@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 // next
 import Head from 'next/head';
 // @mui
-import {Box, Card, Container, Grid, IconButton, LinearProgress, Stack} from '@mui/material';
+import {Box, Card, Container, Grid, LinearProgress} from '@mui/material';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
 // layouts
@@ -11,7 +11,6 @@ import DashboardLayout from '../../../layouts/dashboard';
 // ----------------------------------------------------------------------
 import {useSettingsContext} from "../../../components/settings";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
-import {useAuthContext} from "../../../auth/useAuthContext";
 import EmptyContent from "../../../components/empty-content";
 import {
     DataGrid,
@@ -23,7 +22,6 @@ import {
     GridToolbarQuickFilter
 } from "@mui/x-data-grid";
 import axios from "../../../utils/axios";
-import {useRouter} from "next/router";
 import Link from "next/link";
 
 // ----------------------------------------------------------------------
@@ -80,7 +78,6 @@ export default function ReporteRRhhPage() {
 
         fetchData();
     }, []); // Se ejecuta solo una vez al montar el componente
-
 
     return (
         <>
