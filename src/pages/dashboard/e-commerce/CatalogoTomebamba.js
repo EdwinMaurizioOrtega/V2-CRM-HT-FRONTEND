@@ -192,7 +192,7 @@ export default function CatalogoForm() {
         // reset();
 
         // Crear un cliente.
-        const response = await axios.get('/hanadb/api/products/tomebamba_catalogo');
+        const response = await axios.get(`/hanadb/api/products/tomebamba_catalogo?empresa=${user.EMPRESA}`);
 
         if (response.status === 200) {
             console.log("data: "+JSON.stringify(response.data));
