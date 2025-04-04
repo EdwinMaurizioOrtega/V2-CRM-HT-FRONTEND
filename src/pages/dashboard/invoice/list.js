@@ -459,333 +459,397 @@ export default function InvoiceListPage() {
         shortLabel,
     } = useDateRangePicker(new Date(), new Date());
 
+    const [total, setTotal] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(
+                    `${HOST_API_KEY}/hanadb/api/orders/nro_camiones_servientrega?empresa=${user.EMPRESA}`
+                );
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error: ${response.status}`);
+                }
+
+                const result = await response.json();
+                setTotal(result.total);
+            } catch (err) {
+                setError(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [user.EMPRESA]);
+
+    if (loading) return <p>Cargando...</p>;
+    if (error) return <p>Error: {error.message}</p>;
+
     return (
         <>
-            <Head>
-                <title> Invoice: List | HT</title>
-            </Head>
+        <Head>
+            <title> Invoice: List | HT</title>
+        </Head>
 
-            <Container maxWidth={themeStretch ? false : 'lg'}>
-                <CustomBreadcrumbs
-                    heading="Lista Ordenes"
-                    links={[
-                        {
-                            name: 'Dashboard',
-                            href: PATH_DASHBOARD.root,
-                        },
-                        {
-                            name: 'Invoices',
-                            href: PATH_DASHBOARD.invoice.root,
-                        },
-                        {
-                            name: 'Lista',
-                        },
-                    ]}
-                    action={
-                        // <Button
-                        //   component={NextLink}
-                        //   href={PATH_DASHBOARD.invoice.new}
-                        //   variant="contained"
-                        //   startIcon={<Iconify icon="eva:plus-fill" />}
-                        // >
-                        //   New Invoice
-                        // </Button>
-                        <>
-                            {user.ROLE === "10" && (
-                                <>
-                                    <FormControlLabel
-                                        control={<Switch checked={isChecked} onChange={handleSwitchChange}/>}
-                                        label="Fact."/>
-                                    <Button variant="contained" onClick={rangeInputPicker.onOpen}>
-                                        Rango
-                                    </Button>
-                                </>
-                            )
-                            }
-                            <CustomDateRangePicker
-                                open={rangeInputPicker.open}
-                                startDate={rangeInputPicker.startDate}
-                                endDate={rangeInputPicker.endDate}
-                                onChangeStartDate={rangeInputPicker.onChangeStartDate}
-                                onChangeEndDate={rangeInputPicker.onChangeEndDate}
-                                onClose={rangeInputPicker.onClose}
-                                error={rangeInputPicker.error}
-                            />
-                        </>
+        <Container maxWidth={themeStretch ? false : 'lg'}>
+            <CustomBreadcrumbs
+                heading="Lista Ordenes"
+                links={[
+                    {
+                        name: 'Dashboard',
+                        href: PATH_DASHBOARD.root,
+                    },
+                    {
+                        name: 'Invoices',
+                        href: PATH_DASHBOARD.invoice.root,
+                    },
+                    {
+                        name: 'Lista',
+                    },
+                ]}
+                action={
+                    // <Button
+                    //   component={NextLink}
+                    //   href={PATH_DASHBOARD.invoice.new}
+                    //   variant="contained"
+                    //   startIcon={<Iconify icon="eva:plus-fill" />}
+                    // >
+                    //   New Invoice
+                    // </Button>
+                    <>
+                        {user.ROLE === "10" && (
+                            <>
+                                <FormControlLabel
+                                    control={<Switch checked={isChecked} onChange={handleSwitchChange}/>}
+                                    label="Fact."/>
+                                <Button variant="contained" onClick={rangeInputPicker.onOpen}>
+                                    Rango
+                                </Button>
+                            </>
+                        )
+                        }
+                        <CustomDateRangePicker
+                            open={rangeInputPicker.open}
+                            startDate={rangeInputPicker.startDate}
+                            endDate={rangeInputPicker.endDate}
+                            onChangeStartDate={rangeInputPicker.onChangeStartDate}
+                            onChangeEndDate={rangeInputPicker.onChangeEndDate}
+                            onClose={rangeInputPicker.onClose}
+                            error={rangeInputPicker.error}
+                        />
+                    </>
 
 
-                    }
-                />
+                }
+            />
 
-                <Card sx={{
-                    mb: {xs: 3, md: 5},
-                }}
-                >
+            <Card sx={{
+                mb: {xs: 3, md: 5},
+            }}
+            >
 
-                    {/* <AppCompanyWork/> */}
+                {/* <AppCompanyWork/> */}
 
-                    {user.ROLE === "10" &&
-                        <Stack sx={{typography: 'body2', mt: 3}} alignItems="center">
-                            <div>
-                                <strong>Inicio: </strong> {fDate(rangeInputPicker.startDate)}
-                                {' - '}
-                                <strong>Fin: </strong> {fDate(rangeInputPicker.endDate)}
-                            </div>
-                        </Stack>
-                    }
-                    <Scrollbar>
-                        <Stack
-                            direction="row"
-                            divider={<Divider orientation="vertical" flexItem sx={{borderStyle: 'dashed'}}/>}
-                            sx={{py: 2}}
-                        >
-                            <InvoiceAnalytic
-                                title="Total"
-                                total={tableData.length}
-                                percent={100}
-                                //price={user.COMPANY !== 'TOMEBAMBA' && sumBy(tableData, (item) => Number(item.SUBTOTAL))}
-                                price={user.COMPANY !== 'TOMEBAMBA' && sumBy(
-                                    tableData.filter((item) => item.ESTADO === 6 || item.ESTADO === 1 || item.ESTADO === 0 || item.ESTADO === 22),
-                                    (item) => Number(item.SUBTOTAL))}
-                                icon="solar:bill-list-bold-duotone"
-                                color={theme.palette.info.main}
-                            />
-
-                            <InvoiceAnalytic
-                                title="Por Aprobar Vendedor"
-                                total={getLengthByStatus(15)}
-                                percent={getPercentByStatus(15)}
-                                price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(15)}
-                                icon="solar:file-check-bold-duotone"
-                                color={theme.palette.success.main}
-                            />
-
-                            <InvoiceAnalytic
-                                title="Por Aprobar Crédito"
-                                total={getLengthByStatus(6)}
-                                percent={getPercentByStatus(6)}
-                                price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(6)}
-                                icon="solar:file-check-bold-duotone"
-                                color={theme.palette.success.main}
-                            />
-
-                            <InvoiceAnalytic
-                                title="Por Facturar"
-                                total={getLengthByStatus(0)}
-                                percent={getPercentByStatus(0)}
-                                price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(0)}
-                                icon="solar:sort-by-time-bold-duotone"
-                                color={theme.palette.warning.main}
-                            />
-
-                            {user.COMPANY === 'HT' && user.ROLE !== '31' && <InvoiceAnalytic
-                                title="F/Pend.Cargar Evidencia."
-                                total={getLengthByStatus(22)}
-                                percent={getPercentByStatus(22)}
-                                price={getTotalPriceByStatus(22)}
-                                icon="solar:bell-bing-bold-duotone"
-                                color={theme.palette.error.main}
-                            />
-                            }
-
-                            <InvoiceAnalytic
-                                title="Fact/Entreg."
-                                total={getLengthByStatus(1)}
-                                percent={getPercentByStatus(1)}
-                                price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(1)}
-                                icon="solar:bell-bing-bold-duotone"
-                                color={theme.palette.error.main}
-                            />
-
-                            <InvoiceAnalytic
-                                title="Anulado"
-                                total={getLengthByStatus(8)}
-                                percent={getPercentByStatus(8)}
-                                price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(8)}
-                                icon="solar:file-corrupted-bold-duotone"
-                                color={theme.palette.text.secondary}
-                            />
-                        </Stack>
-                    </Scrollbar>
-                </Card>
-
-                <Card>
-                    <Tabs
-                        value={filterStatus}
-                        onChange={handleFilterStatus}
-                        sx={{
-                            px: 2.5,
-                            boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
-                        }}
+                {user.ROLE === "10" &&
+                    <Stack sx={{typography: 'body2', mt: 3}} alignItems="center">
+                        <div>
+                            <strong>Inicio: </strong> {fDate(rangeInputPicker.startDate)}
+                            {' - '}
+                            <strong>Fin: </strong> {fDate(rangeInputPicker.endDate)}
+                        </div>
+                    </Stack>
+                }
+                <Scrollbar>
+                    <Stack
+                        direction="row"
+                        divider={<Divider orientation="vertical" flexItem sx={{borderStyle: 'dashed'}}/>}
+                        sx={{py: 2}}
                     >
-                        {TABS.map((tab) => (
-                            <Tab
-                                key={tab.value}
-                                value={tab.value}
-                                label={tab.label}
-                                iconPosition="end"
-                                icon={
-                                    <Label
-                                        variant={
-                                            ((tab.value === 'all' || tab.value === filterStatus) && 'filled') || 'soft'
-                                        }
-                                        color={tab.color}>
-                                        {tab.count}
-                                    </Label>
+                        <InvoiceAnalytic
+                            title="Total"
+                            total={tableData.length}
+                            percent={100}
+                            //price={user.COMPANY !== 'TOMEBAMBA' && sumBy(tableData, (item) => Number(item.SUBTOTAL))}
+                            price={user.COMPANY !== 'TOMEBAMBA' && sumBy(
+                                tableData.filter((item) => item.ESTADO === 6 || item.ESTADO === 1 || item.ESTADO === 0 || item.ESTADO === 22),
+                                (item) => Number(item.SUBTOTAL))}
+                            icon="solar:bill-list-bold-duotone"
+                            color={theme.palette.info.main}
+                        />
+
+                        <InvoiceAnalytic
+                            title="Por Aprobar Vendedor"
+                            total={getLengthByStatus(15)}
+                            percent={getPercentByStatus(15)}
+                            price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(15)}
+                            icon="solar:file-check-bold-duotone"
+                            color={theme.palette.success.main}
+                        />
+
+                        <InvoiceAnalytic
+                            title="Por Aprobar Crédito"
+                            total={getLengthByStatus(6)}
+                            percent={getPercentByStatus(6)}
+                            price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(6)}
+                            icon="solar:file-check-bold-duotone"
+                            color={theme.palette.success.main}
+                        />
+
+                        <InvoiceAnalytic
+                            title="Por Facturar"
+                            total={getLengthByStatus(0)}
+                            percent={getPercentByStatus(0)}
+                            price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(0)}
+                            icon="solar:sort-by-time-bold-duotone"
+                            color={theme.palette.warning.main}
+                        />
+
+                        {user.COMPANY === 'HT' && user.ROLE !== '31' && <InvoiceAnalytic
+                            title="F/Pend.Cargar Evidencia."
+                            total={getLengthByStatus(22)}
+                            percent={getPercentByStatus(22)}
+                            price={getTotalPriceByStatus(22)}
+                            icon="solar:bell-bing-bold-duotone"
+                            color={theme.palette.error.main}
+                        />
+                        }
+
+                        <InvoiceAnalytic
+                            title="Fact/Entreg."
+                            total={getLengthByStatus(1)}
+                            percent={getPercentByStatus(1)}
+                            price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(1)}
+                            icon="solar:bell-bing-bold-duotone"
+                            color={theme.palette.error.main}
+                        />
+
+                        <InvoiceAnalytic
+                            title="Anulado"
+                            total={getLengthByStatus(8)}
+                            percent={getPercentByStatus(8)}
+                            price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(8)}
+                            icon="solar:file-corrupted-bold-duotone"
+                            color={theme.palette.text.secondary}
+                        />
+                    </Stack>
+                </Scrollbar>
+            </Card>
+
+            {user.ROLE === '8' && (
+                <div style={{ textAlign: 'center' }}>
+                    <p>
+                        Total Para Servientrega: <strong>
+                        ${Number(total).toLocaleString('es-EC', { minimumFractionDigits: 2 })}
+                    </strong>
+                    </p>
+                </div>
+            )}
+
+        <Card>
+            <Tabs
+                value={filterStatus}
+                onChange={handleFilterStatus}
+                sx={{
+                    px: 2.5,
+                    boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+                }}
+            >
+                {TABS.map((tab) => (
+                    <Tab
+                        key={tab.value}
+                        value={tab.value}
+                        label={tab.label}
+                        iconPosition="end"
+                        icon={
+                            <Label
+                                variant={
+                                    ((tab.value === 'all' || tab.value === filterStatus) && 'filled') || 'soft'
                                 }
-                            />
-                        ))}
-                    </Tabs>
-
-                    <Divider/>
-
-                    <InvoiceTableToolbar
-                        isFiltered={isFiltered}
-                        filterName={filterName}
-                        // filterService={filterService}
-                        // filterEndDate={filterEndDate}
-                        onFilterName={handleFilterName}
-                        optionsService={SERVICE_OPTIONS}
-                        onResetFilter={handleResetFilter}
-                        // filterStartDate={filterStartDate}
-                        onFilterService={handleFilterService}
-                        // onFilterStartDate={(newValue) => {
-                        //     setFilterStartDate(newValue);
-                        // }}
-                        // onFilterEndDate={(newValue) => {
-                        //     setFilterEndDate(newValue);
-                        // }}
+                                color={tab.color}>
+                                {tab.count}
+                            </Label>
+                        }
                     />
+                ))}
+            </Tabs>
 
-                    <TableContainer sx={{position: 'relative', overflow: 'unset'}}>
-                        {/* <TableSelectedAction */}
-                        {/*     dense={dense} */}
-                        {/*     numSelected={selected.length} */}
-                        {/*     rowCount={tableData.length} */}
-                        {/*     onSelectAllRows={(checked) => */}
-                        {/*         onSelectAllRows( */}
-                        {/*             checked, */}
-                        {/*             tableData.map((row) => row.id) */}
-                        {/*         ) */}
-                        {/*     } */}
-                        {/*     action={ */}
-                        {/*         <Stack direction="row"> */}
-                        {/*             <Tooltip title="Sent"> */}
-                        {/*                 <IconButton color="primary"> */}
-                        {/*                     <Iconify icon="ic:round-send"/> */}
-                        {/*                 </IconButton> */}
-                        {/*             </Tooltip> */}
+            <Divider/>
 
-                        {/*             <Tooltip title="Download"> */}
-                        {/*                 <IconButton color="primary"> */}
-                        {/*                     <Iconify icon="eva:download-outline"/> */}
-                        {/*                 </IconButton> */}
-                        {/*             </Tooltip> */}
+            <InvoiceTableToolbar
+                isFiltered={isFiltered}
+                filterName={filterName}
+                // filterService={filterService}
+                // filterEndDate={filterEndDate}
+                onFilterName={handleFilterName}
+                optionsService={SERVICE_OPTIONS}
+                onResetFilter={handleResetFilter}
+                // filterStartDate={filterStartDate}
+                onFilterService={handleFilterService}
+                // onFilterStartDate={(newValue) => {
+                //     setFilterStartDate(newValue);
+                // }}
+                // onFilterEndDate={(newValue) => {
+                //     setFilterEndDate(newValue);
+                // }}
+            />
 
-                        {/*             <Tooltip title="Print"> */}
-                        {/*                 <IconButton color="primary"> */}
-                        {/*                     <Iconify icon="eva:printer-fill"/> */}
-                        {/*                 </IconButton> */}
-                        {/*             </Tooltip> */}
+            <TableContainer sx={{position: 'relative', overflow: 'unset'}}>
+                {/* <TableSelectedAction */}
+                {/*     dense={dense} */}
+                {/*     numSelected={selected.length} */}
+                {/*     rowCount={tableData.length} */}
+                {/*     onSelectAllRows={(checked) => */}
+                {/*         onSelectAllRows( */}
+                {/*             checked, */}
+                {/*             tableData.map((row) => row.id) */}
+                {/*         ) */}
+                {/*     } */}
+                {/*     action={ */}
+                {/*         <Stack direction="row"> */}
+                {/*             <Tooltip title="Sent"> */}
+                {/*                 <IconButton color="primary"> */}
+                {/*                     <Iconify icon="ic:round-send"/> */}
+                {/*                 </IconButton> */}
+                {/*             </Tooltip> */}
 
-                        {/*             <Tooltip title="Delete"> */}
-                        {/*                 <IconButton color="primary" onClick={handleOpenConfirm}> */}
-                        {/*                     <Iconify icon="eva:trash-2-outline"/> */}
-                        {/*                 </IconButton> */}
-                        {/*             </Tooltip> */}
-                        {/*         </Stack> */}
-                        {/*     } */}
-                        {/* /> */}
+                {/*             <Tooltip title="Download"> */}
+                {/*                 <IconButton color="primary"> */}
+                {/*                     <Iconify icon="eva:download-outline"/> */}
+                {/*                 </IconButton> */}
+                {/*             </Tooltip> */}
 
-                        <Scrollbar>
-                            <Table size={dense ? 'small' : 'medium'} sx={{minWidth: 800}}>
-                                <TableHeadCustom
-                                    order={order}
-                                    orderBy={orderBy}
-                                    headLabel={filteredTableHead}
-                                    rowCount={tableData.length}
-                                    // numSelected={selected.length}
-                                    onSort={onSort}
-                                    // onSelectAllRows={(checked) =>
-                                    //     onSelectAllRows(
-                                    //         checked,
-                                    //         tableData.map((row) => row.id)
-                                    //     )
-                                    // }
-                                />
+                {/*             <Tooltip title="Print"> */}
+                {/*                 <IconButton color="primary"> */}
+                {/*                     <Iconify icon="eva:printer-fill"/> */}
+                {/*                 </IconButton> */}
+                {/*             </Tooltip> */}
 
-                                <TableBody>
-                                    {dataFiltered
-                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                        .map((row) => (
-                                            <InvoiceTableRow
-                                                key={row.ID}
-                                                row={row}
-                                                // selected={selected.includes(row.ID)}
-                                                // onSelectRow={() => onSelectRow(row.ID)}
-                                                onViewRow={() => handleViewRow(row.ID)}
-                                                // onAnularRow={() => handleAnularRow(row.ID)}
-                                                // onEditRow={() => handleEditRow(row.ID)}
-                                                // onDeleteRow={() => handleDeleteRow(row.ID)}
-                                            />
-                                        ))}
+                {/*             <Tooltip title="Delete"> */}
+                {/*                 <IconButton color="primary" onClick={handleOpenConfirm}> */}
+                {/*                     <Iconify icon="eva:trash-2-outline"/> */}
+                {/*                 </IconButton> */}
+                {/*             </Tooltip> */}
+                {/*         </Stack> */}
+                {/*     } */}
+                {/* /> */}
 
-                                    <TableEmptyRows
-                                        height={denseHeight}
-                                        emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
+                <Scrollbar>
+                    <Table size={dense ? 'small' : 'medium'} sx={{minWidth: 800}}>
+                        <TableHeadCustom
+                            order={order}
+                            orderBy={orderBy}
+                            headLabel={filteredTableHead}
+                            rowCount={tableData.length}
+                            // numSelected={selected.length}
+                            onSort={onSort}
+                            // onSelectAllRows={(checked) =>
+                            //     onSelectAllRows(
+                            //         checked,
+                            //         tableData.map((row) => row.id)
+                            //     )
+                            // }
+                        />
+
+                        <TableBody>
+                            {dataFiltered
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row) => (
+                                    <InvoiceTableRow
+                                        key={row.ID}
+                                        row={row}
+                                        // selected={selected.includes(row.ID)}
+                                        // onSelectRow={() => onSelectRow(row.ID)}
+                                        onViewRow={() => handleViewRow(row.ID)}
+                                        // onAnularRow={() => handleAnularRow(row.ID)}
+                                        // onEditRow={() => handleEditRow(row.ID)}
+                                        // onDeleteRow={() => handleDeleteRow(row.ID)}
                                     />
+                                ))}
 
-                                    <TableNoData isNotFound={isNotFound}/>
-                                </TableBody>
-                            </Table>
+                            <TableEmptyRows
+                                height={denseHeight}
+                                emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
+                            />
 
-                        </Scrollbar>
-                    </TableContainer>
+                            <TableNoData isNotFound={isNotFound}/>
+                        </TableBody>
+                    </Table>
 
-                    <TablePaginationCustom
-                        count={dataFiltered.length}
-                        page={page}
-                        rowsPerPage={rowsPerPage}
-                        onPageChange={onChangePage}
-                        onRowsPerPageChange={onChangeRowsPerPage}
-                        //
-                        dense={dense}
-                        onChangeDense={onChangeDense}
-                    />
+                </Scrollbar>
+            </TableContainer>
 
-                    <Tooltip title="Descargar">
-                        <IconButton onClick={exportJsonToCSV}
-                        >
-                            <Iconify icon="eva:download-fill"/>
-                        </IconButton>
-                    </Tooltip>
-                </Card>
-            </Container>
+            <TablePaginationCustom
+                count={dataFiltered.length}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                onPageChange={onChangePage}
+                onRowsPerPageChange={onChangeRowsPerPage}
+                //
+                dense={dense}
+                onChangeDense={onChangeDense}
+            />
 
-            {/* <ConfirmDialog */}
-            {/*     open={openConfirm} */}
-            {/*     onClose={handleCloseConfirm} */}
-            {/*     title="Delete" */}
-            {/*     content={ */}
-            {/*         <> */}
-            {/*             Are you sure want to delete <strong> {selected.length} </strong> items? */}
-            {/*         </> */}
-            {/*     } */}
-            {/*     action={ */}
-            {/*         <Button */}
-            {/*             variant="contained" */}
-            {/*             color="error" */}
-            {/*             onClick={() => { */}
-            {/*                 handleDeleteRows(selected); */}
-            {/*                 handleCloseConfirm(); */}
-            {/*             }} */}
-            {/*         > */}
-            {/*             Delete */}
-            {/*         </Button> */}
-            {/*     } */}
-            {/* /> */}
-        </>
-    );
+            <Tooltip title="Descargar">
+                <IconButton onClick={exportJsonToCSV}
+                >
+                    <Iconify icon="eva:download-fill"/>
+                </IconButton>
+            </Tooltip>
+        </Card>
+        </Container>
+
+{/* <ConfirmDialog */
+}
+{/*     open={openConfirm} */
+}
+{/*     onClose={handleCloseConfirm} */
+}
+{/*     title="Delete" */
+}
+{/*     content={ */
+}
+{/*         <> */
+}
+{/*             Are you sure want to delete <strong> {selected.length} </strong> items? */
+}
+{/*         </> */
+}
+{/*     } */
+}
+{/*     action={ */
+}
+{/*         <Button */
+}
+{/*             variant="contained" */
+}
+{/*             color="error" */
+}
+{/*             onClick={() => { */
+}
+{/*                 handleDeleteRows(selected); */
+}
+{/*                 handleCloseConfirm(); */
+}
+{/*             }} */
+}
+{/*         > */
+}
+{/*             Delete */
+}
+{/*         </Button> */
+}
+{/*     } */
+}
+{/* /> */
+}
+</>
+)
+    ;
 }
 
 // ----------------------------------------------------------------------
