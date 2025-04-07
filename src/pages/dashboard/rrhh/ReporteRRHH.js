@@ -175,6 +175,8 @@ function ExcelDownload({data}) {
             { wch: 15 },   // D - MARKED_DATE
             { wch: 15 },   // E - MARKED_TIME
             { wch: 45 },   // F - DISPLAYNAME
+            { wch: 20 },   // F - LATITUDE
+            { wch: 20 },   // F - LONGITUDE
             { wch: 50 },   // G - UBICACION (¡Aquí se agranda!)
         ];
 
@@ -188,6 +190,8 @@ function ExcelDownload({data}) {
                 MARKED_DATE: item.MARKED_DATE,
                 MARKED_TIME: item.MARKED_TIME,
                 DISPLAYNAME: item.DISPLAYNAME,
+                LATITUDE: `${item.LATITUDE}`,
+                LONGITUDE: `${item.LONGITUDE}`,
                 UBICACION: { f: `HYPERLINK("https://www.google.com/maps?q=${item.LATITUDE},${item.LONGITUDE}", "Ver en Google Map")` },
 
             })),
