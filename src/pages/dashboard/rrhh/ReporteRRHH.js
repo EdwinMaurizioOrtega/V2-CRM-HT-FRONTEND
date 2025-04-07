@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 // next
 import Head from 'next/head';
 // @mui
-import {Box, Card, Container, Grid, LinearProgress} from '@mui/material';
+import {Box, Button, Card, Container, Grid, LinearProgress, Stack} from '@mui/material';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
 // layouts
@@ -23,6 +23,9 @@ import {
 } from "@mui/x-data-grid";
 import axios from "../../../utils/axios";
 import Link from "next/link";
+import {LoadingButton} from "@mui/lab";
+import {useAuthContext} from "../../../auth/useAuthContext";
+import * as XLSX from "xlsx";
 
 // ----------------------------------------------------------------------
 
@@ -103,9 +106,13 @@ export default function ReporteRRhhPage() {
                     ]}
                 />
 
+
+
+
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={12}>
                         <Card sx={{p: 3, textAlign: "center"}}>
+                                {businessPartners.length > 0 && <ExcelDownload data={businessPartners}/>}
                             <DataGrid
                                 rows={businessPartners?.map((partner, index) => ({
                                     ...partner,
@@ -146,3 +153,96 @@ function CustomToolbar() {
         </GridToolbarContainer>
     );
 }
+
+
+function ExcelDownload({data}) {
+
+    const {user} = useAuthContext();
+
+    console.log("data: "+data);
+
+    const handleExportToExcel = () => {
+        const wb = XLSX.utils.book_new();
+
+        // Crear una nueva hoja de trabajo vacía con la fila de texto
+        const ws = XLSX.utils.aoa_to_sheet([]);
+
+        // Ajustar la anchura de la columna para la columna "Nombre"
+        ws['!cols'] = [
+            { wch: 10 },   // A - ID
+            { wch: 10 },   // B - EMPRESA
+            { wch: 10 },   // C - USER_ID
+            { wch: 15 },   // D - MARKED_DATE
+            { wch: 15 },   // E - MARKED_TIME
+            { wch: 45 },   // F - DISPLAYNAME
+            { wch: 50 },   // G - UBICACION (¡Aquí se agranda!)
+        ];
+
+        // Agregar los datos JSON a la hoja de trabajo según el mapeo
+        XLSX.utils.sheet_add_json(
+            ws,
+            data.map((item) => ({
+                ID: item.ID,
+                EMPRESA: item.COMPANY,
+                USER_ID: item.USER_ID,
+                MARKED_DATE: item.MARKED_DATE,
+                MARKED_TIME: item.MARKED_TIME,
+                DISPLAYNAME: item.DISPLAYNAME,
+                UBICACION: { f: `HYPERLINK("https://www.google.com/maps?q=${item.LATITUDE},${item.LONGITUDE}", "Ver en Google Map")` },
+
+            })),
+            {origin: 'A1'}
+        );
+
+        for(let R = 3; R <= 25; ++R) {
+            for(let C = 1; C <= 6; ++C) {
+                const cell_address = {c: C, r: R};
+                /* if an A1-style address is needed, encode the address */
+                var cell_ref = XLSX.utils.encode_cell(cell_address);
+
+                // Obtener la celda actual o crear una nueva si no existe
+                var cell = ws[cell_ref] || (ws[cell_ref] = {});
+
+                // Crear un estilo de borde negro
+                var borderStyle = {
+                    top: { style: "thin", color: { rgb: "000000" } }, // Negro
+                    right: { style: "thin", color: { rgb: "000000" } }, // Negro
+                    bottom: { style: "thin", color: { rgb: "000000" } }, // Negro
+                    left: { style: "thin", color: { rgb: "000000" } } // Negro
+                };
+
+                // Aplicar el estilo de borde a la celda
+                cell.s = { border: borderStyle };
+            }
+        }
+
+        // Configurar todas las opciones de protección
+        ws['!protect'] = {
+            selectLockedCells: false,      // Permitir la selección de celdas bloqueadas
+            selectUnlockedCells: false,    // Permitir la selección de celdas desbloqueadas
+            formatCells: false,           // Permitir el formato de celdas
+            formatColumns: false,         // Permitir el formato de columnas
+            formatRows: false,            // Permitir el formato de filas
+            insertRows: false,            // Permitir la inserción de filas
+            insertColumns: false,         // Permitir la inserción de columnas
+            insertHyperlinks: false,      // Permitir la inserción de hipervínculos
+            deleteRows: false,            // Permitir la eliminación de filas
+            deleteColumns: false,         // Permitir la eliminación de columnas
+            sort: false,                  // Permitir la ordenación
+            autoFilter: false,            // Permitir el autofiltro
+            pivotTables: false,           // Permitir las tablas dinámicas
+            password: 'miPassword',    // Establecer la contraseña
+        };
+
+        XLSX.utils.book_append_sheet(wb, ws, `${user.DISPLAYNAME}`);
+        XLSX.writeFile(wb, `${user.DISPLAYNAME}.xlsx`);
+    };
+
+    return (
+        <Box display="flex" justifyContent="center" alignItems="center" height="10vh">
+            <Button variant="contained" onClick={handleExportToExcel}>
+                Exportar a Excel
+            </Button>
+        </Box>
+    );
+};
