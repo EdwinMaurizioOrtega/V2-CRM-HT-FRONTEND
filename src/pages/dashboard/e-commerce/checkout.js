@@ -87,6 +87,7 @@ export default function EcommerceCheckoutPage() {
     const [selectedOptions, setSelectedOptions] = useState([]);
 
     const [otroMotivo, setOtroMotivo] = useState("");
+    const [numeroLocales, setNumeroLocales] = useState("");
 
 
     useEffect(() => {
@@ -322,6 +323,7 @@ export default function EcommerceCheckoutPage() {
                 card_code: checkout.billing.ID, // La cédula del cliente
                 selected_options: selectedOptions,
                 reason: otroSeleccionado ? otroMotivo : null,
+                nro_locales: Number(numeroLocales),
             });
 
             console.log('Status: ', response.status);
@@ -427,6 +429,23 @@ export default function EcommerceCheckoutPage() {
                                 }}
                             >
                                 <Typography variant="h6"> EL CLIENTE CON QUE PLATAFORMA DE CRÉDITO TRABAJA</Typography>
+
+                                <TextField
+                                    required
+                                    type="number"
+                                    fullWidth
+                                    margin="normal"
+                                    label="¿Cuantos locales tienes su cliente?"
+                                    value={numeroLocales}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        if (/^\d*$/.test(value)) {
+                                            setNumeroLocales(value);
+                                        }
+                                    }}
+                                    error={numeroLocales === ''}
+                                    helperText={numeroLocales === '' ? 'Este campo es requerido' : ''}
+                                />
 
                                 <Autocomplete
                                     fullWidth
