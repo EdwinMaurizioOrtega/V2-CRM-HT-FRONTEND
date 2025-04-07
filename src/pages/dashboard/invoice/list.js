@@ -640,7 +640,7 @@ export default function InvoiceListPage() {
                 </Scrollbar>
             </Card>
 
-            {user.ROLE === '8' && (
+            {(user.ROLE === '8' || user.ROLE === '10') && (
                 <div style={{ textAlign: 'center' }}>
                     <p>
                         Total Para Servientrega: <strong>
