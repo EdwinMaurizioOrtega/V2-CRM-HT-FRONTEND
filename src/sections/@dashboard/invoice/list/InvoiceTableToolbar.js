@@ -113,7 +113,7 @@ export default function InvoiceTableToolbar({
         fullWidth
         value={filterName}
         onChange={onFilterName}
-        placeholder="Por: NOM. CLIENTE | NUM. PEDIDO | VENDEDOR."
+        placeholder="Por: NOM. CLIENTE | NUM. PEDIDO | VENDEDOR | BODEGA."
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

@@ -879,7 +879,8 @@ function applyFilter({
             (invoice) =>
                 String(invoice.ID).toLowerCase().indexOf(filterName.toLowerCase()) !== -1 ||
                 invoice.Cliente.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 ||
-                invoice.VENDEDOR.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+                invoice.VENDEDOR.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 ||
+                invoice.BODEGA.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
         );
     }
 
