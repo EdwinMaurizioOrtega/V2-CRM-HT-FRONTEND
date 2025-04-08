@@ -746,7 +746,8 @@ export default function InvoiceListPage() {
                             headLabel={filteredTableHead}
                             rowCount={tableData.length}
                             // numSelected={selected.length}
-                            onSort={onSort}
+                            // onSort={onSort}
+                            {...(user.ROLE !== '8' && { onSort })}
                             // onSelectAllRows={(checked) =>
                             //     onSelectAllRows(
                             //         checked,
