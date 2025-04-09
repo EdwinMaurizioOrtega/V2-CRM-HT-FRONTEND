@@ -284,7 +284,7 @@ export default function InvoiceListPage() {
         }
 
         fetchData();
-    }, [user]);
+    }, [user, orders]);
 
 
     useEffect(() => {
