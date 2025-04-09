@@ -916,7 +916,7 @@ function applyFilter({
             if (warehouses.includes("030")) {
 
                 if (filterStatus === 0) {
-                    inputData = inputData.slice(0, 1); // Return only the first two items
+                    inputData = inputData.slice(0, 2); // Return only the first two items
                 }
 
             }
@@ -925,7 +925,7 @@ function applyFilter({
             if (warehouses.includes("024")) {
 
                 if (filterStatus === 0) {
-                    inputData = inputData.slice(0, 1); // Return only the first two items
+                    inputData = inputData.slice(0, 2); // Return only the first two items
                 }
 
             }
