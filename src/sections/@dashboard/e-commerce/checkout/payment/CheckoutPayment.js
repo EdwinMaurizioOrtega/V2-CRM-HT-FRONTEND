@@ -141,12 +141,18 @@ const WAREHOUSE_OPTIONS_MOVILCELISTIC = [
         title: 'MAYORISTAS MOVILCELISTIC CUENCA',
         description: 'CUENCA',
     },
-    // {
-    //     id: 'T1CARACO',
-    //     value: 'T1CARACO',
-    //     title: 'XIAOMI TERMINALES',
-    //     description: 'QUITO',
-    // },
+    {
+        id: '030',
+        value: '030',
+        title: 'MAYORISTAS MOVILCELISTIC COLON',
+        description: 'COLON',
+    },
+    {
+        id: '024',
+        value: '024',
+        title: 'MAYORISTAS MOVILCELISTIC MANTA',
+        description: 'MANTA',
+    },
 ]
 
 

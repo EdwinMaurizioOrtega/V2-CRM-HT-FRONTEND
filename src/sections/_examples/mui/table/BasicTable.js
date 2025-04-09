@@ -387,6 +387,12 @@ function getTextFromCodigoMovilCelistic(rowCodigo) {
             return "CARACOL XIAOMI ELECTRODOMESTICOS";
         case 'T2MACHAL':
             return "MACHALA XIAOMI ELECTRODOMESTICOS";
+
+        case '030':
+            return "MAYORISTAS MOVILCELISTIC COLON";
+        case '024':
+            return "MAYORISTAS MOVILCELISTIC MANTA";
+
         default:
             return "...";
     }
