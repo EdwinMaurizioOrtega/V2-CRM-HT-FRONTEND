@@ -284,7 +284,7 @@ export default function InvoiceListPage() {
         }
 
         fetchData();
-    }, [user, orders]);
+    }, [user]);
 
 
     useEffect(() => {
@@ -886,25 +886,25 @@ function applyFilter({
     }
 
 
-    console.log("user_user:" + currentUser)
+    //console.log("user_user:" + JSON.stringify(currentUser))
 
     if (filterStatus !== 'all') {
 
-        //console.log("user_user:"+ user)
+        //ALERTA - MUY IMPORTANTE
 
         if (currentUser.ROLE === "8") {
 
-            //CDHT
-            if (currentUser.WAREHOUSE === "019") {
+            const warehouses = JSON.parse(currentUser.WAREHOUSE);
 
+            //CDHT -CDMC
+            if (warehouses.includes("019") || warehouses.includes("DISTLF")) {
                 if (filterStatus === 0) {
                     inputData = inputData.slice(0, 6); // Return only the first two items
                 }
-
             }
 
-            //Cuenca
-            if (currentUser.WAREHOUSE === "002") {
+            //Cuenca HT - MC
+            if (warehouses.includes("002") || warehouses.includes("004")) {
 
                 if (filterStatus === 0) {
                     inputData = inputData.slice(0, 3); // Return only the first two items
@@ -912,8 +912,8 @@ function applyFilter({
 
             }
 
-            //Colon
-            if (currentUser.WAREHOUSE === "030") {
+            //Colon HT - MC
+            if (warehouses.includes("030")) {
 
                 if (filterStatus === 0) {
                     inputData = inputData.slice(0, 1); // Return only the first two items
@@ -921,8 +921,8 @@ function applyFilter({
 
             }
 
-            // Manta
-            if (currentUser.WAREHOUSE === "024") {
+            // Manta HT - MC
+            if (warehouses.includes("024")) {
 
                 if (filterStatus === 0) {
                     inputData = inputData.slice(0, 1); // Return only the first two items
@@ -967,6 +967,8 @@ function parseCustomDate(dateString) {
 
 const getTabs = (user, tableData, getLengthByStatus) => {
 
+    console.log("tableData: "+ JSON.stringify( tableData));
+
     if (user.COMPANY === 'HT') {
 
         if (user.ROLE === '31') {
@@ -989,6 +991,10 @@ const getTabs = (user, tableData, getLengthByStatus) => {
                 {value: 23, label: 'F/Pend. Validar Cartera', color: 'info', count: getLengthByStatus(23)},
                 {value: 1, label: 'Fact./Entregado', color: 'error', count: getLengthByStatus(1)},
                 {value: 8, label: 'Anulado', color: 'default', count: getLengthByStatus(8)},
+
+                {value: '000000000', label: 'CON GUIA', color: 'default', count: getLengthByStatus(8)},
+                {value: '000000000', label: 'SIN GUIA', color: 'default', count: getLengthByStatus(8)},
+
             ];
         }
 
