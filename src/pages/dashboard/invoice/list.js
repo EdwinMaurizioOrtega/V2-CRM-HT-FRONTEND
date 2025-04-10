@@ -899,7 +899,9 @@ function applyFilter({
             //CDHT -CDMC
             if (warehouses.includes("019") || warehouses.includes("DISTLF")) {
                 if (filterStatus === 0) {
-                    inputData = inputData.slice(0, 6); // Return only the first two items
+                    inputData = inputData
+                        .filter((invoice) => invoice.ESTADO === filterStatus)
+                        .slice(0, 6); // Return only the first two items
                 }
             }
 
@@ -907,7 +909,9 @@ function applyFilter({
             if (warehouses.includes("002") || warehouses.includes("004")) {
 
                 if (filterStatus === 0) {
-                    inputData = inputData.slice(0, 3); // Return only the first two items
+                    inputData = inputData
+                        .filter((invoice) => invoice.ESTADO === filterStatus)
+                        .slice(0, 3); // Return only the first two items
                 }
 
             }
@@ -916,7 +920,9 @@ function applyFilter({
             if (warehouses.includes("030")) {
 
                 if (filterStatus === 0) {
-                    inputData = inputData.slice(0, 2); // Return only the first two items
+                    inputData = inputData
+                        .filter((invoice) => invoice.ESTADO === filterStatus)
+                        .slice(0, 2); // Return only the first two items
                 }
 
             }
@@ -925,7 +931,9 @@ function applyFilter({
             if (warehouses.includes("024")) {
 
                 if (filterStatus === 0) {
-                    inputData = inputData.slice(0, 2); // Return only the first two items
+                    inputData = inputData
+                        .filter((invoice) => invoice.ESTADO === filterStatus)
+                        .slice(0, 2); // Return only the first two items
                 }
 
             }
