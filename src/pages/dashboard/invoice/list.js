@@ -344,8 +344,12 @@ export default function InvoiceListPage() {
     //     {value: 8, label: 'Anulado', color: 'default', count: getLengthByStatus(8)},
     // ];
 
+    const getLengthByNumeroSinGuia = (sin_guia) => tableData.filter((item) => item.NUMEROGUIA === sin_guia).length;
+
+    const getLengthByNumeroConGuia = (con_guia) => tableData.filter((item) => item.NUMEROGUIA !== con_guia).length;
+
     // Obtener las pestañas basadas en el usuario
-    const TABS = getTabs(user, tableData, getLengthByStatus);
+    const TABS = getTabs(user, tableData, getLengthByStatus, getLengthByNumeroSinGuia, getLengthByNumeroConGuia);
 
     const handleOpenConfirm = () => {
         setOpenConfirm(true);
@@ -902,6 +906,8 @@ function applyFilter({
                     inputData = inputData
                         .filter((invoice) => invoice.ESTADO === filterStatus)
                         .slice(0, 6); // Return only the first two items
+                } else {
+                    inputData = inputData.filter((invoice) => invoice.ESTADO === filterStatus);
                 }
             }
 
@@ -912,6 +918,8 @@ function applyFilter({
                     inputData = inputData
                         .filter((invoice) => invoice.ESTADO === filterStatus)
                         .slice(0, 3); // Return only the first two items
+                } else {
+                    inputData = inputData.filter((invoice) => invoice.ESTADO === filterStatus);
                 }
 
             }
@@ -923,6 +931,8 @@ function applyFilter({
                     inputData = inputData
                         .filter((invoice) => invoice.ESTADO === filterStatus)
                         .slice(0, 2); // Return only the first two items
+                } else {
+                    inputData = inputData.filter((invoice) => invoice.ESTADO === filterStatus);
                 }
 
             }
@@ -934,6 +944,8 @@ function applyFilter({
                     inputData = inputData
                         .filter((invoice) => invoice.ESTADO === filterStatus)
                         .slice(0, 2); // Return only the first two items
+                } else {
+                    inputData = inputData.filter((invoice) => invoice.ESTADO === filterStatus);
                 }
 
             }
@@ -973,7 +985,7 @@ function parseCustomDate(dateString) {
     return new Date(formattedDateString);
 }
 
-const getTabs = (user, tableData, getLengthByStatus) => {
+const getTabs = (user, tableData, getLengthByStatus, getLengthByNumeroSinGuia, getLengthByNumeroConGuia) => {
 
     console.log("tableData: "+ JSON.stringify( tableData));
 
@@ -1000,8 +1012,8 @@ const getTabs = (user, tableData, getLengthByStatus) => {
                 {value: 1, label: 'Fact./Entregado', color: 'error', count: getLengthByStatus(1)},
                 {value: 8, label: 'Anulado', color: 'default', count: getLengthByStatus(8)},
 
-                {value: '000000000', label: 'CON GUIA', color: 'default', count: getLengthByStatus(8)},
-                {value: '000000000', label: 'SIN GUIA', color: 'default', count: getLengthByStatus(8)},
+                {value: 'con', label: 'CON GUIA', color: 'default', count: getLengthByNumeroConGuia('000000000')},
+                {value: 'sin', label: 'SIN GUIA', color: 'default', count: getLengthByNumeroSinGuia('000000000')},
 
             ];
         }

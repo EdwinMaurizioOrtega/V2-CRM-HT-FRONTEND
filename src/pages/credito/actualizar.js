@@ -1,11 +1,12 @@
 import Head from "next/head";
 import MainLayout from "../../layouts/main";
 import {
+    Box,
     Button,
-    Card,
+    Card, CircularProgress,
     Container,
-    Grid,
-    Stack,
+    Grid, IconButton,
+    Stack, Tooltip,
     Typography
 } from "@mui/material";
 import React, {useCallback, useEffect, useState} from "react";
@@ -14,12 +15,12 @@ import FormProvider, {
     RHFTextField, RHFUpload
 } from "../../components/hook-form";
 import {useForm} from "react-hook-form";
-import {LoadingButton} from "@mui/lab";
 import axios from "../../utils/axios";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import PDFPreviewButtons from "../../components/cartera/PDFPreviewButtons";
 
 DataPage.getLayout = (page) => <MainLayout>{page}</MainLayout>;
 
@@ -91,7 +92,7 @@ export default function DataPage() {
     const router = useRouter();
     const {id} = router.query; // Captura el parámetro "id"
 
-    const [dataProspecto, setDataProspecto] = useState(null);
+    const [dataProspectoAux, setDataProspectoAux] = useState(null);
     const [formValues, setFormValues] = useState(defaultValues);
     const [idEmpresa, setIdEmpresa] = useState(null);
 
@@ -127,6 +128,8 @@ export default function DataPage() {
                     console.log("Response: " + JSON.stringify(response.data.events));
 
                     const dataProspecto = response.data.events;
+
+                    setDataProspectoAux(response.data.events)
 
                     if (dataProspecto) {
 
@@ -573,7 +576,7 @@ export default function DataPage() {
 
     const EliminarDocumento = async (columna_eliminar) => {
 
-        console.log("Eliminar...: "+ columna_eliminar);
+        console.log("Eliminar...: " + columna_eliminar);
         const id_documento = watch("id_documento");
         console.log("id_documento: " + id_documento);
 
@@ -592,7 +595,13 @@ export default function DataPage() {
         }
     }
 
-        return (
+    const GenerarPDF = () => {
+        console.log("GenerarPDF");
+
+
+    }
+
+    return (
         <>
             <Head>
                 <title> Crédito | HT</title>
@@ -1938,6 +1947,9 @@ export default function DataPage() {
                                 {/* </Grid> */}
 
                             </FormProvider>
+
+                            {/* Generar los PDFs */}
+                            <PDFPreviewButtons data={dataProspectoAux} />
 
                         </Card>
                     </Grid>
