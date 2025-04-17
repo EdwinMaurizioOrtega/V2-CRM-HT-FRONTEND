@@ -896,63 +896,63 @@ function applyFilter({
 
         //ALERTA - MUY IMPORTANTE
 
-        if (currentUser.ROLE === "8") {
-
-            const warehouses = JSON.parse(currentUser.WAREHOUSE);
-
-            //CDHT -CDMC
-            if (warehouses.includes("019") || warehouses.includes("DISTLF")) {
-                if (filterStatus === 0) {
-                    inputData = inputData
-                        .filter((invoice) => invoice.ESTADO === filterStatus)
-                        .slice(0, 6); // Return only the first two items
-                } else {
-                    inputData = inputData.filter((invoice) => invoice.ESTADO === filterStatus);
-                }
-            }
-
-            //Cuenca HT - MC
-            if (warehouses.includes("002") || warehouses.includes("004")) {
-
-                if (filterStatus === 0) {
-                    inputData = inputData
-                        .filter((invoice) => invoice.ESTADO === filterStatus)
-                        .slice(0, 3); // Return only the first two items
-                } else {
-                    inputData = inputData.filter((invoice) => invoice.ESTADO === filterStatus);
-                }
-
-            }
-
-            //Colon HT - MC
-            if (warehouses.includes("030")) {
-
-                if (filterStatus === 0) {
-                    inputData = inputData
-                        .filter((invoice) => invoice.ESTADO === filterStatus)
-                        .slice(0, 2); // Return only the first two items
-                } else {
-                    inputData = inputData.filter((invoice) => invoice.ESTADO === filterStatus);
-                }
-
-            }
-
-            // Manta HT - MC
-            if (warehouses.includes("024")) {
-
-                if (filterStatus === 0) {
-                    inputData = inputData
-                        .filter((invoice) => invoice.ESTADO === filterStatus)
-                        .slice(0, 2); // Return only the first two items
-                } else {
-                    inputData = inputData.filter((invoice) => invoice.ESTADO === filterStatus);
-                }
-
-            }
-
-        } else {
+        // if (currentUser.ROLE === "8") {
+        //
+        //     const warehouses = JSON.parse(currentUser.WAREHOUSE);
+        //
+        //     //CDHT -CDMC
+        //     if (warehouses.includes("019") || warehouses.includes("DISTLF")) {
+        //         if (filterStatus === 0) {
+        //             inputData = inputData
+        //                 .filter((invoice) => invoice.ESTADO === filterStatus)
+        //                 .slice(0, 6); // Return only the first two items
+        //         } else {
+        //             inputData = inputData.filter((invoice) => invoice.ESTADO === filterStatus);
+        //         }
+        //     }
+        //
+        //     //Cuenca HT - MC
+        //     if (warehouses.includes("002") || warehouses.includes("004")) {
+        //
+        //         if (filterStatus === 0) {
+        //             inputData = inputData
+        //                 .filter((invoice) => invoice.ESTADO === filterStatus)
+        //                 .slice(0, 3); // Return only the first two items
+        //         } else {
+        //             inputData = inputData.filter((invoice) => invoice.ESTADO === filterStatus);
+        //         }
+        //
+        //     }
+        //
+        //     //Colon HT - MC
+        //     if (warehouses.includes("030")) {
+        //
+        //         if (filterStatus === 0) {
+        //             inputData = inputData
+        //                 .filter((invoice) => invoice.ESTADO === filterStatus)
+        //                 .slice(0, 2); // Return only the first two items
+        //         } else {
+        //             inputData = inputData.filter((invoice) => invoice.ESTADO === filterStatus);
+        //         }
+        //
+        //     }
+        //
+        //     // Manta HT - MC
+        //     if (warehouses.includes("024")) {
+        //
+        //         if (filterStatus === 0) {
+        //             inputData = inputData
+        //                 .filter((invoice) => invoice.ESTADO === filterStatus)
+        //                 .slice(0, 2); // Return only the first two items
+        //         } else {
+        //             inputData = inputData.filter((invoice) => invoice.ESTADO === filterStatus);
+        //         }
+        //
+        //     }
+        //
+        // } else {
             inputData = inputData.filter((invoice) => invoice.ESTADO === filterStatus);
-        }
+        // }
     }
 
     // if (filterService !== 'all') {
