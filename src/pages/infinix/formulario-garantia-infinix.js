@@ -10,10 +10,6 @@ import {
     Stack,
     Typography
 } from "@mui/material";
-import {Upload, UploadBox} from "../../components/upload";
-import Iconify from "../../components/iconify";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
 import React, {useCallback} from "react";
 import {useRouter} from "next/router";
 import FormProvider, {
@@ -31,14 +27,13 @@ import * as Yup from "yup";
 
 export const defaultValues = {
 
-    nombre_de_la_empresa_o_compania: '',
-    ruc: '',
-    nombre_del_representante: '',
-    email: '',
-    direccion_de_trabajo: '',
-    direccion_de_domicilio: '',
-    ciudad: '',
-    provincia: '',
+    nombres: '',
+    apellidos: '',
+    cedula: '',
+    correo_electronico: '',
+    numero_de_telefono: '',
+    modelo_de_equipo: '',
+    imei: '',
 
 };
 
@@ -70,7 +65,7 @@ export default function DataPage() {
         // reset();
 
         // Crear prospecto.
-        const response = await axios.post('/hanadb/api/customers/create_prospecto_cartera', {
+        const response = await axios.post('/hanadb/api/infinix/create_formulario_infinix', {
             data: data,
             //empresa: user?.EMPRESA,
         });
@@ -107,33 +102,9 @@ export default function DataPage() {
 
 
             // Asignar el archivo según el campo correspondiente
-            if (fieldName === 'planilla_servicio_basico') {
+            if (fieldName === 'archivo') {
                 //setValue('planilla_servicio_basico', newFile, { shouldValidate: true });
-                handleFileUpload(file, 'planilla_servicio_basico');
-            } else if (fieldName === 'escritura_constitucion_de_la_empresa') {
-                //setValue('escritura_constitucion_de_la_empresa', newFile, { shouldValidate: true });
-                handleFileUpload(file, 'escritura_constitucion_de_la_empresa');
-            } else if (fieldName === 'ruc_upload') {
-                //setValue('ruc_upload', newFile, { shouldValidate: true });
-                handleFileUpload(file, 'ruc_upload');
-            } else if (fieldName === 'cedula_de_identidad') {
-                //setValue('cedula_de_identidad', newFile, { shouldValidate: true });
-                handleFileUpload(file, 'cedula_de_identidad');
-            } else if (fieldName === 'estados_fiancieros_year_anterior') {
-                //setValue('estados_fiancieros_year_anterior', newFile, { shouldValidate: true });
-                handleFileUpload(file, 'estados_fiancieros_year_anterior');
-            } else if (fieldName === 'nombramiento_del_representante_legal') {
-                //setValue('nombramiento_del_representante_legal', newFile, { shouldValidate: true });
-                handleFileUpload(file, 'nombramiento_del_representante_legal');
-            } else if (fieldName === 'declaracion_de_impuesto_a_la_renta_year_anterior') {
-                //setValue('declaracion_de_impuesto_a_la_renta_year_anterior', newFile, { shouldValidate: true });
-                handleFileUpload(file, 'declaracion_de_impuesto_a_la_renta_year_anterior');
-            } else if (fieldName === 'certificado_bancario') {
-                //setValue('certificado_bancario', newFile, { shouldValidate: true });
-                handleFileUpload(file, 'certificado_bancario');
-            } else if (fieldName === 'foto_del_local_y_georeferencia') {
-                //setValue('foto_del_local_y_georeferencia', newFile, { shouldValidate: true });
-                handleFileUpload(file, 'foto_del_local_y_georeferencia');
+                handleFileUpload(file, 'archivo');
             }
         },
         [setValue]
@@ -173,13 +144,10 @@ export default function DataPage() {
 
     return (
         <>
-
             <Container sx={{ pb: 15}}>
-
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={12}>
                         <Card sx={{p: 3, textAlign: "center"}}>
-
 
                             <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
                                 <Grid container spacing={5}>
@@ -281,52 +249,14 @@ function Block({label = 'RHFTextField', sx, children}) {
 }
 
 export const FormSchemaCartera = Yup.object().shape({
-    nombre_de_la_empresa_o_compania: Yup.string().required('Se requiere el Nombre de la empresa o compañia'),
-    ruc: Yup.string().required('Se requiere el RUC'),
-    nombre_del_representante: Yup.string().required('Se requiere el Nombre del representante'),
-    email: Yup.string().required('Se requiere el Email'),
-    direccion_de_trabajo: Yup.string().required('Se requiere la Direccion de trabajo'),
-    direccion_de_domicilio: Yup.string().required('Se requiere la Direccion de domicilio'),
-    ciudad: Yup.string().required('Se requiere la Ciudad'),
-    provincia: Yup.string().required('Se requiere la Provincia'),
+    nombres: Yup.string().required('Se requieren los Nombres'),
+    apellidos: Yup.string().required('Se requieren los Apellidos'),
+    cedula: Yup.string().required('Se requiere la Cédula'),
+    correo_electronico: Yup.string().required('Se requiere el Email'),
+    numero_de_telefono: Yup.string().required('Se requiere el Número de Telefono'),
+    modelo_de_equipo: Yup.string().required('Se requiere el Modelo del Equipo'),
+    imei: Yup.string().required('Se requiere el IMEI'),
 
-    planilla_servicio_basico: Yup.string().required('Se requiere la Planilla servicio basico'),
-    escritura_constitucion_de_la_empresa: Yup.string().required('Se requiere la Escritura constitucion de la empresa'),
-    ruc_upload: Yup.string().required('Se requiere el RUC upload'),
-    cedula_de_identidad: Yup.string().required('Se requiere la Cédula de identidad'),
-    estados_fiancieros_year_anterior: Yup.string().required('Se requiere los Estados fiancieros años anterior'),
-    nombramiento_del_representante_legal: Yup.string().required('Se requiere el Nombramiento del representante legal'),
-    declaracion_de_impuesto_a_la_renta_year_anterior: Yup.string().required('Se requiere la Declaracion de impuesto a la renta año anterior'),
-    certificado_bancario: Yup.string().required('Se requiere el Certificado bancario'),
-    foto_del_local_y_georeferencia: Yup.string().required('Se requiere la Foto del local y georeferencia'),
+    archivo: Yup.string().required('Se requiere un archivo.'),
 
-    r_c_compania_1: Yup.string().required('Se requiere la Compañia 1'),
-    r_c_tipo_de_credito_1: Yup.string().required('Se requiere el Tipo Crédito 1'),
-    r_c_persona_de_contacto_1: Yup.string().required('Se requiere el Persona Contacto 1'),
-    r_c_telefono_1: Yup.string().required('Se requiere el Teléfono 1'),
-    r_c_compania_2: Yup.string().required('Se requiere la Compañia 2'),
-    r_c_tipo_de_credito_2: Yup.string().required('Se requiere el Tipo Crédito 2'),
-    r_c_persona_de_contacto_2: Yup.string().required('Se requiere el Persona Contacto 2'),
-    r_c_telefono_2: Yup.string().required('Se requiere el Teléfono 2'),
-    r_c_compania_3: Yup.string().required('Se requiere la Compañia 3'),
-    r_c_tipo_de_credito_3: Yup.string().required('Se requiere el Tipo Crédito 3'),
-    r_c_persona_de_contacto_3: Yup.string().required('Se requiere el Persona Contacto 3'),
-    r_c_telefono_3: Yup.string().required('Se requiere el Teléfono 3'),
-
-    d_e_a_direccion_1: Yup.string().required('Se requiere la Dirección 1'),
-    d_e_a_direccion_2: Yup.string().required('Se requiere la Dirección 2'),
-    d_e_a_direccion_3: Yup.string().required('Se requiere ls Dirección 3'),
-
-    r_b_entidad_financiera_1: Yup.string().required('Se requiere el Nombre de la Entidad Financiera 1'),
-    r_b_inicio_de_relacion_1: Yup.string().required('Se requiere el Año de Inicio de la Relación 1'),
-    r_b_persona_de_contacto_1: Yup.string().required('Se requiere la Persona de Contacto 1'),
-    r_b_telefono_1: Yup.string().required('Se requiere el Teléfono 1'),
-    r_b_entidad_financiera_2: Yup.string().required('Se requiere el Nombre de la Entidad Financiera 2'),
-    r_b_inicio_de_relacion_2: Yup.string().required('Se requiere el Año de Inicio de la Relación 2'),
-    r_b_persona_de_contacto_2: Yup.string().required('Se requiere la Persona de Contacto 2'),
-    r_b_telefono_2: Yup.string().required('Se requiere el Teléfono 2'),
-    r_b_entidad_financiera_3: Yup.string().required('Se requiere el Nombre de la Entidad Financiera 3'),
-    r_b_inicio_de_relacion_3: Yup.string().required('Se requiere el Año de Inicio de la Relación 3'),
-    r_b_persona_de_contacto_3: Yup.string().required('Se requiere la Persona de Contacto 3'),
-    r_b_telefono_3: Yup.string().required('Se requiere el Teléfono 3'),
 });
