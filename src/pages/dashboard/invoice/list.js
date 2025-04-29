@@ -79,6 +79,7 @@ const TABLE_HEAD = [
     {id: 'FECHAAPROBO', label: 'Aprobación', align: 'left'},
     {id: 'FECHAFACTURACION', label: 'Facturación', align: 'left'},
     {id: 'NUMEROFACTURALIDENAR', label: 'Nro. Factura', align: 'left'},
+    {id: 'OBSERVACION_ANULACION', label: 'Obs. Anulación', align: 'center', width: 240},
 ];
 // ----------------------------------------------------------------------
 

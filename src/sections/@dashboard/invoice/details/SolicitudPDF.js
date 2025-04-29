@@ -17,7 +17,7 @@ const styles = StyleSheet.create( {
         lineHeight: 1.5
     },
     section: {
-        marginBottom: 12,
+        marginBottom: 10,
     },
     sectionFinal: {
         marginTop: 6,
@@ -209,7 +209,7 @@ export default function SolicitudPDF(data) {
                         <Text style={[styles.tableCell, styles.col4]}>Teléfono</Text>
                     </View>
                     {/* Filas dinámicas */}
-                    {data?.data?.data?.referencias_comerciales?.map((ref, index) => (
+                    {data?.data?.data?.referencias_bancarias?.map((ref, index) => (
                         <View style={styles.tableRow} key={index}>
                             <Text style={[styles.tableCell, styles.col1]}>{ref.ENTIDAD_FINANCIERA}</Text>
                             <Text style={[styles.tableCell, styles.col2]}>{ref.INICIO_RELACION}</Text>

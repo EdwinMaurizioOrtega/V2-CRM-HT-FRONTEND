@@ -79,7 +79,8 @@ export default function InvoiceTableRow({
         NUMEROFACTURALIDENAR,
         NUMEROFACTURAE4,
         URL_INVOICE_SELLER,
-        NOMBREUSUARIOENTREGARA
+        NOMBREUSUARIOENTREGARA,
+        OBSERVACION_ANULACION
     } = row;
 
     const router = useRouter();
@@ -686,6 +687,15 @@ export default function InvoiceTableRow({
                 <TableCell align="left">{FECHAAPROBO}</TableCell>
                 <TableCell align="left">{FECHAFACTURACION}</TableCell>
                 <TableCell align="left">{NUMEROFACTURALIDENAR}</TableCell>
+                <TableCell align="left">
+                    {OBSERVACION_ANULACION && (
+                        <Tooltip title={OBSERVACION_ANULACION} sx={{maxWidth: 500}}>
+                            <Button color="inherit" sx={{ fontSize: '2rem' }}>☹️</Button>
+                        </Tooltip>
+                    )}
+                </TableCell>
+
+
                 {/* <TableCell align="left"> */
                 }
                 {/*     <Button variant="contained" onClick={handleImprimir}>Imprimir</Button> */

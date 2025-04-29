@@ -205,7 +205,8 @@ export default function InvoiceDetails({invoice}) {
         OBSERVACIONESB,
         OBSERVACIONES,
         DOCNUM,
-        DISCOUNT
+        DISCOUNT,
+        U_LS_ASEGURADORA
     } = invoice;
 
     console.log("OBSERVACIONES: " + OBSERVACIONES)
@@ -1226,6 +1227,7 @@ export default function InvoiceDetails({invoice}) {
                                             <Label color="success">Límite de comprometido: {fCurrency(DebtLine)}</Label>
                                             <Typography variant="body2">Pedidos
                                                 Clientes: {fCurrency(OrdersBal)}</Typography>
+                                            <Label color="success">Aseguradora: {U_LS_ASEGURADORA}</Label>
                                         </>
                                     ) : null}
                                     <div style={{whiteSpace: 'pre-line', fontSize: '15px'}}>
