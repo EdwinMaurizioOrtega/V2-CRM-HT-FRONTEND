@@ -29,6 +29,7 @@ export const defaultValues = {
     nombre_de_la_empresa_o_compania: '',
     ruc: '',
     nombre_del_representante: '',
+    cedula_del_representante: '',
     email: '',
     direccion_de_trabajo: '',
     direccion_de_domicilio: '',
@@ -141,6 +142,7 @@ export default function DataPage() {
                                 nombre_de_la_empresa_o_compania: dataProspecto.empresa.NOMBRE || '',
                                 ruc: dataProspecto.empresa.RUC || '',
                                 nombre_del_representante: dataProspecto.empresa.NOMBRE_REPRESENTANTE || '',
+                                cedula_del_representante: dataProspecto.empresa.CEDULA_REPRESENTANTE || '',
                                 provincia: dataProspecto.empresa.PROVINCIA || '',
                                 ciudad: dataProspecto.empresa.CIUDAD || '',
                                 direccion_de_domicilio: dataProspecto.empresa.DIRECCION_DOMICILIO || '',
@@ -326,6 +328,9 @@ export default function DataPage() {
                         case "nombre_del_representante":
                             resultado_final = "NOMBRE_REPRESENTANTE";
                             break;
+                        case "cedula_del_representante":
+                            resultado_final = "CEDULA_REPRESENTANTE";
+                            break;
                         case "ruc_upload":
                             resultado_final = "RUC_UPLOAD";
                             break;
@@ -401,6 +406,9 @@ export default function DataPage() {
                 break;
             case "nombre_del_representante":
                 resultado = "NOMBRE_REPRESENTANTE";
+                break;
+            case "cedula_del_representante":
+                resultado = "CEDULA_REPRESENTANTE";
                 break;
             case "provincia":
                 resultado = "PROVINCIA";
@@ -686,6 +694,28 @@ export default function DataPage() {
                                                 </Stack>
                                             </Block>
 
+                                            <Block label="Cédula del representante">
+                                                <Stack direction="row" alignItems="center" spacing={2}>
+                                                    <RHFTextField name="cedula_del_representante"
+                                                                  label="Cédula del representante"
+                                                    />
+                                                    {watch("cedula_del_representante") ? (
+                                                        <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                    ) : (
+                                                        <>
+                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
+
+                                                        </>
+                                                    )}
+                                                    <Button variant="contained" color="primary" onClick={() => {
+                                                        const campoValor = watch("cedula_del_representante");
+                                                        ActualizarInfoEmpresa("cedula_del_representante", campoValor)
+                                                    }}>
+                                                        Actualizar
+                                                    </Button>
+                                                </Stack>
+                                            </Block>
+
                                             <Block label="E-mail">
                                                 <Stack direction="row" alignItems="center" spacing={2}>
                                                     <RHFTextField name="email" label="E-mail"
@@ -877,7 +907,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="escritura_constitucion_de_la_empresa"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
-                                                                    onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'escritura_constitucion_de_la_empresa')}
+                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'escritura_constitucion_de_la_empresa')}
                                                                     onDelete={() => setValue('escritura_constitucion_de_la_empresa', null, {shouldValidate: true})}
                                                                 />
                                                             </div>
@@ -923,7 +953,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="ruc_upload"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
-                                                                    onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'ruc_upload')}
+                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'ruc_upload')}
                                                                     onDelete={() => setValue('ruc_upload', null, {shouldValidate: true})}
                                                                 />
                                                             </div>
@@ -963,7 +993,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="cedula_de_identidad"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
-                                                                    onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'cedula_de_identidad')}
+                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'cedula_de_identidad')}
                                                                     onDelete={() => setValue('cedula_de_identidad', null, {shouldValidate: true})}
                                                                 />
                                                             </div>
@@ -1011,7 +1041,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="estados_fiancieros_year_anterior"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
-                                                                    onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'estados_fiancieros_year_anterior')}
+                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'estados_fiancieros_year_anterior')}
                                                                     onDelete={() => setValue('estados_fiancieros_year_anterior', null, {shouldValidate: true})}
                                                                 />
                                                             </div>
@@ -1058,7 +1088,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="nombramiento_del_representante_legal"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
-                                                                    onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'nombramiento_del_representante_legal')}
+                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'nombramiento_del_representante_legal')}
                                                                     onDelete={() => setValue('nombramiento_del_representante_legal', null, {shouldValidate: true})}
                                                                 />
                                                             </div>
@@ -1105,7 +1135,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="declaracion_de_impuesto_a_la_renta_year_anterior"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
-                                                                    onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'declaracion_de_impuesto_a_la_renta_year_anterior')}
+                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'declaracion_de_impuesto_a_la_renta_year_anterior')}
                                                                     onDelete={() => setValue('declaracion_de_impuesto_a_la_renta_year_anterior', null, {shouldValidate: true})}
                                                                 />
                                                             </div>
@@ -1152,7 +1182,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="certificado_bancario"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
-                                                                    onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'certificado_bancario')}
+                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'certificado_bancario')}
                                                                     onDelete={() => setValue('certificado_bancario', null, {shouldValidate: true})}
                                                                 />
                                                             </div>
@@ -1193,7 +1223,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="foto_del_local_y_georeferencia"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
-                                                                    onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'foto_del_local_y_georeferencia')}
+                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'foto_del_local_y_georeferencia')}
                                                                     onDelete={() => setValue('foto_del_local_y_georeferencia', null, {shouldValidate: true})}
                                                                 />
                                                             </div>
@@ -1982,6 +2012,7 @@ export const FormSchemaCartera = Yup.object().shape({
     nombre_de_la_empresa_o_compania: Yup.string().required('Se requiere el Nombre de la empresa o compañia'),
     ruc: Yup.string().required('Se requiere el RUC'),
     nombre_del_representante: Yup.string().required('Se requiere el Nombre del representante'),
+    cedula_del_representante: Yup.string().required('Se requiere la Cédula'),
     email: Yup.string().required('Se requiere el Email'),
     direccion_de_trabajo: Yup.string().required('Se requiere la Direccion de trabajo'),
     direccion_de_domicilio: Yup.string().required('Se requiere la Direccion de domicilio'),

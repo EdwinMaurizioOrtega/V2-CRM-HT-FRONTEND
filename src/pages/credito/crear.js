@@ -34,6 +34,7 @@ export const defaultValues = {
     nombre_de_la_empresa_o_compania: '',
     ruc: '',
     nombre_del_representante: '',
+    cedula_del_representante: '',
     email: '',
     direccion_de_trabajo: '',
     direccion_de_domicilio: '',
@@ -204,6 +205,11 @@ export default function DataPage() {
                                             <Block label="Nombre del representante">
                                                 <RHFTextField name="nombre_del_representante"
                                                               label="Nombre del representante"/>
+                                            </Block>
+
+                                            <Block label="Cédula del representante">
+                                                <RHFTextField name="cedula_del_representante"
+                                                              label="Cédula del representante"/>
                                             </Block>
 
                                             <Block label="E-mail">
@@ -791,6 +797,7 @@ export const FormSchemaCartera = Yup.object().shape({
     nombre_de_la_empresa_o_compania: Yup.string().required('Se requiere el Nombre de la empresa o compañia'),
     ruc: Yup.string().required('Se requiere el RUC'),
     nombre_del_representante: Yup.string().required('Se requiere el Nombre del representante'),
+    cedula_del_representante: Yup.string().required('Se requiere la Cédula'),
     email: Yup.string().required('Se requiere el Email'),
     direccion_de_trabajo: Yup.string().required('Se requiere la Direccion de trabajo'),
     direccion_de_domicilio: Yup.string().required('Se requiere la Direccion de domicilio'),
