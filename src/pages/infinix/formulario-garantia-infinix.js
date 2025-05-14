@@ -257,6 +257,6 @@ export const FormSchemaCartera = Yup.object().shape({
     modelo_de_equipo: Yup.string().required('Se requiere el Modelo del Equipo'),
     imei: Yup.string().required('Se requiere el IMEI'),
 
-    archivo: Yup.string().required('Se requiere un archivo.'),
+    // archivo: Yup.string().required('Se requiere un archivo.'),
 
 });
