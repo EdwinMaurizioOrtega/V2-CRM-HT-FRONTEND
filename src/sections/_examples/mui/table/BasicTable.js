@@ -393,6 +393,11 @@ function getTextFromCodigoMovilCelistic(rowCodigo) {
         case '024':
             return "MAYORISTAS MOVILCELISTIC MANTA";
 
+        case '020':
+            return "MALL GUAYAQUIL";
+        case '021':
+            return "MALL CUENCA";
+
         default:
             return "...";
     }

@@ -425,6 +425,9 @@ export default function DataPage() {
             case "email":
                 resultado = "EMAIL";
                 break;
+            case "telefono":
+                resultado = "NUM_TELEFONO";
+                break;
             default:
                 console.log("Revisar...");
                 return null; // Devuelve `null` si no hay coincidencia
@@ -731,6 +734,27 @@ export default function DataPage() {
                                                     <Button variant="contained" color="primary" onClick={() => {
                                                         const campoValor = watch("email");
                                                         ActualizarInfoEmpresa("email", campoValor)
+                                                    }}>
+                                                        Actualizar
+                                                    </Button>
+                                                </Stack>
+                                            </Block>
+
+                                            <Block label="Teléfono">
+                                                <Stack direction="row" alignItems="center" spacing={2}>
+                                                    <RHFTextField name="telefono" label="Teléfono"
+                                                    />
+                                                    {watch("email") ? (
+                                                        <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                    ) : (
+                                                        <>
+                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
+
+                                                        </>
+                                                    )}
+                                                    <Button variant="contained" color="primary" onClick={() => {
+                                                        const campoValor = watch("telefono");
+                                                        ActualizarInfoEmpresa("telefono", campoValor)
                                                     }}>
                                                         Actualizar
                                                     </Button>
