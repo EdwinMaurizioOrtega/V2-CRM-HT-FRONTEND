@@ -8,12 +8,13 @@ module.exports = {
     // HOST_SOCKET: 'ws://192.168.88.120:80',
 
     // HOST LOCAL
+    //HOST_API_KEY: 'http://192.168.0.154:7070',
     // HOST_API_KEY: 'http://localhost:7070',
     // HOST_SOCKET: 'ws://localhost:80',
 
     // HOST REMOTO
-    HOST_API_KEY: 'https://crm.lidenar.com',
-    HOST_SOCKET: 'wss://ss.lidenar.com',
+    HOST_API_KEY: 'https://crm.hipertronics.us',
+    HOST_SOCKET: 'wss://ss.hipertronics.us',
 
     // MAPBOX
     MAPBOX_API: '',
