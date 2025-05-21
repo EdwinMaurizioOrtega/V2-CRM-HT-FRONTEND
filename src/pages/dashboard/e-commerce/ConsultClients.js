@@ -119,27 +119,27 @@ export default function ConsultClientForm() {
         //Razón Social
         if (data.tipo === "1") {
 
-                // Buscar en dataClienteAll
-                const clientes = dataClienteAll.filter(cliente => cliente.Cliente.includes(searchTerm));
+            // Buscar en dataClienteAll
+            const clientes = dataClienteAll.filter(cliente => cliente.Cliente.includes(searchTerm));
 
-                if (clientes.length === 2 || clientes.length === 1) {
-                    console.log('Cliente encontrado:', clientes);
-                    // Aquí puedes hacer algo con el cliente encontrado
+            if (clientes.length === 2 || clientes.length === 1) {
+                console.log('Cliente encontrado:', clientes);
+                // Aquí puedes hacer algo con el cliente encontrado
 
-                    setSearchResults(clientes);
+                setSearchResults(clientes);
 
-                } else if (clientes.length > 2) {
-                    console.log('Se han encontrado mas de dos resultados.', searchTerm);
-                    onSnackbarAction('Se han encontrado mas de dos resultados.', 'default', {
-                        vertical: 'top', horizontal: 'center',
-                    });
-                    // Aquí puedes manejar el caso cuando no se encuentra el cliente
-                } else if (clientes.length === 0) {
-                    console.log('Ningun cliente encontrado.', searchTerm);
-                        onSnackbarAction('Ningun cliente encontrado.', 'default', {
-                            vertical: 'top', horizontal: 'center',
-                        });
-                }
+            } else if (clientes.length > 2) {
+                console.log('Se han encontrado mas de dos resultados.', searchTerm);
+                onSnackbarAction('Se han encontrado mas de dos resultados.', 'default', {
+                    vertical: 'top', horizontal: 'center',
+                });
+                // Aquí puedes manejar el caso cuando no se encuentra el cliente
+            } else if (clientes.length === 0) {
+                console.log('Ningun cliente encontrado.', searchTerm);
+                onSnackbarAction('Ningun cliente encontrado.', 'default', {
+                    vertical: 'top', horizontal: 'center',
+                });
+            }
 
 
         }
@@ -352,12 +352,12 @@ export default function ConsultClientForm() {
                     <Grid container spacing={5}>
                         <Grid item xs={12} md={12}>
                             <Block label="Cliente RUC/Cédula">
-                                <RHFRadioGroup row spacing={4} name="tipo" options={GENDER_OPTION} />
+                                <RHFRadioGroup row spacing={4} name="tipo" options={GENDER_OPTION}/>
                                 <RHFTextField name="searchTerm"
                                               label="RUC/Cédula"
                                               onChange={(event) => {
                                                   const inputValue = event.target.value.toUpperCase(); // Convertir a mayúsculas
-                                                  setValue('searchTerm', inputValue, { shouldValidate: true });
+                                                  setValue('searchTerm', inputValue, {shouldValidate: true});
                                               }}
                                 />
                             </Block>
@@ -405,11 +405,18 @@ export default function ConsultClientForm() {
                                 <Label color="success">Pedidos
                                     Clientes: {fCurrency(searchResults[0].OrdersBal)} </Label>
 
-                                <Label color="success">Saldo en Crédito: {
+                                <Label color="success">Saldo en Crédito:
+                                    {"___"}
+                                    <span style={{color: 'red'}}>
+                                    {fCurrency(searchResults[0].CreditLine - searchResults[0].Balance)}
+                                    </span>{"___"}
+                                    {
+                                        (searchResults[0].CreditLine - searchResults[0].Balance) > 0
+                                            ? "POR COLOCAR"
+                                            : "SOBRECUPO"
+                                    }
 
-                                   fCurrency(searchResults[0].CreditLine - searchResults[0].Balance) >0  ? "POR COLOCAR" : "SOBRECUPO"
-
-                                } </Label>
+                                </Label>
                                 <p style={{color: '#1B806A', backgroundColor: 'rgba(54, 179, 126, 0.16)'}}>
                                     Comentario: {searchResults[0].Free_Text}
                                 </p>
@@ -450,11 +457,17 @@ export default function ConsultClientForm() {
                                         comprometido: {fCurrency(searchResults[1].DebtLine)} </Label>
                                     <Label color="success">Pedidos
                                         Clientes: {fCurrency(searchResults[1].OrdersBal)} </Label>
-                                    <Label color="success">Saldo en Crédito: {
-
-                                        fCurrency(searchResults[0].CreditLine - searchResults[0].Balance) > 0  ? "POR COLOCAR" : "SOBRECUPO"
-
-                                    } </Label>
+                                    <Label color="success">Saldo en Crédito:
+                                        {"___"}
+                                        <span style={{color: 'red'}}>
+                                    {fCurrency(searchResults[1].CreditLine - searchResults[1].Balance)}
+                                    </span>{"___"}
+                                        {
+                                            (searchResults[1].CreditLine - searchResults[1].Balance) > 0
+                                                ? "POR COLOCAR"
+                                                : "SOBRECUPO"
+                                        }
+                                    </Label>
                                     <p style={{color: '#1B806A', backgroundColor: 'rgba(54, 179, 126, 0.16)'}}>
                                         Comentario: {searchResults[1].Free_Text}
                                     </p>
@@ -681,8 +694,8 @@ function CustomToolbar() {
 }
 
 const GENDER_OPTION = [
-    { label: 'Ruc/Cédula', value: '0' },
-    { label: 'Razón Social', value: '1' },
+    {label: 'Ruc/Cédula', value: '0'},
+    {label: 'Razón Social', value: '1'},
 
 ];
 
