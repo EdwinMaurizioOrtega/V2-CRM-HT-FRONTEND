@@ -404,6 +404,12 @@ export default function ConsultClientForm() {
                                     comprometido: {fCurrency(searchResults[0].DebtLine)} </Label>
                                 <Label color="success">Pedidos
                                     Clientes: {fCurrency(searchResults[0].OrdersBal)} </Label>
+
+                                <Label color="success">Saldo en Crédito: {
+
+                                   fCurrency(searchResults[0].CreditLine - searchResults[0].Balance) >0  ? "POR COLOCAR" : "SOBRECUPO"
+
+                                } </Label>
                                 <p style={{color: '#1B806A', backgroundColor: 'rgba(54, 179, 126, 0.16)'}}>
                                     Comentario: {searchResults[0].Free_Text}
                                 </p>
@@ -444,6 +450,11 @@ export default function ConsultClientForm() {
                                         comprometido: {fCurrency(searchResults[1].DebtLine)} </Label>
                                     <Label color="success">Pedidos
                                         Clientes: {fCurrency(searchResults[1].OrdersBal)} </Label>
+                                    <Label color="success">Saldo en Crédito: {
+
+                                        fCurrency(searchResults[0].CreditLine - searchResults[0].Balance) > 0  ? "POR COLOCAR" : "SOBRECUPO"
+
+                                    } </Label>
                                     <p style={{color: '#1B806A', backgroundColor: 'rgba(54, 179, 126, 0.16)'}}>
                                         Comentario: {searchResults[1].Free_Text}
                                     </p>
