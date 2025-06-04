@@ -210,7 +210,9 @@ export default function EcommerceProductListPage() {
                         setProducts(infinixProducts);
                     } else if (user.ROLE === '0') {
                         //Prpductos de la bodega CENTRO_DE_DISTRIBUCION_HT y categoria celulares
-                        const tomebambaProducts = data.products.filter(product => product.CATEGORIA === 'CELULARES' && product.CENTRO_DE_DISTRIBUCION_HT > 0);
+                        const tomebambaProducts = data.products.filter(product => product.CATEGORIA === 'CELULARES'
+                            // && product.CENTRO_DE_DISTRIBUCION_HT > 0
+                        );
                         setProducts(tomebambaProducts);
                     } else {
                         setProducts(data.products);
