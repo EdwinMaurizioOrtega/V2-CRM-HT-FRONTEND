@@ -692,9 +692,9 @@ export default function InvoiceDetails({invoice}) {
         //Enviamos los datos al servidor,
         if (valueGuia.length === 9) {
 
-            if (valueFactura.length === 17) {
+            // if (valueFactura.length === 17) {
 
-                if (valueFactura || valueValorFactura) {
+                // if (valueFactura || valueValorFactura) {
                     try {
 
                         setLoading(true); // Establecer loading a true antes de hacer la llamada a la API
@@ -702,8 +702,8 @@ export default function InvoiceDetails({invoice}) {
                         // Actualizar una orden.
                         const response = await axios.put('/hanadb/api/orders/order/facturar', {
                             ID_ORDER: ID,
-                            NUMERO_FACTURA: `${valueFactura}`,
-                            VALOR_FACTURA: `${valueValorFactura}`,
+                            // NUMERO_FACTURA: `${valueFactura}`,
+                            // VALOR_FACTURA: `${valueValorFactura}`,
                             NUMERO_GUIA: `${valueGuia}`,
                             empresa: user.EMPRESA,
                             IDUSUARIOENTREGARA: Number(idEmpleadoEntregar),
@@ -728,13 +728,13 @@ export default function InvoiceDetails({invoice}) {
                         setLoading(false); // Restablecer loading a false después de que se completa la llamada a la API, independientemente de si fue exitosa o falló
 
                     }
-                } else {
-                    enqueueSnackbar('Los campos con * son obligatorios.', {variant: 'error'})
-                }
+                // } else {
+                //     enqueueSnackbar('Los campos con * son obligatorios.', {variant: 'error'})
+                // }
 
-            } else {
-                enqueueSnackbar('El número de factura debe tener 17 caracteres, incluido los guiones.', {variant: 'error'})
-            }
+            // } else {
+            //     enqueueSnackbar('El número de factura debe tener 17 caracteres, incluido los guiones.', {variant: 'error'})
+            // }
         } else {
             enqueueSnackbar('El número de guía debe tener 9 caracteres.', {variant: 'error'})
         }
@@ -1353,7 +1353,6 @@ export default function InvoiceDetails({invoice}) {
                                     <TableCell align="left">Descripción</TableCell>
                                     {/*{user.ROLE !== '0' ? (*/}
                                     {/*    user.ROLE !== '2' ? (*/}
-                                    {user.ROLE === "9" && <TableCell align="left">Costo</TableCell>}
                                     <TableCell align="left">Tipo Precio</TableCell>
                                     {/*    ) : null*/}
                                     {/*) : null*/}
@@ -1367,6 +1366,7 @@ export default function InvoiceDetails({invoice}) {
                                             <TableCell align="left">Disponible</TableCell>
                                         ) : null
                                     }
+                                    {user.ROLE === "9" && <TableCell align="left">Costo</TableCell>}
                                     <TableCell align="right">Precio unitario</TableCell>
                                     <TableCell align="right">Total</TableCell>
                                     {user.ROLE !== '0' ? (
@@ -1420,7 +1420,6 @@ export default function InvoiceDetails({invoice}) {
                                         {/*) : null*/}
                                         {/*}*/}
 
-                                        {user.ROLE === "9" && <TableCell align="left">{fCurrency(row.COSTO)}</TableCell>}
 
                                         {user.ROLE === '0' || user.ROLE === '2' ? (
 
@@ -1443,6 +1442,8 @@ export default function InvoiceDetails({invoice}) {
 
                                             ) : null
                                         }
+
+                                        {user.ROLE === "9" && <TableCell align="left">{fCurrency(row.COSTO)}</TableCell>}
 
                                         {user.ROLE === '0' || user.ROLE === '2' ? (
                                             <>
@@ -1624,18 +1625,18 @@ export default function InvoiceDetails({invoice}) {
                                 error={valueGuia.length !== 9}
                                 helperText={valueGuia.length !== 9 ? 'El número de guía debe tener 9 caracteres' : ''}
                             />
-                            <TextField
-                                required
-                                label="Número de factura."
-                                value={valueFactura}
-                                onChange={handleChangeFactura}
-                            />
-                            <TextField
-                                required
-                                label="Valor total."
-                                value={valueValorFactura}
-                                onChange={handleChangeValorFactura}
-                            />
+                            {/* <TextField */}
+                            {/*     required */}
+                            {/*     label="Número de factura." */}
+                            {/*     value={valueFactura} */}
+                            {/*     onChange={handleChangeFactura} */}
+                            {/* /> */}
+                            {/* <TextField */}
+                            {/*     required */}
+                            {/*     label="Valor total." */}
+                            {/*     value={valueValorFactura} */}
+                            {/*     onChange={handleChangeValorFactura} */}
+                            {/* /> */}
 
                             {showAutocomplete && user.COMPANY === 'HT' && (
                                 <Autocomplete
