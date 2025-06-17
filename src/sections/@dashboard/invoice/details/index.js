@@ -236,7 +236,7 @@ export default function InvoiceDetails({invoice}) {
 
         //Comprobar si el valor del campo tiene exactamente 9 ceros. Si es así, se actualiza el estado showAutocomplete para mostrar el Autocomplete.
         // Determinar si se debe mostrar el Autocomplete
-        if (/^0{9}$/.test(event.target.value)) {
+        if (/^0{15}$/.test(event.target.value)) {
             setShowAutocomplete(true);
             if (CLIENTEID === 'CL1791251237001') {
                 setShowAutocomplete(false);
@@ -1617,7 +1617,7 @@ export default function InvoiceDetails({invoice}) {
                                 // onChange={handleChangeGuia}
                                 onChange={(e) => {
                                     const inputValue = e.target.value;
-                                    if (/^[0-9]{0,9}$/.test(inputValue)) {
+                                    if (/^[0-9]{0,15}$/.test(inputValue)) {
                                         handleChangeGuia(e);
                                     }
                                 }}
