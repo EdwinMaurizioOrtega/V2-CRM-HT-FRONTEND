@@ -236,7 +236,7 @@ export default function InvoiceDetails({invoice}) {
 
         //Comprobar si el valor del campo tiene exactamente 9 ceros. Si es así, se actualiza el estado showAutocomplete para mostrar el Autocomplete.
         // Determinar si se debe mostrar el Autocomplete
-        if (/^0{15}$/.test(event.target.value)) {
+        if (/^0{9}$/.test(event.target.value)) {
             setShowAutocomplete(true);
             if (CLIENTEID === 'CL1791251237001') {
                 setShowAutocomplete(false);
@@ -690,7 +690,7 @@ export default function InvoiceDetails({invoice}) {
 
 
         //Enviamos los datos al servidor,
-        if (valueGuia.length === 15) {
+        if (valueGuia.length === 9) {
 
             // if (valueFactura.length === 17) {
 
@@ -736,7 +736,7 @@ export default function InvoiceDetails({invoice}) {
             //     enqueueSnackbar('El número de factura debe tener 17 caracteres, incluido los guiones.', {variant: 'error'})
             // }
         } else {
-            enqueueSnackbar('El número de guía debe tener 15 caracteres.', {variant: 'error'})
+            enqueueSnackbar('El número de guía debe tener 9 caracteres.', {variant: 'error'})
         }
 
     }
@@ -1617,13 +1617,13 @@ export default function InvoiceDetails({invoice}) {
                                 // onChange={handleChangeGuia}
                                 onChange={(e) => {
                                     const inputValue = e.target.value;
-                                    if (/^[0-9]{0,15}$/.test(inputValue)) {
+                                    if (/^[0-9]{0,9}$/.test(inputValue)) {
                                         handleChangeGuia(e);
                                     }
                                 }}
-                                inputProps={{maxLength: 15}}
-                                error={valueGuia.length !== 15}
-                                helperText={valueGuia.length !== 15 ? 'El número de guía debe tener 15 caracteres' : ''}
+                                inputProps={{maxLength: 9}}
+                                error={valueGuia.length !== 9}
+                                helperText={valueGuia.length !== 9 ? 'El número de guía debe tener 9 caracteres' : ''}
                             />
                             {/* <TextField */}
                             {/*     required */}
