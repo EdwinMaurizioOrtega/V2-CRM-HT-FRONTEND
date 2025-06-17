@@ -1,5 +1,5 @@
 import Head from "next/head";
-import MainLayout from "../../layouts/main";
+import MainLayout from "../../../layouts/main";
 import {
     Button,
     Card,
@@ -10,37 +10,77 @@ import {
     Stack,
     Typography
 } from "@mui/material";
-import {Upload, UploadBox} from "../../components/upload";
-import Iconify from "../../components/iconify";
+import {Upload, UploadBox} from "../../../components/upload";
+import Iconify from "../../../components/iconify";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import React, {useCallback} from "react";
 import {useRouter} from "next/router";
 import FormProvider, {
     RHFTextField, RHFUpload
-} from "../../components/hook-form";
+} from "../../../components/hook-form";
 import {useForm} from "react-hook-form";
 import {LoadingButton} from "@mui/lab";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import axios from "../../utils/axios";
+import axios from "../../../utils/axios";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {FormSchema} from "../../sections/_examples/extra/form/schema";
+import {FormSchema} from "../../../sections/_examples/extra/form/schema";
 import * as Yup from "yup";
 
 DataPage.getLayout = (page) => <MainLayout>{page}</MainLayout>;
 
 export const defaultValues = {
 
-    nombre_de_la_empresa_o_compania: '',
-    ruc: '',
-    nombre_del_representante: '',
-    cedula_del_representante: '',
-    email: '',
-    telefono: '',
-    direccion_de_trabajo: '',
-    direccion_de_domicilio: '',
-    ciudad: '',
-    provincia: '',
+    nombre_de_la_empresa_o_compania: '_',
+    ruc: '_',
+    nombre_del_representante: '_',
+    cedula_del_representante: '_',
+    email: '_',
+    telefono: '_',
+    direccion_de_trabajo: '_',
+    direccion_de_domicilio: '_',
+    ciudad: '_',
+    provincia: '_',
+
+    planilla_servicio_basico: null,
+    escritura_constitucion_de_la_empresa: null,
+    ruc_upload: null,
+    cedula_de_identidad: null,
+    estados_fiancieros_year_anterior: null,
+    nombramiento_del_representante_legal: null,
+    declaracion_de_impuesto_a_la_renta_year_anterior: null,
+    certificado_bancario: null,
+    foto_del_local_y_georeferencia: null,
+
+    r_c_compania_1: '_',
+    r_c_tipo_de_credito_1: '_',
+    r_c_persona_de_contacto_1: '_',
+    r_c_telefono_1: '_',
+    r_c_compania_2: '_',
+    r_c_tipo_de_credito_2: '_',
+    r_c_persona_de_contacto_2: '_',
+    r_c_telefono_2: '_',
+    r_c_compania_3: '_',
+    r_c_tipo_de_credito_3: '_',
+    r_c_persona_de_contacto_3: '_',
+    r_c_telefono_3: '_',
+
+    d_e_a_direccion_1: '_',
+    d_e_a_direccion_2: '_',
+    d_e_a_direccion_3: '_',
+
+    r_b_entidad_financiera_1: '_',
+    r_b_inicio_de_relacion_1: '_',
+    r_b_persona_de_contacto_1: '_',
+    r_b_telefono_1: '_',
+    r_b_entidad_financiera_2: '_',
+    r_b_inicio_de_relacion_2: '_',
+    r_b_persona_de_contacto_2: '_',
+    r_b_telefono_2: '_',
+    r_b_entidad_financiera_3: '_',
+    r_b_inicio_de_relacion_3: '_',
+    r_b_persona_de_contacto_3: '_',
+    r_b_telefono_3: '_',
 
 };
 
@@ -74,7 +114,7 @@ export default function DataPage() {
         // Crear prospecto.
         const response = await axios.post('/hanadb/api/customers/create_prospecto_cartera', {
             data: data,
-            //empresa: user?.EMPRESA,
+            tipo_persona: 'J',
         });
 
         if (response.status === 200) {
@@ -828,14 +868,14 @@ export const FormSchemaCartera = Yup.object().shape({
     r_c_tipo_de_credito_2: Yup.string().required('Se requiere el Tipo Crédito 2'),
     r_c_persona_de_contacto_2: Yup.string().required('Se requiere el Persona Contacto 2'),
     r_c_telefono_2: Yup.string().required('Se requiere el Teléfono 2'),
-    r_c_compania_3: Yup.string().required('Se requiere la Compañia 3'),
-    r_c_tipo_de_credito_3: Yup.string().required('Se requiere el Tipo Crédito 3'),
-    r_c_persona_de_contacto_3: Yup.string().required('Se requiere el Persona Contacto 3'),
-    r_c_telefono_3: Yup.string().required('Se requiere el Teléfono 3'),
+    // r_c_compania_3: Yup.string().required('Se requiere la Compañia 3'),
+    // r_c_tipo_de_credito_3: Yup.string().required('Se requiere el Tipo Crédito 3'),
+    // r_c_persona_de_contacto_3: Yup.string().required('Se requiere el Persona Contacto 3'),
+    // r_c_telefono_3: Yup.string().required('Se requiere el Teléfono 3'),
 
     d_e_a_direccion_1: Yup.string().required('Se requiere la Dirección 1'),
     d_e_a_direccion_2: Yup.string().required('Se requiere la Dirección 2'),
-    d_e_a_direccion_3: Yup.string().required('Se requiere ls Dirección 3'),
+    // d_e_a_direccion_3: Yup.string().required('Se requiere ls Dirección 3'),
 
     r_b_entidad_financiera_1: Yup.string().required('Se requiere el Nombre de la Entidad Financiera 1'),
     r_b_inicio_de_relacion_1: Yup.string().required('Se requiere el Año de Inicio de la Relación 1'),
@@ -845,8 +885,8 @@ export const FormSchemaCartera = Yup.object().shape({
     r_b_inicio_de_relacion_2: Yup.string().required('Se requiere el Año de Inicio de la Relación 2'),
     r_b_persona_de_contacto_2: Yup.string().required('Se requiere la Persona de Contacto 2'),
     r_b_telefono_2: Yup.string().required('Se requiere el Teléfono 2'),
-    r_b_entidad_financiera_3: Yup.string().required('Se requiere el Nombre de la Entidad Financiera 3'),
-    r_b_inicio_de_relacion_3: Yup.string().required('Se requiere el Año de Inicio de la Relación 3'),
-    r_b_persona_de_contacto_3: Yup.string().required('Se requiere la Persona de Contacto 3'),
-    r_b_telefono_3: Yup.string().required('Se requiere el Teléfono 3'),
+    // r_b_entidad_financiera_3: Yup.string().required('Se requiere el Nombre de la Entidad Financiera 3'),
+    // r_b_inicio_de_relacion_3: Yup.string().required('Se requiere el Año de Inicio de la Relación 3'),
+    // r_b_persona_de_contacto_3: Yup.string().required('Se requiere la Persona de Contacto 3'),
+    // r_b_telefono_3: Yup.string().required('Se requiere el Teléfono 3'),
 });

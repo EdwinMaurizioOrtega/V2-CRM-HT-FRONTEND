@@ -103,7 +103,7 @@ export default function CargarArchivosCreditoPage() {
 
     const VerInformacionCliente = (row) => {
         console.log(row.row);
-        const url = `/credito/actualizar/?id=${row.row.RUC}`; // Asegúrate de que el ID esté disponible
+        const url = `/credito/juridica/actualizar/?id=${row.row.RUC}`; // Asegúrate de que el ID esté disponible
         window.open(url, "_blank");
 
     }

@@ -1,5 +1,5 @@
 import Head from "next/head";
-import MainLayout from "../../layouts/main";
+import MainLayout from "../../../layouts/main";
 import {
     Box,
     Button,
@@ -13,14 +13,14 @@ import React, {useCallback, useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import FormProvider, {
     RHFTextField, RHFUpload
-} from "../../components/hook-form";
+} from "../../../components/hook-form";
 import {useForm} from "react-hook-form";
-import axios from "../../utils/axios";
+import axios from "../../../utils/axios";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
-import PDFPreviewButtons from "../../components/cartera/PDFPreviewButtons";
+import PDFPreviewButtons from "../../../components/cartera/PDFPreviewButtons";
 
 DataPage.getLayout = (page) => <MainLayout>{page}</MainLayout>;
 
@@ -35,6 +35,7 @@ export const defaultValues = {
     direccion_de_domicilio: '',
     ciudad: '',
     provincia: '',
+    telefono: '',
 
     planilla_servicio_basico: '',
     cedula_de_identidad: '',
@@ -144,6 +145,7 @@ export default function DataPage() {
                                 nombre_del_representante: dataProspecto.empresa.NOMBRE_REPRESENTANTE || '',
                                 cedula_del_representante: dataProspecto.empresa.CEDULA_REPRESENTANTE || '',
                                 provincia: dataProspecto.empresa.PROVINCIA || '',
+                                telefono: dataProspecto.empresa.NUM_TELEFONO || '',
                                 ciudad: dataProspecto.empresa.CIUDAD || '',
                                 direccion_de_domicilio: dataProspecto.empresa.DIRECCION_DOMICILIO || '',
                                 direccion_de_trabajo: dataProspecto.empresa.DIRECCION_TRABAJO || '',
@@ -744,7 +746,7 @@ export default function DataPage() {
                                                 <Stack direction="row" alignItems="center" spacing={2}>
                                                     <RHFTextField name="telefono" label="Teléfono"
                                                     />
-                                                    {watch("email") ? (
+                                                    {watch("telefono") ? (
                                                         <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
                                                     ) : (
                                                         <>
