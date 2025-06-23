@@ -501,7 +501,7 @@ export default function InvoiceListPage() {
             <title> Invoice: List | HT</title>
         </Head>
 
-        <Container maxWidth={themeStretch ? false : 'lg'}>
+        <Container maxWidth={false}>
             <CustomBreadcrumbs
                 heading="Lista Ordenes"
                 links={[

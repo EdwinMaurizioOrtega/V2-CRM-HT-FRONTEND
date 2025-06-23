@@ -74,7 +74,7 @@ export default function InvoiceDetailsPage() {
                 <title> Invoice: View | HT</title>
             </Head>
 
-            <Container maxWidth={themeStretch ? false : 'lg'}>
+            <Container maxWidth={false}>
                 <CustomBreadcrumbs
                     heading="Detalle Orden"
                     links={[
