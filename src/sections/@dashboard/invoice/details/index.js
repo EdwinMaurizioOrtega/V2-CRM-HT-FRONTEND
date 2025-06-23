@@ -1275,7 +1275,7 @@ export default function InvoiceDetails({invoice}) {
                                                     )
                                                 }</Typography>
 
-                                                {user.ROLE === "9" || user.ROLE === "10" &&
+                                                {(user.ROLE === "9" || user.ROLE === "10") &&
 
                                                     <Autocomplete
                                                         fullWidth
@@ -1308,7 +1308,7 @@ export default function InvoiceDetails({invoice}) {
                                                 <Typography variant="body2">Forma de pago
                                                     actual: {nameFormaPago(FORMADEPAGO)}</Typography>
 
-                                                {(user.ROLE === "9" || user.ROLE === "10" || (ESTADO === 15 && ['7', '10'].includes(user.ROLE))) && (
+                                                {((user.ROLE === "9" || user.ROLE === "10") || (ESTADO === 15 && ['7', '10'].includes(user.ROLE))) && (
                                                     <Autocomplete
                                                         fullWidth
                                                         options={PAYMENT_OPTIONS_V2}
@@ -1362,11 +1362,11 @@ export default function InvoiceDetails({invoice}) {
                                     <TableCell align="left">Cantidad</TableCell>
 
                                     {
-                                        user.ROLE === "9" || user.ROLE === "10" ? (
+                                        (user.ROLE === "9" || user.ROLE === "10") ? (
                                             <TableCell align="left">Disponible</TableCell>
                                         ) : null
                                     }
-                                    {user.ROLE === "9" || user.ROLE === "10" && <TableCell align="left">Costo</TableCell>}
+                                    {(user.ROLE === "9" || user.ROLE === "10") && <TableCell align="left">Costo</TableCell>}
                                     <TableCell align="right">Precio unitario</TableCell>
                                     <TableCell align="right">Total</TableCell>
                                     {user.ROLE !== '0' ? (
@@ -1434,7 +1434,7 @@ export default function InvoiceDetails({invoice}) {
                                         <TableCell align="left">{row.DISCOUNTPERCENTSAP}</TableCell>
                                         <TableCell align="left">{row.CANTIDAD}</TableCell>
                                         {
-                                            user.ROLE === "9" || user.ROLE === "10" ? (
+                                            (user.ROLE === "9" || user.ROLE === "10") ? (
                                                 <TableCell align="left"
                                                            style={{backgroundColor: Number(row.DISPONIBLE_POR_BODEGA) <= 0 ? 'rgba(255, 0, 0, 0.08)' : 'rgba(0, 171, 85, 0.08)'}}>
 
@@ -1443,7 +1443,7 @@ export default function InvoiceDetails({invoice}) {
                                             ) : null
                                         }
 
-                                        {user.ROLE === "9" || user.ROLE === "9" && <TableCell align="left">{fCurrency(row.COSTO)}</TableCell>}
+                                        {(user.ROLE === "9" || user.ROLE === "10") && <TableCell align="left">{fCurrency(row.COSTO)}</TableCell>}
 
                                         {user.ROLE === '0' || user.ROLE === '2' ? (
                                             <>
@@ -1594,7 +1594,7 @@ export default function InvoiceDetails({invoice}) {
 
                 <Divider sx={{mt: 5}}/>
 
-                {user.ROLE === "9" || user.ROLE === "10"  &&
+                {(user.ROLE === "9" || user.ROLE === "10")  &&
                     <Grid container>
                         <Grid item xs={12} md={12} sx={{py: 3, textAlign: 'center'}}>
                             {/* <Button onClick={enviarOrdenSAP}>CREAR ORDEN DE VENTA SAP</Button> */}
@@ -1751,7 +1751,7 @@ export default function InvoiceDetails({invoice}) {
             {/* } */}
 
 
-            {user.ROLE === "9" || user.ROLE === "10" || (ESTADO === 15 && ['7', '10'].includes(user.ROLE)) ? (
+            {(user.ROLE === "9" || user.ROLE === "10") || (ESTADO === 15 && ['7', '10'].includes(user.ROLE)) ? (
 
                 <MenuPopover
                     open={openPopover}
