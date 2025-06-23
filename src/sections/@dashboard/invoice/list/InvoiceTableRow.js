@@ -734,7 +734,7 @@ export default function InvoiceTableRow({
                 </MenuItem>
                 }
 
-                {[0, 1, 8, 22, 23].includes(ESTADO) && user.ROLE === "9" ? (
+                {[0, 1, 8, 22, 23].includes(ESTADO) && user.ROLE === "9" || user.ROLE === "10" ? (
                     <MenuItem
                         onClick={() => {
                             sendOrderToBagRow();
@@ -748,7 +748,7 @@ export default function InvoiceTableRow({
                 ) : null
                 }
 
-                {ESTADO === 6 && user.ROLE === "9" ? (
+                {ESTADO === 6 && user.ROLE === "9" || user.ROLE === "10" ? (
                     <MenuItem
                         onClick={() => {
                             handleOpenOBS();
@@ -776,7 +776,7 @@ export default function InvoiceTableRow({
                 {/* ) : null */}
                 {/* } */}
 
-                {ESTADO === 0 && user.ROLE === "9" ? (
+                {ESTADO === 0 && user.ROLE === "9" || user.ROLE === "10" ? (
                     <MenuItem
                         onClick={() => {
                             sendOrderMoveToOneInWarehouse();
@@ -792,7 +792,7 @@ export default function InvoiceTableRow({
 
                 <Divider sx={{borderStyle: 'dashed'}}/>
 
-                {(ESTADO === 6 || ESTADO === 22) && user.ROLE === "9" ? (
+                {(ESTADO === 6 || ESTADO === 22) && user.ROLE === "9" || user.ROLE === "10" ? (
                     <MenuItem
                         onClick={() => {
                             handleOpenConfirmAnular();
