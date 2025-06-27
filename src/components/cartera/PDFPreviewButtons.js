@@ -1,9 +1,10 @@
 import {pdf} from '@react-pdf/renderer';
-import {Box, Button, Stack} from '@mui/material';
+import {Box, Button, Card, Stack} from '@mui/material';
 import SolicitudPDF from "../../sections/@dashboard/invoice/details/SolicitudPDF";
 import AutorizacionPDF from "../../sections/@dashboard/invoice/details/AutorizacionPDF";
 import {useState} from "react";
 import {useAuthContext} from "../../auth/useAuthContext";
+import axios from "../../utils/axios";
 // import SolicitudPDF from './pdfs/SolicitudPDF';
 // import OtroPDF from './pdfs/OtroPDF';
 // import TercerPDF from './pdfs/TercerPDF';
@@ -42,26 +43,33 @@ export default function PDFPreviewButtons(data) {
     };
 
     const enviarUANATACA = async () => {
-        const solicitudBase64 = await getPdfBase64(<SolicitudPDF data={data} />);
-        const autorizacionBase64 = await getPdfBase64(<AutorizacionPDF data={data} />);
+
+        console.log("dataE: " + JSON.stringify(data.data.empresa.CEDULA_REPRESENTANTE));
+
+        const solicitudBase64 = await getPdfBase64(<SolicitudPDF data={data}/>);
+        const autorizacionBase64 = await getPdfBase64(<AutorizacionPDF data={data}/>);
+
+
+        const nombre = data.data.empresa.NOMBRE_REPRESENTANTE || "";
+        const partes = nombre.trim().split(" ");
 
         const jsonParaUanataca = {
             flowType: "-NXk9JhsCP7KvP9eQa_11_hps",
             userData: {
-                cedula: "0106678568",
-                email: "tecnologia@hipertronics.us",
-                nombres: "Edwin Maurizio",
-                apellido: "Ortega",
-                apellido2: "Ochoa",
-                telef: "0980151017",
-                dirDom: "Padre Aguirre 9-66 y Gran Colombia",
-                ciudad: "Cuenca",
-                prov: "Azuay",
+                cedula: data.data.empresa.CEDULA_REPRESENTANTE,
+                email: data.data.empresa.EMAIL,
+                nombres: partes.slice(0, 2).join(" "),
+                apellido: partes[2] || "",
+                apellido2: partes[3] || "",
+                telef: data.data.empresa.NUM_TELEFONO,
+                dirDom: data.data.empresa.DIRECCION_DOMICILIO,
+                ciudad: data.data.empresa.CIUDAD,
+                prov: data.data.empresa.PROVINCIA,
                 pais: "EC"
             },
             customData: {
                 subject: "Prueba firmar PDF con Oneshot",
-                msg: "Hola <%=nombre%> por favor utiliza el siguiente enlace para acceder al proceso de firma electrónica: <%=link_sso%>",
+                msg: "Hola " + data.data.empresa.NOMBRE_REPRESENTANTE || "" + "por favor utiliza el siguiente enlace para acceder al proceso de firma electrónica: <%=link_sso%>",
                 channel: "ninguno",
                 channelNotify: "no",
                 endpointNotify: "no",
@@ -108,18 +116,43 @@ export default function PDFPreviewButtons(data) {
             const result = await response.json(); // usar .json() para obtener objeto
 
             if (result.status === 201) {
+                const sessionId = result.details?.sessionId;
                 const sso = result.details?.sso;
-                const link_sso = `https://hypertronics.nexxit.dev/#sso/${sso}`;
-                console.log("Link para firma:", link_sso);
 
-                // Si quieres mostrarlo en la UI o hacer algo con él:
-                //alert(`Link de firma: ${link_sso}`);
-                // Abrir en nueva pestaña
-                window.open(link_sso, "_blank");
+                //Guardamos en la base de datos.
+                try {
+                    const response = await axios.post(`/hanadb/api/customers/guardar_session_id_uanataca`, {
+                        session_id: sessionId,
+                        sso: sso,
+                        empresa_id: data.data.empresa.ID_EMPRESA
+                    });
+
+                    if (response.status === 200) {
+                        console.log(response);
+
+                        //Creamos el enlace y lo abrimos en una nueva pestaña.
+                        const link_sso = `https://hypertronics.nexxit.dev/#sso/${sso}`;
+                        console.log("Link para firma:", link_sso);
+
+                        // Si quieres mostrarlo en la UI o hacer algo con él:
+                        //alert(`Link de firma: ${link_sso}`);
+                        // Abrir en nueva pestaña
+                        window.open(link_sso, "_blank");
+
+                    } else {
+                        // La solicitud POST no se realizó correctamente
+                        console.error('Error en la solicitud POST:', response.status);
+                    }
+
+
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+
+
             } else {
                 console.error("Error en la respuesta:", result);
             }
-
 
 
         } catch (error) {
@@ -132,11 +165,12 @@ export default function PDFPreviewButtons(data) {
         <>
 
 
-            <Stack spacing={2} direction="row">
 
-                {/* { user ? ( */}
+                <Stack spacing={2} direction="row">
+
+                    {/* { user ? ( */}
                     <>
-                        <Button variant="contained" onClick={() => abrirBlob(<SolicitudPDF data={data}/>)}>
+                        <Button variant="contained" color="primary" onClick={() => abrirBlob(<SolicitudPDF data={data}/>)}>
                             Solicitud Creación/Actualización Datos
                         </Button>
                         <Button variant="contained" color="secondary"
@@ -144,7 +178,7 @@ export default function PDFPreviewButtons(data) {
                             Autorización
                         </Button>
 
-                        <Button variant="contained" color="secondary"
+                        <Button variant="contained" color="error"
                                 onClick={() => enviarUANATACA()}>
                             ENVIAR UANATACA
                         </Button>
@@ -155,26 +189,26 @@ export default function PDFPreviewButtons(data) {
                         {/* </Button> */}
 
 
-
                     </>
 
-                {/* ) : null } */}
+                    {/* ) : null } */}
 
-            </Stack>
+                </Stack>
+
+                {/* 📄 Vista embebida del PDF */}
+                {pdfUrl && (
+                    <Box mt={4} height={600} border="1px solid #ccc">
+                        <iframe
+                            src={pdfUrl}
+                            width="100%"
+                            height="100%"
+                            style={{border: 'none'}}
+                            title="Vista previa del PDF"
+                        />
+                    </Box>
+                )}
 
 
-            {/* 📄 Vista embebida del PDF */}
-            {pdfUrl && (
-                <Box mt={4} height={600} border="1px solid #ccc">
-                    <iframe
-                        src={pdfUrl}
-                        width="100%"
-                        height="100%"
-                        style={{border: 'none'}}
-                        title="Vista previa del PDF"
-                    />
-                </Box>
-            )}
         </>
     );
 }

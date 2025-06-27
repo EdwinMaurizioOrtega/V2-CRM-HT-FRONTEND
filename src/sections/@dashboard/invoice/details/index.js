@@ -694,43 +694,43 @@ export default function InvoiceDetails({invoice}) {
 
             // if (valueFactura.length === 17) {
 
-                // if (valueFactura || valueValorFactura) {
-                    try {
+            // if (valueFactura || valueValorFactura) {
+            try {
 
-                        setLoading(true); // Establecer loading a true antes de hacer la llamada a la API
+                setLoading(true); // Establecer loading a true antes de hacer la llamada a la API
 
-                        // Actualizar una orden.
-                        const response = await axios.put('/hanadb/api/orders/order/facturar', {
-                            ID_ORDER: ID,
-                            // NUMERO_FACTURA: `${valueFactura}`,
-                            // VALOR_FACTURA: `${valueValorFactura}`,
-                            NUMERO_GUIA: `${valueGuia}`,
-                            empresa: user.EMPRESA,
-                            IDUSUARIOENTREGARA: Number(idEmpleadoEntregar),
-                            NOMBREUSUARIOENTREGARA: nombreUsuarioEntregara,
-                            ESTADO: Number(estadoInvoice),
-                        });
+                // Actualizar una orden.
+                const response = await axios.put('/hanadb/api/orders/order/facturar', {
+                    ID_ORDER: ID,
+                    // NUMERO_FACTURA: `${valueFactura}`,
+                    // VALOR_FACTURA: `${valueValorFactura}`,
+                    NUMERO_GUIA: `${valueGuia}`,
+                    empresa: user.EMPRESA,
+                    IDUSUARIOENTREGARA: Number(idEmpleadoEntregar),
+                    NOMBREUSUARIOENTREGARA: nombreUsuarioEntregara,
+                    ESTADO: Number(estadoInvoice),
+                });
 
 
-                        console.log("Orden Facturada.");
-                        console.log("Código de estado:", response.status);
+                console.log("Orden Facturada.");
+                console.log("Código de estado:", response.status);
 
-                        // Se completó con éxito (código de estado 200)
-                        if (response.status === 200) {
-                            router.push('/dashboard/invoice/list/');
-                        }
+                // Se completó con éxito (código de estado 200)
+                if (response.status === 200) {
+                    router.push('/dashboard/invoice/list/');
+                }
 
-                        setLoading(false); // Restablecer loading a false después de que se completa la llamada a la API, independientemente de si fue exitosa o falló
+                setLoading(false); // Restablecer loading a false después de que se completa la llamada a la API, independientemente de si fue exitosa o falló
 
-                    } catch (error) {
-                        // Manejar el error de la petición PUT aquí
-                        console.error('Error al actualizar la orden:', error);
-                        setLoading(false); // Restablecer loading a false después de que se completa la llamada a la API, independientemente de si fue exitosa o falló
+            } catch (error) {
+                // Manejar el error de la petición PUT aquí
+                console.error('Error al actualizar la orden:', error);
+                setLoading(false); // Restablecer loading a false después de que se completa la llamada a la API, independientemente de si fue exitosa o falló
 
-                    }
-                // } else {
-                //     enqueueSnackbar('Los campos con * son obligatorios.', {variant: 'error'})
-                // }
+            }
+            // } else {
+            //     enqueueSnackbar('Los campos con * son obligatorios.', {variant: 'error'})
+            // }
 
             // } else {
             //     enqueueSnackbar('El número de factura debe tener 17 caracteres, incluido los guiones.', {variant: 'error'})
@@ -1069,8 +1069,51 @@ export default function InvoiceDetails({invoice}) {
 
     };
 
-
     const [dataEmpladosVenta, setDataEmpleadosVenta] = useState([]);
+
+    const [preciosActualizados, setPreciosActualizados] = useState({});
+
+    const handlePrecioChange = (id, nuevoValor) => {
+        const valorNumerico = parseFloat(nuevoValor);
+
+        if (!nuevoValor || isNaN(valorNumerico) || valorNumerico === 0) {
+            // Eliminar si es 0 o inválido
+            const { [id]: omitido, ...resto } = preciosActualizados;
+            setPreciosActualizados(resto);
+        } else {
+            // Agregar o actualizar valor
+            setPreciosActualizados(prev => ({
+                ...prev,
+                [id]: valorNumerico,
+            }));
+        }
+            //console.log("JSON actualizado:", JSON.stringify(preciosActualizados, null, 2));
+    };
+
+    const enviarPrecios = async () => {
+        //console.log("JSON actualizado:", JSON.stringify(preciosActualizados));
+        try {
+            // Actualizar una orden.
+            const response = await axios.put('/hanadb/api/orders/order/detail/massive_priceunit', {
+                empresa: user.EMPRESA,
+                id_order: ID,
+                massive_price_update: preciosActualizados
+            });
+
+            //console.log("Orden actualizada correctamente.");
+            //console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+                router.reload();
+            }
+
+        } catch (error) {
+            // Manejar el error de la petición PUT aquí
+            //console.error('Error al actualizar la orden:', error);
+        }
+
+    };
 
 
     return (
@@ -1366,7 +1409,8 @@ export default function InvoiceDetails({invoice}) {
                                             <TableCell align="left">Disponible</TableCell>
                                         ) : null
                                     }
-                                    {(user.ROLE === "9" || user.ROLE === "10") && <TableCell align="left">Costo</TableCell>}
+                                    {(user.ROLE === "9" || user.ROLE === "10") &&
+                                        <TableCell align="left">Costo</TableCell>}
                                     <TableCell align="right">Precio unitario</TableCell>
                                     <TableCell align="right">Total</TableCell>
                                     {user.ROLE !== '0' ? (
@@ -1443,7 +1487,8 @@ export default function InvoiceDetails({invoice}) {
                                             ) : null
                                         }
 
-                                        {(user.ROLE === "9" || user.ROLE === "10") && <TableCell align="left">{fCurrency(row.COSTO)}</TableCell>}
+                                        {(user.ROLE === "9" || user.ROLE === "10") &&
+                                            <TableCell align="left">{fCurrency(row.COSTO)}</TableCell>}
 
                                         {user.ROLE === '0' || user.ROLE === '2' ? (
                                             <>
@@ -1456,7 +1501,23 @@ export default function InvoiceDetails({invoice}) {
                                         ) : (
                                             <>
                                                 <TableCell
-                                                    align="right">{fCurrency(row.PRECIOUNITARIOVENTA)}</TableCell>
+                                                    align="left">
+                                                    <Box display="flex" flexDirection="row">
+                                                        <Typography variant="body2" sx={{ mb: 0.5 }}>
+                                                        {fCurrency(
+                                                            row.PRECIOUNITARIOVENTA)}
+                                                        </Typography>
+                                                        {(user.ROLE === "9" || user.ROLE === "10") &&
+                                                        <TextField
+                                                            onChange={(e) => handlePrecioChange(row.ID, e.target.value)}
+                                                            size="small"
+                                                            variant="standard"
+                                                            inputProps={{style: {textAlign: 'right'}}}
+                                                            sx={{ width: 100 }} // o el valor que desees: 100, '80px', '10ch', etc.
+                                                        />}
+                                                    </Box>
+                                                </TableCell>
+
                                                 <TableCell
                                                     align="right">{fCurrency(row.PRECIOUNITARIOVENTA * row.CANTIDAD)}</TableCell>
                                             </>
@@ -1487,7 +1548,6 @@ export default function InvoiceDetails({invoice}) {
                                     </TableCell>
 
 
-
                                     <TableCell align="right" width={120} sx={{typography: 'body1'}}>
                                         <Box sx={{mt: 2}}/>
                                         {fCurrency(subtotalTotal)}
@@ -1496,36 +1556,36 @@ export default function InvoiceDetails({invoice}) {
                                 </StyledRowResult>
 
                                 <StyledRowResult>
-                                  <TableCell colSpan={3} />
+                                    <TableCell colSpan={3}/>
 
-                                  <TableCell align="right" sx={{ typography: 'body1' }}>
-                                    Discount
-                                  </TableCell>
+                                    <TableCell align="right" sx={{typography: 'body1'}}>
+                                        Discount
+                                    </TableCell>
 
-                                  <TableCell
-                                    align="right"
-                                    width={120}
-                                    sx={{ color: 'error.main', typography: 'body1' }}
-                                  >
-                                    {DISCOUNT && fCurrency(-DISCOUNT)}
+                                    <TableCell
+                                        align="right"
+                                        width={120}
+                                        sx={{color: 'error.main', typography: 'body1'}}
+                                    >
+                                        {DISCOUNT && fCurrency(-DISCOUNT)}
 
-                                      {user.ROLE === '9' && (
-                                      <Box display="flex" alignItems="center" gap={2}>
-                                          <TextField
-                                              value={valueNew}
-                                              onChange={handleChange}
-                                              sx={{ width: 75 }} // 🔥 Establece el ancho en 10px
-                                          />
-                                          <Button variant="contained" color="error" onClick={() => {
-                                              handleChangeLevelOrderDiscount();
-                                          }}>
-                                              ❤️
-                                          </Button>
-                                      </Box>
-                                          )
-                                      }
+                                        {user.ROLE === '9' && (
+                                            <Box display="flex" alignItems="center" gap={2}>
+                                                <TextField
+                                                    value={valueNew}
+                                                    onChange={handleChange}
+                                                    sx={{width: 75}} // 🔥 Establece el ancho en 10px
+                                                />
+                                                <Button variant="contained" color="error" onClick={() => {
+                                                    handleChangeLevelOrderDiscount();
+                                                }}>
+                                                    ❤️
+                                                </Button>
+                                            </Box>
+                                        )
+                                        }
 
-                                  </TableCell>
+                                    </TableCell>
                                 </StyledRowResult>
 
                                 <StyledRowResult>
@@ -1560,6 +1620,8 @@ export default function InvoiceDetails({invoice}) {
                     </Scrollbar>
                 </TableContainer>
 
+
+
                 <TextField
                     fullWidth
                     multiline
@@ -1570,6 +1632,12 @@ export default function InvoiceDetails({invoice}) {
                 />
 
                 <Divider sx={{mt: 5}}/>
+                {(user.ROLE === "9" || user.ROLE === "10") &&
+                <Button variant="contained"
+                        onClick={enviarPrecios}
+                >
+                    Enviar precios actualizados
+                </Button>}
                 <Grid container>
                     <Grid item xs={12} md={9} sx={{py: 3}}>
                         <Typography variant="subtitle2">NOTAS</Typography>
@@ -1594,7 +1662,7 @@ export default function InvoiceDetails({invoice}) {
 
                 <Divider sx={{mt: 5}}/>
 
-                {(user.ROLE === "9" || user.ROLE === "10")  &&
+                {(user.ROLE === "9" || user.ROLE === "10") &&
                     <Grid container>
                         <Grid item xs={12} md={12} sx={{py: 3, textAlign: 'center'}}>
                             {/* <Button onClick={enviarOrdenSAP}>CREAR ORDEN DE VENTA SAP</Button> */}

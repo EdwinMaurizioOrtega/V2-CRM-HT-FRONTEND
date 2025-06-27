@@ -61,9 +61,28 @@ export default function CargarArchivosCreditoPage() {
                 );
             },
         },
+        // {
+        //     field: 'CREAR DOCUMENTOS',
+        //     headerName: 'CREAR DOCUMENTOS',
+        //     flex: 1,
+        //     minWidth: 180,
+        //     renderCell: (params) => {
+        //         return (
+        //             <Button
+        //                 component="label"
+        //                 variant="outlined"
+        //                 onClick={() => {
+        //                     VerInformacionCliente(params);
+        //                 }}
+        //             >
+        //                 CREAR DOCUMENTOS
+        //             </Button>
+        //         );
+        //     },
+        // },
         {
-            field: 'CREAR DOCUMENTOS',
-            headerName: 'CREAR DOCUMENTOS',
+            field: 'VER EN UANATAC',
+            headerName: 'VER EN UANATAC',
             flex: 1,
             minWidth: 180,
             renderCell: (params) => {
@@ -72,29 +91,10 @@ export default function CargarArchivosCreditoPage() {
                         component="label"
                         variant="outlined"
                         onClick={() => {
-                            VerInformacionCliente(params);
+                            VerInformacionUanataca(params);
                         }}
                     >
-                        CREAR DOCUMENTOS
-                    </Button>
-                );
-            },
-        },
-        {
-            field: 'ENVIAR UANATAC',
-            headerName: 'ENVIAR UANATAC',
-            flex: 1,
-            minWidth: 180,
-            renderCell: (params) => {
-                return (
-                    <Button
-                        component="label"
-                        variant="outlined"
-                        onClick={() => {
-                            VerInformacionCliente(params);
-                        }}
-                    >
-                        ENVIAR UANATAC
+                        VER EN UANATAC
                     </Button>
                 );
             },
@@ -104,6 +104,13 @@ export default function CargarArchivosCreditoPage() {
     const VerInformacionCliente = (row) => {
         console.log(row.row);
         const url = `/credito/juridica/actualizar/?id=${row.row.RUC}`; // Asegúrate de que el ID esté disponible
+        window.open(url, "_blank");
+
+    }
+
+    const VerInformacionUanataca = (row) => {
+        console.log(row.row);
+        const url = `https://console.nexxit.dev/#login`; // Asegúrate de que el ID esté disponible
         window.open(url, "_blank");
 
     }

@@ -21,6 +21,7 @@ import * as Yup from "yup";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import PDFPreviewButtons from "../../../components/cartera/PDFPreviewButtons";
+import {useAuthContext} from "../../../auth/useAuthContext";
 
 DataPage.getLayout = (page) => <MainLayout>{page}</MainLayout>;
 
@@ -90,6 +91,8 @@ export const defaultValues = {
 };
 
 export default function DataPage() {
+
+    const {user} = useAuthContext();
 
     const router = useRouter();
     const {id} = router.query; // Captura el parámetro "id"
@@ -2004,10 +2007,20 @@ export default function DataPage() {
 
                             </FormProvider>
 
-                            {/* Generar los PDFs */}
-                            <PDFPreviewButtons data={dataProspectoAux} />
-
                         </Card>
+
+                        {/* Generar los PDFs */}
+                        {(user?.ROLE === '8' || user?.ROLE === '10') && (
+                            <Card sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',      // centra horizontalmente
+                                justifyContent: 'center',  // centra verticalmente (si le das una altura)
+                                textAlign: 'center',       // centra el texto
+                            }}>
+                                <PDFPreviewButtons data={dataProspectoAux} />
+                            </Card>
+                        )}
                     </Grid>
                 </Grid>
 

@@ -111,25 +111,39 @@ export default function DataPage() {
         console.log('DATA', data);
         // reset();
 
-        // Crear prospecto.
-        const response = await axios.post('/hanadb/api/customers/create_prospecto_cartera', {
-            data: data,
-            tipo_persona: 'J',
+        // Verificar existencia cédula prospecto.
+        const response = await axios.post('/hanadb/api/customers/verificar_creacion_prospecto_cartera', {
+            cedula_ruc: data.ruc,
         });
 
         if (response.status === 200) {
-            //console.log(response);
-            console.log("Se insertaron los datos.");
-            alert("Solicitud enviada correctamente.")
-            // Esperar a que el usuario cierre la alerta antes de recargar
-            setTimeout(() => {
-                router.reload();
-            }, 100);
+
+            alert("El cliente ya se encuentra en proceso de firma electrónica.")
+
         } else {
-            // La solicitud POST no se realizó correctamente
-            console.error('Error en la solicitud POST:', response.status);
-            alert("Ocurrio un error en la solicitud.")
+
+            // Crear prospecto.
+            const response = await axios.post('/hanadb/api/customers/create_prospecto_cartera', {
+                data: data,
+                tipo_persona: 'J',
+            });
+
+            if (response.status === 200) {
+                //console.log(response);
+                console.log("Se insertaron los datos.");
+                alert("Solicitud enviada correctamente.")
+                // Esperar a que el usuario cierre la alerta antes de recargar
+                setTimeout(() => {
+                    router.reload();
+                }, 100);
+            } else {
+                // La solicitud POST no se realizó correctamente
+                console.error('Error en la solicitud POST:', response.status);
+                alert("Ocurrio un error en la solicitud.")
+            }
         }
+
+
     };
 
     const handleDropSingleFile = useCallback((acceptedFiles, fieldName) => {
