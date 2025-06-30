@@ -345,12 +345,15 @@ export default function InvoiceListPage() {
     //     {value: 8, label: 'Anulado', color: 'default', count: getLengthByStatus(8)},
     // ];
 
-    const getLengthByNumeroSinGuia = (sin_guia) => tableData.filter((item) => item.NUMEROGUIA === sin_guia).length;
+    //const getLengthByNumeroSinGuia = (sin_guia) => tableData.filter((item) => item.NUMEROGUIA === sin_guia).length;
 
-    const getLengthByNumeroConGuia = (con_guia) => tableData.filter((item) => item.NUMEROGUIA !== con_guia).length;
+    //const getLengthByNumeroConGuia = (con_guia) => tableData.filter((item) => item.NUMEROGUIA !== con_guia).length;
 
     // Obtener las pestañas basadas en el usuario
-    const TABS = getTabs(user, tableData, getLengthByStatus, getLengthByNumeroSinGuia, getLengthByNumeroConGuia);
+    const TABS = getTabs(user, tableData, getLengthByStatus,
+        //getLengthByNumeroSinGuia,
+        //getLengthByNumeroConGuia
+    );
 
     const handleOpenConfirm = () => {
         setOpenConfirm(true);
@@ -986,7 +989,10 @@ function parseCustomDate(dateString) {
     return new Date(formattedDateString);
 }
 
-const getTabs = (user, tableData, getLengthByStatus, getLengthByNumeroSinGuia, getLengthByNumeroConGuia) => {
+const getTabs = (user, tableData, getLengthByStatus,
+                 //getLengthByNumeroSinGuia,
+                 //getLengthByNumeroConGuia
+) => {
 
     console.log("tableData: "+ JSON.stringify( tableData));
 
@@ -1013,8 +1019,8 @@ const getTabs = (user, tableData, getLengthByStatus, getLengthByNumeroSinGuia, g
                 {value: 1, label: 'Fact./Entregado', color: 'error', count: getLengthByStatus(1)},
                 {value: 8, label: 'Anulado', color: 'default', count: getLengthByStatus(8)},
 
-                {value: 'con', label: 'CON GUIA', color: 'default', count: getLengthByNumeroConGuia('000000000')},
-                {value: 'sin', label: 'SIN GUIA', color: 'default', count: getLengthByNumeroSinGuia('000000000')},
+                //{value: 'con', label: 'CON GUIA', color: 'default', count: getLengthByNumeroConGuia('000000000')},
+                //{value: 'sin', label: 'SIN GUIA', color: 'default', count: getLengthByNumeroSinGuia('000000000')},
 
             ];
         }

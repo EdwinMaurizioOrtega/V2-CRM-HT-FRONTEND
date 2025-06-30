@@ -1620,7 +1620,13 @@ export default function InvoiceDetails({invoice}) {
                     </Scrollbar>
                 </TableContainer>
 
-
+                {(user.ROLE === "9" || user.ROLE === "10") && (
+                    <Box sx={{ display: 'flex', justifyContent: 'end', width: '100%', px: 2, py: 1 }}>
+                        <Button variant="contained" onClick={enviarPrecios}>
+                            Enviar precios actualizados
+                        </Button>
+                    </Box>
+                )}
 
                 <TextField
                     fullWidth
@@ -1632,12 +1638,7 @@ export default function InvoiceDetails({invoice}) {
                 />
 
                 <Divider sx={{mt: 5}}/>
-                {(user.ROLE === "9" || user.ROLE === "10") &&
-                <Button variant="contained"
-                        onClick={enviarPrecios}
-                >
-                    Enviar precios actualizados
-                </Button>}
+
                 <Grid container>
                     <Grid item xs={12} md={9} sx={{py: 3}}>
                         <Typography variant="subtitle2">NOTAS</Typography>
