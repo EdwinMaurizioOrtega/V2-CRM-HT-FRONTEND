@@ -87,7 +87,6 @@ export const defaultValues = {
 export default function DataPage() {
 
     const router = useRouter();
-    const {id} = router.query; // Captura el parámetro "id"
 
     const methods = useForm({
         resolver: yupResolver(FormSchemaCartera),
@@ -112,14 +111,10 @@ export default function DataPage() {
         // reset();
 
         // Verificar existencia cédula prospecto.
-        const response = await axios.post('/hanadb/api/customers/verificar_creacion_prospecto_cartera', {
-            cedula_ruc: data.ruc,
-        });
+        const response = await axios.post(`/hanadb/api/customers/get_prospecto_cartera_by_ruc?ruc=${data.ruc}`);
 
         if (response.status === 200) {
-
             alert("El cliente ya se encuentra en proceso de firma electrónica.")
-
         } else {
 
             // Crear prospecto.
