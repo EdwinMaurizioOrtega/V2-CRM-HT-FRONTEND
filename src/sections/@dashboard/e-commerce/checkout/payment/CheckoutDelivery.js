@@ -64,7 +64,7 @@ export default function CheckoutDelivery({
     const [selectedValue, setSelectedValue] = useState(null);
 
     const handleRadioChange = (event) => {
-        console.log(event.target.value);
+        //console.log(event.target.value);
     };
 
     // const [dataCities, setDataCities] = useState([]);
@@ -76,9 +76,9 @@ export default function CheckoutDelivery({
     //             const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/order/ServiEntrega/ciudades`);
     //             const result = await response.json();
     //             setDataCities(result.data);
-    //             console.log(dataCities);
+    //             //console.log(dataCities);
     //         } catch (error) {
-    //             console.log('error', error);
+    //             //console.log('error', error);
     //         }
     //     };
     //
@@ -118,7 +118,7 @@ export default function CheckoutDelivery({
                             {...field}
                             onChange={(event) => {
                                 const {value} = event.target;
-                                console.log("Envío: "+value);
+                                //console.log("Envío: "+value);
                                 field.onChange(Number(value));
                                 onApplyShipping(Number(value));
                             }}
@@ -238,7 +238,7 @@ export default function CheckoutDelivery({
                                 field.onChange(value);
                                 //const mergedObject = {...JSON.parse(value), ...JSON.parse(JSON.stringify(selectedCityDestino))};
                                 const mergedObject = JSON.parse(value);
-                                //console.log("Value Muy Importante: " + JSON.stringify(mergedObject));
+                                ////console.log("Value Muy Importante: " + JSON.stringify(mergedObject));
                                 onApplyServientrega(mergedObject);
                             }}
                         >

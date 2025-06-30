@@ -137,12 +137,12 @@ function CardItem({ card }) {
 
   const handleDelete = () => {
     handleClosePopover();
-    console.log('DELETE', id);
+    //console.log('DELETE', id);
   };
 
   const handleEdit = () => {
     handleClosePopover();
-    console.log('EDIT', id);
+    //console.log('EDIT', id);
   };
 
   return (

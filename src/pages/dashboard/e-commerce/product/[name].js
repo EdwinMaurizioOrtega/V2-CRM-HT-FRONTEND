@@ -55,7 +55,7 @@ export default function EcommerceProductDetailsPage() {
     const {themeStretch} = useSettingsContext();
 
     const {user} = useAuthContext();
-    console.log("user_data: "+ JSON.stringify( user));
+    //console.log("user_data: "+ JSON.stringify( user));
 
     const {
         query: {name},
@@ -98,7 +98,7 @@ export default function EcommerceProductDetailsPage() {
                             const cachedData = await response.json();
                             const searchResultsAux = cachedData.products.filter(product => product.CODIGO === name.trim());
                             setProduct(searchResultsAux[0]);
-                            console.log('Producto encontrado en la caché:', searchResultsAux[0]);
+                            //console.log('Producto encontrado en la caché:', searchResultsAux[0]);
                         }
 
                     } else {
@@ -120,7 +120,7 @@ export default function EcommerceProductDetailsPage() {
                                 const cachedData = await response.json();
                                 const searchResultsAux = cachedData.products.filter(product => product.CODIGO === name.trim());
                                 setProduct(searchResultsAux[0]);
-                                console.log('Producto encontrado en la caché:', searchResultsAux[0]);
+                                //console.log('Producto encontrado en la caché:', searchResultsAux[0]);
                             }
 
                         }
@@ -160,7 +160,7 @@ export default function EcommerceProductDetailsPage() {
                         if (response.status === 200) {
                             const data = await response.json();
                             setPricelistproduct(data.data);
-                            console.log("pricelistproduct: " + JSON.stringify(pricelistproduct));
+                            //console.log("pricelistproduct: " + JSON.stringify(pricelistproduct));
 
                             // Eliminar el estado de carga aquí, ya que la respuesta es exitosa (código 200).
                             setLoading(false);
@@ -173,7 +173,7 @@ export default function EcommerceProductDetailsPage() {
                         if (response.status === 200) {
                             const data = await response.json();
                             setPricelistproduct(data.data);
-                            console.log("pricelistproduct: " + JSON.stringify(pricelistproduct));
+                            //console.log("pricelistproduct: " + JSON.stringify(pricelistproduct));
 
                             // Eliminar el estado de carga aquí, ya que la respuesta es exitosa (código 200).
                             setLoading(false);
@@ -184,13 +184,13 @@ export default function EcommerceProductDetailsPage() {
                     }
 
                     if (user.COMPANY === "TOMEBAMBA") {
-                        console.log("La empresa es Tomebamba...")
+                        //console.log("La empresa es Tomebamba...")
 
                         const response = await fetch(`${HOST_API_KEY}/hanadb/api/products/price_list_tomebamba_product?code_product=${name}`);
                         if (response.status === 200) {
                             const data = await response.json();
                             setPricelisttomebambaproduct(data.data);
-                            console.log("PriceListTomebambaProduct: " + JSON.stringify(data.data));
+                            //console.log("PriceListTomebambaProduct: " + JSON.stringify(data.data));
 
                             // Eliminar el estado de carga aquí, ya que la respuesta es exitosa (código 200).
                             setLoading(false);
@@ -228,7 +228,7 @@ export default function EcommerceProductDetailsPage() {
     const [resultado, setResultado] = useState(null);
 
     const functionStock = (dato) => {
-        console.log("dato: " + dato);
+        //console.log("dato: " + dato);
         setResultado(dato);
     }
 

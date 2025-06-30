@@ -75,8 +75,8 @@ export default function BasicTable({code, validateStock}) {
                     }
                     const data = await response.json();
                     setStockProduct(data.product_stock);
-                    console.log("Stock: " + JSON.stringify(data.product_stock));
-                    //console.log("Stock: " + JSON.stringify(stockProduct));
+                    //console.log("Stock: " + JSON.stringify(data.product_stock));
+                    ////console.log("Stock: " + JSON.stringify(stockProduct));
 
 
                     if (data.product_stock && data.product_stock.length > 0) {
@@ -84,7 +84,7 @@ export default function BasicTable({code, validateStock}) {
                         // Usamos reduce para sumar todos los valores del campo DISPONIBLE
                         //const sumaDisponible = data.product_stock.reduce((total, producto) => total + Number(producto.DISPONIBLE), 0);
 
-                        // console.log(`La suma total del campo DISPONIBLE es: ${sumaDisponible}`);
+                        // //console.log(`La suma total del campo DISPONIBLE es: ${sumaDisponible}`);
                         // validateStock(sumaDisponible);
 
                         //Cuatro B. Mayoristas: 019 CDH - 002 Cuenca - 024 Manta - 030 Colon
@@ -99,7 +99,7 @@ export default function BasicTable({code, validateStock}) {
                         validateStock(bodegasM);
 
                     } else {
-                        console.log('No hay datos de stock disponibles.');
+                        //console.log('No hay datos de stock disponibles.');
                     }
 
                 } catch (error) {
@@ -358,7 +358,7 @@ function getTextFromCodigoAlphacell(rowCodigo) {
 
 // function functionAuxStock (data) {
 //     functionStock(data)
-//     console.log(data);
+//     //console.log(data);
 // }
 
 function getTextFromCodigoMovilCelistic(rowCodigo) {

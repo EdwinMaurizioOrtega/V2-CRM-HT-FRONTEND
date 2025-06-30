@@ -40,10 +40,10 @@ export default function TableHeadCustom({
   sx,
 }) {
 
-  // console.log("headLabel: "+ JSON.stringify(headLabel));
-  // console.log("onSort: "+ JSON.stringify(onSort));
-  // console.log("orderBy: "+ JSON.stringify(orderBy));
-  // console.log("order: "+ JSON.stringify(order));
+  // //console.log("headLabel: "+ JSON.stringify(headLabel));
+  // //console.log("onSort: "+ JSON.stringify(onSort));
+  // //console.log("orderBy: "+ JSON.stringify(orderBy));
+  // //console.log("order: "+ JSON.stringify(order));
 
   return (
     <TableHead sx={sx}>

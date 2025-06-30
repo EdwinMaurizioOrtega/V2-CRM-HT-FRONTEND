@@ -68,7 +68,7 @@ export default function DataPage() {
     const onSubmit = async (data) => {
 
         // await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log('DATA', data);
+        //console.log('DATA', data);
         // reset();
 
         // Crear prospecto.
@@ -78,8 +78,8 @@ export default function DataPage() {
         });
 
         if (response.status === 200) {
-            //console.log(response);
-            console.log("Se insertaron los datos.");
+            ////console.log(response);
+            //console.log("Se insertaron los datos.");
             alert("Solicitud enviada correctamente.")
             // Esperar a que el usuario cierre la alerta antes de recargar
             setTimeout(() => {
@@ -95,7 +95,7 @@ export default function DataPage() {
     const handleDropSingleFile = useCallback((acceptedFiles, fieldName) => {
 
             const file = acceptedFiles[0];
-            console.log('Archivo seleccionado:', file);
+            //console.log('Archivo seleccionado:', file);
 
             if (!file) return; // Si no hay archivo, salir
 
@@ -160,7 +160,7 @@ export default function DataPage() {
             })
             .then(async data => {
                 if (data.status === 'success') {
-                    console.log('Archivo subido con éxito. Enlace:', data.link);
+                    //console.log('Archivo subido con éxito. Enlace:', data.link);
                     //Guardamos el enlace por cada archivo cargado.
                     setValue(tipo_campo, data.link, {shouldValidate: true});
                 } else {

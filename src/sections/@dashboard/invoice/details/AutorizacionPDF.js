@@ -42,9 +42,9 @@ const styles = StyleSheet.create({
 
 export default function AutorizacionPDF(data) {
 
-    console.log("data_autorizacion: " + JSON.stringify(data));
+    //console.log("data_autorizacion: " + JSON.stringify(data));
 
-    console.log("data?.empresa?.NOMBRE: "+data?.empresa?.NOMBRE);
+    //console.log("data?.empresa?.NOMBRE: "+data?.empresa?.NOMBRE);
 
     const fechaActual = new Date();
 

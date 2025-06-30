@@ -219,7 +219,7 @@ export default function CatalogoForm() {
     const onSubmit = async (data) => {
 
         // await new Promise((resolve) => setTimeout(resolve, 3000));
-        //console.log('DATA', JSON.stringify(data));
+        ////console.log('DATA', JSON.stringify(data));
         // reset();
 
         // Crear un cliente.
@@ -232,7 +232,7 @@ export default function CatalogoForm() {
         });
 
         if (response.status === 200) {
-            console.log(response);
+            //console.log(response);
             // La solicitud PUT se realizó correctamente
             setDataCatalog(response.data.catalogo)
         } else {
@@ -260,7 +260,7 @@ export default function CatalogoForm() {
     };
 
     const onCreateBilling = async (value) => {
-        console.log("CLIENTE SELECCIONADO: " + JSON.stringify(value));
+        //console.log("CLIENTE SELECCIONADO: " + JSON.stringify(value));
         setDataCliente(value);
     }
 
@@ -274,7 +274,7 @@ export default function CatalogoForm() {
         // push(PATH_DASHBOARD.eCommerce.view(paramCase(name)));
         // push(PATH_DASHBOARD.eCommerce.view(name));
 
-        console.log(name);
+        //console.log(name);
     };
 
     return (
@@ -486,8 +486,8 @@ function ExcelDownload({data, client}) {
 
     const {user} = useAuthContext();
 
-    console.log("data: " + data);
-    console.log("client: " + JSON.stringify(client));
+    //console.log("data: " + data);
+    //console.log("client: " + JSON.stringify(client));
 
     const handleExportToExcel = () => {
         const wb = XLSX.utils.book_new();

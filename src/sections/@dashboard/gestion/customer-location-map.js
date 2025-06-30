@@ -14,7 +14,7 @@ import {GoogleMap, InfoWindow, Marker, useJsApiLoader} from "@react-google-maps/
 
 export default function CustomerLocationMap({currentPartner, open, onClose}) {
 
-    console.log("partner.ID " + currentPartner?.Cliente || '');
+    //console.log("partner.ID " + currentPartner?.Cliente || '');
 
     return (<Dialog
             fullWidth
@@ -69,7 +69,7 @@ const mapContainerStyle = {
 
 function MapComponent({markers}) {
 
-    console.log("Markers: " + JSON.stringify(markers));
+    //console.log("Markers: " + JSON.stringify(markers));
 
     const [map, setMap] = useState(null);
     const [center, setCenter] = useState({ lat: -1.8312, lng: -78.1834 });

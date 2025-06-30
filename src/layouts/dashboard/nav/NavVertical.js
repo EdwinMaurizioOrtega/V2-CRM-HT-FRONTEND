@@ -60,7 +60,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
             });
 
             const myAccessData = response.data.data;
-            //console.log("myAccessData: " + JSON.stringify(myAccessData));
+            ////console.log("myAccessData: " + JSON.stringify(myAccessData));
 
             const navConfigFiltrado = myAccessData.map(
                 permisosSubheader => {
@@ -79,7 +79,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
                 }).filter(Boolean);
 
-            //console.log(navConfigFiltrado);
+            ////console.log(navConfigFiltrado);
 
             setAllItems(navConfigFiltrado);
 

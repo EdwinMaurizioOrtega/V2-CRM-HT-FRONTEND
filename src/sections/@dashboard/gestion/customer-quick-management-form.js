@@ -38,7 +38,7 @@ export default function CustomerQuickManagementForm({ currentPartner, open, onCl
 
   const {user} = useAuthContext();
 
-  console.log("Cliente a gestionar: "+ currentPartner?.ID || '');
+  //console.log("Cliente a gestionar: "+ currentPartner?.ID || '');
 
   const methods = useForm({
     // resolver: yupResolver(NewUserSchema),
@@ -62,11 +62,11 @@ export default function CustomerQuickManagementForm({ currentPartner, open, onCl
         USER_ID: user.ID,
       });
 
-      console.log("Código de estado:", response.status);
+      //console.log("Código de estado:", response.status);
 
       // Se completó con éxito (código de estado 200)
       if (response.status === 200) {
-        console.log("Gestión creada.");
+        //console.log("Gestión creada.");
         reset();
         onClose();
         enqueueSnackbar('Guardado exitoso!');

@@ -202,11 +202,11 @@ export default function CalendarView({onValorCambiado}) {
 
     const handleCreateUpdateEvent = (newEvent) => {
 
-        console.log("Cerrar Agenda: "+JSON.stringify(newEvent));
+        //console.log("Cerrar Agenda: "+JSON.stringify(newEvent));
 
         if (selectedEventId) {
             //Actualizar
-            console.log("Actualizar: "+ JSON.stringify( selectedEventId ));
+            //console.log("Actualizar: "+ JSON.stringify( selectedEventId ));
             dispatch(updateEvent(selectedEventId));
             // Recargar la página
             window.location.reload();
@@ -289,7 +289,7 @@ export default function CalendarView({onValorCambiado}) {
 
     const onSubmitOk = async (data) => {
         try {
-            console.log("Data Nueva Fecha Agenda: "+ JSON.stringify(data))
+            //console.log("Data Nueva Fecha Agenda: "+ JSON.stringify(data))
         } catch (error) {
             console.error(error);
         }
@@ -426,8 +426,8 @@ const useGetEvents = () => {
 
     const {events: data} = useSelector((state) => state.calendar);
 
-    console.log("data: " + JSON.stringify(data));
-    // console.log("events: "+ JSON.stringify( events) );
+    //console.log("data: " + JSON.stringify(data));
+    // //console.log("events: "+ JSON.stringify( events) );
 
     const getAllEvents = useCallback(() => {
         dispatch(getEvents(user));
@@ -449,7 +449,7 @@ const useGetEvents = () => {
     }));
 
 
-    console.log("events: " + JSON.stringify(events));
+    //console.log("events: " + JSON.stringify(events));
 
     return events;
 };
@@ -473,6 +473,6 @@ function applyFilter({inputData, filterEventColor, filterStartDate, filterEndDat
         );
     }
 
-    console.log("inputData: " + JSON.stringify(inputData));
+    //console.log("inputData: " + JSON.stringify(inputData));
     return inputData;
 }

@@ -101,7 +101,7 @@ export default function BlogNewPostForm() {
       handleClosePreview();
       enqueueSnackbar('Post success!');
       push(PATH_DASHBOARD.blog.posts);
-      console.log('DATA', data);
+      //console.log('DATA', data);
     } catch (error) {
       console.error(error);
     }

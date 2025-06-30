@@ -115,9 +115,9 @@ const styles = StyleSheet.create( {
 });
 
 export default function SolicitudPDF(data) {
-    console.log("data_data: " + JSON.stringify(data));
+    //console.log("data_data: " + JSON.stringify(data));
 
-    console.log("data?.empresa?.NOMBRE: "+data?.empresa?.NOMBRE);
+    //console.log("data?.empresa?.NOMBRE: "+data?.empresa?.NOMBRE);
 
 
     const documentosMap = [

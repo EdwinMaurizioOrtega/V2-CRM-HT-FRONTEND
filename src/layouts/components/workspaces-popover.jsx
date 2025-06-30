@@ -31,10 +31,10 @@ export function WorkspacesPopover({data = [], sx, ...other}) {
         if (user?.EMPRESA) {
             const workspace = data.find(item => item.id === user?.EMPRESA);
             if (workspace) {
-                console.log(workspace);
+                //console.log(workspace);
                 setWorkspace(workspace);
             } else {
-                console.log('No se encontró el workspace con ese id.');
+                //console.log('No se encontró el workspace con ese id.');
             }
 
         }
@@ -47,7 +47,7 @@ export function WorkspacesPopover({data = [], sx, ...other}) {
 
             // ----------------------------------------------------------------------
 
-            console.log(newValue);
+            //console.log(newValue);
 
             // Lógica para cambiar EMPRESA basado en la selección
             updateUser({EMPRESA: newValue.id});

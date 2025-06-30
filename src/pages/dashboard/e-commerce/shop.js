@@ -88,7 +88,7 @@ export default function EcommerceShopPage() {
                 const networkResponse = await fetch(`${HOST_API_KEY}/hanadb/api/products/customers`);
                 const data = await networkResponse.json();
                 setProducts(data.products);
-                console.log("products: " + JSON.stringify(data));
+                //console.log("products: " + JSON.stringify(data));
 
                 // Extraer categorías y marcas únicas
                 const uniqueCategories = [...new Set(data.products.map(product => product.CATEGORIA))];
@@ -110,8 +110,8 @@ export default function EcommerceShopPage() {
                 SET_FILTER_BRAND_OPTIONS(brandOptions);
 
                 // Imprimir en consola
-                console.log("FILTER_CATEGORY_OPTIONS:", categoryOptions);
-                console.log("FILTER_BRAND_OPTIONS:", brandOptions);
+                //console.log("FILTER_CATEGORY_OPTIONS:", categoryOptions);
+                //console.log("FILTER_BRAND_OPTIONS:", brandOptions);
 
 
             } catch (error) {

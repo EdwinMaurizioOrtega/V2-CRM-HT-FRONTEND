@@ -105,7 +105,7 @@ export default function UserNewEditForm({isEdit = false, currentUser}) {
             reset();
             enqueueSnackbar(!isEdit ? '¡Creado con éxito!' : 'Actualización exitosa!');
             push(PATH_DASHBOARD.user.list);
-            console.log('DATA', data);
+            //console.log('DATA', data);
 
             if (!isEdit) {
                 // Crear un cliente.

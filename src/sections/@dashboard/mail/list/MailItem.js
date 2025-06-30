@@ -260,10 +260,18 @@ export default function MailItem({
 
       <MailItemAction
         id="mailActions"
-        onArchive={() => console.log('ARCHIVE', mail.id)}
-        onDelete={() => console.log('DELETE', mail.id)}
-        onMarkRead={() => console.log('MARKREAD', mail.id)}
-        onHidden={() => console.log('HIDDEN', mail.id)}
+        onArchive={() => {
+          //console.log('ARCHIVE', mail.id)
+        }}
+        onDelete={() => {
+          //console.log('DELETE', mail.id)
+        }}
+        onMarkRead={() => {
+          //console.log('MARKREAD', mail.id)
+        }}
+        onHidden={() => {
+          //console.log('HIDDEN', mail.id)
+          }}
       />
     </StyledRoot>
   );

@@ -63,14 +63,14 @@ export default slice.reducer;
 // ----------------------------------------------------------------------
 
 export function getEvents(us) {
-    //console.log("user: "+ JSON.stringify(us))
+    ////console.log("user: "+ JSON.stringify(us))
     return async (dispatch) => {
         dispatch(slice.actions.startLoading());
         try {
             //const response = await axios.get('https://api-dev-minimal-v4.vercel.app/api/calendar/events');
             const response = await axios.get('/hanadb/api/customers/calendar?USER_ID=' + us.ID);
             dispatch(slice.actions.getEventsSuccess(response.data.events));
-            //console.log("getEventsResponse: "+ JSON.stringify( response))
+            ////console.log("getEventsResponse: "+ JSON.stringify( response))
         } catch (error) {
             dispatch(slice.actions.hasError(error));
         }
@@ -95,7 +95,7 @@ export function createEvent(newEvent) {
 
 export function updateEvent(eventId) {
 
-    console.log("eventId: " + eventId);
+    //console.log("eventId: " + eventId);
 
     return async (dispatch) => {
         dispatch(slice.actions.startLoading());
@@ -105,7 +105,7 @@ export function updateEvent(eventId) {
                 ID_AGENDA: Number(eventId)
             });
 
-            console.log("responseStatus: " + response.status)
+            //console.log("responseStatus: " + response.status)
             if (response.status === 200) {
                 dispatch(slice.actions.updateEventSuccess(response.data.event));
 

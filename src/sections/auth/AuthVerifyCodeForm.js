@@ -52,7 +52,7 @@ export default function AuthVerifyCodeForm() {
   const onSubmit = async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
-      console.log('DATA', Object.values(data).join(''));
+      //console.log('DATA', Object.values(data).join(''));
       enqueueSnackbar('Verify success!');
       push(PATH_DASHBOARD.root);
     } catch (error) {

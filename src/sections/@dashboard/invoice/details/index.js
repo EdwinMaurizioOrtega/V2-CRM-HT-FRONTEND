@@ -71,7 +71,7 @@ function insertLineBreaks(text, maxLength) {
     let currentLine = '';
     let words = text.split(' '); // Dividir el texto en palabras
 
-    console.log(`Palabras: ${words}`)
+    //console.log(`Palabras: ${words}`)
 
     for (let i = 0; i < words.length; i++) {
         if (currentLine.length + words[i].length <= maxLength) {
@@ -86,14 +86,14 @@ function insertLineBreaks(text, maxLength) {
 
     // Agregar la última línea
     result += currentLine.trim();
-    console.log(`Última línea: ${result}`)
+    //console.log(`Última línea: ${result}`)
     return result;
 }
 
 
 export default function InvoiceDetails({invoice}) {
 
-    console.log("InvoiceDetail: " + JSON.stringify(invoice));
+    //console.log("InvoiceDetail: " + JSON.stringify(invoice));
 
     const [loading, setLoading] = useState(false); // Variable de estado para rastrear el estado de carga
 
@@ -166,7 +166,7 @@ export default function InvoiceDetails({invoice}) {
     const handleOpenPopover = (event, rowData) => {
         setOpenPopover(event.currentTarget);
 
-        console.log("ID seleccionado:", rowData);
+        //console.log("ID seleccionado:", rowData);
         setSelected(rowData);
     };
 
@@ -209,8 +209,8 @@ export default function InvoiceDetails({invoice}) {
         U_LS_ASEGURADORA
     } = invoice;
 
-    console.log("OBSERVACIONES: " + OBSERVACIONES)
-    console.log("Row Detail Order: " + JSON.stringify(items))
+    //console.log("OBSERVACIONES: " + OBSERVACIONES)
+    //console.log("Row Detail Order: " + JSON.stringify(items))
 
     const [observacionA, setObservacionA] = useState('Ninguno...');
 
@@ -227,12 +227,12 @@ export default function InvoiceDetails({invoice}) {
 
     const handleChange = (event) => {
         setValueNew(event.target.value);
-        // console.log(`Nuevo precio unitario ${valueNew}`);
+        // //console.log(`Nuevo precio unitario ${valueNew}`);
     };
 
     const handleChangeGuia = (event) => {
         setValueGuia(event.target.value);
-        // console.log(`Nuevo precio unitario ${valueNew}`);
+        // //console.log(`Nuevo precio unitario ${valueNew}`);
 
         //Comprobar si el valor del campo tiene exactamente 9 ceros. Si es así, se actualiza el estado showAutocomplete para mostrar el Autocomplete.
         // Determinar si se debe mostrar el Autocomplete
@@ -249,24 +249,24 @@ export default function InvoiceDetails({invoice}) {
 
     const handleChangeFactura = (event) => {
         setValueFactura(event.target.value);
-        // console.log(`Nuevo precio unitario ${valueNew}`);
+        // //console.log(`Nuevo precio unitario ${valueNew}`);
     };
 
     const handleChangeValorFactura = (event) => {
         setValueValorFactura(event.target.value);
-        // console.log(`Nuevo precio unitario ${valueNew}`);
+        // //console.log(`Nuevo precio unitario ${valueNew}`);
     };
 
     const handleChangeEmpleadoEntregar = (event, newValue) => {
         setEmpleadoEntregar(newValue);
-        // console.log(`Nuevo precio unitario ${valueNew}`);
+        // //console.log(`Nuevo precio unitario ${valueNew}`);
     };
 
 
     const handleChangePriceUnit = async () => {
 
-        // console.log(selected.ID);
-        // console.log(valueNew);
+        // //console.log(selected.ID);
+        // //console.log(valueNew);
 
         try {
             // Actualizar una orden.
@@ -277,8 +277,8 @@ export default function InvoiceDetails({invoice}) {
                 id_order: ID
             });
 
-            console.log("Orden actualizada correctamente.");
-            console.log("Código de estado:", response.status);
+            //console.log("Orden actualizada correctamente.");
+            //console.log("Código de estado:", response.status);
 
             // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
             if (response.status === 200) {
@@ -294,8 +294,8 @@ export default function InvoiceDetails({invoice}) {
 
     const handleChangeProduct = async () => {
 
-        // console.log(selected.ID);
-        // console.log(valueNew);
+        // //console.log(selected.ID);
+        // //console.log(valueNew);
 
         try {
             // Actualizar una orden.
@@ -305,8 +305,8 @@ export default function InvoiceDetails({invoice}) {
                 empresa: user.EMPRESA
             });
 
-            console.log("Orden actualizada correctamente.");
-            console.log("Código de estado:", response.status);
+            //console.log("Orden actualizada correctamente.");
+            //console.log("Código de estado:", response.status);
 
             // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
             if (response.status === 200) {
@@ -322,8 +322,8 @@ export default function InvoiceDetails({invoice}) {
 
     const handleChangeQuantity = async () => {
 
-        // console.log(selected.ID);
-        // console.log(valueNew);
+        // //console.log(selected.ID);
+        // //console.log(valueNew);
 
         try {
             // Actualizar una orden.
@@ -334,8 +334,8 @@ export default function InvoiceDetails({invoice}) {
                 id_order: ID
             });
 
-            console.log("Orden actualizada correctamente.");
-            console.log("Código de estado:", response.status);
+            //console.log("Orden actualizada correctamente.");
+            //console.log("Código de estado:", response.status);
 
             // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
             if (response.status === 200) {
@@ -351,8 +351,8 @@ export default function InvoiceDetails({invoice}) {
 
     const handleChangeDiscount = async () => {
 
-        // console.log(selected.ID);
-        // console.log(valueNew);
+        // //console.log(selected.ID);
+        // //console.log(valueNew);
 
         try {
             // Actualizar una orden.
@@ -363,8 +363,8 @@ export default function InvoiceDetails({invoice}) {
                 id_order: ID
             });
 
-            console.log("Orden actualizada correctamente.");
-            console.log("Código de estado:", response.status);
+            //console.log("Orden actualizada correctamente.");
+            //console.log("Código de estado:", response.status);
 
             // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
             if (response.status === 200) {
@@ -380,8 +380,8 @@ export default function InvoiceDetails({invoice}) {
 
     const handleChangeLevelOrderDiscount = async () => {
 
-        // console.log(selected.ID);
-        // console.log(valueNew);
+        // //console.log(selected.ID);
+        // //console.log(valueNew);
 
         try {
             // Actualizar una orden.
@@ -391,8 +391,8 @@ export default function InvoiceDetails({invoice}) {
                 id_order: ID
             });
 
-            console.log("Orden actualizada correctamente.");
-            console.log("Código de estado:", response.status);
+            //console.log("Orden actualizada correctamente.");
+            //console.log("Código de estado:", response.status);
 
             // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
             if (response.status === 200) {
@@ -417,10 +417,10 @@ export default function InvoiceDetails({invoice}) {
             });
 
             // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
-            console.log('La orden se eliminó correctamente');
+            //console.log('La orden se eliminó correctamente');
 
-            console.log("Orden actualizada correctamente.");
-            console.log("Código de estado:", response.status);
+            //console.log("Orden actualizada correctamente.");
+            //console.log("Código de estado:", response.status);
 
             // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
             if (response.status === 200) {
@@ -439,9 +439,9 @@ export default function InvoiceDetails({invoice}) {
 
         try {
 
-            console.log("Cambio de bodega.")
-            console.log(value.id); // Log the selected element
-            console.log(ID); // Log ID de la orden
+            //console.log("Cambio de bodega.")
+            //console.log(value.id); // Log the selected element
+            //console.log(ID); // Log ID de la orden
 
             // Actualizar una orden.
             const response = await axios.put('/hanadb/api/orders/order/change_warehouse', {
@@ -451,8 +451,8 @@ export default function InvoiceDetails({invoice}) {
                 empresa: user.EMPRESA
             });
 
-            console.log("Orden actualizada correctamente.");
-            console.log("Código de estado:", response.status);
+            //console.log("Orden actualizada correctamente.");
+            //console.log("Código de estado:", response.status);
 
             // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
             if (response.status === 200) {
@@ -469,8 +469,8 @@ export default function InvoiceDetails({invoice}) {
     const handleChangePayment = async (event, value) => {
 
         try {
-            console.log(value.id); // Log the selected element
-            console.log(ID); // Log ID de la orden
+            //console.log(value.id); // Log the selected element
+            //console.log(ID); // Log ID de la orden
             // Actualizar una orden.
             const response = await axios.put('/hanadb/api/orders/order/change_payment', {
                 ID_ORDER: ID,
@@ -478,8 +478,8 @@ export default function InvoiceDetails({invoice}) {
                 empresa: user.EMPRESA
             });
 
-            console.log("Orden actualizada correctamente.");
-            console.log("Código de estado:", response.status);
+            //console.log("Orden actualizada correctamente.");
+            //console.log("Código de estado:", response.status);
 
             // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
             if (response.status === 200) {
@@ -495,7 +495,7 @@ export default function InvoiceDetails({invoice}) {
 
     // La  mejor forma de crear un CASE
     function nameWarehouse(ware) {
-        console.log(`Bodega: ${ware}`);
+        //console.log(`Bodega: ${ware}`);
         const strings = {
             "019": "Centro Distribución HT",
             "002": "Cuenca",
@@ -511,7 +511,7 @@ export default function InvoiceDetails({invoice}) {
     }
 
     function nameWarehouseAlphacell(ware) {
-        console.log(`Bodega: ${ware}`);
+        //console.log(`Bodega: ${ware}`);
         const strings = {
             "001": "BODEGA",
             "002": "MOVISTAR RESERVA",
@@ -530,7 +530,7 @@ export default function InvoiceDetails({invoice}) {
     }
 
     function nameWarehouseMovilCelistic(ware) {
-        console.log(`Bodega: ${ware}`);
+        //console.log(`Bodega: ${ware}`);
         const strings = {
             "DISTLF": "CARAPUNGO - CENTRO DISTRIBUCION MOVILCELISTIC",
             "003": "MACHALA - MAYORISTAS MOVILCELISTIC MACHALA",
@@ -607,14 +607,14 @@ export default function InvoiceDetails({invoice}) {
     const ivaTotal = (subtotalTotal - DISCOUNT) * ivaPorcentaje;
     const totalConIva = (subtotalTotal - DISCOUNT) + ivaTotal;
 
-    console.log('Subtotal: ', subtotalTotal);
-    console.log('IVA: ', ivaTotal);
-    console.log('Total incluido IVA: ', totalConIva);
+    //console.log('Subtotal: ', subtotalTotal);
+    //console.log('IVA: ', ivaTotal);
+    //console.log('Total incluido IVA: ', totalConIva);
 
     const enviarOrdenSAP = async () => {
         try {
-            console.log(ID); // Log ID de la orden
-            console.log(user.ID); // Log ID del usuario
+            //console.log(ID); // Log ID de la orden
+            //console.log(user.ID); // Log ID del usuario
 
             setLoading(true); // Establecer loading a true antes de hacer la llamada a la API
 
@@ -626,8 +626,8 @@ export default function InvoiceDetails({invoice}) {
                 empresa: user.EMPRESA,
             });
 
-            console.log("Orden Creada en el SAP.");
-            console.log("Código de estado:", response.status);
+            //console.log("Orden Creada en el SAP.");
+            //console.log("Código de estado:", response.status);
 
             // Se completó con éxito (código de estado 200)
             if (response.status === 200) {
@@ -649,8 +649,8 @@ export default function InvoiceDetails({invoice}) {
 
     const handleChangePedidoFactura = async () => {
 
-        // console.log(ID);
-        console.log(JSON.stringify(user));
+        // //console.log(ID);
+        //console.log(JSON.stringify(user));
 
         //=========For All Companys=========
         let idEmpleadoEntregar = 0;
@@ -659,7 +659,7 @@ export default function InvoiceDetails({invoice}) {
 
         if (user.COMPANY === 'HT') {
 
-            console.log("Empleado Entregar: " + JSON.stringify(empleadoEntregar))
+            //console.log("Empleado Entregar: " + JSON.stringify(empleadoEntregar))
 
             if (valueGuia === '000000000' && empleadoEntregar === '') {
                 if (valueGuia === '000000000' && CLIENTEID === 'CL1791251237001') {
@@ -685,7 +685,7 @@ export default function InvoiceDetails({invoice}) {
                 estadoInvoice = 1
             }
 
-            console.log("ID empleado seleccionado: " + idEmpleadoEntregar)
+            //console.log("ID empleado seleccionado: " + idEmpleadoEntregar)
         }
 
 
@@ -712,8 +712,8 @@ export default function InvoiceDetails({invoice}) {
                 });
 
 
-                console.log("Orden Facturada.");
-                console.log("Código de estado:", response.status);
+                //console.log("Orden Facturada.");
+                //console.log("Código de estado:", response.status);
 
                 // Se completó con éxito (código de estado 200)
                 if (response.status === 200) {
@@ -746,7 +746,7 @@ export default function InvoiceDetails({invoice}) {
 
     const handleServiEntrega = async () => {
 
-        console.log("OBSERVACIONESB: " + OBSERVACIONESB);
+        //console.log("OBSERVACIONESB: " + OBSERVACIONESB);
 
         var cadenaSinCL = CLIENTEID.replace("CL", "");
 
@@ -810,7 +810,7 @@ export default function InvoiceDetails({invoice}) {
             password: 'lidenar'
         };
 
-        console.log(JSON.stringify(dataToSend));
+        //console.log(JSON.stringify(dataToSend));
 
 // URL del servidor al que deseas enviar los datos
         const url = `${HOST_API_KEY}/hanadb/api/orders/order/ServiEntrega`;
@@ -829,7 +829,7 @@ export default function InvoiceDetails({invoice}) {
             .then((response) => response.json()) // Convertir la respuesta en formato JSON
             .then((data) => {
                 // Aquí puedes manejar la respuesta del servidor (data)
-                console.log("Respuesta del servidor:", data);
+                //console.log("Respuesta del servidor:", data);
 
                 var pdfDecode = data.base64File;
 
@@ -852,9 +852,9 @@ export default function InvoiceDetails({invoice}) {
             //     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/order/ServiEntrega/ciudades`);
             //     const result = await response.json();
             //     setDataCities(result.data);
-            //     console.log(dataCities);
+            //     //console.log(dataCities);
             // } catch (error) {
-            //     console.log('error', error);
+            //     //console.log('error', error);
             // }
 
 
@@ -863,7 +863,7 @@ export default function InvoiceDetails({invoice}) {
                 const response = await axios.get(`${HOST_API_KEY}/hanadb/api/customers/get_crm_empleados_venta`);
 
                 if (response.status === 200) {
-                    console.log("DATA: " + JSON.stringify(response.data.data));
+                    //console.log("DATA: " + JSON.stringify(response.data.data));
                     // La solicitud PUT se realizó correctamente
                     setDataEmpleadosVenta(response.data.data);
                 } else {
@@ -912,9 +912,9 @@ export default function InvoiceDetails({invoice}) {
 
     //Para imprimir
     useEffect(() => {
-        console.log("Origen ID:", selectedCityOrigen.id);
-        console.log("Destino ID:", selectedCityDestino.id);
-        console.log("Boxes ID:", selectedCityBoxes.id);
+        //console.log("Origen ID:", selectedCityOrigen.id);
+        //console.log("Destino ID:", selectedCityDestino.id);
+        //console.log("Boxes ID:", selectedCityBoxes.id);
     }, [selectedCityOrigen, selectedCityDestino, selectedCityBoxes]);
 
 
@@ -932,14 +932,14 @@ export default function InvoiceDetails({invoice}) {
 
 
     const handleButtonClick = () => {
-        console.log('Contenido del texto:', observacion);
+        //console.log('Contenido del texto:', observacion);
         // Puedes realizar otras acciones con el contenido del texto aquí
     };
 
     const handleDownloadClick = async (id) => {
         // Your method or logic to execute after the download icon is clicked
-        console.log('Download icon clicked!');
-        console.log("Número de orden: " + id);
+        //console.log('Download icon clicked!');
+        //console.log("Número de orden: " + id);
 
         try {
             const response = await axios.put('/hanadb/api/orders/order/imprimir', {
@@ -950,11 +950,11 @@ export default function InvoiceDetails({invoice}) {
             });
 
             // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
-            console.log("Código de estado:", response.status);
+            //console.log("Código de estado:", response.status);
 
             // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
             if (response.status === 200) {
-                console.log('Impresión de la orden en PDF.');
+                //console.log('Impresión de la orden en PDF.');
             }
 
         } catch (error) {
@@ -964,10 +964,10 @@ export default function InvoiceDetails({invoice}) {
 
     };
 
-    //console.log("USUARIO: "+ JSON.stringify( user));
+    ////console.log("USUARIO: "+ JSON.stringify( user));
 
     const orderAprobarEjecutivoSoporte = async () => {
-        console.log("Número de orden Tomebamba: " + ID);
+        //console.log("Número de orden Tomebamba: " + ID);
 
         try {
             const response = await axios.put('/hanadb/api/orders/order/importadora_tomebamba_approve', {
@@ -977,8 +977,8 @@ export default function InvoiceDetails({invoice}) {
             });
 
             // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
-            console.log('Cambiando estado');
-            console.log("Código de estado:", response.status);
+            //console.log('Cambiando estado');
+            //console.log("Código de estado:", response.status);
 
             // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
             if (response.status === 200) {
@@ -996,7 +996,7 @@ export default function InvoiceDetails({invoice}) {
     }
 
     const orderAprobarComercial = async () => {
-        console.log("Número de orden Tomebamba: " + ID);
+        //console.log("Número de orden Tomebamba: " + ID);
 
         try {
             const response = await axios.put('/hanadb/api/orders/order/importadora_tomebamba_approve', {
@@ -1006,8 +1006,8 @@ export default function InvoiceDetails({invoice}) {
             });
 
             // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
-            console.log('Cambiando estado');
-            console.log("Código de estado:", response.status);
+            //console.log('Cambiando estado');
+            //console.log("Código de estado:", response.status);
 
             // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
             if (response.status === 200) {
@@ -1037,8 +1037,8 @@ export default function InvoiceDetails({invoice}) {
 
     //Anúla una orden
     const onAnularRow = async () => {
-        console.log("Número de orden: " + ID);
-        console.log("Observación anulación orden: " + valueNew);
+        //console.log("Número de orden: " + ID);
+        //console.log("Observación anulación orden: " + valueNew);
 
         try {
             const response = await axios.put('/hanadb/api/orders/order/anular', {
@@ -1051,8 +1051,8 @@ export default function InvoiceDetails({invoice}) {
             });
 
             // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
-            console.log('Estado de orden anulado.');
-            console.log("Código de estado:", response.status);
+            //console.log('Estado de orden anulado.');
+            //console.log("Código de estado:", response.status);
 
             // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
             if (response.status === 200) {
@@ -1087,11 +1087,11 @@ export default function InvoiceDetails({invoice}) {
                 [id]: valorNumerico,
             }));
         }
-            //console.log("JSON actualizado:", JSON.stringify(preciosActualizados, null, 2));
+            ////console.log("JSON actualizado:", JSON.stringify(preciosActualizados, null, 2));
     };
 
     const enviarPrecios = async () => {
-        //console.log("JSON actualizado:", JSON.stringify(preciosActualizados));
+        ////console.log("JSON actualizado:", JSON.stringify(preciosActualizados));
         try {
             // Actualizar una orden.
             const response = await axios.put('/hanadb/api/orders/order/detail/massive_priceunit', {
@@ -1100,8 +1100,8 @@ export default function InvoiceDetails({invoice}) {
                 massive_price_update: preciosActualizados
             });
 
-            //console.log("Orden actualizada correctamente.");
-            //console.log("Código de estado:", response.status);
+            ////console.log("Orden actualizada correctamente.");
+            ////console.log("Código de estado:", response.status);
 
             // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
             if (response.status === 200) {

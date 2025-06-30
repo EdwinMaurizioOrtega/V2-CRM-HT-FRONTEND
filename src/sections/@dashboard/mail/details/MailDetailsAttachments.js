@@ -51,7 +51,9 @@ function FileItem({ file }) {
         bgcolor: 'background.paper',
       }}
     >
-      <FileThumbnail tooltip file={file.preview} onDownload={() => console.log('DOWNLOAD')} />
+      <FileThumbnail tooltip file={file.preview} onDownload={() => {
+          //console.log('DOWNLOAD')
+      }} />
     </Stack>
   );
 }

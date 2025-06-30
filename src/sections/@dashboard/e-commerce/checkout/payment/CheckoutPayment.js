@@ -337,11 +337,11 @@ export default function CheckoutPayment({
             onReset();
 
             //V2
-            // //console.log("Valor envío... "+ shipping);
+            // ////console.log("Valor envío... "+ shipping);
             // if (shipping == 3 || shipping == 5 || shipping == 7 || shipping == 13) {
             //     // console.error("Debe de seleccionar una ciudad destino y una dirección")
             //     if (servientrega && servientrega.CODE_SERVIENTREGA != null) {
-            //         console.log("Se va ha crear una guia de servientrega")
+            //         //console.log("Se va ha crear una guia de servientrega")
             //         onNextStep();
             //         onReset();
             //

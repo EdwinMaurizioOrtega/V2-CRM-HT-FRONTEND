@@ -50,7 +50,7 @@ export default function AccountChangePassword() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
       enqueueSnackbar('Update success!');
-      console.log('DATA', data);
+      //console.log('DATA', data);
     } catch (error) {
       console.error(error);
     }

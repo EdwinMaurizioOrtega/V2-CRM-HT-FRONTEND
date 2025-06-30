@@ -81,7 +81,7 @@ export default function GeneralFilePage() {
   const handleCreateNewFolder = () => {
     handleCloseNewFolder();
     setFolderName('');
-    console.log('CREATE NEW FOLDER', folderName);
+    //console.log('CREATE NEW FOLDER', folderName);
   };
 
   const handleDrop = useCallback(
@@ -230,7 +230,9 @@ export default function GeneralFilePage() {
                     <FileFolderCard
                       key={folder.id}
                       folder={folder}
-                      onDelete={() => console.log('DELETE', folder.id)}
+                      onDelete={() => {
+                        //console.log('DELETE', folder.id)
+                      }}
                       sx={{
                         ...(_folders.length > 3 && {
                           minWidth: 222,
@@ -253,7 +255,9 @@ export default function GeneralFilePage() {
                   <FileGeneralRecentCard
                     key={file.id}
                     file={file}
-                    onDelete={() => console.log('DELETE', file.id)}
+                    onDelete={() => {
+                      //console.log('DELETE', file.id)
+                    }}
                   />
                 ))}
               </Stack>

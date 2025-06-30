@@ -74,15 +74,15 @@ export default function GarantiaPage() {
                 const response = await axios.get(`/hanadb/api/technical_service/get_oders_technical_service?status=1&empresa=${user.EMPRESA}`);
 
                 if (response.status === 200) {
-                    console.log(response);
+                    //console.log(response);
                     const businessPartnersWithId = response.data.result.map((partner, index) => ({
                         ...partner,
                         id: index + 1, // Puedes ajustar la lógica según tus necesidades
                     }));
 
                     setBusinessPartners(businessPartnersWithId);
-                    console.log("response.data.data: " + JSON.stringify(response.data.data));
-                    console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
+                    //console.log("response.data.data: " + JSON.stringify(response.data.data));
+                    //console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
 
                 } else {
                     // La solicitud POST no se realizó correctamente
@@ -126,9 +126,9 @@ export default function GarantiaPage() {
         const switchState = switchStates[id] || false;
         const precioProducto = textFieldValues[id] || '';
 
-        console.log('Crear NC para:', row);
-        console.log('Estado del Switch para esta fila:', switchState);
-        console.log('Valor del TextField para esta fila:', precioProducto);
+        //console.log('Crear NC para:', row);
+        //console.log('Estado del Switch para esta fila:', switchState);
+        //console.log('Valor del TextField para esta fila:', precioProducto);
 
         if (precioProducto) {
 
@@ -141,8 +141,8 @@ export default function GarantiaPage() {
                 empresa: user.EMPRESA,
             });
 
-            console.log("Orden actualizada correctamente.");
-            console.log("Código de estado:", response.status);
+            //console.log("Orden actualizada correctamente.");
+            //console.log("Código de estado:", response.status);
 
 
             // Limpiar los campos
@@ -299,11 +299,11 @@ export default function GarantiaPage() {
 
     const handleShowSiAplicaNotaCredito = (data) => {
         if (data) {
-            console.log("Fila seleccionada:", data);
+            //console.log("Fila seleccionada:", data);
             // Puedes hacer algo con las coordenadas seleccionadas aquí, si es necesario
 
         } else {
-            console.log("No se ha seleccionado ningún marcador.");
+            //console.log("No se ha seleccionado ningún marcador.");
         }
     };
 

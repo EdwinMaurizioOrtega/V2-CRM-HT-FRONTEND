@@ -50,15 +50,15 @@ export default function GarantiaPage() {
                 const response = await axios.get(`/hanadb/api/technical_service/get_oders_technical_service?status=2, 3, 4&empresa=${user.EMPRESA}`);
 
                 if (response.status === 200) {
-                    console.log(response);
+                    //console.log(response);
                     const businessPartnersWithId = response.data.result.map((partner, index) => ({
                         ...partner,
                         id: index + 1, // Puedes ajustar la lógica según tus necesidades
                     }));
 
                     setBusinessPartners(businessPartnersWithId);
-                    console.log("response.data.data: " + JSON.stringify(response.data.data));
-                    console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
+                    //console.log("response.data.data: " + JSON.stringify(response.data.data));
+                    //console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
 
                 } else {
                     // La solicitud POST no se realizó correctamente

@@ -104,7 +104,7 @@ export default function ReactHookForm({ debug }) {
 
   const onSubmit = async (data) => {
     await new Promise((resolve) => setTimeout(resolve, 3000));
-    console.log('DATA', data);
+    //console.log('DATA', data);
     reset();
   };
 
@@ -314,7 +314,9 @@ export default function ReactHookForm({ debug }) {
                     )
                   }
                   onRemoveAll={() => setValue('multiUpload', [], { shouldValidate: true })}
-                  onUpload={() => console.log('ON UPLOAD')}
+                  onUpload={() => {
+                    //console.log('ON UPLOAD')
+                  }}
                 />
               </Block>
 

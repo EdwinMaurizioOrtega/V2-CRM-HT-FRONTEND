@@ -59,29 +59,29 @@ export default function GarantiaPage() {
 
     const handleSwitchChange = (event) => {
         setIsChecked(event.target.checked);
-        console.log(event.target.checked ? 'Activo' : 'Inactivo');
+        //console.log(event.target.checked ? 'Activo' : 'Inactivo');
     };
 
     const handleSwitchChangeGuia = (event) => {
         setIsCheckedGuia(event.target.checked);
-        console.log(event.target.checked ? 'Activo' : 'Inactivo');
+        //console.log(event.target.checked ? 'Activo' : 'Inactivo');
     };
 
 
     const showImei = async (enteredName) => {
         if (enteredName.length === 16 || enteredName.length === 15 || enteredName.length === 11 || enteredName.length === 14 || enteredName.length === 10 || enteredName.length === 20) {
             try {
-                console.log(`IMEI A CONSULTAR: ${enteredName}`);
-                console.log("Buscando en el sistema Facturacion PAC");
+                //console.log(`IMEI A CONSULTAR: ${enteredName}`);
+                //console.log("Buscando en el sistema Facturacion PAC");
 
                 const responseFull = await fetch(`${HOST_API_KEY}/hanadb/api/technical_service/garantia_imei_sap?imei=${enteredName}&empresa=${user.EMPRESA}`);
-                console.log(" responseFull: " + JSON.stringify(responseFull));
+                //console.log(" responseFull: " + JSON.stringify(responseFull));
 
                 if (responseFull.status === 200) {
                     const data = await responseFull.json();
                     setGarantia(data);
                 } else {
-                    console.log(`Status ${responseFull.status}: Hubo un problema en la consulta.`);
+                    //console.log(`Status ${responseFull.status}: Hubo un problema en la consulta.`);
                     alert("IMEI NO FACTURADO EN LIDENAR");
                 }
             } catch (error) {
@@ -121,7 +121,7 @@ export default function GarantiaPage() {
                 const response = await axios.get(`${HOST_API_KEY}/hanadb/api/customers/get_empleados_venta`);
 
                 if (response.status === 200) {
-                    console.log("DATA: " + JSON.stringify(response.data.data));
+                    //console.log("DATA: " + JSON.stringify(response.data.data));
                     // La solicitud PUT se realizó correctamente
                     setDataEmpleadosVenta(response.data.data);
                 } else {
@@ -141,14 +141,14 @@ export default function GarantiaPage() {
 
 
         try {
-            console.log("hola");
+            //console.log("hola");
 
-            console.log('DATA', data);
-            console.log('EMPRESA', user.EMPRESA);
-            console.log('enteredName', enteredName);
-            console.log('isChecked', isChecked);
-            console.log('garantia', garantia);
-            console.log('isCheckedGuia', isCheckedGuia);
+            //console.log('DATA', data);
+            //console.log('EMPRESA', user.EMPRESA);
+            //console.log('enteredName', enteredName);
+            //console.log('isChecked', isChecked);
+            //console.log('garantia', garantia);
+            //console.log('isCheckedGuia', isCheckedGuia);
             //Enviar un correo electrónico + la creación de la guía
             const response = await axios.post('/hanadb/api/technical_service/create_warranty_sap', {
                 IMEI_SERIE: enteredName,
@@ -165,16 +165,16 @@ export default function GarantiaPage() {
                 empresa: user.EMPRESA,
             });
 
-            console.log("response status: " + response.status);
+            //console.log("response status: " + response.status);
 
             if (response.status === 200) {
-                console.log(response);
+                //console.log(response);
                 // La solicitud PUT se realizó correctamente
                 //setDataCatalog(response.data.catalogo)
 
                 if (response.data.guia_pdf) {
                     const pdfDecode = response.data.guia_pdf;
-                    console.log("pdfDecode: " + pdfDecode)
+                    //console.log("pdfDecode: " + pdfDecode)
 
                     const byteCharacters = atob(pdfDecode);
                     const byteNumbers = new Array(byteCharacters.length);

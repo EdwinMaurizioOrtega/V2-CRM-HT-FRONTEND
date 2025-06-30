@@ -102,12 +102,12 @@ function FriendCard({ friend }) {
 
   const handleDelete = () => {
     handleClosePopover();
-    console.log('DELETE', name);
+    //console.log('DELETE', name);
   };
 
   const handleEdit = () => {
     handleClosePopover();
-    console.log('EDIT', name);
+    //console.log('EDIT', name);
   };
 
   return (

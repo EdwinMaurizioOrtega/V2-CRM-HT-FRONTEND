@@ -66,12 +66,12 @@ export default function InvoiceCreatePage() {
 
 
         setText(validatedIMEIs);
-        console.log(validatedIMEIs);
+        //console.log(validatedIMEIs);
         // Puedes agregar aquí una lógica adicional después de imprimir en la consola, si es necesario
 
         // Copiar al portapapeles
         navigator.clipboard.writeText(validatedIMEIs).then(() => {
-            console.log('Texto copiado al portapapeles');
+            //console.log('Texto copiado al portapapeles');
             // Puedes agregar aquí una lógica adicional después de copiar al portapapeles, si es necesario
         }).finally(() => {
             setButtonDisabled(true);
@@ -87,7 +87,7 @@ export default function InvoiceCreatePage() {
 
 
     // var isvalid = luhn_validate("353829856681213");
-    // console.log("isvalid: " + isvalid);
+    // //console.log("isvalid: " + isvalid);
 
     function luhn_validate(fullcode) {
         return luhn_checksum(fullcode) == 0

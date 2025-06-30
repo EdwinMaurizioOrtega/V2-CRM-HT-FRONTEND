@@ -29,7 +29,7 @@ export default function ChatMessageInput({ disabled, conversationId, onSend, sx,
 
   const handleSend = (event) => {
     if (event.key === 'Enter') {
-      console.log('Enter');
+      //console.log('Enter');
       if (onSend && message && conversationId) {
         onSend({
           conversationId,

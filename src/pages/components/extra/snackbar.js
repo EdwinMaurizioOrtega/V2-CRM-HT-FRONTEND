@@ -42,7 +42,7 @@ export default function DemoSnackbarPage() {
             size="small"
             color={color !== 'default' ? color : 'primary'}
             onClick={() => {
-              console.log(`I belong to snackbar with key ${key}`);
+              //console.log(`I belong to snackbar with key ${key}`);
             }}
           >
             Alert

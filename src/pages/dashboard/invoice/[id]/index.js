@@ -35,7 +35,7 @@ export default function InvoiceDetailsPage() {
 
     const dispatch = useDispatch();
 
-    console.log(`Invoice: ${id}`);
+    //console.log(`Invoice: ${id}`);
 
     //const {currentInvoice, isLoading} = useSelector((state) => state.orders_status);
     const [currentInvoice, setCurrentInvoice] = useState([]);
@@ -54,7 +54,7 @@ export default function InvoiceDetailsPage() {
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/order/detail?id=${id}&empresa=${user.EMPRESA}`);
                     const data = await response.json();
                     setCurrentInvoice(data.data);
-                    console.log("currentInvoice: "+JSON.stringify(data.data));
+                    //console.log("currentInvoice: "+JSON.stringify(data.data));
                 } catch (error) {
                     console.error('Error fetching data:', error);
                     setCurrentInvoice([]);
@@ -66,7 +66,7 @@ export default function InvoiceDetailsPage() {
         fetchData();
     }, [id]);
 
-    console.log(currentInvoice);
+    //console.log(currentInvoice);
 
     return (
         <>

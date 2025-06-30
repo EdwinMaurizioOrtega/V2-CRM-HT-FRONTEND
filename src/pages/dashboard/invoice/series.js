@@ -78,7 +78,7 @@ export default function SeriesPage() {
 
     const handleOpenChangeProduct = (row) => {
         setOpenChangeProduct(true);
-        console.log(row);
+        //console.log(row);
         setSelected(row)
     };
 
@@ -160,7 +160,7 @@ export default function SeriesPage() {
 
     const F_OrdenVenta = async (nroOrdenVenta) => {
 
-        console.log('nroOrdenVenta: ' + nroOrdenVenta);
+        //console.log('nroOrdenVenta: ' + nroOrdenVenta);
         setLoading(true); // Activa el loading
 
         try {
@@ -170,7 +170,7 @@ export default function SeriesPage() {
             });
 
             if (response.status === 200) {
-                console.log(response);
+                //console.log(response);
                 setBusinessPartners(response.data);
 
             } else {
@@ -190,23 +190,23 @@ export default function SeriesPage() {
 
     const handleChangeProduct = async () => {
 
-        console.log("LineNum: ");
-        console.log(selected.row.line_num);
+        //console.log("LineNum: ");
+        //console.log(selected.row.line_num);
 
-        console.log("DocEntry: ")
-        console.log(businessPartners.doc_entry)
+        //console.log("DocEntry: ")
+        //console.log(businessPartners.doc_entry)
 
-        console.log("Lista IMEIS: ")
-        console.log(valueNew)
+        //console.log("Lista IMEIS: ")
+        //console.log(valueNew)
 
-        console.log("Empresa: ")
-        console.log(user.EMPRESA)
+        //console.log("Empresa: ")
+        //console.log(user.EMPRESA)
 
         // Reemplazar los saltos de línea (\n) por una cadena vacía
         const sinSaltosDeLinea = valueNew.replace(/\n/g, '');
         // Convertir la cadena a un array de strings
         const listaDeStrings = sinSaltosDeLinea.split(',').map(String);
-        console.log("ListaDeStrings: " + listaDeStrings);
+        //console.log("ListaDeStrings: " + listaDeStrings);
 
         try {
             const response = await axios.post(`/hanadb/api/orders/sap/parchar_series_sap_orden_venta`, {
@@ -220,8 +220,8 @@ export default function SeriesPage() {
             });
 
             if (response.status === 200) {
-                console.log(response);
-                console.log("hola.......");
+                //console.log(response);
+                //console.log("hola.......");
                 alert(  JSON.stringify( response.data));
             } else {
                 // La solicitud POST no se realizó correctamente
@@ -261,7 +261,7 @@ export default function SeriesPage() {
         const validatedIMEIs = validIMEIs.join(',\n');
 
         setValueNew(validatedIMEIs);
-        console.log(validatedIMEIs);
+        //console.log(validatedIMEIs);
         // Puedes agregar aquí una lógica adicional después de imprimir en la consola, si es necesario
 
     };

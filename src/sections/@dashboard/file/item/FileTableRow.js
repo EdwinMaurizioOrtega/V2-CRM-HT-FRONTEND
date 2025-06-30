@@ -102,7 +102,9 @@ export default function FileTableRow({ row, selected, onSelectRow, onDeleteRow }
     click: () => {
       handleOpenDetails();
     },
-    doubleClick: () => console.log('DOUBLE CLICK'),
+    doubleClick: () => {
+      //console.log('DOUBLE CLICK')
+    },
   });
 
   const handleCopy = () => {
@@ -136,7 +138,9 @@ export default function FileTableRow({ row, selected, onSelectRow, onDeleteRow }
         >
           <Checkbox
             checked={selected}
-            onDoubleClick={() => console.log('ON DOUBLE CLICK')}
+            onDoubleClick={() => {
+              //console.log('ON DOUBLE CLICK')
+            }}
             onClick={onSelectRow}
           />
         </TableCell>

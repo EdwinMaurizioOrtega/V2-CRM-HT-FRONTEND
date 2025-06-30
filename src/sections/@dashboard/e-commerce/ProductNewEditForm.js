@@ -123,7 +123,7 @@ export default function ProductNewEditForm({ isEdit, currentProduct }) {
       reset();
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
       push(PATH_DASHBOARD.eCommerce.list);
-      console.log('DATA', data);
+      //console.log('DATA', data);
     } catch (error) {
       console.error(error);
     }
@@ -182,7 +182,9 @@ export default function ProductNewEditForm({ isEdit, currentProduct }) {
                   onDrop={handleDrop}
                   onRemove={handleRemoveFile}
                   onRemoveAll={handleRemoveAllFiles}
-                  onUpload={() => console.log('ON UPLOAD')}
+                  onUpload={() => {
+                    //console.log('ON UPLOAD')
+                  }}
                 />
               </Stack>
             </Stack>

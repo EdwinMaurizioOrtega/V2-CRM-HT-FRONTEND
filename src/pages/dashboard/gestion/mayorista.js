@@ -262,8 +262,8 @@ export default function MayoristaPage(callback, deps) {
     //             }));
     //
     //             setBusinessPartners(businessPartnersWithId);
-    //             console.log("response.data.data: "+JSON.stringify(response.data.data));
-    //             console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
+    //             //console.log("response.data.data: "+JSON.stringify(response.data.data));
+    //             //console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
     //
     //         } catch (error) {
     //             console.error('Error fetching data:', error);
@@ -283,8 +283,8 @@ export default function MayoristaPage(callback, deps) {
 
         try {
 
-            console.log("ID RANGO: " + value.id); // Log the selected element
-            console.log("Usuario logueado: " + user.DISPLAYNAME)
+            //console.log("ID RANGO: " + value.id); // Log the selected element
+            //console.log("Usuario logueado: " + user.DISPLAYNAME)
 
             try {
                 const response = await axios.post('/hanadb/api/customers/BusinessPartnersByRange', {
@@ -293,15 +293,15 @@ export default function MayoristaPage(callback, deps) {
                 });
 
                 if (response.status === 200) {
-                    console.log(response);
+                    //console.log(response);
                     const businessPartnersWithId = response.data.data.map((partner, index) => ({
                         ...partner,
                         id: index + 1, // Puedes ajustar la lógica según tus necesidades
                     }));
 
                     setBusinessPartners(businessPartnersWithId);
-                    console.log("response.data.data: " + JSON.stringify(response.data.data));
-                    console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
+                    //console.log("response.data.data: " + JSON.stringify(response.data.data));
+                    //console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
 
                 } else {
                     // La solicitud POST no se realizó correctamente
@@ -323,7 +323,7 @@ export default function MayoristaPage(callback, deps) {
     const handleViewRow = useCallback(
         (row) => {
             quickEdit.onTrue();
-            console.log("Cliente a gestionar: " + JSON.stringify(row));
+            //console.log("Cliente a gestionar: " + JSON.stringify(row));
             setPartner(row);
 
         },
@@ -334,7 +334,7 @@ export default function MayoristaPage(callback, deps) {
     const handleViewManagementRow = useCallback(
         (row) => {
             quickPCM.onTrue();
-            console.log("Cliente a gestionar: " + JSON.stringify(row));
+            //console.log("Cliente a gestionar: " + JSON.stringify(row));
             setPartner(row);
 
         },
@@ -345,7 +345,7 @@ export default function MayoristaPage(callback, deps) {
     const handleViewOrdersRow = useCallback(
         (row) => {
             quickICO.onTrue();
-            console.log("Cliente a gestionar: " + JSON.stringify(row));
+            //console.log("Cliente a gestionar: " + JSON.stringify(row));
             setPartner(row);
 
         },
@@ -358,11 +358,11 @@ export default function MayoristaPage(callback, deps) {
         async (row) => {
             quickDC.onTrue();
 
-            console.log("ID: " + row?.ID);
-            console.log('USER: ', user.ID);
+            //console.log("ID: " + row?.ID);
+            //console.log('USER: ', user.ID);
 
             let currentPartner = row?.ID.replace(/CL/g, "");
-            console.log('Cliente: ', currentPartner); // Output: "Mi nombre es ara y vivo en oud ity."
+            //console.log('Cliente: ', currentPartner); // Output: "Mi nombre es ara y vivo en oud ity."
 
             // Crear un cliente.
             const response = await axios.post('/hanadb/api/customers/BusinessPartners/ByRucCI', {
@@ -372,7 +372,7 @@ export default function MayoristaPage(callback, deps) {
             });
 
             if (response.status === 200) {
-                console.log("DATA: " + JSON.stringify(response.data.data));
+                //console.log("DATA: " + JSON.stringify(response.data.data));
                 // La solicitud PUT se realizó correctamente
                 setDataCliente(response.data.data);
             } else {
@@ -388,7 +388,7 @@ export default function MayoristaPage(callback, deps) {
     const handleViewCustomerLocationMapRow = useCallback(
         (row) => {
             quickCLM.onTrue();
-            console.log("Cliente a gestionar: " + JSON.stringify(row));
+            //console.log("Cliente a gestionar: " + JSON.stringify(row));
             setPartner(row);
 
         },
@@ -402,7 +402,7 @@ export default function MayoristaPage(callback, deps) {
 
 
     const handleValorCambiado = (nuevoValor) => {
-        console.log("Llega el nuevo valor: " + JSON.stringify(nuevoValor));
+        //console.log("Llega el nuevo valor: " + JSON.stringify(nuevoValor));
 
         setDataContAgenda(nuevoValor.length); // Corregido: asignar la longitud directamente
         const agendaCerrada = nuevoValor.filter((agenda) => agenda.VISITO === false); // Usar filter() para obtener todos los elementos que cumplan con la condición

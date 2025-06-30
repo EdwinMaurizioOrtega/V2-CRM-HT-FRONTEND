@@ -262,7 +262,7 @@ export default function FileFolderCard({ folder, selected, onSelect, onDelete, s
         onUpdate={() => {
           handleCloseEditFolder();
           setFolderName(folderName);
-          console.log('UPDATE FOLDER', folderName);
+          //console.log('UPDATE FOLDER', folderName);
         }}
         folderName={folderName}
         onChangeFolderName={(event) => setFolderName(event.target.value)}

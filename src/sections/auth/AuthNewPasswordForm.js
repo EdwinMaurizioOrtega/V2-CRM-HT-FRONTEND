@@ -69,11 +69,11 @@ export default function AuthNewPasswordForm() {
   const onSubmit = async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
-      console.log('DATA:', {
-        email: data.email,
-        code: `${data.code1}${data.code2}${data.code3}${data.code4}${data.code5}${data.code6}`,
-        password: data.password,
-      });
+      // console.log('DATA:', {
+      //   email: data.email,
+      //   code: `${data.code1}${data.code2}${data.code3}${data.code4}${data.code5}${data.code6}`,
+      //   password: data.password,
+      // });
       sessionStorage.removeItem('email-recovery');
       enqueueSnackbar('Change password success!');
       push(PATH_DASHBOARD.root);

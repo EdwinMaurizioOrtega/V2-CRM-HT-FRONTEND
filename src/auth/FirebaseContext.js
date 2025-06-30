@@ -72,7 +72,7 @@ AuthProvider.propTypes = {
 
 export function AuthProvider({ children }) {
 
-  console.log("AUTH: "+ AUTH);
+  //console.log("AUTH: "+ AUTH);
 
   const [state, dispatch] = useReducer(reducer, initialState);
 

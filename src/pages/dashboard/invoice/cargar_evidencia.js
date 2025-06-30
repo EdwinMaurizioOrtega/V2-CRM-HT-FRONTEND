@@ -61,15 +61,15 @@ export default function EvidenciaPage() {
                 const response = await axios.get(`/hanadb/api/orders/get_invoices_for_upload_evidencia_by_usuario?user_id=${user.ID}&empresa=${user.EMPRESA}`);
 
                 if (response.status === 200) {
-                    console.log(response);
+                    //console.log(response);
                     const businessPartnersWithId = response.data.orders.map((partner, index) => ({
                         ...partner,
                         id: index + 1, // Puedes ajustar la lógica según tus necesidades
                     }));
 
                     setBusinessPartners(businessPartnersWithId);
-                    console.log("response.data.data: " + JSON.stringify(response.data.data));
-                    console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
+                    //console.log("response.data.data: " + JSON.stringify(response.data.data));
+                    //console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
 
                 } else {
                     // La solicitud POST no se realizó correctamente
@@ -102,8 +102,8 @@ export default function EvidenciaPage() {
 
 
         // Aquí puedes manejar la carga del archivo, por ejemplo, enviándolo a un servidor
-        console.log('Archivo seleccionado:', file);
-        console.log('Número de orden:', row.ID);
+        //console.log('Archivo seleccionado:', file);
+        //console.log('Número de orden:', row.ID);
 
         //Ejemplo de envío a un servidor (reemplaza con tu lógica)
         const formData = new FormData();
@@ -122,7 +122,7 @@ export default function EvidenciaPage() {
             })
             .then(async data => {
                 if (data.status === 'success') {
-                    console.log('Archivo subido con éxito. Enlace:', data.link);
+                    //console.log('Archivo subido con éxito. Enlace:', data.link);
 
                     // Actualizar una orden.
                     const response = await axios.put('/hanadb/api/orders/api_save_url_file', {
@@ -131,8 +131,8 @@ export default function EvidenciaPage() {
                         empresa: user.EMPRESA,
                     });
 
-                    console.log("Orden actualizada correctamente.");
-                    console.log("Código de estado:", response.status);
+                    //console.log("Orden actualizada correctamente.");
+                    //console.log("Código de estado:", response.status);
 
                     // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
                     if (response.status === 200) {

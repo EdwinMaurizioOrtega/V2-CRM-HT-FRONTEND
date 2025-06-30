@@ -56,15 +56,15 @@ export default function GarantiaPage() {
                 const response = await axios.get('/hanadb/api/products/get_all_product_images');
 
                 if (response.status === 200) {
-                    console.log(response);
+                    //console.log(response);
                     const businessPartnersWithId = response.data.images.map((partner, index) => ({
                         ...partner,
                         id: index + 1, // Puedes ajustar la lógica según tus necesidades
                     }));
 
                     setBusinessPartners(businessPartnersWithId);
-                    console.log("response.data.data: " + JSON.stringify(response.data.data));
-                    console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
+                    //console.log("response.data.data: " + JSON.stringify(response.data.data));
+                    //console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
 
                 } else {
                     // La solicitud POST no se realizó correctamente
@@ -101,8 +101,8 @@ export default function GarantiaPage() {
     const handleFileUpload = (file, cod) => {
 
         // Aquí puedes manejar la carga del archivo, por ejemplo, enviándolo a un servidor
-        console.log('Archivo seleccionado:', file);
-        console.log('Código producto:', cod);
+        //console.log('Archivo seleccionado:', file);
+        //console.log('Código producto:', cod);
 
         // Ejemplo de envío a un servidor (reemplaza con tu lógica)
         const formData = new FormData();
@@ -121,7 +121,7 @@ export default function GarantiaPage() {
             })
             .then(async data => {
                 if (data.status === 'success') {
-                    console.log('Archivo subido con éxito. Enlace:', data.link);
+                    //console.log('Archivo subido con éxito. Enlace:', data.link);
 
                     // Actualizar una orden.
                     const response = await axios.post('/hanadb/api/products/save_url_img_product', {
@@ -130,8 +130,8 @@ export default function GarantiaPage() {
 
                     });
 
-                    console.log("Orden actualizada correctamente.");
-                    console.log("Código de estado:", response.status);
+                    //console.log("Orden actualizada correctamente.");
+                    //console.log("Código de estado:", response.status);
 
                     // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
                     if (response.status === 200) {
@@ -203,15 +203,15 @@ export default function GarantiaPage() {
     const handleDeleteImage = async (data) => {
         //Enviar a la páguina de creación de la nota de credito
         if (data) {
-            console.log("Fila seleccionada:", data);
+            //console.log("Fila seleccionada:", data);
             // Puedes hacer algo con las coordenadas seleccionadas aquí, si es necesario
 
             // Actualizar una orden.
             const response = await axios.delete(`/hanadb/api/products/delete_image_product?URL=${data.URL}`
             );
 
-            console.log("Orden actualizada correctamente.");
-            console.log("Código de estado:", response.status);
+            //console.log("Orden actualizada correctamente.");
+            //console.log("Código de estado:", response.status);
 
             // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
             if (response.status === 200) {
@@ -219,7 +219,7 @@ export default function GarantiaPage() {
             }
 
         } else {
-            console.log("No se ha seleccionado ningún marcador.");
+            //console.log("No se ha seleccionado ningún marcador.");
         }
     };
 

@@ -90,7 +90,9 @@ function AttachmentItem({ attachment }) {
         <FileThumbnail
           imageView
           file={attachment.preview}
-          onDownload={() => console.log('DOWNLOAD')}
+          onDownload={() => {
+              //console.log('DOWNLOAD')
+          }}
           sx={{ width: 28, height: 28 }}
         />
       </Stack>

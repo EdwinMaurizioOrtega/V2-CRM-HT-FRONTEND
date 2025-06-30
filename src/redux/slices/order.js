@@ -72,7 +72,7 @@ export default slice.reducer;
 //         dispatch(slice.actions.startLoading());
 //         try {
 //             const response = await axios.get(`/hanadb/api/orders/bodega?bod=${bodega}`);
-//             console.log("hola hola: "+response.data.orders);
+//             //console.log("hola hola: "+response.data.orders);
 //             dispatch(slice.actions.getOrdersSuccess(response.data.orders));
 //         } catch (error) {
 //             dispatch(slice.actions.hasError(error));

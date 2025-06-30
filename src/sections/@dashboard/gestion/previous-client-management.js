@@ -29,7 +29,7 @@ import {useTheme} from "@mui/material/styles";
 
 export default function PreviousClientManagement({userID, currentPartner, open, onClose}) {
 
-    console.log("partner.ID " + currentPartner?.ID || '');
+    //console.log("partner.ID " + currentPartner?.ID || '');
 
     const theme = useTheme();
 
@@ -83,7 +83,7 @@ export default function PreviousClientManagement({userID, currentPartner, open, 
     useEffect(() => {
         const handleViewManagementRow = async () => {
 
-            console.log("event: " + JSON.stringify(currentPartner.ID));
+            //console.log("event: " + JSON.stringify(currentPartner.ID));
 
             if (currentPartner) {
 
@@ -93,7 +93,7 @@ export default function PreviousClientManagement({userID, currentPartner, open, 
                     });
 
                     if (response.status === 200) {
-                        console.log("DATA: " + JSON.stringify(response.data));
+                        //console.log("DATA: " + JSON.stringify(response.data));
 
                         const businessPartnersWithId = response.data.data.map((partner, index) => ({
                             ...partner,
@@ -101,8 +101,8 @@ export default function PreviousClientManagement({userID, currentPartner, open, 
                         }));
 
                         setBusinessPartnersManagement(businessPartnersWithId);
-                        console.log("response.data.data: " + JSON.stringify(response.data.data));
-                        console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
+                        //console.log("response.data.data: " + JSON.stringify(response.data.data));
+                        //console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
 
                     } else {
                         // La solicitud POST no se realizó correctamente
@@ -124,7 +124,7 @@ export default function PreviousClientManagement({userID, currentPartner, open, 
     useEffect(() => {
         const handleViewVisitasByDia = async () => {
 
-            console.log("event: " + JSON.stringify(currentPartner.ID));
+            //console.log("event: " + JSON.stringify(currentPartner.ID));
 
             if (currentPartner) {
 
@@ -136,7 +136,7 @@ export default function PreviousClientManagement({userID, currentPartner, open, 
                     });
 
                     if (response.status === 200) {
-                        console.log("Visitas Por Día: " + JSON.stringify(response.data));
+                        //console.log("Visitas Por Día: " + JSON.stringify(response.data));
 
                         const getVisitByDayTemplate = response.data.data.map((partner) => ({
                             fechaFormat: partner.FECHA_FORMAT,
@@ -150,8 +150,8 @@ export default function PreviousClientManagement({userID, currentPartner, open, 
                             labels: labels,
                             data: data
                         });
-                        console.log("Visitas Por Día: " + JSON.stringify(response.data.data));
-                        //console.log("Template Visitas Por Día: " + JSON.stringify(visitByDayManagement));
+                        //console.log("Visitas Por Día: " + JSON.stringify(response.data.data));
+                        ////console.log("Template Visitas Por Día: " + JSON.stringify(visitByDayManagement));
 
                     } else {
                         // La solicitud POST no se realizó correctamente
@@ -174,7 +174,7 @@ export default function PreviousClientManagement({userID, currentPartner, open, 
     useEffect(() => {
         const handleViewAgenda = async () => {
 
-            console.log("event: " + JSON.stringify(currentPartner.ID));
+            //console.log("event: " + JSON.stringify(currentPartner.ID));
 
             if (currentPartner) {
                 //Agenda (cerrada y abierta) por cliente
@@ -183,7 +183,7 @@ export default function PreviousClientManagement({userID, currentPartner, open, 
 
                     if (response.status === 200) {
 
-                        console.log("Agenda JSON " + JSON.stringify(response.data));
+                        //console.log("Agenda JSON " + JSON.stringify(response.data));
 
                         let trueCounter = 0;
                         let falseCounter = 0;

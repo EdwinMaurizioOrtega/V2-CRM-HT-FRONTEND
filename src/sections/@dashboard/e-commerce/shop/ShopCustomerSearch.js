@@ -44,7 +44,7 @@ export default function ShopCustomerSearch() {
     // push(PATH_DASHBOARD.eCommerce.view(paramCase(name)));
     // push(PATH_DASHBOARD.eCommerce.view(name));
 
-      console.log(name);
+      //console.log(name);
   };
 
   const handleKeyUp = (event) => {

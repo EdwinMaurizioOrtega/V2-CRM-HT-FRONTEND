@@ -138,7 +138,9 @@ export default function DemoUploadPage() {
                 onDrop={handleDropMultiFile}
                 onRemove={handleRemoveFile}
                 onRemoveAll={handleRemoveAllFiles}
-                onUpload={() => console.log('ON UPLOAD')}
+                onUpload={() => {
+                    //console.log('ON UPLOAD')
+                }}
               />
             </CardContent>
           </Card>

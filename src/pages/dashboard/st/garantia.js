@@ -37,12 +37,12 @@ export default function GarantiaPage() {
 
                 setIsLoading(true); // Set loading to true when starting the fetch
 
-                console.log("Guia: " + guia);
+                //console.log("Guia: " + guia);
                 var dataToSend = {
                     num_guia: guia
                 };
 
-                //console.log("dataToSend: "+JSON.stringify(dataToSend));
+                ////console.log("dataToSend: "+JSON.stringify(dataToSend));
 
                 // URL del servidor al que deseas enviar los datos
                 const url = `${HOST_API_KEY}/hanadb/api/orders/order/ServiEntrega/GuiasWeb`;
@@ -61,7 +61,7 @@ export default function GarantiaPage() {
                     .then((response) => response.json()) // Convertir la respuesta en formato JSON
                     .then((data) => {
                         // Aquí puedes manejar la respuesta del servidor (data)
-                        console.log("Respuesta del servidor:", data);
+                        //console.log("Respuesta del servidor:", data);
 
                         var pdfDecode = data.base64File;
 

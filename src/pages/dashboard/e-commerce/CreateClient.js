@@ -126,7 +126,7 @@ export default function ConsultClientForm() {
 
     const onSubmit = async (data) => {
 
-        console.log('DATA', data);
+        //console.log('DATA', data);
 
 
         const currentDate = new Date();
@@ -174,12 +174,12 @@ export default function ConsultClientForm() {
             ]
         };
 
-        console.log('PAYLOAD', payload);
+        //console.log('PAYLOAD', payload);
 
 
         try {
             const response = await axios.post('/hanadb/api/customers/create_customer_sap', payload);
-            console.log('RESPONSE', response);
+            //console.log('RESPONSE', response);
             alert(response.data.data);
         } catch (error) {
             console.error('ERROR', error);
@@ -215,7 +215,7 @@ export default function ConsultClientForm() {
                 const response = await axios.get(`${HOST_API_KEY}/hanadb/api/customers/get_parroquias`);
 
                 if (response.status === 200) {
-                    console.log("DATA: " + JSON.stringify(response.data.data));
+                    //console.log("DATA: " + JSON.stringify(response.data.data));
                     // La solicitud PUT se realizó correctamente
                     setDataParroquias(response.data.data);
                 } else {
@@ -232,7 +232,7 @@ export default function ConsultClientForm() {
                 const response = await axios.get(`${HOST_API_KEY}/hanadb/api/customers/get_tipo_cliente`);
 
                 if (response.status === 200) {
-                    console.log("DATA: " + JSON.stringify(response.data.data));
+                    //console.log("DATA: " + JSON.stringify(response.data.data));
                     // La solicitud PUT se realizó correctamente
                     setDataTiposCliente(response.data.data);
                 } else {
@@ -250,7 +250,7 @@ export default function ConsultClientForm() {
                 const response = await axios.get(`${HOST_API_KEY}/hanadb/api/customers/get_empleados_venta`);
 
                 if (response.status === 200) {
-                    console.log("DATA: " + JSON.stringify(response.data.data));
+                    //console.log("DATA: " + JSON.stringify(response.data.data));
                     // La solicitud PUT se realizó correctamente
                     setDataEmpleadosVenta(response.data.data);
                 } else {
@@ -268,12 +268,12 @@ export default function ConsultClientForm() {
 
     const handleShowCoordinates = (position) => {
         if (position) {
-            console.log("Coordenadas seleccionadas:", position);
+            //console.log("Coordenadas seleccionadas:", position);
             // Puedes hacer algo con las coordenadas seleccionadas aquí, si es necesario
             setDataCliente(position);
 
         } else {
-            console.log("No se ha seleccionado ningún marcador.");
+            //console.log("No se ha seleccionado ningún marcador.");
         }
     };
 

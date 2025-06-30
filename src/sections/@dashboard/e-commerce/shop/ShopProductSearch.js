@@ -37,7 +37,7 @@ export default function ShopProductSearch() {
         //
         //     setSearchResults(response.data.results);
         //
-        //     console.log('Productos encontrados:', searchResults)
+        //     //console.log('Productos encontrados:', searchResults)
         //   }
         // } catch (error) {
         //   console.error(error);
@@ -55,7 +55,7 @@ export default function ShopProductSearch() {
                     const cachedData = await response.json();
                     const searchResultsAux = cachedData.products.filter(product => product.NOMBRE.includes(value.toUpperCase().trim()));
                     setSearchResults(searchResultsAux);
-                    console.log('Productos encontrados en la caché:', searchResultsAux);
+                    //console.log('Productos encontrados en la caché:', searchResultsAux);
                 }
 
             }
@@ -74,12 +74,12 @@ export default function ShopProductSearch() {
         //         const searchResultsAux = cachedData.products.filter(product => product.CODIGO === value || product.NOMBRE.toLowerCase().includes(value.toLowerCase()));
         //
         //         if (searchResultsAux.length > 0) {
-        //             console.log('Productos encontrados en la caché:', searchResultsAux);
+        //             //console.log('Productos encontrados en la caché:', searchResultsAux);
         //             setSearchResults(searchResultsAux);
-        //             console.log('Productos encontrados:', searchResults)
+        //             //console.log('Productos encontrados:', searchResults)
         //             // Realizar alguna operación con la lista de productos encontrados en la caché
         //         } else {
-        //             console.log('No se encontraron productos en la caché que coincidan con el término de búsqueda');
+        //             //console.log('No se encontraron productos en la caché que coincidan con el término de búsqueda');
         //             // Realizar alguna operación cuando no se encuentren productos en la caché que coincidan con el término de búsqueda
         //         }
         //     }

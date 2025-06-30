@@ -21,11 +21,11 @@ PedidoInvoicePDF.propTypes = {
 
 
 export default function PedidoInvoicePDF({invoice, user, empresa}) {
-    // console.log("invoice: "+ JSON.stringify(invoice));
-    // console.log("invoice: "+ JSON.stringify(invoice[0]));
-    // console.log("invoice: "+ invoice.PEDIDO_PROV);
+    // //console.log("invoice: "+ JSON.stringify(invoice));
+    // //console.log("invoice: "+ JSON.stringify(invoice[0]));
+    // //console.log("invoice: "+ invoice.PEDIDO_PROV);
 
-    console.log("invoice: " + invoice);
+    //console.log("invoice: " + invoice);
     const {
         items = [],
         ID,
@@ -91,9 +91,9 @@ export default function PedidoInvoicePDF({invoice, user, empresa}) {
     const ivaTotal = subtotalTotal * ivaPorcentaje;
     const totalConIva = subtotalTotal + ivaTotal;
 
-    console.log('Subtotal: ', subtotalTotal);
-    console.log('IVA: ', ivaTotal);
-    console.log('Total incluido IVA: ', totalConIva);
+    //console.log('Subtotal: ', subtotalTotal);
+    //console.log('IVA: ', ivaTotal);
+    //console.log('Total incluido IVA: ', totalConIva);
 
     return (
         <Document>

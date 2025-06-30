@@ -59,15 +59,15 @@ const options_2 = [
 
 export default function InvoicedClientOrders({userID, currentPartner, open, onClose}) {
 
-    console.log("partner.ID " + currentPartner?.ID || '');
-    console.log("Current User: " + userID || '');
+    //console.log("partner.ID " + currentPartner?.ID || '');
+    //console.log("Current User: " + userID || '');
 
     const {push} = useRouter();
 
     const theme = useTheme();
 
     const handleViewRow = (id) => {
-        // console.log("id_id"+ id);
+        // //console.log("id_id"+ id);
         //push(PATH_DASHBOARD.invoice.view(id));
         window.open(PATH_DASHBOARD.invoice.view(id), '_blank');
 
@@ -150,7 +150,7 @@ export default function InvoicedClientOrders({userID, currentPartner, open, onCl
     useEffect(() => {
         const handleViewManagementRow = async () => {
             if (currentPartner) {
-                console.log("event: " + JSON.stringify(currentPartner.ID));
+                //console.log("event: " + JSON.stringify(currentPartner.ID));
 
                 try {
                     const response = await axios.post('/hanadb/api/customers/management/OrdersList', {
@@ -158,7 +158,7 @@ export default function InvoicedClientOrders({userID, currentPartner, open, onCl
                     });
 
                     if (response.status === 200) {
-                        console.log("DATA: " + JSON.stringify(response.data));
+                        //console.log("DATA: " + JSON.stringify(response.data));
 
                         const businessPartnersWithId = response.data.data.map((partner, index) => ({
                             ...partner,
@@ -166,8 +166,8 @@ export default function InvoicedClientOrders({userID, currentPartner, open, onCl
                         }));
 
                         setBusinessPartnersInvoiced(businessPartnersWithId);
-                        console.log("response.data.data: " + JSON.stringify(response.data.data));
-                        console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
+                        //console.log("response.data.data: " + JSON.stringify(response.data.data));
+                        //console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
 
                     } else {
                         // La solicitud POST no se realizó correctamente
@@ -186,13 +186,13 @@ export default function InvoicedClientOrders({userID, currentPartner, open, onCl
 
         const handleValorFacturado = async () => {
             if (userID) {
-                console.log("userIDuserID: " + JSON.stringify(userID));
+                //console.log("userIDuserID: " + JSON.stringify(userID));
 
                 try {
                     const response = await axios.get(`/hanadb/api/customers/total_sales_per_week?USER_ID=${userID}&ID_CLIENTE=${currentPartner.ID}`);
 
                     if (response.status === 200) {
-                        console.log("DATA: " + JSON.stringify(response.data));
+                        //console.log("DATA: " + JSON.stringify(response.data));
 
                         const ventasBySemanaUserWithId = response.data.data.map((partner, index) => ({
                             id: index + 1, // Puedes ajustar la lógica según tus necesidades
@@ -201,8 +201,8 @@ export default function InvoicedClientOrders({userID, currentPartner, open, onCl
                         }));
 
                         setVentasBySemanaUserWithId(ventasBySemanaUserWithId);
-                        console.log("PorSemana: " + JSON.stringify(response.data.data));
-                        console.log("PorSemana: " + JSON.stringify(ventasBySemanaUserWithId));
+                        //console.log("PorSemana: " + JSON.stringify(response.data.data));
+                        //console.log("PorSemana: " + JSON.stringify(ventasBySemanaUserWithId));
 
                     } else {
                         // La solicitud POST no se realizó correctamente
@@ -221,13 +221,13 @@ export default function InvoicedClientOrders({userID, currentPartner, open, onCl
 
         const handleFacturadoAndAnulado = async () => {
             if (userID) {
-                console.log("userIDuserID: " + JSON.stringify(userID));
+                //console.log("userIDuserID: " + JSON.stringify(userID));
 
                 try {
                     const response = await axios.get(`/hanadb/api/customers/total_billed_and_voided?USER_ID=${userID}&ID_CLIENTE=${currentPartner.ID}`);
 
                     if (response.status === 200) {
-                        console.log("DATA: " + JSON.stringify(response.data));
+                        //console.log("DATA: " + JSON.stringify(response.data));
 
                         const ventasBySemanaUserWithId = response.data.data.map((partner, index) => ({
                             id: index + 1, // Puedes ajustar la lógica según tus necesidades
@@ -236,8 +236,8 @@ export default function InvoicedClientOrders({userID, currentPartner, open, onCl
                         }));
 
                         setVentasAnuladoFacturado(ventasBySemanaUserWithId);
-                        console.log("PorSemana: " + JSON.stringify(response.data.data));
-                        console.log("PorSemana: " + JSON.stringify(ventasBySemanaUserWithId));
+                        //console.log("PorSemana: " + JSON.stringify(response.data.data));
+                        //console.log("PorSemana: " + JSON.stringify(ventasBySemanaUserWithId));
 
                     } else {
                         // La solicitud POST no se realizó correctamente

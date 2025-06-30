@@ -147,10 +147,10 @@ export default function ProductDetailsSummary({
     }, [product]);
 
     const onSubmit = async (data) => {
-        //console.log("data: "+ data);
+        ////console.log("data: "+ data);
         try {
             if (!alreadyProduct) {
-                console.log("data: " + data);
+                //console.log("data: " + data);
                 onAddCart({
                     ...data,
                     // colors: [values.colors],
@@ -165,9 +165,9 @@ export default function ProductDetailsSummary({
     };
 
     const handleAddCart = async () => {
-        // //console.log("values: "+ values.price.Price);
+        // ////console.log("values: "+ values.price.Price);
 
-        console.log("user: " + JSON.stringify(user));
+        //console.log("user: " + JSON.stringify(user));
 
         //Hipertronics
         if (user.EMPRESA === '0992537442001') {
@@ -177,7 +177,7 @@ export default function ProductDetailsSummary({
                 if (selectedTomebambaPrice) {
                     //Para LIDENAR el precio por defecto es el NE
                     const primerObjeto = pricelistproduct[0];
-                    console.log("primerObjeto: " + JSON.stringify(primerObjeto));
+                    //console.log("primerObjeto: " + JSON.stringify(primerObjeto));
 
                     try {
                         onAddCart({
@@ -242,7 +242,7 @@ export default function ProductDetailsSummary({
                 if (selectedTomebambaPrice) {
                     //Para MC el precio por defecto es el C30
                     const primerObjeto = pricelistproduct[1];
-                    console.log("primerObjeto: " + JSON.stringify(primerObjeto));
+                    //console.log("primerObjeto: " + JSON.stringify(primerObjeto));
 
                     try {
                         onAddCart({
@@ -282,8 +282,8 @@ export default function ProductDetailsSummary({
 
         }
 
-        //console.log("onStockValidate: "+JSON.stringify( onStockValidate));
-        // console.log("onValueQuality: "+JSON.stringify(values.quantity));
+        ////console.log("onStockValidate: "+JSON.stringify( onStockValidate));
+        // //console.log("onValueQuality: "+JSON.stringify(values.quantity));
 
     };
 

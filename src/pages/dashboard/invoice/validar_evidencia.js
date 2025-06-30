@@ -66,15 +66,15 @@ export default function ValidarEvidenciaPage() {
                 const response = await axios.get(`/hanadb/api/orders/get_invoices_for_upload_evidencia_by_status?status=23&empresa=${user.EMPRESA}`);
 
                 if (response.status === 200) {
-                    console.log(response);
+                    //console.log(response);
                     const businessPartnersWithId = response.data.orders.map((partner, index) => ({
                         ...partner,
                         id: index + 1, // Puedes ajustar la lógica según tus necesidades
                     }));
 
                     setBusinessPartners(businessPartnersWithId);
-                    console.log("response.data.data: " + JSON.stringify(response.data.data));
-                    console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
+                    //console.log("response.data.data: " + JSON.stringify(response.data.data));
+                    //console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
 
                 } else {
                     // La solicitud POST no se realizó correctamente
@@ -102,8 +102,8 @@ export default function ValidarEvidenciaPage() {
             empresa: user.EMPRESA,
         });
 
-        console.log("Orden actualizada correctamente.");
-        console.log("Código de estado:", response.status);
+        //console.log("Orden actualizada correctamente.");
+        //console.log("Código de estado:", response.status);
 
         // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
         if (response.status === 200) {
@@ -126,8 +126,8 @@ export default function ValidarEvidenciaPage() {
             empresa: user.EMPRESA,
         });
 
-        console.log("Orden actualizada correctamente.");
-        console.log("Código de estado:", response.status);
+        //console.log("Orden actualizada correctamente.");
+        //console.log("Código de estado:", response.status);
 
         // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
         if (response.status === 200) {

@@ -137,7 +137,7 @@ export default function EcommerceProductListPage() {
     useEffect(() => {
         const fetchData = async () => {
 
-            console.log("User: " + JSON.stringify(user));
+            //console.log("User: " + JSON.stringify(user));
 
             try {
 
@@ -151,13 +151,13 @@ export default function EcommerceProductListPage() {
                         // Si hay una respuesta en la caché, se obtiene su contenido
                         const cachedData = await response.json();
                         setProducts(cachedData.products);
-                        console.log("cachedData: " + JSON.stringify(cachedData));
+                        //console.log("cachedData: " + JSON.stringify(cachedData));
                     }
 
                     // Independientemente de si hay una respuesta en la caché o no, se realiza la solicitud de red
                     const networkResponse = await fetch(`${HOST_API_KEY}/hanadb/api/products/mc`);
                     const data = await networkResponse.json();
-                    //console.log("data: " + JSON.stringify(data));
+                    ////console.log("data: " + JSON.stringify(data));
 
                     // Se almacena la respuesta de red en la caché
                     await cache.put(`${HOST_API_KEY}/hanadb/api/products/mc`, new Response(JSON.stringify(data)));
@@ -191,13 +191,13 @@ export default function EcommerceProductListPage() {
                             setProducts(cachedData.products);
                         }
 
-                        console.log("cachedData: " + JSON.stringify(cachedData));
+                        //console.log("cachedData: " + JSON.stringify(cachedData));
                     }
 
                     // Independientemente de si hay una respuesta en la caché o no, se realiza la solicitud de red
                     const networkResponse = await fetch(`${HOST_API_KEY}/hanadb/api/products/?empresa=${user.EMPRESA}`);
                     const data = await networkResponse.json();
-                    //console.log("data: " + JSON.stringify(data));
+                    ////console.log("data: " + JSON.stringify(data));
 
                     // Se almacena la respuesta de red en la caché
                     await cache.put(`${HOST_API_KEY}/hanadb/api/products/?empresa=${user.EMPRESA}`, new Response(JSON.stringify(data)));

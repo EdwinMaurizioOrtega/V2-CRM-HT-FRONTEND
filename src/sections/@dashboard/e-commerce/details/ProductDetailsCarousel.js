@@ -138,7 +138,7 @@ export default function ProductDetailsCarousel({ product }) {
   };
 
   const handleShare = (url) => {
-    console.log('Compartiendo:', url);
+    //console.log('Compartiendo:', url);
 
     const image = new window.Image();
     image.crossOrigin = 'Anonymous'; // Establecer CORS para la imagen

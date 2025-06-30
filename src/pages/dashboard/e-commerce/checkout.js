@@ -70,7 +70,7 @@ export default function EcommerceCheckoutPage() {
 
     const {user} = useAuthContext();
 
-    console.log('user: ' + JSON.stringify(user));
+    //console.log('user: ' + JSON.stringify(user));
 
     const {themeStretch} = useSettingsContext();
 
@@ -106,7 +106,7 @@ export default function EcommerceCheckoutPage() {
 
     const handleTomebambaNextStep = () => {
 
-        console.log("Crear Orden Tomebamba.")
+        //console.log("Crear Orden Tomebamba.")
 
         //Saltarse a finalizar la orden.
         dispatch(gotoStep(3));
@@ -177,7 +177,7 @@ export default function EcommerceCheckoutPage() {
 
     const handleCustomerNextStep = () => {
 
-        console.log("Crear Orden Customer Mayorista.")
+        //console.log("Crear Orden Customer Mayorista.")
 
         //Saltarse a finalizar la orden.
         dispatch(gotoStep(3));
@@ -229,7 +229,7 @@ export default function EcommerceCheckoutPage() {
     const handleCreateBilling = (address) => {
         dispatch(createBilling(address));
         // dispatch(nextStep());
-        console.log(address);
+        //console.log(address);
         if (address.TIENE_PLATAFORMA_CREDITO === 'NO') {
             handleOpen();
         } else {
@@ -264,7 +264,7 @@ export default function EcommerceCheckoutPage() {
     //Crear el pedido y enviar al área de aprobación
     const handleReset = async () => {
         if (completed) {
-            console.log('DATA', checkout);
+            //console.log('DATA', checkout);
 
             try {
 
@@ -275,15 +275,15 @@ export default function EcommerceCheckoutPage() {
                     checkoutUser: user
                 });
 
-                console.log('Status crear orden SAP:', response.status);
+                //console.log('Status crear orden SAP:', response.status);
                 if (response.status === 201) {
                     await Promise.all([dispatch(resetCart()), replace(PATH_DASHBOARD.invoice.list)]);
                 } else {
-                    console.log('La solicitud no devolvió un estado 201.');
+                    //console.log('La solicitud no devolvió un estado 201.');
                     // Realizar alguna acción adicional en caso de que el estado de respuesta no sea 201
                 }
             } catch (error) {
-                console.log('Error al crear la orden:', error);
+                //console.log('Error al crear la orden:', error);
                 // Manejar el error al crear la orden
             } finally {
                 setLoading(false); // Desactivar el estado de carga
@@ -303,17 +303,17 @@ export default function EcommerceCheckoutPage() {
 
     const handleSave = async () => {
 
-        console.log('DataX', checkout.billing.ID);
+        //console.log('DataX', checkout.billing.ID);
 
-        console.log("Opciones seleccionadas:", selectedOptions);
+        //console.log("Opciones seleccionadas:", selectedOptions);
         if (selectedOptions.some((option) => option.id === 6)) {
-            console.log("Motivo de 'Otro':", otroMotivo);
+            //console.log("Motivo de 'Otro':", otroMotivo);
         }
 
         const otroSeleccionado = selectedOptions.some((option) => option.title === "Otro");
 
         if (otroSeleccionado) {
-            console.log("Motivo de 'Otro':", otroMotivo);
+            //console.log("Motivo de 'Otro':", otroMotivo);
         }
 
         try {
@@ -326,17 +326,17 @@ export default function EcommerceCheckoutPage() {
                 nro_locales: Number(numeroLocales),
             });
 
-            console.log('Status: ', response.status);
+            //console.log('Status: ', response.status);
             if (response.status === 200) {
-                console.log('La solicitud devolvió un estado 200.');
+                //console.log('La solicitud devolvió un estado 200.');
                 handleClose();
                 dispatch(nextStep());
             } else {
-                console.log('La solicitud no devolvió un estado 200.');
+                //console.log('La solicitud no devolvió un estado 200.');
                 // Realizar alguna acción adicional en caso de que el estado de respuesta no sea 201
             }
         } catch (error) {
-            console.log('Error al crear la orden:', error);
+            //console.log('Error al crear la orden:', error);
             // Manejar el error al crear la orden
         }
 

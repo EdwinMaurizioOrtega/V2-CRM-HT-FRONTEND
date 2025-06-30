@@ -188,14 +188,14 @@ export default function CatalogoForm() {
     const onSubmit = async () => {
 
         // await new Promise((resolve) => setTimeout(resolve, 3000));
-        //console.log('DATA', JSON.stringify(data));
+        ////console.log('DATA', JSON.stringify(data));
         // reset();
 
         // Crear un cliente.
         const response = await axios.get(`/hanadb/api/products/tomebamba_catalogo?empresa=${user.EMPRESA}`);
 
         if (response.status === 200) {
-            console.log("data: "+JSON.stringify(response.data));
+            //console.log("data: "+JSON.stringify(response.data));
             // La solicitud PUT se realizó correctamente
             setDataCatalog(response.data.catalogo)
         } else {
@@ -287,8 +287,8 @@ function ExcelDownload({data, client}) {
 
     const {user} = useAuthContext();
 
-    console.log("data: "+data);
-    console.log("client: "+JSON.stringify( client));
+    //console.log("data: "+data);
+    //console.log("client: "+JSON.stringify( client));
 
     const handleExportToExcel = () => {
         const wb = XLSX.utils.book_new();

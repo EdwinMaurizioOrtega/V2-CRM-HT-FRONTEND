@@ -212,7 +212,7 @@ export default function FileGridView({ table, data, dataFiltered, onDeleteItem, 
         onCreate={() => {
           handleCloseNewFolder();
           setFolderName('');
-          console.log('CREATE NEW FOLDER', folderName);
+          //console.log('CREATE NEW FOLDER', folderName);
         }}
         folderName={folderName}
         onChangeFolderName={(event) => setFolderName(event.target.value)}

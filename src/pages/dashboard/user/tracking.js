@@ -92,7 +92,7 @@ export default function TrackingPage() {
                 if (response.status === 200) {
 
                     const data = await response.json();
-                    console.log("coordinatesCustomers: " + JSON.stringify(data.data));
+                    //console.log("coordinatesCustomers: " + JSON.stringify(data.data));
 
                     const objectArray = [];
 
@@ -117,7 +117,7 @@ export default function TrackingPage() {
 
 
                 } else {
-                    console.log("Error error.")
+                    //console.log("Error error.")
                 }
 
 
@@ -151,10 +151,10 @@ export default function TrackingPage() {
 
         // MAP
         socket.on("connect", () => {
-            console.log("Connected to socket server");
+            //console.log("Connected to socket server");
             setName(`anon-${socket.id}`);
             setConnected(true);
-            console.log("joining room map ", currentRoomMap);
+            //console.log("joining room map ", currentRoomMap);
 
             socket.emit("get_coordinates", currentRoomMap);
 
@@ -162,13 +162,13 @@ export default function TrackingPage() {
 
         // Agregar un manejador de eventos para el evento "coordinates"
         socket.on("coordinates", (data) => {
-            console.log("Coordenadas recibidas: ", data);
+            //console.log("Coordenadas recibidas: ", data);
             data.date = new Date(data.date);
             setCoordinates((coord) => [...coord, data])
         });
 
         socket.on("list_coordinates", (msgs) => {
-            console.log("Lista Coordenadas Recibidas: ", msgs);
+            //console.log("Lista Coordenadas Recibidas: ", msgs);
             let messages = msgs.coordinates.map((msg) => {
                 msg.date = new Date(msg.date);
                 return msg;
@@ -182,7 +182,7 @@ export default function TrackingPage() {
     useEffect(() => {
         if (coordinates.length > 0) {
 
-            console.log("messages: " + JSON.stringify(coordinates));
+            //console.log("messages: " + JSON.stringify(coordinates));
             const objectArray = [];
 
             // Definir los valores estáticos para todos los países
@@ -212,7 +212,7 @@ export default function TrackingPage() {
 
             });
 
-            console.log("Lista de todos los países: ", objectArray);
+            //console.log("Lista de todos los países: ", objectArray);
 
             // Establecer los países como datos
             setCountriesData(objectArray);
@@ -298,12 +298,12 @@ export default function TrackingPage() {
 
     const handleShowCoordinates = (position) => {
         if (position) {
-            console.log("Coordenadas seleccionadas:", position);
+            //console.log("Coordenadas seleccionadas:", position);
             // Puedes hacer algo con las coordenadas seleccionadas aquí, si es necesario
             setSelectedCoordinates(position);
 
         } else {
-            console.log("No se ha seleccionado ningún marcador.");
+            //console.log("No se ha seleccionado ningún marcador.");
         }
     };
 
@@ -446,13 +446,13 @@ function MapComponent({markers, selectedCoordinates, coordinatesCustomersA}) {
 
 
     const handleGestionesAnteriores = (data) => {
-        console.log("Gestiones anteriores: " + JSON.stringify(data));
+        //console.log("Gestiones anteriores: " + JSON.stringify(data));
     };
 
     const handleViewRow = useCallback(
         (row) => {
             quickEdit.onTrue();
-            console.log("Cliente a gestionar: " + JSON.stringify(row));
+            //console.log("Cliente a gestionar: " + JSON.stringify(row));
             setPartner(row);
 
         },
@@ -554,11 +554,11 @@ function CustomToolbar() {
 //     const [waypointsLoaded, setWaypointsLoaded] = useState(false);
 //
 //     const onLoad = (map) => {
-//         console.log('Mapa cargado:', map);
+//         //console.log('Mapa cargado:', map);
 //     };
 //
 //     const onDirectionsLoad = (directionsResult) => {
-//         console.log('Direcciones cargadas:', directionsResult);
+//         //console.log('Direcciones cargadas:', directionsResult);
 //         if (!directions) {
 //             setDirections(directionsResult);
 //         }
@@ -582,7 +582,7 @@ function CustomToolbar() {
 //         <LoadScript
 //             googleMapsApiKey="AIzaSyARV9G0tkya9zgXXlVNmx8U5ep7mg8XdHI"
 //             libraries={["places"]}
-//             onLoad={() => console.log('Biblioteca de Google Maps cargada correctamente')}
+//             onLoad={() => //console.log('Biblioteca de Google Maps cargada correctamente')}
 //         >
 //             <GoogleMap
 //                 mapContainerStyle={{ width: '100%', height: '400px' }}
@@ -609,7 +609,7 @@ const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {.
 
 function TransitionsDialogsEd(gps_coordinates) {
 
-    console.log("gps_coordinates: " + JSON.stringify(gps_coordinates));
+    //console.log("gps_coordinates: " + JSON.stringify(gps_coordinates));
 
     const [open, setOpen] = useState(false);
 

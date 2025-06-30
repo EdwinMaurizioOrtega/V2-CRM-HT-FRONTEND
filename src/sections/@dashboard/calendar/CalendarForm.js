@@ -75,7 +75,7 @@ export default function CalendarForm({
   const values = watch();
 
   const onSubmit = async (data) => {
-    console.log("imprimir-imprimir")
+    //console.log("imprimir-imprimir")
     try {
       const newEvent = {
         title: data.title,

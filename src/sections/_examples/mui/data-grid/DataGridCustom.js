@@ -139,7 +139,9 @@ const columns = [
         filterable: false,
         disableColumnMenu: true,
         renderCell: (params) => (
-            <IconButton onClick={() => console.log('ID', params.row.id)}>
+            <IconButton onClick={() => {
+                //console.log('ID', params.row.id)
+            }}>
                 <Iconify icon="eva:more-vertical-fill" />
             </IconButton>
         ),
@@ -171,7 +173,7 @@ export default function DataGridCustom({ data }) {
 
     const selected = data.filter((row) => selectionModel.includes(row.id));
 
-    console.log('SELECTED', selected);
+    //console.log('SELECTED', selected);
 
     return (
         <DataGrid

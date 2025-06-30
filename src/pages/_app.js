@@ -83,11 +83,11 @@ export default function MyApp(props) {
     //         navigator.serviceWorker.register('/service-worker.js')
     //             .then(function (registration) {
     //                 // Registro exitoso
-    //                 console.log('Service Worker registrado con éxito:', registration.scope);
+    //                 //console.log('Service Worker registrado con éxito:', registration.scope);
     //             })
     //             .catch(function (error) {
     //                 // Error en el registro
-    //                 console.log('Error al registrar el Service Worker:', error);
+    //                 //console.log('Error al registrar el Service Worker:', error);
     //             });
     //     }
     //

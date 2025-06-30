@@ -13,7 +13,7 @@ export default function PDFPreviewButtons(data) {
 
     const {user} = useAuthContext();
 
-    console.log("user-aaa: ", user);
+    //console.log("user-aaa: ", user);
 
     const [pdfUrl, setPdfUrl] = useState(null);
 
@@ -44,7 +44,7 @@ export default function PDFPreviewButtons(data) {
 
     const enviarUANATACA = async () => {
 
-        console.log("dataE: " + JSON.stringify(data.data.empresa.CEDULA_REPRESENTANTE));
+        //console.log("dataE: " + JSON.stringify(data.data.empresa.CEDULA_REPRESENTANTE));
 
         const solicitudBase64 = await getPdfBase64(<SolicitudPDF data={data}/>);
         const autorizacionBase64 = await getPdfBase64(<AutorizacionPDF data={data}/>);
@@ -97,7 +97,7 @@ export default function PDFPreviewButtons(data) {
             }
         };
 
-        console.log("JSON para UANATACA:", JSON.stringify(jsonParaUanataca, null, 2));
+        //console.log("JSON para UANATACA:", JSON.stringify(jsonParaUanataca, null, 2));
         // Puedes ahora enviar 'documentos' a tu backend si lo necesitas
 
         const myHeaders = new Headers();
@@ -128,11 +128,11 @@ export default function PDFPreviewButtons(data) {
                     });
 
                     if (response.status === 200) {
-                        console.log(response);
+                        //console.log(response);
 
                         //Creamos el enlace y lo abrimos en una nueva pestaña.
                         const link_sso = `https://hypertronics.nexxit.dev/#sso/${sso}`;
-                        console.log("Link para firma:", link_sso);
+                        //console.log("Link para firma:", link_sso);
 
                         // Si quieres mostrarlo en la UI o hacer algo con él:
                         //alert(`Link de firma: ${link_sso}`);

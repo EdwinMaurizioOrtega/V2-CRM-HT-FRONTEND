@@ -64,7 +64,7 @@ export default function AccountSocialLinks({ socialLinks }) {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       enqueueSnackbar('Update success!');
-      console.log('DATA', data);
+      //console.log('DATA', data);
     } catch (error) {
       console.error(error);
     }

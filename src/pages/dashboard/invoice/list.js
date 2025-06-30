@@ -146,7 +146,7 @@ export default function InvoiceListPage() {
 
     const handleSwitchChange = (event) => {
         setIsChecked(event.target.checked);
-        console.log(event.target.checked ? 'Activo' : 'Inactivo');
+        //console.log(event.target.checked ? 'Activo' : 'Inactivo');
     };
 
     // Filtrar la tabla según el rol del usuario
@@ -168,8 +168,8 @@ export default function InvoiceListPage() {
 
     // useEffect(async () => {
     //
-    //   console.log(user.DISPLAYNAME);
-    //   console.log(user.ROLE);
+    //   //console.log(user.DISPLAYNAME);
+    //   //console.log(user.ROLE);
     //
     //   // Perfil vendedor
     //   if (user.ROLE === "7") {
@@ -182,7 +182,7 @@ export default function InvoiceListPage() {
     //
     //       const data = await response.json();
     //       setOrders(data.data.orders);
-    //       console.log(orders);
+    //       //console.log(orders);
     //     } catch (error) {
     //       console.error('Error fetching data:', error);
     //       setOrders([]);
@@ -202,7 +202,7 @@ export default function InvoiceListPage() {
     //
     //       const data = await response.json();
     //       setOrders(data.orders);
-    //       console.log(orders);
+    //       //console.log(orders);
     //     } catch (error) {
     //       console.error('Error fetching data:', error);
     //       setOrders([]);
@@ -213,7 +213,7 @@ export default function InvoiceListPage() {
     //   // Perfil bodega
     //
     //   if (user.ROLE === "8") {
-    //     console.log(user.WAREHOUSE);
+    //     //console.log(user.WAREHOUSE);
     //     const bodegaSAP = user.WAREHOUSE;
     //
     //     dispatch(getOrdersByBodega(bodegaSAP));
@@ -223,7 +223,7 @@ export default function InvoiceListPage() {
     //
     //       const data = await response.json();
     //       setOrders(data.data.orders);
-    //       console.log(orders);
+    //       //console.log(orders);
     //     } catch (error) {
     //       console.error('Error fetching data:', error);
     //       setOrders([]);
@@ -236,8 +236,8 @@ export default function InvoiceListPage() {
 
     useEffect(() => {
         async function fetchData() {
-            console.log(user.DISPLAYNAME);
-            console.log(user.ROLE);
+            //console.log(user.DISPLAYNAME);
+            //console.log(user.ROLE);
 
             setCurrentUser(user);
 
@@ -258,7 +258,7 @@ export default function InvoiceListPage() {
                     data = await response.json();
                 } else if (user.ROLE === "8") {
                     //8 => Bodega
-                    //console.log(user.WAREHOUSE);
+                    ////console.log(user.WAREHOUSE);
                     const bodegaSAP = user.WAREHOUSE;
                     const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/bodega?bod=${bodegaSAP}&empresa=${user.EMPRESA}`);
                     data = await response.json();
@@ -277,7 +277,7 @@ export default function InvoiceListPage() {
                 }
 
                 setOrders(data.orders);
-                console.log("data.orders: " + JSON.stringify(data.orders));
+                //console.log("data.orders: " + JSON.stringify(data.orders));
             } catch (error) {
                 console.error('Error fetching data:', error);
                 setOrders([]);
@@ -894,7 +894,7 @@ function applyFilter({
     }
 
 
-    //console.log("user_user:" + JSON.stringify(currentUser))
+    ////console.log("user_user:" + JSON.stringify(currentUser))
 
     if (filterStatus !== 'all') {
 
@@ -967,9 +967,9 @@ function applyFilter({
     //
     //     inputData = inputData.filter(
     //         (invoice) => {
-    //             console.log("invoice.FECHACREACION: "+parseCustomDate(invoice.FECHACREACION));
-    //             console.log("filterStartDate: "+filterStartDate);
-    //             console.log("filterEndDate: "+filterEndDate);
+    //             //console.log("invoice.FECHACREACION: "+parseCustomDate(invoice.FECHACREACION));
+    //             //console.log("filterStartDate: "+filterStartDate);
+    //             //console.log("filterEndDate: "+filterEndDate);
     //             fTimestamp(parseCustomDate(invoice.FECHACREACION)) >= fTimestamp(filterStartDate) &&
     //             fTimestamp(parseCustomDate(invoice.FECHACREACION)) <= fTimestamp(filterEndDate)
     //         }
@@ -994,7 +994,7 @@ const getTabs = (user, tableData, getLengthByStatus,
                  //getLengthByNumeroConGuia
 ) => {
 
-    console.log("tableData: "+ JSON.stringify( tableData));
+    //console.log("tableData: "+ JSON.stringify( tableData));
 
     if (user.COMPANY === 'HT') {
 

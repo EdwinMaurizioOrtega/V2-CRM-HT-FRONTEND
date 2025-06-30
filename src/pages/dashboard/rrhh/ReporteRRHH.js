@@ -159,7 +159,7 @@ function ExcelDownload({data}) {
 
     const {user} = useAuthContext();
 
-    console.log("data: "+data);
+    //console.log("data: "+data);
 
     const handleExportToExcel = () => {
         const wb = XLSX.utils.book_new();

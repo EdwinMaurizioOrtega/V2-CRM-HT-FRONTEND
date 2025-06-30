@@ -13,8 +13,8 @@ const GeoLocationComponent = ({ user }) => {
                         const latitude = position.coords.latitude;
                         const longitude = position.coords.longitude;
 
-                        console.log("latitude:" + latitude);
-                        console.log("longitude:" + longitude);
+                        //console.log("latitude:" + latitude);
+                        //console.log("longitude:" + longitude);
 
                         // Enviar las coordenadas al servidor de socket
                         socket.emit("coordinates", {

@@ -58,22 +58,22 @@ export default function NavDocs() {
     //     // CHAT
     //
     //     socket.on("connect", () => {
-    //         console.log("Connected to socket server");
+    //         //console.log("Connected to socket server");
     //         setName(`anon-${socket.id}`);
     //         setConnected(true);
-    //         console.log("joining room", currentRoom);
+    //         //console.log("joining room", currentRoom);
     //
     //         socket.emit("join", currentRoom);
     //     });
     //
     //     socket.on("message", (msg) => {
-    //         console.log("Message received AAA", msg);
+    //         //console.log("Message received AAA", msg);
     //         msg.date = new Date(msg.date);
     //         setMessages((messages) => [...messages, msg]);
     //     });
     //
     //     socket.on("messages", (msgs) => {
-    //         console.log("Messages received BBB", msgs);
+    //         //console.log("Messages received BBB", msgs);
     //         let messages = msgs.messages.map((msg) => {
     //             msg.date = new Date(msg.date);
     //             return msg;

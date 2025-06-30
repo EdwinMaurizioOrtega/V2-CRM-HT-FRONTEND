@@ -62,9 +62,9 @@ export default function MarcarPage() {
                     const { latitude, longitude } = position.coords;
                     setCoordinates({ latitude, longitude });
                     setDataValid(true);
-                    console.log("Fecha de la marca:", now.toLocaleDateString());
-                    console.log("Hora de la marca:", formatTime24(now));
-                    console.log("Coordenadas:", `Lat: ${latitude}, Lng: ${longitude}`);
+                    //console.log("Fecha de la marca:", now.toLocaleDateString());
+                    //console.log("Hora de la marca:", formatTime24(now));
+                    //console.log("Coordenadas:", `Lat: ${latitude}, Lng: ${longitude}`);
 
                     // Enviar datos a la API
                     sendToAPI(latitude, longitude);
@@ -90,11 +90,11 @@ export default function MarcarPage() {
                 longitude: longitude,
             });
 
-            console.log('Status crear registro:', response.status);
+            //console.log('Status crear registro:', response.status);
             if (response.status === 200) {
-                console.log('Gracias');
+                //console.log('Gracias');
             } else {
-                console.log('La solicitud no devolvió un estado 200.');
+                //console.log('La solicitud no devolvió un estado 200.');
             }
         } catch (error) {
             console.error('Error en la solicitud:', error);

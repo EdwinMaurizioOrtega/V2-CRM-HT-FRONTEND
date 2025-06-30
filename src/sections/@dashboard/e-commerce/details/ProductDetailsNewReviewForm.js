@@ -57,7 +57,7 @@ export default function ProductDetailsNewReviewForm({ onClose, ...other }) {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
       onClose();
-      console.log('DATA', data);
+      //console.log('DATA', data);
     } catch (error) {
       console.error(error);
     }

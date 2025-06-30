@@ -102,14 +102,14 @@ export default function CargarArchivosCreditoPage() {
     ];
 
     const VerInformacionCliente = (row) => {
-        console.log(row.row);
+        //console.log(row.row);
         const url = `/credito/juridica/actualizar/?id=${row.row.RUC}`; // Asegúrate de que el ID esté disponible
         window.open(url, "_blank");
 
     }
 
     const VerInformacionUanataca = (row) => {
-        console.log(row.row);
+        //console.log(row.row);
         const url = `https://console.nexxit.dev/#login`; // Asegúrate de que el ID esté disponible
         window.open(url, "_blank");
 

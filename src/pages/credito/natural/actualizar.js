@@ -123,10 +123,10 @@ export default function DataPage() {
                 const response = await axios.get(`/hanadb/api/customers/get_prospecto_cartera_by_ruc?ruc=${id}`);
 
                 if (response.status === 200) {
-                    console.log(response);
+                    //console.log(response);
 
                     //setDataProspecto(response.data.events);
-                    console.log("Response: " + JSON.stringify(response.data.events));
+                    //console.log("Response: " + JSON.stringify(response.data.events));
 
                     const dataProspecto = response.data.events;
 
@@ -221,7 +221,7 @@ export default function DataPage() {
     const onSubmit = async (data) => {
 
         // await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log('DATA', data);
+        //console.log('DATA', data);
         // reset();
 
         // Crear prospecto.
@@ -231,8 +231,8 @@ export default function DataPage() {
         });
 
         if (response.status === 200) {
-            //console.log(response);
-            console.log("Se insertaron los datos.");
+            ////console.log(response);
+            //console.log("Se insertaron los datos.");
             alert("Solicitud enviada correctamente.")
             // Esperar a que el usuario cierre la alerta antes de recargar
             setTimeout(() => {
@@ -248,7 +248,7 @@ export default function DataPage() {
     const handleDropSingleFileActualizar = useCallback((acceptedFiles, fieldName) => {
 
             const file = acceptedFiles[0];
-            console.log('Archivo seleccionado:', file);
+            //console.log('Archivo seleccionado:', file);
 
             if (!file) return; // Si no hay archivo, salir
 
@@ -312,7 +312,7 @@ export default function DataPage() {
             })
             .then(async data => {
                 if (data.status === 'success') {
-                    console.log('Archivo subido con éxito. Enlace:', data.link);
+                    //console.log('Archivo subido con éxito. Enlace:', data.link);
                     //Guardamos el enlace por cada archivo cargado.
                     //setValue(tipo_campo, data.link, {shouldValidate: true});
 
@@ -353,12 +353,12 @@ export default function DataPage() {
                             resultado_final = "FOTO_LOCAL_GEOREFERENCIA";
                             break;
                         default:
-                            console.log("Revisar...");
+                            //console.log("Revisar...");
                             return null; // Devuelve `null` si no hay coincidencia
                     }
 
-                    console.log("columna: " + resultado_final);
-                    console.log("link: " + data.link);
+                    //console.log("columna: " + resultado_final);
+                    //console.log("link: " + data.link);
 
                     const id_documento = watch("id_documento")
 
@@ -371,10 +371,10 @@ export default function DataPage() {
 
                     });
 
-                    console.log("response status: " + response.status);
+                    //console.log("response status: " + response.status);
 
                     if (response.status === 200) {
-                        console.log(response);
+                        //console.log(response);
                         router.reload();
                     }
 
@@ -391,9 +391,9 @@ export default function DataPage() {
 
     const ActualizarInfoEmpresa = async (tipo, valor) => {
 
-        console.log(tipo);
-        console.log(valor);
-        console.log(idEmpresa);
+        //console.log(tipo);
+        //console.log(valor);
+        //console.log(idEmpresa);
 
         let resultado;
 
@@ -429,7 +429,7 @@ export default function DataPage() {
                 resultado = "NUM_TELEFONO";
                 break;
             default:
-                console.log("Revisar...");
+                //console.log("Revisar...");
                 return null; // Devuelve `null` si no hay coincidencia
         }
 
@@ -441,19 +441,19 @@ export default function DataPage() {
 
         });
 
-        console.log("response status: " + response.status);
+        //console.log("response status: " + response.status);
 
         if (response.status === 200) {
-            console.log(response);
+            //console.log(response);
             router.reload();
         }
     }
 
     const ActualizarReferenciasComerciales = async (tipo, valor, id_referencia) => {
 
-        console.log("tipo: " + tipo);
-        console.log("valor: " + valor);
-        console.log("id_referencia: " + id_referencia);
+        //console.log("tipo: " + tipo);
+        //console.log("valor: " + valor);
+        //console.log("id_referencia: " + id_referencia);
 
         let resultado;
 
@@ -479,7 +479,7 @@ export default function DataPage() {
                 resultado = "TELEFONO";
                 break;
             default:
-                console.log("Revisar...");
+                //console.log("Revisar...");
                 return null; // Devuelve `null` si no hay coincidencia
         }
 
@@ -491,19 +491,19 @@ export default function DataPage() {
 
         });
 
-        console.log("response status: " + response.status);
+        //console.log("response status: " + response.status);
 
         if (response.status === 200) {
-            console.log(response);
+            //console.log(response);
             router.reload();
         }
     }
 
     const ActualizarDireccionesAutorizadas = async (tipo, valor, id_direccion_au) => {
 
-        console.log("tipo: " + tipo);
-        console.log("valor: " + valor);
-        console.log("id_direccion_au: " + id_direccion_au);
+        //console.log("tipo: " + tipo);
+        //console.log("valor: " + valor);
+        //console.log("id_direccion_au: " + id_direccion_au);
 
         let resultado;
 
@@ -514,7 +514,7 @@ export default function DataPage() {
                 resultado = "DIRECCION";
                 break;
             default:
-                console.log("Revisar...");
+                //console.log("Revisar...");
                 return null; // Devuelve `null` si no hay coincidencia
         }
 
@@ -526,19 +526,19 @@ export default function DataPage() {
 
         });
 
-        console.log("response status: " + response.status);
+        //console.log("response status: " + response.status);
 
         if (response.status === 200) {
-            console.log(response);
+            //console.log(response);
             router.reload();
         }
     }
 
     const ActualizarReferenciasBancarias = async (tipo, valor, id_referencia) => {
 
-        console.log("tipo: " + tipo);
-        console.log("valor: " + valor);
-        console.log("id_referencia: " + id_referencia);
+        //console.log("tipo: " + tipo);
+        //console.log("valor: " + valor);
+        //console.log("id_referencia: " + id_referencia);
 
         let resultado;
 
@@ -564,7 +564,7 @@ export default function DataPage() {
                 resultado = "TELEFONO";
                 break;
             default:
-                console.log("Revisar...");
+                //console.log("Revisar...");
                 return null; // Devuelve `null` si no hay coincidencia
         }
 
@@ -576,10 +576,10 @@ export default function DataPage() {
 
         });
 
-        console.log("response status: " + response.status);
+        //console.log("response status: " + response.status);
 
         if (response.status === 200) {
-            console.log(response);
+            //console.log(response);
             router.reload();
         }
     }
@@ -587,9 +587,9 @@ export default function DataPage() {
 
     const EliminarDocumento = async (columna_eliminar) => {
 
-        console.log("Eliminar...: " + columna_eliminar);
+        //console.log("Eliminar...: " + columna_eliminar);
         const id_documento = watch("id_documento");
-        console.log("id_documento: " + id_documento);
+        //console.log("id_documento: " + id_documento);
 
         const response = await axios.delete('/hanadb/api/customers/eliminar_documento_prospecto_cartera', {
             params: {
@@ -598,16 +598,16 @@ export default function DataPage() {
             }
         });
 
-        console.log("response status: " + response.status);
+        //console.log("response status: " + response.status);
 
         if (response.status === 200) {
-            console.log(response);
+            //console.log(response);
             router.reload();
         }
     }
 
     const GenerarPDF = () => {
-        console.log("GenerarPDF");
+        //console.log("GenerarPDF");
 
 
     }
@@ -877,7 +877,7 @@ export default function DataPage() {
                                                             </Button>
                                                             <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
                                                             <Button variant="contained" color="primary" onClick={() => {
-                                                                console.log("Eliminando...")
+                                                                //console.log("Eliminando...")
                                                                 EliminarDocumento("PLANILLA_SERVICIO_BASICO")
                                                             }}>
                                                                 Eliminar
@@ -919,7 +919,7 @@ export default function DataPage() {
                                                             </Button>
                                                             <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
                                                             <Button variant="contained" color="primary" onClick={() => {
-                                                                console.log("Eliminando...")
+                                                                //console.log("Eliminando...")
                                                                 EliminarDocumento("ESCRITURA_CONSTITUCION")
                                                             }}>
                                                                 Eliminar
@@ -965,7 +965,7 @@ export default function DataPage() {
                                                             <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
 
                                                             <Button variant="contained" color="primary" onClick={() => {
-                                                                console.log("Eliminando...")
+                                                                //console.log("Eliminando...")
                                                                 EliminarDocumento("RUC_UPLOAD")
                                                             }}>
                                                                 Eliminar
@@ -1005,7 +1005,7 @@ export default function DataPage() {
                                                             </Button>
                                                             <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
                                                             <Button variant="contained" color="primary" onClick={() => {
-                                                                console.log("Eliminando...")
+                                                                //console.log("Eliminando...")
                                                                 EliminarDocumento("CEDULA_IDENTIDAD")
                                                             }}>
                                                                 Eliminar
@@ -1053,7 +1053,7 @@ export default function DataPage() {
                                                             </Button>
                                                             <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
                                                             <Button variant="contained" color="primary" onClick={() => {
-                                                                console.log("Eliminando...")
+                                                                //console.log("Eliminando...")
                                                                 EliminarDocumento("ESTADOS_FINANCIEROS")
                                                             }}>
                                                                 Eliminar
@@ -1100,7 +1100,7 @@ export default function DataPage() {
                                                             </Button>
                                                             <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
                                                             <Button variant="contained" color="primary" onClick={() => {
-                                                                console.log("Eliminando...")
+                                                                //console.log("Eliminando...")
                                                                 EliminarDocumento("NOMBRAMIENTO_REPRESENTANTE")
                                                             }}>
                                                                 Eliminar
@@ -1147,7 +1147,7 @@ export default function DataPage() {
                                                             </Button>
                                                             <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
                                                             <Button variant="contained" color="primary" onClick={() => {
-                                                                console.log("Eliminando...")
+                                                                //console.log("Eliminando...")
                                                                 EliminarDocumento("DECLARACION_IMPUESTOS")
                                                             }}>
                                                                 Eliminar
@@ -1194,7 +1194,7 @@ export default function DataPage() {
                                                             </Button>
                                                             <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
                                                             <Button variant="contained" color="primary" onClick={() => {
-                                                                console.log("Eliminando...")
+                                                                //console.log("Eliminando...")
                                                                 EliminarDocumento("CERTIFICADO_BANCARIO")
                                                             }}>
                                                                 Eliminar
@@ -1235,7 +1235,7 @@ export default function DataPage() {
                                                             </Button>
                                                             <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
                                                             <Button variant="contained" color="primary" onClick={() => {
-                                                                console.log("Eliminando...")
+                                                                //console.log("Eliminando...")
                                                                 EliminarDocumento("FOTO_LOCAL_GEOREFERENCIA")
                                                             }}>
                                                                 Eliminar

@@ -84,7 +84,7 @@ export default function ConsultClientForm() {
 
     const onSubmit = async (data) => {
 
-        console.log('DATA', data);
+        //console.log('DATA', data);
 
         const searchTerm = data.searchTerm || ""; // Si data.ci_ruc es undefined, asigna una cadena vacía
 
@@ -97,13 +97,13 @@ export default function ConsultClientForm() {
                 const clientes = dataClienteAll.filter(cliente => cliente.ID === 'CL' + searchTerm);
 
                 if (clientes) {
-                    console.log('Cliente encontrado:', clientes);
+                    //console.log('Cliente encontrado:', clientes);
                     // Aquí puedes hacer algo con el cliente encontrado
 
                     setSearchResults(clientes);
 
                 } else {
-                    console.log('Cliente no encontrado con ci_ruc:', searchTerm);
+                    //console.log('Cliente no encontrado con ci_ruc:', searchTerm);
                     // Aquí puedes manejar el caso cuando no se encuentra el cliente
                 }
 
@@ -123,19 +123,19 @@ export default function ConsultClientForm() {
             const clientes = dataClienteAll.filter(cliente => cliente.Cliente.includes(searchTerm));
 
             if (clientes.length === 2 || clientes.length === 1) {
-                console.log('Cliente encontrado:', clientes);
+                //console.log('Cliente encontrado:', clientes);
                 // Aquí puedes hacer algo con el cliente encontrado
 
                 setSearchResults(clientes);
 
             } else if (clientes.length > 2) {
-                console.log('Se han encontrado mas de dos resultados.', searchTerm);
+                //console.log('Se han encontrado mas de dos resultados.', searchTerm);
                 onSnackbarAction('Se han encontrado mas de dos resultados.', 'default', {
                     vertical: 'top', horizontal: 'center',
                 });
                 // Aquí puedes manejar el caso cuando no se encuentra el cliente
             } else if (clientes.length === 0) {
-                console.log('Ningun cliente encontrado.', searchTerm);
+                //console.log('Ningun cliente encontrado.', searchTerm);
                 onSnackbarAction('Ningun cliente encontrado.', 'default', {
                     vertical: 'top', horizontal: 'center',
                 });
@@ -187,7 +187,7 @@ export default function ConsultClientForm() {
                 const response = await axios.get(`${HOST_API_KEY}/hanadb/api/customers/all_customers_of_companys`);
 
                 if (response.status === 200) {
-                    console.log("DATA: " + JSON.stringify(response.data.data));
+                    //console.log("DATA: " + JSON.stringify(response.data.data));
                     // La solicitud PUT se realizó correctamente
                     setDataClienteAll(response.data.data);
                 } else {
@@ -206,12 +206,12 @@ export default function ConsultClientForm() {
 
     const handleShowCoordinates = (position) => {
         if (position) {
-            console.log("Coordenadas seleccionadas:", position);
+            //console.log("Coordenadas seleccionadas:", position);
             // Puedes hacer algo con las coordenadas seleccionadas aquí, si es necesario
             setDataCliente(position);
 
         } else {
-            console.log("No se ha seleccionado ningún marcador.");
+            //console.log("No se ha seleccionado ningún marcador.");
         }
     };
 
@@ -617,7 +617,7 @@ const mapContainerStyle = {
 
 function MapComponent({markers}) {
 
-    console.log("Markers: " + JSON.stringify(markers));
+    //console.log("Markers: " + JSON.stringify(markers));
 
     const [map, setMap] = useState(null);
     const [center, setCenter] = useState({lat: -1.8312, lng: -78.1834});
