@@ -1,19 +1,12 @@
 import Head from "next/head";
 import MainLayout from "../../../layouts/main";
 import {
-    Button,
     Card,
-    CardContent,
-    CardHeader,
     Container,
     Grid,
     Stack,
     Typography
 } from "@mui/material";
-import {Upload, UploadBox} from "../../../components/upload";
-import Iconify from "../../../components/iconify";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
 import React, {useCallback} from "react";
 import {useRouter} from "next/router";
 import FormProvider, {
@@ -21,10 +14,8 @@ import FormProvider, {
 } from "../../../components/hook-form";
 import {useForm} from "react-hook-form";
 import {LoadingButton} from "@mui/lab";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import axios from "../../../utils/axios";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {FormSchema} from "../../../sections/_examples/extra/form/schema";
 import * as Yup from "yup";
 
 DataPage.getLayout = (page) => <MainLayout>{page}</MainLayout>;
@@ -862,27 +853,27 @@ export const FormSchemaCartera = Yup.object().shape({
     r_c_tipo_de_credito_1: Yup.string().required('Se requiere el Tipo Crédito 1'),
     r_c_persona_de_contacto_1: Yup.string().required('Se requiere el Persona Contacto 1'),
     r_c_telefono_1: Yup.string().required('Se requiere el Teléfono 1'),
-    r_c_compania_2: Yup.string().required('Se requiere la Compañia 2'),
-    r_c_tipo_de_credito_2: Yup.string().required('Se requiere el Tipo Crédito 2'),
-    r_c_persona_de_contacto_2: Yup.string().required('Se requiere el Persona Contacto 2'),
-    r_c_telefono_2: Yup.string().required('Se requiere el Teléfono 2'),
+    // r_c_compania_2: Yup.string().required('Se requiere la Compañia 2'),
+    // r_c_tipo_de_credito_2: Yup.string().required('Se requiere el Tipo Crédito 2'),
+    // r_c_persona_de_contacto_2: Yup.string().required('Se requiere el Persona Contacto 2'),
+    // r_c_telefono_2: Yup.string().required('Se requiere el Teléfono 2'),
     // r_c_compania_3: Yup.string().required('Se requiere la Compañia 3'),
     // r_c_tipo_de_credito_3: Yup.string().required('Se requiere el Tipo Crédito 3'),
     // r_c_persona_de_contacto_3: Yup.string().required('Se requiere el Persona Contacto 3'),
     // r_c_telefono_3: Yup.string().required('Se requiere el Teléfono 3'),
 
     d_e_a_direccion_1: Yup.string().required('Se requiere la Dirección 1'),
-    d_e_a_direccion_2: Yup.string().required('Se requiere la Dirección 2'),
+    //d_e_a_direccion_2: Yup.string().required('Se requiere la Dirección 2'),
     // d_e_a_direccion_3: Yup.string().required('Se requiere ls Dirección 3'),
 
     r_b_entidad_financiera_1: Yup.string().required('Se requiere el Nombre de la Entidad Financiera 1'),
     r_b_inicio_de_relacion_1: Yup.string().required('Se requiere el Año de Inicio de la Relación 1'),
     r_b_persona_de_contacto_1: Yup.string().required('Se requiere la Persona de Contacto 1'),
     r_b_telefono_1: Yup.string().required('Se requiere el Teléfono 1'),
-    r_b_entidad_financiera_2: Yup.string().required('Se requiere el Nombre de la Entidad Financiera 2'),
-    r_b_inicio_de_relacion_2: Yup.string().required('Se requiere el Año de Inicio de la Relación 2'),
-    r_b_persona_de_contacto_2: Yup.string().required('Se requiere la Persona de Contacto 2'),
-    r_b_telefono_2: Yup.string().required('Se requiere el Teléfono 2'),
+    // r_b_entidad_financiera_2: Yup.string().required('Se requiere el Nombre de la Entidad Financiera 2'),
+    // r_b_inicio_de_relacion_2: Yup.string().required('Se requiere el Año de Inicio de la Relación 2'),
+    // r_b_persona_de_contacto_2: Yup.string().required('Se requiere la Persona de Contacto 2'),
+    // r_b_telefono_2: Yup.string().required('Se requiere el Teléfono 2'),
     // r_b_entidad_financiera_3: Yup.string().required('Se requiere el Nombre de la Entidad Financiera 3'),
     // r_b_inicio_de_relacion_3: Yup.string().required('Se requiere el Año de Inicio de la Relación 3'),
     // r_b_persona_de_contacto_3: Yup.string().required('Se requiere la Persona de Contacto 3'),
