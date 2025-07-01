@@ -106,38 +106,27 @@ export default function DataPage() {
 
     const onSubmit = async (data) => {
 
-        // await new Promise((resolve) => setTimeout(resolve, 3000));
-        //console.log('DATA', data);
-        // reset();
+        console.log("data: "+data);
 
-        // Verificar existencia cédula prospecto.
-        const response = await axios.post(`/hanadb/api/customers/get_prospecto_cartera_by_ruc?ruc=${data.ruc}`);
+        // Crear prospecto.
+        const response = await axios.post('/hanadb/api/customers/create_prospecto_cartera', {
+            data: data,
+            tipo_persona: 'J',
+        });
 
         if (response.status === 200) {
-            alert("El cliente ya se encuentra en proceso de firma electrónica.")
+            ////console.log(response);
+            //console.log("Se insertaron los datos.");
+            alert("Solicitud enviada correctamente.")
+            // Esperar a que el usuario cierre la alerta antes de recargar
+            setTimeout(() => {
+                router.reload();
+            }, 100);
         } else {
-
-            // Crear prospecto.
-            const response = await axios.post('/hanadb/api/customers/create_prospecto_cartera', {
-                data: data,
-                tipo_persona: 'J',
-            });
-
-            if (response.status === 200) {
-                ////console.log(response);
-                //console.log("Se insertaron los datos.");
-                alert("Solicitud enviada correctamente.")
-                // Esperar a que el usuario cierre la alerta antes de recargar
-                setTimeout(() => {
-                    router.reload();
-                }, 100);
-            } else {
-                // La solicitud POST no se realizó correctamente
-                console.error('Error en la solicitud POST:', response.status);
-                alert("Ocurrio un error en la solicitud.")
-            }
+            // La solicitud POST no se realizó correctamente
+            console.error('Error en la solicitud POST:', response.status);
+            alert("Ocurrio un error en la solicitud.")
         }
-
 
     };
 
@@ -245,7 +234,7 @@ export default function DataPage() {
                                             <Block label="Nombre de la empresa o compañia">
                                                 <RHFTextField name="nombre_de_la_empresa_o_compania"
                                                               label="Nombre de la empresa o compania"
-                                                                    />
+                                                />
                                             </Block>
 
                                             <Block label="RUC">
