@@ -72,7 +72,7 @@ export default function AutorizacionPDF(data) {
 
                     <Text style={styles.text}>Yo,</Text>
                     <Text style={styles.line}>{data?.data?.data?.empresa?.NOMBRE_REPRESENTANTE}</Text>
-                    <Text style={styles.text}>con número de cédula: {data?.data?.data?.empresa?.NUM_TELEFONO}</Text>
+                    <Text style={styles.text}>con número de cédula: {data?.data?.data?.empresa?.CEDULA_REPRESENTANTE}</Text>
                     <Text style={styles.text}>Representante Legal de {data?.data?.data?.empresa?.NOMBRE}</Text>
                     <Text style={styles.text}>Con número de RUC {data?.data?.data?.empresa?.RUC}</Text>
 

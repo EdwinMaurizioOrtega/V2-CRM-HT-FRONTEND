@@ -1,13 +1,15 @@
 import {pdf} from '@react-pdf/renderer';
-import {Box, Button, Card, Stack} from '@mui/material';
+import {Box, Button, Card, Stack, TextField} from '@mui/material';
 import SolicitudPDF from "../../sections/@dashboard/invoice/details/SolicitudPDF";
 import AutorizacionPDF from "../../sections/@dashboard/invoice/details/AutorizacionPDF";
+import PagarePDF from "../../sections/@dashboard/invoice/details/PagarePDF";
 import {useState} from "react";
 import {useAuthContext} from "../../auth/useAuthContext";
 import axios from "../../utils/axios";
 // import SolicitudPDF from './pdfs/SolicitudPDF';
 // import OtroPDF from './pdfs/OtroPDF';
 // import TercerPDF from './pdfs/TercerPDF';
+import n2words from 'n2words';
 
 export default function PDFPreviewButtons(data) {
 
@@ -161,10 +163,43 @@ export default function PDFPreviewButtons(data) {
 
     };
 
+    const [valor, setValor] = useState('');
+    const [texto, setTexto] = useState('');
+
+    // Función para formatear número a moneda US$
+    const formatearMoneda = (num) => {
+        return new Intl.NumberFormat('es-EC', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        }).format(num);
+    };
+
+    const handleChange = (e) => {
+        let input = e.target.value.replace(',', '.');
+        setValor(input);
+
+        const numero = parseFloat(input);
+        if (!isNaN(numero)) {
+            const entero = Math.floor(numero);
+            const decimal = Math.round((numero - entero) * 100);
+
+            // Convierte números a texto (en minúsculas)
+            const enteroTexto = n2words(entero, { lang: 'es' });
+            const decimalTexto = n2words(decimal, { lang: 'es' });
+
+            const textoCompleto = `${enteroTexto} Dólares de los Estados Unidos de América con ${decimalTexto} centavo${decimal !== 1 ? 's' : ''} (${formatearMoneda(numero)})`;
+
+            setTexto(textoCompleto);
+            console.log(textoCompleto);
+        } else {
+            setTexto('');
+        }
+    };
+
     return (
         <>
-
-
 
                 <Stack spacing={2} direction="row">
 
@@ -183,11 +218,17 @@ export default function PDFPreviewButtons(data) {
                             ENVIAR UANATACA
                         </Button>
 
+                        <TextField
+                            label="VALOR DEL PAGARÉ"
+                            variant="outlined"
+                            fullWidth
+                            onChange={handleChange}
 
-                        {/* <Button variant="contained" color="success" onClick={() => abrirBlob(<TercerPDF />)}> */}
-                        {/*     Ver Tercer PDF */}
-                        {/* </Button> */}
+                        />
 
+                        <Button variant="contained" color="success" onClick={() => abrirBlob(<PagarePDF valor={valor} texto={texto} data={data}/>)}>
+                            PAGARE
+                        </Button>
 
                     </>
 
@@ -197,7 +238,7 @@ export default function PDFPreviewButtons(data) {
 
                 {/* 📄 Vista embebida del PDF */}
                 {pdfUrl && (
-                    <Box mt={4} height={600} border="1px solid #ccc">
+                    <Box mt={4} height={600} width={'100%'} border="1px solid #ccc">
                         <iframe
                             src={pdfUrl}
                             width="100%"
