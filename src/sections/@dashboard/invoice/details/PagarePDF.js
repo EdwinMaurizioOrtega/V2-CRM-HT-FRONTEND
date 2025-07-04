@@ -64,7 +64,10 @@ export default function PagarePDF({valor, texto, data}) {
                     <Text style={styles.header}>PAGARÉ A LA ORDEN DE LIDENAR S.A</Text>
 
                     <Text>Pagaré No.</Text>
-                    <Text style={{ marginBottom: 10 }}>VENCIMIENTO {dia} {mes} {anio+1} Por US {fCurrency(valor)}</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+                        <Text>VENCIMIENTO {dia} {mes} {anio + 1}</Text>
+                        <Text>Por US {fCurrency(valor)}</Text>
+                    </View>
 
                     <Text style={styles.text}>
                         Debo(emos) y pagaré(mos) en la moneda de curso legal solidaria e incondicionalmente, a la orden de la compañía <Text style={{ fontFamily: 'Times-Bold', fontSize: 10 }}> LIDENAR S.A</Text>, en su oficina ubicada en la calle Padre Aguirre 9-68 y Gran Colombia, en esta ciudad de Cuenca,

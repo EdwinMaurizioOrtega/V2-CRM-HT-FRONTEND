@@ -227,7 +227,7 @@ export default function PDFPreviewButtons(data) {
                         />
 
                         <Button variant="contained" color="success" onClick={() => abrirBlob(<PagarePDF valor={valor} texto={texto} data={data}/>)}>
-                            PAGARE
+                            PAGARÉ
                         </Button>
 
                     </>
