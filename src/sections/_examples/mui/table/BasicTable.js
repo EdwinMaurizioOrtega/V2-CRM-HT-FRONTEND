@@ -310,7 +310,7 @@ function getTextFromCodigo(rowCodigo) {
         case '009':
             return "SAMSUNG_BAHIA";
         case '014':
-            return "ME_COMPRAS_SAMSUNG_ORELLANA";
+            return "BODEGA_COMBO";
         case '001':
             return "SAMSUNG_CARACOL_QUITO";
         case '011':
