@@ -1,13 +1,14 @@
 import Head from "next/head";
 import MainLayout from "../../../layouts/main";
 import {
-    Card,
+    Box,
+    Card, CircularProgress,
     Container,
     Grid,
     Stack,
     Typography
 } from "@mui/material";
-import React, {useCallback} from "react";
+import React, {useCallback, useState} from "react";
 import {useRouter} from "next/router";
 import FormProvider, {
     RHFTextField, RHFUpload
@@ -79,6 +80,8 @@ export default function DataPage() {
 
     const router = useRouter();
 
+    const [loadingFields, setLoadingFields] = useState({});
+
     const methods = useForm({
         resolver: yupResolver(FormSchemaCartera),
         defaultValues,
@@ -97,7 +100,7 @@ export default function DataPage() {
 
     const onSubmit = async (data) => {
 
-        console.log("data: "+data);
+        console.log("data: " + data);
 
         // Crear prospecto.
         const response = await axios.post('/hanadb/api/customers/create_prospecto_cartera', {
@@ -136,36 +139,43 @@ export default function DataPage() {
                 return;
             }
 
+            // Activar loading para el campo actual
+            setLoadingFields(prev => ({...prev, [fieldName]: true}));
 
-            // Asignar el archivo según el campo correspondiente
-            if (fieldName === 'planilla_servicio_basico') {
-                //setValue('planilla_servicio_basico', newFile, { shouldValidate: true });
-                handleFileUpload(file, 'planilla_servicio_basico');
-            } else if (fieldName === 'escritura_constitucion_de_la_empresa') {
-                //setValue('escritura_constitucion_de_la_empresa', newFile, { shouldValidate: true });
-                handleFileUpload(file, 'escritura_constitucion_de_la_empresa');
-            } else if (fieldName === 'ruc_upload') {
-                //setValue('ruc_upload', newFile, { shouldValidate: true });
-                handleFileUpload(file, 'ruc_upload');
-            } else if (fieldName === 'cedula_de_identidad') {
-                //setValue('cedula_de_identidad', newFile, { shouldValidate: true });
-                handleFileUpload(file, 'cedula_de_identidad');
-            } else if (fieldName === 'estados_fiancieros_year_anterior') {
-                //setValue('estados_fiancieros_year_anterior', newFile, { shouldValidate: true });
-                handleFileUpload(file, 'estados_fiancieros_year_anterior');
-            } else if (fieldName === 'nombramiento_del_representante_legal') {
-                //setValue('nombramiento_del_representante_legal', newFile, { shouldValidate: true });
-                handleFileUpload(file, 'nombramiento_del_representante_legal');
-            } else if (fieldName === 'declaracion_de_impuesto_a_la_renta_year_anterior') {
-                //setValue('declaracion_de_impuesto_a_la_renta_year_anterior', newFile, { shouldValidate: true });
-                handleFileUpload(file, 'declaracion_de_impuesto_a_la_renta_year_anterior');
-            } else if (fieldName === 'certificado_bancario') {
-                //setValue('certificado_bancario', newFile, { shouldValidate: true });
-                handleFileUpload(file, 'certificado_bancario');
-            } else if (fieldName === 'foto_del_local_y_georeferencia') {
-                //setValue('foto_del_local_y_georeferencia', newFile, { shouldValidate: true });
-                handleFileUpload(file, 'foto_del_local_y_georeferencia');
+            const upload = (name) => {
+                return handleFileUpload(file, name)
+                    .finally(() => {
+                        // Desactivar loading cuando termine
+                        setLoadingFields(prev => ({...prev, [fieldName]: false}));
+                    });
+            };
+
+            switch (fieldName) {
+                case 'planilla_servicio_basico':
+                case 'escritura_constitucion_de_la_empresa':
+                case 'ruc_upload':
+                case 'cedula_de_identidad':
+                case 'estados_fiancieros_year_anterior':
+                case 'nombramiento_del_representante_legal':
+                case 'declaracion_de_impuesto_a_la_renta_year_anterior':
+                case 'certificado_bancario':
+                case 'foto_del_local_y_georeferencia':
+                    upload(fieldName)
+                        .then(response => {
+                            // Puedes manejar el resultado aquí si necesitas
+                            console.log(`Archivo ${fieldName} subido correctamente`);
+                        })
+                        .catch(error => {
+                            console.error(`Error subiendo ${fieldName}:`, error);
+                        })
+                        .finally(() => {
+                            setLoadingFields(prev => ({...prev, [fieldName]: false}));
+                        });
+                    break;
+                default:
+                    console.warn(`Campo desconocido: ${fieldName}`);
             }
+
         },
         [setValue]
     );
@@ -176,7 +186,7 @@ export default function DataPage() {
         const formData = new FormData();
         formData.append('file', file);
 
-        fetch(`https://imagen.hipertronics.us/ht/cloud/upload_web_files`, {
+        return fetch(`https://imagen.hipertronics.us/ht/cloud/upload_web_files`, {
             method: 'POST',
             body: formData,
         })
@@ -199,7 +209,6 @@ export default function DataPage() {
             .catch(error => {
                 console.error('Error al cargar el archivo:', error);
             });
-
     };
 
     return (
@@ -232,9 +241,9 @@ export default function DataPage() {
                                                 <RHFTextField name="ruc" label="RUC"/>
                                             </Block>
 
-                                            <Block label="Nombre del representante">
+                                            <Block label="Representante (Dos Nombres - Dos Apellidos)">
                                                 <RHFTextField name="nombre_del_representante"
-                                                              label="Nombre del representante"/>
+                                                              label="Representante (Dos Nombres - Dos Apellidos)"/>
                                             </Block>
 
                                             <Block label="Cédula del representante">
@@ -274,84 +283,246 @@ export default function DataPage() {
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={2}>
                                             <Block label="Planilla Servicio básico">
-                                                <RHFUpload
-                                                    name="planilla_servicio_basico"
-                                                    maxSize={5 * 1024 * 1024}  // 5 MB
-                                                    onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'planilla_servicio_basico')}
-                                                    onDelete={() => setValue('planilla_servicio_basico', null, {shouldValidate: true})}
-                                                />
+                                                <Box position="relative">
+                                                    <RHFUpload
+                                                        name="planilla_servicio_basico"
+                                                        maxSize={5 * 1024 * 1024}  // 5 MB
+                                                        onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'planilla_servicio_basico')}
+                                                        onDelete={() => setValue('planilla_servicio_basico', null, {shouldValidate: true})}
+                                                    />
+                                                    {loadingFields['planilla_servicio_basico'] && (
+                                                        <Box
+                                                            position="absolute"
+                                                            top={0}
+                                                            left={0}
+                                                            width="100%"
+                                                            height="100%"
+                                                            display="flex"
+                                                            alignItems="center"
+                                                            justifyContent="center"
+                                                            bgcolor="rgba(255, 255, 255, 0.6)"
+                                                            zIndex={2}
+                                                        >
+                                                            <CircularProgress size={36}/>
+                                                        </Box>
+                                                    )}
+                                                </Box>
                                             </Block>
 
                                             <Block label="Escritura Constitucion de la Empresa">
-                                                <RHFUpload
-                                                    name="escritura_constitucion_de_la_empresa"
-                                                    maxSize={5 * 1024 * 1024}  // 5 MB
-                                                    onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'escritura_constitucion_de_la_empresa')}
-                                                    onDelete={() => setValue('escritura_constitucion_de_la_empresa', null, {shouldValidate: true})}
-                                                />
+                                                <Box position="relative">
+                                                    <RHFUpload
+                                                        name="escritura_constitucion_de_la_empresa"
+                                                        maxSize={5 * 1024 * 1024}  // 5 MB
+                                                        onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'escritura_constitucion_de_la_empresa')}
+                                                        onDelete={() => setValue('escritura_constitucion_de_la_empresa', null, {shouldValidate: true})}
+                                                    />
+                                                    {loadingFields['escritura_constitucion_de_la_empresa'] && (
+                                                        <Box
+                                                            position="absolute"
+                                                            top={0}
+                                                            left={0}
+                                                            width="100%"
+                                                            height="100%"
+                                                            display="flex"
+                                                            alignItems="center"
+                                                            justifyContent="center"
+                                                            bgcolor="rgba(255, 255, 255, 0.6)"
+                                                            zIndex={2}
+                                                        >
+                                                            <CircularProgress size={36}/>
+                                                        </Box>
+                                                    )}
+                                                </Box>
                                             </Block>
 
                                             <Block label="RUC">
-                                                <RHFUpload
-                                                    name="ruc_upload"
-                                                    maxSize={5 * 1024 * 1024}  // 5 MB
-                                                    onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'ruc_upload')}
-                                                    onDelete={() => setValue('ruc_upload', null, {shouldValidate: true})}
-                                                />
+                                                <Box position="relative">
+                                                    <RHFUpload
+                                                        name="ruc_upload"
+                                                        maxSize={5 * 1024 * 1024}  // 5 MB
+                                                        onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'ruc_upload')}
+                                                        onDelete={() => setValue('ruc_upload', null, {shouldValidate: true})}
+                                                    />
+                                                    {loadingFields['ruc_upload'] && (
+                                                        <Box
+                                                            position="absolute"
+                                                            top={0}
+                                                            left={0}
+                                                            width="100%"
+                                                            height="100%"
+                                                            display="flex"
+                                                            alignItems="center"
+                                                            justifyContent="center"
+                                                            bgcolor="rgba(255, 255, 255, 0.6)"
+                                                            zIndex={2}
+                                                        >
+                                                            <CircularProgress size={36}/>
+                                                        </Box>
+                                                    )}
+                                                </Box>
                                             </Block>
 
                                             <Block label="Cédula de Identidad">
-                                                <RHFUpload
-                                                    name="cedula_de_identidad"
-                                                    maxSize={5 * 1024 * 1024}  // 5 MB
-                                                    onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'cedula_de_identidad')}
-                                                    onDelete={() => setValue('cedula_de_identidad', null, {shouldValidate: true})}
-                                                />
+                                                <Box position="relative">
+                                                    <RHFUpload
+                                                        name="cedula_de_identidad"
+                                                        maxSize={5 * 1024 * 1024}  // 5 MB
+                                                        onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'cedula_de_identidad')}
+                                                        onDelete={() => setValue('cedula_de_identidad', null, {shouldValidate: true})}
+                                                    />
+                                                    {loadingFields['cedula_de_identidad'] && (
+                                                        <Box
+                                                            position="absolute"
+                                                            top={0}
+                                                            left={0}
+                                                            width="100%"
+                                                            height="100%"
+                                                            display="flex"
+                                                            alignItems="center"
+                                                            justifyContent="center"
+                                                            bgcolor="rgba(255, 255, 255, 0.6)"
+                                                            zIndex={2}
+                                                        >
+                                                            <CircularProgress size={36}/>
+                                                        </Box>
+                                                    )}
+                                                </Box>
                                             </Block>
 
                                             <Block label="Estados Fiancieros (Año anterior)">
-                                                <RHFUpload
-                                                    name="estados_fiancieros_year_anterior"
-                                                    maxSize={5 * 1024 * 1024}  // 5 MB
-                                                    onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'estados_fiancieros_year_anterior')}
-                                                    onDelete={() => setValue('estados_fiancieros_year_anterior', null, {shouldValidate: true})}
-                                                />
+                                                <Box position="relative">
+                                                    <RHFUpload
+                                                        name="estados_fiancieros_year_anterior"
+                                                        maxSize={5 * 1024 * 1024}  // 5 MB
+                                                        onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'estados_fiancieros_year_anterior')}
+                                                        onDelete={() => setValue('estados_fiancieros_year_anterior', null, {shouldValidate: true})}
+                                                    />
+                                                    {loadingFields['estados_fiancieros_year_anterior'] && (
+                                                        <Box
+                                                            position="absolute"
+                                                            top={0}
+                                                            left={0}
+                                                            width="100%"
+                                                            height="100%"
+                                                            display="flex"
+                                                            alignItems="center"
+                                                            justifyContent="center"
+                                                            bgcolor="rgba(255, 255, 255, 0.6)"
+                                                            zIndex={2}
+                                                        >
+                                                            <CircularProgress size={36}/>
+                                                        </Box>
+                                                    )}
+                                                </Box>
                                             </Block>
 
                                             <Block label="Nombramiento del Representante Legal">
-                                                <RHFUpload
-                                                    name="nombramiento_del_representante_legal"
-                                                    maxSize={5 * 1024 * 1024}  // 5 MB
-                                                    onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'nombramiento_del_representante_legal')}
-                                                    onDelete={() => setValue('nombramiento_del_representante_legal', null, {shouldValidate: true})}
-                                                />
+                                                <Box position="relative">
+                                                    <RHFUpload
+                                                        name="nombramiento_del_representante_legal"
+                                                        maxSize={5 * 1024 * 1024}  // 5 MB
+                                                        onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'nombramiento_del_representante_legal')}
+                                                        onDelete={() => setValue('nombramiento_del_representante_legal', null, {shouldValidate: true})}
+                                                    />
+                                                    {loadingFields['nombramiento_del_representante_legal'] && (
+                                                        <Box
+                                                            position="absolute"
+                                                            top={0}
+                                                            left={0}
+                                                            width="100%"
+                                                            height="100%"
+                                                            display="flex"
+                                                            alignItems="center"
+                                                            justifyContent="center"
+                                                            bgcolor="rgba(255, 255, 255, 0.6)"
+                                                            zIndex={2}
+                                                        >
+                                                            <CircularProgress size={36}/>
+                                                        </Box>
+                                                    )}
+                                                </Box>
                                             </Block>
 
                                             <Block label="Declaración de Impuesto a la Renta (Año anterior)">
-                                                <RHFUpload
-                                                    name="declaracion_de_impuesto_a_la_renta_year_anterior"
-                                                    maxSize={5 * 1024 * 1024}  // 5 MB
-                                                    onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'declaracion_de_impuesto_a_la_renta_year_anterior')}
-                                                    onDelete={() => setValue('declaracion_de_impuesto_a_la_renta_year_anterior', null, {shouldValidate: true})}
-                                                />
+                                                <Box position="relative">
+                                                    <RHFUpload
+                                                        name="declaracion_de_impuesto_a_la_renta_year_anterior"
+                                                        maxSize={5 * 1024 * 1024}  // 5 MB
+                                                        onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'declaracion_de_impuesto_a_la_renta_year_anterior')}
+                                                        onDelete={() => setValue('declaracion_de_impuesto_a_la_renta_year_anterior', null, {shouldValidate: true})}
+                                                    />
+                                                    {loadingFields['declaracion_de_impuesto_a_la_renta_year_anterior'] && (
+                                                        <Box
+                                                            position="absolute"
+                                                            top={0}
+                                                            left={0}
+                                                            width="100%"
+                                                            height="100%"
+                                                            display="flex"
+                                                            alignItems="center"
+                                                            justifyContent="center"
+                                                            bgcolor="rgba(255, 255, 255, 0.6)"
+                                                            zIndex={2}
+                                                        >
+                                                            <CircularProgress size={36}/>
+                                                        </Box>
+                                                    )}
+                                                </Box>
                                             </Block>
 
                                             <Block label="Certificado Bancario">
-                                                <RHFUpload
-                                                    name="certificado_bancario"
-                                                    maxSize={5 * 1024 * 1024}  // 5 MB
-                                                    onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'certificado_bancario')}
-                                                    onDelete={() => setValue('certificado_bancario', null, {shouldValidate: true})}
-                                                />
+                                                <Box position="relative">
+                                                    <RHFUpload
+                                                        name="certificado_bancario"
+                                                        maxSize={5 * 1024 * 1024}  // 5 MB
+                                                        onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'certificado_bancario')}
+                                                        onDelete={() => setValue('certificado_bancario', null, {shouldValidate: true})}
+                                                    />
+                                                    {loadingFields['certificado_bancario'] && (
+                                                        <Box
+                                                            position="absolute"
+                                                            top={0}
+                                                            left={0}
+                                                            width="100%"
+                                                            height="100%"
+                                                            display="flex"
+                                                            alignItems="center"
+                                                            justifyContent="center"
+                                                            bgcolor="rgba(255, 255, 255, 0.6)"
+                                                            zIndex={2}
+                                                        >
+                                                            <CircularProgress size={36}/>
+                                                        </Box>
+                                                    )}
+                                                </Box>
                                             </Block>
 
                                             <Block label="Foto del local y georeferencia">
-                                                <RHFUpload
-                                                    name="foto_del_local_y_georeferencia"
-                                                    maxSize={5 * 1024 * 1024}  // 5 MB
-                                                    onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'foto_del_local_y_georeferencia')}
-                                                    onDelete={() => setValue('foto_del_local_y_georeferencia', null, {shouldValidate: true})}
-                                                />
+                                                <Box position="relative">
+                                                    <RHFUpload
+                                                        name="foto_del_local_y_georeferencia"
+                                                        maxSize={5 * 1024 * 1024}  // 5 MB
+                                                        onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'foto_del_local_y_georeferencia')}
+                                                        onDelete={() => setValue('foto_del_local_y_georeferencia', null, {shouldValidate: true})}
+                                                    />
+                                                    {loadingFields['foto_del_local_y_georeferencia'] && (
+                                                        <Box
+                                                            position="absolute"
+                                                            top={0}
+                                                            left={0}
+                                                            width="100%"
+                                                            height="100%"
+                                                            display="flex"
+                                                            alignItems="center"
+                                                            justifyContent="center"
+                                                            bgcolor="rgba(255, 255, 255, 0.6)"
+                                                            zIndex={2}
+                                                        >
+                                                            <CircularProgress size={36}/>
+                                                        </Box>
+                                                    )}
+                                                </Box>
                                             </Block>
 
                                         </Stack>
@@ -655,154 +826,10 @@ export default function DataPage() {
                                         </Stack>
                                     </Grid>
                                 </Grid>
-
                             </FormProvider>
-
-
-                            {/* <CardHeader title={'CLIENTE: ' + id}/> */}
-
-                            {/* <CardContent> */}
-                            {/*     <Stack direction="row" spacing={2}> */}
-                            {/*         <h3 style={{color: 'black'}}>Planilla Servicio básico.</h3> */}
-                            {/*         <UploadBox */}
-                            {/*             placeholder={ */}
-                            {/*                 <Stack spacing={0.5} alignItems="center"> */}
-                            {/*                     <Iconify icon="eva:cloud-upload-fill" width={40}/> */}
-                            {/*                     <Typography variant="body2">Upload file</Typography> */}
-                            {/*                 </Stack> */}
-                            {/*             } */}
-                            {/*             sx={{flexGrow: 1, height: 'auto', py: 2.5, mb: 3}} */}
-                            {/*         /> */}
-                            {/*         <CheckCircleIcon style={{color: "green", fontSize: 40}}/> */}
-                            {/*         <CancelIcon style={{color: "red", fontSize: 40}}/> */}
-                            {/*     </Stack> */}
-
-                            {/*     <Stack direction="row" spacing={2}> */}
-                            {/*         <h3 style={{color: 'black'}}>Escritura Constitucion de la Empresa</h3> */}
-                            {/*         <UploadBox */}
-                            {/*             placeholder={ */}
-                            {/*                 <Stack spacing={0.5} alignItems="center"> */}
-                            {/*                     <Iconify icon="eva:cloud-upload-fill" width={40}/> */}
-                            {/*                     <Typography variant="body2">Upload file</Typography> */}
-                            {/*                 </Stack> */}
-                            {/*             } */}
-                            {/*             sx={{flexGrow: 1, height: 'auto', py: 2.5, mb: 3}} */}
-                            {/*         /> */}
-                            {/*         <CheckCircleIcon style={{color: "green", fontSize: 40}}/> */}
-                            {/*         <CancelIcon style={{color: "red", fontSize: 40}}/> */}
-                            {/*     </Stack> */}
-
-                            {/*     <Stack direction="row" spacing={2}> */}
-                            {/*         <h3 style={{color: 'black'}}>RUC</h3> */}
-                            {/*         <UploadBox */}
-                            {/*             placeholder={ */}
-                            {/*                 <Stack spacing={0.5} alignItems="center"> */}
-                            {/*                     <Iconify icon="eva:cloud-upload-fill" width={40}/> */}
-                            {/*                     <Typography variant="body2">Upload file</Typography> */}
-                            {/*                 </Stack> */}
-                            {/*             } */}
-                            {/*             sx={{flexGrow: 1, height: 'auto', py: 2.5, mb: 3}} */}
-                            {/*         /> */}
-                            {/*         <CheckCircleIcon style={{color: "green", fontSize: 40}}/> */}
-                            {/*         <CancelIcon style={{color: "red", fontSize: 40}}/> */}
-                            {/*     </Stack> */}
-
-                            {/*     <Stack direction="row" spacing={2}> */}
-                            {/*         <h3 style={{color: 'black'}}>Cédula de Identidad</h3> */}
-                            {/*         <UploadBox */}
-                            {/*             placeholder={ */}
-                            {/*                 <Stack spacing={0.5} alignItems="center"> */}
-                            {/*                     <Iconify icon="eva:cloud-upload-fill" width={40}/> */}
-                            {/*                     <Typography variant="body2">Upload file</Typography> */}
-                            {/*                 </Stack> */}
-                            {/*             } */}
-                            {/*             sx={{flexGrow: 1, height: 'auto', py: 2.5, mb: 3}} */}
-                            {/*         /> */}
-                            {/*         <CheckCircleIcon style={{color: "green", fontSize: 40}}/> */}
-                            {/*         <CancelIcon style={{color: "red", fontSize: 40}}/> */}
-                            {/*     </Stack> */}
-
-                            {/*     <Stack direction="row" spacing={2}> */}
-                            {/*         <h3 style={{color: 'black'}}>Estados Fiancieros (Año anterior)</h3> */}
-                            {/*         <UploadBox */}
-                            {/*             placeholder={ */}
-                            {/*                 <Stack spacing={0.5} alignItems="center"> */}
-                            {/*                     <Iconify icon="eva:cloud-upload-fill" width={40}/> */}
-                            {/*                     <Typography variant="body2">Upload file</Typography> */}
-                            {/*                 </Stack> */}
-                            {/*             } */}
-                            {/*             sx={{flexGrow: 1, height: 'auto', py: 2.5, mb: 3}} */}
-                            {/*         /> */}
-                            {/*         <CheckCircleIcon style={{color: "green", fontSize: 40}}/> */}
-                            {/*         <CancelIcon style={{color: "red", fontSize: 40}}/> */}
-                            {/*     </Stack> */}
-
-                            {/*     <Stack direction="row" spacing={2}> */}
-                            {/*         <h3 style={{color: 'black'}}>Nombramiento del Representante Legal</h3> */}
-                            {/*         <UploadBox */}
-                            {/*             placeholder={ */}
-                            {/*                 <Stack spacing={0.5} alignItems="center"> */}
-                            {/*                     <Iconify icon="eva:cloud-upload-fill" width={40}/> */}
-                            {/*                     <Typography variant="body2">Upload file</Typography> */}
-                            {/*                 </Stack> */}
-                            {/*             } */}
-                            {/*             sx={{flexGrow: 1, height: 'auto', py: 2.5, mb: 3}} */}
-                            {/*         /> */}
-                            {/*         <CheckCircleIcon style={{color: "green", fontSize: 40}}/> */}
-                            {/*         <CancelIcon style={{color: "red", fontSize: 40}}/> */}
-                            {/*     </Stack> */}
-
-                            {/*     <Stack direction="row" spacing={2}> */}
-                            {/*         <h3 style={{color: 'black'}}>Declaración de Impuesto a la Renta (Año anterior)</h3> */}
-                            {/*         <UploadBox */}
-                            {/*             placeholder={ */}
-                            {/*                 <Stack spacing={0.5} alignItems="center"> */}
-                            {/*                     <Iconify icon="eva:cloud-upload-fill" width={40}/> */}
-                            {/*                     <Typography variant="body2">Upload file</Typography> */}
-                            {/*                 </Stack> */}
-                            {/*             } */}
-                            {/*             sx={{flexGrow: 1, height: 'auto', py: 2.5, mb: 3}} */}
-                            {/*         /> */}
-                            {/*         <CheckCircleIcon style={{color: "green", fontSize: 40}}/> */}
-                            {/*         <CancelIcon style={{color: "red", fontSize: 40}}/> */}
-                            {/*     </Stack> */}
-
-                            {/*     <Stack direction="row" spacing={2}> */}
-                            {/*         <h3 style={{color: 'black'}}>Certificado Bancario</h3> */}
-                            {/*         <UploadBox */}
-                            {/*             placeholder={ */}
-                            {/*                 <Stack spacing={0.5} alignItems="center"> */}
-                            {/*                     <Iconify icon="eva:cloud-upload-fill" width={40}/> */}
-                            {/*                     <Typography variant="body2">Upload file</Typography> */}
-                            {/*                 </Stack> */}
-                            {/*             } */}
-                            {/*             sx={{flexGrow: 1, height: 'auto', py: 2.5, mb: 3}} */}
-                            {/*         /> */}
-                            {/*         <CheckCircleIcon style={{color: "green", fontSize: 40}}/> */}
-                            {/*         <CancelIcon style={{color: "red", fontSize: 40}}/> */}
-                            {/*     </Stack> */}
-
-                            {/*     <Stack direction="row" spacing={2}> */}
-                            {/*         <h3 style={{color: 'black'}}>Foto del local y georeferencia</h3> */}
-                            {/*         <UploadBox */}
-                            {/*             placeholder={ */}
-                            {/*                 <Stack spacing={0.5} alignItems="center"> */}
-                            {/*                     <Iconify icon="eva:cloud-upload-fill" width={40}/> */}
-                            {/*                     <Typography variant="body2">Upload file</Typography> */}
-                            {/*                 </Stack> */}
-                            {/*             } */}
-                            {/*             sx={{flexGrow: 1, height: 'auto', py: 2.5, mb: 3}} */}
-                            {/*         /> */}
-                            {/*         <CheckCircleIcon style={{color: "green", fontSize: 40}}/> */}
-                            {/*         <CancelIcon style={{color: "red", fontSize: 40}}/> */}
-                            {/*     </Stack> */}
-
-                            {/* </CardContent> */}
-
                         </Card>
                     </Grid>
                 </Grid>
-
             </Container>
         </>
     );
@@ -830,7 +857,7 @@ function Block({label = 'RHFTextField', sx, children}) {
 export const FormSchemaCartera = Yup.object().shape({
     nombre_de_la_empresa_o_compania: Yup.string().required('Se requiere el Nombre de la empresa o compañia'),
     ruc: Yup.string().required('Se requiere el RUC'),
-    nombre_del_representante: Yup.string().required('Se requiere el Nombre del representante'),
+    nombre_del_representante: Yup.string().required('Se requiere el representante (Dos Nombres - Dos Apellidos)'),
     cedula_del_representante: Yup.string().required('Se requiere la Cédula'),
     email: Yup.string().required('Se requiere el Email'),
     telefono: Yup.string().required('Se requiere el teléfono'),
