@@ -1,11 +1,11 @@
 import {pdf} from '@react-pdf/renderer';
 import {Box, Button, Card, Stack, TextField} from '@mui/material';
-import SolicitudPDF from "../../sections/@dashboard/invoice/details/SolicitudPDF";
-import AutorizacionPDF from "../../sections/@dashboard/invoice/details/AutorizacionPDF";
-import PagarePDF from "../../sections/@dashboard/invoice/details/PagarePDF";
+import SolicitudPDF from "../../../sections/@dashboard/invoice/details/credito/natural/SolicitudPDF";
+import AutorizacionPDF from "../../../sections/@dashboard/invoice/details/credito/natural/AutorizacionPDF";
+import PagarePDF from "../../../sections/@dashboard/invoice/details/credito/natural/PagarePDF";
 import {useState} from "react";
-import {useAuthContext} from "../../auth/useAuthContext";
-import axios from "../../utils/axios";
+import {useAuthContext} from "../../../auth/useAuthContext";
+import axios from "../../../utils/axios";
 // import SolicitudPDF from './pdfs/SolicitudPDF';
 // import OtroPDF from './pdfs/OtroPDF';
 // import TercerPDF from './pdfs/TercerPDF';

@@ -20,7 +20,7 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
-import PDFPreviewButtons from "../../../components/cartera/PDFPreviewButtons";
+import PDFPreviewButtons from "../../../components/cartera/juridica/PDFPreviewButtons";
 import {useAuthContext} from "../../../auth/useAuthContext";
 
 DataPage.getLayout = (page) => <MainLayout>{page}</MainLayout>;

@@ -20,7 +20,8 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
-import PDFPreviewButtons from "../../../components/cartera/PDFPreviewButtons";
+import PDFPreviewButtons from "../../../components/cartera/natural/PDFPreviewButtons";
+import {useAuthContext} from "../../../auth/useAuthContext";
 
 DataPage.getLayout = (page) => <MainLayout>{page}</MainLayout>;
 
@@ -35,6 +36,7 @@ export const defaultValues = {
     direccion_de_domicilio: '',
     ciudad: '',
     provincia: '',
+    telefono: '',
 
     planilla_servicio_basico: '',
     cedula_de_identidad: '',
@@ -90,6 +92,8 @@ export const defaultValues = {
 
 export default function DataPage() {
 
+    const {user} = useAuthContext();
+
     const router = useRouter();
     const {id} = router.query; // Captura el parámetro "id"
 
@@ -144,6 +148,7 @@ export default function DataPage() {
                                 nombre_del_representante: dataProspecto.empresa.NOMBRE_REPRESENTANTE || '',
                                 cedula_del_representante: dataProspecto.empresa.CEDULA_REPRESENTANTE || '',
                                 provincia: dataProspecto.empresa.PROVINCIA || '',
+                                telefono: dataProspecto.empresa.NUM_TELEFONO || '',
                                 ciudad: dataProspecto.empresa.CIUDAD || '',
                                 direccion_de_domicilio: dataProspecto.empresa.DIRECCION_DOMICILIO || '',
                                 direccion_de_trabajo: dataProspecto.empresa.DIRECCION_TRABAJO || '',
@@ -632,48 +637,6 @@ export default function DataPage() {
                                 <Grid container spacing={5}>
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={2}>
-                                            <Block label="Nombre de la empresa o compañia">
-                                                <Stack direction="row" alignItems="center" spacing={2}>
-                                                    <RHFTextField name="nombre_de_la_empresa_o_compania"
-                                                                  label="Nombre de la empresa o compania"
-                                                    />
-                                                    {watch("nombre_de_la_empresa_o_compania") ? (
-                                                        <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
-                                                    ) : (
-                                                        <>
-                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
-                                                        </>
-                                                    )}
-                                                    <Button variant="contained" color="primary" onClick={() => {
-                                                        // Obtener el valor actualizado del campo
-                                                        const campoValor = watch("nombre_de_la_empresa_o_compania");
-                                                        ActualizarInfoEmpresa("nombre_de_la_empresa_o_compania", campoValor)
-                                                    }}>
-                                                        Actualizar
-                                                    </Button>
-                                                </Stack>
-                                            </Block>
-
-                                            <Block label="RUC">
-                                                <Stack direction="row" alignItems="center" spacing={2}>
-                                                    <RHFTextField name="ruc" label="RUC"
-                                                    />
-                                                    {watch("ruc") ? (
-                                                        <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
-                                                    ) : (
-                                                        <>
-                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
-                                                        </>
-                                                    )}
-                                                    <Button variant="contained" color="primary" onClick={() => {
-                                                        // Obtener el valor actualizado del campo
-                                                        const campoValor = watch("ruc");
-                                                        ActualizarInfoEmpresa("ruc", campoValor)
-                                                    }}>
-                                                        Actualizar
-                                                    </Button>
-                                                </Stack>
-                                            </Block>
 
                                             <Block label="Nombre del representante">
                                                 <Stack direction="row" alignItems="center" spacing={2}>
@@ -718,6 +681,48 @@ export default function DataPage() {
                                                     </Button>
                                                 </Stack>
                                             </Block>
+                                            <Block label="Nombre de la empresa o compañia">
+                                                <Stack direction="row" alignItems="center" spacing={2}>
+                                                    <RHFTextField name="nombre_de_la_empresa_o_compania"
+                                                                  label="Nombre de la empresa o compania"
+                                                    />
+                                                    {watch("nombre_de_la_empresa_o_compania") ? (
+                                                        <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                    ) : (
+                                                        <>
+                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
+                                                        </>
+                                                    )}
+                                                    <Button variant="contained" color="primary" onClick={() => {
+                                                        // Obtener el valor actualizado del campo
+                                                        const campoValor = watch("nombre_de_la_empresa_o_compania");
+                                                        ActualizarInfoEmpresa("nombre_de_la_empresa_o_compania", campoValor)
+                                                    }}>
+                                                        Actualizar
+                                                    </Button>
+                                                </Stack>
+                                            </Block>
+
+                                            <Block label="RUC">
+                                                <Stack direction="row" alignItems="center" spacing={2}>
+                                                    <RHFTextField name="ruc" label="RUC"
+                                                    />
+                                                    {watch("ruc") ? (
+                                                        <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                    ) : (
+                                                        <>
+                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
+                                                        </>
+                                                    )}
+                                                    <Button variant="contained" color="primary" onClick={() => {
+                                                        // Obtener el valor actualizado del campo
+                                                        const campoValor = watch("ruc");
+                                                        ActualizarInfoEmpresa("ruc", campoValor)
+                                                    }}>
+                                                        Actualizar
+                                                    </Button>
+                                                </Stack>
+                                            </Block>
 
                                             <Block label="E-mail">
                                                 <Stack direction="row" alignItems="center" spacing={2}>
@@ -744,7 +749,7 @@ export default function DataPage() {
                                                 <Stack direction="row" alignItems="center" spacing={2}>
                                                     <RHFTextField name="telefono" label="Teléfono"
                                                     />
-                                                    {watch("email") ? (
+                                                    {watch("telefono") ? (
                                                         <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
                                                     ) : (
                                                         <>
@@ -901,52 +906,6 @@ export default function DataPage() {
                                                 </Stack>
                                             </Block>
 
-                                            <Block label="Escritura Constitucion de la Empresa">
-                                                <Stack direction="row" justifyContent="flex-end" alignItems="center"
-                                                       spacing={2}>
-
-                                                    {watch("escritura_constitucion_de_la_empresa") ? (
-                                                        <>
-                                                            <Button variant="contained" color="primary" onClick={() => {
-                                                                const campoValor = watch("escritura_constitucion_de_la_empresa");
-                                                                if (campoValor) {
-                                                                    window.open(campoValor, "_blank");
-                                                                } else {
-                                                                    console.error("No hay una URL válida");
-                                                                }
-                                                            }}>
-                                                                Abrir
-                                                            </Button>
-                                                            <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
-                                                            <Button variant="contained" color="primary" onClick={() => {
-                                                                //console.log("Eliminando...")
-                                                                EliminarDocumento("ESCRITURA_CONSTITUCION")
-                                                            }}>
-                                                                Eliminar
-                                                            </Button>
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            <div style={{width: '80%'}}>
-                                                                <RHFUpload
-                                                                    name="escritura_constitucion_de_la_empresa"
-                                                                    maxSize={5 * 1024 * 1024}  // 5 MB
-                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'escritura_constitucion_de_la_empresa')}
-                                                                    onDelete={() => setValue('escritura_constitucion_de_la_empresa', null, {shouldValidate: true})}
-                                                                />
-                                                            </div>
-                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
-                                                        </>
-                                                    )}
-                                                    {/* <Button variant="contained" color="primary" onClick={() => { */}
-                                                    {/*     const campoValor = watch("escritura_constitucion_de_la_empresa"); */}
-                                                    {/*     ActualizarDocumentos("escritura_constitucion_de_la_empresa", campoValor) */}
-                                                    {/* }}> */}
-                                                    {/*     Actualizar */}
-                                                    {/* </Button> */}
-                                                </Stack>
-                                            </Block>
-
                                             <Block label="RUC">
                                                 <Stack direction="row" justifyContent="flex-end" alignItems="center"
                                                        spacing={2}>
@@ -1075,53 +1034,6 @@ export default function DataPage() {
                                                     {/* <Button variant="contained" color="primary" onClick={() => { */}
                                                     {/*     const campoValor = watch("estados_fiancieros_year_anterior"); */}
                                                     {/*     ActualizarDocumentos("estados_fiancieros_year_anterior", campoValor) */}
-                                                    {/* }}> */}
-                                                    {/*     Actualizar */}
-                                                    {/* </Button> */}
-
-                                                </Stack>
-                                            </Block>
-
-                                            <Block label="Nombramiento del Representante Legal">
-                                                <Stack direction="row" justifyContent="flex-end" alignItems="center"
-                                                       spacing={2}>
-
-                                                    {watch("nombramiento_del_representante_legal") ? (
-                                                        <>
-                                                            <Button variant="contained" color="primary" onClick={() => {
-                                                                const campoValor = watch("nombramiento_del_representante_legal");
-                                                                if (campoValor) {
-                                                                    window.open(campoValor, "_blank");
-                                                                } else {
-                                                                    console.error("No hay una URL válida");
-                                                                }
-                                                            }}>
-                                                                Abrir
-                                                            </Button>
-                                                            <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
-                                                            <Button variant="contained" color="primary" onClick={() => {
-                                                                //console.log("Eliminando...")
-                                                                EliminarDocumento("NOMBRAMIENTO_REPRESENTANTE")
-                                                            }}>
-                                                                Eliminar
-                                                            </Button>
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            <div style={{width: '80%'}}>
-                                                                <RHFUpload
-                                                                    name="nombramiento_del_representante_legal"
-                                                                    maxSize={5 * 1024 * 1024}  // 5 MB
-                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'nombramiento_del_representante_legal')}
-                                                                    onDelete={() => setValue('nombramiento_del_representante_legal', null, {shouldValidate: true})}
-                                                                />
-                                                            </div>
-                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
-                                                        </>
-                                                    )}
-                                                    {/* <Button variant="contained" color="primary" onClick={() => { */}
-                                                    {/*     const campoValor = watch("nombramiento_del_representante_legal"); */}
-                                                    {/*     ActualizarDocumentos("nombramiento_del_representante_legal", campoValor) */}
                                                     {/* }}> */}
                                                     {/*     Actualizar */}
                                                     {/* </Button> */}
@@ -2002,10 +1914,20 @@ export default function DataPage() {
 
                             </FormProvider>
 
-                            {/* Generar los PDFs */}
-                            <PDFPreviewButtons data={dataProspectoAux} />
-
                         </Card>
+
+                        {/* Generar los PDFs */}
+                        {(user?.ROLE === '8' || user?.ROLE === '10') && (
+                            <Card sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',      // centra horizontalmente
+                                justifyContent: 'center',  // centra verticalmente (si le das una altura)
+                                textAlign: 'center',       // centra el texto
+                            }}>
+                                <PDFPreviewButtons data={dataProspectoAux} />
+                            </Card>
+                        )}
                     </Grid>
                 </Grid>
 

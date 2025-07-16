@@ -6,7 +6,7 @@ import {
     Document,
     StyleSheet, Image
 } from '@react-pdf/renderer';
-import {fCurrency} from "../../../../utils/formatNumber";
+import {fCurrency} from "../../../../../../utils/formatNumber";
 
 // Estilos
 const styles = StyleSheet.create({
