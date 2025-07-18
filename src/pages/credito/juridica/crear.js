@@ -248,7 +248,27 @@ export default function DataPage() {
                                             </Block>
 
                                             <Block label="RUC">
-                                                <RHFTextField name="ruc" label="RUC"/>
+                                                <RHFTextField name="ruc" label="RUC"
+                                                              onKeyPress={(e) => {
+                                                                  if (!/[0-9]/.test(e.key)) e.preventDefault();
+                                                              }}
+                                                              inputProps={{
+                                                                  maxLength: 13,
+                                                                  inputMode: 'numeric',
+                                                                  pattern: '[0-9]*',
+                                                              }}
+                                                              onBlur={(e) => {
+                                                                  const value = e.target.value.trim();
+                                                                  if (value.length !== 13 || !/^\d{13}$/.test(value)) {
+                                                                      methods.setError('ruc', {
+                                                                          type: 'manual',
+                                                                          message: 'El RUC debe tener exactamente 13 dígitos numéricos',
+                                                                      });
+                                                                  } else {
+                                                                      methods.clearErrors('ruc');
+                                                                  }
+                                                              }}
+                                                />
                                             </Block>
 
                                             <Block label="Representante (Dos Nombres - Dos Apellidos)">
@@ -261,7 +281,27 @@ export default function DataPage() {
 
                                             <Block label="Cédula del representante">
                                                 <RHFTextField name="cedula_del_representante"
-                                                              label="Cédula del representante"/>
+                                                              label="Cédula del representante"
+                                                              onKeyPress={(e) => {
+                                                                  if (!/[0-9]/.test(e.key)) e.preventDefault();
+                                                              }}
+                                                              inputProps={{
+                                                                  maxLength: 10,
+                                                                  inputMode: 'numeric',
+                                                                  pattern: '[0-9]*',
+                                                              }}
+                                                              onBlur={(e) => {
+                                                                  const value = e.target.value.trim();
+                                                                  if (value.length !== 10 || !/^\d{10}$/.test(value)) {
+                                                                      methods.setError('cedula_del_representante', {
+                                                                          type: 'manual',
+                                                                          message: 'La CÉDULA debe tener exactamente 10 dígitos numéricos',
+                                                                      });
+                                                                  } else {
+                                                                      methods.clearErrors('cedula_del_representante');
+                                                                  }
+                                                              }}
+                                                />
                                             </Block>
 
                                             <Block label="E-mail">
@@ -272,7 +312,27 @@ export default function DataPage() {
                                             </Block>
 
                                             <Block label="Teléfono">
-                                                <RHFTextField name="telefono" label="Teléfono"/>
+                                                <RHFTextField name="telefono" label="Teléfono"
+                                                              onKeyPress={(e) => {
+                                                                  if (!/[0-9]/.test(e.key)) e.preventDefault();
+                                                              }}
+                                                              inputProps={{
+                                                                  maxLength: 10,
+                                                                  inputMode: 'numeric',
+                                                                  pattern: '[0-9]*',
+                                                              }}
+                                                              onBlur={(e) => {
+                                                                  const value = e.target.value.trim();
+                                                                  if (value.length !== 10 || !/^\d{10}$/.test(value)) {
+                                                                      methods.setError('telefono', {
+                                                                          type: 'manual',
+                                                                          message: 'El TELÉFONO debe tener exactamente 10 dígitos numéricos',
+                                                                      });
+                                                                  } else {
+                                                                      methods.clearErrors('telefono');
+                                                                  }
+                                                              }}
+                                                />
                                             </Block>
 
                                             <Block label="Dirección completa de trabajo - referencias">
