@@ -217,11 +217,11 @@ const navConfig = [
     // 9 - GENERAR DOCUMENTOS CREDITO
     // ----------------------------------------------------------------------
     {
-        subheader: 'CREADOR DOCUMENTOS ONLINE',
+        subheader: 'UANATACA - MAYORISTAS',
         items: [
-            {title: 'Validar', path: PATH_DASHBOARD.credito.cargar, icon: ICONS.analytics},
-            {title: 'Estados', path: PATH_DASHBOARD.rrhh.reporte_rrhh, icon: ICONS.blog},
-            {title: 'Consultar', path: PATH_DASHBOARD.rrhh.reporte_rrhh, icon: ICONS.blog},
+            {title: 'Consultar', path: PATH_DASHBOARD.credito.cargar, icon: ICONS.analytics},
+            {title: 'Equifax', path: PATH_DASHBOARD.credito.auth_equifax, icon: ICONS.blog},
+            {title: '......', path: PATH_DASHBOARD.credito.cargar, icon: ICONS.blog},
         ],
     },
 

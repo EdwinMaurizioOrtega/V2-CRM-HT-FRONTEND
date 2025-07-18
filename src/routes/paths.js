@@ -138,6 +138,7 @@ export const PATH_DASHBOARD = {
   credito: {
     root: path(ROOTS_DASHBOARD, '/credito'),
     cargar: path(ROOTS_DASHBOARD, '/credito/cargar_archivos_credito'),
+    auth_equifax: path(ROOTS_DASHBOARD, '/credito/auth_equifax_uanataca'),
   },
   customer: {
     root: path(ROOTS_DASHBOARD, '/customer'),

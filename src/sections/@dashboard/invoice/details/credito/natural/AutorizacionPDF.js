@@ -89,7 +89,7 @@ export default function AutorizacionPDF(data) {
 
                     {/* <Text style={styles.line}>{data?.data?.data?.empresa?.NOMBRE_REPRESENTANTE}</Text> */}
                     <Text style={styles.text}>Nombre: {data?.data?.data?.empresa?.NOMBRE_REPRESENTANTE}</Text>
-                    <Text style={styles.text}>CI.: {data?.data?.data?.empresa?.NUM_TELEFONO}</Text>
+                    <Text style={styles.text}>CI.: {data?.data?.data?.empresa?.CEDULA_REPRESENTANTE}</Text>
                 </View>
 
             </Page>

@@ -219,6 +219,14 @@ export default function DataPage() {
             });
     };
 
+    const handleUpper = (fieldName) => (e) => {
+        const value = e.target.value.toUpperCase();
+        setValue(fieldName, value, {
+            shouldValidate: true,
+            shouldDirty: true,
+        });
+    };
+
     return (
         <>
             <Head>
@@ -242,7 +250,10 @@ export default function DataPage() {
 
                                             <Block label="Representante (Dos Nombres - Dos Apellidos)">
                                                 <RHFTextField name="nombre_del_representante"
-                                                              label="Representante (Dos Nombres - Dos Apellidos)"/>
+                                                              label="Representante (Dos Nombres - Dos Apellidos)"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('nombre_del_representante')}
+                                                />
                                             </Block>
 
                                             <Block label="Cédula del representante">
@@ -252,6 +263,8 @@ export default function DataPage() {
                                             <Block label="Nombre de la empresa o compañia">
                                                 <RHFTextField name="nombre_de_la_empresa_o_compania"
                                                               label="Nombre de la empresa o compania"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('nombre_de_la_empresa_o_compania')}
                                                 />
                                             </Block>
                                             <Block label="RUC">
@@ -261,29 +274,44 @@ export default function DataPage() {
                                                 />
                                             </Block>
                                             <Block label="E-mail">
-                                                <RHFTextField name="email" label="E-mail"/>
+                                                <RHFTextField name="email" label="E-mail"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('email')}
+                                                />
                                             </Block>
 
                                             <Block label="Teléfono">
                                                 <RHFTextField name="telefono" label="Teléfono"/>
                                             </Block>
 
-                                            <Block label="Dirección de trabajo">
+                                            <Block label="Dirección completa de trabajo - referencias">
                                                 <RHFTextField name="direccion_de_trabajo"
-                                                              label="Dirección de trabajo"/>
+                                                              label="Dirección completa de trabajo - referencias"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('direccion_de_trabajo')}
+                                                />
                                             </Block>
 
-                                            <Block label="Dirección de domicilio">
+                                            <Block label="Dirección completa de domicilio - referencias">
                                                 <RHFTextField name="direccion_de_domicilio"
-                                                              label="Dirección de domicilio"/>
+                                                              label="Dirección completa de domicilio - referencias"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('direccion_de_domicilio')}
+                                                />
                                             </Block>
 
                                             <Block label="Ciudad">
-                                                <RHFTextField name="ciudad" label="Ciudad"/>
+                                                <RHFTextField name="ciudad" label="Ciudad"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('ciudad')}
+                                                />
                                             </Block>
 
                                             <Block label="Provincia">
-                                                <RHFTextField name="provincia" label="Provincia"/>
+                                                <RHFTextField name="provincia" label="Provincia"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('provincia')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -320,7 +348,7 @@ export default function DataPage() {
 
 
 
-                                            <Block label="RUC">
+                                            <Block label="Certificado RUC">
                                                 <Box position="relative">
                                                     <RHFUpload
                                                         name="ruc_upload"
@@ -496,7 +524,10 @@ export default function DataPage() {
                                     <Grid item xs={12} md={3}>
                                         <Stack spacing={2}>
                                             <Block label="Compañía 1">
-                                                <RHFTextField name="r_c_compania_1" label="Compañía 1"/>
+                                                <RHFTextField name="r_c_compania_1" label="Compañía 1"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('r_c_compania_1')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -505,7 +536,10 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Tipo de Crédito 1">
                                                 <RHFTextField name="r_c_tipo_de_credito_1"
-                                                              label="Tipo de Crédito 1"/>
+                                                              label="Tipo de Crédito 1"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('r_c_tipo_de_credito_1')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -515,7 +549,10 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Persona de Contacto 1">
                                                 <RHFTextField name="r_c_persona_de_contacto_1"
-                                                              label="Persona de Contacto 1"/>
+                                                              label="Persona de Contacto 1"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('r_c_persona_de_contacto_1')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -534,7 +571,10 @@ export default function DataPage() {
                                     <Grid item xs={12} md={3}>
                                         <Stack spacing={2}>
                                             <Block label="Compañía 2">
-                                                <RHFTextField name="r_c_compania_2" label="Compañía 2"/>
+                                                <RHFTextField name="r_c_compania_2" label="Compañía 2"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('r_c_compania_2')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -544,7 +584,10 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Tipo de Crédito 2">
                                                 <RHFTextField name="r_c_tipo_de_credito_2"
-                                                              label="Tipo de Crédito 2"/>
+                                                              label="Tipo de Crédito 2"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('r_c_tipo_de_credito_2')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -554,7 +597,10 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Persona de Contacto 2">
                                                 <RHFTextField name="r_c_persona_de_contacto_2"
-                                                              label="Persona de Contacto 2"/>
+                                                              label="Persona de Contacto 2"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('r_c_persona_de_contacto_2')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -573,7 +619,10 @@ export default function DataPage() {
                                     <Grid item xs={12} md={3}>
                                         <Stack spacing={2}>
                                             <Block label="Compañía 3">
-                                                <RHFTextField name="r_c_compania_3" label="Compañía 3"/>
+                                                <RHFTextField name="r_c_compania_3" label="Compañía 3"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('r_c_compania_3')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -583,7 +632,10 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Tipo de Crédito 3">
                                                 <RHFTextField name="r_c_tipo_de_credito_3"
-                                                              label="Tipo de Crédito 3"/>
+                                                              label="Tipo de Crédito 3"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('r_c_tipo_de_credito_3')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -593,7 +645,10 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Persona de Contacto 3">
                                                 <RHFTextField name="r_c_persona_de_contacto_3"
-                                                              label="Persona de Contacto 3"/>
+                                                              label="Persona de Contacto 3"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('r_c_persona_de_contacto_3')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -617,7 +672,10 @@ export default function DataPage() {
                                     <Grid item xs={12} md={12}>
                                         <Stack spacing={2}>
                                             <Block label="Dirección 1">
-                                                <RHFTextField name="d_e_a_direccion_1" label="Dirección 1"/>
+                                                <RHFTextField name="d_e_a_direccion_1" label="Dirección 1"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('d_e_a_direccion_1')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -627,7 +685,10 @@ export default function DataPage() {
                                     <Grid item xs={12} md={12}>
                                         <Stack spacing={2}>
                                             <Block label="Dirección 2">
-                                                <RHFTextField name="d_e_a_direccion_2" label="Dirección 2"/>
+                                                <RHFTextField name="d_e_a_direccion_2" label="Dirección 2"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('d_e_a_direccion_2')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -637,7 +698,10 @@ export default function DataPage() {
                                     <Grid item xs={12} md={12}>
                                         <Stack spacing={2}>
                                             <Block label="Dirección 3">
-                                                <RHFTextField name="d_e_a_direccion_3" label="Dirección 3"/>
+                                                <RHFTextField name="d_e_a_direccion_3" label="Dirección 3"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('d_e_a_direccion_3')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -653,7 +717,10 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Entidad Financiera 1">
                                                 <RHFTextField name="r_b_entidad_financiera_1"
-                                                              label="Entidad Financiera 1"/>
+                                                              label="Entidad Financiera 1"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('r_b_entidad_financiera_1')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -662,7 +729,10 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Inicio de Relacióno 1">
                                                 <RHFTextField name="r_b_inicio_de_relacion_1"
-                                                              label="Inicio de Relación 1"/>
+                                                              label="Inicio de Relación 1"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('r_b_inicio_de_relacion_1')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -672,7 +742,10 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Persona de Contacto 1">
                                                 <RHFTextField name="r_b_persona_de_contacto_1"
-                                                              label="Persona de Contacto 1"/>
+                                                              label="Persona de Contacto 1"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('r_b_persona_de_contacto_1')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -692,7 +765,10 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Entidad Financiera 2">
                                                 <RHFTextField name="r_b_entidad_financiera_2"
-                                                              label="Entidad Financiera 2"/>
+                                                              label="Entidad Financiera 2"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('r_b_entidad_financiera_2')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -702,7 +778,10 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Inicio de Relación 2">
                                                 <RHFTextField name="r_b_inicio_de_relacion_2"
-                                                              label="Inicio de Relación 2"/>
+                                                              label="Inicio de Relación 2"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('r_b_inicio_de_relacion_2')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -712,7 +791,10 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Persona de Contacto 2">
                                                 <RHFTextField name="r_b_persona_de_contacto_2"
-                                                              label="Persona de Contacto 2"/>
+                                                              label="Persona de Contacto 2"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('r_b_persona_de_contacto_2')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -732,7 +814,10 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Entidad Financiera 3">
                                                 <RHFTextField name="r_b_entidad_financiera_3"
-                                                              label="Entidad Financiera 3"/>
+                                                              label="Entidad Financiera 3"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('r_b_entidad_financiera_3')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -742,7 +827,10 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Inicio de Relación 3">
                                                 <RHFTextField name="r_b_inicio_de_relacion_3"
-                                                              label="Inicio de Relación 3"/>
+                                                              label="Inicio de Relación 3"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('r_b_inicio_de_relacion_3')}
+                                                />
                                             </Block>
 
                                         </Stack>
@@ -752,7 +840,10 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Persona de Contacto 3">
                                                 <RHFTextField name="r_b_persona_de_contacto_3"
-                                                              label="Persona de Contacto 3"/>
+                                                              label="Persona de Contacto 3"
+                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              onChange={handleUpper('r_b_persona_de_contacto_3')}
+                                                />
                                             </Block>
 
                                         </Stack>

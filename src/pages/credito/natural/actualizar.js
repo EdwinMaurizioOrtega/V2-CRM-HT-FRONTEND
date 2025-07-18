@@ -766,10 +766,10 @@ export default function DataPage() {
                                                 </Stack>
                                             </Block>
 
-                                            <Block label="Dirección de trabajo">
+                                            <Block label="Dirección completa de trabajo - referencias">
                                                 <Stack direction="row" alignItems="center" spacing={2}>
                                                     <RHFTextField name="direccion_de_trabajo"
-                                                                  label="Dirección de trabajo"
+                                                                  label="Dirección completa de trabajo - referencias"
                                                     />
                                                     {watch("direccion_de_trabajo") ? (
                                                         <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
@@ -793,11 +793,11 @@ export default function DataPage() {
                                                 </Stack>
                                             </Block>
 
-                                            <Block label="Dirección de domicilio">
+                                            <Block label="Dirección completa de domicilio - referencias">
                                                 <Stack direction="row" alignItems="center" spacing={2}>
 
                                                     <RHFTextField name="direccion_de_domicilio"
-                                                                  label="Dirección de domicilio"
+                                                                  label="Dirección completa de domicilio - referencias"
 
                                                     />
                                                     {watch("direccion_de_domicilio") ? (
@@ -906,7 +906,7 @@ export default function DataPage() {
                                                 </Stack>
                                             </Block>
 
-                                            <Block label="RUC">
+                                            <Block label="Certificado RUC">
                                                 <Stack direction="row" justifyContent="flex-end" alignItems="center"
                                                        spacing={2}>
                                                     {watch("ruc_upload") ? (
