@@ -42,6 +42,7 @@ export default function CargarArchivosCreditoPage() {
         {field: 'id', headerName: 'ID', width: 90},
         {field: 'RUC', headerName: 'RUC', width: 120},
         {field: 'NOMBRE', headerName: 'NOMBRE', width: 250},
+        {field: 'TIPO_PERSONA', headerName: 'T_P', width: 100},
         {
             field: 'VER INFORMACIÓN',
             headerName: 'VER INFORMACIÓN',
@@ -99,11 +100,32 @@ export default function CargarArchivosCreditoPage() {
                 );
             },
         },
+        {
+            field: 'VER FIRMA',
+            headerName: 'VER FIRMA',
+            flex: 1,
+            minWidth: 180,
+            renderCell: (params) => {
+                return (
+                    <Button
+                        component="label"
+                        variant="outlined"
+                        onClick={() => {
+                            VerFirmaUanataca(params);
+                        }}
+                    >
+                        VER FIRMA
+                    </Button>
+                );
+            },
+        },
+
+
     ];
 
     const VerInformacionCliente = (row) => {
         //console.log(row.row);
-        const url = `/credito/juridica/actualizar/?id=${row.row.RUC}`; // Asegúrate de que el ID esté disponible
+        const url = `/credito/${row.row.TIPO_PERSONA === 'N' ? 'natural' : 'juridica'}/actualizar/?id=${row.row.RUC}`; // Asegúrate de que el ID esté disponible
         window.open(url, "_blank");
 
     }
@@ -111,6 +133,14 @@ export default function CargarArchivosCreditoPage() {
     const VerInformacionUanataca = (row) => {
         //console.log(row.row);
         const url = `https://console.nexxit.dev/#login`; // Asegúrate de que el ID esté disponible
+        window.open(url, "_blank");
+
+    }
+
+
+    const VerFirmaUanataca = (row) => {
+        //console.log(row.row);
+        const url = `https://hypertronics.nexxit.dev/#sso/${row.row.SOO}`; // Asegúrate de que el ID esté disponible
         window.open(url, "_blank");
 
     }
