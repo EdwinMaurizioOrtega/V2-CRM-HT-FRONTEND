@@ -43,7 +43,7 @@ export const defaultValues = {
     certificado_bancario: '',
     declaracion_de_impuesto_a_la_renta_year_anterior: '',
     escritura_constitucion_de_la_empresa: '',
-    estados_fiancieros_year_anterior: '',
+    // estados_fiancieros_year_anterior: '',
     foto_del_local_y_georeferencia: '',
     id_documento: '',
     nombramiento_del_representante_legal: '',
@@ -153,6 +153,9 @@ export default function DataPage() {
                                 direccion_de_domicilio: dataProspecto.empresa.DIRECCION_DOMICILIO || '',
                                 direccion_de_trabajo: dataProspecto.empresa.DIRECCION_TRABAJO || '',
                                 email: dataProspecto.empresa.EMAIL || '',
+                                fecha_inicio_actividades: dataProspecto.empresa.FECHA_INICIO_ACTIVIDADES || '',
+                                fecha_nacimiento: dataProspecto.empresa.FECHA_NACIMIENTO || '',
+                                fecha_caducidad_cedula: dataProspecto.empresa.FECHA_CADUCIDAD_CEDULA || '',
 
                                 planilla_servicio_basico: dataProspecto.documentos?.PLANILLA_SERVICIO_BASICO || '',
                                 cedula_de_identidad: dataProspecto.documentos?.CEDULA_IDENTIDAD || '',
@@ -164,6 +167,15 @@ export default function DataPage() {
                                 id_documento: dataProspecto.documentos?.ID_DOCUMENTO || '',
                                 nombramiento_del_representante_legal: dataProspecto.documentos?.NOMBRAMIENTO_REPRESENTANTE || '',
                                 ruc_upload: dataProspecto.documentos?.RUC_UPLOAD || '',
+
+                                consulta_procesos: dataProspecto.documentos?.CONSULTA_PROCESOS || '',
+                                certificado_cumplimiento_tributario: dataProspecto.documentos?.CERTIFICADO_CUMPLIMIENTO_TRIBUTARIO || '',
+                                certificado_cumplimiento_iess: dataProspecto.documentos?.CERTIFICADO_CUMPLIMIENTO_IESS || '',
+                                declaracion_iva: dataProspecto.documentos?.DECLARACION_IVA || '',
+                                estado_resultados: dataProspecto.documentos?.ESTADO_RESULTADOS || '',
+                                estado_situacion_financiera: dataProspecto.documentos?.ESTADO_SITUACION_FINANCIERA || '',
+                                equifax_pdf: dataProspecto.documentos?.EQUIFAX_PDF || '',
+                                carta_vendedores: dataProspecto.documentos?.CARTA_VENDEDORES || '',
 
                                 r_c_id_referencia_1: dataProspecto.referencias_comerciales?.[0]?.ID_REFERENCIA || '',
                                 r_c_compania_1: dataProspecto.referencias_comerciales?.[0]?.COMPANIA || '',
@@ -294,6 +306,30 @@ export default function DataPage() {
                 //setValue('foto_del_local_y_georeferencia', newFile, { shouldValidate: true });
                 handleFileUploadActualizar(file, 'foto_del_local_y_georeferencia');
             }
+            else if (fieldName === 'consulta_procesos') {
+                handleFileUploadActualizar(file, 'consulta_procesos');
+            }
+            else if (fieldName === 'certificado_cumplimiento_tributario') {
+                handleFileUploadActualizar(file, 'certificado_cumplimiento_tributario');
+            }
+            else if (fieldName === 'certificado_cumplimiento_iess') {
+                handleFileUploadActualizar(file, 'certificado_cumplimiento_iess');
+            }
+            else if (fieldName === 'declaracion_iva') {
+                handleFileUploadActualizar(file, 'declaracion_iva');
+            }
+            else if (fieldName === 'estado_resultados') {
+                handleFileUploadActualizar(file, 'estado_resultados');
+            }
+            else if (fieldName === 'estado_situacion_financiera') {
+                handleFileUploadActualizar(file, 'estado_situacion_financiera');
+            }
+            else if (fieldName === 'equifax_pdf') {
+                handleFileUploadActualizar(file, 'equifax_pdf');
+            }
+            else if (fieldName === 'carta_vendedores') {
+                handleFileUploadActualizar(file, 'carta_vendedores');
+            }
         },
         [setValue]
     );
@@ -342,9 +378,9 @@ export default function DataPage() {
                         case "cedula_de_identidad":
                             resultado_final = "CEDULA_IDENTIDAD";
                             break;
-                        case "estados_fiancieros_year_anterior":
-                            resultado_final = "ESTADOS_FINANCIEROS";
-                            break;
+                        // case "estados_fiancieros_year_anterior":
+                        //     resultado_final = "ESTADOS_FINANCIEROS";
+                        //     break;
                         case "nombramiento_del_representante_legal":
                             resultado_final = "NOMBRAMIENTO_REPRESENTANTE";
                             break;
@@ -356,6 +392,31 @@ export default function DataPage() {
                             break;
                         case "foto_del_local_y_georeferencia":
                             resultado_final = "FOTO_LOCAL_GEOREFERENCIA";
+                            break;
+
+                        case "consulta_procesos":
+                            resultado_final = "CONSULTA_PROCESOS";
+                            break;
+                        case "certificado_cumplimiento_tributario":
+                            resultado_final = "CERTIFICADO_CUMPLIMIENTO_TRIBUTARIO";
+                            break;
+                        case "certificado_cumplimiento_iess":
+                            resultado_final = "CERTIFICADO_CUMPLIMIENTO_IESS";
+                            break;
+                        case "declaracion_iva":
+                            resultado_final = "DECLARACION_IVA";
+                            break;
+                        case "estado_resultados":
+                            resultado_final = "ESTADO_RESULTADOS";
+                            break;
+                        case "estado_situacion_financiera":
+                            resultado_final = "ESTADO_SITUACION_FINANCIERA";
+                            break;
+                        case "equifax_pdf":
+                            resultado_final = "EQUIFAX_PDF";
+                            break;
+                        case "carta_vendedores":
+                            resultado_final = "CARTA_VENDEDORES";
                             break;
                         default:
                             //console.log("Revisar...");
@@ -433,6 +494,17 @@ export default function DataPage() {
             case "telefono":
                 resultado = "NUM_TELEFONO";
                 break;
+
+            case "fecha_inicio_actividades":
+                resultado = "FECHA_INICIO_ACTIVIDADES";
+                break;
+            case "fecha_nacimiento":
+                resultado = "FECHA_NACIMIENTO";
+                break;
+            case "fecha_caducidad_cedula":
+                resultado = "FECHA_CADUCIDAD_CEDULA";
+                break;
+
             default:
                 //console.log("Revisar...");
                 return null; // Devuelve `null` si no hay coincidencia
@@ -859,6 +931,69 @@ export default function DataPage() {
                                                 </Stack>
                                             </Block>
 
+                                            <Block label="Fecha de Inicio de Actividades">
+                                                <Stack direction="row" alignItems="center" spacing={2}>
+                                                    <RHFTextField name="fecha_inicio_actividades" label="Fecha de Inicio de Actividades"
+                                                    />
+                                                    {watch("fecha_inicio_actividades") ? (
+                                                        <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                    ) : (
+                                                        <>
+                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
+
+                                                        </>
+                                                    )}
+                                                    <Button variant="contained" color="primary" onClick={() => {
+                                                        const campoValor = watch("fecha_inicio_actividades");
+                                                        ActualizarInfoEmpresa("fecha_inicio_actividades", campoValor)
+                                                    }}>
+                                                        Actualizar
+                                                    </Button>
+                                                </Stack>
+                                            </Block>
+
+                                            <Block label="Fecha de Nacimiento">
+                                                <Stack direction="row" alignItems="center" spacing={2}>
+                                                    <RHFTextField name="fecha_nacimiento" label="Fecha de Nacimiento"
+                                                    />
+                                                    {watch("fecha_nacimiento") ? (
+                                                        <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                    ) : (
+                                                        <>
+                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
+
+                                                        </>
+                                                    )}
+                                                    <Button variant="contained" color="primary" onClick={() => {
+                                                        const campoValor = watch("fecha_nacimiento");
+                                                        ActualizarInfoEmpresa("fecha_nacimiento", campoValor)
+                                                    }}>
+                                                        Actualizar
+                                                    </Button>
+                                                </Stack>
+                                            </Block>
+
+                                            <Block label="Fecha de caducidad Cédula">
+                                                <Stack direction="row" alignItems="center" spacing={2}>
+                                                    <RHFTextField name="fecha_caducidad_cedula" label="Fecha de caducidad Cédula"
+                                                    />
+                                                    {watch("fecha_caducidad_cedula") ? (
+                                                        <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                    ) : (
+                                                        <>
+                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
+
+                                                        </>
+                                                    )}
+                                                    <Button variant="contained" color="primary" onClick={() => {
+                                                        const campoValor = watch("fecha_caducidad_cedula");
+                                                        ActualizarInfoEmpresa("fecha_caducidad_cedula", campoValor)
+                                                    }}>
+                                                        Actualizar
+                                                    </Button>
+                                                </Stack>
+                                            </Block>
+
                                         </Stack>
                                     </Grid>
 
@@ -1173,6 +1308,327 @@ export default function DataPage() {
                                                     {/*     Actualizar */}
                                                     {/* </Button> */}
 
+                                                </Stack>
+                                            </Block>
+
+
+                                            <Block label="Consulta de Procesos">
+                                                <Stack direction="row" justifyContent="flex-end" alignItems="center"
+                                                       spacing={2}>
+
+                                                    {watch("consulta_procesos") ? (
+                                                        <>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("consulta_procesos");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                            <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                //console.log("Eliminando...")
+                                                                EliminarDocumento("CONSULTA_PROCESOS")
+                                                            }}>
+                                                                Eliminar
+                                                            </Button>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <div style={{width: '80%'}}>
+                                                                <RHFUpload
+                                                                    name="consulta_procesos"
+                                                                    maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'consulta_procesos')}
+                                                                    onDelete={() => setValue('consulta_procesos', null, {shouldValidate: true})}
+                                                                />
+                                                            </div>
+                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
+                                                        </>
+                                                    )}
+                                                </Stack>
+                                            </Block>
+
+                                            <Block label="Certificado de Cumplimiento Tributario">
+                                                <Stack direction="row" justifyContent="flex-end" alignItems="center"
+                                                       spacing={2}>
+
+                                                    {watch("certificado_cumplimiento_tributario") ? (
+                                                        <>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("certificado_cumplimiento_tributario");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                            <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                //console.log("Eliminando...")
+                                                                EliminarDocumento("CERTIFICADO_CUMPLIMIENTO_TRIBUTARIO")
+                                                            }}>
+                                                                Eliminar
+                                                            </Button>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <div style={{width: '80%'}}>
+                                                                <RHFUpload
+                                                                    name="certificado_cumplimiento_tributario"
+                                                                    maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'certificado_cumplimiento_tributario')}
+                                                                    onDelete={() => setValue('certificado_cumplimiento_tributario', null, {shouldValidate: true})}
+                                                                />
+                                                            </div>
+                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
+                                                        </>
+                                                    )}
+                                                </Stack>
+                                            </Block>
+
+                                            <Block label="Certificado de Cumplimiento IESS">
+                                                <Stack direction="row" justifyContent="flex-end" alignItems="center"
+                                                       spacing={2}>
+
+                                                    {watch("certificado_cumplimiento_iess") ? (
+                                                        <>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("certificado_cumplimiento_iess");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                            <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                //console.log("Eliminando...")
+                                                                EliminarDocumento("CERTIFICADO_CUMPLIMIENTO_IESS")
+                                                            }}>
+                                                                Eliminar
+                                                            </Button>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <div style={{width: '80%'}}>
+                                                                <RHFUpload
+                                                                    name="certificado_cumplimiento_iess"
+                                                                    maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'certificado_cumplimiento_iess')}
+                                                                    onDelete={() => setValue('certificado_cumplimiento_iess', null, {shouldValidate: true})}
+                                                                />
+                                                            </div>
+                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
+                                                        </>
+                                                    )}
+                                                </Stack>
+                                            </Block>
+
+                                            <Block label="Declaracion de IVA">
+                                                <Stack direction="row" justifyContent="flex-end" alignItems="center"
+                                                       spacing={2}>
+
+                                                    {watch("declaracion_iva") ? (
+                                                        <>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("declaracion_iva");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                            <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                //console.log("Eliminando...")
+                                                                EliminarDocumento("DECLARACION_IVA")
+                                                            }}>
+                                                                Eliminar
+                                                            </Button>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <div style={{width: '80%'}}>
+                                                                <RHFUpload
+                                                                    name="declaracion_iva"
+                                                                    maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'declaracion_iva')}
+                                                                    onDelete={() => setValue('declaracion_iva', null, {shouldValidate: true})}
+                                                                />
+                                                            </div>
+                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
+                                                        </>
+                                                    )}
+                                                </Stack>
+                                            </Block>
+
+                                            <Block label="Estado de Resultados">
+                                                <Stack direction="row" justifyContent="flex-end" alignItems="center"
+                                                       spacing={2}>
+
+                                                    {watch("estado_resultados") ? (
+                                                        <>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("estado_resultados");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                            <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                //console.log("Eliminando...")
+                                                                EliminarDocumento("ESTADO_RESULTADOS")
+                                                            }}>
+                                                                Eliminar
+                                                            </Button>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <div style={{width: '80%'}}>
+                                                                <RHFUpload
+                                                                    name="estado_resultados"
+                                                                    maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'estado_resultados')}
+                                                                    onDelete={() => setValue('estado_resultados', null, {shouldValidate: true})}
+                                                                />
+                                                            </div>
+                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
+                                                        </>
+                                                    )}
+                                                </Stack>
+                                            </Block>
+
+                                            <Block label="Estado de Situación Financiera">
+                                                <Stack direction="row" justifyContent="flex-end" alignItems="center"
+                                                       spacing={2}>
+
+                                                    {watch("estado_situacion_financiera") ? (
+                                                        <>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("estado_situacion_financiera");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                            <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                //console.log("Eliminando...")
+                                                                EliminarDocumento("ESTADO_SITUACION_FINANCIERA")
+                                                            }}>
+                                                                Eliminar
+                                                            </Button>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <div style={{width: '80%'}}>
+                                                                <RHFUpload
+                                                                    name="estado_situacion_financiera"
+                                                                    maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'estado_situacion_financiera')}
+                                                                    onDelete={() => setValue('estado_situacion_financiera', null, {shouldValidate: true})}
+                                                                />
+                                                            </div>
+                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
+                                                        </>
+                                                    )}
+                                                </Stack>
+                                            </Block>
+
+                                            <Block label="Equifax PDF">
+                                                <Stack direction="row" justifyContent="flex-end" alignItems="center"
+                                                       spacing={2}>
+
+                                                    {watch("equifax_pdf") ? (
+                                                        <>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("equifax_pdf");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                            <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                //console.log("Eliminando...")
+                                                                EliminarDocumento("EQUIFAX_PDF")
+                                                            }}>
+                                                                Eliminar
+                                                            </Button>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <div style={{width: '80%'}}>
+                                                                <RHFUpload
+                                                                    name="equifax_pdf"
+                                                                    maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'equifax_pdf')}
+                                                                    onDelete={() => setValue('equifax_pdf', null, {shouldValidate: true})}
+                                                                />
+                                                            </div>
+                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
+                                                        </>
+                                                    )}
+                                                </Stack>
+                                            </Block>
+
+                                            <Block label="Carta Vendedores">
+                                                <Stack direction="row" justifyContent="flex-end" alignItems="center"
+                                                       spacing={2}>
+
+                                                    {watch("carta_vendedores") ? (
+                                                        <>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("carta_vendedores");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                            <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                //console.log("Eliminando...")
+                                                                EliminarDocumento("CARTA_VENDEDORES")
+                                                            }}>
+                                                                Eliminar
+                                                            </Button>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <div style={{width: '80%'}}>
+                                                                <RHFUpload
+                                                                    name="carta_vendedores"
+                                                                    maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'carta_vendedores')}
+                                                                    onDelete={() => setValue('carta_vendedores', null, {shouldValidate: true})}
+                                                                />
+                                                            </div>
+                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
+                                                        </>
+                                                    )}
                                                 </Stack>
                                             </Block>
 

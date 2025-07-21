@@ -38,7 +38,7 @@ export const defaultValues = {
     escritura_constitucion_de_la_empresa: null,
     ruc_upload: null,
     cedula_de_identidad: null,
-    estados_fiancieros_year_anterior: null,
+    // estados_fiancieros_year_anterior: null,
     nombramiento_del_representante_legal: null,
     declaracion_de_impuesto_a_la_renta_year_anterior: null,
     certificado_bancario: null,
@@ -163,7 +163,7 @@ export default function DataPage() {
                 case 'escritura_constitucion_de_la_empresa':
                 case 'ruc_upload':
                 case 'cedula_de_identidad':
-                case 'estados_fiancieros_year_anterior':
+                // case 'estados_fiancieros_year_anterior':
                 case 'nombramiento_del_representante_legal':
                 case 'declaracion_de_impuesto_a_la_renta_year_anterior':
                 case 'certificado_bancario':
@@ -442,32 +442,32 @@ export default function DataPage() {
                                                 </Box>
                                             </Block>
 
-                                            <Block label="Estados Fiancieros (Año anterior)">
-                                                <Box position="relative">
-                                                    <RHFUpload
-                                                        name="estados_fiancieros_year_anterior"
-                                                        maxSize={5 * 1024 * 1024}  // 5 MB
-                                                        onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'estados_fiancieros_year_anterior')}
-                                                        onDelete={() => setValue('estados_fiancieros_year_anterior', null, {shouldValidate: true})}
-                                                    />
-                                                    {loadingFields['estados_fiancieros_year_anterior'] && (
-                                                        <Box
-                                                            position="absolute"
-                                                            top={0}
-                                                            left={0}
-                                                            width="100%"
-                                                            height="100%"
-                                                            display="flex"
-                                                            alignItems="center"
-                                                            justifyContent="center"
-                                                            bgcolor="rgba(255, 255, 255, 0.6)"
-                                                            zIndex={2}
-                                                        >
-                                                            <CircularProgress size={36}/>
-                                                        </Box>
-                                                    )}
-                                                </Box>
-                                            </Block>
+                                            {/* <Block label="Estados Fiancieros (Año anterior)"> */}
+                                            {/*     <Box position="relative"> */}
+                                            {/*         <RHFUpload */}
+                                            {/*             name="estados_fiancieros_year_anterior" */}
+                                            {/*             maxSize={5 * 1024 * 1024}  // 5 MB */}
+                                            {/*             onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'estados_fiancieros_year_anterior')} */}
+                                            {/*             onDelete={() => setValue('estados_fiancieros_year_anterior', null, {shouldValidate: true})} */}
+                                            {/*         /> */}
+                                            {/*         {loadingFields['estados_fiancieros_year_anterior'] && ( */}
+                                            {/*             <Box */}
+                                            {/*                 position="absolute" */}
+                                            {/*                 top={0} */}
+                                            {/*                 left={0} */}
+                                            {/*                 width="100%" */}
+                                            {/*                 height="100%" */}
+                                            {/*                 display="flex" */}
+                                            {/*                 alignItems="center" */}
+                                            {/*                 justifyContent="center" */}
+                                            {/*                 bgcolor="rgba(255, 255, 255, 0.6)" */}
+                                            {/*                 zIndex={2} */}
+                                            {/*             > */}
+                                            {/*                 <CircularProgress size={36}/> */}
+                                            {/*             </Box> */}
+                                            {/*         )} */}
+                                            {/*     </Box> */}
+                                            {/* </Block> */}
 
 
 
@@ -960,7 +960,7 @@ export const FormSchemaCartera = Yup.object().shape({
     //escritura_constitucion_de_la_empresa: Yup.string().required('Se requiere la Escritura constitucion de la empresa'),
     ruc_upload: Yup.string().required('Se requiere el RUC upload'),
     cedula_de_identidad: Yup.string().required('Se requiere la Cédula de identidad'),
-    estados_fiancieros_year_anterior: Yup.string().required('Se requiere los Estados fiancieros años anterior'),
+    //estados_fiancieros_year_anterior: Yup.string().required('Se requiere los Estados fiancieros años anterior'),
     //nombramiento_del_representante_legal: Yup.string().required('Se requiere el Nombramiento del representante legal'),
     declaracion_de_impuesto_a_la_renta_year_anterior: Yup.string().required('Se requiere la Declaracion de impuesto a la renta año anterior'),
     certificado_bancario: Yup.string().required('Se requiere el Certificado bancario'),

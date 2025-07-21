@@ -126,7 +126,7 @@ export default function SolicitudPDF(data) {
         { label: "Cédula de Identidad", key: "CEDULA_IDENTIDAD" },
         { label: "Nombramiento del Representante Legal", key: "NOMBRAMIENTO_REPRESENTANTE" },
         { label: "Escritura de constitución de la empresa", key: "ESCRITURA_CONSTITUCION" },
-        { label: "Estados Financieros (Año anterior)", key: "ESTADOS_FINANCIEROS" },
+        // { label: "Estados Financieros (Año anterior)", key: "ESTADOS_FINANCIEROS" },
         { label: "Declaración de Impuesto a la Renta (Año anterior)", key: "DECLARACION_IMPUESTOS" },
         { label: "Certificado Bancario", key: "CERTIFICADO_BANCARIO" },
         { label: "Foto del local y georeferencia", key: "FOTO_LOCAL_GEOREFERENCIA" },
