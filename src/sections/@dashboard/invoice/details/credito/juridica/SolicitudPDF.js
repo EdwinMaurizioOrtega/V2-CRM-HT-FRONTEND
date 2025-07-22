@@ -132,12 +132,26 @@ export default function SolicitudPDF(data) {
         { label: "Foto del local y georeferencia", key: "FOTO_LOCAL_GEOREFERENCIA" },
     ];
 
+    const fechaActual = new Date();
+    const dia = fechaActual.getDate();
+    const mes = fechaActual.toLocaleString("es-EC", { month: "long" }); // "abril", "mayo", etc.
+    const anio = fechaActual.getFullYear();
+
     return (
         <Document>
             <Page size="A4" style={styles.page}>
 
-                <View style={[styles.gridContainer, styles.mb40]}>
+                <View style={[styles.gridContainer, styles.mb40, { position: 'relative'}]}>
                     <Image source="/logo/header.png" style={{ height: 'auto' }} />
+                    <Text style={{
+                        position: 'absolute',
+                        bottom: 0,   // Separación desde abajo
+                        right: 50,    // Separación desde la derecha
+                        color: '#000000',
+                        fontSize: 14,
+                    }}>
+                        {dia}-{mes}-{anio}
+                    </Text>
                 </View>
 
                 <View style={styles.section}>

@@ -37,6 +37,9 @@ export const defaultValues = {
     ciudad: '',
     provincia: '',
     telefono: '',
+    fecha_inicio_actividades: '',
+    fecha_nacimiento: '',
+    fecha_caducidad_cedula: '',
 
     planilla_servicio_basico: '',
     cedula_de_identidad: '',
