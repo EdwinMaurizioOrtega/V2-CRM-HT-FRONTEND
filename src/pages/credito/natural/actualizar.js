@@ -2373,7 +2373,7 @@ export default function DataPage() {
                         </Card>
 
                         {/* Generar los PDFs */}
-                        {(user?.ROLE === '8' || user?.ROLE === '10') && (
+                        {(user?.ROLE === '9' || user?.ROLE === '10') && (
                             <Card sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
