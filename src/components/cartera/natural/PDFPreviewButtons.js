@@ -56,7 +56,7 @@ export default function PDFPreviewButtons(data) {
         const partes = nombre.trim().split(" ");
 
         const jsonParaUanataca = {
-            flowType: "-NXk9JhsCP7KvP9eQa_11_hps",
+            flowType: "-NXk9JhsCP7KvP9eQa_11_hpp",
             userData: {
                 cedula: data.data.empresa.CEDULA_REPRESENTANTE,
                 email: data.data.empresa.EMAIL,
@@ -114,7 +114,7 @@ export default function PDFPreviewButtons(data) {
         };
 
         try {
-            const response = await fetch("https://wfdev.nexxit.dev/wf/flow", requestOptions);
+            const response = await fetch("https://wfapi.nexxit.dev/wf/flow", requestOptions);
             const result = await response.json(); // usar .json() para obtener objeto
 
             if (result.status === 201) {
@@ -209,7 +209,7 @@ export default function PDFPreviewButtons(data) {
         const partes = nombre.trim().split(" ");
 
         const jsonParaUanataca = {
-            flowType: "-NXk9JhsCP7KvP9eQa_11_hps",
+            flowType: "-NXk9JhsCP7KvP9eQa_11_hpp",
             userData: {
                 cedula: data.data.empresa.CEDULA_REPRESENTANTE,
                 email: data.data.empresa.EMAIL,
@@ -259,7 +259,7 @@ export default function PDFPreviewButtons(data) {
         };
 
         try {
-            const response = await fetch("https://wfdev.nexxit.dev/wf/flow", requestOptions);
+            const response = await fetch("https://wfapi.nexxit.dev/wf/flow", requestOptions);
             const result = await response.json(); // usar .json() para obtener objeto
 
             if (result.status === 201) {
