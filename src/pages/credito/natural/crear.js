@@ -40,9 +40,9 @@ export const defaultValues = {
     cedula_de_identidad: null,
     // estados_fiancieros_year_anterior: null,
     nombramiento_del_representante_legal: null,
-    declaracion_de_impuesto_a_la_renta_year_anterior: null,
     certificado_bancario: null,
     foto_del_local_y_georeferencia: null,
+    carta_vendedores: null,
 
     r_c_compania_1: '_',
     r_c_tipo_de_credito_1: '_',
@@ -165,7 +165,7 @@ export default function DataPage() {
                 case 'cedula_de_identidad':
                 // case 'estados_fiancieros_year_anterior':
                 case 'nombramiento_del_representante_legal':
-                case 'declaracion_de_impuesto_a_la_renta_year_anterior':
+                case 'carta_vendedores':
                 case 'certificado_bancario':
                 case 'foto_del_local_y_georeferencia':
                     upload(fieldName)
@@ -442,62 +442,6 @@ export default function DataPage() {
                                                 </Box>
                                             </Block>
 
-                                            {/* <Block label="Estados Fiancieros (Año anterior)"> */}
-                                            {/*     <Box position="relative"> */}
-                                            {/*         <RHFUpload */}
-                                            {/*             name="estados_fiancieros_year_anterior" */}
-                                            {/*             maxSize={5 * 1024 * 1024}  // 5 MB */}
-                                            {/*             onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'estados_fiancieros_year_anterior')} */}
-                                            {/*             onDelete={() => setValue('estados_fiancieros_year_anterior', null, {shouldValidate: true})} */}
-                                            {/*         /> */}
-                                            {/*         {loadingFields['estados_fiancieros_year_anterior'] && ( */}
-                                            {/*             <Box */}
-                                            {/*                 position="absolute" */}
-                                            {/*                 top={0} */}
-                                            {/*                 left={0} */}
-                                            {/*                 width="100%" */}
-                                            {/*                 height="100%" */}
-                                            {/*                 display="flex" */}
-                                            {/*                 alignItems="center" */}
-                                            {/*                 justifyContent="center" */}
-                                            {/*                 bgcolor="rgba(255, 255, 255, 0.6)" */}
-                                            {/*                 zIndex={2} */}
-                                            {/*             > */}
-                                            {/*                 <CircularProgress size={36}/> */}
-                                            {/*             </Box> */}
-                                            {/*         )} */}
-                                            {/*     </Box> */}
-                                            {/* </Block> */}
-
-
-
-                                            <Block label="Declaración de Impuesto a la Renta (Año anterior)">
-                                                <Box position="relative">
-                                                    <RHFUpload
-                                                        name="declaracion_de_impuesto_a_la_renta_year_anterior"
-                                                        maxSize={5 * 1024 * 1024}  // 5 MB
-                                                        onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'declaracion_de_impuesto_a_la_renta_year_anterior')}
-                                                        onDelete={() => setValue('declaracion_de_impuesto_a_la_renta_year_anterior', null, {shouldValidate: true})}
-                                                    />
-                                                    {loadingFields['declaracion_de_impuesto_a_la_renta_year_anterior'] && (
-                                                        <Box
-                                                            position="absolute"
-                                                            top={0}
-                                                            left={0}
-                                                            width="100%"
-                                                            height="100%"
-                                                            display="flex"
-                                                            alignItems="center"
-                                                            justifyContent="center"
-                                                            bgcolor="rgba(255, 255, 255, 0.6)"
-                                                            zIndex={2}
-                                                        >
-                                                            <CircularProgress size={36}/>
-                                                        </Box>
-                                                    )}
-                                                </Box>
-                                            </Block>
-
                                             <Block label="Certificado Bancario">
                                                 <Box position="relative">
                                                     <RHFUpload
@@ -534,6 +478,33 @@ export default function DataPage() {
                                                         onDelete={() => setValue('foto_del_local_y_georeferencia', null, {shouldValidate: true})}
                                                     />
                                                     {loadingFields['foto_del_local_y_georeferencia'] && (
+                                                        <Box
+                                                            position="absolute"
+                                                            top={0}
+                                                            left={0}
+                                                            width="100%"
+                                                            height="100%"
+                                                            display="flex"
+                                                            alignItems="center"
+                                                            justifyContent="center"
+                                                            bgcolor="rgba(255, 255, 255, 0.6)"
+                                                            zIndex={2}
+                                                        >
+                                                            <CircularProgress size={36}/>
+                                                        </Box>
+                                                    )}
+                                                </Box>
+                                            </Block>
+
+                                            <Block label="Carta Vendedores">
+                                                <Box position="relative">
+                                                    <RHFUpload
+                                                        name="carta_vendedores"
+                                                        maxSize={5 * 1024 * 1024}  // 5 MB
+                                                        onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'carta_vendedores')}
+                                                        onDelete={() => setValue('carta_vendedores', null, {shouldValidate: true})}
+                                                    />
+                                                    {loadingFields['carta_vendedores'] && (
                                                         <Box
                                                             position="absolute"
                                                             top={0}
@@ -962,7 +933,7 @@ export const FormSchemaCartera = Yup.object().shape({
     cedula_de_identidad: Yup.string().required('Se requiere la Cédula de identidad'),
     //estados_fiancieros_year_anterior: Yup.string().required('Se requiere los Estados fiancieros años anterior'),
     //nombramiento_del_representante_legal: Yup.string().required('Se requiere el Nombramiento del representante legal'),
-    declaracion_de_impuesto_a_la_renta_year_anterior: Yup.string().required('Se requiere la Declaracion de impuesto a la renta año anterior'),
+    carta_vendedores: Yup.string().required('Se requiere la Carta de los Vendedores'),
     certificado_bancario: Yup.string().required('Se requiere el Certificado bancario'),
     foto_del_local_y_georeferencia: Yup.string().required('Se requiere la Foto del local y georeferencia'),
 

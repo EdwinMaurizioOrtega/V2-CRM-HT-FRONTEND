@@ -1131,100 +1131,53 @@ export default function DataPage() {
                                                 </Stack>
                                             </Block>
 
-                                            <Block label="Estados Fiancieros (Año anterior)">
-                                                <Stack direction="row" justifyContent="flex-end" alignItems="center"
-                                                       spacing={2}>
+                                            {/* <Block label="Estados Fiancieros (Año anterior)"> */}
+                                            {/*     <Stack direction="row" justifyContent="flex-end" alignItems="center" */}
+                                            {/*            spacing={2}> */}
 
-                                                    {watch("estados_fiancieros_year_anterior") ? (
+                                            {/*         {watch("estados_fiancieros_year_anterior") ? ( */}
 
-                                                        <>
-                                                            <Button variant="contained" color="primary" onClick={() => {
-                                                                const campoValor = watch("estados_fiancieros_year_anterior");
-                                                                if (campoValor) {
-                                                                    window.open(campoValor, "_blank");
-                                                                } else {
-                                                                    console.error("No hay una URL válida");
-                                                                }
-                                                            }}>
-                                                                Abrir
-                                                            </Button>
-                                                            <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
-                                                            <Button variant="contained" color="primary" onClick={() => {
-                                                                //console.log("Eliminando...")
-                                                                EliminarDocumento("ESTADOS_FINANCIEROS")
-                                                            }}>
-                                                                Eliminar
-                                                            </Button>
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            <div style={{width: '80%'}}>
-                                                                <RHFUpload
-                                                                    name="estados_fiancieros_year_anterior"
-                                                                    maxSize={5 * 1024 * 1024}  // 5 MB
-                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'estados_fiancieros_year_anterior')}
-                                                                    onDelete={() => setValue('estados_fiancieros_year_anterior', null, {shouldValidate: true})}
-                                                                />
-                                                            </div>
-                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
-                                                        </>
-                                                    )}
-                                                    {/* <Button variant="contained" color="primary" onClick={() => { */}
-                                                    {/*     const campoValor = watch("estados_fiancieros_year_anterior"); */}
-                                                    {/*     ActualizarDocumentos("estados_fiancieros_year_anterior", campoValor) */}
-                                                    {/* }}> */}
-                                                    {/*     Actualizar */}
-                                                    {/* </Button> */}
+                                            {/*             <> */}
+                                            {/*                 <Button variant="contained" color="primary" onClick={() => { */}
+                                            {/*                     const campoValor = watch("estados_fiancieros_year_anterior"); */}
+                                            {/*                     if (campoValor) { */}
+                                            {/*                         window.open(campoValor, "_blank"); */}
+                                            {/*                     } else { */}
+                                            {/*                         console.error("No hay una URL válida"); */}
+                                            {/*                     } */}
+                                            {/*                 }}> */}
+                                            {/*                     Abrir */}
+                                            {/*                 </Button> */}
+                                            {/*                 <CheckCircleIcon style={{color: "green", fontSize: 40}}/> */}
+                                            {/*                 <Button variant="contained" color="primary" onClick={() => { */}
+                                            {/*                     //console.log("Eliminando...") */}
+                                            {/*                     EliminarDocumento("ESTADOS_FINANCIEROS") */}
+                                            {/*                 }}> */}
+                                            {/*                     Eliminar */}
+                                            {/*                 </Button> */}
+                                            {/*             </> */}
+                                            {/*         ) : ( */}
+                                            {/*             <> */}
+                                            {/*                 <div style={{width: '80%'}}> */}
+                                            {/*                     <RHFUpload */}
+                                            {/*                         name="estados_fiancieros_year_anterior" */}
+                                            {/*                         maxSize={5 * 1024 * 1024}  // 5 MB */}
+                                            {/*                         onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'estados_fiancieros_year_anterior')} */}
+                                            {/*                         onDelete={() => setValue('estados_fiancieros_year_anterior', null, {shouldValidate: true})} */}
+                                            {/*                     /> */}
+                                            {/*                 </div> */}
+                                            {/*                 <CancelIcon style={{color: "red", fontSize: 40}}/> */}
+                                            {/*             </> */}
+                                            {/*         )} */}
+                                            {/*         /!* <Button variant="contained" color="primary" onClick={() => { *!/ */}
+                                            {/*         /!*     const campoValor = watch("estados_fiancieros_year_anterior"); *!/ */}
+                                            {/*         /!*     ActualizarDocumentos("estados_fiancieros_year_anterior", campoValor) *!/ */}
+                                            {/*         /!* }}> *!/ */}
+                                            {/*         /!*     Actualizar *!/ */}
+                                            {/*         /!* </Button> *!/ */}
 
-                                                </Stack>
-                                            </Block>
-
-                                            <Block label="Declaración de Impuesto a la Renta (Año anterior)">
-                                                <Stack direction="row" justifyContent="flex-end" alignItems="center"
-                                                       spacing={2}>
-
-                                                    {watch("declaracion_de_impuesto_a_la_renta_year_anterior") ? (
-                                                        <>
-                                                            <Button variant="contained" color="primary" onClick={() => {
-                                                                const campoValor = watch("declaracion_de_impuesto_a_la_renta_year_anterior");
-                                                                if (campoValor) {
-                                                                    window.open(campoValor, "_blank");
-                                                                } else {
-                                                                    console.error("No hay una URL válida");
-                                                                }
-                                                            }}>
-                                                                Abrir
-                                                            </Button>
-                                                            <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
-                                                            <Button variant="contained" color="primary" onClick={() => {
-                                                                //console.log("Eliminando...")
-                                                                EliminarDocumento("DECLARACION_IMPUESTOS")
-                                                            }}>
-                                                                Eliminar
-                                                            </Button>
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            <div style={{width: '80%'}}>
-                                                                <RHFUpload
-                                                                    name="declaracion_de_impuesto_a_la_renta_year_anterior"
-                                                                    maxSize={5 * 1024 * 1024}  // 5 MB
-                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'declaracion_de_impuesto_a_la_renta_year_anterior')}
-                                                                    onDelete={() => setValue('declaracion_de_impuesto_a_la_renta_year_anterior', null, {shouldValidate: true})}
-                                                                />
-                                                            </div>
-                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
-                                                        </>
-                                                    )}
-                                                    {/* <Button variant="contained" color="primary" onClick={() => { */}
-                                                    {/*     const campoValor = watch("declaracion_de_impuesto_a_la_renta_year_anterior"); */}
-                                                    {/*     ActualizarDocumentos("declaracion_de_impuesto_a_la_renta_year_anterior", campoValor) */}
-                                                    {/* }}> */}
-                                                    {/*     Actualizar */}
-                                                    {/* </Button> */}
-
-                                                </Stack>
-                                            </Block>
+                                            {/*     </Stack> */}
+                                            {/* </Block> */}
 
                                             <Block label="Certificado Bancario">
                                                 <Stack direction="row" justifyContent="flex-end" alignItems="center"
@@ -1307,6 +1260,53 @@ export default function DataPage() {
                                                     {/* <Button variant="contained" color="primary" onClick={() => { */}
                                                     {/*     const campoValor = watch("foto_del_local_y_georeferencia"); */}
                                                     {/*     ActualizarDocumentos("foto_del_local_y_georeferencia", campoValor) */}
+                                                    {/* }}> */}
+                                                    {/*     Actualizar */}
+                                                    {/* </Button> */}
+
+                                                </Stack>
+                                            </Block>
+
+                                            <Block label="Declaración de Impuesto a la Renta (Año anterior)">
+                                                <Stack direction="row" justifyContent="flex-end" alignItems="center"
+                                                       spacing={2}>
+
+                                                    {watch("declaracion_de_impuesto_a_la_renta_year_anterior") ? (
+                                                        <>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("declaracion_de_impuesto_a_la_renta_year_anterior");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                            <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                //console.log("Eliminando...")
+                                                                EliminarDocumento("DECLARACION_IMPUESTOS")
+                                                            }}>
+                                                                Eliminar
+                                                            </Button>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <div style={{width: '80%'}}>
+                                                                <RHFUpload
+                                                                    name="declaracion_de_impuesto_a_la_renta_year_anterior"
+                                                                    maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'declaracion_de_impuesto_a_la_renta_year_anterior')}
+                                                                    onDelete={() => setValue('declaracion_de_impuesto_a_la_renta_year_anterior', null, {shouldValidate: true})}
+                                                                />
+                                                            </div>
+                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
+                                                        </>
+                                                    )}
+                                                    {/* <Button variant="contained" color="primary" onClick={() => { */}
+                                                    {/*     const campoValor = watch("declaracion_de_impuesto_a_la_renta_year_anterior"); */}
+                                                    {/*     ActualizarDocumentos("declaracion_de_impuesto_a_la_renta_year_anterior", campoValor) */}
                                                     {/* }}> */}
                                                     {/*     Actualizar */}
                                                     {/* </Button> */}
