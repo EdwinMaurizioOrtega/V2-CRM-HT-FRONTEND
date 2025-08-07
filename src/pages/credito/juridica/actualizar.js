@@ -47,7 +47,7 @@ export const defaultValues = {
     declaracion_de_impuesto_a_la_renta_year_anterior: '',
     escritura_constitucion_de_la_empresa: '',
     // estados_fiancieros_year_anterior: '',
-    foto_del_local_y_georeferencia: '',
+    foto_del_local: '',
     id_documento: '',
     nombramiento_del_representante_legal: '',
     ruc_upload: '',
@@ -166,7 +166,7 @@ export default function DataPage() {
                                 declaracion_de_impuesto_a_la_renta_year_anterior: dataProspecto.documentos?.DECLARACION_IMPUESTOS || '',
                                 escritura_constitucion_de_la_empresa: dataProspecto.documentos?.ESCRITURA_CONSTITUCION || '',
                                 // estados_fiancieros_year_anterior: dataProspecto.documentos?.ESTADOS_FINANCIEROS || '',
-                                foto_del_local_y_georeferencia: dataProspecto.documentos?.FOTO_LOCAL_GEOREFERENCIA || '',
+                                foto_del_local: dataProspecto.documentos?.FOTO_LOCAL || '',
                                 id_documento: dataProspecto.documentos?.ID_DOCUMENTO || '',
                                 nombramiento_del_representante_legal: dataProspecto.documentos?.NOMBRAMIENTO_REPRESENTANTE || '',
                                 ruc_upload: dataProspecto.documentos?.RUC_UPLOAD || '',
@@ -307,9 +307,9 @@ export default function DataPage() {
             } else if (fieldName === 'certificado_bancario') {
                 //setValue('certificado_bancario', newFile, { shouldValidate: true });
                 handleFileUploadActualizar(file, 'certificado_bancario');
-            } else if (fieldName === 'foto_del_local_y_georeferencia') {
+            } else if (fieldName === 'foto_del_local') {
                 //setValue('foto_del_local_y_georeferencia', newFile, { shouldValidate: true });
-                handleFileUploadActualizar(file, 'foto_del_local_y_georeferencia');
+                handleFileUploadActualizar(file, 'foto_del_local');
             }
             else if (fieldName === 'consulta_procesos') {
                 handleFileUploadActualizar(file, 'consulta_procesos');
@@ -395,8 +395,8 @@ export default function DataPage() {
                         case "certificado_bancario":
                             resultado_final = "CERTIFICADO_BANCARIO";
                             break;
-                        case "foto_del_local_y_georeferencia":
-                            resultado_final = "FOTO_LOCAL_GEOREFERENCIA";
+                        case "foto_del_local":
+                            resultado_final = "FOTO_LOCAL";
                             break;
 
                         case "consulta_procesos":
@@ -1316,14 +1316,14 @@ export default function DataPage() {
                                                 </Stack>
                                             </Block>
 
-                                            <Block label="Foto del local y georeferencia">
+                                            <Block label="Foto del local">
                                                 <Stack direction="row" justifyContent="flex-end" alignItems="center"
                                                        spacing={2}>
 
-                                                    {watch("foto_del_local_y_georeferencia") ? (
+                                                    {watch("foto_del_local") ? (
                                                         <>
                                                             <Button variant="contained" color="primary" onClick={() => {
-                                                                const campoValor = watch("foto_del_local_y_georeferencia");
+                                                                const campoValor = watch("foto_del_local");
                                                                 if (campoValor) {
                                                                     window.open(campoValor, "_blank");
                                                                 } else {
@@ -1335,7 +1335,7 @@ export default function DataPage() {
                                                             <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
                                                             <Button variant="contained" color="primary" onClick={() => {
                                                                 //console.log("Eliminando...")
-                                                                EliminarDocumento("FOTO_LOCAL_GEOREFERENCIA")
+                                                                EliminarDocumento("FOTO_LOCAL")
                                                             }}>
                                                                 Eliminar
                                                             </Button>
@@ -1344,10 +1344,10 @@ export default function DataPage() {
                                                         <>
                                                             <div style={{width: '80%'}}>
                                                                 <RHFUpload
-                                                                    name="foto_del_local_y_georeferencia"
+                                                                    name="foto_del_local"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
-                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'foto_del_local_y_georeferencia')}
-                                                                    onDelete={() => setValue('foto_del_local_y_georeferencia', null, {shouldValidate: true})}
+                                                                    onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'foto_del_local')}
+                                                                    onDelete={() => setValue('foto_del_local', null, {shouldValidate: true})}
                                                                 />
                                                             </div>
                                                             <CancelIcon style={{color: "red", fontSize: 40}}/>
@@ -2521,7 +2521,7 @@ export const FormSchemaCartera = Yup.object().shape({
     nombramiento_del_representante_legal: Yup.string().required('Se requiere el Nombramiento del representante legal'),
     declaracion_de_impuesto_a_la_renta_year_anterior: Yup.string().required('Se requiere la Declaracion de impuesto a la renta año anterior'),
     certificado_bancario: Yup.string().required('Se requiere el Certificado bancario'),
-    foto_del_local_y_georeferencia: Yup.string().required('Se requiere la Foto del local y georeferencia'),
+    foto_del_local: Yup.string().required('Se requiere la Foto del local'),
 
     r_c_compania_1: Yup.string().required('Se requiere la Compañia 1'),
     r_c_tipo_de_credito_1: Yup.string().required('Se requiere el Tipo Crédito 1'),

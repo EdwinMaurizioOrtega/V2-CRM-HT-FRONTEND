@@ -33,6 +33,7 @@ export const defaultValues = {
     direccion_de_domicilio: '_',
     ciudad: '_',
     provincia: '_',
+    geolocalizacion: '_',
 
     planilla_servicio_basico: null,
     escritura_constitucion_de_la_empresa: null,
@@ -42,7 +43,7 @@ export const defaultValues = {
     nombramiento_del_representante_legal: null,
     // declaracion_de_impuesto_a_la_renta_year_anterior: null,
     certificado_bancario: null,
-    foto_del_local_y_georeferencia: null,
+    foto_del_local: null,
     carta_vendedores: null,
 
     r_c_compania_1: '_',
@@ -160,7 +161,7 @@ export default function DataPage() {
                 case 'nombramiento_del_representante_legal':
                 // case 'declaracion_de_impuesto_a_la_renta_year_anterior':
                 case 'certificado_bancario':
-                case 'foto_del_local_y_georeferencia':
+                case 'foto_del_local':
                 case 'carta_vendedores':
                     upload(fieldName)
                         .then(response => {
@@ -588,15 +589,15 @@ export default function DataPage() {
                                                 </Box>
                                             </Block>
 
-                                            <Block label="Foto del local y georeferencia">
+                                            <Block label="Foto del local">
                                                 <Box position="relative">
                                                     <RHFUpload
-                                                        name="foto_del_local_y_georeferencia"
+                                                        name="foto_del_local"
                                                         maxSize={5 * 1024 * 1024}  // 5 MB
-                                                        onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'foto_del_local_y_georeferencia')}
-                                                        onDelete={() => setValue('foto_del_local_y_georeferencia', null, {shouldValidate: true})}
+                                                        onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'foto_del_local')}
+                                                        onDelete={() => setValue('foto_del_local', null, {shouldValidate: true})}
                                                     />
-                                                    {loadingFields['foto_del_local_y_georeferencia'] && (
+                                                    {loadingFields['foto_del_local'] && (
                                                         <Box
                                                             position="absolute"
                                                             top={0}
@@ -613,6 +614,15 @@ export default function DataPage() {
                                                         </Box>
                                                     )}
                                                 </Box>
+                                            </Block>
+
+                                            <Block label="Geolocalización">
+                                                <RHFTextField name="geolocalizacion" label="Geolocalización"
+                                                              onChange={(e) => {
+                                                                  const value = e.target.value;
+                                                                  setValue('geolocalizacion', value)
+                                                              }}
+                                                />
                                             </Block>
 
                                             <Block label="Carta Vendedores">
@@ -1045,6 +1055,7 @@ export const FormSchemaCartera = Yup.object().shape({
     direccion_de_domicilio: Yup.string().required('Se requiere la Direccion de domicilio'),
     ciudad: Yup.string().required('Se requiere la Ciudad'),
     provincia: Yup.string().required('Se requiere la Provincia'),
+    geolocalizacion: Yup.string().required('Se requiere la Geolocalización'),
 
     planilla_servicio_basico: Yup.string().required('Se requiere la Planilla servicio basico'),
     escritura_constitucion_de_la_empresa: Yup.string().required('Se requiere la Escritura constitucion de la empresa'),
@@ -1054,7 +1065,7 @@ export const FormSchemaCartera = Yup.object().shape({
     nombramiento_del_representante_legal: Yup.string().required('Se requiere el Nombramiento del representante legal'),
     // declaracion_de_impuesto_a_la_renta_year_anterior: Yup.string().required('Se requiere la Declaracion de impuesto a la renta año anterior'),
     certificado_bancario: Yup.string().required('Se requiere el Certificado bancario'),
-    foto_del_local_y_georeferencia: Yup.string().required('Se requiere la Foto del local y georeferencia'),
+    foto_del_local: Yup.string().required('Se requiere la Foto del local'),
     carta_vendedores: Yup.string().required('Se requiere la Carta del Vendedor'),
 
     r_c_compania_1: Yup.string().required('Se requiere la Compañia 1'),
