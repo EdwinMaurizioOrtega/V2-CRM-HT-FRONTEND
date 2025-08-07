@@ -1038,6 +1038,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="planilla_servicio_basico"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    accept={{ 'application/pdf': ['.pdf'] }} // solo PDF
                                                                     onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'planilla_servicio_basico')}
                                                                     onDelete={() => setValue('planilla_servicio_basico', null, {shouldValidate: true})}
                                                                 />
@@ -1079,6 +1080,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="ruc_upload"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    accept={{ 'application/pdf': ['.pdf'] }} // solo PDF
                                                                     onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'ruc_upload')}
                                                                     onDelete={() => setValue('ruc_upload', null, {shouldValidate: true})}
                                                                 />
@@ -1119,6 +1121,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="cedula_de_identidad"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    accept={{ 'application/pdf': ['.pdf'] }} // solo PDF
                                                                     onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'cedula_de_identidad')}
                                                                     onDelete={() => setValue('cedula_de_identidad', null, {shouldValidate: true})}
                                                                 />
@@ -1214,6 +1217,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="certificado_bancario"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    accept={{ 'application/pdf': ['.pdf'] }} // solo PDF
                                                                     onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'certificado_bancario')}
                                                                     onDelete={() => setValue('certificado_bancario', null, {shouldValidate: true})}
                                                                 />
@@ -1255,6 +1259,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="foto_del_local"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    accept={{ 'application/pdf': ['.pdf'] }} // solo PDF
                                                                     onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'foto_del_local')}
                                                                     onDelete={() => setValue('foto_del_local', null, {shouldValidate: true})}
                                                                 />
@@ -1323,6 +1328,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="declaracion_de_impuesto_a_la_renta_year_anterior"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    accept={{ 'application/pdf': ['.pdf'] }} // solo PDF
                                                                     onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'declaracion_de_impuesto_a_la_renta_year_anterior')}
                                                                     onDelete={() => setValue('declaracion_de_impuesto_a_la_renta_year_anterior', null, {shouldValidate: true})}
                                                                 />
@@ -1371,6 +1377,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="consulta_procesos"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    accept={{ 'application/pdf': ['.pdf'] }} // solo PDF
                                                                     onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'consulta_procesos')}
                                                                     onDelete={() => setValue('consulta_procesos', null, {shouldValidate: true})}
                                                                 />
@@ -1411,6 +1418,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="certificado_cumplimiento_tributario"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    accept={{ 'application/pdf': ['.pdf'] }} // solo PDF
                                                                     onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'certificado_cumplimiento_tributario')}
                                                                     onDelete={() => setValue('certificado_cumplimiento_tributario', null, {shouldValidate: true})}
                                                                 />
@@ -1451,6 +1459,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="certificado_cumplimiento_iess"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    accept={{ 'application/pdf': ['.pdf'] }} // solo PDF
                                                                     onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'certificado_cumplimiento_iess')}
                                                                     onDelete={() => setValue('certificado_cumplimiento_iess', null, {shouldValidate: true})}
                                                                 />
@@ -1491,6 +1500,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="declaracion_iva"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    accept={{ 'application/pdf': ['.pdf'] }} // solo PDF
                                                                     onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'declaracion_iva')}
                                                                     onDelete={() => setValue('declaracion_iva', null, {shouldValidate: true})}
                                                                 />
@@ -1531,6 +1541,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="estado_resultados"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    accept={{ 'application/pdf': ['.pdf'] }} // solo PDF
                                                                     onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'estado_resultados')}
                                                                     onDelete={() => setValue('estado_resultados', null, {shouldValidate: true})}
                                                                 />
@@ -1571,6 +1582,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="estado_situacion_financiera"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    accept={{ 'application/pdf': ['.pdf'] }} // solo PDF
                                                                     onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'estado_situacion_financiera')}
                                                                     onDelete={() => setValue('estado_situacion_financiera', null, {shouldValidate: true})}
                                                                 />
@@ -1611,6 +1623,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="equifax_pdf"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    accept={{ 'application/pdf': ['.pdf'] }} // solo PDF
                                                                     onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'equifax_pdf')}
                                                                     onDelete={() => setValue('equifax_pdf', null, {shouldValidate: true})}
                                                                 />
@@ -1651,6 +1664,7 @@ export default function DataPage() {
                                                                 <RHFUpload
                                                                     name="carta_vendedores"
                                                                     maxSize={5 * 1024 * 1024}  // 5 MB
+                                                                    accept={{ 'application/pdf': ['.pdf'] }} // solo PDF
                                                                     onDrop={(acceptedFiles) => handleDropSingleFileActualizar(acceptedFiles, 'carta_vendedores')}
                                                                     onDelete={() => setValue('carta_vendedores', null, {shouldValidate: true})}
                                                                 />
