@@ -1,7 +1,7 @@
 import Head from "next/head";
 import MainLayout from "../../../layouts/main";
 import {
-    Box,
+    Box, Button,
     Card, CircularProgress,
     Container,
     Grid,
@@ -97,7 +97,7 @@ export default function DataPage() {
         formState: {isSubmitting},
     } = methods;
 
-    const cedula = useWatch({ control, name: 'cedula_del_representante' });
+    const cedula = useWatch({control, name: 'cedula_del_representante'});
 
     useEffect(() => {
         if (cedula && cedula.length === 10) {
@@ -252,7 +252,7 @@ export default function DataPage() {
                                             <Block label="Representante (Dos Nombres - Dos Apellidos)">
                                                 <RHFTextField name="nombre_del_representante"
                                                               label="Representante (Dos Nombres - Dos Apellidos)"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('nombre_del_representante')}
                                                 />
                                             </Block>
@@ -284,7 +284,7 @@ export default function DataPage() {
                                             <Block label="Nombre de la empresa o compañia">
                                                 <RHFTextField name="nombre_de_la_empresa_o_compania"
                                                               label="Nombre de la empresa o compania"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('nombre_de_la_empresa_o_compania')}
                                                 />
                                             </Block>
@@ -296,7 +296,7 @@ export default function DataPage() {
                                             </Block>
                                             <Block label="E-mail">
                                                 <RHFTextField name="email" label="E-mail"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('email')}
                                                 />
                                             </Block>
@@ -328,7 +328,7 @@ export default function DataPage() {
                                             <Block label="Dirección completa de trabajo - referencias">
                                                 <RHFTextField name="direccion_de_trabajo"
                                                               label="Dirección completa de trabajo - referencias"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('direccion_de_trabajo')}
                                                 />
                                             </Block>
@@ -336,21 +336,21 @@ export default function DataPage() {
                                             <Block label="Dirección completa de domicilio - referencias">
                                                 <RHFTextField name="direccion_de_domicilio"
                                                               label="Dirección completa de domicilio - referencias"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('direccion_de_domicilio')}
                                                 />
                                             </Block>
 
                                             <Block label="Ciudad">
                                                 <RHFTextField name="ciudad" label="Ciudad"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('ciudad')}
                                                 />
                                             </Block>
 
                                             <Block label="Provincia">
                                                 <RHFTextField name="provincia" label="Provincia"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('provincia')}
                                                 />
                                             </Block>
@@ -368,6 +368,22 @@ export default function DataPage() {
                                                         onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'planilla_servicio_basico')}
                                                         onDelete={() => setValue('planilla_servicio_basico', null, {shouldValidate: true})}
                                                     />
+
+                                                    {watch("planilla_servicio_basico") ? (
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("planilla_servicio_basico");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                        ) :
+                                                        null
+                                                    }
+
                                                     {loadingFields['planilla_servicio_basico'] && (
                                                         <Box
                                                             position="absolute"
@@ -388,7 +404,6 @@ export default function DataPage() {
                                             </Block>
 
 
-
                                             <Block label="Certificado RUC">
                                                 <Box position="relative">
                                                     <RHFUpload
@@ -397,6 +412,20 @@ export default function DataPage() {
                                                         onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'ruc_upload')}
                                                         onDelete={() => setValue('ruc_upload', null, {shouldValidate: true})}
                                                     />
+                                                    {watch("ruc_upload") ? (
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("ruc_upload");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                        ) :
+                                                        null
+                                                    }
                                                     {loadingFields['ruc_upload'] && (
                                                         <Box
                                                             position="absolute"
@@ -424,6 +453,20 @@ export default function DataPage() {
                                                         onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'cedula_de_identidad')}
                                                         onDelete={() => setValue('cedula_de_identidad', null, {shouldValidate: true})}
                                                     />
+                                                    {watch("cedula_de_identidad") ? (
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("cedula_de_identidad");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                        ) :
+                                                        null
+                                                    }
                                                     {loadingFields['cedula_de_identidad'] && (
                                                         <Box
                                                             position="absolute"
@@ -451,6 +494,20 @@ export default function DataPage() {
                                                         onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'certificado_bancario')}
                                                         onDelete={() => setValue('certificado_bancario', null, {shouldValidate: true})}
                                                     />
+                                                    {watch("certificado_bancario") ? (
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("certificado_bancario");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                        ) :
+                                                        null
+                                                    }
                                                     {loadingFields['certificado_bancario'] && (
                                                         <Box
                                                             position="absolute"
@@ -478,6 +535,20 @@ export default function DataPage() {
                                                         onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'foto_del_local')}
                                                         onDelete={() => setValue('foto_del_local', null, {shouldValidate: true})}
                                                     />
+                                                    {watch("foto_del_local") ? (
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("foto_del_local");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                        ) :
+                                                        null
+                                                    }
                                                     {loadingFields['foto_del_local'] && (
                                                         <Box
                                                             position="absolute"
@@ -514,6 +585,20 @@ export default function DataPage() {
                                                         onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'carta_vendedores')}
                                                         onDelete={() => setValue('carta_vendedores', null, {shouldValidate: true})}
                                                     />
+                                                    {watch("carta_vendedores") ? (
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("carta_vendedores");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                        ) :
+                                                        null
+                                                    }
                                                     {loadingFields['carta_vendedores'] && (
                                                         <Box
                                                             position="absolute"
@@ -546,7 +631,7 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Compañía 1">
                                                 <RHFTextField name="r_c_compania_1" label="Compañía 1"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('r_c_compania_1')}
                                                 />
                                             </Block>
@@ -558,7 +643,7 @@ export default function DataPage() {
                                             <Block label="Tipo de Crédito 1">
                                                 <RHFTextField name="r_c_tipo_de_credito_1"
                                                               label="Tipo de Crédito 1"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('r_c_tipo_de_credito_1')}
                                                 />
                                             </Block>
@@ -571,7 +656,7 @@ export default function DataPage() {
                                             <Block label="Persona de Contacto 1">
                                                 <RHFTextField name="r_c_persona_de_contacto_1"
                                                               label="Persona de Contacto 1"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('r_c_persona_de_contacto_1')}
                                                 />
                                             </Block>
@@ -593,7 +678,7 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Compañía 2">
                                                 <RHFTextField name="r_c_compania_2" label="Compañía 2"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('r_c_compania_2')}
                                                 />
                                             </Block>
@@ -606,7 +691,7 @@ export default function DataPage() {
                                             <Block label="Tipo de Crédito 2">
                                                 <RHFTextField name="r_c_tipo_de_credito_2"
                                                               label="Tipo de Crédito 2"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('r_c_tipo_de_credito_2')}
                                                 />
                                             </Block>
@@ -619,7 +704,7 @@ export default function DataPage() {
                                             <Block label="Persona de Contacto 2">
                                                 <RHFTextField name="r_c_persona_de_contacto_2"
                                                               label="Persona de Contacto 2"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('r_c_persona_de_contacto_2')}
                                                 />
                                             </Block>
@@ -641,7 +726,7 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Compañía 3">
                                                 <RHFTextField name="r_c_compania_3" label="Compañía 3"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('r_c_compania_3')}
                                                 />
                                             </Block>
@@ -654,7 +739,7 @@ export default function DataPage() {
                                             <Block label="Tipo de Crédito 3">
                                                 <RHFTextField name="r_c_tipo_de_credito_3"
                                                               label="Tipo de Crédito 3"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('r_c_tipo_de_credito_3')}
                                                 />
                                             </Block>
@@ -667,7 +752,7 @@ export default function DataPage() {
                                             <Block label="Persona de Contacto 3">
                                                 <RHFTextField name="r_c_persona_de_contacto_3"
                                                               label="Persona de Contacto 3"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('r_c_persona_de_contacto_3')}
                                                 />
                                             </Block>
@@ -694,7 +779,7 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Dirección 1">
                                                 <RHFTextField name="d_e_a_direccion_1" label="Dirección 1"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('d_e_a_direccion_1')}
                                                 />
                                             </Block>
@@ -707,7 +792,7 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Dirección 2">
                                                 <RHFTextField name="d_e_a_direccion_2" label="Dirección 2"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('d_e_a_direccion_2')}
                                                 />
                                             </Block>
@@ -720,7 +805,7 @@ export default function DataPage() {
                                         <Stack spacing={2}>
                                             <Block label="Dirección 3">
                                                 <RHFTextField name="d_e_a_direccion_3" label="Dirección 3"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('d_e_a_direccion_3')}
                                                 />
                                             </Block>
@@ -739,7 +824,7 @@ export default function DataPage() {
                                             <Block label="Entidad Financiera 1">
                                                 <RHFTextField name="r_b_entidad_financiera_1"
                                                               label="Entidad Financiera 1"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('r_b_entidad_financiera_1')}
                                                 />
                                             </Block>
@@ -751,7 +836,7 @@ export default function DataPage() {
                                             <Block label="Inicio de Relacióno 1">
                                                 <RHFTextField name="r_b_inicio_de_relacion_1"
                                                               label="Inicio de Relación 1"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('r_b_inicio_de_relacion_1')}
                                                 />
                                             </Block>
@@ -764,7 +849,7 @@ export default function DataPage() {
                                             <Block label="Persona de Contacto 1">
                                                 <RHFTextField name="r_b_persona_de_contacto_1"
                                                               label="Persona de Contacto 1"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('r_b_persona_de_contacto_1')}
                                                 />
                                             </Block>
@@ -787,7 +872,7 @@ export default function DataPage() {
                                             <Block label="Entidad Financiera 2">
                                                 <RHFTextField name="r_b_entidad_financiera_2"
                                                               label="Entidad Financiera 2"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('r_b_entidad_financiera_2')}
                                                 />
                                             </Block>
@@ -800,7 +885,7 @@ export default function DataPage() {
                                             <Block label="Inicio de Relación 2">
                                                 <RHFTextField name="r_b_inicio_de_relacion_2"
                                                               label="Inicio de Relación 2"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('r_b_inicio_de_relacion_2')}
                                                 />
                                             </Block>
@@ -813,7 +898,7 @@ export default function DataPage() {
                                             <Block label="Persona de Contacto 2">
                                                 <RHFTextField name="r_b_persona_de_contacto_2"
                                                               label="Persona de Contacto 2"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('r_b_persona_de_contacto_2')}
                                                 />
                                             </Block>
@@ -836,7 +921,7 @@ export default function DataPage() {
                                             <Block label="Entidad Financiera 3">
                                                 <RHFTextField name="r_b_entidad_financiera_3"
                                                               label="Entidad Financiera 3"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('r_b_entidad_financiera_3')}
                                                 />
                                             </Block>
@@ -849,7 +934,7 @@ export default function DataPage() {
                                             <Block label="Inicio de Relación 3">
                                                 <RHFTextField name="r_b_inicio_de_relacion_3"
                                                               label="Inicio de Relación 3"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('r_b_inicio_de_relacion_3')}
                                                 />
                                             </Block>
@@ -862,7 +947,7 @@ export default function DataPage() {
                                             <Block label="Persona de Contacto 3">
                                                 <RHFTextField name="r_b_persona_de_contacto_3"
                                                               label="Persona de Contacto 3"
-                                                              inputProps={{ style: { textTransform: 'uppercase' } }}
+                                                              inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('r_b_persona_de_contacto_3')}
                                                 />
                                             </Block>

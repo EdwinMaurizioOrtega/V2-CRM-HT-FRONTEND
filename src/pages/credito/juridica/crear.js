@@ -1,7 +1,7 @@
 import Head from "next/head";
 import MainLayout from "../../../layouts/main";
 import {
-    Box,
+    Box, Button,
     Card, CircularProgress,
     Container,
     Grid,
@@ -381,6 +381,20 @@ export default function DataPage() {
                                                         onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'planilla_servicio_basico')}
                                                         onDelete={() => setValue('planilla_servicio_basico', null, {shouldValidate: true})}
                                                     />
+                                                    {watch("planilla_servicio_basico") ? (
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("planilla_servicio_basico");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                        ) :
+                                                        null
+                                                    }
                                                     {loadingFields['planilla_servicio_basico'] && (
                                                         <Box
                                                             position="absolute"
@@ -408,6 +422,20 @@ export default function DataPage() {
                                                         onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'escritura_constitucion_de_la_empresa')}
                                                         onDelete={() => setValue('escritura_constitucion_de_la_empresa', null, {shouldValidate: true})}
                                                     />
+                                                    {watch("escritura_constitucion_de_la_empresa") ? (
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("escritura_constitucion_de_la_empresa");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                        ) :
+                                                        null
+                                                    }
                                                     {loadingFields['escritura_constitucion_de_la_empresa'] && (
                                                         <Box
                                                             position="absolute"
@@ -435,6 +463,20 @@ export default function DataPage() {
                                                         onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'ruc_upload')}
                                                         onDelete={() => setValue('ruc_upload', null, {shouldValidate: true})}
                                                     />
+                                                    {watch("ruc_upload") ? (
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("ruc_upload");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                        ) :
+                                                        null
+                                                    }
                                                     {loadingFields['ruc_upload'] && (
                                                         <Box
                                                             position="absolute"
@@ -462,6 +504,20 @@ export default function DataPage() {
                                                         onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'cedula_de_identidad')}
                                                         onDelete={() => setValue('cedula_de_identidad', null, {shouldValidate: true})}
                                                     />
+                                                    {watch("cedula_de_identidad") ? (
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("cedula_de_identidad");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                        ) :
+                                                        null
+                                                    }
                                                     {loadingFields['cedula_de_identidad'] && (
                                                         <Box
                                                             position="absolute"
@@ -481,33 +537,6 @@ export default function DataPage() {
                                                 </Box>
                                             </Block>
 
-                                            {/* <Block label="Estados Fiancieros (Año anterior)"> */}
-                                            {/*     <Box position="relative"> */}
-                                            {/*         <RHFUpload */}
-                                            {/*             name="estados_fiancieros_year_anterior" */}
-                                            {/*             maxSize={5 * 1024 * 1024}  // 5 MB */}
-                                            {/*             onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'estados_fiancieros_year_anterior')} */}
-                                            {/*             onDelete={() => setValue('estados_fiancieros_year_anterior', null, {shouldValidate: true})} */}
-                                            {/*         /> */}
-                                            {/*         {loadingFields['estados_fiancieros_year_anterior'] && ( */}
-                                            {/*             <Box */}
-                                            {/*                 position="absolute" */}
-                                            {/*                 top={0} */}
-                                            {/*                 left={0} */}
-                                            {/*                 width="100%" */}
-                                            {/*                 height="100%" */}
-                                            {/*                 display="flex" */}
-                                            {/*                 alignItems="center" */}
-                                            {/*                 justifyContent="center" */}
-                                            {/*                 bgcolor="rgba(255, 255, 255, 0.6)" */}
-                                            {/*                 zIndex={2} */}
-                                            {/*             > */}
-                                            {/*                 <CircularProgress size={36}/> */}
-                                            {/*             </Box> */}
-                                            {/*         )} */}
-                                            {/*     </Box> */}
-                                            {/* </Block> */}
-
                                             <Block label="Nombramiento del Representante Legal">
                                                 <Box position="relative">
                                                     <RHFUpload
@@ -516,6 +545,20 @@ export default function DataPage() {
                                                         onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'nombramiento_del_representante_legal')}
                                                         onDelete={() => setValue('nombramiento_del_representante_legal', null, {shouldValidate: true})}
                                                     />
+                                                    {watch("nombramiento_del_representante_legal") ? (
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("nombramiento_del_representante_legal");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                        ) :
+                                                        null
+                                                    }
                                                     {loadingFields['nombramiento_del_representante_legal'] && (
                                                         <Box
                                                             position="absolute"
@@ -535,33 +578,6 @@ export default function DataPage() {
                                                 </Box>
                                             </Block>
 
-                                            {/* <Block label="Declaración de Impuesto a la Renta (Año anterior)"> */}
-                                            {/*     <Box position="relative"> */}
-                                            {/*         <RHFUpload */}
-                                            {/*             name="declaracion_de_impuesto_a_la_renta_year_anterior" */}
-                                            {/*             maxSize={5 * 1024 * 1024}  // 5 MB */}
-                                            {/*             onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'declaracion_de_impuesto_a_la_renta_year_anterior')} */}
-                                            {/*             onDelete={() => setValue('declaracion_de_impuesto_a_la_renta_year_anterior', null, {shouldValidate: true})} */}
-                                            {/*         /> */}
-                                            {/*         {loadingFields['declaracion_de_impuesto_a_la_renta_year_anterior'] && ( */}
-                                            {/*             <Box */}
-                                            {/*                 position="absolute" */}
-                                            {/*                 top={0} */}
-                                            {/*                 left={0} */}
-                                            {/*                 width="100%" */}
-                                            {/*                 height="100%" */}
-                                            {/*                 display="flex" */}
-                                            {/*                 alignItems="center" */}
-                                            {/*                 justifyContent="center" */}
-                                            {/*                 bgcolor="rgba(255, 255, 255, 0.6)" */}
-                                            {/*                 zIndex={2} */}
-                                            {/*             > */}
-                                            {/*                 <CircularProgress size={36}/> */}
-                                            {/*             </Box> */}
-                                            {/*         )} */}
-                                            {/*     </Box> */}
-                                            {/* </Block> */}
-
                                             <Block label="Certificado Bancario">
                                                 <Box position="relative">
                                                     <RHFUpload
@@ -570,6 +586,20 @@ export default function DataPage() {
                                                         onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'certificado_bancario')}
                                                         onDelete={() => setValue('certificado_bancario', null, {shouldValidate: true})}
                                                     />
+                                                    {watch("certificado_bancario") ? (
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("certificado_bancario");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                        ) :
+                                                        null
+                                                    }
                                                     {loadingFields['certificado_bancario'] && (
                                                         <Box
                                                             position="absolute"
@@ -597,6 +627,20 @@ export default function DataPage() {
                                                         onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'foto_del_local')}
                                                         onDelete={() => setValue('foto_del_local', null, {shouldValidate: true})}
                                                     />
+                                                    {watch("foto_del_local") ? (
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("foto_del_local");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                        ) :
+                                                        null
+                                                    }
                                                     {loadingFields['foto_del_local'] && (
                                                         <Box
                                                             position="absolute"
@@ -633,6 +677,20 @@ export default function DataPage() {
                                                         onDrop={(acceptedFiles) => handleDropSingleFile(acceptedFiles, 'carta_vendedores')}
                                                         onDelete={() => setValue('carta_vendedores', null, {shouldValidate: true})}
                                                     />
+                                                    {watch("carta_vendedores") ? (
+                                                            <Button variant="contained" color="primary" onClick={() => {
+                                                                const campoValor = watch("carta_vendedores");
+                                                                if (campoValor) {
+                                                                    window.open(campoValor, "_blank");
+                                                                } else {
+                                                                    console.error("No hay una URL válida");
+                                                                }
+                                                            }}>
+                                                                Abrir
+                                                            </Button>
+                                                        ) :
+                                                        null
+                                                    }
                                                     {loadingFields['carta_vendedores'] && (
                                                         <Box
                                                             position="absolute"

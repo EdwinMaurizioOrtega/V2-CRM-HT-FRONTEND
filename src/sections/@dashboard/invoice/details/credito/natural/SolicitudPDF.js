@@ -86,10 +86,11 @@ export default function SolicitudPDF(data) {
     //     label: "Estados Financieros (Año anterior)",
     //     key: "ESTADOS_FINANCIEROS"
     // },
-        {
-        label: "Declaración de Impuesto a la Renta (Año anterior)",
-        key: "DECLARACION_IMPUESTOS"
-    }, {label: "Certificado Bancario", key: "CERTIFICADO_BANCARIO"}, {
+    //     {
+    //     label: "Declaración de Impuesto a la Renta (Año anterior)",
+    //     key: "DECLARACION_IMPUESTOS"
+    // },
+        {label: "Certificado Bancario", key: "CERTIFICADO_BANCARIO"}, {
         label: "Foto del local",
         key: "FOTO_LOCAL"
     },];
