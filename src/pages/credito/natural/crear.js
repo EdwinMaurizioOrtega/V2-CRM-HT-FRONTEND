@@ -18,6 +18,7 @@ import {LoadingButton} from "@mui/lab";
 import axios from "../../../utils/axios";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import {useAuthContext} from "../../../auth/useAuthContext";
 
 DataPage.getLayout = (page) => <MainLayout>{page}</MainLayout>;
 
@@ -79,6 +80,8 @@ export const defaultValues = {
 
 export default function DataPage() {
 
+    const {user} = useAuthContext();
+
     const router = useRouter();
 
     const [loadingFields, setLoadingFields] = useState({});
@@ -115,6 +118,7 @@ export default function DataPage() {
         const response = await axios.post('/hanadb/api/customers/create_prospecto_cartera', {
             data: data,
             tipo_persona: 'N',
+            user_id: user?.ID,
         });
 
         if (response.status === 200) {

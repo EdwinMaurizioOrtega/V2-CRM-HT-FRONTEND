@@ -23,12 +23,16 @@ import {
     GridToolbarQuickFilter
 } from "@mui/x-data-grid";
 import axios from "../../../utils/axios";
+import {useAuthContext} from "../../../auth/useAuthContext";
 
 CargarArchivosCreditoPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
 export default function CargarArchivosCreditoPage() {
+
+    const {user} = useAuthContext();
+
     const {themeStretch} = useSettingsContext();
 
     const router = useRouter();
@@ -149,8 +153,17 @@ export default function CargarArchivosCreditoPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('/hanadb/api/customers/lista_validar_info_prospecto_cartera');
-                setBusinessPartners(response.data);  // Suponiendo que el response.data contiene los registros
+                let url = '';
+
+                // Vendedor
+                if (user?.ROLE === '7') {
+                    url = `/hanadb/api/customers/lista_validar_info_prospecto_cartera_by_user?id_user=${user?.ID}`;
+                } else {
+                    url = '/hanadb/api/customers/lista_validar_info_prospecto_cartera';
+                }
+
+                const response = await axios.get(url);
+                setBusinessPartners(response.data); // Suponiendo que el response.data contiene los registros
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
             } finally {
@@ -159,7 +172,7 @@ export default function CargarArchivosCreditoPage() {
         };
 
         fetchData();
-    }, []); // Se ejecuta solo una vez al montar el componente
+    }, [user]); // Dependencia: se ejecuta al montar y cuando cambie user
 
     return (
         <>
