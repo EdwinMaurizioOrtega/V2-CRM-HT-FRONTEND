@@ -36,6 +36,7 @@ export const defaultValues = {
     direccion_de_domicilio: '',
     ciudad: '',
     provincia: '',
+    geolocalizacion: '',
     telefono: '',
     fecha_inicio_actividades: '',
     fecha_nacimiento: '',
@@ -151,6 +152,7 @@ export default function DataPage() {
                                 nombre_del_representante: dataProspecto.empresa.NOMBRE_REPRESENTANTE || '',
                                 cedula_del_representante: dataProspecto.empresa.CEDULA_REPRESENTANTE || '',
                                 provincia: dataProspecto.empresa.PROVINCIA || '',
+                                geolocalizacion: dataProspecto.empresa.GEOLOCALIZACION || '',
                                 telefono: dataProspecto.empresa.NUM_TELEFONO || '',
                                 ciudad: dataProspecto.empresa.CIUDAD || '',
                                 direccion_de_domicilio: dataProspecto.empresa.DIRECCION_DOMICILIO || '',
@@ -481,6 +483,9 @@ export default function DataPage() {
                 break;
             case "provincia":
                 resultado = "PROVINCIA";
+                break;
+            case "geolocalizacion":
+                resultado = "GEOLOCALIZACION";
                 break;
             case "ciudad":
                 resultado = "CIUDAD";
@@ -1264,6 +1269,27 @@ export default function DataPage() {
                                                     {/*     Actualizar */}
                                                     {/* </Button> */}
 
+                                                </Stack>
+                                            </Block>
+
+                                            <Block label="Geolocalización">
+                                                <Stack direction="row" alignItems="center" spacing={2}>
+                                                    <RHFTextField name="geolocalizacion" label="Geolocalización"
+                                                    />
+                                                    {watch("geolocalizacion") ? (
+                                                        <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
+                                                    ) : (
+                                                        <>
+                                                            <CancelIcon style={{color: "red", fontSize: 40}}/>
+
+                                                        </>
+                                                    )}
+                                                    <Button variant="contained" color="primary" onClick={() => {
+                                                        const campoValor = watch("geolocalizacion");
+                                                        ActualizarInfoEmpresa("geolocalizacion", campoValor)
+                                                    }}>
+                                                        Actualizar
+                                                    </Button>
                                                 </Stack>
                                             </Block>
 
@@ -2423,6 +2449,7 @@ export const FormSchemaCartera = Yup.object().shape({
     direccion_de_domicilio: Yup.string().required('Se requiere la Direccion de domicilio'),
     ciudad: Yup.string().required('Se requiere la Ciudad'),
     provincia: Yup.string().required('Se requiere la Provincia'),
+    geolocalizacion: Yup.string().required('Se requiere la Geolocalización'),
 
     planilla_servicio_basico: Yup.string().required('Se requiere la Planilla servicio basico'),
     escritura_constitucion_de_la_empresa: Yup.string().required('Se requiere la Escritura constitucion de la empresa'),
