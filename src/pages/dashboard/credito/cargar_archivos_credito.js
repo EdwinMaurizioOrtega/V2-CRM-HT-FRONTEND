@@ -44,7 +44,7 @@ export default function CargarArchivosCreditoPage() {
     // Define las columnas para el DataGrid
     const baseColumns = [
         {field: 'id', headerName: 'ID', width: 90},
-        {field: 'RUC', headerName: 'RUC', width: 120},
+        {field: 'RUC', headerName: 'RUC', width: 200},
         {field: 'NOMBRE', headerName: 'NOMBRE', width: 250},
         {field: 'TIPO_PERSONA', headerName: 'T_P', width: 100},
         {
@@ -105,8 +105,8 @@ export default function CargarArchivosCreditoPage() {
             },
         },
         {
-            field: 'VER FIRMA',
-            headerName: 'VER FIRMA',
+            field: 'verFirma',
+            headerName: 'COPIAR ENLACE FIRMA',
             flex: 1,
             minWidth: 180,
             renderCell: (params) => {
@@ -118,7 +118,7 @@ export default function CargarArchivosCreditoPage() {
                             VerFirmaUanataca(params);
                         }}
                     >
-                        VER FIRMA
+                        COPIAR ENLACE
                     </Button>
                 );
             },
@@ -143,9 +143,25 @@ export default function CargarArchivosCreditoPage() {
 
 
     const VerFirmaUanataca = (row) => {
-        //console.log(row.row);
-        const url = `https://hypertronics.nexxit.dev/#sso/${row.row.SOO}`; // Asegúrate de que el ID esté disponible
-        window.open(url, "_blank");
+        // //console.log(row.row);
+        // const url = `https://hypertronics.nexxit.dev/#sso/${row.row.SOO}`; // Asegúrate de que el ID esté disponible
+        // window.open(url, "_blank");
+
+        const SOO = row.row.SOO;
+        if (!SOO) {
+            alert("Aún no se genera el enlace por el área de crédito.");
+            return;
+        }
+
+        const url = `https://hypertronics.nexxit.dev/#sso/${row.row.SOO}`;
+
+        navigator.clipboard.writeText(url)
+            .then(() => {
+                alert("Enlace copiado al portapapeles ✅");
+            })
+            .catch(() => {
+                alert("No se pudo copiar el enlace ❌");
+            });
 
     }
 
