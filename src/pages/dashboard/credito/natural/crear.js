@@ -38,11 +38,11 @@ export const defaultValues = {
     geolocalizacion: '_',
 
     planilla_servicio_basico: null,
-    escritura_constitucion_de_la_empresa: null,
+    escritura_constitucion_de_la_empresa: '',
     ruc_upload: null,
     cedula_de_identidad: null,
     // estados_fiancieros_year_anterior: null,
-    nombramiento_del_representante_legal: null,
+    nombramiento_del_representante_legal: '',
     certificado_bancario: null,
     foto_del_local: null,
     carta_vendedores: null,

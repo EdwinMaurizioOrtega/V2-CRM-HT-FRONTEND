@@ -92,6 +92,13 @@ export default function CargarArchivosCreditoPage() {
             flex: 1,
             minWidth: 180,
             renderCell: (params) => {
+
+                const SOO = params.row.SOO;
+                // Si viene null, undefined, vacío o como "<NULL>" => no mostramos el botón
+                if (!SOO || SOO === "<NULL>") {
+                    return null;
+                }
+
                 return (
                     <Button
                         component="label"
@@ -150,9 +157,6 @@ export default function CargarArchivosCreditoPage() {
 
 
     const VerFirmaUanataca = (row) => {
-        // //console.log(row.row);
-        // const url = `https://hypertronics.nexxit.dev/#sso/${row.row.SOO}`; // Asegúrate de que el ID esté disponible
-        // window.open(url, "_blank");
 
         const SOO = row.row.SOO;
         if (!SOO) {
@@ -194,6 +198,7 @@ export default function CargarArchivosCreditoPage() {
 
                 const response = await axios.get(url);
                 setBusinessPartners(response.data); // Suponiendo que el response.data contiene los registros
+                console.log(response.data);
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
             } finally {
