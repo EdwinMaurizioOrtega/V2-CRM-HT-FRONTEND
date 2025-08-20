@@ -300,7 +300,7 @@ export default function MayoristaPage(callback, deps) {
                     }));
 
                     setBusinessPartners(businessPartnersWithId);
-                    //console.log("response.data.data: " + JSON.stringify(response.data.data));
+                    console.log("response.data.data: " + JSON.stringify(response.data.data));
                     //console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
 
                 } else {

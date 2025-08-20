@@ -44,6 +44,7 @@ export default function CargarArchivosCreditoPage() {
     // Define las columnas para el DataGrid
     const baseColumns = [
         {field: 'id', headerName: 'ID', width: 90},
+        {field: 'DISPLAYNAME', headerName: 'VENDEDOR', width: 350},
         {field: 'RUC', headerName: 'RUC', width: 200},
         {field: 'NOMBRE', headerName: 'NOMBRE', width: 250},
         {field: 'TIPO_PERSONA', headerName: 'T_P', width: 100},
@@ -66,25 +67,6 @@ export default function CargarArchivosCreditoPage() {
                 );
             },
         },
-        // {
-        //     field: 'CREAR DOCUMENTOS',
-        //     headerName: 'CREAR DOCUMENTOS',
-        //     flex: 1,
-        //     minWidth: 180,
-        //     renderCell: (params) => {
-        //         return (
-        //             <Button
-        //                 component="label"
-        //                 variant="outlined"
-        //                 onClick={() => {
-        //                     VerInformacionCliente(params);
-        //                 }}
-        //             >
-        //                 CREAR DOCUMENTOS
-        //             </Button>
-        //         );
-        //     },
-        // },
         {
             field: 'VER EN UANATAC',
             headerName: 'VER EN UANATAC',
@@ -124,6 +106,26 @@ export default function CargarArchivosCreditoPage() {
             },
         },
 
+        // {
+        //     field: 'verFotoRegistroCivil',
+        //     headerName: 'FOTO REGISTRO CIVIL',
+        //     flex: 1,
+        //     minWidth: 180,
+        //     renderCell: (params) => {
+        //         return (
+        //             <Button
+        //                 component="label"
+        //                 variant="outlined"
+        //                 onClick={() => {
+        //                     VerFotoRegistroCivil(params);
+        //                 }}
+        //             >
+        //                 Ver
+        //             </Button>
+        //         );
+        //     },
+        // },
+
 
     ];
 
@@ -162,6 +164,13 @@ export default function CargarArchivosCreditoPage() {
             .catch(() => {
                 alert("No se pudo copiar el enlace ❌");
             });
+
+    }
+
+    const VerFotoRegistroCivil = (row) => {
+        console.log(row);
+        // const SESSION_ID = row.row.SESSION_ID;
+        // console.log(SESSION_ID);
 
     }
 

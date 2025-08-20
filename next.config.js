@@ -9,7 +9,7 @@ module.exports = {
 
     // HOST LOCAL
     // HOST_API_KEY: 'http://192.168.0.154:7070',
-    // HOST_API_KEY: 'http://localhost:7070',
+    // HOST_API_KEY: 'http://localhost:7171',
     // HOST_SOCKET: 'ws://localhost:80',
 
     // HOST REMOTO
