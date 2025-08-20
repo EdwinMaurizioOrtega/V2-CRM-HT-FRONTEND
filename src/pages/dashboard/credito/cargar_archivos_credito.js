@@ -130,9 +130,14 @@ export default function CargarArchivosCreditoPage() {
     ];
 
     const VerInformacionCliente = (row) => {
-        //console.log(row.row);
-        const url = `/credito/${row.row.TIPO_PERSONA === 'N' ? 'natural' : 'juridica'}/actualizar/?id=${row.row.RUC}`; // Asegúrate de que el ID esté disponible
-        window.open(url, "_blank");
+        const { TIPO_PERSONA, RUC } = row.row;
+
+        const url =
+            TIPO_PERSONA === 'N'
+                ? PATH_DASHBOARD.credito.natural_view(RUC)
+                : PATH_DASHBOARD.credito.juridica_view(RUC);
+
+        router.push(url);
 
     }
 

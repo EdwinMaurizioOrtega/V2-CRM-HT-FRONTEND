@@ -219,8 +219,8 @@ const navConfig = [
     {
         subheader: 'UANATACA - MAYORISTAS',
         items: [
-            {title: 'Crear Natural', path: '/credito/natural/crear/', icon: ICONS.blog, target: '_blank'},
-            {title: 'Crear Jurídica', path: '/credito/juridica/crear/', icon: ICONS.blog, target: '_blank'},
+            {title: 'Crear Natural', path: PATH_DASHBOARD.credito.natural_crear, icon: ICONS.blog},
+            {title: 'Crear Jurídica', path: PATH_DASHBOARD.credito.juridica_crear, icon: ICONS.blog},
             {title: 'Consultar', path: PATH_DASHBOARD.credito.cargar, icon: ICONS.analytics},
             // {title: 'Equifax', path: PATH_DASHBOARD.credito.auth_equifax, icon: ICONS.blog},
         ],

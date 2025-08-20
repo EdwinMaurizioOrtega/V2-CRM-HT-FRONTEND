@@ -1,5 +1,5 @@
 import Head from "next/head";
-import MainLayout from "../../../layouts/main";
+import MainLayout from "../../../../layouts/main";
 import {
     Box,
     Button,
@@ -13,17 +13,18 @@ import React, {useCallback, useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import FormProvider, {
     RHFTextField, RHFUpload
-} from "../../../components/hook-form";
+} from "../../../../components/hook-form";
 import {useForm} from "react-hook-form";
-import axios from "../../../utils/axios";
+import axios from "../../../../utils/axios";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
-import PDFPreviewButtons from "../../../components/cartera/natural/PDFPreviewButtons";
-import {useAuthContext} from "../../../auth/useAuthContext";
+import PDFPreviewButtons from "../../../../components/cartera/natural/PDFPreviewButtons";
+import {useAuthContext} from "../../../../auth/useAuthContext";
+import DashboardLayout from "../../../../layouts/dashboard";
 
-DataPage.getLayout = (page) => <MainLayout>{page}</MainLayout>;
+DataPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export const defaultValues = {
 
@@ -701,7 +702,7 @@ export default function DataPage() {
         <>
             <Head>
                 <title> Crédito | HT</title>
-            </Head>i
+            </Head>
 
             <Container sx={{pt: 10, pb: 15}}>
 

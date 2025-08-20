@@ -1,5 +1,5 @@
 import Head from "next/head";
-import MainLayout from "../../../layouts/main";
+import MainLayout from "../../../../layouts/main";
 import {
     Box, Button,
     Card, CircularProgress,
@@ -12,15 +12,16 @@ import React, {useCallback, useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import FormProvider, {
     RHFTextField, RHFUpload
-} from "../../../components/hook-form";
+} from "../../../../components/hook-form";
 import {useForm, useWatch} from "react-hook-form";
 import {LoadingButton} from "@mui/lab";
-import axios from "../../../utils/axios";
+import axios from "../../../../utils/axios";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import {useAuthContext} from "../../../auth/useAuthContext";
+import {useAuthContext} from "../../../../auth/useAuthContext";
+import DashboardLayout from "../../../../layouts/dashboard";
 
-DataPage.getLayout = (page) => <MainLayout>{page}</MainLayout>;
+DataPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export const defaultValues = {
 
