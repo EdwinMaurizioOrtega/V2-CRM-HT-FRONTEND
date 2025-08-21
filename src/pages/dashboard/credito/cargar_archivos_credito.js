@@ -48,6 +48,7 @@ export default function CargarArchivosCreditoPage() {
         {field: 'RUC', headerName: 'RUC', width: 200},
         {field: 'NOMBRE', headerName: 'NOMBRE', width: 250},
         {field: 'TIPO_PERSONA', headerName: 'T_P', width: 100},
+        {field: 'CREATED_AT', headerName: 'CREACIÓN', width: 250},
         {
             field: 'VER INFORMACIÓN',
             headerName: 'VER INFORMACIÓN',
