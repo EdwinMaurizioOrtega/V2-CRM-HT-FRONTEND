@@ -537,6 +537,7 @@ export default function InvoiceDetails({invoice}) {
             "004": "CUENCA - MAYORISTAS MOVILCELISTIC CUENCA",
             "030": "COLON - MAYORISTAS MOVILCELISTIC COLON",
             "024": "MANTA - MAYORISTAS MOVILCELISTIC MANTA",
+            "005": "CARAPUNGO - CARRIER OPERADORAS",
             // "T1CARACO": "QUITO - XIAOMI TERMINALES"
         };
 
@@ -2078,6 +2079,7 @@ export const top100FilmsMovilCelistic = [
     {title: 'CUENCA - MAYORISTAS MOVILCELISTIC CUENCA', id: "004"},
     {title: 'COLON - MAYORISTAS MOVILCELISTIC COLON', id: "030"},
     {title: 'MANTA - MAYORISTAS MOVILCELISTIC MANTA', id: "024"},
+    {title: 'CARAPUNGO - CARRIER OPERADORAS', id: "005"},
     // {title: 'QUITO - XIAOMI TERMINALES', id: "T1CARACO"}
 ]
 

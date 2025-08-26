@@ -153,6 +153,12 @@ const WAREHOUSE_OPTIONS_MOVILCELISTIC = [
         title: 'MAYORISTAS MOVILCELISTIC MANTA',
         description: 'MANTA',
     },
+    {
+        id: '005',
+        value: '005',
+        title: 'CARRIER OPERADORAS',
+        description: 'CARAPUNGO',
+    },
 ]
 
 

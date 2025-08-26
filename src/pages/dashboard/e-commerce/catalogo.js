@@ -79,6 +79,7 @@ const BODEGAS_MOVILCELISTIC = [
 
     {value: '030', label: 'MAYORISTAS MOVILCELISTIC COLON'},
     {value: '024', label: 'MAYORISTAS MOVILCELISTIC MANTA'},
+    {value: '005', label: 'CARRIER OPERADORAS'},
 ];
 
 const CATEGORIAS_HT = [
