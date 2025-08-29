@@ -12,7 +12,7 @@ import {
     LinearProgress,
     Card,
     TextField,
-    Autocomplete, InputAdornment, IconButton, Grid, Divider
+    Autocomplete, InputAdornment, IconButton, Grid, Divider, CardActionArea, Chip, CardContent
 } from '@mui/material';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
@@ -53,21 +53,23 @@ MayoristaPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 export const rangos = [
-    {title: '0-15 dias', id: "01"},
-    {title: '16-30 dias', id: "02"},
-    {title: '31-60 dias', id: "03"},
-    {title: '61-90 dias', id: "04"},
-    {title: '91-180 dias', id: "05"},
-    {title: '180-360 dias', id: "06"},
-    {title: '+360 dias', id: "07"},
-    {title: 'Nunca', id: "08"}
-]
+    { title: "0-15 días", id: "01", icon: "solar:calendar-date-bold" },
+    { title: "16-30 días", id: "02", icon: "solar:calendar-bold" },
+    { title: "31-60 días", id: "03", icon: "solar:clock-circle-bold" },
+    { title: "61-90 días", id: "04", icon: "solar:hourglass-bold" },
+    { title: "91-180 días", id: "05", icon: "solar:calendar-add-bold" },
+    { title: "180-360 días", id: "06", icon: "solar:calendar-mark-bold" },
+    { title: "+360 días", id: "07", icon: "solar:infinity-bold-duotone" },
+    // { title: "Nunca", id: "08", icon: "solar:close-circle-bold" },
+];
 
 export default function MayoristaPage(callback, deps) {
 
     const {user} = useAuthContext();
 
     const {themeStretch} = useSettingsContext();
+
+    const [selected, setSelected] = useState(null);
 
     const [partner, setPartner] = useState(null);
     const quickEdit = useBoolean();
@@ -145,14 +147,14 @@ export default function MayoristaPage(callback, deps) {
             field: 'DIAS_DIFFERENCE',
             headerName: 'ÚLTIMA GESTIÓN',
             flex: 1,
-            minWidth: 160,
+            minWidth: 100,
             renderCell: renderDiasColumn, // Usa el renderizador de celdas personalizado
         },
         {
             field: 'Cliente',
             headerName: 'CLIENTE',
             flex: 1,
-            minWidth: 160,
+            minWidth: 300,
         },
         {
             field: 'ID',
@@ -412,6 +414,12 @@ export default function MayoristaPage(callback, deps) {
         setDataContAgendaPorCerrar(agendaPorCerrar.length); // Almacenar los elementos que cumplen con la condición
     };
 
+
+    const handleClick = async (event, rango) => {
+        setSelected(rango.id);
+        await BuscarPorRango(event, rango);
+    };
+
     return (
         <>
             <Head>
@@ -436,150 +444,92 @@ export default function MayoristaPage(callback, deps) {
                     ]}
                 />
 
-                <Card sx={{
-                    p: 5
-                }}
+                <Card
+                    sx={{
+                        p: 3,
+                        borderRadius: 4,
+                        boxShadow: "0 8px 24px rgba(0,0,0,0.06)",
+                        background: (theme) =>
+                            `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${theme.palette.grey[50]} 100%)`,
+                    }}
                 >
-
-
-                    <Grid item xs={12} md={12} lg={8} padding={2}>
-                        {/*<Box*/}
-                        {/*    rowGap={3}*/}
-                        {/*    columnGap={2}*/}
-                        {/*    display="grid"*/}
-                        {/*    gridTemplateColumns={{*/}
-                        {/*        xs: 'repeat(1, 1fr)',*/}
-                        {/*        sm: 'repeat(2, 1fr)',*/}
-                        {/*    }}*/}
-                        {/*>*/}
-                        <Autocomplete
-                            fullWidth
-                            options={rangos}
-                            getOptionLabel={(option) => option.title}
-                            onChange={(event, value) => {
-                                BuscarPorRango(event, value);
-                            }} // Add onChange event handler
-                            renderInput={(params) => <TextField {...params} label="Filtrar por rango"
-                                                                margin="none"/>}
-                        />
-
-
-                        {/*<TextField*/}
-                        {/*    fullWidth*/}
-                        {/*    type="text"*/}
-                        {/*    label="Nombre / Razon Social"*/}
-                        {/*    InputProps={{*/}
-                        {/*        endAdornment: (*/}
-                        {/*            <InputAdornment position="end">*/}
-                        {/*                <IconButton*/}
-                        {/*                    edge="end"*/}
-                        {/*                >*/}
-                        {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
-
-                        {/*                </IconButton>*/}
-                        {/*            </InputAdornment>*/}
-                        {/*        ),*/}
-                        {/*    }}*/}
-                        {/*/>*/}
-
-                        {/*<TextField*/}
-                        {/*    fullWidth*/}
-                        {/*    type="text"*/}
-                        {/*    label="Cédula/RUC"*/}
-                        {/*    InputProps={{*/}
-                        {/*        endAdornment: (*/}
-                        {/*            <InputAdornment position="end">*/}
-                        {/*                <IconButton*/}
-                        {/*                    edge="end"*/}
-                        {/*                >*/}
-                        {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
-
-                        {/*                </IconButton>*/}
-                        {/*            </InputAdornment>*/}
-                        {/*        ),*/}
-                        {/*    }}*/}
-                        {/*/>*/}
-
-                        {/*<TextField*/}
-                        {/*    fullWidth*/}
-                        {/*    type="text"*/}
-                        {/*    label="Nombre Producto"*/}
-                        {/*    InputProps={{*/}
-                        {/*        endAdornment: (*/}
-                        {/*            <InputAdornment position="end">*/}
-                        {/*                <IconButton*/}
-                        {/*                    edge="end"*/}
-                        {/*                >*/}
-                        {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
-
-                        {/*                </IconButton>*/}
-                        {/*            </InputAdornment>*/}
-                        {/*        ),*/}
-                        {/*    }}*/}
-                        {/*/>*/}
-
-                        {/*<TextField*/}
-                        {/*    fullWidth*/}
-                        {/*    type="text"*/}
-                        {/*    label="Código Producto"*/}
-                        {/*    InputProps={{*/}
-                        {/*        endAdornment: (*/}
-                        {/*            <InputAdornment position="end">*/}
-                        {/*                <IconButton*/}
-                        {/*                    edge="end"*/}
-                        {/*                >*/}
-                        {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
-
-                        {/*                </IconButton>*/}
-                        {/*            </InputAdornment>*/}
-                        {/*        ),*/}
-                        {/*    }}*/}
-                        {/*/>*/}
-
-
-                        {/*</Box>*/}
+                    {/* Filtros tipo Airbnb */}
+                    <Grid
+                        container
+                        spacing={2}
+                        sx={{
+                            mb: 4,
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: 1,
+                        }}
+                    >
+                        {rangos.map((rango) => (
+                            <Grid item key={rango.id}>
+                                <Chip
+                                    onClick={(e) => handleClick(e, rango)}
+                                    label={
+                                        <Stack direction="row" alignItems="center" spacing={1}>
+                                            <Iconify
+                                                icon={rango.icon}
+                                                width={18}
+                                                height={18}
+                                                style={{
+                                                    color: selected === rango.id ? "white" : "#000000",
+                                                }}
+                                            />
+                                            <span>{rango.title}</span>
+                                        </Stack>
+                                    }
+                                    variant={selected === rango.id ? "filled" : "outlined"}
+                                    color={selected === rango.id ? "primary" : "default"}
+                                    sx={{
+                                        px: 2.5,
+                                        py: 1.2,
+                                        borderRadius: "24px",
+                                        fontWeight: 600,
+                                        fontSize: "0.9rem",
+                                        bgcolor:
+                                            selected === rango.id ? "primary.main" : "background.paper",
+                                        color:
+                                            selected === rango.id
+                                                ? "primary.contrastText"
+                                                : "text.primary",
+                                        boxShadow: selected === rango.id ? 3 : 1,
+                                        transition: "all 0.25s ease",
+                                        "&:hover": {
+                                            boxShadow: 4,
+                                            transform: "translateY(-2px)",
+                                        },
+                                    }}
+                                />
+                            </Grid>
+                        ))}
                     </Grid>
 
-
+                    {/* Métricas tipo dashboard */}
                     <Grid container spacing={3}>
-
                         <Grid item xs={12} sm={6} md={3}>
-                            <AnalyticsWidgetSummary
+                            <StatCard
                                 title="Por Gestionar"
                                 total={
-                                    businessPartners && businessPartners.length ? businessPartners.length : 0
+                                    businessPartners && businessPartners.length
+                                        ? businessPartners.length
+                                        : 0
                                 }
                                 color="info"
-                                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png"/>}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12} sm={6} md={3}>
-                            <AnalyticsWidgetSummary
-                                title="Total Agenda"
-                                total={dataContAgenda}
-                                color="warning"
-                                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png"/>}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={3}>
-                            <AnalyticsWidgetSummary
-                                title="Agenda Cerrados"
-                                total={dataContAgendaPorCerrar}
-                                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png"/>}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={3}>
-                            <AnalyticsWidgetSummary
-                                title="Agenda Abiertos"
-                                total={dataContAgendaCErrado}
-                                color="error"
-                                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png"/>}
+                                icon={
+                                    <img
+                                        alt="icon"
+                                        src="/assets/icons/glass/ic_glass_users.png"
+                                        width={28}
+                                    />
+                                }
                             />
                         </Grid>
                     </Grid>
-
                 </Card>
+
 
                 <Card sx={{
                     p: 5
@@ -669,4 +619,49 @@ function CustomToolbar() {
 // ----------------------------------------------------------------------
 
 
+const StatCard = ({ title, total, color, icon }) => {
+    return (
+        <Card
+            sx={{
+                borderRadius: 4,
+                boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+                transition: '0.3s',
+                background: `linear-gradient(135deg, ${color}.100, ${color}.50)`,
+                '&:hover': {
+                    transform: 'translateY(-6px)',
+                    boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
+                },
+            }}
+        >
+            <CardContent>
+                <Box display="flex" alignItems="center" gap={2}>
+                    {/* Icono circular con fondo sutil */}
+                    <Box
+                        sx={{
+                            width: 56,
+                            height: 56,
+                            borderRadius: '50%',
+                            backgroundColor: `${color}.200`,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            p: 1.5,
+                        }}
+                    >
+                        {icon}
+                    </Box>
 
+                    {/* Texto */}
+                    <Box>
+                        <Typography variant="subtitle2" color="text.secondary">
+                            {title}
+                        </Typography>
+                        <Typography variant="h4" fontWeight="bold" color="text.primary">
+                            {total}
+                        </Typography>
+                    </Box>
+                </Box>
+            </CardContent>
+        </Card>
+    );
+};

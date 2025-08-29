@@ -44,11 +44,11 @@ export default function CargarArchivosCreditoPage() {
     // Define las columnas para el DataGrid
     const baseColumns = [
         {field: 'id', headerName: 'ID', width: 90},
+        {field: 'CREATED_AT', headerName: 'CREACIÓN', width: 250},
         {field: 'DISPLAYNAME', headerName: 'VENDEDOR', width: 350},
         {field: 'RUC', headerName: 'RUC', width: 200},
         {field: 'NOMBRE', headerName: 'NOMBRE', width: 250},
         {field: 'TIPO_PERSONA', headerName: 'T_P', width: 100},
-        {field: 'CREATED_AT', headerName: 'CREACIÓN', width: 250},
         {
             field: 'VER INFORMACIÓN',
             headerName: 'VER INFORMACIÓN',
@@ -216,7 +216,7 @@ export default function CargarArchivosCreditoPage() {
                 <title> Validar Información | HT</title>
             </Head>
 
-            <Container maxWidth={themeStretch ? false : 'lg'}>
+            <Container maxWidth={false}>
                 <CustomBreadcrumbs
                     heading="Validar Información"
                     links={[
