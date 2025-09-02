@@ -12,7 +12,7 @@ import {
     LinearProgress,
     Card,
     TextField,
-    Autocomplete, InputAdornment, IconButton, Grid, Divider, CardActionArea, Chip, CardContent
+    Autocomplete, InputAdornment, IconButton, Grid, Divider, CardActionArea, Chip, CardContent, Tabs, Tab
 } from '@mui/material';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
@@ -46,6 +46,7 @@ import {Space_Mono} from "@next/font/google";
 import {TIPO_CREDITO} from "../../../utils/constants";
 import CustomerData from "../../../sections/@dashboard/gestion/customer-data";
 import CustomerLocationMap from "../../../sections/@dashboard/gestion/customer-location-map";
+import {Block} from "../../../sections/_examples/Block";
 
 // ----------------------------------------------------------------------
 
@@ -53,14 +54,20 @@ MayoristaPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 export const rangos = [
-    { title: "0-15 días", id: "01", icon: "solar:calendar-date-bold" },
-    { title: "16-30 días", id: "02", icon: "solar:calendar-bold" },
-    { title: "31-60 días", id: "03", icon: "solar:clock-circle-bold" },
-    { title: "61-90 días", id: "04", icon: "solar:hourglass-bold" },
-    { title: "91-180 días", id: "05", icon: "solar:calendar-add-bold" },
-    { title: "180-360 días", id: "06", icon: "solar:calendar-mark-bold" },
-    { title: "+360 días", id: "07", icon: "solar:infinity-bold-duotone" },
+    {title: "0-15 días", id: "01", icon: "solar:calendar-date-bold"},
+    {title: "16-30 días", id: "02", icon: "solar:calendar-bold"},
+    {title: "31-60 días", id: "03", icon: "solar:clock-circle-bold"},
+    {title: "61-90 días", id: "04", icon: "solar:hourglass-bold"},
+    {title: "91-180 días", id: "05", icon: "solar:calendar-add-bold"},
+    {title: "180-360 días", id: "06", icon: "solar:calendar-mark-bold"},
+    {title: "+360 días", id: "07", icon: "solar:infinity-bold-duotone"},
     // { title: "Nunca", id: "08", icon: "solar:close-circle-bold" },
+];
+
+const TABS = [
+    {value: 'ultima-factura', label: 'Última Factura'},
+    {value: 'medio-de-contacto', label: 'Medio de Contacto'},
+    {value: 'otro-criterio', label: 'Otro Criterio'},
 ];
 
 export default function MayoristaPage(callback, deps) {
@@ -70,6 +77,9 @@ export default function MayoristaPage(callback, deps) {
     const {themeStretch} = useSettingsContext();
 
     const [selected, setSelected] = useState(null);
+
+    const [currentTab, setCurrentTab] = useState('one');
+
 
     const [partner, setPartner] = useState(null);
     const quickEdit = useBoolean();
@@ -92,6 +102,14 @@ export default function MayoristaPage(callback, deps) {
         const payActual = TIPO_CREDITO.find(option => option.id == pay);
         return payActual ? payActual.title : "Pago no definido.";
     }
+
+    const style = {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        '& > *': {mx: '8px !important'},
+    };
 
     const baseColumns = [
         {
@@ -236,7 +254,7 @@ export default function MayoristaPage(callback, deps) {
         //     flex: 1,
         //     minWidth: 160,
         // },
-         {
+        {
             field: 'PADRE',
             headerName: 'PADRE',
             flex: 1,
@@ -281,7 +299,7 @@ export default function MayoristaPage(callback, deps) {
         return counter;
     };
 
-    const BuscarPorRango = async (event, value) => {
+    const BuscarPorRango = async (event, value, tipo_gestion) => {
 
         try {
 
@@ -291,7 +309,8 @@ export default function MayoristaPage(callback, deps) {
             try {
                 const response = await axios.post('/hanadb/api/customers/BusinessPartnersByRange', {
                     ID_RANGO: value.id,
-                    USER_NAME: user.DISPLAYNAME
+                    USER_NAME: user.DISPLAYNAME,
+                    TIPO_GESTION: tipo_gestion,
                 });
 
                 if (response.status === 200) {
@@ -415,9 +434,9 @@ export default function MayoristaPage(callback, deps) {
     };
 
 
-    const handleClick = async (event, rango) => {
+    const handleClick = async (event, rango, tipo_gestion) => {
         setSelected(rango.id);
-        await BuscarPorRango(event, rango);
+        await BuscarPorRango(event, rango, tipo_gestion);
     };
 
     return (
@@ -453,145 +472,391 @@ export default function MayoristaPage(callback, deps) {
                             `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${theme.palette.grey[50]} 100%)`,
                     }}
                 >
-                    {/* Filtros tipo Airbnb */}
-                    <Grid
-                        container
-                        spacing={2}
-                        sx={{
-                            mb: 4,
-                            display: "flex",
-                            flexWrap: "wrap",
-                            gap: 1,
-                        }}
-                    >
-                        {rangos.map((rango) => (
-                            <Grid item key={rango.id}>
-                                <Chip
-                                    onClick={(e) => handleClick(e, rango)}
-                                    label={
-                                        <Stack direction="row" alignItems="center" spacing={1}>
-                                            <Iconify
-                                                icon={rango.icon}
-                                                width={18}
-                                                height={18}
-                                                style={{
-                                                    color: selected === rango.id ? "white" : "#000000",
-                                                }}
-                                            />
-                                            <span>{rango.title}</span>
-                                        </Stack>
-                                    }
-                                    variant={selected === rango.id ? "filled" : "outlined"}
-                                    color={selected === rango.id ? "primary" : "default"}
-                                    sx={{
-                                        px: 2.5,
-                                        py: 1.2,
-                                        borderRadius: "24px",
-                                        fontWeight: 600,
-                                        fontSize: "0.9rem",
-                                        bgcolor:
-                                            selected === rango.id ? "primary.main" : "background.paper",
-                                        color:
-                                            selected === rango.id
-                                                ? "primary.contrastText"
-                                                : "text.primary",
-                                        boxShadow: selected === rango.id ? 3 : 1,
-                                        transition: "all 0.25s ease",
-                                        "&:hover": {
-                                            boxShadow: 4,
-                                            transform: "translateY(-2px)",
-                                        },
-                                    }}
-                                />
-                            </Grid>
-                        ))}
-                    </Grid>
-
-                    {/* Métricas tipo dashboard */}
-                    <Grid container spacing={3}>
-                        <Grid item xs={12} sm={6} md={3}>
-                            <StatCard
-                                title="Por Gestionar"
-                                total={
-                                    businessPartners && businessPartners.length
-                                        ? businessPartners.length
-                                        : 0
-                                }
-                                color="info"
-                                icon={
-                                    <img
-                                        alt="icon"
-                                        src="/assets/icons/glass/ic_glass_users.png"
-                                        width={28}
-                                    />
-                                }
-                            />
-                        </Grid>
-                    </Grid>
-                </Card>
 
 
-                <Card sx={{
-                    p: 5
-                }}
-                >
-                    <DataGrid
-                        rows={businessPartners}
-                        columns={baseColumns}
-                        pagination
-                        slots={{
-                            toolbar: CustomToolbar,
-                            noRowsOverlay: () => <EmptyContent title="No Data"/>,
-                            noResultsOverlay: () => <EmptyContent title="No results found"/>,
-                        }}
-                    />
+                    <Block title="Gestión por:" sx={style}>
+                        <Stack spacing={2} sx={{width: 1}}>
+                            <Tabs value={currentTab} onChange={(event, newValue) => setCurrentTab(newValue)}>
+                                {TABS.slice(0, 3).map((tab) => (
+                                    <Tab key={tab.value} value={tab.value} label={tab.label}/>
+                                ))}
+                            </Tabs>
 
-                    {user && partner && (
-                        <CustomerQuickManagementForm
-                            currentPartner={partner}
-                            open={quickEdit.value}
-                            onClose={quickEdit.onFalse}/>
-                    )}
+                            {TABS.slice(0, 3).map(
+                                (tab) =>
+                                    tab.value === currentTab && (
+                                        <Box
+                                            key={tab.value}
+                                            sx={{p: 2, borderRadius: 1, bgcolor: 'background.neutral'}}
+                                        >
+                                            {(() => {
+                                                switch (currentTab) {
+                                                    case 'ultima-factura':
+                                                        return <div>
+                                                            {/* Filtros tipo Airbnb */}
+                                                            <Grid
+                                                                container
+                                                                spacing={2}
+                                                                sx={{
+                                                                    mb: 4,
+                                                                    display: "flex",
+                                                                    flexWrap: "wrap",
+                                                                    gap: 1,
+                                                                }}
+                                                            >
+                                                                {rangos.map((rango) => (
+                                                                    <Grid item key={rango.id}>
+                                                                        <Chip
+                                                                            onClick={(e) => handleClick(e, rango, 1)}
+                                                                            label={
+                                                                                <Stack direction="row" alignItems="center"
+                                                                                       spacing={1}>
+                                                                                    <Iconify
+                                                                                        icon={rango.icon}
+                                                                                        width={18}
+                                                                                        height={18}
+                                                                                        style={{
+                                                                                            color: selected === rango.id ? "white" : "#000000",
+                                                                                        }}
+                                                                                    />
+                                                                                    <span>{rango.title}</span>
+                                                                                </Stack>
+                                                                            }
+                                                                            variant={selected === rango.id ? "filled" : "outlined"}
+                                                                            color={selected === rango.id ? "primary" : "default"}
+                                                                            sx={{
+                                                                                px: 2.5,
+                                                                                py: 1.2,
+                                                                                borderRadius: "24px",
+                                                                                fontWeight: 600,
+                                                                                fontSize: "0.9rem",
+                                                                                bgcolor:
+                                                                                    selected === rango.id ? "primary.main" : "background.paper",
+                                                                                color:
+                                                                                    selected === rango.id
+                                                                                        ? "primary.contrastText"
+                                                                                        : "text.primary",
+                                                                                boxShadow: selected === rango.id ? 3 : 1,
+                                                                                transition: "all 0.25s ease",
+                                                                                "&:hover": {
+                                                                                    boxShadow: 4,
+                                                                                    transform: "translateY(-2px)",
+                                                                                },
+                                                                            }}
+                                                                        />
+                                                                    </Grid>
+                                                                ))}
+                                                            </Grid>
 
-                    {user && partner && (
-                        <PreviousClientManagement
-                            userID={user.ID}
-                            currentPartner={partner}
-                            open={quickPCM.value}
-                            onClose={quickPCM.onFalse}/>
-                    )}
+                                                            {/* Métricas tipo dashboard */}
+                                                            <Grid container spacing={3}>
+                                                                <Grid item xs={12} sm={6} md={3}>
+                                                                    <StatCard
+                                                                        title="Por Gestionar"
+                                                                        total={
+                                                                            businessPartners && businessPartners.length
+                                                                                ? businessPartners.length
+                                                                                : 0
+                                                                        }
+                                                                        color="info"
+                                                                        icon={
+                                                                            <img
+                                                                                alt="icon"
+                                                                                src="/assets/icons/glass/ic_glass_users.png"
+                                                                                width={28}
+                                                                            />
+                                                                        }
+                                                                    />
+                                                                </Grid>
+                                                            </Grid>
 
-                    {user && partner && (
-                        <InvoicedClientOrders
-                            userID={user.ID}
-                            currentPartner={partner}
-                            open={quickICO.value}
-                            onClose={quickICO.onFalse}/>
-                    )}
+                                                            <Card sx={{
+                                                                p: 5
+                                                            }}
+                                                            >
+                                                                <DataGrid
+                                                                    rows={businessPartners}
+                                                                    columns={baseColumns}
+                                                                    pagination
+                                                                    slots={{
+                                                                        toolbar: CustomToolbar,
+                                                                        noRowsOverlay: () => <EmptyContent
+                                                                            title="No Data"/>,
+                                                                        noResultsOverlay: () => <EmptyContent
+                                                                            title="No results found"/>,
+                                                                    }}
+                                                                />
 
-                    {user && dataCliente && (
-                        <CustomerData
-                            userID={user.ID}
-                            currentPartner={dataCliente}
-                            open={quickDC.value}
-                            onClose={quickDC.onFalse}/>
-                    )}
+                                                                {user && partner && (
+                                                                    <CustomerQuickManagementForm
+                                                                        currentPartner={partner}
+                                                                        open={quickEdit.value}
+                                                                        onClose={quickEdit.onFalse}/>
+                                                                )}
 
-                    {user && partner && (
-                        <CustomerLocationMap
-                            currentPartner={partner}
-                            open={quickCLM.value}
-                            onClose={quickCLM.onFalse}/>
-                    )}
+                                                                {user && partner && (
+                                                                    <PreviousClientManagement
+                                                                        userID={user.ID}
+                                                                        currentPartner={partner}
+                                                                        open={quickPCM.value}
+                                                                        onClose={quickPCM.onFalse}/>
+                                                                )}
 
-                </Card>
+                                                                {user && partner && (
+                                                                    <InvoicedClientOrders
+                                                                        userID={user.ID}
+                                                                        currentPartner={partner}
+                                                                        open={quickICO.value}
+                                                                        onClose={quickICO.onFalse}/>
+                                                                )}
+
+                                                                {user && dataCliente && (
+                                                                    <CustomerData
+                                                                        userID={user.ID}
+                                                                        currentPartner={dataCliente}
+                                                                        open={quickDC.value}
+                                                                        onClose={quickDC.onFalse}/>
+                                                                )}
+
+                                                                {user && partner && (
+                                                                    <CustomerLocationMap
+                                                                        currentPartner={partner}
+                                                                        open={quickCLM.value}
+                                                                        onClose={quickCLM.onFalse}/>
+                                                                )}
+
+                                                            </Card>
 
 
-                <Card sx={{
-                    p: 5
-                }}
-                >
-                    <CalendarView onValorCambiado={handleValorCambiado}/>
+                                                        </div>;
+                                                    case 'medio-de-contacto':
+                                                        return <div>
+
+                                                            <Card sx={{
+                                                                p: 5
+                                                            }}
+                                                            >
+
+
+                                                                <Grid item xs={12} md={12} lg={8} padding={2}>
+                                                                    {/*<Box*/}
+                                                                    {/*    rowGap={3}*/}
+                                                                    {/*    columnGap={2}*/}
+                                                                    {/*    display="grid"*/}
+                                                                    {/*    gridTemplateColumns={{*/}
+                                                                    {/*        xs: 'repeat(1, 1fr)',*/}
+                                                                    {/*        sm: 'repeat(2, 1fr)',*/}
+                                                                    {/*    }}*/}
+                                                                    {/*>*/}
+                                                                    <Autocomplete
+                                                                        fullWidth
+                                                                        options={rangos}
+                                                                        getOptionLabel={(option) => option.title}
+                                                                        onChange={(event, value) => {
+                                                                            handleClick(event, value, 0);
+                                                                        }} // Add onChange event handler
+                                                                        renderInput={(params) => <TextField {...params} label="Filtrar por rango"
+                                                                                                            margin="none"/>}
+                                                                    />
+
+
+                                                                    {/*<TextField*/}
+                                                                    {/*    fullWidth*/}
+                                                                    {/*    type="text"*/}
+                                                                    {/*    label="Nombre / Razon Social"*/}
+                                                                    {/*    InputProps={{*/}
+                                                                    {/*        endAdornment: (*/}
+                                                                    {/*            <InputAdornment position="end">*/}
+                                                                    {/*                <IconButton*/}
+                                                                    {/*                    edge="end"*/}
+                                                                    {/*                >*/}
+                                                                    {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
+
+                                                                    {/*                </IconButton>*/}
+                                                                    {/*            </InputAdornment>*/}
+                                                                    {/*        ),*/}
+                                                                    {/*    }}*/}
+                                                                    {/*/>*/}
+
+                                                                    {/*<TextField*/}
+                                                                    {/*    fullWidth*/}
+                                                                    {/*    type="text"*/}
+                                                                    {/*    label="Cédula/RUC"*/}
+                                                                    {/*    InputProps={{*/}
+                                                                    {/*        endAdornment: (*/}
+                                                                    {/*            <InputAdornment position="end">*/}
+                                                                    {/*                <IconButton*/}
+                                                                    {/*                    edge="end"*/}
+                                                                    {/*                >*/}
+                                                                    {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
+
+                                                                    {/*                </IconButton>*/}
+                                                                    {/*            </InputAdornment>*/}
+                                                                    {/*        ),*/}
+                                                                    {/*    }}*/}
+                                                                    {/*/>*/}
+
+                                                                    {/*<TextField*/}
+                                                                    {/*    fullWidth*/}
+                                                                    {/*    type="text"*/}
+                                                                    {/*    label="Nombre Producto"*/}
+                                                                    {/*    InputProps={{*/}
+                                                                    {/*        endAdornment: (*/}
+                                                                    {/*            <InputAdornment position="end">*/}
+                                                                    {/*                <IconButton*/}
+                                                                    {/*                    edge="end"*/}
+                                                                    {/*                >*/}
+                                                                    {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
+
+                                                                    {/*                </IconButton>*/}
+                                                                    {/*            </InputAdornment>*/}
+                                                                    {/*        ),*/}
+                                                                    {/*    }}*/}
+                                                                    {/*/>*/}
+
+                                                                    {/*<TextField*/}
+                                                                    {/*    fullWidth*/}
+                                                                    {/*    type="text"*/}
+                                                                    {/*    label="Código Producto"*/}
+                                                                    {/*    InputProps={{*/}
+                                                                    {/*        endAdornment: (*/}
+                                                                    {/*            <InputAdornment position="end">*/}
+                                                                    {/*                <IconButton*/}
+                                                                    {/*                    edge="end"*/}
+                                                                    {/*                >*/}
+                                                                    {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
+
+                                                                    {/*                </IconButton>*/}
+                                                                    {/*            </InputAdornment>*/}
+                                                                    {/*        ),*/}
+                                                                    {/*    }}*/}
+                                                                    {/*/>*/}
+
+
+                                                                    {/*</Box>*/}
+                                                                </Grid>
+
+
+                                                                <Grid container spacing={3}>
+
+                                                                    <Grid item xs={12} sm={6} md={3}>
+                                                                        <AnalyticsWidgetSummary
+                                                                            title="Por Gestionar"
+                                                                            total={
+                                                                                businessPartners && businessPartners.length ? businessPartners.length : 0
+                                                                            }
+                                                                            color="info"
+                                                                            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png"/>}
+                                                                        />
+                                                                    </Grid>
+
+                                                                    <Grid item xs={12} sm={6} md={3}>
+                                                                        <AnalyticsWidgetSummary
+                                                                            title="Total Agenda"
+                                                                            total={dataContAgenda}
+                                                                            color="warning"
+                                                                            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png"/>}
+                                                                        />
+                                                                    </Grid>
+                                                                    <Grid item xs={12} sm={6} md={3}>
+                                                                        <AnalyticsWidgetSummary
+                                                                            title="Agenda Cerrados"
+                                                                            total={dataContAgendaPorCerrar}
+                                                                            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png"/>}
+                                                                        />
+                                                                    </Grid>
+                                                                    <Grid item xs={12} sm={6} md={3}>
+                                                                        <AnalyticsWidgetSummary
+                                                                            title="Agenda Abiertos"
+                                                                            total={dataContAgendaCErrado}
+                                                                            color="error"
+                                                                            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png"/>}
+                                                                        />
+                                                                    </Grid>
+                                                                </Grid>
+
+                                                            </Card>
+
+                                                            <Card sx={{
+                                                                p: 5
+                                                            }}
+                                                            >
+                                                                <DataGrid
+                                                                    rows={businessPartners}
+                                                                    columns={baseColumns}
+                                                                    pagination
+                                                                    slots={{
+                                                                        toolbar: CustomToolbar,
+                                                                        noRowsOverlay: () => <EmptyContent title="No Data"/>,
+                                                                        noResultsOverlay: () => <EmptyContent title="No results found"/>,
+                                                                    }}
+                                                                />
+
+                                                                {user && partner && (
+                                                                    <CustomerQuickManagementForm
+                                                                        currentPartner={partner}
+                                                                        open={quickEdit.value}
+                                                                        onClose={quickEdit.onFalse}/>
+                                                                )}
+
+                                                                {user && partner && (
+                                                                    <PreviousClientManagement
+                                                                        userID={user.ID}
+                                                                        currentPartner={partner}
+                                                                        open={quickPCM.value}
+                                                                        onClose={quickPCM.onFalse}/>
+                                                                )}
+
+                                                                {user && partner && (
+                                                                    <InvoicedClientOrders
+                                                                        userID={user.ID}
+                                                                        currentPartner={partner}
+                                                                        open={quickICO.value}
+                                                                        onClose={quickICO.onFalse}/>
+                                                                )}
+
+                                                                {user && dataCliente && (
+                                                                    <CustomerData
+                                                                        userID={user.ID}
+                                                                        currentPartner={dataCliente}
+                                                                        open={quickDC.value}
+                                                                        onClose={quickDC.onFalse}/>
+                                                                )}
+
+                                                                {user && partner && (
+                                                                    <CustomerLocationMap
+                                                                        currentPartner={partner}
+                                                                        open={quickCLM.value}
+                                                                        onClose={quickCLM.onFalse}/>
+                                                                )}
+
+                                                            </Card>
+
+
+
+
+
+
+                                                            <Card sx={{
+                                                                p: 5
+                                                            }}
+                                                            >
+                                                                <CalendarView onValorCambiado={handleValorCambiado}/>
+
+                                                            </Card>
+                                                        </div>;
+                                                    case 'otro-criterio':
+                                                        return <div>Otro criterio</div>;
+                                                    default:
+                                                        return null;
+                                                }
+                                            })()}
+                                        </Box>
+                                    )
+                            )}
+                        </Stack>
+                    </Block>
+
 
                 </Card>
 
@@ -619,7 +884,7 @@ function CustomToolbar() {
 // ----------------------------------------------------------------------
 
 
-const StatCard = ({ title, total, color, icon }) => {
+const StatCard = ({title, total, color, icon}) => {
     return (
         <Card
             sx={{
