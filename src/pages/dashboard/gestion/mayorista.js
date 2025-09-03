@@ -552,7 +552,7 @@ export default function MayoristaPage(callback, deps) {
                                                             <Grid container spacing={3}>
                                                                 <Grid item xs={12} sm={6} md={3}>
                                                                     <StatCard
-                                                                        title="Por Gestionar"
+                                                                        title="Pudes vender a: "
                                                                         total={
                                                                             businessPartners && businessPartners.length
                                                                                 ? businessPartners.length

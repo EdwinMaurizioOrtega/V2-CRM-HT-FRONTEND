@@ -4,13 +4,14 @@ import Head from "next/head";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
 import {PATH_DASHBOARD} from "../../../routes/paths";
 import {
+    Badge,
     Box,
     Button,
     Card,
     CardContent,
     Container,
-    Grid,
-    LinearProgress
+    Grid, IconButton,
+    LinearProgress, MenuItem, TableCell, TextField, Tooltip
 } from "@mui/material";
 import {useSettingsContext} from "../../../components/settings";
 import {useRouter} from "next/router";
@@ -24,6 +25,11 @@ import {
 } from "@mui/x-data-grid";
 import axios from "../../../utils/axios";
 import {useAuthContext} from "../../../auth/useAuthContext";
+import Iconify from "../../../components/iconify";
+import MenuPopover from "../../../components/menu-popover";
+import ConfirmDialog from "../../../components/confirm-dialog";
+import NotificationsIcon from '@mui/icons-material/Notifications';
+
 
 CargarArchivosCreditoPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
@@ -41,9 +47,70 @@ export default function CargarArchivosCreditoPage() {
     const [businessPartners, setBusinessPartners] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const [openPopover, setOpenPopover] = useState(null);
+    const [openOBS, setOpenOBS] = useState(false);
+    const [valueNewOBS, setValueNewOBS] = useState('Ninguno..');
+// Estado para guardar el ID seleccionado
+    const [selectedIdEmpresa, setSelectedIdEmpresa] = useState(null);
+    const handleChangeOBS = (event) => {
+        setValueNewOBS(event.target.value);
+        // //console.log(`Nuevo precio unitario ${valueNew}`);
+    };
+
+    const handleCloseOBS = () => {
+        setOpenOBS(false);
+    };
+    const handleOpenPopover = (event, params) => {
+        setOpenPopover(event.currentTarget);
+        //console.log( JSON.stringify( params.row.ID_EMPRESA));
+        // Guardamos el ID de la fila seleccionada
+        setSelectedIdEmpresa(params.row.ID_EMPRESA);
+    };
+
+    const handleClosePopover = () => {
+        setOpenPopover(null);
+    };
+
+    const handleOpenOBS = () => {
+        setOpenOBS(true);
+    };
+
     // Define las columnas para el DataGrid
     const baseColumns = [
-        {field: 'id', headerName: 'ID', width: 90},
+
+        {
+            type: 'actions',
+            field: 'actions',
+            headerName: 'ACCIONES',
+            align: 'center',
+            headerAlign: 'center',
+            width: 120,
+            sortable: false,
+            filterable: false,
+            disableColumnMenu: true,
+            getActions: (params) => [
+                <TableCell align="right">
+                    <IconButton color={openPopover ? 'inherit' : 'default'} onClick={(event) =>handleOpenPopover(event, params)}>
+                        <Iconify icon="eva:more-vertical-fill"/>
+                    </IconButton>
+                    {params.row.OBSERVACIONES_CREDITO
+                        && params.row.OBSERVACIONES_CREDITO !== "<NULL>"
+                        && (
+                            <Tooltip title={params.row.OBSERVACIONES_CREDITO}>
+                                <IconButton color="primary" sx={{ width: 40, height: 40 }}>
+                                    <Badge badgeContent={1} color="error">
+                                        <NotificationsIcon />
+                                    </Badge>
+                                </IconButton>
+                            </Tooltip>
+                        )}
+
+                </TableCell>
+
+            ],
+        },
+
+        // {field: 'id', headerName: 'ID', width: 90},
         {field: 'CREATED_AT', headerName: 'CREACIÓN', width: 250},
         {field: 'DISPLAYNAME', headerName: 'VENDEDOR', width: 350},
         {field: 'RUC', headerName: 'RUC', width: 200},
@@ -210,6 +277,38 @@ export default function CargarArchivosCreditoPage() {
         fetchData();
     }, [user]); // Dependencia: se ejecuta al montar y cuando cambie user
 
+    const onRowOBS = async () => {
+        console.log("Número ID_EMPRESA: " + selectedIdEmpresa);
+        console.log("Observación de cartera: " + valueNewOBS);
+        console.log("USER_ID: " + user?.ID);
+
+        try {
+            const response = await axios.put('/hanadb/api/customers/obs_cartera_uanataca', {
+                ID_REGISTRO: selectedIdEmpresa,
+                OBS: valueNewOBS,
+                USER_ID: Number(user?.ID),
+            });
+
+            // Comprobar si la petición DELETE se realizó correctamente pero no se recibe una respuesta del servidor
+            //console.log('Cambiando estado');
+            //console.log("Código de estado:", response.status);
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+
+                //setTimeout(() => {
+                router.reload();
+                //}, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
+            }
+
+        } catch (error) {
+            // Manejar el error de la petición DELETE aquí
+            console.error('Error al cambiar el status de la orden:', error);
+        }
+
+
+    };
+
     return (
         <>
             <Head>
@@ -249,6 +348,48 @@ export default function CargarArchivosCreditoPage() {
 
                                     }}
                                     loading={loading} // Activa el loading
+                                />
+
+
+
+                                <MenuPopover
+                                    open={openPopover}
+                                    onClose={handleClosePopover}
+                                    arrow="right-top"
+                                    sx={{width: 160}}
+                                >
+                                    <MenuItem
+                                        onClick={() => {
+                                            handleOpenOBS();
+                                            handleClosePopover();
+                                        }}
+                                    >
+                                        <Iconify icon="eva:shopping-bag-outline"/>
+                                        Observación
+                                    </MenuItem>
+
+
+                                </MenuPopover>
+
+
+                                <ConfirmDialog
+                                    open={openOBS}
+                                    onClose={handleCloseOBS}
+                                    title="Observación Cartera (UANATACA)"
+                                    action={
+                                        <>
+                                            <TextField
+                                                label="Nota"
+                                                value={valueNewOBS}
+                                                onChange={handleChangeOBS}
+                                            />
+                                            <Button variant="contained" color="error" onClick={() => {
+                                                onRowOBS();
+                                            }}>
+                                                Guardar.
+                                            </Button>
+                                        </>
+                                    }
                                 />
                             </CardContent>
 

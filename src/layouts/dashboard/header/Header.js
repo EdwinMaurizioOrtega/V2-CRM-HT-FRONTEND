@@ -22,6 +22,7 @@ import NotificationsPopover from './NotificationsPopover';
 import {_workspaces} from "../../nav-config-workspace";
 import {WorkspacesPopover} from "../../components/workspaces-popover";
 import {useAuthContext} from "../../../auth/useAuthContext";
+import NotificationsButton from "../../../components/NotificationsButton/NotificationsButton";
 
 // ----------------------------------------------------------------------
 
@@ -73,6 +74,7 @@ export default function Header({onOpenNav}) {
                 {/* <LanguagePopover /> */}
 
                 {/* <NotificationsPopover /> */}
+                <NotificationsButton/>
 
                 {/* <ContactsPopover /> */}
 

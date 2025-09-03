@@ -55,26 +55,27 @@ export const _contacts = [...Array(20)].map((_, index) => ({
 // ----------------------------------------------------------------------
 
 export const _notifications = [...Array(5)].map((_, index) => ({
-  id: _mock.id(index),
-  title: [
-    'Your order is placed',
-    'Sylvan King',
-    'You have new message',
-    'You have new mail',
-    'Delivery processing',
-  ][index],
-  description: [
-    'waiting for shipping',
-    'answered to your comment on the Minimal',
-    '5 unread messages',
-    'sent from Guido Padberg',
-    'Your order is being shipped',
-  ][index],
-  avatar: [null, _mock.image.avatar(2), null, null, null][index],
-  type: ['order_placed', 'friend_interactive', 'chat_message', 'mail', 'order_shipped'][index],
-  createdAt: _mock.time(index),
-  isUnRead: [true, true, false, false, false][index],
+    id: _mock.id(index),
+    title: [
+        'Tu pedido ha sido realizado',
+        'Sylvan King',
+        'Tienes un nuevo mensaje',
+        'Tienes un nuevo correo',
+        'Procesando entrega',
+    ][index],
+    description: [
+        'esperando envío',
+        'respondió a tu comentario en Minimal',
+        '5 mensajes sin leer',
+        'enviado por Guido Padberg',
+        'Tu pedido está siendo enviado',
+    ][index],
+    avatar: [null, _mock.image.avatar(2), null, null, null][index],
+    type: ['order_placed', 'friend_interactive', 'chat_message', 'mail', 'order_shipped'][index],
+    createdAt: _mock.time(index),
+    isUnRead: [true, true, false, false, false][index],
 }));
+
 
 // ----------------------------------------------------------------------
 

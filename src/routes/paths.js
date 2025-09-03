@@ -40,6 +40,7 @@ export const PATH_DASHBOARD = {
     calendar: path(ROOTS_DASHBOARD, '/calendar'),
     fileManager: path(ROOTS_DASHBOARD, '/files-manager'),
     permissionDenied: path(ROOTS_DASHBOARD, '/permission-denied'),
+    notifications_page:path(ROOTS_DASHBOARD, '/notifications-page'),
     blank: path(ROOTS_DASHBOARD, '/blank'),
     general: {
         app: path(ROOTS_DASHBOARD, '/app'),
