@@ -10,7 +10,7 @@ import {
     MenuItem,
     TableCell,
     IconButton,
-    Typography, TextField, Tooltip, Avatar, CardContent, Autocomplete, Box,
+    Typography, TextField, Tooltip, Avatar, CardContent, Autocomplete, Box, Badge,
 } from '@mui/material';
 // components
 import Label from '../../../../components/label';
@@ -25,6 +25,7 @@ import {PAYMENT_OPTIONS_V2, TABULAR_ANULAR_PEDIDOS} from "../../../../utils/cons
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import {top100FilmsMovilCelistic} from "../details";
 import {PATH_DASHBOARD} from "../../../../routes/paths";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 
 // ----------------------------------------------------------------------
 
@@ -519,7 +520,7 @@ export default function InvoiceTableRow({
                         <div>
                             <Typography variant="subtitle2" noWrap>
                                 {VENDEDOR.split(" ").map((word, index) =>
-                                    index === 2 ? <><br />{word} </> : word + " "
+                                    index === 2 ? <><br/>{word} </> : word + " "
                                 )}
                             </Typography>
 
@@ -531,17 +532,30 @@ export default function InvoiceTableRow({
                             >
                                 {`INV-${ID}`}
                             </Link>
+                            {NUMEROFACTURAE4 && (
+                                <Tooltip title={NUMEROFACTURAE4}>
+                                    <IconButton color="primary" sx={{width: 40, height: 40}}>
+                                        <Badge badgeContent={1} color="error">
+                                            <NotificationsIcon/>
+                                        </Badge>
+                                    </IconButton>
+                                </Tooltip>
+                            )}
                         </div>
 
                     </Stack>
                 </TableCell>
-                <TableCell align="left">
-                    {NUMEROFACTURAE4 && (
-                        <Tooltip title={NUMEROFACTURAE4} sx={{maxWidth: 500}}>
-                            <Button color="inherit">🤔</Button>
-                        </Tooltip>
-                    )}
-                </TableCell>
+                {/* <TableCell align="left"> */}
+                {/*     {NUMEROFACTURAE4 && ( */}
+                {/*         <Tooltip title={NUMEROFACTURAE4}> */}
+                {/*             <IconButton color="primary" sx={{width: 40, height: 40}}> */}
+                {/*                 <Badge badgeContent={1} color="error"> */}
+                {/*                     <NotificationsIcon/> */}
+                {/*                 </Badge> */}
+                {/*             </IconButton> */}
+                {/*         </Tooltip> */}
+                {/*     )} */}
+                {/* </TableCell> */}
                 <TableCell align="left">
                     <Label
                         variant="soft"
@@ -690,7 +704,7 @@ export default function InvoiceTableRow({
                 <TableCell align="left">
                     {OBSERVACION_ANULACION && (
                         <Tooltip title={OBSERVACION_ANULACION} sx={{maxWidth: 500}}>
-                            <Button color="inherit" sx={{ fontSize: '2rem' }}>☹️</Button>
+                            <Button color="inherit" sx={{fontSize: '2rem'}}>☹️</Button>
                         </Tooltip>
                     )}
                 </TableCell>

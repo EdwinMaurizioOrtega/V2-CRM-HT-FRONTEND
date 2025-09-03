@@ -62,7 +62,7 @@ const SERVICE_OPTIONS = [
 const TABLE_HEAD = [
     {id: 'detalle', label: 'Detalle', align: 'left'},
     {id: 'ID', label: 'Orden', align: 'left'},
-    {id: 'NUMEROFACTURAE4', label: 'NOTA', align: 'left'},
+    // {id: 'NUMEROFACTURAE4', label: 'NOTA', align: 'left'},
     {id: 'ESTADO', label: 'Estado', align: 'left'},
     // {id: 'BODEGA', label: 'Bodega', align: 'left'},
     // {id: 'FORMADEPAGO', label: 'FPago', align: 'left'},
