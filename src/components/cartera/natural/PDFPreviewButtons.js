@@ -268,7 +268,7 @@ export default function PDFPreviewButtons(data) {
 
                 //Guardamos en la base de datos.
                 try {
-                    const response = await axios.post(`/hanadb/api/customers/guardar_session_id_uanataca`, {
+                    const response = await axios.post(`/hanadb/api/customers/guardar_session_id_uanataca_pagare`, {
                         session_id: sessionId,
                         sso: sso,
                         empresa_id: data.data.empresa.ID_EMPRESA

@@ -156,9 +156,20 @@ export default function CargarArchivosCreditoPage() {
         },
         {
             field: 'verFirma',
-            headerName: 'COPIAR ENLACE FIRMA',
+            headerName: 'COPIAR ENLACE FIRMA SOLICITUD+AUTORIZACION',
             flex: 1,
             minWidth: 180,
+            renderHeader: () => (
+        <Box sx={{
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            textAlign: 'center',
+            lineHeight: 1.2,
+            fontWeight: 'bold'
+        }}>
+            COPIAR ENLACE FIRMA SOLICITUD+AUTORIZACION
+        </Box>
+    ),
             renderCell: (params) => {
 
                 const SOO = params.row.SOO;
@@ -172,7 +183,45 @@ export default function CargarArchivosCreditoPage() {
                         component="label"
                         variant="outlined"
                         onClick={() => {
-                            VerFirmaUanataca(params);
+                            VerFirmaUanataca(SOO);
+                        }}
+                    >
+                        COPIAR ENLACE
+                    </Button>
+                );
+            },
+        },
+
+        {
+            field: 'verFirmaPagare',
+            headerName: 'COPIAR ENLACE FIRMA PAGARE',
+            flex: 1,
+            minWidth: 180,
+            renderHeader: () => (
+        <Box sx={{
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            textAlign: 'center',
+            lineHeight: 1.2,
+            fontWeight: 'bold'
+        }}>
+            COPIAR ENLACE FIRMA PAGARE
+        </Box>
+    ),
+            renderCell: (params) => {
+
+                const SOO_PAGARE = params.row.SOO_PAGARE;
+                // Si viene null, undefined, vacío o como "<NULL>" => no mostramos el botón
+                if (!SOO_PAGARE || SOO_PAGARE === "<NULL>") {
+                    return null;
+                }
+
+                return (
+                    <Button
+                        component="label"
+                        variant="outlined"
+                        onClick={() => {
+                            VerFirmaUanataca(SOO_PAGARE);
                         }}
                     >
                         COPIAR ENLACE
@@ -224,15 +273,9 @@ export default function CargarArchivosCreditoPage() {
     }
 
 
-    const VerFirmaUanataca = (row) => {
-
-        const SOO = row.row.SOO;
-        if (!SOO) {
-            alert("Aún no se genera el enlace por el área de crédito.");
-            return;
-        }
-
-        const url = `https://hypertronics.nexxit.dev/#sso/${row.row.SOO}`;
+    const VerFirmaUanataca = (dato) => {
+        //console.log(dato);
+        const url = `https://hypertronics.nexxit.dev/#sso/${dato}`;
 
         navigator.clipboard.writeText(url)
             .then(() => {
