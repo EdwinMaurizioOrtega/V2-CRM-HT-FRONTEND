@@ -114,7 +114,8 @@ export default function CargarArchivosCreditoPage() {
         {field: 'CREATED_AT', headerName: 'CREACIÓN', width: 250},
         {field: 'DISPLAYNAME', headerName: 'VENDEDOR', width: 350},
         {field: 'RUC', headerName: 'RUC', width: 200},
-        {field: 'NOMBRE', headerName: 'NOMBRE', width: 250},
+        {field: 'NOMBRE', headerName: 'NOMBRE_EMPRESARIAL', width: 300},
+        {field: 'NOMBRE_REPRESENTANTE', headerName: 'NOMBRE_REPRESENTANTE', width: 400},
         {field: 'TIPO_PERSONA', headerName: 'T_P', width: 100},
         {
             field: 'VER INFORMACIÓN',
