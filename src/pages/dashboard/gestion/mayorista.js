@@ -1,7 +1,7 @@
 // next
 import Head from 'next/head';
 // @mui
-import {alpha} from '@mui/material/styles';
+import { alpha } from '@mui/material/styles';
 import {
     Container,
     Typography,
@@ -17,9 +17,9 @@ import {
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
 // components
-import {useSettingsContext} from '../../../components/settings';
+import { useSettingsContext } from '../../../components/settings';
 import EmptyContent from "../../../components/empty-content";
-import React, {useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState} from "react";
+import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import {
     DataGrid, GridActionsCellItem, GridToolbar,
     GridToolbarColumnsButton,
@@ -31,22 +31,22 @@ import PropTypes from "prop-types";
 import _mock from "../../../_mock";
 import Label from "../../../components/label";
 import Iconify from "../../../components/iconify";
-import {fCurrency, fPercent} from "../../../utils/formatNumber";
+import { fCurrency, fPercent } from "../../../utils/formatNumber";
 import axios from "../../../utils/axios";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
-import {PATH_DASHBOARD} from "../../../routes/paths";
-import {useBoolean} from "../../../hooks/use-boolean";
+import { PATH_DASHBOARD } from "../../../routes/paths";
+import { useBoolean } from "../../../hooks/use-boolean";
 import CustomerQuickManagementForm from "../../../sections/@dashboard/gestion/customer-quick-management-form";
 import PreviousClientManagement from "../../../sections/@dashboard/gestion/previous-client-management";
 import InvoicedClientOrders from "../../../sections/@dashboard/gestion/invoiced-client-orders";
-import {useAuthContext} from "../../../auth/useAuthContext";
+import { useAuthContext } from "../../../auth/useAuthContext";
 import CalendarView from "../../../sections/calendar/view/calendar";
-import {AnalyticsWidgetSummary} from "../../../sections/@dashboard/general/analytics";
-import {Space_Mono} from "@next/font/google";
-import {TIPO_CREDITO} from "../../../utils/constants";
+import { AnalyticsWidgetSummary } from "../../../sections/@dashboard/general/analytics";
+import { Space_Mono } from "@next/font/google";
+import { TIPO_CREDITO } from "../../../utils/constants";
 import CustomerData from "../../../sections/@dashboard/gestion/customer-data";
 import CustomerLocationMap from "../../../sections/@dashboard/gestion/customer-location-map";
-import {Block} from "../../../sections/_examples/Block";
+import { Block } from "../../../sections/_examples/Block";
 
 // ----------------------------------------------------------------------
 
@@ -54,27 +54,27 @@ MayoristaPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 export const rangos = [
-    {title: "0-15 días", id: "01", icon: "solar:calendar-date-bold"},
-    {title: "16-30 días", id: "02", icon: "solar:calendar-bold"},
-    {title: "31-60 días", id: "03", icon: "solar:clock-circle-bold"},
-    {title: "61-90 días", id: "04", icon: "solar:hourglass-bold"},
-    {title: "91-180 días", id: "05", icon: "solar:calendar-add-bold"},
-    {title: "180-360 días", id: "06", icon: "solar:calendar-mark-bold"},
-    {title: "+360 días", id: "07", icon: "solar:infinity-bold-duotone"},
+    { title: "0-15 días", id: "01", icon: "solar:calendar-date-bold" },
+    { title: "16-30 días", id: "02", icon: "solar:calendar-bold" },
+    { title: "31-60 días", id: "03", icon: "solar:clock-circle-bold" },
+    { title: "61-90 días", id: "04", icon: "solar:hourglass-bold" },
+    { title: "91-180 días", id: "05", icon: "solar:calendar-add-bold" },
+    { title: "180-360 días", id: "06", icon: "solar:calendar-mark-bold" },
+    { title: "+360 días", id: "07", icon: "solar:infinity-bold-duotone" },
     // { title: "Nunca", id: "08", icon: "solar:close-circle-bold" },
 ];
 
 const TABS = [
-    {value: 'ultima-factura', label: 'Última Factura'},
-    {value: 'medio-de-contacto', label: 'Medio de Contacto'},
-    {value: 'otro-criterio', label: 'Otro Criterio'},
+    { value: 'ultima-factura', label: 'Última Factura' },
+    { value: 'medio-de-contacto', label: 'Medio de Contacto' },
+    { value: 'otro-criterio', label: 'Otro Criterio' },
 ];
 
 export default function MayoristaPage(callback, deps) {
 
-    const {user} = useAuthContext();
+    const { user } = useAuthContext();
 
-    const {themeStretch} = useSettingsContext();
+    const { themeStretch } = useSettingsContext();
 
     const [selected, setSelected] = useState(null);
 
@@ -108,7 +108,7 @@ export default function MayoristaPage(callback, deps) {
         alignItems: 'center',
         justifyContent: 'center',
         flexWrap: 'wrap',
-        '& > *': {mx: '8px !important'},
+        '& > *': { mx: '8px !important' },
     };
 
     const baseColumns = [
@@ -126,31 +126,31 @@ export default function MayoristaPage(callback, deps) {
 
                 <GridActionsCellItem
                     showInMenu
-                    icon={<Iconify icon="solar:pen-broken"/>}
+                    icon={<Iconify icon="solar:pen-broken" />}
                     label="Registar Gestión"
                     onClick={() => handleViewRow(params.row)}
                 />,
                 <GridActionsCellItem
                     showInMenu
-                    icon={<Iconify icon="solar:eye-broken"/>}
+                    icon={<Iconify icon="solar:eye-broken" />}
                     label="Gestiones Anteriores"
                     onClick={() => handleViewManagementRow(params.row)}
                 />,
                 <GridActionsCellItem
                     showInMenu
-                    icon={<Iconify icon="solar:paperclip-rounded-outline"/>}
+                    icon={<Iconify icon="solar:paperclip-rounded-outline" />}
                     label="Histórico Órdenes"
                     onClick={() => handleViewOrdersRow(params.row)}
                 />,
                 <GridActionsCellItem
                     showInMenu
-                    icon={<Iconify icon="solar:maximize-square-3-linear"/>}
+                    icon={<Iconify icon="solar:maximize-square-3-linear" />}
                     label="Datos del Cliente"
                     onClick={() => handleViewDataCustomerRow(params.row)}
                 />,
                 <GridActionsCellItem
                     showInMenu
-                    icon={<Iconify icon="solar:map-point-favourite-linear"/>}
+                    icon={<Iconify icon="solar:map-point-favourite-linear" />}
                     label="Google Maps"
                     onClick={() => handleViewCustomerLocationMapRow(params.row)}
                 />,
@@ -335,7 +335,7 @@ export default function MayoristaPage(callback, deps) {
             }
 
         } catch
-            (error) {
+        (error) {
             // Manejar el error de la petición PUT aquí
             console.error('Error al actualizar la orden:', error);
         }
@@ -475,10 +475,10 @@ export default function MayoristaPage(callback, deps) {
 
 
                     <Block title="Gestión por:" sx={style}>
-                        <Stack spacing={2} sx={{width: 1}}>
+                        <Stack spacing={2} sx={{ width: 1 }}>
                             <Tabs value={currentTab} onChange={(event, newValue) => setCurrentTab(newValue)}>
                                 {TABS.slice(0, 3).map((tab) => (
-                                    <Tab key={tab.value} value={tab.value} label={tab.label}/>
+                                    <Tab key={tab.value} value={tab.value} label={tab.label} />
                                 ))}
                             </Tabs>
 
@@ -487,7 +487,7 @@ export default function MayoristaPage(callback, deps) {
                                     tab.value === currentTab && (
                                         <Box
                                             key={tab.value}
-                                            sx={{p: 2, borderRadius: 1, bgcolor: 'background.neutral'}}
+                                            sx={{ p: 2, borderRadius: 1, bgcolor: 'background.neutral' }}
                                         >
                                             {(() => {
                                                 switch (currentTab) {
@@ -510,7 +510,7 @@ export default function MayoristaPage(callback, deps) {
                                                                             onClick={(e) => handleClick(e, rango, 1)}
                                                                             label={
                                                                                 <Stack direction="row" alignItems="center"
-                                                                                       spacing={1}>
+                                                                                    spacing={1}>
                                                                                     <Iconify
                                                                                         icon={rango.icon}
                                                                                         width={18}
@@ -550,25 +550,52 @@ export default function MayoristaPage(callback, deps) {
 
                                                             {/* Métricas tipo dashboard */}
                                                             <Grid container spacing={3}>
-                                                                <Grid item xs={12} sm={6} md={3}>
-                                                                    <StatCard
-                                                                        title="Pudes vender a: "
-                                                                        total={
-                                                                            businessPartners && businessPartners.length
-                                                                                ? businessPartners.length
-                                                                                : 0
-                                                                        }
-                                                                        color="info"
-                                                                        icon={
+                                                                <Grid item xs={12} sm={12} md={12}>
+                                                                    <Box
+                                                                        sx={{
+                                                                            width: '100%',
+                                                                            textAlign: 'center',
+                                                                            p: 3,
+                                                                            borderRadius: 2,
+                                                                            boxShadow: 2,
+                                                                            bgcolor: 'background.paper',
+                                                                        }}
+                                                                    >
+                                                                        <span style={{
+                                                                            display: 'inline-block',
+                                                                            marginBottom: 12,
+                                                                            borderRadius: '50%',
+                                                                            background: '#e3f2fd',
+                                                                            padding: 12,
+                                                                        }}>
                                                                             <img
                                                                                 alt="icon"
                                                                                 src="/assets/icons/glass/ic_glass_users.png"
                                                                                 width={28}
                                                                             />
-                                                                        }
-                                                                    />
+                                                                        </span>
+                                                                        <span style={{
+                                                                            display: 'block',
+                                                                            fontSize: '1rem',
+                                                                            color: '#757575',
+                                                                            marginBottom: 4,
+                                                                            fontWeight: 500,
+                                                                        }}>
+                                                                            Prospectos a gestionar:
+                                                                        </span>
+                                                                        <span style={{
+                                                                            display: 'block',
+                                                                            fontSize: '2rem',
+                                                                            fontWeight: 'bold',
+                                                                            color: '#000000ff',
+                                                                        }}>
+                                                                            {businessPartners && businessPartners.length ? businessPartners.length : 0}
+                                                                        </span>
+                                                                    </Box>
                                                                 </Grid>
                                                             </Grid>
+
+                                                            <Divider sx={{ my: 3 }} />
 
                                                             <Card sx={{
                                                                 p: 5
@@ -581,9 +608,9 @@ export default function MayoristaPage(callback, deps) {
                                                                     slots={{
                                                                         toolbar: CustomToolbar,
                                                                         noRowsOverlay: () => <EmptyContent
-                                                                            title="No Data"/>,
+                                                                            title="No Data" />,
                                                                         noResultsOverlay: () => <EmptyContent
-                                                                            title="No results found"/>,
+                                                                            title="No results found" />,
                                                                     }}
                                                                 />
 
@@ -591,7 +618,7 @@ export default function MayoristaPage(callback, deps) {
                                                                     <CustomerQuickManagementForm
                                                                         currentPartner={partner}
                                                                         open={quickEdit.value}
-                                                                        onClose={quickEdit.onFalse}/>
+                                                                        onClose={quickEdit.onFalse} />
                                                                 )}
 
                                                                 {user && partner && (
@@ -599,7 +626,7 @@ export default function MayoristaPage(callback, deps) {
                                                                         userID={user.ID}
                                                                         currentPartner={partner}
                                                                         open={quickPCM.value}
-                                                                        onClose={quickPCM.onFalse}/>
+                                                                        onClose={quickPCM.onFalse} />
                                                                 )}
 
                                                                 {user && partner && (
@@ -607,7 +634,7 @@ export default function MayoristaPage(callback, deps) {
                                                                         userID={user.ID}
                                                                         currentPartner={partner}
                                                                         open={quickICO.value}
-                                                                        onClose={quickICO.onFalse}/>
+                                                                        onClose={quickICO.onFalse} />
                                                                 )}
 
                                                                 {user && dataCliente && (
@@ -615,14 +642,14 @@ export default function MayoristaPage(callback, deps) {
                                                                         userID={user.ID}
                                                                         currentPartner={dataCliente}
                                                                         open={quickDC.value}
-                                                                        onClose={quickDC.onFalse}/>
+                                                                        onClose={quickDC.onFalse} />
                                                                 )}
 
                                                                 {user && partner && (
                                                                     <CustomerLocationMap
                                                                         currentPartner={partner}
                                                                         open={quickCLM.value}
-                                                                        onClose={quickCLM.onFalse}/>
+                                                                        onClose={quickCLM.onFalse} />
                                                                 )}
 
                                                             </Card>
@@ -656,7 +683,7 @@ export default function MayoristaPage(callback, deps) {
                                                                             handleClick(event, value, 0);
                                                                         }} // Add onChange event handler
                                                                         renderInput={(params) => <TextField {...params} label="Filtrar por rango"
-                                                                                                            margin="none"/>}
+                                                                            margin="none" />}
                                                                     />
 
 
@@ -746,7 +773,7 @@ export default function MayoristaPage(callback, deps) {
                                                                                 businessPartners && businessPartners.length ? businessPartners.length : 0
                                                                             }
                                                                             color="info"
-                                                                            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png"/>}
+                                                                            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
                                                                         />
                                                                     </Grid>
 
@@ -755,14 +782,14 @@ export default function MayoristaPage(callback, deps) {
                                                                             title="Total Agenda"
                                                                             total={dataContAgenda}
                                                                             color="warning"
-                                                                            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png"/>}
+                                                                            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
                                                                         />
                                                                     </Grid>
                                                                     <Grid item xs={12} sm={6} md={3}>
                                                                         <AnalyticsWidgetSummary
                                                                             title="Agenda Cerrados"
                                                                             total={dataContAgendaPorCerrar}
-                                                                            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png"/>}
+                                                                            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
                                                                         />
                                                                     </Grid>
                                                                     <Grid item xs={12} sm={6} md={3}>
@@ -770,7 +797,7 @@ export default function MayoristaPage(callback, deps) {
                                                                             title="Agenda Abiertos"
                                                                             total={dataContAgendaCErrado}
                                                                             color="error"
-                                                                            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png"/>}
+                                                                            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
                                                                         />
                                                                     </Grid>
                                                                 </Grid>
@@ -787,8 +814,8 @@ export default function MayoristaPage(callback, deps) {
                                                                     pagination
                                                                     slots={{
                                                                         toolbar: CustomToolbar,
-                                                                        noRowsOverlay: () => <EmptyContent title="No Data"/>,
-                                                                        noResultsOverlay: () => <EmptyContent title="No results found"/>,
+                                                                        noRowsOverlay: () => <EmptyContent title="No Data" />,
+                                                                        noResultsOverlay: () => <EmptyContent title="No results found" />,
                                                                     }}
                                                                 />
 
@@ -796,7 +823,7 @@ export default function MayoristaPage(callback, deps) {
                                                                     <CustomerQuickManagementForm
                                                                         currentPartner={partner}
                                                                         open={quickEdit.value}
-                                                                        onClose={quickEdit.onFalse}/>
+                                                                        onClose={quickEdit.onFalse} />
                                                                 )}
 
                                                                 {user && partner && (
@@ -804,7 +831,7 @@ export default function MayoristaPage(callback, deps) {
                                                                         userID={user.ID}
                                                                         currentPartner={partner}
                                                                         open={quickPCM.value}
-                                                                        onClose={quickPCM.onFalse}/>
+                                                                        onClose={quickPCM.onFalse} />
                                                                 )}
 
                                                                 {user && partner && (
@@ -812,7 +839,7 @@ export default function MayoristaPage(callback, deps) {
                                                                         userID={user.ID}
                                                                         currentPartner={partner}
                                                                         open={quickICO.value}
-                                                                        onClose={quickICO.onFalse}/>
+                                                                        onClose={quickICO.onFalse} />
                                                                 )}
 
                                                                 {user && dataCliente && (
@@ -820,14 +847,14 @@ export default function MayoristaPage(callback, deps) {
                                                                         userID={user.ID}
                                                                         currentPartner={dataCliente}
                                                                         open={quickDC.value}
-                                                                        onClose={quickDC.onFalse}/>
+                                                                        onClose={quickDC.onFalse} />
                                                                 )}
 
                                                                 {user && partner && (
                                                                     <CustomerLocationMap
                                                                         currentPartner={partner}
                                                                         open={quickCLM.value}
-                                                                        onClose={quickCLM.onFalse}/>
+                                                                        onClose={quickCLM.onFalse} />
                                                                 )}
 
                                                             </Card>
@@ -841,7 +868,7 @@ export default function MayoristaPage(callback, deps) {
                                                                 p: 5
                                                             }}
                                                             >
-                                                                <CalendarView onValorCambiado={handleValorCambiado}/>
+                                                                <CalendarView onValorCambiado={handleValorCambiado} />
 
                                                             </Card>
                                                         </div>;
@@ -871,12 +898,12 @@ export default function MayoristaPage(callback, deps) {
 function CustomToolbar() {
     return (
         <GridToolbarContainer>
-            <GridToolbarQuickFilter/>
-            <Box sx={{flexGrow: 1}}/>
-            <GridToolbarColumnsButton/>
-            <GridToolbarFilterButton/>
-            <GridToolbarDensitySelector/>
-            <GridToolbarExport/>
+            <GridToolbarQuickFilter />
+            <Box sx={{ flexGrow: 1 }} />
+            <GridToolbarColumnsButton />
+            <GridToolbarFilterButton />
+            <GridToolbarDensitySelector />
+            <GridToolbarExport />
         </GridToolbarContainer>
     );
 }
@@ -884,7 +911,7 @@ function CustomToolbar() {
 // ----------------------------------------------------------------------
 
 
-const StatCard = ({title, total, color, icon}) => {
+const StatCard = ({ title, total, color, icon }) => {
     return (
         <Card
             sx={{
