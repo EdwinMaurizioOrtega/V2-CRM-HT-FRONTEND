@@ -47,7 +47,14 @@ import { TIPO_CREDITO } from "../../../utils/constants";
 import CustomerData from "../../../sections/@dashboard/gestion/customer-data";
 import CustomerLocationMap from "../../../sections/@dashboard/gestion/customer-location-map";
 import { Block } from "../../../sections/_examples/Block";
-
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import AutorenewIcon from "@mui/icons-material/Autorenew";
+import CancelIcon from "@mui/icons-material/Cancel";
+import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import CustomerReasignarCliente from 'src/sections/@dashboard/gestion/customer-reasignar-cliente';
 // ----------------------------------------------------------------------
 
 MayoristaPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -66,9 +73,77 @@ export const rangos = [
 
 const TABS = [
     { value: 'ultima-factura', label: 'Última Factura' },
-    { value: 'medio-de-contacto', label: 'Medio de Contacto' },
+    { value: 'medio-de-contacto', label: 'Vendedor asignado en Socios de Negocio / Medio de Contacto' },
     { value: 'otro-criterio', label: 'Otro Criterio' },
 ];
+
+function CountdownCell({ value }) {
+  const [timeLeft, setTimeLeft] = useState("");
+  const [color, setColor] = useState("default");
+  const [icon, setIcon] = useState(null);
+
+  useEffect(() => {
+    if (!value) {
+      setTimeLeft("Aún no carga el pagaré");
+      setColor("default");
+      setIcon(<HourglassEmptyIcon />);
+      return;
+    }
+
+    const target = new Date(value);
+
+    const tick = () => {
+      if (isNaN(target.getTime())) {
+        setTimeLeft("Fecha inválida");
+        setColor("default");
+        setIcon(<HelpOutlineIcon />);
+        return;
+      }
+
+      const diff = target.getTime() - Date.now();
+
+      if (diff <= 0) {
+        setTimeLeft("Vencido - Reportado a gerencia");
+        setColor("error"); // rojo oscuro
+        setIcon(<CancelIcon />);
+        return;
+      }
+
+      const totalSeconds = Math.floor(diff / 1000);
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      const formatted = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+      // Condiciones según días restantes
+      if (days > 45) {
+        setTimeLeft(formatted);
+        setColor("success"); // verde
+        setIcon(<CheckCircleIcon />);
+      } else if (days > 30) {
+        setTimeLeft(`${formatted} - Próximo a vencer`);
+        setColor("warning"); // amarillo/dorado
+        setIcon(<WarningAmberIcon />);
+      } else if (days > 15) {
+        setTimeLeft(`${formatted} - Notificación a gerencia`);
+        setColor("warning"); // naranja
+        setIcon(<MailOutlineIcon />);
+      } else if (days > 0) {
+        setTimeLeft(`${formatted} - Cliente será reasignado`);
+        setColor("error"); // rojo
+        setIcon(<AutorenewIcon />);
+      }
+    };
+
+    tick();
+    const timer = setInterval(tick, 1000);
+    return () => clearInterval(timer);
+  }, [value]);
+
+  return <Chip label={timeLeft} color={color} variant="outlined" icon={icon} />;
+}
 
 export default function MayoristaPage(callback, deps) {
 
@@ -78,7 +153,7 @@ export default function MayoristaPage(callback, deps) {
 
     const [selected, setSelected] = useState(null);
 
-    const [currentTab, setCurrentTab] = useState('one');
+    const [currentTab, setCurrentTab] = useState('ultima-factura');
 
 
     const [partner, setPartner] = useState(null);
@@ -87,6 +162,7 @@ export default function MayoristaPage(callback, deps) {
     const quickICO = useBoolean();
     const quickDC = useBoolean();
     const quickCLM = useBoolean();
+    const quickRC = useBoolean();
 
     // Define el renderizador de celdas personalizado para la columna "DIAS_DIFFERENCE"
     const renderDiasColumn = (params) => {
@@ -154,13 +230,19 @@ export default function MayoristaPage(callback, deps) {
                     label="Google Maps"
                     onClick={() => handleViewCustomerLocationMapRow(params.row)}
                 />,
+                <GridActionsCellItem
+                    showInMenu
+                    icon={<Iconify icon="solar:map-point-favourite-linear" />}
+                    label="Reasignar Cliente"
+                    onClick={() => handleViewCustomerReasignarCliente(params.row)}
+                />,
             ],
         },
 
-        {
-            field: 'id',
-            hide: true,
-        },
+        // {
+        //     field: 'id',
+        //     hide: true,
+        // },
         {
             field: 'DIAS_DIFFERENCE',
             headerName: 'ÚLTIMA GESTIÓN',
@@ -198,44 +280,44 @@ export default function MayoristaPage(callback, deps) {
             flex: 1,
             minWidth: 160,
         },
-        {
-            field: 'Direccion',
-            headerName: 'Direccion',
-            flex: 1,
-            minWidth: 160,
-        },
+        // {
+        //     field: 'Direccion',
+        //     headerName: 'Direccion',
+        //     flex: 1,
+        //     minWidth: 160,
+        // },
 
-        {
-            field: 'CreditLine',
-            headerName: 'Límte de Crédito',
-            flex: 1,
-            minWidth: 160,
-            renderCell: (params) => fCurrency(params.value),
-        },
-        {
-            field: 'Balance',
-            headerName: 'Saldo Deuda',
-            flex: 1,
-            minWidth: 160,
-            renderCell: (params) => fCurrency(params.value),
-        },
-        {
-            headerName: 'Cupo Disponible',
-            flex: 1,
-            minWidth: 160,
-            renderCell: (params) => {
-                const creditLine = params.row.CreditLine || 0; // Valor predeterminado de CreditLine si es null o undefined
-                const balance = params.row.Balance || 0; // Valor predeterminado de Balance si es null o undefined
-                return fCurrency(creditLine - balance);
-            },
-        },
-        {
-            field: 'U_SYP_CREDITO',
-            headerName: 'Tipo Crédito',
-            flex: 1,
-            minWidth: 160,
-            renderCell: (params) => tipoCredito(params.value)
-        },
+        // {
+        //     field: 'CreditLine',
+        //     headerName: 'Límte de Crédito',
+        //     flex: 1,
+        //     minWidth: 160,
+        //     renderCell: (params) => fCurrency(params.value),
+        // },
+        // {
+        //     field: 'Balance',
+        //     headerName: 'Saldo Deuda',
+        //     flex: 1,
+        //     minWidth: 160,
+        //     renderCell: (params) => fCurrency(params.value),
+        // },
+        // {
+        //     headerName: 'Cupo Disponible',
+        //     flex: 1,
+        //     minWidth: 160,
+        //     renderCell: (params) => {
+        //         const creditLine = params.row.CreditLine || 0; // Valor predeterminado de CreditLine si es null o undefined
+        //         const balance = params.row.Balance || 0; // Valor predeterminado de Balance si es null o undefined
+        //         return fCurrency(creditLine - balance);
+        //     },
+        // },
+        // {
+        //     field: 'U_SYP_CREDITO',
+        //     headerName: 'Tipo Crédito',
+        //     flex: 1,
+        //     minWidth: 160,
+        //     renderCell: (params) => tipoCredito(params.value)
+        // },
         // {
         //     field: 'Endeudamiento',
         //     headerName: 'Endeudamiento',
@@ -254,17 +336,25 @@ export default function MayoristaPage(callback, deps) {
         //     flex: 1,
         //     minWidth: 160,
         // },
+        // {
+        //     field: 'PADRE',
+        //     headerName: 'PADRE',
+        //     flex: 1,
+        //     minWidth: 160,
+        // },
+        // {
+        //     field: 'NOM_PADRE',
+        //     headerName: 'NOM_PADRE',
+        //     flex: 1,
+        //     minWidth: 160,
+        // },
         {
-            field: 'PADRE',
-            headerName: 'PADRE',
+            field: "U_LS_Vencimiento_Pagare",
+            headerName: "Vencimiento",
             flex: 1,
-            minWidth: 160,
-        },
-        {
-            field: 'NOM_PADRE',
-            headerName: 'NOM_PADRE',
-            flex: 1,
-            minWidth: 160,
+            minWidth: 400,
+            renderCell: (params) => <CountdownCell value={params.value} />,
+
         },
     ]
 
@@ -311,6 +401,7 @@ export default function MayoristaPage(callback, deps) {
                     ID_RANGO: value.id,
                     USER_NAME: user.DISPLAYNAME,
                     TIPO_GESTION: tipo_gestion,
+                    EMPRESA: user.EMPRESA,
                 });
 
                 if (response.status === 200) {
@@ -321,7 +412,7 @@ export default function MayoristaPage(callback, deps) {
                     }));
 
                     setBusinessPartners(businessPartnersWithId);
-                    console.log("response.data.data: " + JSON.stringify(response.data.data));
+                    //console.log("response.data.data: " + JSON.stringify(response.data.data));
                     //console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
 
                 } else {
@@ -414,6 +505,16 @@ export default function MayoristaPage(callback, deps) {
 
         },
         [quickCLM]
+    );
+
+        const handleViewCustomerReasignarCliente = useCallback(
+        (row) => {
+            quickRC.onTrue();
+            //console.log("Cliente a gestionar: " + JSON.stringify(row));
+            setPartner(row);
+
+        },
+        [quickRC]
     );
 
 
@@ -652,6 +753,13 @@ export default function MayoristaPage(callback, deps) {
                                                                         onClose={quickCLM.onFalse} />
                                                                 )}
 
+                                                                {user && partner && (
+                                                                    <CustomerReasignarCliente
+                                                                        currentPartner={partner}
+                                                                        open={quickRC.value}
+                                                                        onClose={quickRC.onFalse} />
+                                                                )}
+
                                                             </Card>
 
 
@@ -855,6 +963,13 @@ export default function MayoristaPage(callback, deps) {
                                                                         currentPartner={partner}
                                                                         open={quickCLM.value}
                                                                         onClose={quickCLM.onFalse} />
+                                                                )}
+
+                                                                {user && partner && (
+                                                                    <CustomerReasignarCliente
+                                                                        currentPartner={partner}
+                                                                        open={quickRC.value}
+                                                                        onClose={quickRC.onFalse} />
                                                                 )}
 
                                                             </Card>
