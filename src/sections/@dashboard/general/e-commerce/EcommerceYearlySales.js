@@ -1,62 +1,67 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
-// @mui
-import { Card, CardHeader, Box } from '@mui/material';
-// components
-import { CustomSmallSelect } from '../../../../components/custom-input';
-import Chart, { useChart } from '../../../../components/chart';
+
+import Card from '@mui/material/Card';
+import { useTheme } from '@mui/material/styles';
+import { CardHeader } from '@mui/material';
+
+import Chart, { useChart } from 'src/components/chart';
+import { CustomSmallSelect } from "../../../../components/custom-input";
 
 // ----------------------------------------------------------------------
 
-EcommerceYearlySales.propTypes = {
-  chart: PropTypes.object,
-  title: PropTypes.string,
-  subheader: PropTypes.string,
-};
+export default function EcommerceYearlySales({ title, subheader, chart, sx, ...other }) {
+    const [selectedSeries, setSelectedSeries] = useState('2025');
 
-export default function EcommerceYearlySales({ title, subheader, chart, ...other }) {
-  const { colors, categories, series, options } = chart;
+    const chartOptions = useChart({
+        xaxis: { categories: chart.categories },
+        stroke: { width: [3, 3] },
+        markers: { size: 4 },
+        yaxis: {
+            labels: {
+                formatter: (val) => `$${val.toFixed(2)}`,
+            },
+        },
+        tooltip: {
+            y: {
+                formatter: (val) => `$${val.toFixed(2)}`,
+            },
+        },
+        ...chart.options,
+    });
 
-  const [seriesData, setSeriesData] = useState('2019');
+    const currentSeries = chart.series.find((i) => i.name === selectedSeries);
 
-  const chartOptions = useChart({
-    colors,
-    legend: {
-      position: 'top',
-      horizontalAlign: 'right',
-    },
-    xaxis: {
-      categories,
-    },
-    ...options,
-  });
+    return (
+        <Card sx={sx} {...other}>
+            <CardHeader
+                title={title}
+                subheader={subheader}
+                action={
+                    <CustomSmallSelect
+                        value={selectedSeries}
+                        onChange={(event) => setSelectedSeries(event.target.value)}
+                    >
+                        {chart.series.map((option) => (
+                            <option key={option.name} value={option.name}>
+                                {option.name}
+                            </option>
+                        ))}
+                    </CustomSmallSelect>
+                }
+            />
 
-  return (
-    <Card {...other}>
-      <CardHeader
-        title={title}
-        subheader={subheader}
-        action={
-          <CustomSmallSelect
-            value={seriesData}
-            onChange={(event) => setSeriesData(event.target.value)}
-          >
-            {series.map((option) => (
-              <option key={option.year} value={option.year}>
-                {option.year}
-              </option>
-            ))}
-          </CustomSmallSelect>
-        }
-      />
-
-      {series.map((item) => (
-        <Box key={item.year} sx={{ mt: 3, mx: 3 }} dir="ltr">
-          {item.year === seriesData && (
-            <Chart type="area" series={item.data} options={chartOptions} height={364} />
-          )}
-        </Box>
-      ))}
-    </Card>
-  );
+            <Chart
+                type="line"
+                series={currentSeries?.data}
+                options={chartOptions}
+                slotProps={{ loading: { p: 2.5 } }}
+                sx={{
+                    pl: 1,
+                    py: 2.5,
+                    pr: 2.5,
+                    height: 320,
+                }}
+            />
+        </Card>
+    );
 }

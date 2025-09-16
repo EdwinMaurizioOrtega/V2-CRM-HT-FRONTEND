@@ -55,6 +55,16 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import CustomerReasignarCliente from 'src/sections/@dashboard/gestion/customer-reasignar-cliente';
+import CustomerPagosEfectuados from 'src/sections/@dashboard/gestion/customer-pagos-efectuados';
+import SearchNotFound from "../../../components/search-not-found";
+import {CustomTextField} from "../../../components/custom-input";
+
+import match from "autosuggest-highlight/match";
+import parse from "autosuggest-highlight/parse";
+import {createBilling, nextStep} from "../../../redux/slices/product";
+import {dispatch} from "../../../redux/store";
+import {useRouter} from "next/router";
+
 // ----------------------------------------------------------------------
 
 MayoristaPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -72,82 +82,85 @@ export const rangos = [
 ];
 
 const TABS = [
+    { value: 'crear-orden', label: 'Crear Orden' },
     { value: 'ultima-factura', label: 'Última Factura' },
-    { value: 'medio-de-contacto', label: 'Vendedor asignado en Socios de Negocio / Medio de Contacto' },
-    { value: 'otro-criterio', label: 'Otro Criterio' },
+    { value: 'medio-de-contacto', label: 'Socios de Negocio' },
+    { value: 'otro-criterio', label: 'Por Marca' },
 ];
 
 function CountdownCell({ value }) {
-  const [timeLeft, setTimeLeft] = useState("");
-  const [color, setColor] = useState("default");
-  const [icon, setIcon] = useState(null);
+    const [timeLeft, setTimeLeft] = useState("");
+    const [color, setColor] = useState("default");
+    const [icon, setIcon] = useState(null);
 
-  useEffect(() => {
-    if (!value) {
-      setTimeLeft("Aún no carga el pagaré");
-      setColor("default");
-      setIcon(<HourglassEmptyIcon />);
-      return;
-    }
+    useEffect(() => {
+        if (!value) {
+            setTimeLeft("Aún no carga el pagaré");
+            setColor("default");
+            setIcon(<HourglassEmptyIcon />);
+            return;
+        }
 
-    const target = new Date(value);
+        const target = new Date(value);
 
-    const tick = () => {
-      if (isNaN(target.getTime())) {
-        setTimeLeft("Fecha inválida");
-        setColor("default");
-        setIcon(<HelpOutlineIcon />);
-        return;
-      }
+        const tick = () => {
+            if (isNaN(target.getTime())) {
+                setTimeLeft("Fecha inválida");
+                setColor("default");
+                setIcon(<HelpOutlineIcon />);
+                return;
+            }
 
-      const diff = target.getTime() - Date.now();
+            const diff = target.getTime() - Date.now();
 
-      if (diff <= 0) {
-        setTimeLeft("Vencido - Reportado a gerencia");
-        setColor("error"); // rojo oscuro
-        setIcon(<CancelIcon />);
-        return;
-      }
+            if (diff <= 0) {
+                setTimeLeft("Vencido - Reportado a gerencia");
+                setColor("error"); // rojo oscuro
+                setIcon(<CancelIcon />);
+                return;
+            }
 
-      const totalSeconds = Math.floor(diff / 1000);
-      const days = Math.floor(totalSeconds / 86400);
-      const hours = Math.floor((totalSeconds % 86400) / 3600);
-      const minutes = Math.floor((totalSeconds % 3600) / 60);
-      const seconds = totalSeconds % 60;
+            const totalSeconds = Math.floor(diff / 1000);
+            const days = Math.floor(totalSeconds / 86400);
+            const hours = Math.floor((totalSeconds % 86400) / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
 
-      const formatted = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            const formatted = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 
-      // Condiciones según días restantes
-      if (days > 45) {
-        setTimeLeft(formatted);
-        setColor("success"); // verde
-        setIcon(<CheckCircleIcon />);
-      } else if (days > 30) {
-        setTimeLeft(`${formatted} - Próximo a vencer`);
-        setColor("warning"); // amarillo/dorado
-        setIcon(<WarningAmberIcon />);
-      } else if (days > 15) {
-        setTimeLeft(`${formatted} - Notificación a gerencia`);
-        setColor("warning"); // naranja
-        setIcon(<MailOutlineIcon />);
-      } else if (days > 0) {
-        setTimeLeft(`${formatted} - Cliente será reasignado`);
-        setColor("error"); // rojo
-        setIcon(<AutorenewIcon />);
-      }
-    };
+            // Condiciones según días restantes
+            if (days > 45) {
+                setTimeLeft(formatted);
+                setColor("success"); // verde
+                setIcon(<CheckCircleIcon />);
+            } else if (days > 30) {
+                setTimeLeft(`${formatted} - Próximo a vencer`);
+                setColor("warning"); // amarillo/dorado
+                setIcon(<WarningAmberIcon />);
+            } else if (days > 15) {
+                setTimeLeft(`${formatted} - Notificación a gerencia`);
+                setColor("warning"); // naranja
+                setIcon(<MailOutlineIcon />);
+            } else if (days > 0) {
+                setTimeLeft(`${formatted} - Cliente será reasignado`);
+                setColor("error"); // rojo
+                setIcon(<AutorenewIcon />);
+            }
+        };
 
-    tick();
-    const timer = setInterval(tick, 1000);
-    return () => clearInterval(timer);
-  }, [value]);
+        tick();
+        const timer = setInterval(tick, 1000);
+        return () => clearInterval(timer);
+    }, [value]);
 
-  return <Chip label={timeLeft} color={color} variant="outlined" icon={icon} />;
+    return <Chip label={timeLeft} color={color} variant="outlined" icon={icon} />;
 }
 
 export default function MayoristaPage(callback, deps) {
 
     const { user } = useAuthContext();
+
+    const router = useRouter();
 
     const { themeStretch } = useSettingsContext();
 
@@ -163,6 +176,7 @@ export default function MayoristaPage(callback, deps) {
     const quickDC = useBoolean();
     const quickCLM = useBoolean();
     const quickRC = useBoolean();
+    const quickPE = useBoolean();
 
     // Define el renderizador de celdas personalizado para la columna "DIAS_DIFFERENCE"
     const renderDiasColumn = (params) => {
@@ -186,6 +200,14 @@ export default function MayoristaPage(callback, deps) {
         flexWrap: 'wrap',
         '& > *': { mx: '8px !important' },
     };
+
+    const formatNumber = (value) => {
+        return parseFloat(value).toLocaleString("en-US", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+        });
+    };
+
 
     const baseColumns = [
         {
@@ -236,6 +258,12 @@ export default function MayoristaPage(callback, deps) {
                     label="Reasignar Cliente"
                     onClick={() => handleViewCustomerReasignarCliente(params.row)}
                 />,
+                <GridActionsCellItem
+                    showInMenu
+                    icon={<Iconify icon="solar:map-point-favourite-linear" />}
+                    label="Pagos / Abonos"
+                    onClick={() => handleViewCustomerPagosEfectuados(params.row)}
+                />,
             ],
         },
 
@@ -281,36 +309,110 @@ export default function MayoristaPage(callback, deps) {
             minWidth: 160,
         },
         // {
-        //     field: 'Direccion',
-        //     headerName: 'Direccion',
+        //     field: 'U_LS_LIM_CRE_LID',
+        //     headerName: 'U_LS_LIM_CRE_LID',
+        //     flex: 1,
+        //     minWidth: 160,
+        // },
+        // {
+        //     field: 'U_LS_EXT_CUP_1',
+        //     headerName: 'U_LS_EXT_CUP_1',
+        //     flex: 1,
+        //     minWidth: 160,
+        // },
+        // {
+        //     field: 'U_LS_EXT_CUP_2',
+        //     headerName: 'U_LS_EXT_CUP_2',
         //     flex: 1,
         //     minWidth: 160,
         // },
 
         // {
-        //     field: 'CreditLine',
-        //     headerName: 'Límte de Crédito',
-        //     flex: 1,
-        //     minWidth: 160,
-        //     renderCell: (params) => fCurrency(params.value),
-        // },
-        // {
         //     field: 'Balance',
-        //     headerName: 'Saldo Deuda',
+        //     headerName: 'Balance',
         //     flex: 1,
         //     minWidth: 160,
-        //     renderCell: (params) => fCurrency(params.value),
         // },
+
+        {
+            headerName: "Límite de Crédito",
+            flex: 1,
+            minWidth: 280,
+            renderCell: (params) => {
+                const U_LS_LIM_CRE_LID = parseFloat(params.row.U_LS_LIM_CRE_LID || 0);
+                const U_LS_EXT_CUP_1 = parseFloat(params.row.U_LS_EXT_CUP_1 || 0);
+                const U_LS_EXT_CUP_2 = parseFloat(params.row.U_LS_EXT_CUP_2 || 0);
+                const Balance = parseFloat(params.row.Balance || 0);
+
+                const totalCredito = U_LS_LIM_CRE_LID + U_LS_EXT_CUP_1 + U_LS_EXT_CUP_2;
+                const disponible = totalCredito - Balance;
+
+                const porcentajeDisponible = totalCredito > 0 ? (disponible / totalCredito) * 100 : 0;
+                const porcentajeConsumido = totalCredito > 0 ? (Balance / totalCredito) * 100 : 0;
+
+                // 🔥 Función de formateo
+                const formatNumber = (value) =>
+                    parseFloat(value).toLocaleString("es-EC", {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                    });
+
+                return (
+                    <Box sx={{ width: "100%" }}>
+                        <Typography variant="body2">
+                            Disponible: {formatNumber(disponible)} ({porcentajeDisponible.toFixed(2)}%)
+                        </Typography>
+                        <Typography variant="body2">
+                            Consumido: {formatNumber(Balance)} ({porcentajeConsumido.toFixed(2)}%)
+                        </Typography>
+
+                        {/* Barra combinada */}
+                        <Box sx={{ display: "flex", height: 8, borderRadius: 5, overflow: "hidden", mt: 0.5 }}>
+                            {/* Barra de consumido */}
+                            <Box sx={{ width: `${porcentajeConsumido}%`, backgroundColor: "#f44336" }} />
+                            {/* Barra de disponible */}
+                            <Box sx={{ width: `${porcentajeDisponible}%`, backgroundColor: "#4caf50" }} />
+                        </Box>
+                    </Box>
+                );
+            },
+        },
+
+
         // {
-        //     headerName: 'Cupo Disponible',
+        //     headerName: "Cupo Disponible3",
         //     flex: 1,
-        //     minWidth: 160,
+        //     minWidth: 220,
         //     renderCell: (params) => {
-        //         const creditLine = params.row.CreditLine || 0; // Valor predeterminado de CreditLine si es null o undefined
-        //         const balance = params.row.Balance || 0; // Valor predeterminado de Balance si es null o undefined
-        //         return fCurrency(creditLine - balance);
+        //         const creditLine = params.row.CreditLine || 0;
+        //         const balance = params.row.Balance || 0;
+
+        //         const disponible = creditLine - balance;
+        //         const porcentaje = creditLine > 0 ? (disponible / creditLine) * 100 : 0;
+
+        //         return (
+        //             <Box sx={{ width: "100%" }}>
+        //                 <Typography variant="body2">
+        //                     {fCurrency(disponible)} ({porcentaje.toFixed(1)}%)
+        //                 </Typography>
+        //                 <LinearProgress
+        //                     variant="determinate"
+        //                     value={porcentaje}
+        //                     sx={{
+        //                         height: 8,
+        //                         borderRadius: 5,
+        //                         mt: 0.5,
+        //                         backgroundColor: "#eee",
+        //                         "& .MuiLinearProgress-bar": {
+        //                             backgroundColor: porcentaje > 50 ? "#4caf50" : "#f44336", // Verde si >50%, rojo si <=50%
+        //                         },
+        //                     }}
+        //                 />
+        //             </Box>
+        //         );
         //     },
         // },
+
         // {
         //     field: 'U_SYP_CREDITO',
         //     headerName: 'Tipo Crédito',
@@ -412,7 +514,7 @@ export default function MayoristaPage(callback, deps) {
                     }));
 
                     setBusinessPartners(businessPartnersWithId);
-                    //console.log("response.data.data: " + JSON.stringify(response.data.data));
+                    console.log("response.data.data: " + JSON.stringify(response.data.data));
                     //console.log("businessPartnersWithId: " + JSON.stringify(businessPartnersWithId));
 
                 } else {
@@ -507,7 +609,7 @@ export default function MayoristaPage(callback, deps) {
         [quickCLM]
     );
 
-        const handleViewCustomerReasignarCliente = useCallback(
+    const handleViewCustomerReasignarCliente = useCallback(
         (row) => {
             quickRC.onTrue();
             //console.log("Cliente a gestionar: " + JSON.stringify(row));
@@ -515,6 +617,16 @@ export default function MayoristaPage(callback, deps) {
 
         },
         [quickRC]
+    );
+
+    const handleViewCustomerPagosEfectuados = useCallback(
+        (row) => {
+            quickPE.onTrue();
+            //console.log("Cliente a gestionar: " + JSON.stringify(row));
+            setPartner(row);
+
+        },
+        [quickPE]
     );
 
 
@@ -538,6 +650,36 @@ export default function MayoristaPage(callback, deps) {
     const handleClick = async (event, rango, tipo_gestion) => {
         setSelected(rango.id);
         await BuscarPorRango(event, rango, tipo_gestion);
+    };
+
+
+    const [searchProducts, setSearchProducts] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+
+    const handleChangeSearch = async (value) => {
+        try {
+            setSearchProducts(value);
+            if (value) {
+                const response = await axios.get('/hanadb/api/customers/search', {
+                    params: {query: value, empresa: user.EMPRESA},
+                });
+
+                setSearchResults(response.data.results);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleKeyUp = (event) => {
+        if (event.key === 'Enter') {
+            handleGotoProduct(searchProducts);
+        }
+    };
+
+    const handleCreateBilling = async (address) => {
+        await dispatch(createBilling(address));
+        await router.push('/dashboard/e-commerce/list/'); // Cambia '/ruta-destino' por la página a la que quieras ir
     };
 
     return (
@@ -578,7 +720,7 @@ export default function MayoristaPage(callback, deps) {
                     <Block title="Gestión por:" sx={style}>
                         <Stack spacing={2} sx={{ width: 1 }}>
                             <Tabs value={currentTab} onChange={(event, newValue) => setCurrentTab(newValue)}>
-                                {TABS.slice(0, 3).map((tab) => (
+                                {TABS.slice(0, 4).map((tab) => (
                                     <Tab key={tab.value} value={tab.value} label={tab.label} />
                                 ))}
                             </Tabs>
@@ -592,6 +734,79 @@ export default function MayoristaPage(callback, deps) {
                                         >
                                             {(() => {
                                                 switch (currentTab) {
+                                                    case 'crear-orden':
+                                                        return <div>
+
+                                                            <Autocomplete
+                                                                size="small"
+                                                                autoHighlight
+                                                                popupIcon={null}
+                                                                options={searchResults}
+                                                                onInputChange={(event, value) => handleChangeSearch(value)}
+                                                                getOptionLabel={(product) => product.Cliente}
+                                                                noOptionsText={<SearchNotFound query={searchProducts}/>}
+                                                                isOptionEqualToValue={(option, value) => option.ID === value.ID}
+                                                                componentsProps={{
+                                                                    paper: {
+                                                                        sx: {
+                                                                            '& .MuiAutocomplete-option': {
+                                                                                px: `8px !important`,
+                                                                            },
+                                                                        },
+                                                                    },
+                                                                }}
+                                                                renderInput={(params) => (
+                                                                    <CustomTextField
+                                                                        {...params}
+
+                                                                        placeholder="Buscar..."
+                                                                        onKeyUp={handleKeyUp}
+                                                                        InputProps={{
+                                                                            ...params.InputProps,
+                                                                            startAdornment: (
+                                                                                <InputAdornment position="start">
+                                                                                    <Iconify icon="eva:search-fill" sx={{ml: 1, color: 'text.disabled'}}/>
+                                                                                </InputAdornment>
+                                                                            ),
+                                                                        }}
+                                                                    />
+                                                                )}
+                                                                renderOption={(props, product, {inputValue}) => {
+                                                                    const {ID, Cliente} = product;
+                                                                    const matches = match(Cliente, inputValue);
+                                                                    const parts = parse(Cliente, matches);
+
+                                                                    return (
+                                                                        <li {...props}>
+
+
+                                                                            <AddressItem
+                                                                                key={ID}
+                                                                                address={product}
+                                                                                onCreateBilling={() => handleCreateBilling(product)}
+                                                                            >
+                                                                                {parts.map((part, index) => (
+                                                                                    <Typography
+                                                                                        key={index}
+                                                                                        component="span"
+                                                                                        variant="subtitle2"
+                                                                                        color={part.highlight ? 'primary' : 'textPrimary'}
+                                                                                    >
+                                                                                        {part.text}
+                                                                                    </Typography>
+                                                                                ))}
+
+                                                                            </AddressItem>
+
+                                                                        </li>
+                                                                    );
+                                                                }}
+                                                            />
+
+
+
+
+                                                        </div>;
                                                     case 'ultima-factura':
                                                         return <div>
                                                             {/* Filtros tipo Airbnb */}
@@ -760,6 +975,13 @@ export default function MayoristaPage(callback, deps) {
                                                                         onClose={quickRC.onFalse} />
                                                                 )}
 
+                                                                {user && partner && (
+                                                                    <CustomerPagosEfectuados
+                                                                        currentPartner={partner}
+                                                                        open={quickPE.value}
+                                                                        onClose={quickPE.onFalse} />
+                                                                )}
+
                                                             </Card>
 
 
@@ -773,102 +995,63 @@ export default function MayoristaPage(callback, deps) {
                                                             >
 
 
-                                                                <Grid item xs={12} md={12} lg={8} padding={2}>
-                                                                    {/*<Box*/}
-                                                                    {/*    rowGap={3}*/}
-                                                                    {/*    columnGap={2}*/}
-                                                                    {/*    display="grid"*/}
-                                                                    {/*    gridTemplateColumns={{*/}
-                                                                    {/*        xs: 'repeat(1, 1fr)',*/}
-                                                                    {/*        sm: 'repeat(2, 1fr)',*/}
-                                                                    {/*    }}*/}
-                                                                    {/*>*/}
-                                                                    <Autocomplete
-                                                                        fullWidth
-                                                                        options={rangos}
-                                                                        getOptionLabel={(option) => option.title}
-                                                                        onChange={(event, value) => {
-                                                                            handleClick(event, value, 0);
-                                                                        }} // Add onChange event handler
-                                                                        renderInput={(params) => <TextField {...params} label="Filtrar por rango"
-                                                                            margin="none" />}
-                                                                    />
+                                                                <Grid 
+                                                                
+                                                                container
+                                                                spacing={2}
+                                                                sx={{
+                                                                    mb: 4,
+                                                                    display: "flex",
+                                                                    flexWrap: "wrap",
+                                                                    gap: 1,
+                                                                }}
+                                                                >
+                                                
+
+                                                                    {rangos.map((rango) => (
+                                                                    <Grid item key={rango.id}>
+                                                                        <Chip
+                                                                            onClick={(e) => handleClick(e, rango, 1)}
+                                                                            label={
+                                                                                <Stack direction="row" alignItems="center"
+                                                                                    spacing={1}>
+                                                                                    <Iconify
+                                                                                        icon={rango.icon}
+                                                                                        width={18}
+                                                                                        height={18}
+                                                                                        style={{
+                                                                                            color: selected === rango.id ? "white" : "#000000",
+                                                                                        }}
+                                                                                    />
+                                                                                    <span>{rango.title}</span>
+                                                                                </Stack>
+                                                                            }
+                                                                            variant={selected === rango.id ? "filled" : "outlined"}
+                                                                            color={selected === rango.id ? "primary" : "default"}
+                                                                            sx={{
+                                                                                px: 2.5,
+                                                                                py: 1.2,
+                                                                                borderRadius: "24px",
+                                                                                fontWeight: 600,
+                                                                                fontSize: "0.9rem",
+                                                                                bgcolor:
+                                                                                    selected === rango.id ? "primary.main" : "background.paper",
+                                                                                color:
+                                                                                    selected === rango.id
+                                                                                        ? "primary.contrastText"
+                                                                                        : "text.primary",
+                                                                                boxShadow: selected === rango.id ? 3 : 1,
+                                                                                transition: "all 0.25s ease",
+                                                                                "&:hover": {
+                                                                                    boxShadow: 4,
+                                                                                    transform: "translateY(-2px)",
+                                                                                },
+                                                                            }}
+                                                                        />
+                                                                    </Grid>
+                                                                ))}
 
 
-                                                                    {/*<TextField*/}
-                                                                    {/*    fullWidth*/}
-                                                                    {/*    type="text"*/}
-                                                                    {/*    label="Nombre / Razon Social"*/}
-                                                                    {/*    InputProps={{*/}
-                                                                    {/*        endAdornment: (*/}
-                                                                    {/*            <InputAdornment position="end">*/}
-                                                                    {/*                <IconButton*/}
-                                                                    {/*                    edge="end"*/}
-                                                                    {/*                >*/}
-                                                                    {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
-
-                                                                    {/*                </IconButton>*/}
-                                                                    {/*            </InputAdornment>*/}
-                                                                    {/*        ),*/}
-                                                                    {/*    }}*/}
-                                                                    {/*/>*/}
-
-                                                                    {/*<TextField*/}
-                                                                    {/*    fullWidth*/}
-                                                                    {/*    type="text"*/}
-                                                                    {/*    label="Cédula/RUC"*/}
-                                                                    {/*    InputProps={{*/}
-                                                                    {/*        endAdornment: (*/}
-                                                                    {/*            <InputAdornment position="end">*/}
-                                                                    {/*                <IconButton*/}
-                                                                    {/*                    edge="end"*/}
-                                                                    {/*                >*/}
-                                                                    {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
-
-                                                                    {/*                </IconButton>*/}
-                                                                    {/*            </InputAdornment>*/}
-                                                                    {/*        ),*/}
-                                                                    {/*    }}*/}
-                                                                    {/*/>*/}
-
-                                                                    {/*<TextField*/}
-                                                                    {/*    fullWidth*/}
-                                                                    {/*    type="text"*/}
-                                                                    {/*    label="Nombre Producto"*/}
-                                                                    {/*    InputProps={{*/}
-                                                                    {/*        endAdornment: (*/}
-                                                                    {/*            <InputAdornment position="end">*/}
-                                                                    {/*                <IconButton*/}
-                                                                    {/*                    edge="end"*/}
-                                                                    {/*                >*/}
-                                                                    {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
-
-                                                                    {/*                </IconButton>*/}
-                                                                    {/*            </InputAdornment>*/}
-                                                                    {/*        ),*/}
-                                                                    {/*    }}*/}
-                                                                    {/*/>*/}
-
-                                                                    {/*<TextField*/}
-                                                                    {/*    fullWidth*/}
-                                                                    {/*    type="text"*/}
-                                                                    {/*    label="Código Producto"*/}
-                                                                    {/*    InputProps={{*/}
-                                                                    {/*        endAdornment: (*/}
-                                                                    {/*            <InputAdornment position="end">*/}
-                                                                    {/*                <IconButton*/}
-                                                                    {/*                    edge="end"*/}
-                                                                    {/*                >*/}
-                                                                    {/*                    <Iconify icon="eva:search-fill" width={24}/>*/}
-
-                                                                    {/*                </IconButton>*/}
-                                                                    {/*            </InputAdornment>*/}
-                                                                    {/*        ),*/}
-                                                                    {/*    }}*/}
-                                                                    {/*/>*/}
-
-
-                                                                    {/*</Box>*/}
                                                                 </Grid>
 
 
@@ -971,6 +1154,12 @@ export default function MayoristaPage(callback, deps) {
                                                                         open={quickRC.value}
                                                                         onClose={quickRC.onFalse} />
                                                                 )}
+                                                                {user && partner && (
+                                                                    <CustomerPagosEfectuados
+                                                                        currentPartner={partner}
+                                                                        open={quickPE.value}
+                                                                        onClose={quickPE.onFalse} />
+                                                                )}
 
                                                             </Card>
 
@@ -988,7 +1177,7 @@ export default function MayoristaPage(callback, deps) {
                                                             </Card>
                                                         </div>;
                                                     case 'otro-criterio':
-                                                        return <div>Otro criterio</div>;
+                                                        return <div>Por Marca</div>;
                                                     default:
                                                         return null;
                                                 }
@@ -1072,3 +1261,97 @@ const StatCard = ({ title, total, color, icon }) => {
         </Card>
     );
 };
+
+
+
+// ----------------------------------------------------------------------
+
+AddressItem.propTypes = {
+    address: PropTypes.object,
+    onCreateBilling: PropTypes.func,
+};
+
+function AddressItem({address, onCreateBilling}) {
+    // const {Cliente, Direccion, Celular, receiver, fullAddress, addressType, phoneNumber, isDefault} = address;
+    const {Cliente, Direccion, Celular, ID, Tipo, U_SYP_CREDITO, CreditLine, Balance} = address;
+    const receiver = Cliente;
+    const tipo = Tipo;
+    const id = ID;
+    const tipo_credito = U_SYP_CREDITO;
+    const credit_line = CreditLine;
+    const balance_a = Balance;
+
+
+    function tipoCredito(pay) {
+        const payActual = TIPO_CREDITO.find(option => option.id == pay);
+        return payActual ? payActual.title : "Pago no definido.";
+    }
+
+    return (
+        <Card onClick={onCreateBilling}
+              sx={{
+                  p: 3,
+                  mb: 3,
+                  width: '100%', // Hacer que el card ocupe todo el ancho disponible
+
+              }}
+        >
+            <Stack
+                spacing={2}
+                alignItems={{
+                    md: 'flex-end',
+                }}
+                direction={{
+                    xs: 'column',
+                    md: 'row',
+                }}
+            >
+                <Stack flexGrow={1} spacing={1}>
+                    <Stack direction="row" alignItems="center">
+                        <Typography variant="subtitle1">
+                            {receiver}
+                            <Box component="span" sx={{ml: 0.5, typography: 'body2', color: 'text.secondary'}}>
+                                ({id + " | " + tipo})
+                            </Box>
+                        </Typography>
+
+                        {/* {isDefault && ( */}
+                        {/*     <Label color="info" sx={{ml: 1}}> */}
+                        {/*         Default */}
+                        {/*     </Label> */}
+                        {/* )} */}
+                    </Stack>
+
+                    {/*<Typography variant="body2">{tipo + " " +id}</Typography>*/}
+
+                    {/*<Typography variant="body2" sx={{color: 'text.secondary'}}>*/}
+                    {/*    {id}*/}
+                    {/*</Typography>*/}
+                    <Label color="success" sx={{ml: 1}}>
+                        Cupo Otorgado: {fCurrency(credit_line)}
+                    </Label>
+
+                    <Label color="warning" sx={{ml: 1}}>
+                        Cupo Disponible: {fCurrency(credit_line - balance_a)}
+                    </Label>
+
+                    <Label color="info" sx={{ml: 1}}>
+                        Tipo de Crédito: {tipoCredito(tipo_credito)}
+                    </Label>
+                </Stack>
+
+                {/* <Stack flexDirection="row" flexWrap="wrap" flexShrink={0}> */}
+                {/*     /!* {!isDefault && ( *!/ */}
+                {/*     /!*     <Button variant="outlined" size="small" color="inherit" sx={{mr: 1}}> *!/ */}
+                {/*     /!*         Borrar *!/ */}
+                {/*     /!*     </Button> *!/ */}
+                {/*     /!* )} *!/ */}
+
+                {/*     <Button variant="outlined" size="small" onClick={onCreateBilling}> */}
+                {/*         Entregar a esta dirección */}
+                {/*     </Button> */}
+                {/* </Stack> */}
+            </Stack>
+        </Card>
+    );
+}
