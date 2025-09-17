@@ -1,7 +1,7 @@
 // next
 import Head from 'next/head';
 // @mui
-import { alpha } from '@mui/material/styles';
+import {alpha} from '@mui/material/styles';
 import {
     Container,
     Typography,
@@ -17,9 +17,9 @@ import {
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
 // components
-import { useSettingsContext } from '../../../components/settings';
+import {useSettingsContext} from '../../../components/settings';
 import EmptyContent from "../../../components/empty-content";
-import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
+import React, {useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState} from "react";
 import {
     DataGrid, GridActionsCellItem, GridToolbar,
     GridToolbarColumnsButton,
@@ -31,22 +31,22 @@ import PropTypes from "prop-types";
 import _mock from "../../../_mock";
 import Label from "../../../components/label";
 import Iconify from "../../../components/iconify";
-import { fCurrency, fPercent } from "../../../utils/formatNumber";
+import {fCurrency, fPercent} from "../../../utils/formatNumber";
 import axios from "../../../utils/axios";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
-import { PATH_DASHBOARD } from "../../../routes/paths";
-import { useBoolean } from "../../../hooks/use-boolean";
+import {PATH_DASHBOARD} from "../../../routes/paths";
+import {useBoolean} from "../../../hooks/use-boolean";
 import CustomerQuickManagementForm from "../../../sections/@dashboard/gestion/customer-quick-management-form";
 import PreviousClientManagement from "../../../sections/@dashboard/gestion/previous-client-management";
 import InvoicedClientOrders from "../../../sections/@dashboard/gestion/invoiced-client-orders";
-import { useAuthContext } from "../../../auth/useAuthContext";
+import {useAuthContext} from "../../../auth/useAuthContext";
 import CalendarView from "../../../sections/calendar/view/calendar";
-import { AnalyticsWidgetSummary } from "../../../sections/@dashboard/general/analytics";
-import { Space_Mono } from "@next/font/google";
-import { TIPO_CREDITO } from "../../../utils/constants";
+import {AnalyticsWidgetSummary} from "../../../sections/@dashboard/general/analytics";
+import {Space_Mono} from "@next/font/google";
+import {TIPO_CREDITO} from "../../../utils/constants";
 import CustomerData from "../../../sections/@dashboard/gestion/customer-data";
 import CustomerLocationMap from "../../../sections/@dashboard/gestion/customer-location-map";
-import { Block } from "../../../sections/_examples/Block";
+import {Block} from "../../../sections/_examples/Block";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
@@ -64,6 +64,7 @@ import parse from "autosuggest-highlight/parse";
 import {createBilling, nextStep} from "../../../redux/slices/product";
 import {dispatch} from "../../../redux/store";
 import {useRouter} from "next/router";
+import CustomerUltimaVentaPorMarca from "../../../sections/@dashboard/gestion/ultima-venta-por-marca";
 
 // ----------------------------------------------------------------------
 
@@ -71,24 +72,24 @@ MayoristaPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 export const rangos = [
-    { title: "0-15 días", id: "01", icon: "solar:calendar-date-bold" },
-    { title: "16-30 días", id: "02", icon: "solar:calendar-bold" },
-    { title: "31-60 días", id: "03", icon: "solar:clock-circle-bold" },
-    { title: "61-90 días", id: "04", icon: "solar:hourglass-bold" },
-    { title: "91-180 días", id: "05", icon: "solar:calendar-add-bold" },
-    { title: "180-360 días", id: "06", icon: "solar:calendar-mark-bold" },
-    { title: "+360 días", id: "07", icon: "solar:infinity-bold-duotone" },
+    {title: "0-15 días", id: "01", icon: "solar:calendar-date-bold"},
+    {title: "16-30 días", id: "02", icon: "solar:calendar-bold"},
+    {title: "31-60 días", id: "03", icon: "solar:clock-circle-bold"},
+    {title: "61-90 días", id: "04", icon: "solar:hourglass-bold"},
+    {title: "91-180 días", id: "05", icon: "solar:calendar-add-bold"},
+    {title: "180-360 días", id: "06", icon: "solar:calendar-mark-bold"},
+    {title: "+360 días", id: "07", icon: "solar:infinity-bold-duotone"},
     // { title: "Nunca", id: "08", icon: "solar:close-circle-bold" },
 ];
 
 const TABS = [
-    { value: 'crear-orden', label: 'Crear Orden' },
-    { value: 'ultima-factura', label: 'Última Factura' },
-    { value: 'medio-de-contacto', label: 'Socios de Negocio' },
-    { value: 'otro-criterio', label: 'Por Marca' },
+    {value: 'crear-orden', label: 'Crear Orden'},
+    {value: 'ultima-factura', label: 'Última Factura'},
+    {value: 'medio-de-contacto', label: 'Socios de Negocio'},
+    {value: 'otro-criterio', label: 'Otro'},
 ];
 
-function CountdownCell({ value }) {
+function CountdownCell({value}) {
     const [timeLeft, setTimeLeft] = useState("");
     const [color, setColor] = useState("default");
     const [icon, setIcon] = useState(null);
@@ -97,7 +98,7 @@ function CountdownCell({ value }) {
         if (!value) {
             setTimeLeft("Aún no carga el pagaré");
             setColor("default");
-            setIcon(<HourglassEmptyIcon />);
+            setIcon(<HourglassEmptyIcon/>);
             return;
         }
 
@@ -107,7 +108,7 @@ function CountdownCell({ value }) {
             if (isNaN(target.getTime())) {
                 setTimeLeft("Fecha inválida");
                 setColor("default");
-                setIcon(<HelpOutlineIcon />);
+                setIcon(<HelpOutlineIcon/>);
                 return;
             }
 
@@ -116,7 +117,7 @@ function CountdownCell({ value }) {
             if (diff <= 0) {
                 setTimeLeft("Vencido - Reportado a gerencia");
                 setColor("error"); // rojo oscuro
-                setIcon(<CancelIcon />);
+                setIcon(<CancelIcon/>);
                 return;
             }
 
@@ -132,19 +133,19 @@ function CountdownCell({ value }) {
             if (days > 45) {
                 setTimeLeft(formatted);
                 setColor("success"); // verde
-                setIcon(<CheckCircleIcon />);
+                setIcon(<CheckCircleIcon/>);
             } else if (days > 30) {
                 setTimeLeft(`${formatted} - Próximo a vencer`);
                 setColor("warning"); // amarillo/dorado
-                setIcon(<WarningAmberIcon />);
+                setIcon(<WarningAmberIcon/>);
             } else if (days > 15) {
                 setTimeLeft(`${formatted} - Notificación a gerencia`);
                 setColor("warning"); // naranja
-                setIcon(<MailOutlineIcon />);
+                setIcon(<MailOutlineIcon/>);
             } else if (days > 0) {
                 setTimeLeft(`${formatted} - Cliente será reasignado`);
                 setColor("error"); // rojo
-                setIcon(<AutorenewIcon />);
+                setIcon(<AutorenewIcon/>);
             }
         };
 
@@ -153,16 +154,16 @@ function CountdownCell({ value }) {
         return () => clearInterval(timer);
     }, [value]);
 
-    return <Chip label={timeLeft} color={color} variant="outlined" icon={icon} />;
+    return <Chip label={timeLeft} color={color} variant="outlined" icon={icon}/>;
 }
 
 export default function MayoristaPage(callback, deps) {
 
-    const { user } = useAuthContext();
+    const {user} = useAuthContext();
 
     const router = useRouter();
 
-    const { themeStretch } = useSettingsContext();
+    const {themeStretch} = useSettingsContext();
 
     const [selected, setSelected] = useState(null);
 
@@ -177,6 +178,7 @@ export default function MayoristaPage(callback, deps) {
     const quickCLM = useBoolean();
     const quickRC = useBoolean();
     const quickPE = useBoolean();
+    const quickUVPM = useBoolean();
 
     // Define el renderizador de celdas personalizado para la columna "DIAS_DIFFERENCE"
     const renderDiasColumn = (params) => {
@@ -198,16 +200,8 @@ export default function MayoristaPage(callback, deps) {
         alignItems: 'center',
         justifyContent: 'center',
         flexWrap: 'wrap',
-        '& > *': { mx: '8px !important' },
+        '& > *': {mx: '8px !important'},
     };
-
-    const formatNumber = (value) => {
-        return parseFloat(value).toLocaleString("en-US", {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-        });
-    };
-
 
     const baseColumns = [
         {
@@ -224,46 +218,53 @@ export default function MayoristaPage(callback, deps) {
 
                 <GridActionsCellItem
                     showInMenu
-                    icon={<Iconify icon="solar:pen-broken" />}
-                    label="Registar Gestión"
+                    icon={<Iconify icon="solar:pen-broken"/>}
+                    label="Registrar Gestión"
                     onClick={() => handleViewRow(params.row)}
                 />,
                 <GridActionsCellItem
                     showInMenu
-                    icon={<Iconify icon="solar:eye-broken" />}
+                    icon={<Iconify icon="solar:eye-broken"/>}
                     label="Gestiones Anteriores"
                     onClick={() => handleViewManagementRow(params.row)}
                 />,
                 <GridActionsCellItem
                     showInMenu
-                    icon={<Iconify icon="solar:paperclip-rounded-outline" />}
+                    icon={<Iconify icon="solar:paperclip-rounded-outline"/>}
                     label="Histórico Órdenes"
                     onClick={() => handleViewOrdersRow(params.row)}
                 />,
                 <GridActionsCellItem
                     showInMenu
-                    icon={<Iconify icon="solar:maximize-square-3-linear" />}
+                    icon={<Iconify icon="solar:user-linear"/>}
                     label="Datos del Cliente"
                     onClick={() => handleViewDataCustomerRow(params.row)}
                 />,
                 <GridActionsCellItem
                     showInMenu
-                    icon={<Iconify icon="solar:map-point-favourite-linear" />}
+                    icon={<Iconify icon="solar:map-point-favourite-linear"/>}
                     label="Google Maps"
                     onClick={() => handleViewCustomerLocationMapRow(params.row)}
                 />,
                 <GridActionsCellItem
                     showInMenu
-                    icon={<Iconify icon="solar:map-point-favourite-linear" />}
+                    icon={<Iconify icon="solar:repeat-outline"/>}
                     label="Reasignar Cliente"
                     onClick={() => handleViewCustomerReasignarCliente(params.row)}
                 />,
                 <GridActionsCellItem
                     showInMenu
-                    icon={<Iconify icon="solar:map-point-favourite-linear" />}
+                    icon={<Iconify icon="solar:wallet-linear"/>}
                     label="Pagos / Abonos"
                     onClick={() => handleViewCustomerPagosEfectuados(params.row)}
                 />,
+                <GridActionsCellItem
+                    showInMenu
+                    icon={<Iconify icon="solar:chart-square-linear"/>}
+                    label="Última Venta Por Marca"
+                    onClick={() => handleViewCustomerUltimaVentaPorMarca(params.row)}
+                />,
+
             ],
         },
 
@@ -358,7 +359,7 @@ export default function MayoristaPage(callback, deps) {
                     });
 
                 return (
-                    <Box sx={{ width: "100%" }}>
+                    <Box sx={{width: "100%"}}>
                         <Typography variant="body2">
                             Disponible: {formatNumber(disponible)} ({porcentajeDisponible.toFixed(2)}%)
                         </Typography>
@@ -367,11 +368,11 @@ export default function MayoristaPage(callback, deps) {
                         </Typography>
 
                         {/* Barra combinada */}
-                        <Box sx={{ display: "flex", height: 8, borderRadius: 5, overflow: "hidden", mt: 0.5 }}>
+                        <Box sx={{display: "flex", height: 8, borderRadius: 5, overflow: "hidden", mt: 0.5}}>
                             {/* Barra de consumido */}
-                            <Box sx={{ width: `${porcentajeConsumido}%`, backgroundColor: "#f44336" }} />
+                            <Box sx={{width: `${porcentajeConsumido}%`, backgroundColor: "#f44336"}}/>
                             {/* Barra de disponible */}
-                            <Box sx={{ width: `${porcentajeDisponible}%`, backgroundColor: "#4caf50" }} />
+                            <Box sx={{width: `${porcentajeDisponible}%`, backgroundColor: "#4caf50"}}/>
                         </Box>
                     </Box>
                 );
@@ -455,7 +456,7 @@ export default function MayoristaPage(callback, deps) {
             headerName: "Vencimiento",
             flex: 1,
             minWidth: 400,
-            renderCell: (params) => <CountdownCell value={params.value} />,
+            renderCell: (params) => <CountdownCell value={params.value}/>,
 
         },
     ]
@@ -528,7 +529,7 @@ export default function MayoristaPage(callback, deps) {
             }
 
         } catch
-        (error) {
+            (error) {
             // Manejar el error de la petición PUT aquí
             console.error('Error al actualizar la orden:', error);
         }
@@ -629,6 +630,16 @@ export default function MayoristaPage(callback, deps) {
         [quickPE]
     );
 
+    const handleViewCustomerUltimaVentaPorMarca = useCallback(
+        (row) => {
+            quickUVPM.onTrue();
+            //console.log("Cliente a gestionar: " + JSON.stringify(row));
+            setPartner(row);
+
+        },
+        [quickUVPM]
+    );
+
 
     const [dataContAgenda, setDataContAgenda] = useState(0);
     const [dataContAgendaCErrado, setDataContAgendaCerrado] = useState(0);
@@ -688,7 +699,7 @@ export default function MayoristaPage(callback, deps) {
                 <title> Mayorista Page | HT</title>
             </Head>
 
-            <Container maxWidth={themeStretch ? false : 'xl'}>
+            <Container maxWidth={false}>
                 <CustomBreadcrumbs
                     heading="Gestión Mayoristas"
                     links={[
@@ -718,19 +729,19 @@ export default function MayoristaPage(callback, deps) {
 
 
                     <Block title="Gestión por:" sx={style}>
-                        <Stack spacing={2} sx={{ width: 1 }}>
+                        <Stack spacing={2} sx={{width: 1}}>
                             <Tabs value={currentTab} onChange={(event, newValue) => setCurrentTab(newValue)}>
                                 {TABS.slice(0, 4).map((tab) => (
-                                    <Tab key={tab.value} value={tab.value} label={tab.label} />
+                                    <Tab key={tab.value} value={tab.value} label={tab.label}/>
                                 ))}
                             </Tabs>
 
-                            {TABS.slice(0, 3).map(
+                            {TABS.slice(0, 4).map(
                                 (tab) =>
                                     tab.value === currentTab && (
                                         <Box
                                             key={tab.value}
-                                            sx={{ p: 2, borderRadius: 1, bgcolor: 'background.neutral' }}
+                                            sx={{p: 2, borderRadius: 1, bgcolor: 'background.neutral'}}
                                         >
                                             {(() => {
                                                 switch (currentTab) {
@@ -765,7 +776,10 @@ export default function MayoristaPage(callback, deps) {
                                                                             ...params.InputProps,
                                                                             startAdornment: (
                                                                                 <InputAdornment position="start">
-                                                                                    <Iconify icon="eva:search-fill" sx={{ml: 1, color: 'text.disabled'}}/>
+                                                                                    <Iconify icon="eva:search-fill" sx={{
+                                                                                        ml: 1,
+                                                                                        color: 'text.disabled'
+                                                                                    }}/>
                                                                                 </InputAdornment>
                                                                             ),
                                                                         }}
@@ -804,114 +818,94 @@ export default function MayoristaPage(callback, deps) {
                                                             />
 
 
-
-
                                                         </div>;
                                                     case 'ultima-factura':
                                                         return <div>
-                                                            {/* Filtros tipo Airbnb */}
-                                                            <Grid
-                                                                container
-                                                                spacing={2}
-                                                                sx={{
-                                                                    mb: 4,
-                                                                    display: "flex",
-                                                                    flexWrap: "wrap",
-                                                                    gap: 1,
-                                                                }}
-                                                            >
-                                                                {rangos.map((rango) => (
-                                                                    <Grid item key={rango.id}>
-                                                                        <Chip
-                                                                            onClick={(e) => handleClick(e, rango, 1)}
-                                                                            label={
-                                                                                <Stack direction="row" alignItems="center"
-                                                                                    spacing={1}>
-                                                                                    <Iconify
-                                                                                        icon={rango.icon}
-                                                                                        width={18}
-                                                                                        height={18}
-                                                                                        style={{
-                                                                                            color: selected === rango.id ? "white" : "#000000",
+                                                            <Card sx={{p: 3}}>
+                                                                <Grid container spacing={3} alignItems="center">
+                                                                    {/* Chips principales */}
+                                                                    <Grid item xs={12} md={10}>
+                                                                        <Grid
+                                                                            container
+                                                                            spacing={2}
+                                                                            sx={{
+                                                                                mb: 4,
+                                                                                justifyContent: "center", // centra horizontalmente
+                                                                                flexWrap: "wrap",
+                                                                                gap: 1,
+                                                                            }}
+                                                                        >
+                                                                            {rangos.map((rango) => (
+                                                                                <Grid
+                                                                                    item
+                                                                                    key={rango.id}
+                                                                                    sx={{
+                                                                                        display: "flex",
+                                                                                        justifyContent: "center",
+                                                                                        alignItems: "center",
+                                                                                    }}
+                                                                                >
+                                                                                    <Chip
+                                                                                        onClick={(e) => handleClick(e, rango, 1)}
+                                                                                        label={
+                                                                                            <Stack direction="row"
+                                                                                                   alignItems="center"
+                                                                                                   spacing={1}>
+                                                                                                <Iconify
+                                                                                                    icon={rango.icon}
+                                                                                                    width={18}
+                                                                                                    height={18}
+                                                                                                    style={{
+                                                                                                        color: selected === rango.id ? "white" : "#000000",
+                                                                                                    }}
+                                                                                                />
+                                                                                                <span>{rango.title}</span>
+                                                                                            </Stack>
+                                                                                        }
+                                                                                        variant={selected === rango.id ? "filled" : "outlined"}
+                                                                                        color={selected === rango.id ? "primary" : "default"}
+                                                                                        sx={{
+                                                                                            px: 2.5,
+                                                                                            py: 1.2,
+                                                                                            borderRadius: "24px",
+                                                                                            fontWeight: 600,
+                                                                                            fontSize: "0.9rem",
+                                                                                            bgcolor: selected === rango.id ? "primary.main" : "background.paper",
+                                                                                            color: selected === rango.id ? "primary.contrastText" : "text.primary",
+                                                                                            boxShadow: selected === rango.id ? 3 : 1,
+                                                                                            transition: "all 0.25s ease",
+                                                                                            "&:hover": {
+                                                                                                boxShadow: 4,
+                                                                                                transform: "translateY(-2px)",
+                                                                                            },
                                                                                         }}
                                                                                     />
-                                                                                    <span>{rango.title}</span>
-                                                                                </Stack>
-                                                                            }
-                                                                            variant={selected === rango.id ? "filled" : "outlined"}
-                                                                            color={selected === rango.id ? "primary" : "default"}
-                                                                            sx={{
-                                                                                px: 2.5,
-                                                                                py: 1.2,
-                                                                                borderRadius: "24px",
-                                                                                fontWeight: 600,
-                                                                                fontSize: "0.9rem",
-                                                                                bgcolor:
-                                                                                    selected === rango.id ? "primary.main" : "background.paper",
-                                                                                color:
-                                                                                    selected === rango.id
-                                                                                        ? "primary.contrastText"
-                                                                                        : "text.primary",
-                                                                                boxShadow: selected === rango.id ? 3 : 1,
-                                                                                transition: "all 0.25s ease",
-                                                                                "&:hover": {
-                                                                                    boxShadow: 4,
-                                                                                    transform: "translateY(-2px)",
-                                                                                },
-                                                                            }}
-                                                                        />
+                                                                                </Grid>
+                                                                            ))}
+                                                                        </Grid>
                                                                     </Grid>
-                                                                ))}
-                                                            </Grid>
 
-                                                            {/* Métricas tipo dashboard */}
-                                                            <Grid container spacing={3}>
-                                                                <Grid item xs={12} sm={12} md={12}>
-                                                                    <Box
-                                                                        sx={{
-                                                                            width: '100%',
-                                                                            textAlign: 'center',
-                                                                            p: 3,
-                                                                            borderRadius: 2,
-                                                                            boxShadow: 2,
-                                                                            bgcolor: 'background.paper',
-                                                                        }}
-                                                                    >
-                                                                        <span style={{
-                                                                            display: 'inline-block',
-                                                                            marginBottom: 12,
-                                                                            borderRadius: '50%',
-                                                                            background: '#e3f2fd',
-                                                                            padding: 12,
-                                                                        }}>
-                                                                            <img
-                                                                                alt="icon"
-                                                                                src="/assets/icons/glass/ic_glass_users.png"
-                                                                                width={28}
-                                                                            />
-                                                                        </span>
-                                                                        <span style={{
-                                                                            display: 'block',
-                                                                            fontSize: '1rem',
-                                                                            color: '#757575',
-                                                                            marginBottom: 4,
-                                                                            fontWeight: 500,
-                                                                        }}>
-                                                                            Prospectos a gestionar:
-                                                                        </span>
-                                                                        <span style={{
-                                                                            display: 'block',
-                                                                            fontSize: '2rem',
-                                                                            fontWeight: 'bold',
-                                                                            color: '#000000ff',
-                                                                        }}>
-                                                                            {businessPartners && businessPartners.length ? businessPartners.length : 0}
-                                                                        </span>
-                                                                    </Box>
+                                                                    {/* Box de prospectos */}
+                                                                    <Grid item xs={12} md={2}>
+
+
+
+                                                                        <AnalyticsWidgetSummary
+                                                                            title="Prospectos gestionar:"
+                                                                            total={
+                                                                                businessPartners?.length || 0
+                                                                            }
+                                                                            color="info"
+                                                                            icon={<img alt="icon"
+                                                                                       src="/assets/icons/glass/ic_glass_users.png"/>}
+                                                                        />
+
+                                                                    </Grid>
                                                                 </Grid>
-                                                            </Grid>
+                                                            </Card>
 
-                                                            <Divider sx={{ my: 3 }} />
+
+                                                            <Divider sx={{my: 3}}/>
 
                                                             <Card sx={{
                                                                 p: 5
@@ -924,9 +918,9 @@ export default function MayoristaPage(callback, deps) {
                                                                     slots={{
                                                                         toolbar: CustomToolbar,
                                                                         noRowsOverlay: () => <EmptyContent
-                                                                            title="No Data" />,
+                                                                            title="No Data"/>,
                                                                         noResultsOverlay: () => <EmptyContent
-                                                                            title="No results found" />,
+                                                                            title="No results found"/>,
                                                                     }}
                                                                 />
 
@@ -934,7 +928,7 @@ export default function MayoristaPage(callback, deps) {
                                                                     <CustomerQuickManagementForm
                                                                         currentPartner={partner}
                                                                         open={quickEdit.value}
-                                                                        onClose={quickEdit.onFalse} />
+                                                                        onClose={quickEdit.onFalse}/>
                                                                 )}
 
                                                                 {user && partner && (
@@ -942,7 +936,7 @@ export default function MayoristaPage(callback, deps) {
                                                                         userID={user.ID}
                                                                         currentPartner={partner}
                                                                         open={quickPCM.value}
-                                                                        onClose={quickPCM.onFalse} />
+                                                                        onClose={quickPCM.onFalse}/>
                                                                 )}
 
                                                                 {user && partner && (
@@ -950,7 +944,7 @@ export default function MayoristaPage(callback, deps) {
                                                                         userID={user.ID}
                                                                         currentPartner={partner}
                                                                         open={quickICO.value}
-                                                                        onClose={quickICO.onFalse} />
+                                                                        onClose={quickICO.onFalse}/>
                                                                 )}
 
                                                                 {user && dataCliente && (
@@ -958,28 +952,35 @@ export default function MayoristaPage(callback, deps) {
                                                                         userID={user.ID}
                                                                         currentPartner={dataCliente}
                                                                         open={quickDC.value}
-                                                                        onClose={quickDC.onFalse} />
+                                                                        onClose={quickDC.onFalse}/>
                                                                 )}
 
                                                                 {user && partner && (
                                                                     <CustomerLocationMap
                                                                         currentPartner={partner}
                                                                         open={quickCLM.value}
-                                                                        onClose={quickCLM.onFalse} />
+                                                                        onClose={quickCLM.onFalse}/>
                                                                 )}
 
                                                                 {user && partner && (
                                                                     <CustomerReasignarCliente
                                                                         currentPartner={partner}
                                                                         open={quickRC.value}
-                                                                        onClose={quickRC.onFalse} />
+                                                                        onClose={quickRC.onFalse}/>
                                                                 )}
 
                                                                 {user && partner && (
                                                                     <CustomerPagosEfectuados
                                                                         currentPartner={partner}
                                                                         open={quickPE.value}
-                                                                        onClose={quickPE.onFalse} />
+                                                                        onClose={quickPE.onFalse}/>
+                                                                )}
+
+                                                                {user && partner && (
+                                                                    <CustomerUltimaVentaPorMarca
+                                                                        currentPartner={partner}
+                                                                        open={quickUVPM.value}
+                                                                        onClose={quickUVPM.onFalse}/>
                                                                 )}
 
                                                             </Card>
@@ -995,196 +996,222 @@ export default function MayoristaPage(callback, deps) {
                                                             >
 
 
-                                                                <Grid 
-                                                                
-                                                                container
-                                                                spacing={2}
-                                                                sx={{
-                                                                    mb: 4,
-                                                                    display: "flex",
-                                                                    flexWrap: "wrap",
-                                                                    gap: 1,
-                                                                }}
+                                                                <Grid
+
+                                                                    container
+                                                                    spacing={2}
+                                                                    sx={{
+                                                                        mb: 4,
+                                                                        display: "flex",
+                                                                        flexWrap: "wrap",
+                                                                        gap: 1,
+                                                                        justifyContent: "center", // centra los chips horizontalmente
+                                                                    }}
                                                                 >
-                                                
+
 
                                                                     {rangos.map((rango) => (
-                                                                    <Grid item key={rango.id}>
-                                                                        <Chip
-                                                                            onClick={(e) => handleClick(e, rango, 1)}
-                                                                            label={
-                                                                                <Stack direction="row" alignItems="center"
-                                                                                    spacing={1}>
-                                                                                    <Iconify
-                                                                                        icon={rango.icon}
-                                                                                        width={18}
-                                                                                        height={18}
-                                                                                        style={{
-                                                                                            color: selected === rango.id ? "white" : "#000000",
-                                                                                        }}
-                                                                                    />
-                                                                                    <span>{rango.title}</span>
-                                                                                </Stack>
-                                                                            }
-                                                                            variant={selected === rango.id ? "filled" : "outlined"}
-                                                                            color={selected === rango.id ? "primary" : "default"}
-                                                                            sx={{
-                                                                                px: 2.5,
-                                                                                py: 1.2,
-                                                                                borderRadius: "24px",
-                                                                                fontWeight: 600,
-                                                                                fontSize: "0.9rem",
-                                                                                bgcolor:
-                                                                                    selected === rango.id ? "primary.main" : "background.paper",
-                                                                                color:
-                                                                                    selected === rango.id
-                                                                                        ? "primary.contrastText"
-                                                                                        : "text.primary",
-                                                                                boxShadow: selected === rango.id ? 3 : 1,
-                                                                                transition: "all 0.25s ease",
-                                                                                "&:hover": {
-                                                                                    boxShadow: 4,
-                                                                                    transform: "translateY(-2px)",
-                                                                                },
-                                                                            }}
-                                                                        />
-                                                                    </Grid>
-                                                                ))}
+                                                                        <Grid item key={rango.id}
+                                                                              sx={{
+                                                                                  display: "flex",
+                                                                                  justifyContent: "center", // asegura que cada chip también esté centrado
+                                                                                  alignItems: "center",
+                                                                              }}
+                                                                        >
+                                                                            <Chip
+                                                                                onClick={(e) => handleClick(e, rango, 1)}
+                                                                                label={
+                                                                                    <Stack direction="row"
+                                                                                           alignItems="center"
+                                                                                           spacing={1}>
+                                                                                        <Iconify
+                                                                                            icon={rango.icon}
+                                                                                            width={18}
+                                                                                            height={18}
+                                                                                            style={{
+                                                                                                color: selected === rango.id ? "white" : "#000000",
+                                                                                            }}
+                                                                                        />
+                                                                                        <span>{rango.title}</span>
+                                                                                    </Stack>
+                                                                                }
+                                                                                variant={selected === rango.id ? "filled" : "outlined"}
+                                                                                color={selected === rango.id ? "primary" : "default"}
+                                                                                sx={{
+                                                                                    px: 2.5,
+                                                                                    py: 1.2,
+                                                                                    borderRadius: "24px",
+                                                                                    fontWeight: 600,
+                                                                                    fontSize: "0.9rem",
+                                                                                    bgcolor:
+                                                                                        selected === rango.id ? "primary.main" : "background.paper",
+                                                                                    color:
+                                                                                        selected === rango.id
+                                                                                            ? "primary.contrastText"
+                                                                                            : "text.primary",
+                                                                                    boxShadow: selected === rango.id ? 3 : 1,
+                                                                                    transition: "all 0.25s ease",
+                                                                                    "&:hover": {
+                                                                                        boxShadow: 4,
+                                                                                        transform: "translateY(-2px)",
+                                                                                    },
+                                                                                }}
+                                                                            />
+                                                                        </Grid>
+                                                                    ))}
 
 
                                                                 </Grid>
 
 
                                                                 <Grid container spacing={3}>
+                                                                    {/* Columna izquierda: Analytics */}
+                                                                    <Grid item xs={12} md={1}>
+                                                                        <Stack spacing={3}>
+                                                                            <AnalyticsWidgetSummary
+                                                                                title="Por Gestionar"
+                                                                                total={
+                                                                                    businessPartners && businessPartners.length ? businessPartners.length : 0
+                                                                                }
+                                                                                color="info"
+                                                                                icon={<img alt="icon"
+                                                                                           src="/assets/icons/glass/ic_glass_users.png"/>}
+                                                                            />
 
-                                                                    <Grid item xs={12} sm={6} md={3}>
-                                                                        <AnalyticsWidgetSummary
-                                                                            title="Por Gestionar"
-                                                                            total={
-                                                                                businessPartners && businessPartners.length ? businessPartners.length : 0
-                                                                            }
-                                                                            color="info"
-                                                                            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
-                                                                        />
+                                                                            <AnalyticsWidgetSummary
+                                                                                title="Total Agenda"
+                                                                                total={dataContAgenda}
+                                                                                color="warning"
+                                                                                icon={<img alt="icon"
+                                                                                           src="/assets/icons/glass/ic_glass_buy.png"/>}
+                                                                            />
+
+                                                                            <AnalyticsWidgetSummary
+                                                                                title="Agenda Cerrados"
+                                                                                total={dataContAgendaPorCerrar}
+                                                                                icon={<img alt="icon"
+                                                                                           src="/assets/icons/glass/ic_glass_bag.png"/>}
+                                                                            />
+
+                                                                            <AnalyticsWidgetSummary
+                                                                                title="Agenda Abiertos"
+                                                                                total={dataContAgendaCErrado}
+                                                                                color="error"
+                                                                                icon={<img alt="icon"
+                                                                                           src="/assets/icons/glass/ic_glass_message.png"/>}
+                                                                            />
+                                                                        </Stack>
                                                                     </Grid>
 
-                                                                    <Grid item xs={12} sm={6} md={3}>
-                                                                        <AnalyticsWidgetSummary
-                                                                            title="Total Agenda"
-                                                                            total={dataContAgenda}
-                                                                            color="warning"
-                                                                            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
-                                                                        />
-                                                                    </Grid>
-                                                                    <Grid item xs={12} sm={6} md={3}>
-                                                                        <AnalyticsWidgetSummary
-                                                                            title="Agenda Cerrados"
-                                                                            total={dataContAgendaPorCerrar}
-                                                                            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
-                                                                        />
-                                                                    </Grid>
-                                                                    <Grid item xs={12} sm={6} md={3}>
-                                                                        <AnalyticsWidgetSummary
-                                                                            title="Agenda Abiertos"
-                                                                            total={dataContAgendaCErrado}
-                                                                            color="error"
-                                                                            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
-                                                                        />
+
+                                                                    {/* Columna derecha: DataGrid */}
+                                                                    <Grid item xs={12} md={11}>
+
+                                                                        <Card sx={{
+                                                                            p: 5
+                                                                        }}
+                                                                        >
+                                                                            <DataGrid
+                                                                                rows={businessPartners}
+                                                                                columns={baseColumns}
+                                                                                pagination
+                                                                                slots={{
+                                                                                    toolbar: CustomToolbar,
+                                                                                    noRowsOverlay: () => <EmptyContent
+                                                                                        title="No Data"/>,
+                                                                                    noResultsOverlay: () => <EmptyContent
+                                                                                        title="No results found"/>,
+                                                                                }}
+                                                                            />
+
+                                                                            {user && partner && (
+                                                                                <CustomerQuickManagementForm
+                                                                                    currentPartner={partner}
+                                                                                    open={quickEdit.value}
+                                                                                    onClose={quickEdit.onFalse}/>
+                                                                            )}
+
+                                                                            {user && partner && (
+                                                                                <PreviousClientManagement
+                                                                                    userID={user.ID}
+                                                                                    currentPartner={partner}
+                                                                                    open={quickPCM.value}
+                                                                                    onClose={quickPCM.onFalse}/>
+                                                                            )}
+
+                                                                            {user && partner && (
+                                                                                <InvoicedClientOrders
+                                                                                    userID={user.ID}
+                                                                                    currentPartner={partner}
+                                                                                    open={quickICO.value}
+                                                                                    onClose={quickICO.onFalse}/>
+                                                                            )}
+
+                                                                            {user && dataCliente && (
+                                                                                <CustomerData
+                                                                                    userID={user.ID}
+                                                                                    currentPartner={dataCliente}
+                                                                                    open={quickDC.value}
+                                                                                    onClose={quickDC.onFalse}/>
+                                                                            )}
+
+                                                                            {user && partner && (
+                                                                                <CustomerLocationMap
+                                                                                    currentPartner={partner}
+                                                                                    open={quickCLM.value}
+                                                                                    onClose={quickCLM.onFalse}/>
+                                                                            )}
+
+                                                                            {user && partner && (
+                                                                                <CustomerReasignarCliente
+                                                                                    currentPartner={partner}
+                                                                                    open={quickRC.value}
+                                                                                    onClose={quickRC.onFalse}/>
+                                                                            )}
+                                                                            {user && partner && (
+                                                                                <CustomerPagosEfectuados
+                                                                                    currentPartner={partner}
+                                                                                    open={quickPE.value}
+                                                                                    onClose={quickPE.onFalse}/>
+                                                                            )}
+
+                                                                            {user && partner && (
+                                                                                <CustomerUltimaVentaPorMarca
+                                                                                    currentPartner={partner}
+                                                                                    open={quickUVPM.value}
+                                                                                    onClose={quickUVPM.onFalse}/>
+                                                                            )}
+
+                                                                        </Card>
+
+
                                                                     </Grid>
                                                                 </Grid>
 
                                                             </Card>
-
                                                             <Card sx={{
                                                                 p: 5
                                                             }}
                                                             >
-                                                                <DataGrid
-                                                                    rows={businessPartners}
-                                                                    columns={baseColumns}
-                                                                    pagination
-                                                                    slots={{
-                                                                        toolbar: CustomToolbar,
-                                                                        noRowsOverlay: () => <EmptyContent title="No Data" />,
-                                                                        noResultsOverlay: () => <EmptyContent title="No results found" />,
-                                                                    }}
-                                                                />
-
-                                                                {user && partner && (
-                                                                    <CustomerQuickManagementForm
-                                                                        currentPartner={partner}
-                                                                        open={quickEdit.value}
-                                                                        onClose={quickEdit.onFalse} />
-                                                                )}
-
-                                                                {user && partner && (
-                                                                    <PreviousClientManagement
-                                                                        userID={user.ID}
-                                                                        currentPartner={partner}
-                                                                        open={quickPCM.value}
-                                                                        onClose={quickPCM.onFalse} />
-                                                                )}
-
-                                                                {user && partner && (
-                                                                    <InvoicedClientOrders
-                                                                        userID={user.ID}
-                                                                        currentPartner={partner}
-                                                                        open={quickICO.value}
-                                                                        onClose={quickICO.onFalse} />
-                                                                )}
-
-                                                                {user && dataCliente && (
-                                                                    <CustomerData
-                                                                        userID={user.ID}
-                                                                        currentPartner={dataCliente}
-                                                                        open={quickDC.value}
-                                                                        onClose={quickDC.onFalse} />
-                                                                )}
-
-                                                                {user && partner && (
-                                                                    <CustomerLocationMap
-                                                                        currentPartner={partner}
-                                                                        open={quickCLM.value}
-                                                                        onClose={quickCLM.onFalse} />
-                                                                )}
-
-                                                                {user && partner && (
-                                                                    <CustomerReasignarCliente
-                                                                        currentPartner={partner}
-                                                                        open={quickRC.value}
-                                                                        onClose={quickRC.onFalse} />
-                                                                )}
-                                                                {user && partner && (
-                                                                    <CustomerPagosEfectuados
-                                                                        currentPartner={partner}
-                                                                        open={quickPE.value}
-                                                                        onClose={quickPE.onFalse} />
-                                                                )}
+                                                                <CalendarView onValorCambiado={handleValorCambiado}/>
 
                                                             </Card>
-
-
-
-
-
-
-                                                            <Card sx={{
-                                                                p: 5
-                                                            }}
-                                                            >
-                                                                <CalendarView onValorCambiado={handleValorCambiado} />
-
-                                                            </Card>
-                                                        </div>;
+                                                        </div>
+                                                            ;
                                                     case 'otro-criterio':
-                                                        return <div>Por Marca</div>;
+                                                        return
+                                                        <div>
+                                                            Otro
+                                                        </div>
+                                                        ;
                                                     default:
                                                         return null;
                                                 }
                                             })()}
                                         </Box>
                                     )
-                            )}
+                            )
+                            }
                         </Stack>
                     </Block>
 
@@ -1194,7 +1221,8 @@ export default function MayoristaPage(callback, deps) {
             </Container>
 
         </>
-    );
+    )
+        ;
 }
 
 // ----------------------------------------------------------------------
@@ -1202,12 +1230,12 @@ export default function MayoristaPage(callback, deps) {
 function CustomToolbar() {
     return (
         <GridToolbarContainer>
-            <GridToolbarQuickFilter />
-            <Box sx={{ flexGrow: 1 }} />
-            <GridToolbarColumnsButton />
-            <GridToolbarFilterButton />
-            <GridToolbarDensitySelector />
-            <GridToolbarExport />
+            <GridToolbarQuickFilter/>
+            <Box sx={{flexGrow: 1}}/>
+            <GridToolbarColumnsButton/>
+            <GridToolbarFilterButton/>
+            <GridToolbarDensitySelector/>
+            <GridToolbarExport/>
         </GridToolbarContainer>
     );
 }
@@ -1215,7 +1243,7 @@ function CustomToolbar() {
 // ----------------------------------------------------------------------
 
 
-const StatCard = ({ title, total, color, icon }) => {
+const StatCard = ({title, total, color, icon}) => {
     return (
         <Card
             sx={{
@@ -1261,7 +1289,6 @@ const StatCard = ({ title, total, color, icon }) => {
         </Card>
     );
 };
-
 
 
 // ----------------------------------------------------------------------

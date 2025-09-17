@@ -144,7 +144,7 @@ export default function CustomerPagosEfectuados({currentPartner, open, onClose})
                 const response = await axios.get(`${HOST_API_KEY}/hanadb/api/customers/pagos_efectuados_by_cliente?EMPRESA=${user?.EMPRESA}&CARD_CODE=${currentPartner.ID}`);
 
                 if (response.status === 200) {
-                    console.log("DATA: " + JSON.stringify(response.data));
+                    //console.log("DATA: " + JSON.stringify(response.data));
 
                     const businessPartnersWithId = response.data.data.map((partner, index) => ({
                         ...partner,
