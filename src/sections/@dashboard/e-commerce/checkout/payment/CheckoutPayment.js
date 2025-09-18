@@ -80,12 +80,12 @@ const WAREHOUSE_OPTIONS = [
         title: 'MAYORISTA QUITO',
         description: 'Sucursal en la ciudad de Quito.',
     },
-    {
-        id: '015',
-        value: '015',
-        title: 'MAYORISTA GUAYAQUIL',
-        description: 'SUCURSAL en la ciudad de Guayaquil.',
-    },
+    // {
+    //     id: '015',
+    //     value: '015',
+    //     title: 'MAYORISTA GUAYAQUIL',
+    //     description: 'SUCURSAL en la ciudad de Guayaquil.',
+    // },
     {
         id: '024',
         value: '024',
@@ -156,7 +156,7 @@ const WAREHOUSE_OPTIONS_MOVILCELISTIC = [
     {
         id: '005',
         value: '005',
-        title: 'CARRIER OPERADORAS',
+        title: '⚠️OPERADORAS CARRIER',
         description: 'CARAPUNGO',
     },
 ]

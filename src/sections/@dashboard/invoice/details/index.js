@@ -500,7 +500,7 @@ export default function InvoiceDetails({invoice}) {
             "019": "Centro Distribución HT",
             "002": "Cuenca",
             "006": "Quito",
-            "015": "Guayaquil",
+            // "015": "Guayaquil",
             "024": "Manta",
             "030": "Colón",
         };
@@ -537,7 +537,7 @@ export default function InvoiceDetails({invoice}) {
             "004": "CUENCA - MAYORISTAS MOVILCELISTIC CUENCA",
             "030": "COLON - MAYORISTAS MOVILCELISTIC COLON",
             "024": "MANTA - MAYORISTAS MOVILCELISTIC MANTA",
-            "005": "CARAPUNGO - CARRIER OPERADORAS",
+            "005": "CARAPUNGO - ⚠️OPERADORAS CARRIER",
             // "T1CARACO": "QUITO - XIAOMI TERMINALES"
         };
 
@@ -2056,7 +2056,7 @@ export const top100Films = [
     {title: 'Centro Distribución HT', id: "019"},
     {title: 'Cuenca', id: "002"},
     {title: 'Quito', id: "006"},
-    {title: 'Guayaquil', id: "015"},
+    // {title: 'Guayaquil', id: "015"},
     {title: 'Manta', id: "024"},
     {title: 'Colón', id: "030"}
 ]
@@ -2079,7 +2079,7 @@ export const top100FilmsMovilCelistic = [
     {title: 'CUENCA - MAYORISTAS MOVILCELISTIC CUENCA', id: "004"},
     {title: 'COLON - MAYORISTAS MOVILCELISTIC COLON', id: "030"},
     {title: 'MANTA - MAYORISTAS MOVILCELISTIC MANTA', id: "024"},
-    {title: 'CARAPUNGO - CARRIER OPERADORAS', id: "005"},
+    {title: 'CARAPUNGO - ⚠️OPERADORAS CARRIER', id: "005"},
     // {title: 'QUITO - XIAOMI TERMINALES', id: "T1CARACO"}
 ]
 

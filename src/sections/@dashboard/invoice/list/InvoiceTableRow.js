@@ -982,7 +982,7 @@ function nameWarehouse(ware) {
         "019": "Centro Distribución HT",
         "002": "Cuenca",
         "006": "Quito",
-        "015": "Guayaquil",
+        // "015": "Guayaquil",
         "024": "Manta",
         "030": "Colón"
     };
@@ -1019,7 +1019,7 @@ function nameWarehouseMovilCelistic(ware) {
         "004": "CUENCA - MAYORISTAS MOVILCELISTIC CUENCA",
         "030": "COLON - MAYORISTAS MOVILCELISTIC COLON",
         "024": "MANTA - MAYORISTAS MOVILCELISTIC MANTA",
-        "005": "CARAPUNGO - CARRIER OPERADORAS",
+        "005": "CARAPUNGO - ⚠️OPERADORAS CARRIER",
         // "T1CARACO": "QUITO - XIAOMI TERMINALES"
     };
 

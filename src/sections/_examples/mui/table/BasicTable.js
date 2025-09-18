@@ -399,7 +399,7 @@ function getTextFromCodigoMovilCelistic(rowCodigo) {
             return "MALL CUENCA";
 
         case '005':
-            return "CARRIER OPERADORAS";
+            return "⚠️OPERADORAS CARRIER";
 
         default:
             return "...";
