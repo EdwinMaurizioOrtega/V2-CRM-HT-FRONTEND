@@ -81,7 +81,8 @@ export default function InvoiceTableRow({
         NUMEROFACTURAE4,
         URL_INVOICE_SELLER,
         NOMBREUSUARIOENTREGARA,
-        OBSERVACION_ANULACION
+        OBSERVACION_ANULACION,
+        USUARIOAPROBO
     } = row;
 
     const router = useRouter();
@@ -679,6 +680,7 @@ export default function InvoiceTableRow({
                 {
                     user.ROLE !== '31' ? (
                         <>
+                
                             <TableCell align="center" sx={{textTransform: 'capitalize'}}>
                                 {NOMBREUSUARIOENTREGARA}
                             </TableCell>
@@ -688,6 +690,10 @@ export default function InvoiceTableRow({
                             }
                             <TableCell align="center" sx={{textTransform: 'capitalize'}}>
                                 {DOCNUM}
+                            </TableCell>
+
+                            <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                                {USUARIOAPROBO}
                             </TableCell>
                         </>
                     ) : null}

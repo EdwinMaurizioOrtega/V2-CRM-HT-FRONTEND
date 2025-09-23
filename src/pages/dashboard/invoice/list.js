@@ -161,6 +161,7 @@ export default function InvoiceListPage() {
         ...TABLE_HEAD.slice(7, 10), // Incluye las columnas desde el índice 7 hasta el 10 (que incluye 'Ciudad', 'CITY', 'NUMEROGUIA')
         ...(user && user.ROLE !== '31' ? [
             {id: 'NOMBREUSUARIOENTREGARA', label: 'ENTREGAR', align: 'left'},
+            {id: 'USUARIOAPROBO', label: 'USUARIOAPROBO', align: 'left'},
             {id: 'DOCNUM', label: 'OV SAP', align: 'left'},
         ] : []), // Incluir "ENTREGAR" y "OV SAP" si el rol no es '31'
         ...TABLE_HEAD.slice(10) // Incluye el resto de las columnas
