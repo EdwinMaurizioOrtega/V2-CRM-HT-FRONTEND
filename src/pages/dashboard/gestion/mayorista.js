@@ -1,7 +1,7 @@
 // next
 import Head from 'next/head';
 // @mui
-import {alpha} from '@mui/material/styles';
+import {alpha, useTheme} from '@mui/material/styles';
 import {
     Container,
     Typography,
@@ -164,6 +164,8 @@ export default function MayoristaPage(callback, deps) {
     const router = useRouter();
 
     const {themeStretch} = useSettingsContext();
+
+    const theme = useTheme();
 
     const [selected, setSelected] = useState(null);
 
@@ -699,40 +701,134 @@ export default function MayoristaPage(callback, deps) {
                 <title> Mayorista Page | HT</title>
             </Head>
 
-            <Container maxWidth={false}>
+            <Container maxWidth={false} sx={{ 
+                py: 3,
+                background: `linear-gradient(135deg, ${theme.palette.background.default} 0%, ${theme.palette.grey[50]} 100%)`,
+                minHeight: '100vh'
+            }}>
                 <CustomBreadcrumbs
-                    heading="Gestión Mayoristas"
+                    heading="🏢 Gestión Mayoristas"
                     links={[
                         {
-                            name: 'Dashboard',
+                            name: '🏠 Dashboard',
                             href: PATH_DASHBOARD.root,
                         },
                         {
-                            name: 'Gestión',
+                            name: '⚙️ Gestión',
                             href: PATH_DASHBOARD.gestion.mayorista,
                         },
                         {
-                            name: 'Mayoristas',
+                            name: '🏪 Mayoristas',
                         },
                     ]}
+                    sx={{
+                        mb: 4,
+                        '& .MuiBreadcrumbs-separator': {
+                            color: theme.palette.primary.main,
+                            fontSize: '1.2rem',
+                        },
+                        '& .MuiTypography-h4': {
+                            background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                            backgroundClip: 'text',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            fontWeight: 800,
+                            fontSize: '2rem',
+                        }
+                    }}
                 />
 
                 <Card
                     sx={{
-                        p: 3,
-                        borderRadius: 4,
-                        boxShadow: "0 8px 24px rgba(0,0,0,0.06)",
-                        background: (theme) =>
-                            `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${theme.palette.grey[50]} 100%)`,
+                        p: 4,
+                        borderRadius: 3,
+                        boxShadow: theme.customShadows?.z24 || "0 24px 48px rgba(0,0,0,0.12)",
+                        background: `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${alpha(theme.palette.primary.lighter || theme.palette.primary.light, 0.03)} 100%)`,
+                        border: `1px solid ${alpha(theme.palette.primary.main, 0.08)}`,
+                        backdropFilter: 'blur(10px)',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        '&::before': {
+                            content: '""',
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main}, ${theme.palette.success.main})`,
+                        }
                     }}
                 >
 
 
-                    <Block title="Gestión por:" sx={style}>
-                        <Stack spacing={2} sx={{width: 1}}>
-                            <Tabs value={currentTab} onChange={(event, newValue) => setCurrentTab(newValue)}>
+                    <Block 
+                        title="🎯 Gestión por:" 
+                        sx={{
+                            ...style,
+                            mb: 3,
+                            '& .MuiTypography-h6': {
+                                color: theme.palette.text.primary,
+                                fontWeight: 700,
+                                fontSize: '1.25rem',
+                                background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                                backgroundClip: 'text',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                            }
+                        }}
+                    >
+                        <Stack spacing={3} sx={{width: 1}}>
+                            <Tabs 
+                                value={currentTab} 
+                                onChange={(event, newValue) => setCurrentTab(newValue)}
+                                sx={{
+                                    '& .MuiTabs-flexContainer': {
+                                        gap: 1,
+                                    },
+                                    '& .MuiTab-root': {
+                                        textTransform: 'none',
+                                        fontWeight: 600,
+                                        fontSize: '0.875rem',
+                                        borderRadius: 2,
+                                        minHeight: 48,
+                                        color: theme.palette.text.secondary,
+                                        transition: 'all 0.2s ease',
+                                        '&:hover': {
+                                            backgroundColor: alpha(theme.palette.primary.main, 0.08),
+                                            color: theme.palette.primary.main,
+                                        },
+                                        '&.Mui-selected': {
+                                            color: theme.palette.primary.main,
+                                            backgroundColor: alpha(theme.palette.primary.main, 0.12),
+                                            fontWeight: 700,
+                                        }
+                                    },
+                                    '& .MuiTabs-indicator': {
+                                        height: 3,
+                                        borderRadius: 1.5,
+                                        background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                                    }
+                                }}
+                            >
                                 {TABS.slice(0, 4).map((tab) => (
-                                    <Tab key={tab.value} value={tab.value} label={tab.label}/>
+                                    <Tab 
+                                        key={tab.value} 
+                                        value={tab.value} 
+                                        label={
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                <Iconify 
+                                                    icon={
+                                                        tab.value === 'crear-orden' ? 'eva:plus-circle-outline' :
+                                                        tab.value === 'ultima-factura' ? 'eva:file-text-outline' :
+                                                        tab.value === 'medio-de-contacto' ? 'eva:people-outline' :
+                                                        'eva:options-outline'
+                                                    } 
+                                                    width={20} 
+                                                />
+                                                {tab.label}
+                                            </Box>
+                                        }
+                                    />
                                 ))}
                             </Tabs>
 
@@ -741,7 +837,14 @@ export default function MayoristaPage(callback, deps) {
                                     tab.value === currentTab && (
                                         <Box
                                             key={tab.value}
-                                            sx={{p: 2, borderRadius: 1, bgcolor: 'background.neutral'}}
+                                            sx={{
+                                                p: 3, 
+                                                borderRadius: 2, 
+                                                background: `linear-gradient(135deg, ${alpha(theme.palette.background.neutral || theme.palette.grey[50], 0.8)} 0%, ${alpha(theme.palette.background.paper, 0.9)} 100%)`,
+                                                border: `1px solid ${alpha(theme.palette.divider, 0.2)}`,
+                                                backdropFilter: 'blur(10px)',
+                                                minHeight: '400px'
+                                            }}
                                         >
                                             {(() => {
                                                 switch (currentTab) {
@@ -850,34 +953,54 @@ export default function MayoristaPage(callback, deps) {
                                                                                         label={
                                                                                             <Stack direction="row"
                                                                                                    alignItems="center"
-                                                                                                   spacing={1}>
+                                                                                                   spacing={1.5}>
                                                                                                 <Iconify
                                                                                                     icon={rango.icon}
-                                                                                                    width={18}
-                                                                                                    height={18}
-                                                                                                    style={{
-                                                                                                        color: selected === rango.id ? "white" : "#000000",
+                                                                                                    width={20}
+                                                                                                    height={20}
+                                                                                                    sx={{
+                                                                                                        color: selected === rango.id ? 'white' : theme.palette.primary.main,
+                                                                                                        transition: 'all 0.2s ease'
                                                                                                     }}
                                                                                                 />
-                                                                                                <span>{rango.title}</span>
+                                                                                                <Box component="span" sx={{ fontWeight: 600 }}>
+                                                                                                    {rango.title}
+                                                                                                </Box>
                                                                                             </Stack>
                                                                                         }
                                                                                         variant={selected === rango.id ? "filled" : "outlined"}
                                                                                         color={selected === rango.id ? "primary" : "default"}
                                                                                         sx={{
-                                                                                            px: 2.5,
-                                                                                            py: 1.2,
-                                                                                            borderRadius: "24px",
+                                                                                            px: 3,
+                                                                                            py: 1.5,
+                                                                                            borderRadius: 3,
                                                                                             fontWeight: 600,
-                                                                                            fontSize: "0.9rem",
-                                                                                            bgcolor: selected === rango.id ? "primary.main" : "background.paper",
-                                                                                            color: selected === rango.id ? "primary.contrastText" : "text.primary",
-                                                                                            boxShadow: selected === rango.id ? 3 : 1,
-                                                                                            transition: "all 0.25s ease",
+                                                                                            fontSize: "0.875rem",
+                                                                                            minHeight: 44,
+                                                                                            cursor: 'pointer',
+                                                                                            background: selected === rango.id 
+                                                                                                ? `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`
+                                                                                                : `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${alpha(theme.palette.primary.lighter || theme.palette.primary.light, 0.1)} 100%)`,
+                                                                                            border: selected === rango.id 
+                                                                                                ? 'none' 
+                                                                                                : `2px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+                                                                                            color: selected === rango.id ? "white" : theme.palette.text.primary,
+                                                                                            boxShadow: selected === rango.id 
+                                                                                                ? `0 8px 24px ${alpha(theme.palette.primary.main, 0.4)}`
+                                                                                                : `0 4px 12px ${alpha(theme.palette.grey[500], 0.15)}`,
+                                                                                            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                                                                                             "&:hover": {
-                                                                                                boxShadow: 4,
-                                                                                                transform: "translateY(-2px)",
+                                                                                                transform: "translateY(-4px) scale(1.02)",
+                                                                                                boxShadow: selected === rango.id 
+                                                                                                    ? `0 12px 32px ${alpha(theme.palette.primary.main, 0.5)}`
+                                                                                                    : `0 8px 24px ${alpha(theme.palette.primary.main, 0.25)}`,
+                                                                                                background: selected === rango.id 
+                                                                                                    ? `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`
+                                                                                                    : `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.05)} 0%, ${alpha(theme.palette.primary.main, 0.15)} 100%)`,
                                                                                             },
+                                                                                            "&:active": {
+                                                                                                transform: "translateY(-2px) scale(0.98)",
+                                                                                            }
                                                                                         }}
                                                                                     />
                                                                                 </Grid>
@@ -887,42 +1010,151 @@ export default function MayoristaPage(callback, deps) {
 
                                                                     {/* Box de prospectos */}
                                                                     <Grid item xs={12} md={2}>
-
-
-
-                                                                        <AnalyticsWidgetSummary
-                                                                            title="Prospectos gestionar:"
-                                                                            total={
-                                                                                businessPartners?.length || 0
+                                                                        <Box sx={{
+                                                                            p: 2,
+                                                                            borderRadius: 2,
+                                                                            background: `linear-gradient(135deg, ${alpha(theme.palette.info.main, 0.1)} 0%, ${alpha(theme.palette.info.lighter || theme.palette.info.light, 0.05)} 100%)`,
+                                                                            border: `1px solid ${alpha(theme.palette.info.main, 0.2)}`,
+                                                                            transition: 'all 0.3s ease',
+                                                                            '&:hover': {
+                                                                                transform: 'translateY(-4px)',
+                                                                                boxShadow: `0 8px 24px ${alpha(theme.palette.info.main, 0.25)}`,
                                                                             }
-                                                                            color="info"
-                                                                            icon={<img alt="icon"
-                                                                                       src="/assets/icons/glass/ic_glass_users.png"/>}
-                                                                        />
-
+                                                                        }}>
+                                                                            <AnalyticsWidgetSummary
+                                                                                title="📊 Prospectos gestionar:"
+                                                                                total={
+                                                                                    businessPartners?.length || 0
+                                                                                }
+                                                                                color="info"
+                                                                                icon={<img alt="icon"
+                                                                                           src="/assets/icons/glass/ic_glass_users.png"/>}
+                                                                            />
+                                                                        </Box>
                                                                     </Grid>
                                                                 </Grid>
                                                             </Card>
 
 
-                                                            <Divider sx={{my: 3}}/>
+                                                            <Divider 
+                                                                sx={{
+                                                                    my: 4,
+                                                                    border: 'none',
+                                                                    height: '2px',
+                                                                    background: `linear-gradient(90deg, transparent 0%, ${theme.palette.primary.main} 50%, transparent 100%)`,
+                                                                    borderRadius: 1
+                                                                }}
+                                                            />
 
                                                             <Card sx={{
-                                                                p: 5
+                                                                p: 4,
+                                                                borderRadius: 3,
+                                                                boxShadow: theme.customShadows?.z16 || "0 16px 32px rgba(0,0,0,0.08)",
+                                                                background: `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${alpha(theme.palette.grey[50], 0.3)} 100%)`,
+                                                                border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+                                                                position: 'relative',
+                                                                overflow: 'hidden',
+                                                                '&::before': {
+                                                                    content: '""',
+                                                                    position: 'absolute',
+                                                                    top: 0,
+                                                                    left: 0,
+                                                                    right: 0,
+                                                                    height: '3px',
+                                                                    background: `linear-gradient(90deg, ${theme.palette.success.main}, ${theme.palette.info.main}, ${theme.palette.warning.main})`,
+                                                                }
                                                             }}
                                                             >
-                                                                <DataGrid
-                                                                    rows={businessPartners}
-                                                                    columns={baseColumns}
-                                                                    pagination
-                                                                    slots={{
-                                                                        toolbar: CustomToolbar,
-                                                                        noRowsOverlay: () => <EmptyContent
-                                                                            title="No Data"/>,
-                                                                        noResultsOverlay: () => <EmptyContent
-                                                                            title="No results found"/>,
-                                                                    }}
-                                                                />
+                                                                <Box sx={{ mt: 2, mb: 3 }}>
+                                                                    <DataGrid
+                                                                        rows={businessPartners}
+                                                                        columns={baseColumns}
+                                                                        pagination
+                                                                        autoHeight
+                                                                        disableRowSelectionOnClick
+                                                                        slots={{
+                                                                            toolbar: CustomToolbar,
+                                                                            noRowsOverlay: () => <EmptyContent title="📋 No hay datos disponibles" sx={{ py: 6 }} />,
+                                                                            noResultsOverlay: () => <EmptyContent title="🔍 No se encontraron resultados" sx={{ py: 6 }} />,
+                                                                        }}
+                                                                        sx={{
+                                                                            border: 'none',
+                                                                            borderRadius: 2,
+                                                                            boxShadow: theme.customShadows?.card || '0px 4px 20px rgba(0, 0, 0, 0.08)',
+                                                                            backgroundColor: theme.palette.background.paper,
+                                                                            '& .MuiDataGrid-main': {
+                                                                                borderRadius: 2,
+                                                                            },
+                                                                            '& .MuiDataGrid-columnHeaders': {
+                                                                                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.04)',
+                                                                                borderBottom: `2px solid ${theme.palette.divider}`,
+                                                                                borderRadius: '8px 8px 0 0',
+                                                                                fontWeight: 700,
+                                                                                fontSize: '0.875rem',
+                                                                                color: theme.palette.text.primary,
+                                                                                minHeight: '56px !important',
+                                                                                '& .MuiDataGrid-columnHeader': {
+                                                                                    padding: '12px 16px',
+                                                                                    '&:focus': {
+                                                                                        outline: 'none',
+                                                                                    },
+                                                                                    '&:focus-within': {
+                                                                                        outline: `2px solid ${theme.palette.primary.main}`,
+                                                                                        outlineOffset: '-2px',
+                                                                                    },
+                                                                                },
+                                                                                '& .MuiDataGrid-columnHeaderTitle': {
+                                                                                    fontWeight: 700,
+                                                                                    fontSize: '0.875rem',
+                                                                                    color: theme.palette.text.primary,
+                                                                                },
+                                                                            },
+                                                                            '& .MuiDataGrid-cell': {
+                                                                                borderBottom: `1px solid ${theme.palette.divider}`,
+                                                                                padding: '12px 16px',
+                                                                                fontSize: '0.875rem',
+                                                                                color: theme.palette.text.primary,
+                                                                            },
+                                                                            '& .MuiDataGrid-row': {
+                                                                                transition: 'all 0.2s ease-in-out',
+                                                                                '&:hover': {
+                                                                                    backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
+                                                                                    transform: 'translateY(-1px)',
+                                                                                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.12)',
+                                                                                },
+                                                                            },
+                                                                            '& .MuiDataGrid-footerContainer': {
+                                                                                borderTop: `2px solid ${theme.palette.divider}`,
+                                                                                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.02)',
+                                                                                padding: '8px 16px',
+                                                                                borderRadius: '0 0 8px 8px',
+                                                                            },
+                                                                            '& .MuiDataGrid-toolbar': {
+                                                                                padding: '16px',
+                                                                                borderBottom: `1px solid ${theme.palette.divider}`,
+                                                                                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.02)',
+                                                                                '& .MuiButton-root': {
+                                                                                    color: theme.palette.text.secondary,
+                                                                                    fontSize: '0.875rem',
+                                                                                    fontWeight: 500,
+                                                                                    textTransform: 'none',
+                                                                                    padding: '6px 12px',
+                                                                                    borderRadius: 1.5,
+                                                                                    '&:hover': {
+                                                                                        backgroundColor: theme.palette.action.hover,
+                                                                                        color: theme.palette.primary.main,
+                                                                                    },
+                                                                                },
+                                                                            },
+                                                                        }}
+                                                                        initialState={{
+                                                                            pagination: {
+                                                                                paginationModel: { pageSize: 10 },
+                                                                            },
+                                                                        }}
+                                                                        pageSizeOptions={[5, 10, 25, 50]}
+                                                                    />
+                                                                </Box>
 
                                                                 {user && partner && (
                                                                     <CustomerQuickManagementForm
@@ -991,7 +1223,22 @@ export default function MayoristaPage(callback, deps) {
                                                         return <div>
 
                                                             <Card sx={{
-                                                                p: 5
+                                                                p: 4,
+                                                                borderRadius: 3,
+                                                                boxShadow: theme.customShadows?.z16 || "0 16px 32px rgba(0,0,0,0.08)",
+                                                                background: `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${alpha(theme.palette.secondary.lighter || theme.palette.secondary.light, 0.03)} 100%)`,
+                                                                border: `1px solid ${alpha(theme.palette.secondary.main, 0.08)}`,
+                                                                position: 'relative',
+                                                                overflow: 'hidden',
+                                                                '&::before': {
+                                                                    content: '""',
+                                                                    position: 'absolute',
+                                                                    top: 0,
+                                                                    left: 0,
+                                                                    right: 0,
+                                                                    height: '3px',
+                                                                    background: `linear-gradient(90deg, ${theme.palette.secondary.main}, ${theme.palette.primary.main}, ${theme.palette.warning.main})`,
+                                                                }
                                                             }}
                                                             >
 
@@ -1023,38 +1270,54 @@ export default function MayoristaPage(callback, deps) {
                                                                                 label={
                                                                                     <Stack direction="row"
                                                                                            alignItems="center"
-                                                                                           spacing={1}>
+                                                                                           spacing={1.5}>
                                                                                         <Iconify
                                                                                             icon={rango.icon}
-                                                                                            width={18}
-                                                                                            height={18}
-                                                                                            style={{
-                                                                                                color: selected === rango.id ? "white" : "#000000",
+                                                                                            width={20}
+                                                                                            height={20}
+                                                                                            sx={{
+                                                                                                color: selected === rango.id ? 'white' : theme.palette.secondary.main,
+                                                                                                transition: 'all 0.2s ease'
                                                                                             }}
                                                                                         />
-                                                                                        <span>{rango.title}</span>
+                                                                                        <Box component="span" sx={{ fontWeight: 600 }}>
+                                                                                            {rango.title}
+                                                                                        </Box>
                                                                                     </Stack>
                                                                                 }
                                                                                 variant={selected === rango.id ? "filled" : "outlined"}
-                                                                                color={selected === rango.id ? "primary" : "default"}
+                                                                                color={selected === rango.id ? "secondary" : "default"}
                                                                                 sx={{
-                                                                                    px: 2.5,
-                                                                                    py: 1.2,
-                                                                                    borderRadius: "24px",
+                                                                                    px: 3,
+                                                                                    py: 1.5,
+                                                                                    borderRadius: 3,
                                                                                     fontWeight: 600,
-                                                                                    fontSize: "0.9rem",
-                                                                                    bgcolor:
-                                                                                        selected === rango.id ? "primary.main" : "background.paper",
-                                                                                    color:
-                                                                                        selected === rango.id
-                                                                                            ? "primary.contrastText"
-                                                                                            : "text.primary",
-                                                                                    boxShadow: selected === rango.id ? 3 : 1,
-                                                                                    transition: "all 0.25s ease",
+                                                                                    fontSize: "0.875rem",
+                                                                                    minHeight: 44,
+                                                                                    cursor: 'pointer',
+                                                                                    background: selected === rango.id 
+                                                                                        ? `linear-gradient(135deg, ${theme.palette.secondary.main} 0%, ${theme.palette.secondary.dark} 100%)`
+                                                                                        : `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${alpha(theme.palette.secondary.lighter || theme.palette.secondary.light, 0.1)} 100%)`,
+                                                                                    border: selected === rango.id 
+                                                                                        ? 'none' 
+                                                                                        : `2px solid ${alpha(theme.palette.secondary.main, 0.2)}`,
+                                                                                    color: selected === rango.id ? "white" : theme.palette.text.primary,
+                                                                                    boxShadow: selected === rango.id 
+                                                                                        ? `0 8px 24px ${alpha(theme.palette.secondary.main, 0.4)}`
+                                                                                        : `0 4px 12px ${alpha(theme.palette.grey[500], 0.15)}`,
+                                                                                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                                                                                     "&:hover": {
-                                                                                        boxShadow: 4,
-                                                                                        transform: "translateY(-2px)",
+                                                                                        transform: "translateY(-4px) scale(1.02)",
+                                                                                        boxShadow: selected === rango.id 
+                                                                                            ? `0 12px 32px ${alpha(theme.palette.secondary.main, 0.5)}`
+                                                                                            : `0 8px 24px ${alpha(theme.palette.secondary.main, 0.25)}`,
+                                                                                        background: selected === rango.id 
+                                                                                            ? `linear-gradient(135deg, ${theme.palette.secondary.dark} 0%, ${theme.palette.secondary.main} 100%)`
+                                                                                            : `linear-gradient(135deg, ${alpha(theme.palette.secondary.main, 0.05)} 0%, ${alpha(theme.palette.secondary.main, 0.15)} 100%)`,
                                                                                     },
+                                                                                    "&:active": {
+                                                                                        transform: "translateY(-2px) scale(0.98)",
+                                                                                    }
                                                                                 }}
                                                                             />
                                                                         </Grid>
@@ -1068,38 +1331,87 @@ export default function MayoristaPage(callback, deps) {
                                                                     {/* Columna izquierda: Analytics */}
                                                                     <Grid item xs={12} md={1}>
                                                                         <Stack spacing={3}>
-                                                                            <AnalyticsWidgetSummary
-                                                                                title="Por Gestionar"
-                                                                                total={
-                                                                                    businessPartners && businessPartners.length ? businessPartners.length : 0
+                                                                            <Box sx={{
+                                                                                p: 2,
+                                                                                borderRadius: 2,
+                                                                                background: `linear-gradient(135deg, ${alpha(theme.palette.info.main, 0.1)} 0%, ${alpha(theme.palette.info.lighter || theme.palette.info.light, 0.05)} 100%)`,
+                                                                                border: `1px solid ${alpha(theme.palette.info.main, 0.15)}`,
+                                                                                transition: 'all 0.3s ease',
+                                                                                '&:hover': {
+                                                                                    transform: 'translateY(-2px)',
+                                                                                    boxShadow: `0 8px 16px ${alpha(theme.palette.info.main, 0.2)}`,
                                                                                 }
-                                                                                color="info"
-                                                                                icon={<img alt="icon"
-                                                                                           src="/assets/icons/glass/ic_glass_users.png"/>}
-                                                                            />
+                                                                            }}>
+                                                                                <AnalyticsWidgetSummary
+                                                                                    title="🔄 Por Gestionar"
+                                                                                    total={
+                                                                                        businessPartners && businessPartners.length ? businessPartners.length : 0
+                                                                                    }
+                                                                                    color="info"
+                                                                                    icon={<img alt="icon"
+                                                                                               src="/assets/icons/glass/ic_glass_users.png"/>}
+                                                                                />
+                                                                            </Box>
 
-                                                                            <AnalyticsWidgetSummary
-                                                                                title="Total Agenda"
-                                                                                total={dataContAgenda}
-                                                                                color="warning"
-                                                                                icon={<img alt="icon"
-                                                                                           src="/assets/icons/glass/ic_glass_buy.png"/>}
-                                                                            />
+                                                                            <Box sx={{
+                                                                                p: 2,
+                                                                                borderRadius: 2,
+                                                                                background: `linear-gradient(135deg, ${alpha(theme.palette.warning.main, 0.1)} 0%, ${alpha(theme.palette.warning.lighter || theme.palette.warning.light, 0.05)} 100%)`,
+                                                                                border: `1px solid ${alpha(theme.palette.warning.main, 0.15)}`,
+                                                                                transition: 'all 0.3s ease',
+                                                                                '&:hover': {
+                                                                                    transform: 'translateY(-2px)',
+                                                                                    boxShadow: `0 8px 16px ${alpha(theme.palette.warning.main, 0.2)}`,
+                                                                                }
+                                                                            }}>
+                                                                                <AnalyticsWidgetSummary
+                                                                                    title="📅 Total Agenda"
+                                                                                    total={dataContAgenda}
+                                                                                    color="warning"
+                                                                                    icon={<img alt="icon"
+                                                                                               src="/assets/icons/glass/ic_glass_buy.png"/>}
+                                                                                />
+                                                                            </Box>
 
-                                                                            <AnalyticsWidgetSummary
-                                                                                title="Agenda Cerrados"
-                                                                                total={dataContAgendaPorCerrar}
-                                                                                icon={<img alt="icon"
-                                                                                           src="/assets/icons/glass/ic_glass_bag.png"/>}
-                                                                            />
+                                                                            <Box sx={{
+                                                                                p: 2,
+                                                                                borderRadius: 2,
+                                                                                background: `linear-gradient(135deg, ${alpha(theme.palette.success.main, 0.1)} 0%, ${alpha(theme.palette.success.lighter || theme.palette.success.light, 0.05)} 100%)`,
+                                                                                border: `1px solid ${alpha(theme.palette.success.main, 0.15)}`,
+                                                                                transition: 'all 0.3s ease',
+                                                                                '&:hover': {
+                                                                                    transform: 'translateY(-2px)',
+                                                                                    boxShadow: `0 8px 16px ${alpha(theme.palette.success.main, 0.2)}`,
+                                                                                }
+                                                                            }}>
+                                                                                <AnalyticsWidgetSummary
+                                                                                    title="✅ Agenda Cerrados"
+                                                                                    total={dataContAgendaPorCerrar}
+                                                                                    color="success"
+                                                                                    icon={<img alt="icon"
+                                                                                               src="/assets/icons/glass/ic_glass_bag.png"/>}
+                                                                                />
+                                                                            </Box>
 
-                                                                            <AnalyticsWidgetSummary
-                                                                                title="Agenda Abiertos"
-                                                                                total={dataContAgendaCErrado}
-                                                                                color="error"
-                                                                                icon={<img alt="icon"
-                                                                                           src="/assets/icons/glass/ic_glass_message.png"/>}
-                                                                            />
+                                                                            <Box sx={{
+                                                                                p: 2,
+                                                                                borderRadius: 2,
+                                                                                background: `linear-gradient(135deg, ${alpha(theme.palette.error.main, 0.1)} 0%, ${alpha(theme.palette.error.lighter || theme.palette.error.light, 0.05)} 100%)`,
+                                                                                border: `1px solid ${alpha(theme.palette.error.main, 0.15)}`,
+                                                                                transition: 'all 0.3s ease',
+                                                                                '&:hover': {
+                                                                                    transform: 'translateY(-2px)',
+                                                                                    boxShadow: `0 8px 16px ${alpha(theme.palette.error.main, 0.2)}`,
+                                                                                }
+                                                                            }}>
+                                                                                <AnalyticsWidgetSummary
+                                                                                    title="⏳ Agenda Abiertos"
+                                                                                    total={dataContAgendaCErrado}
+                                                                                    color="error"
+                                                                                    icon={<img alt="icon"
+                                                                                               src="/assets/icons/glass/ic_glass_message.png"/>}
+                                                                                />
+                                                                            </Box>
                                                                         </Stack>
                                                                     </Grid>
 
@@ -1108,21 +1420,99 @@ export default function MayoristaPage(callback, deps) {
                                                                     <Grid item xs={12} md={11}>
 
                                                                         <Card sx={{
-                                                                            p: 5
+                                                                            p: 4,
+                                                                            borderRadius: 3,
+                                                                            boxShadow: theme.customShadows?.z16 || "0 16px 32px rgba(0,0,0,0.08)",
+                                                                            background: `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${alpha(theme.palette.grey[50], 0.3)} 100%)`,
+                                                                            border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+                                                                            position: 'relative',
+                                                                            overflow: 'hidden',
+                                                                            '&::before': {
+                                                                                content: '""',
+                                                                                position: 'absolute',
+                                                                                top: 0,
+                                                                                left: 0,
+                                                                                right: 0,
+                                                                                height: '3px',
+                                                                                background: `linear-gradient(90deg, ${theme.palette.secondary.main}, ${theme.palette.primary.main}, ${theme.palette.success.main})`,
+                                                                            }
                                                                         }}
                                                                         >
-                                                                            <DataGrid
-                                                                                rows={businessPartners}
-                                                                                columns={baseColumns}
-                                                                                pagination
-                                                                                slots={{
-                                                                                    toolbar: CustomToolbar,
-                                                                                    noRowsOverlay: () => <EmptyContent
-                                                                                        title="No Data"/>,
-                                                                                    noResultsOverlay: () => <EmptyContent
-                                                                                        title="No results found"/>,
-                                                                                }}
-                                                                            />
+                                                                            <Box sx={{ mt: 2, mb: 3 }}>
+                                                                                <DataGrid
+                                                                                    rows={businessPartners}
+                                                                                    columns={baseColumns}
+                                                                                    pagination
+                                                                                    autoHeight
+                                                                                    disableRowSelectionOnClick
+                                                                                    slots={{
+                                                                                        toolbar: CustomToolbar,
+                                                                                        noRowsOverlay: () => <EmptyContent title="📋 No hay datos disponibles" sx={{ py: 6 }} />,
+                                                                                        noResultsOverlay: () => <EmptyContent title="🔍 No se encontraron resultados" sx={{ py: 6 }} />,
+                                                                                    }}
+                                                                                    sx={{
+                                                                                        border: 'none',
+                                                                                        borderRadius: 2,
+                                                                                        boxShadow: theme.customShadows?.card || '0px 4px 20px rgba(0, 0, 0, 0.08)',
+                                                                                        backgroundColor: theme.palette.background.paper,
+                                                                                        '& .MuiDataGrid-main': {
+                                                                                            borderRadius: 2,
+                                                                                        },
+                                                                                        '& .MuiDataGrid-columnHeaders': {
+                                                                                            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.04)',
+                                                                                            borderBottom: `2px solid ${theme.palette.divider}`,
+                                                                                            borderRadius: '8px 8px 0 0',
+                                                                                            fontWeight: 700,
+                                                                                            fontSize: '0.875rem',
+                                                                                            color: theme.palette.text.primary,
+                                                                                            minHeight: '56px !important',
+                                                                                        },
+                                                                                        '& .MuiDataGrid-cell': {
+                                                                                            borderBottom: `1px solid ${theme.palette.divider}`,
+                                                                                            padding: '12px 16px',
+                                                                                            fontSize: '0.875rem',
+                                                                                            color: theme.palette.text.primary,
+                                                                                        },
+                                                                                        '& .MuiDataGrid-row': {
+                                                                                            transition: 'all 0.2s ease-in-out',
+                                                                                            '&:hover': {
+                                                                                                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
+                                                                                                transform: 'translateY(-1px)',
+                                                                                                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.12)',
+                                                                                            },
+                                                                                        },
+                                                                                        '& .MuiDataGrid-footerContainer': {
+                                                                                            borderTop: `2px solid ${theme.palette.divider}`,
+                                                                                            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.02)',
+                                                                                            padding: '8px 16px',
+                                                                                            borderRadius: '0 0 8px 8px',
+                                                                                        },
+                                                                                        '& .MuiDataGrid-toolbar': {
+                                                                                            padding: '16px',
+                                                                                            borderBottom: `1px solid ${theme.palette.divider}`,
+                                                                                            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.02)',
+                                                                                            '& .MuiButton-root': {
+                                                                                                color: theme.palette.text.secondary,
+                                                                                                fontSize: '0.875rem',
+                                                                                                fontWeight: 500,
+                                                                                                textTransform: 'none',
+                                                                                                padding: '6px 12px',
+                                                                                                borderRadius: 1.5,
+                                                                                                '&:hover': {
+                                                                                                    backgroundColor: theme.palette.action.hover,
+                                                                                                    color: theme.palette.primary.main,
+                                                                                                },
+                                                                                            },
+                                                                                        },
+                                                                                    }}
+                                                                                    initialState={{
+                                                                                        pagination: {
+                                                                                            paginationModel: { pageSize: 10 },
+                                                                                        },
+                                                                                    }}
+                                                                                    pageSizeOptions={[5, 10, 25, 50]}
+                                                                                />
+                                                                            </Box>
 
                                                                             {user && partner && (
                                                                                 <CustomerQuickManagementForm
@@ -1190,7 +1580,23 @@ export default function MayoristaPage(callback, deps) {
 
                                                             </Card>
                                                             <Card sx={{
-                                                                p: 5
+                                                                p: 4,
+                                                                mt: 3,
+                                                                borderRadius: 3,
+                                                                boxShadow: theme.customShadows?.z16 || "0 16px 32px rgba(0,0,0,0.08)",
+                                                                background: `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${alpha(theme.palette.info.lighter || theme.palette.info.light, 0.05)} 100%)`,
+                                                                border: `1px solid ${alpha(theme.palette.info.main, 0.1)}`,
+                                                                position: 'relative',
+                                                                overflow: 'hidden',
+                                                                '&::before': {
+                                                                    content: '""',
+                                                                    position: 'absolute',
+                                                                    top: 0,
+                                                                    left: 0,
+                                                                    right: 0,
+                                                                    height: '3px',
+                                                                    background: `linear-gradient(90deg, ${theme.palette.info.main}, ${theme.palette.success.main}, ${theme.palette.warning.main})`,
+                                                                }
                                                             }}
                                                             >
                                                                 <CalendarView onValorCambiado={handleValorCambiado}/>
