@@ -542,7 +542,7 @@ export default function CustomerPagosEfectuados({ currentPartner, open, onClose 
                                                     </Typography>
                                                 </Box>
                                                 <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.primary.main }}>
-                                                    ${totalFacturado.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                                                    ${totalFacturado.toLocaleString('es-EC', { minimumFractionDigits: 2 })}
                                                 </Typography>
                                             </CardContent>
                                         </Card>
@@ -595,7 +595,7 @@ export default function CustomerPagosEfectuados({ currentPartner, open, onClose 
                                                     </Typography>
                                                 </Box>
                                                 <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.success.main }}>
-                                                    ${totalPagado.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                                                    ${totalPagado.toLocaleString('es-EC', { minimumFractionDigits: 2 })}
                                                 </Typography>
                                             </CardContent>
                                         </Card>
@@ -648,7 +648,7 @@ export default function CustomerPagosEfectuados({ currentPartner, open, onClose 
                                                     </Typography>
                                                 </Box>
                                                 <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.warning.main }}>
-                                                    ${totalNotasCredito.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                                                    ${totalNotasCredito.toLocaleString('es-EC', { minimumFractionDigits: 2 })}
                                                 </Typography>
                                             </CardContent>
                                         </Card>
@@ -701,7 +701,7 @@ export default function CustomerPagosEfectuados({ currentPartner, open, onClose 
                                                     </Typography>
                                                 </Box>
                                                 <Typography variant="h5" sx={{ fontWeight: 700, color: '#9C27B0' }}>
-                                                    ${totalReconciliaciones.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                                                    ${totalReconciliaciones.toLocaleString('es-EC', { minimumFractionDigits: 2 })}
                                                 </Typography>
                                             </CardContent>
                                         </Card>
@@ -754,7 +754,7 @@ export default function CustomerPagosEfectuados({ currentPartner, open, onClose 
                                                     </Typography>
                                                 </Box>
                                                 <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.error.main }}>
-                                                    ${saldoPendiente.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                                                    ${saldoPendiente.toLocaleString('es-EC', { minimumFractionDigits: 2 })}
                                                 </Typography>
                                             </CardContent>
                                         </Card>
@@ -867,261 +867,6 @@ export default function CustomerPagosEfectuados({ currentPartner, open, onClose 
                                     </Grid>
                                 </Grid>
 
-
-                                <Box
-                                    sx={{
-                                        borderRadius: '20px',
-                                        overflow: 'hidden',
-                                        background: `linear-gradient(135deg, 
-                                            ${alpha(theme.palette.background.paper, 0.8)} 0%, 
-                                            ${alpha(theme.palette.primary.main, 0.02)} 50%,
-                                            ${alpha(theme.palette.secondary.main, 0.02)} 100%)`,
-                                        border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
-                                        boxShadow: `0 12px 40px ${alpha(theme.palette.common.black, 0.1)}`,
-                                        backdropFilter: 'blur(20px)',
-                                        position: 'relative',
-                                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                        '&::before': {
-                                            content: '""',
-                                            position: 'absolute',
-                                            top: 0,
-                                            left: 0,
-                                            right: 0,
-                                            height: '4px',
-                                            background: `linear-gradient(90deg, 
-                                                ${theme.palette.primary.main}, 
-                                                ${theme.palette.secondary.main}, 
-                                                ${theme.palette.success.main})`,
-                                        },
-                                        '&:hover': {
-                                            transform: 'translateY(-4px)',
-                                            boxShadow: `0 20px 60px ${alpha(theme.palette.common.black, 0.15)}`,
-                                            border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
-                                        }
-                                    }}
-                                >
-                                    <Box sx={{ p: 3, borderBottom: `1px solid ${alpha(theme.palette.divider, 0.08)}` }}>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                                <Box
-                                                    sx={{
-                                                        width: 48,
-                                                        height: 48,
-                                                        borderRadius: '16px',
-                                                        background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        fontSize: '24px',
-                                                        boxShadow: `0 6px 20px ${alpha(theme.palette.primary.main, 0.3)}`,
-                                                        animation: 'pulse 2s infinite'
-                                                    }}
-                                                >
-                                                    📈
-                                                </Box>
-                                                <Box>
-                                                    <Typography
-                                                        variant="h5"
-                                                        sx={{
-                                                            fontWeight: 700,
-                                                            background: `linear-gradient(45deg, ${theme.palette.text.primary}, ${theme.palette.primary.main})`,
-                                                            backgroundClip: 'text',
-                                                            WebkitBackgroundClip: 'text',
-                                                            WebkitTextFillColor: 'transparent',
-                                                            letterSpacing: '-0.5px',
-                                                            mb: 0.5
-                                                        }}
-                                                    >
-                                                        Evolución Temporal
-                                                    </Typography>
-                                                    <Typography 
-                                                        variant="body2" 
-                                                        sx={{ 
-                                                            color: theme.palette.text.secondary,
-                                                            fontWeight: 500,
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            gap: 0.5
-                                                        }}
-                                                    >
-                                                        <Box sx={{ fontSize: '16px' }}>📊</Box>
-                                                        Análisis de tendencias de facturación y pagos
-                                                    </Typography>
-                                                </Box>
-                                            </Box>
-                                            <Box sx={{ display: 'flex', gap: 1 }}>
-                                                <Box
-                                                    sx={{
-                                                        px: 2,
-                                                        py: 1,
-                                                        borderRadius: '12px',
-                                                        background: `linear-gradient(135deg, ${alpha(theme.palette.success.main, 0.1)}, ${alpha(theme.palette.success.light, 0.05)})`,
-                                                        border: `1px solid ${alpha(theme.palette.success.main, 0.2)}`,
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        gap: 0.5
-                                                    }}
-                                                >
-                                                    <Box sx={{ fontSize: '12px' }}>💵</Box>
-                                                    <Typography variant="caption" sx={{ fontWeight: 600, color: theme.palette.success.main }}>
-                                                        Pagos
-                                                    </Typography>
-                                                </Box>
-                                                <Box
-                                                    sx={{
-                                                        px: 2,
-                                                        py: 1,
-                                                        borderRadius: '12px',
-                                                        background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)}, ${alpha(theme.palette.primary.light, 0.05)})`,
-                                                        border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        gap: 0.5
-                                                    }}
-                                                >
-                                                    <Box sx={{ fontSize: '12px' }}>📋</Box>
-                                                    <Typography variant="caption" sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
-                                                        Facturado
-                                                    </Typography>
-                                                </Box>
-                                            </Box>
-                                        </Box>
-                                    </Box>
-                                    <Box sx={{ px: 3, pb: 2, borderBottom: `1px solid ${alpha(theme.palette.divider, 0.05)}` }}>
-                                        <Grid container spacing={3}>
-                                            <Grid item xs={12} sm={4}>
-                                                <Box
-                                                    sx={{
-                                                        p: 2,
-                                                        borderRadius: '12px',
-                                                        background: `linear-gradient(135deg, ${alpha(theme.palette.success.main, 0.08)}, ${alpha(theme.palette.success.light, 0.03)})`,
-                                                        border: `1px solid ${alpha(theme.palette.success.main, 0.15)}`,
-                                                        textAlign: 'center',
-                                                        transition: 'all 0.3s ease',
-                                                        '&:hover': {
-                                                            transform: 'translateY(-2px)',
-                                                            boxShadow: `0 6px 20px ${alpha(theme.palette.success.main, 0.2)}`,
-                                                        }
-                                                    }}
-                                                >
-                                                    <Typography variant="h4" sx={{ fontWeight: 700, color: theme.palette.success.main, mb: 0.5 }}>
-                                                        {facturasAgrupadas.length}
-                                                    </Typography>
-                                                    <Typography variant="body2" sx={{ color: theme.palette.text.secondary, fontWeight: 500 }}>
-                                                        Facturas Procesadas
-                                                    </Typography>
-                                                </Box>
-                                            </Grid>
-                                            <Grid item xs={12} sm={4}>
-                                                <Box
-                                                    sx={{
-                                                        p: 2,
-                                                        borderRadius: '12px',
-                                                        background: `linear-gradient(135deg, ${alpha(theme.palette.warning.main, 0.08)}, ${alpha(theme.palette.warning.light, 0.03)})`,
-                                                        border: `1px solid ${alpha(theme.palette.warning.main, 0.15)}`,
-                                                        textAlign: 'center',
-                                                        transition: 'all 0.3s ease',
-                                                        '&:hover': {
-                                                            transform: 'translateY(-2px)',
-                                                            boxShadow: `0 6px 20px ${alpha(theme.palette.warning.main, 0.2)}`,
-                                                        }
-                                                    }}
-                                                >
-                                                    <Typography variant="h4" sx={{ fontWeight: 700, color: theme.palette.warning.main, mb: 0.5 }}>
-                                                        {totalPagado > 0 ? ((totalPagado / totalFacturado) * 100).toFixed(1) : 0}%
-                                                    </Typography>
-                                                    <Typography variant="body2" sx={{ color: theme.palette.text.secondary, fontWeight: 500 }}>
-                                                        Efectividad de Cobro
-                                                    </Typography>
-                                                </Box>
-                                            </Grid>
-                                            <Grid item xs={12} sm={4}>
-                                                <Box
-                                                    sx={{
-                                                        p: 2,
-                                                        borderRadius: '12px',
-                                                        background: `linear-gradient(135deg, ${alpha(theme.palette.info.main, 0.08)}, ${alpha(theme.palette.info.light, 0.03)})`,
-                                                        border: `1px solid ${alpha(theme.palette.info.main, 0.15)}`,
-                                                        textAlign: 'center',
-                                                        transition: 'all 0.3s ease',
-                                                        '&:hover': {
-                                                            transform: 'translateY(-2px)',
-                                                            boxShadow: `0 6px 20px ${alpha(theme.palette.info.main, 0.2)}`,
-                                                        }
-                                                    }}
-                                                >
-                                                    <Typography variant="h4" sx={{ fontWeight: 700, color: theme.palette.info.main, mb: 0.5 }}>
-                                                        ${(totalFacturado / facturasAgrupadas.length || 0).toFixed(0)}
-                                                    </Typography>
-                                                    <Typography variant="body2" sx={{ color: theme.palette.text.secondary, fontWeight: 500 }}>
-                                                        Promedio por Factura
-                                                    </Typography>
-                                                </Box>
-                                            </Grid>
-                                        </Grid>
-                                    </Box>
-                                    <Box sx={{ p: 3 }}>
-                                        <EcommerceYearlySales
-                                            title=""
-                                            chart={{
-                                                categories,
-                                                series: [
-                                                    {
-                                                        name: '2025',
-                                                        data: [
-                                                            {
-                                                                name: 'Pagos',
-                                                                data: pagos
-                                                            },
-                                                            {
-                                                                name: 'Facturado',
-                                                                data: facturado,
-                                                            },
-                                                        ],
-                                                    },
-                                                ],
-                                            }}
-                                        />
-                                    </Box>
-                                    <Box 
-                                        sx={{ 
-                                            px: 3, 
-                                            pb: 3, 
-                                            pt: 1,
-                                            borderTop: `1px solid ${alpha(theme.palette.divider, 0.05)}`,
-                                        }}
-                                    >
-                                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                                <Box
-                                                    sx={{
-                                                        width: 8,
-                                                        height: 8,
-                                                        borderRadius: '50%',
-                                                        background: theme.palette.success.main,
-                                                        animation: 'pulse 2s infinite'
-                                                    }}
-                                                />
-                                                <Typography variant="caption" sx={{ color: theme.palette.success.main, fontWeight: 600 }}>
-                                                    Datos actualizados
-                                                </Typography>
-                                            </Box>
-                                            <Typography variant="caption" sx={{ color: theme.palette.text.secondary }}>
-                                                Último análisis: {new Date().toLocaleDateString('es-ES', { 
-                                                    day: '2-digit', 
-                                                    month: 'short', 
-                                                    year: 'numeric',
-                                                    hour: '2-digit',
-                                                    minute: '2-digit'
-                                                })}
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-                                </Box>
-
-
-
-
                                 <Grid item xs={12} md={6} lg={8}>
                                     <Box
                                         sx={{
@@ -1200,20 +945,20 @@ export default function CustomerPagosEfectuados({ currentPartner, open, onClose 
                                                             // Crear datos para CSV con facturas agrupadas
                                                             const csvData = facturasAgrupadas.map(factura => {
                                                                 const detallesPagos = factura.PAGOS.map(pago => 
-                                                                    `${pago.noPago}:$${pago.monto.toFixed(2)}:${new Date(pago.fecha).toLocaleDateString('en-US')}`
+                                                                    `${pago.noPago}:$${pago.monto.toFixed(2)}:${new Date(pago.fecha).toLocaleDateString('es-EC')}`
                                                                 ).join('|');
                                                                 
                                                                 const detallesNotasCredito = factura.NOTAS_CREDITO.map(nota => 
-                                                                    `${nota.noNota}:$${nota.monto.toFixed(2)}:${new Date(nota.fecha).toLocaleDateString('en-US')}`
+                                                                    `${nota.noNota}:$${nota.monto.toFixed(2)}:${new Date(nota.fecha).toLocaleDateString('es-EC')}`
                                                                 ).join('|');
 
                                                                 const detallesReconciliaciones = factura.RECONCILIACIONES_INTERNAS.map(recon => 
-                                                                    `${recon.noDocumento}:$${recon.monto.toFixed(2)}:${new Date(recon.fecha).toLocaleDateString('en-US')}:${recon.reconType}`
+                                                                    `${recon.noDocumento}:$${recon.monto.toFixed(2)}:${new Date(recon.fecha).toLocaleDateString('es-EC')}:${recon.reconType}`
                                                                 ).join('|');
                                                                 
                                                                 return {
                                                                     'No_Factura': factura.NO_FACTURA,
-                                                                    'Fecha_Factura': new Date(factura.FECHA_CONTAB_FACT).toLocaleDateString('en-US'),
+                                                                    'Fecha_Factura': new Date(factura.FECHA_CONTAB_FACT).toLocaleDateString('es-EC'),
                                                                     'Total_Facturado': factura.TOTAL_FACTURA.toFixed(2),
                                                                     'Total_Pagado': factura.TOTAL_PAGOS.toFixed(2),
                                                                     'Total_Notas_Credito': factura.TOTAL_NOTAS_CREDITO.toFixed(2),
@@ -1225,7 +970,7 @@ export default function CustomerPagosEfectuados({ currentPartner, open, onClose 
                                                                     'Cantidad_Pagos': factura.PAGOS.length,
                                                                     'Cantidad_Notas_Credito': factura.NOTAS_CREDITO.length,
                                                                     'Cantidad_Reconciliaciones': factura.RECONCILIACIONES_INTERNAS.length,
-                                                                    'Fecha_Ultimo_Pago': factura.FECHA_ULTIMO_PAGO ? new Date(factura.FECHA_ULTIMO_PAGO).toLocaleDateString('en-US') : 'N/A',
+                                                                    'Fecha_Ultimo_Pago': factura.FECHA_ULTIMO_PAGO ? new Date(factura.FECHA_ULTIMO_PAGO).toLocaleDateString('es-EC') : 'N/A',
                                                                     'Estado': (factura.TOTAL_FACTURA - factura.TOTAL_PAGOS - factura.TOTAL_NOTAS_CREDITO - factura.TOTAL_RECONCILIACIONES) <= 0 ? 'Pagado' : 'Pendiente',
                                                                     'Cliente': currentPartner.Cliente || '',
                                                                     'Detalle_Pagos': detallesPagos,
@@ -1420,8 +1165,8 @@ export default function CustomerPagosEfectuados({ currentPartner, open, onClose 
                                                             const pendiente = series[4][dataPointIndex];
                                                             const facturaData = facturasAgrupadas[dataPointIndex];
                                                             const numeroFactura = facturaData.NO_FACTURA;
-                                                            const fechaFactura = new Date(facturaData.FECHA_CONTAB_FACT).toLocaleDateString('en-US');
-                                                            const fechaUltimoPago = facturaData.FECHA_ULTIMO_PAGO ? new Date(facturaData.FECHA_ULTIMO_PAGO).toLocaleDateString('en-US') : 'N/A';
+                                                            const fechaFactura = new Date(facturaData.FECHA_CONTAB_FACT).toLocaleDateString('es-EC');
+                                                            const fechaUltimoPago = facturaData.FECHA_ULTIMO_PAGO ? new Date(facturaData.FECHA_ULTIMO_PAGO).toLocaleDateString('es-EC') : 'N/A';
                                                             const porcentajePagado = facturado > 0 ? ((pagado/facturado)*100).toFixed(1) : 0;
                                                             const porcentajeNotasCredito = facturado > 0 ? ((notaCredito/facturado)*100).toFixed(1) : 0;
                                                             const porcentajeReconciliacion = facturado > 0 ? ((reconciliacion/facturado)*100).toFixed(1) : 0;
@@ -1430,21 +1175,21 @@ export default function CustomerPagosEfectuados({ currentPartner, open, onClose 
                                                             // Generar lista de pagos
                                                             const listaPagos = facturaData.PAGOS.map((pago, idx) => 
                                                                 `<div style="margin: 2px 0; font-size: 10px; color: #666; padding-left: 10px;">
-                                                                    • $${pago.monto.toFixed(2)} - ${new Date(pago.fecha).toLocaleDateString('en-US')} (${pago.noPago})
+                                                                    • $${pago.monto.toFixed(2)} - ${new Date(pago.fecha).toLocaleDateString('es-EC')} (${pago.noPago})
                                                                 </div>`
                                                             ).join('');
 
                                                             // Generar lista de notas de crédito
                                                             const listaNotasCredito = facturaData.NOTAS_CREDITO.map((nota, idx) => 
                                                                 `<div style="margin: 2px 0; font-size: 10px; color: #666; padding-left: 10px;">
-                                                                    • $${nota.monto.toFixed(2)} - ${new Date(nota.fecha).toLocaleDateString('en-US')} (${nota.noNota}) - ${nota.motivo || 'S/M'}
+                                                                    • $${nota.monto.toFixed(2)} - ${new Date(nota.fecha).toLocaleDateString('es-EC')} (${nota.noNota}) - ${nota.motivo || 'S/M'}
                                                                 </div>`
                                                             ).join('');
 
                                                             // Generar lista de reconciliaciones internas
                                                             const listaReconciliaciones = facturaData.RECONCILIACIONES_INTERNAS.map((recon, idx) => 
                                                                 `<div style="margin: 2px 0; font-size: 10px; color: #666; padding-left: 10px;">
-                                                                    • $${recon.monto.toFixed(2)} - ${new Date(recon.fecha).toLocaleDateString('en-US')} (${recon.noDocumento}) - ${recon.reconType}
+                                                                    • $${recon.monto.toFixed(2)} - ${new Date(recon.fecha).toLocaleDateString('es-EC')} (${recon.noDocumento}) - ${recon.reconType}
                                                                 </div>`
                                                             ).join('');
                                                             
