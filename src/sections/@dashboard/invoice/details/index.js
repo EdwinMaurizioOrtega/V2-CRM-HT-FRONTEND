@@ -1443,7 +1443,7 @@ export default function InvoiceDetails({ invoice }) {
         setSeriesDisponibles('{"data": []}');
         setSelected(false);
         setOpenCargarSeries(false);
-        
+
         // Recargar la página
         window.location.reload();
     };
@@ -1475,7 +1475,7 @@ export default function InvoiceDetails({ invoice }) {
 
             if (response.status === 200) {
                 //console.log(response);
-               
+
                 //alert(JSON.stringify(response.data));
 
                 setSeriesDisponibles(JSON.stringify(response.data));
@@ -1880,7 +1880,13 @@ export default function InvoiceDetails({ invoice }) {
                                     ) : null
                                     }
 
-                                    <TableCell align="left">ID Detalle</TableCell>
+
+                                    {(user.ROLE === "8") && (
+
+                                        // <TableCell align="left">ID Detalle</TableCell>
+
+                                        <TableCell align="left">Nro. Series Cargadas</TableCell>
+                                    )}
 
                                 </TableRow>
                             </TableHead>
@@ -2016,7 +2022,12 @@ export default function InvoiceDetails({ invoice }) {
                                             </IconButton>
                                         </TableCell>
 
-                                        <TableCell align="left">{row.ID}</TableCell>
+                                        {(user.ROLE === "8") && (
+
+                                            // <TableCell align="left">{row.ID}</TableCell>
+
+                                            <TableCell align="left">{row.SERIES_COUNT}</TableCell>
+                                        )}
 
                                     </TableRow>
 
@@ -2106,6 +2117,17 @@ export default function InvoiceDetails({ invoice }) {
                         </Table>
                     </Scrollbar>
                 </TableContainer>
+
+{/* Bodega */}
+                 {(user.ROLE === "8") && (
+
+                {/* Resumen de series cargadas */}
+                <Box sx={{ mt: 2, p: 2, bgcolor: 'grey.50', borderRadius: 1, border: '1px solid', borderColor: 'grey.200' }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+                        📦 Total de series cargadas: {items.reduce((total, item) => total + (parseInt(item.SERIES_COUNT) || 0), 0)}
+                    </Typography>
+                </Box>
+                 )}
 
                 {(user.ROLE === "9" || user.ROLE === "10") && (
                     <>
@@ -2724,7 +2746,7 @@ export default function InvoiceDetails({ invoice }) {
                         <Button color="inherit" onClick={handleClearClick} style={{ marginLeft: '10px' }}>
                             Cerrar
                         </Button>
-                        
+
                     </Toolbar>
                 </AppBar>
 
@@ -2740,7 +2762,7 @@ export default function InvoiceDetails({ invoice }) {
                             alignItems: 'center', // Centra verticalmente los elementos
                         }}
                     >
-                        
+
                         <Typography variant="body1" sx={{ marginRight: '10px' }}>
                             Líneas ingresadas: {textArrayCount}
                         </Typography>
