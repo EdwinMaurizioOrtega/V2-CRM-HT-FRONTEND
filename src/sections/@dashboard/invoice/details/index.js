@@ -1483,6 +1483,7 @@ export default function InvoiceDetails({ invoice }) {
                 //Recargar la página
                 window.location.reload();
             } else {
+                //
                 // La solicitud POST no se realizó correctamente
                 console.error('Error en la solicitud POST:', response.status);
                 alert(JSON.stringify(response.status));
