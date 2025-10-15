@@ -2118,16 +2118,14 @@ export default function InvoiceDetails({ invoice }) {
                     </Scrollbar>
                 </TableContainer>
 
-{/* Bodega */}
-                 {(user.ROLE === "8") && (
-
-                {/* Resumen de series cargadas */}
-                <Box sx={{ mt: 2, p: 2, bgcolor: 'grey.50', borderRadius: 1, border: '1px solid', borderColor: 'grey.200' }}>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
-                        📦 Total de series cargadas: {items.reduce((total, item) => total + (parseInt(item.SERIES_COUNT) || 0), 0)}
-                    </Typography>
-                </Box>
-                 )}
+                {/* Resumen de series cargadas para Bodega */}
+                {(user.ROLE === "8") && (
+                    <Box sx={{ mt: 2, p: 2, bgcolor: 'grey.50', borderRadius: 1, border: '1px solid', borderColor: 'grey.200' }}>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+                            📦 Total de series cargadas: {items.reduce((total, item) => total + (parseInt(item.SERIES_COUNT) || 0), 0)}
+                        </Typography>
+                    </Box>
+                )}
 
                 {(user.ROLE === "9" || user.ROLE === "10") && (
                     <>
