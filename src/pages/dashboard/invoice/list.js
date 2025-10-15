@@ -1177,6 +1177,15 @@ export default function InvoiceListPage() {
                             />
 
                             <InvoiceAnalytic
+                                title="Por Cargar Series"
+                                total={getLengthByStatus(7)}
+                                percent={getPercentByStatus(7)}
+                                price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(7)}
+                                icon="solar:file-check-bold-duotone"
+                                color={theme.palette.success.main}
+                            />
+
+                            <InvoiceAnalytic
                                 title="Por Facturar"
                                 total={getLengthByStatus(0)}
                                 percent={getPercentByStatus(0)}
