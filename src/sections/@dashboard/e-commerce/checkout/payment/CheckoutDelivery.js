@@ -199,7 +199,7 @@ export default function CheckoutDelivery({
 
             </CardContent>
 
-            <CardHeader title="SERVIENTREGA"/>
+            <CardHeader title="DIRECCION DE ENTREGA - SERVIENTREGA"/>
 
             {/* <ContadorRegresivo /> */}
 

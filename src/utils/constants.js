@@ -293,3 +293,122 @@ export const TABULAR_ANULAR_PEDIDOS = [
         title: "Anulación factura en SAP."
     },
 ]
+
+
+
+export const BANCOS_LIDENAR = [
+    {
+        AcctCode: 101010322,
+        AcctName: "Banco Internacional 8000631140"
+    },
+    {
+        AcctCode: 101010302,
+        AcctName: "Banco Pacifico"
+    },
+
+    {
+        AcctCode: 101010310,
+        AcctName: "Coop Jep"
+    },
+
+    {
+        AcctCode: 101010318,
+        AcctName: "Cooperativa 29 de Octubre"
+    },
+
+    {
+        AcctCode: 101010315,
+        AcctName: "Banco Diners Club"
+    },
+    {
+        AcctCode: 101010311,
+        AcctName: "Banco del Austro"
+    },
+
+    {
+        AcctCode: 101010316,
+        AcctName: "Banco Produbanco 566003"
+    },
+
+    {
+        AcctCode: 101010320,
+        AcctName: "Banco Terrabank 1300305406"
+    },
+
+    {
+        AcctCode: 101010304,
+        AcctName: "Cooperativa Jardin Azuayo 2613185"
+    },
+
+    {
+        AcctCode: 101010308,
+        AcctName: "Banco Bolivariano 29764"
+    },
+
+    {
+        AcctCode: 101010317,
+        AcctName: "Banco Rumiñahui 9104"
+    },
+
+    {
+        AcctCode: 101010313,
+        AcctName: "Banco Solidario"
+    },
+
+    {
+        AcctCode: 101010307,
+        AcctName: "Produbanco Ahorros 12734076679"
+    },
+
+    {
+        AcctCode: 101010319,
+        AcctName: "Banco Guayaquil 0022476742"
+    },
+
+    {
+        AcctCode: 101010309,
+        AcctName: "Banco Produbanco"
+    },
+
+    {
+        AcctCode: 101010303,
+        AcctName: "Banco Pichincha 604"
+    },
+
+]
+
+export const BANCOS_MOVILCELISTIC = [
+    {
+        AcctCode: 1010103010401,
+        AcctName: "Banco Internacional Cta Cte N.0910602415"
+    },
+    {
+        AcctCode: 1010103010102,
+        AcctName: "Bco Produbanco Cta Cte. N.07734000046"
+    },
+
+    {
+        AcctCode: 1010103010501,
+        AcctName: "Banco Bolivariano Cta Cte. 4005048081"
+    },
+
+    {
+        AcctCode: 1010103010601,
+        AcctName: "Banco del Pacífico Cta Cte 8552363"
+    },
+
+    {
+        AcctCode: 1010103010301,
+        AcctName: "Bco Guayaquil Cta Cte N.41273550"
+    },
+
+    {
+        AcctCode: 1010103010101,
+        AcctName: "Bco Produbanco Cta Cte N.2005195175"
+    },
+
+    {
+        AcctCode: 1010103010201,
+        AcctName: "Bco del Pichincha Cta Cte N.3467788804"
+    },
+]

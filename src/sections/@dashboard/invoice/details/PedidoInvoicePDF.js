@@ -99,7 +99,19 @@ export default function PedidoInvoicePDF({invoice, user, empresa}) {
         <Document>
             <Page size="A4" style={styles.page}>
                 <View style={[styles.gridContainer, styles.mb40]}>
-                    <Image source="/logo/ht_bit.png" style={{height: 32}}/>
+                    <Image source="/logo/logo_group_ht.jpeg" style={{height: 32}}/>
+                    <Text>
+                            {new Date().toLocaleString('es-EC', {
+                                timeZone: 'America/Guayaquil',
+                                year: 'numeric',
+                                month: '2-digit',
+                                day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                second: '2-digit',
+                                hour12: false
+                            })}
+                        </Text>
                     <View style={{alignItems: 'flex-end', flexDirection: 'column'}}>
                         <Text style={styles.h3}>{status}</Text>
                         <Text> {`PEDIDO: ${ID}`} </Text>

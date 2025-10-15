@@ -297,8 +297,10 @@ export default function InvoiceListPage() {
 
 
     useEffect(() => {
-        if (orders.length) {
+        if (orders && Array.isArray(orders) && orders.length > 0) {
             setTableData(orders);
+        } else if (orders && Array.isArray(orders) && orders.length === 0) {
+            setTableData([]);
         }
     }, [orders])
 
@@ -1582,6 +1584,7 @@ const getTabs = (user, tableData, getLengthByStatus,
                 { value: 'all', label: 'Total', color: 'info', count: tableData.length },
                 { value: 15, label: 'Pendiente Aprobar Vendedor', color: 'success', count: getLengthByStatus(15) },
                 { value: 6, label: 'Pendiente Aprobar Crédito', color: 'success', count: getLengthByStatus(6) },
+                { value: 7, label: 'Pendiente Cargar Series', color: 'success', count: getLengthByStatus(7) },
                 { value: 0, label: 'Pendiente Facturar', color: 'warning', count: getLengthByStatus(0) },
                 { value: 22, label: 'F/Pend. Cargar Evidencia', color: 'info', count: getLengthByStatus(22) },
                 { value: 23, label: 'F/Pend. Validar Cartera', color: 'info', count: getLengthByStatus(23) },

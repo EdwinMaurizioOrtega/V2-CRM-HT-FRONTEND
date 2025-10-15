@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 // @mui
-import {styled} from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import {
     Box,
     Card,
@@ -20,13 +20,16 @@ import {
     Autocomplete,
     Tooltip,
     CircularProgress,
+    Dialog,
+    DialogContent, Toolbar, AppBar, LinearProgress,
+    SvgIcon
 } from '@mui/material';
 
 import Link from 'next/link';
 // utils
-import {useEffect, useState} from "react";
-import {useRouter} from "next/router";
-import {fCurrency, fNumberSin} from '../../../../utils/formatNumber';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { fCurrency, fNumberSin } from '../../../../utils/formatNumber';
 // components
 import Label from '../../../../components/label';
 import Image from '../../../../components/image';
@@ -35,21 +38,21 @@ import Iconify from "../../../../components/iconify";
 import MenuPopover from "../../../../components/menu-popover";
 import ConfirmDialog from "../../../../components/confirm-dialog";
 import axios from "../../../../utils/axios";
-import {useAuthContext} from "../../../../auth/useAuthContext";
+import { useAuthContext } from "../../../../auth/useAuthContext";
 import React from 'react';
-import {useSnackbar} from "../../../../components/snackbar";
-import {HOST_API_KEY} from "../../../../config-global";
-import {useBoolean} from "../../../../hooks/use-boolean";
-import {PDFDownloadLink} from "@react-pdf/renderer";
+import { useSnackbar } from "../../../../components/snackbar";
+import { HOST_API_KEY } from "../../../../config-global";
+import { useBoolean } from "../../../../hooks/use-boolean";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 import PedidoInvoicePDF from "./PedidoInvoicePDF";
-import {DOCUMENTACION, PAYMENT_OPTIONS_V2, TIPO_CREDITO, TIPO_PRECIO} from "../../../../utils/constants";
+import { DOCUMENTACION, PAYMENT_OPTIONS_V2, TIPO_CREDITO, TIPO_PRECIO, BANCOS_LIDENAR, BANCOS_MOVILCELISTIC } from "../../../../utils/constants";
 
 import datos from '/data/datos.json'; // Ajusta la ruta según la ubicación de tu archivo JSON
 import datos_promo from '/data/promo.json'; // JSON Promoción
 
 // ----------------------------------------------------------------------
 
-const StyledRowResult = styled(TableRow)(({theme}) => ({
+const StyledRowResult = styled(TableRow)(({ theme }) => ({
     '& td': {
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(1),
@@ -91,7 +94,7 @@ function insertLineBreaks(text, maxLength) {
 }
 
 
-export default function InvoiceDetails({invoice}) {
+export default function InvoiceDetails({ invoice }) {
 
     //console.log("InvoiceDetail: " + JSON.stringify(invoice));
 
@@ -99,11 +102,13 @@ export default function InvoiceDetails({invoice}) {
 
     const router = useRouter();
 
-    const {user} = useAuthContext();
+    const { user } = useAuthContext();
 
     const [selected, setSelected] = useState(false);
 
     const [valueNew, setValueNew] = useState('');
+
+    const [seriesDisponibles, setSeriesDisponibles] = useState([]);
 
     const [valueGuia, setValueGuia] = useState('');
     const [valueFactura, setValueFactura] = useState('');
@@ -112,7 +117,12 @@ export default function InvoiceDetails({invoice}) {
 
     const [openConfirm, setOpenConfirm] = useState(false);
 
+    const [openCargarSeries, setOpenCargarSeries] = useState(false);
+    const [openVerListaSeries, setOpenVerListaSeries] = useState(false);
+    const [seriesGuardadas, setSeriesGuardadas] = useState([]);
+
     const [openPriceUnit, setOpenPriceUnit] = useState(false);
+
     const [openChangeProduct, setOpenChangeProduct] = useState(false);
 
     const [openQty, setOpenQty] = useState(false);
@@ -121,7 +131,13 @@ export default function InvoiceDetails({invoice}) {
 
     const [openPopover, setOpenPopover] = useState(null);
 
-    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const [buttonDisabled, setButtonDisabled] = useState(false);
+
+    const [textArrayCount, setTextArrayCount] = useState(0);
+    const [uniqueTextArrayCount, setUniqueTextArrayCount] = useState(0);
+
+
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     const handleOpenDiscountPercentage = () => {
         setOpenDiscountPercentage(true);
@@ -130,6 +146,14 @@ export default function InvoiceDetails({invoice}) {
     const handleCloseDiscountPercentage = () => {
         setOpenDiscountPercentage(false);
     };
+
+    const FileCopySvgIcon = (props) => (
+        <SvgIcon {...props}>
+            <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                fill="currentColor"></path>
+        </SvgIcon>
+    );
 
     const handleOpenQty = () => {
         setOpenQty(true);
@@ -174,6 +198,50 @@ export default function InvoiceDetails({invoice}) {
         setOpenPopover(null);
     };
 
+    const handleOpenCargarSeries = () => {
+        setOpenCargarSeries(true);
+    };
+
+    const handleCloseCargarSeries = () => {
+        setOpenCargarSeries(false);
+    };
+
+
+    const handleOpenVerListaSeries = async () => {
+        setOpenVerListaSeries(true);
+
+        // Llamar a la API cuando se abre el dialog
+        await obtenerSeriesGuardadas();
+    };
+
+    const handleCloseVerListaSeries = () => {
+        setOpenVerListaSeries(false);
+    };
+
+    // Nueva función para obtener las series guardadas de la API
+    const obtenerSeriesGuardadas = async () => {
+        try {
+
+            console.log("ID de orden:", selected.ID);
+
+            const response = await axios.post(`/hanadb/api/orders/series_by_id_detalle_orden`, {
+                empresa: user.EMPRESA,
+                id_detalle_orden: Number(selected.ID),
+            });
+
+            if (response.status === 200) {
+                console.log("Series obtenidas exitosamente:", response.data.data);
+                setSeriesGuardadas(response.data.data);
+            } else {
+                console.error('Error al obtener las series:', response.status);
+                setSeriesGuardadas([]);
+            }
+
+        } catch (error) {
+            console.error('Error en la solicitud para obtener series:', error);
+            setSeriesGuardadas([]);
+        }
+    };
 
     const {
         items = [],
@@ -213,6 +281,9 @@ export default function InvoiceDetails({invoice}) {
     //console.log("Row Detail Order: " + JSON.stringify(items))
 
     const [observacionA, setObservacionA] = useState('Ninguno...');
+    const [transferAccount, setTransferAccount] = useState(null);
+    const [transferReference, setTransferReference] = useState(null);
+    const [totalDolaresReferencia, setTotalDolaresReferencia] = useState(0);
 
     const [showAutocomplete, setShowAutocomplete] = useState(false);
 
@@ -493,6 +564,35 @@ export default function InvoiceDetails({invoice}) {
 
     }
 
+
+    // Cambiar la forma de pago en la base de datos GRUPO_EMPRESARIAL_HT
+    const handleBancoSeleccionado = async (event, value) => {
+
+        try {
+            console.log(value.AcctCode); // Log the selected element
+            //console.log(ID); // Log ID de la orden
+            // Actualizar una orden.
+            // const response = await axios.put('/hanadb/api/orders/order/change_payment', {
+            //     ID_ORDER: ID,
+            //     NEW_PAYMENT: value.id,
+            //     empresa: user.EMPRESA
+            // });
+
+            // //console.log("Orden actualizada correctamente.");
+            // //console.log("Código de estado:", response.status);
+
+            // // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            // if (response.status === 200) {
+            //     router.reload();
+            // }
+
+        } catch (error) {
+            // Manejar el error de la petición PUT aquí
+            console.error('Error al actualizar la orden:', error);
+        }
+
+    }
+
     // La  mejor forma de crear un CASE
     function nameWarehouse(ware) {
         //console.log(`Bodega: ${ware}`);
@@ -647,6 +747,120 @@ export default function InvoiceDetails({invoice}) {
         // }
     };
 
+    const enviarOrdenPendienteCargaSeries = async () => {
+
+        if (FORMADEPAGO === '-1') {
+
+            console.log("Código de cuenta de transferencia: " + transferAccount.AcctCode);
+            console.log("Número de referencia: " + transferReference);
+            console.log("Total en dólares de referencia: " + totalDolaresReferencia);
+
+
+            // Validar que todos los campos requeridos estén presentes
+            if (!transferAccount || !transferAccount.AcctCode) {
+                alert("Por favor selecciona una cuenta de transferencia");
+                return;
+            }
+
+            if (!transferReference || transferReference.trim() === '') {
+                alert("Por favor ingresa un número de referencia");
+                return;
+            }
+
+            if (!totalDolaresReferencia || totalDolaresReferencia <= 0) {
+                alert("Por favor ingresa un monto válido para el total en dólares");
+                return;
+            }
+        }
+
+        try {
+            //console.log(ID); // Log ID de la orden
+            //console.log(user.ID); // Log ID del usuario
+
+            setLoading(true); // Establecer loading a true antes de hacer la llamada a la API
+
+            // Convertir totalDolaresReferencia a número
+            const totalDolaresNumerico = parseFloat(totalDolaresReferencia);
+
+            // Preparar los datos base
+            const requestData = {
+                ID_ORDER: ID,
+                ID_USER: user.ID,
+                OBSERVACION_APROBACION: observacionA,
+                empresa: user.EMPRESA,
+            };
+
+            // Agregar datos adicionales si es transferencia
+            if (FORMADEPAGO === '-1') {
+                requestData.CUENTA_TRANSFERENCIA = `${transferAccount.AcctCode}`;
+                requestData.NUMERO_REFERENCIA = `${transferReference}`;
+                requestData.TOTAL_DOLARES_REFERENCIA = totalDolaresNumerico;
+            }
+
+
+            // Actualizar una orden.
+            const response = await axios.post('/hanadb/api/orders/enviar_cargar_series', requestData);
+
+            //console.log("Orden Creada en el SAP.");
+            //console.log("Código de estado:", response.status);
+
+            // Se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+                //await router.push('/dashboard/invoice/list/');
+                //setTimeout(() => {
+                window.location.href = '/dashboard/invoice/list/';
+                //}, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
+            }
+        } catch (error) {
+            // Manejar el error de la petición POST aquí
+            console.error('Error al actualizar la orden:', error);
+        }
+
+        // finally {
+        //     setLoading(false); // Restablecer loading a false después de que se completa la llamada a la API, independientemente de si fue exitosa o falló
+        // }
+    };
+
+
+    const crearFacturaSAP = async () => {
+
+        try {
+            setLoading(true);
+
+            console.log("Enviando datos a la API:");
+            console.log("- ID_ORDER:", ID);
+
+            // Preparar los datos base
+            const requestData = {
+                ID_ORDER: ID,
+                ID_USER: user.ID,
+                empresa: user.EMPRESA,
+            };
+
+            // Actualizar una orden.
+            const response = await axios.post('/hanadb/api/orders/factura_sap', requestData);
+
+            console.log("Factura creada en el SAP.");
+            console.log("Código de estado:", response.status);
+
+            // Se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+                window.location.href = '/dashboard/invoice/list/';
+            }
+            
+        } catch (error) {
+            console.error('Error al crear la factura:', error);
+            if (error.response) {
+                console.error('Detalles del error:', error.response.data);
+                alert(`Error del servidor: ${error.response.data.message || error.response.data}`);
+            } else {
+                alert('Error de conexión con el servidor');
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     const handleChangePedidoFactura = async () => {
 
@@ -656,7 +870,7 @@ export default function InvoiceDetails({invoice}) {
         //=========For All Companys=========
         let idEmpleadoEntregar = 0;
         let nombreUsuarioEntregara = '';
-        let estadoInvoice = 1
+        let estadoInvoice = 0
 
         if (user.COMPANY === 'HT') {
 
@@ -666,7 +880,7 @@ export default function InvoiceDetails({invoice}) {
                 if (valueGuia === '000000000' && CLIENTEID === 'CL1791251237001') {
                     idEmpleadoEntregar = 0;
                     nombreUsuarioEntregara = '';
-                    estadoInvoice = 1
+                    estadoInvoice = 0
                 } else {
                     alert("Seleccionar un empleado es obligatorio cuando la guía es => 000000000")
                     return; // Stop the execution of the function if the condition is met
@@ -677,13 +891,13 @@ export default function InvoiceDetails({invoice}) {
                 idEmpleadoEntregar = empleadoEntregar.CODE
                 nombreUsuarioEntregara = empleadoEntregar.NOMBRE
                 //Facturado - Pendiente de cargar evidencia vendedor
-                estadoInvoice = 22;
+                estadoInvoice = 0;
             }
 
             if (valueGuia !== '000000000') {
                 idEmpleadoEntregar = 0;
                 nombreUsuarioEntregara = '';
-                estadoInvoice = 1
+                estadoInvoice = 0
             }
 
             //console.log("ID empleado seleccionado: " + idEmpleadoEntregar)
@@ -737,7 +951,7 @@ export default function InvoiceDetails({invoice}) {
             //     enqueueSnackbar('El número de factura debe tener 17 caracteres, incluido los guiones.', {variant: 'error'})
             // }
         } else {
-            enqueueSnackbar('El número de guía debe tener 9 caracteres.', {variant: 'error'})
+            enqueueSnackbar('El número de guía debe tener 9 caracteres.', { variant: 'error' })
         }
 
     }
@@ -813,10 +1027,10 @@ export default function InvoiceDetails({invoice}) {
 
         //console.log(JSON.stringify(dataToSend));
 
-// URL del servidor al que deseas enviar los datos
+        // URL del servidor al que deseas enviar los datos
         const url = `${HOST_API_KEY}/hanadb/api/orders/order/ServiEntrega`;
 
-// Configuración de la solicitud
+        // Configuración de la solicitud
         const requestOptions = {
             method: "POST", // Método de la solicitud (POST en este caso)
             headers: {
@@ -825,7 +1039,7 @@ export default function InvoiceDetails({invoice}) {
             body: JSON.stringify(dataToSend), // Convertir el objeto en una cadena JSON y usarlo como cuerpo de la solicitud
         };
 
-// Realizar la solicitud Fetch
+        // Realizar la solicitud Fetch
         fetch(url, requestOptions)
             .then((response) => response.json()) // Convertir la respuesta en formato JSON
             .then((data) => {
@@ -926,7 +1140,7 @@ export default function InvoiceDetails({invoice}) {
             byteNumbers[i] = byteCharacters.charCodeAt(i);
         }
         const byteArray = new Uint8Array(byteNumbers);
-        const pdfBlob = new Blob([byteArray], {type: 'application/pdf'});
+        const pdfBlob = new Blob([byteArray], { type: 'application/pdf' });
         const pdfUrl = URL.createObjectURL(pdfBlob);
         window.open(pdfUrl, '_blank');
     };
@@ -1088,7 +1302,7 @@ export default function InvoiceDetails({invoice}) {
                 [id]: valorNumerico,
             }));
         }
-            ////console.log("JSON actualizado:", JSON.stringify(preciosActualizados, null, 2));
+        ////console.log("JSON actualizado:", JSON.stringify(preciosActualizados, null, 2));
     };
 
     const enviarPrecios = async () => {
@@ -1116,30 +1330,182 @@ export default function InvoiceDetails({invoice}) {
 
     };
 
+    //const [openChangeProduct, setOpenChangeProduct] = useState(false);
+
+    // const handleOpenChangeProduct = (row) => {
+    //     setOpenChangeProduct(true);
+    //     //console.log(row);
+    //     setSelected(row)
+    // };
+
+    // const handleCloseChangeProduct = () => {
+    //     setOpenChangeProduct(false);
+    // };
+
+    const handlePrintClick = () => {
+
+        setButtonDisabled(true);
+
+        const textArray = valueNew.split('\n').map((item) => item.trim()).filter(Boolean); // Eliminar líneas vacías
+
+        setTextArrayCount(textArray.length);
+
+        const uniqueTextArray = [...new Set(textArray)]; // Eliminar duplicados usando un Set
+
+        // var validIMEIs = uniqueTextArray.filter(function (imei) {
+        //     return luhn_validate(imei);
+        // });
+
+
+        // function luhn_validate(fullcode) {
+        //     return luhn_checksum(fullcode) == 0
+        // }
+
+        // function luhn_checksum(code) {
+        //     var len = code.length
+        //     var parity = len % 2
+        //     var sum = 0
+        //     for (var i = len - 1; i >= 0; i--) {
+        //         var d = parseInt(code.charAt(i))
+        //         if (i % 2 == parity) {
+        //             d *= 2
+        //         }
+        //         if (d > 9) {
+        //             d -= 9
+        //         }
+        //         sum += d
+        //     }
+        //     return sum % 10
+        // }
+
+
+        setUniqueTextArrayCount(uniqueTextArray.length); // Contar solo los IMEIs válidos
+
+        const validatedIMEIs = uniqueTextArray.join(',\n');
+
+        setValueNew(validatedIMEIs);
+        //console.log(validatedIMEIs);
+        // Puedes agregar aquí una lógica adicional después de imprimir en la consola, si es necesario
+
+    };
+
+    const handleTextChange = (event) => {
+        const inputText = event.target.value;
+        const textArray = inputText.split('\n').map((item) => item.trim());
+        setTextArrayCount(textArray.length);
+        setValueNew(event.target.value);
+        //setText(textArray.join('\n'));
+    };
+
+    const handleCargarSeriesSAP = async () => {
+
+        // Reemplazar los saltos de línea (\n) por una cadena vacía
+        const sinSaltosDeLinea = valueNew.replace(/\n/g, '');
+        console.log("SinSaltosDeLinea: " + sinSaltosDeLinea);
+        // Convertir la cadena a un array de strings
+        const listaDeStrings = sinSaltosDeLinea.split(',').map(String);
+        console.log("ListaDeStrings: " + listaDeStrings);
+
+        console.log("Selected: " + JSON.stringify(selected));
+        console.log("Selected: " + JSON.stringify(selected.PRODUCTO_ID));
+        console.log("User: " + JSON.stringify(user.WAREHOUSE));
+
+        try {
+            const response = await axios.post(`/hanadb/api/orders/sap/validate_series_by_bodega_producto_in_sap`, {
+                empresa: user.EMPRESA,
+                bodega: BODEGA,
+                cod_producto: selected.PRODUCTO_ID,
+                series: `${listaDeStrings}`,
+            });
+
+            if (response.status === 200) {
+                //console.log(response);
+                //console.log("hola.......");
+                alert(JSON.stringify(response.data));
+
+                setSeriesDisponibles(JSON.stringify(response.data));
+            } else {
+                // La solicitud POST no se realizó correctamente
+                console.error('Error en la solicitud POST:', response.status);
+            }
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    const handleClearClick = () => {
+        setValueNew('');
+        setTextArrayCount(0);
+        setUniqueTextArrayCount(0);
+        setButtonDisabled(false); // Asegúrate de habilitar el botón después de limpiar.
+    };
+
+
+    const handleGuardarSeriesDisponiblesSAP = async () => {
+        console.log("selected.ID: " + selected.ID);
+
+
+        const parsedData = JSON.parse(seriesDisponibles);
+        const dataArray = parsedData?.data || [];
+        const seriesList = dataArray.map(item => item.IntrSerial);
+
+        console.log("Lista de Series:", seriesList);
+        console.log("Total de series:", seriesList.length);
+
+        // Si quieres solo la lista como string separado por comas:
+        console.log("Series separadas por comas:", seriesList.join(', '));
+        const seriesListPorComa = seriesList.join(', ');
+
+
+        try {
+            const response = await axios.post(`/hanadb/api/orders/save_series_by_id_detalle_orden`, {
+                empresa: user.EMPRESA,
+                id_usuario: Number(user.ID),
+                series: seriesList,
+                id_detalle_orden: Number(selected.ID)
+            });
+
+            if (response.status === 200) {
+                //console.log(response);
+                //console.log("hola.......");
+                alert(JSON.stringify(response.data));
+
+                setSeriesDisponibles(JSON.stringify(response.data));
+            } else {
+                // La solicitud POST no se realizó correctamente
+                console.error('Error en la solicitud POST:', response.status);
+            }
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+
+    }
 
     return (
         <>
             {/* <InvoiceToolbar invoice={invoice} /> */}
-            <Card sx={{pt: 5, px: 5}}>
+            <Card sx={{ pt: 5, px: 5 }}>
                 <Grid container>
-                    <Grid item xs={12} sm={6} sx={{mb: 5}}>
-                        <Image disabledEffect alt="logo" src="/logo/logo_full.svg" sx={{maxWidth: 120}}/>
+                    <Grid item xs={12} sm={6} sx={{ mb: 5 }}>
+                        <Image disabledEffect alt="logo" src="/logo/logo_full.svg" sx={{ maxWidth: 120 }} />
 
                         {/*{user.COMPANY === 'HT' || user.COMPANY === 'ALPHACELL' ? (*/}
                         <PDFDownloadLink
-                            document={<PedidoInvoicePDF invoice={invoice} user={user} empresa="LD"/>}
+                            document={<PedidoInvoicePDF invoice={invoice} user={user} empresa="LD" />}
                             fileName={`PEDIDO_CLIENTE_${invoice.ID}`}
-                            style={{textDecoration: 'none'}}
+                            style={{ textDecoration: 'none' }}
                         >
-                            {({loading}) => (
+                            {({ loading }) => (
                                 <Tooltip title="Descargar LD">
                                     <IconButton
                                         onClick={user.ROLE === "8" ? () => handleDownloadClick(ID) : undefined}
                                     >
                                         {loading ? (
-                                            <CircularProgress size={24} color="inherit"/>
+                                            <CircularProgress size={24} color="inherit" />
                                         ) : (
-                                            <Iconify icon="eva:download-fill"/>
+                                            <Iconify icon="eva:download-fill" />
                                         )}
                                     </IconButton>
                                 </Tooltip>
@@ -1151,19 +1517,19 @@ export default function InvoiceDetails({invoice}) {
                             user.ROLE === '1' ? (
 
                                 <PDFDownloadLink
-                                    document={<PedidoInvoicePDF invoice={invoice} user={user} empresa="TM"/>}
+                                    document={<PedidoInvoicePDF invoice={invoice} user={user} empresa="TM" />}
                                     fileName={`PEDIDO_CLIENTE_${invoice.ID}`}
-                                    style={{textDecoration: 'none'}}
+                                    style={{ textDecoration: 'none' }}
                                 >
-                                    {({loading}) => (
+                                    {({ loading }) => (
                                         <Tooltip title="Descargar TM">
                                             <IconButton
                                                 onClick={user.ROLE === "8" ? () => handleDownloadClick(ID) : undefined}
                                             >
                                                 {loading ? (
-                                                    <CircularProgress size={24} color="inherit"/>
+                                                    <CircularProgress size={24} color="inherit" />
                                                 ) : (
-                                                    <Iconify icon="eva:download-fill"/>
+                                                    <Iconify icon="eva:download-fill" />
                                                 )}
                                             </IconButton>
                                         </Tooltip>
@@ -1175,8 +1541,8 @@ export default function InvoiceDetails({invoice}) {
 
                     </Grid>
 
-                    <Grid item xs={12} sm={6} sx={{mb: 5}}>
-                        <Box sx={{textAlign: {sm: 'right'}}}>
+                    <Grid item xs={12} sm={6} sx={{ mb: 5 }}>
+                        <Box sx={{ textAlign: { sm: 'right' } }}>
                             {/* <Label */}
                             {/*   variant="soft" */}
                             {/*   color={ */}
@@ -1248,13 +1614,16 @@ export default function InvoiceDetails({invoice}) {
                         user.ROLE !== '2' ? (
                             <>
 
-                                <Grid item xs={12} sm={6} sx={{mb: 5}}>
-                                    <Typography paragraph variant="overline" sx={{color: 'text.disabled'}}>
+                                <Grid item xs={12} sm={6} sx={{ mb: 5 }}>
+                                    <Typography paragraph variant="overline" sx={{ color: 'text.disabled' }}>
                                         FACTURA A:
                                     </Typography>
                                     <Label color="success">{Cliente}</Label>
                                     <Typography variant="body2">CI/RUC: {CLIENTEID}</Typography>
-                                    {user.ROLE !== '31' ? (
+
+                                    {/* 31 => Clientes Mayoristas || 8 => Bodega */}
+                                    {(user.ROLE !== '31' && user.ROLE !== '8') ? (
+
                                         <>
                                             <Label color="success">{Ciudad}</Label>
                                             <Typography variant="body2">TIPO: {Tipo}</Typography>
@@ -1272,18 +1641,21 @@ export default function InvoiceDetails({invoice}) {
                                             <Typography variant="body2">Pedidos
                                                 Clientes: {fCurrency(OrdersBal)}</Typography>
                                             <Label color="success">Aseguradora: {U_LS_ASEGURADORA}</Label>
+
+                                            <div style={{ whiteSpace: 'pre-line', fontSize: '15px' }}>
+                                                <span>
+                                                    Comentario: {insertLineBreaks(Free_Text, 40)}
+                                                </span>
+                                            </div>
                                         </>
+
                                     ) : null}
-                                    <div style={{whiteSpace: 'pre-line', fontSize: '15px'}}>
-                            <span>
-                            Comentario: {insertLineBreaks(Free_Text, 40)}
-                            </span>
-                                    </div>
+
 
                                 </Grid>
 
-                                <Grid item xs={12} sm={6} sx={{mb: 5}}>
-                                    <Typography paragraph variant="overline" sx={{color: 'text.disabled'}}>
+                                <Grid item xs={12} sm={6} sx={{ mb: 5 }}>
+                                    <Typography paragraph variant="overline" sx={{ color: 'text.disabled' }}>
                                         Orden de
                                     </Typography>
 
@@ -1292,21 +1664,22 @@ export default function InvoiceDetails({invoice}) {
                                     <Typography variant="body2">{CITY}</Typography>
 
                                     {/* <Typography variant="body2">Phone: {invoiceFrom.phone}</Typography> */}
-                                    <Typography variant="overline" sx={{color: 'text.disabled'}}>
+                                    <Typography variant="overline" sx={{ color: 'text.disabled' }}>
                                         fecha de creación
                                     </Typography>
 
                                     <Typography variant="body2">{FECHACREACION}</Typography>
 
-                                    <Typography variant="overline" sx={{color: 'text.disabled'}}>
+                                    <Typography variant="overline" sx={{ color: 'text.disabled' }}>
                                         opciones
                                     </Typography>
 
                                     {user.ROLE !== '31' ? (
                                         <>
-                                            <Grid item xs={12} sm={5} sx={{mb: 1}}>
+                                            <Grid item xs={12} sm={5} sx={{ mb: 1 }}>
 
                                                 {/* <Typography variant="body2">{fDate(dueDate)}</Typography> */}
+
                                                 <Typography variant="body2">Bodega actual: {
                                                     user.EMPRESA === '0992537442001' ? (
                                                         nameWarehouse(BODEGA) // Hipertronics
@@ -1319,8 +1692,7 @@ export default function InvoiceDetails({invoice}) {
                                                     )
                                                 }</Typography>
 
-                                                {(user.ROLE === "9" || user.ROLE === "10") &&
-
+                                                {(user.ROLE === "9" || user.ROLE === "10") && (ESTADO === 6) && (
                                                     <Autocomplete
                                                         fullWidth
                                                         options={
@@ -1341,29 +1713,91 @@ export default function InvoiceDetails({invoice}) {
                                                             handleChangeWarehouse(event, value);
                                                         }} // Add onChange event handler
                                                         renderInput={(params) => <TextField {...params} label="-_-"
-                                                                                            margin="none"/>}
+                                                            margin="none" />}
                                                     />
-                                                }
+                                                )}
 
                                             </Grid>
 
-                                            <Grid item xs={12} sm={7} sx={{mb: 1}}>
+                                            <Grid item xs={12} sm={7} sx={{ mb: 1 }}>
 
                                                 <Typography variant="body2">Forma de pago
                                                     actual: {nameFormaPago(FORMADEPAGO)}</Typography>
 
-                                                {((user.ROLE === "9" || user.ROLE === "10") || (ESTADO === 15 && ['7', '10'].includes(user.ROLE))) && (
-                                                    <Autocomplete
-                                                        fullWidth
-                                                        options={PAYMENT_OPTIONS_V2}
-                                                        getOptionLabel={(option) => option.title}
-                                                        onChange={(event, value) => {
-                                                            handleChangePayment(event, value);
-                                                        }}
-                                                        renderInput={(params) => <TextField {...params} label="-_-"
-                                                                                            margin="none"/>}
-                                                    />
+                                                {((user.ROLE === "9" || user.ROLE === "10") || (ESTADO === 15 && ['7', '10'].includes(user.ROLE))) && (ESTADO === 6) && (
+                                                    <>
+
+                                                        <Autocomplete
+                                                            fullWidth
+                                                            options={PAYMENT_OPTIONS_V2}
+                                                            getOptionLabel={(option) => option.title}
+                                                            onChange={(event, value) => {
+                                                                handleChangePayment(event, value);
+                                                            }}
+                                                            renderInput={(params) => <TextField {...params} label="-_-"
+                                                                margin="none" />}
+                                                        />
+                                                    </>
                                                 )}
+
+
+                                                {/* CONTADO */}
+                                                {(FORMADEPAGO === '-1' && ESTADO === 6) && (
+                                                    <>
+                                                        {/* Hipertronics */}
+                                                        {user.EMPRESA === '0992537442001' && (
+                                                            <Autocomplete
+                                                                fullWidth
+                                                                options={BANCOS_LIDENAR}
+                                                                getOptionLabel={(option) => option.AcctName}
+                                                                onChange={(event, value) => {
+                                                                    setTransferAccount(value);
+                                                                    console.log("Banco seleccionado:", value);
+                                                                }}
+                                                                renderInput={(params) => <TextField {...params} label="Seleccionar Banco"
+                                                                    margin="none" />}
+                                                            />
+                                                        )}
+
+                                                        {/* MovilCelistic */}
+                                                        {user.EMPRESA === '1792161037001' && (
+                                                            <Autocomplete
+                                                                fullWidth
+                                                                options={BANCOS_MOVILCELISTIC}
+                                                                getOptionLabel={(option) => option.AcctName}
+                                                                onChange={(event, value) => {
+                                                                    setTransferAccount(value);
+                                                                    console.log("Banco seleccionado:", value);
+                                                                }}
+                                                                renderInput={(params) => <TextField {...params} label="Seleccionar Banco"
+                                                                    margin="none" />}
+                                                            />
+                                                        )}
+
+
+
+
+
+                                                        <TextField
+                                                            fullWidth
+                                                            multiline
+                                                            placeholder="Número de referencia."
+                                                            label="Número de referencia."
+                                                            value={transferReference}
+                                                            onChange={(e) => setTransferReference(e.target.value)}
+                                                        />
+
+                                                        <TextField
+                                                            fullWidth
+                                                            multiline
+                                                            placeholder="Total dólares referencia."
+                                                            label="Total dólares referencia."
+                                                            value={totalDolaresReferencia}
+                                                            onChange={(e) => setTotalDolaresReferencia(e.target.value)}
+                                                        />
+                                                    </>
+                                                )}
+
 
                                             </Grid>
 
@@ -1374,35 +1808,38 @@ export default function InvoiceDetails({invoice}) {
                         ) : null
                     ) : null}
 
-                    <Grid item xs={12} sm={6} sx={{mb: 5}}>
+                    <Grid item xs={12} sm={6} sx={{ mb: 5 }}>
 
                     </Grid>
 
-                    <Grid item xs={12} sm={6} sx={{mb: 5}}>
+                    <Grid item xs={12} sm={6} sx={{ mb: 5 }}>
 
                     </Grid>
                 </Grid>
 
-                <TableContainer sx={{overflow: 'unset'}}>
+                <TableContainer sx={{ overflow: 'unset' }}>
                     <Scrollbar>
-                        <Table sx={{minWidth: 960}}>
+                        <Table sx={{ minWidth: 960 }}>
                             <TableHead
                                 sx={{
                                     borderBottom: (theme) => `solid 1px ${theme.palette.divider}`,
-                                    '& th': {backgroundColor: 'transparent'},
+                                    '& th': { backgroundColor: 'transparent' },
                                 }}
                             >
                                 <TableRow>
                                     <TableCell width={40}>#</TableCell>
                                     <TableCell align="left">Descripción</TableCell>
-                                    {/*{user.ROLE !== '0' ? (*/}
-                                    {/*    user.ROLE !== '2' ? (*/}
-                                    <TableCell align="left">Tipo Precio</TableCell>
-                                    {/*    ) : null*/}
-                                    {/*) : null*/}
-                                    {/*}*/}
-                                    <TableCell align="left">Comentario Precio</TableCell>
-                                    <TableCell align="left">%Desc.</TableCell>
+
+
+                                    {
+                                        (user.ROLE === "9" || user.ROLE === "10") && (
+                                            <>
+                                                <TableCell align="left">Tipo Precio</TableCell>
+                                                <TableCell align="left">Comentario Precio</TableCell>
+                                                <TableCell align="left">%Desc.</TableCell>
+                                            </>
+                                        )
+                                    }
                                     <TableCell align="left">Cantidad</TableCell>
 
                                     {
@@ -1410,10 +1847,17 @@ export default function InvoiceDetails({invoice}) {
                                             <TableCell align="left">Disponible</TableCell>
                                         ) : null
                                     }
-                                    {(user.ROLE === "9" || user.ROLE === "10") &&
-                                        <TableCell align="left">Costo</TableCell>}
-                                    <TableCell align="right">Precio unitario</TableCell>
-                                    <TableCell align="right">Total</TableCell>
+                                    {(user.ROLE === "9" || user.ROLE === "10") && (<>
+
+
+                                        <TableCell align="left">Costo</TableCell>
+
+                                        <TableCell align="right">Precio unitario</TableCell>
+                                        <TableCell align="right">Total</TableCell>
+
+                                    </>
+                                    )}
+
                                     {user.ROLE !== '0' ? (
                                         user.ROLE !== '2' ? (
                                             <>
@@ -1422,6 +1866,9 @@ export default function InvoiceDetails({invoice}) {
                                         ) : null
                                     ) : null
                                     }
+
+                                    <TableCell align="left">ID Detalle</TableCell>
+
                                 </TableRow>
                             </TableHead>
 
@@ -1436,7 +1883,7 @@ export default function InvoiceDetails({invoice}) {
                                         <TableCell>{index + 1}</TableCell>
 
                                         <TableCell align="left">
-                                            <Box sx={{maxWidth: 560}}>
+                                            <Box sx={{ maxWidth: 560 }}>
                                                 <Typography
                                                     variant="subtitle2"
                                                     // sx={{
@@ -1452,7 +1899,7 @@ export default function InvoiceDetails({invoice}) {
                                                 <Typography variant="body2" sx={{
                                                     color: 'text.secondary',
                                                     backgroundColor: row.PRODUCTO_ID === '07.62.02'
-                                                    || row.PRODUCTO_ID === '07.62.01' ? 'yellow' : 'inherit'
+                                                        || row.PRODUCTO_ID === '07.62.01' ? 'yellow' : 'inherit'
                                                 }} noWrap>
                                                     {row.PRODUCTO_ID}
                                                 </Typography>
@@ -1466,22 +1913,29 @@ export default function InvoiceDetails({invoice}) {
                                         {/*}*/}
 
 
-                                        {user.ROLE === '0' || user.ROLE === '2' ? (
-
+                                        {user.ROLE === '0' || user.ROLE === '2' && (
+                                            // ROLES TOMEBAMBA
                                             <TableCell align="left">{namePriceType(row.TM_TIPO_PRECIO)}</TableCell>
 
-                                        ) : (
-                                            <TableCell align="left">{namePriceType(row.TIPOPRECIO)}</TableCell>
                                         )
                                         }
 
-                                        <TableCell align="left">{row.COMENTARIOPRECIO}</TableCell>
-                                        <TableCell align="left">{row.DISCOUNTPERCENTSAP}</TableCell>
+                                        {(user.ROLE === "9" || user.ROLE === "10") && (
+                                            <>
+                                                <TableCell align="left">{namePriceType(row.TIPOPRECIO)}</TableCell>
+
+                                                <TableCell align="left">{row.COMENTARIOPRECIO}</TableCell>
+                                                <TableCell align="left">{row.DISCOUNTPERCENTSAP}</TableCell>
+                                            </>
+                                        )}
+
                                         <TableCell align="left">{row.CANTIDAD}</TableCell>
+
+
                                         {
                                             (user.ROLE === "9" || user.ROLE === "10") ? (
                                                 <TableCell align="left"
-                                                           style={{backgroundColor: Number(row.DISPONIBLE_POR_BODEGA) <= 0 ? 'rgba(255, 0, 0, 0.08)' : 'rgba(0, 171, 85, 0.08)'}}>
+                                                    style={{ backgroundColor: Number(row.DISPONIBLE_POR_BODEGA) <= 0 ? 'rgba(255, 0, 0, 0.08)' : 'rgba(0, 171, 85, 0.08)' }}>
 
                                                     {Number(row.DISPONIBLE_POR_BODEGA)}</TableCell>
 
@@ -1491,7 +1945,7 @@ export default function InvoiceDetails({invoice}) {
                                         {(user.ROLE === "9" || user.ROLE === "10") &&
                                             <TableCell align="left">{fCurrency(row.COSTO)}</TableCell>}
 
-                                        {user.ROLE === '0' || user.ROLE === '2' ? (
+                                        {user.ROLE === '0' || user.ROLE === '2' && (
                                             <>
                                                 <TableCell
                                                     align="right">{fCurrency(row.TM_PRECIO_UNITARIO_VENTA)}</TableCell>
@@ -1499,122 +1953,141 @@ export default function InvoiceDetails({invoice}) {
                                                     align="right">{fCurrency(row.TM_PRECIO_UNITARIO_VENTA * row.CANTIDAD)}</TableCell>
                                             </>
 
-                                        ) : (
+                                        )}
+
+
+                                        {(user.ROLE === "9" || user.ROLE === "10") && (
                                             <>
                                                 <TableCell
                                                     align="left">
                                                     <Box display="flex" flexDirection="row">
+
                                                         <Typography variant="body2" sx={{ mb: 0.5 }}>
-                                                        {fCurrency(
-                                                            row.PRECIOUNITARIOVENTA)}
+                                                            {fCurrency(
+                                                                row.PRECIOUNITARIOVENTA)}
                                                         </Typography>
-                                                        {(user.ROLE === "9" || user.ROLE === "10") &&
-                                                        <TextField
-                                                            onChange={(e) => handlePrecioChange(row.ID, e.target.value)}
-                                                            size="small"
-                                                            variant="standard"
-                                                            inputProps={{style: {textAlign: 'right'}}}
-                                                            sx={{ width: 100 }} // o el valor que desees: 100, '80px', '10ch', etc.
-                                                        />}
+
+                                                        {(ESTADO === 6) && (
+
+                                                            <TextField
+                                                                onChange={(e) => handlePrecioChange(row.ID, e.target.value)}
+                                                                size="small"
+                                                                variant="standard"
+                                                                inputProps={{ style: { textAlign: 'right' } }}
+                                                                sx={{ width: 100 }} // o el valor que desees: 100, '80px', '10ch', etc.
+                                                            />
+                                                        )}
                                                     </Box>
                                                 </TableCell>
 
+
+
+
                                                 <TableCell
                                                     align="right">{fCurrency(row.PRECIOUNITARIOVENTA * row.CANTIDAD)}</TableCell>
-                                            </>
 
+                                            </>
                                         )
                                         }
 
                                         <TableCell align="right">
                                             <IconButton color={openPopover ? 'inherit' : 'default'}
-                                                        onClick={(event) => handleOpenPopover(event, row)}>
-                                                <Iconify icon="eva:more-vertical-fill"/>
+
+
+
+                                                onClick={(event) => handleOpenPopover(event, row)}
+
+
+                                            >
+                                                <Iconify icon="eva:more-vertical-fill" />
                                             </IconButton>
                                         </TableCell>
+
+                                        <TableCell align="left">{row.ID}</TableCell>
 
                                     </TableRow>
 
                                 ))}
 
-                                {/*{*/}
-                                {/*    user.COMPANY !== 'TOMEBAMBA' ? (*/}
-                                {/*        <>*/}
-                                <StyledRowResult>
-                                    <TableCell colSpan={3}/>
+                                {(user.ROLE === "9" || user.ROLE === "10") && (
+                                    <>
+                                        <StyledRowResult>
+                                            <TableCell colSpan={3} />
 
-                                    <TableCell align="right" sx={{typography: 'body1'}}>
-                                        <Box sx={{mt: 2}}/>
-                                        Subtotal
-                                    </TableCell>
+                                            <TableCell align="right" sx={{ typography: 'body1' }}>
+                                                <Box sx={{ mt: 2 }} />
+                                                Subtotal
+                                            </TableCell>
 
 
-                                    <TableCell align="right" width={120} sx={{typography: 'body1'}}>
-                                        <Box sx={{mt: 2}}/>
-                                        {fCurrency(subtotalTotal)}
-                                    </TableCell>
+                                            <TableCell align="right" width={120} sx={{ typography: 'body1' }}>
+                                                <Box sx={{ mt: 2 }} />
+                                                {fCurrency(subtotalTotal)}
+                                            </TableCell>
 
-                                </StyledRowResult>
+                                        </StyledRowResult>
 
-                                <StyledRowResult>
-                                    <TableCell colSpan={3}/>
+                                        <StyledRowResult>
+                                            <TableCell colSpan={3} />
 
-                                    <TableCell align="right" sx={{typography: 'body1'}}>
-                                        Discount
-                                    </TableCell>
+                                            <TableCell align="right" sx={{ typography: 'body1' }}>
+                                                Discount
+                                            </TableCell>
 
-                                    <TableCell
-                                        align="right"
-                                        width={120}
-                                        sx={{color: 'error.main', typography: 'body1'}}
-                                    >
-                                        {DISCOUNT && fCurrency(-DISCOUNT)}
+                                            <TableCell
+                                                align="right"
+                                                width={120}
+                                                sx={{ color: 'error.main', typography: 'body1' }}
+                                            >
+                                                {DISCOUNT && fCurrency(-DISCOUNT)}
 
-                                        {user.ROLE === '9' && (
-                                            <Box display="flex" alignItems="center" gap={2}>
-                                                <TextField
-                                                    value={valueNew}
-                                                    onChange={handleChange}
-                                                    sx={{width: 75}} // 🔥 Establece el ancho en 10px
-                                                />
-                                                <Button variant="contained" color="error" onClick={() => {
-                                                    handleChangeLevelOrderDiscount();
-                                                }}>
-                                                    ❤️
-                                                </Button>
-                                            </Box>
-                                        )
-                                        }
+                                                {user.ROLE === '9' && (
+                                                    <Box display="flex" alignItems="center" gap={2}>
+                                                        <TextField
+                                                            value={valueNew}
+                                                            onChange={handleChange}
+                                                            sx={{ width: 75 }} // 🔥 Establece el ancho en 10px
+                                                        />
+                                                        {(ESTADO === 6) && (
 
-                                    </TableCell>
-                                </StyledRowResult>
+                                                            <Button variant="contained" color="error" onClick={() => {
+                                                                handleChangeLevelOrderDiscount();
+                                                            }}>
+                                                                ❤️
+                                                            </Button>
+                                                        )}
+                                                    </Box>
+                                                )
+                                                }
 
-                                <StyledRowResult>
-                                    <TableCell colSpan={3}/>
+                                            </TableCell>
+                                        </StyledRowResult>
 
-                                    <TableCell align="right" sx={{typography: 'body1'}}>
-                                        IVA
-                                    </TableCell>
+                                        <StyledRowResult>
+                                            <TableCell colSpan={3} />
 
-                                    <TableCell align="right" width={120} sx={{typography: 'body1'}}>
-                                        {fCurrency(ivaTotal)}
-                                    </TableCell>
-                                </StyledRowResult>
+                                            <TableCell align="right" sx={{ typography: 'body1' }}>
+                                                IVA
+                                            </TableCell>
 
-                                <StyledRowResult>
-                                    <TableCell colSpan={3}/>
+                                            <TableCell align="right" width={120} sx={{ typography: 'body1' }}>
+                                                {fCurrency(ivaTotal)}
+                                            </TableCell>
+                                        </StyledRowResult>
 
-                                    <TableCell align="right" sx={{typography: 'h6'}}>
-                                        Total
-                                    </TableCell>
+                                        <StyledRowResult>
+                                            <TableCell colSpan={3} />
 
-                                    <TableCell align="right" width={140} sx={{typography: 'h6'}}>
-                                        {fCurrency(totalConIva)}
-                                    </TableCell>
-                                </StyledRowResult>
-                                {/*        </>*/}
-                                {/*    ) : null*/}
-                                {/*}*/}
+                                            <TableCell align="right" sx={{ typography: 'h6' }}>
+                                                Total
+                                            </TableCell>
+
+                                            <TableCell align="right" width={140} sx={{ typography: 'h6' }}>
+                                                {fCurrency(totalConIva)}
+                                            </TableCell>
+                                        </StyledRowResult>
+                                    </>
+                                )}
 
                             </TableBody>
                         </Table>
@@ -1622,26 +2095,34 @@ export default function InvoiceDetails({invoice}) {
                 </TableContainer>
 
                 {(user.ROLE === "9" || user.ROLE === "10") && (
-                    <Box sx={{ display: 'flex', justifyContent: 'end', width: '100%', px: 2, py: 1 }}>
-                        <Button variant="contained" onClick={enviarPrecios}>
-                            Enviar precios actualizados
-                        </Button>
-                    </Box>
+                    <>
+
+                        {(ESTADO === 6) && (
+                            <Box sx={{ display: 'flex', justifyContent: 'end', width: '100%', px: 2, py: 1 }}>
+                                <Button variant="contained" onClick={enviarPrecios}>
+                                    Enviar precios actualizados
+                                </Button>
+                            </Box>
+                        )}
+
+
+                        <TextField
+                            fullWidth
+                            multiline
+                            placeholder="Observaciones al aprobar."
+                            label="Observaciones al aprobar."
+                            value={observacionA}
+                            onChange={(e) => setObservacionA(e.target.value)}
+                        />
+                    </>
                 )}
 
-                <TextField
-                    fullWidth
-                    multiline
-                    placeholder="Observaciones al aprobar."
-                    label="Observaciones al aprobar."
-                    value={observacionA}
-                    onChange={(e) => setObservacionA(e.target.value)}
-                />
 
-                <Divider sx={{mt: 5}}/>
+
+                <Divider sx={{ mt: 5 }} />
 
                 <Grid container>
-                    <Grid item xs={12} md={9} sx={{py: 3}}>
+                    <Grid item xs={12} md={9} sx={{ py: 3 }}>
                         <Typography variant="subtitle2">NOTAS</Typography>
 
                         <Typography variant="body2">
@@ -1651,7 +2132,7 @@ export default function InvoiceDetails({invoice}) {
                             correspondiente. Agradecemos su colaboración. </Typography>
                     </Grid>
 
-                    <Grid item xs={12} md={3} sx={{py: 3, textAlign: 'right'}}>
+                    <Grid item xs={12} md={3} sx={{ py: 3, textAlign: 'right' }}>
                         <Typography variant="subtitle2">¿Tengo una pregunta?</Typography>
 
                         <Link href="https://wa.me/593939991111">
@@ -1662,23 +2143,126 @@ export default function InvoiceDetails({invoice}) {
                     </Grid>
                 </Grid>
 
-                <Divider sx={{mt: 5}}/>
+
+                <Grid container>
+                    <Grid item xs={12} md={9} sx={{ py: 3 }}>
+                        <Typography variant="subtitle2" sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold' }}>
+                            📍 INFORMACIÓN DE ENTREGA
+                        </Typography>
+
+                        {(() => {
+                            try {
+                                const deliveryInfo = JSON.parse(OBSERVACIONESB);
+                                return (
+                                    <Card sx={{ p: 2, bgcolor: 'grey.50', border: '1px solid', borderColor: 'grey.200' }}>
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={12} sm={6}>
+                                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                                                    <Typography variant="body2" sx={{ fontWeight: 'bold', mr: 1, color: 'text.secondary' }}>
+                                                        🏠 Dirección:
+                                                    </Typography>
+                                                </Box>
+                                                <Typography variant="body2" sx={{ ml: 3, color: 'text.primary' }}>
+                                                    {deliveryInfo.DIRECCION || 'No especificada'}
+                                                </Typography>
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={6}>
+                                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                                                    <Typography variant="body2" sx={{ fontWeight: 'bold', mr: 1, color: 'text.secondary' }}>
+                                                        🏢 Sucursal:
+                                                    </Typography>
+                                                </Box>
+                                                <Typography variant="body2" sx={{ ml: 3, color: 'text.primary' }}>
+                                                    {deliveryInfo.NAME_SERVIENTREGA || 'No especificada'}
+                                                </Typography>
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={6}>
+                                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                                                    <Typography variant="body2" sx={{ fontWeight: 'bold', mr: 1, color: 'text.secondary' }}>
+                                                        🌍 Provincia:
+                                                    </Typography>
+                                                </Box>
+                                                <Typography variant="body2" sx={{ ml: 3, color: 'text.primary' }}>
+                                                    {deliveryInfo.PROVINCIA || 'No especificada'}
+                                                </Typography>
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={6}>
+                                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                                                    <Typography variant="body2" sx={{ fontWeight: 'bold', mr: 1, color: 'text.secondary' }}>
+                                                        📮 Código Postal:
+                                                    </Typography>
+                                                </Box>
+                                                <Typography variant="body2" sx={{ ml: 3, color: 'text.primary' }}>
+                                                    {deliveryInfo.ZIPCODE || 'No especificado'}
+                                                </Typography>
+                                            </Grid>
+
+                                            {deliveryInfo.TIPO && (
+                                                <Grid item xs={12}>
+                                                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                                                        <Typography variant="body2" sx={{ fontWeight: 'bold', mr: 1, color: 'text.secondary' }}>
+                                                            🏷️ Tipo:
+                                                        </Typography>
+                                                    </Box>
+                                                    <Label
+                                                        color="info"
+                                                        sx={{ ml: 3, textTransform: 'capitalize' }}
+                                                    >
+                                                        {deliveryInfo.TIPO}
+                                                    </Label>
+                                                </Grid>
+                                            )}
+                                        </Grid>
+                                    </Card>
+                                );
+                            } catch (error) {
+                                return (
+                                    <Card sx={{ p: 2, bgcolor: 'warning.lighter', border: '1px solid', borderColor: 'warning.light' }}>
+                                        <Typography variant="body2" sx={{ color: 'warning.dark' }}>
+                                            ⚠️ Información de entrega no disponible o formato inválido
+                                        </Typography>
+                                        <Typography variant="caption" sx={{ color: 'text.secondary', mt: 1, display: 'block' }}>
+                                            Datos originales: {OBSERVACIONESB}
+                                        </Typography>
+                                    </Card>
+                                );
+                            }
+                        })()}
+                    </Grid>
+
+                </Grid>
+
+                <Divider sx={{ mt: 5 }} />
 
                 {(user.ROLE === "9" || user.ROLE === "10") &&
                     <Grid container>
-                        <Grid item xs={12} md={12} sx={{py: 3, textAlign: 'center'}}>
+                        <Grid item xs={12} md={12} sx={{ py: 3, textAlign: 'center' }}>
                             {/* <Button onClick={enviarOrdenSAP}>CREAR ORDEN DE VENTA SAP</Button> */}
 
-                            <Button onClick={() => !loading && enviarOrdenSAP()} disabled={loading}>
-                                {loading ? 'CREANDO...' : 'CREAR ORDEN DE VENTA SAP'}
-                            </Button>
+                            {/* Enviar a pendiente cargar series */}
+                            {(ESTADO === 6) &&
+                                <Button onClick={() => !loading && enviarOrdenPendienteCargaSeries()} disabled={loading}>
+                                    {loading ? 'CREANDO...' : 'ENVIAR A PENDIENTE CARGAR SERIES'}
+                                </Button>
+                            }
+
+                            {/* Pendiente factuaración / Solo le va a aparecer el ROL de crédito */}
+                            {(ESTADO === 0 && user.ROLE === "9") &&
+                                <Button onClick={() => !loading && crearFacturaSAP()} disabled={loading}>
+                                    {loading ? 'CREANDO FACTURA...' : 'CREAR FACTURA EN SAP'}
+                                </Button>
+                            }
+
                         </Grid>
                     </Grid>
                 }
 
                 {user.ROLE === "8" &&
                     <Grid container>
-                        <Grid item xs={12} md={12} sx={{py: 6}}>
+                        <Grid item xs={12} md={12} sx={{ py: 6 }}>
 
                             <TextField
                                 required
@@ -1691,7 +2275,7 @@ export default function InvoiceDetails({invoice}) {
                                         handleChangeGuia(e);
                                     }
                                 }}
-                                inputProps={{maxLength: 9}}
+                                inputProps={{ maxLength: 9 }}
                                 error={valueGuia.length !== 9}
                                 helperText={valueGuia.length !== 9 ? 'El número de guía debe tener 9 caracteres' : ''}
                             />
@@ -1717,7 +2301,7 @@ export default function InvoiceDetails({invoice}) {
                                     options={dataEmpladosVenta}
                                     getOptionLabel={(option) => option.NOMBRE || ''}
                                     renderInput={(params) => <TextField {...params} label="Entregar a: "
-                                                                        margin="none"/>}
+                                        margin="none" />}
                                     onChange={(event, newValue) => handleChangeEmpleadoEntregar(event, newValue)}
 
                                 />
@@ -1725,15 +2309,15 @@ export default function InvoiceDetails({invoice}) {
                             )}
 
                             <Button variant="contained" color="success"
-                                    onClick={() => !loading && handleChangePedidoFactura()} disabled={loading}>
-                                {loading ? 'GUARDANDO...' : ' Guardar Factura'}
+                                onClick={() => !loading && handleChangePedidoFactura()} disabled={loading}>
+                                {loading ? 'GUARDANDO...' : ' Enviar al área de facturación'}
                             </Button>
 
                         </Grid>
 
                     </Grid>
                 }
-            </Card>
+            </Card >
 
 
             {/* {user.ROLE === "8" && */}
@@ -1821,103 +2405,160 @@ export default function InvoiceDetails({invoice}) {
             {/* } */}
 
 
-            {(user.ROLE === "9" || user.ROLE === "10") || (ESTADO === 15 && ['7', '10'].includes(user.ROLE)) ? (
+            {
+                (user.ROLE === "9" || user.ROLE === "10") || (ESTADO === 15 && ['7', '10'].includes(user.ROLE)) ? (
 
-                <MenuPopover
-                    open={openPopover}
-                    onClose={handleClosePopover}
-                    arrow="right-top"
-                    sx={{width: 160}}
-                >
-                    <MenuItem
-                        onClick={() => {
-                            handleOpenPriceUnit();
-                            handleClosePopover();
-                        }}
+
+
+
+
+
+                    <MenuPopover
+                        open={openPopover}
+                        onClose={handleClosePopover}
+                        arrow="right-top"
+                        sx={{ width: 160 }}
                     >
-                        <Iconify icon="eva:edit-fill"/>
-                        Precio Unitario.
-                    </MenuItem>
-                    <MenuItem
+
+                        {(ESTADO === 6) && (
+
+                            <>
+
+
+                                <MenuItem
+                                    onClick={() => {
+                                        handleOpenPriceUnit();
+                                        handleClosePopover();
+                                    }}
+                                >
+                                    <Iconify icon="eva:edit-fill" />
+                                    Precio Unitario.
+                                </MenuItem>
+                                <MenuItem
+                                    onClick={() => {
+                                        handleOpenQty();
+                                        handleClosePopover();
+                                    }}
+                                >
+                                    <Iconify icon="eva:edit-fill" />
+                                    Cantidad.
+                                </MenuItem>
+
+                                <MenuItem
+                                    onClick={() => {
+                                        handleOpenDiscountPercentage();
+                                        handleClosePopover();
+                                    }}
+                                >
+                                    <Iconify icon="eva:edit-fill" />
+                                    %Desc.
+                                </MenuItem>
+
+                                <MenuItem
+                                    onClick={() => {
+                                        handleOpenChangeProduct();
+                                        handleClosePopover();
+                                    }}
+                                >
+                                    <Iconify icon="eva:edit-fill" />
+                                    Producto.
+                                </MenuItem>
+
+                                <Divider sx={{ borderStyle: 'dashed' }} />
+
+                                <MenuItem
+                                    onClick={() => {
+                                        handleOpenConfirm();
+                                        handleClosePopover();
+                                    }}
+                                    sx={{ color: 'error.main' }}
+                                >
+                                    <Iconify icon="eva:trash-2-outline" />
+                                    Borrar
+                                </MenuItem>
+                            </>
+                        )
+                        }
+                    </MenuPopover>
+                ) : null
+            }
+
+
+
+
+
+            {
+                user.ROLE === "8" ? (
+
+                    <MenuPopover
+                        open={openPopover}
+                        onClose={handleClosePopover}
+                        arrow="right-top"
+                        sx={{ width: 160 }}
+                    >
+
+                        <MenuItem
+                            onClick={() => {
+                                handleOpenCargarSeries();
+                                handleClosePopover();
+                            }}
+                        >
+                            <Iconify icon="eva:edit-fill" />
+                            Cargar Series
+                        </MenuItem>
+
+                        <MenuItem
+                            onClick={() => {
+                                handleOpenVerListaSeries();
+                                handleClosePopover();
+                            }}
+                        >
+                            <Iconify icon="eva:edit-fill" />
+                            Ver Series
+                        </MenuItem>
+
+
+                    </MenuPopover>
+                ) : null
+            }
+
+
+
+            {
+                user.ROLE === "2" || user.ROLE === "1" ? (
+
+                    <MenuPopover
+                        open={openPopover}
+                        onClose={handleClosePopover}
+                        arrow="right-top"
+                        sx={{ width: 160 }}
+                    >
+
+                        {/* <MenuItem
                         onClick={() => {
                             handleOpenQty();
                             handleClosePopover();
                         }}
                     >
-                        <Iconify icon="eva:edit-fill"/>
+                        <Iconify icon="eva:edit-fill" />
                         Cantidad.
-                    </MenuItem>
+                    </MenuItem> */}
 
-                    <MenuItem
-                        onClick={() => {
-                            handleOpenDiscountPercentage();
-                            handleClosePopover();
-                        }}
-                    >
-                        <Iconify icon="eva:edit-fill"/>
-                        %Desc.
-                    </MenuItem>
+                        <MenuItem
+                            onClick={() => {
+                                handleOpenConfirm();
+                                handleClosePopover();
+                            }}
+                            sx={{ color: 'error.main' }}
+                        >
+                            <Iconify icon="eva:trash-2-outline" />
+                            Borrar
+                        </MenuItem>
 
-                    <MenuItem
-                        onClick={() => {
-                            handleOpenChangeProduct();
-                            handleClosePopover();
-                        }}
-                    >
-                        <Iconify icon="eva:edit-fill"/>
-                        Producto.
-                    </MenuItem>
-
-                    <Divider sx={{borderStyle: 'dashed'}}/>
-
-                    <MenuItem
-                        onClick={() => {
-                            handleOpenConfirm();
-                            handleClosePopover();
-                        }}
-                        sx={{color: 'error.main'}}
-                    >
-                        <Iconify icon="eva:trash-2-outline"/>
-                        Borrar
-                    </MenuItem>
-                </MenuPopover>
-            ) : null
+                    </MenuPopover>
+                ) : null
             }
 
-
-            {user.ROLE === "2" || user.ROLE === "1" ? (
-
-                <MenuPopover
-                    open={openPopover}
-                    onClose={handleClosePopover}
-                    arrow="right-top"
-                    sx={{width: 160}}
-                >
-
-                    <MenuItem
-                        onClick={() => {
-                            handleOpenQty();
-                            handleClosePopover();
-                        }}
-                    >
-                        <Iconify icon="eva:edit-fill"/>
-                        Cantidad.
-                    </MenuItem>
-
-                    <MenuItem
-                        onClick={() => {
-                            handleOpenConfirm();
-                            handleClosePopover();
-                        }}
-                        sx={{color: 'error.main'}}
-                    >
-                        <Iconify icon="eva:trash-2-outline"/>
-                        Borrar
-                    </MenuItem>
-
-                </MenuPopover>
-            ) : null
-            }
 
             <ConfirmDialog
 
@@ -2047,52 +2688,348 @@ export default function InvoiceDetails({invoice}) {
             />
 
 
+
+            <Dialog
+                open={openCargarSeries}
+                onClose={handleCloseCargarSeries}
+                fullScreen
+                sx={{ padding: '16px' }}
+            >
+                <AppBar position="relative">
+                    <Toolbar>
+                        <IconButton color="inherit" edge="start" onClick={handleCloseCargarSeries}>
+                            <Iconify icon="eva:close-fill" />
+                        </IconButton>
+                        <IconButton color="inherit" onClick={handlePrintClick} disabled={buttonDisabled}>
+                            <FileCopySvgIcon />
+                        </IconButton>
+                        <Button autoFocus color="inherit" onClick={() => {
+                            handleCargarSeriesSAP();
+                        }}>
+                            Subir
+                        </Button>
+                        <Button color="inherit" onClick={handleClearClick} style={{ marginLeft: '10px' }}>
+                            Limpiar
+                        </Button>
+                    </Toolbar>
+                </AppBar>
+
+                <DialogContent
+                    dividers={scroll === 'paper'}
+                    sx={{ padding: '16px' }}
+
+                >
+
+                    <Box
+                        sx={{
+                            display: 'flex', // Alinea los elementos horizontalmente
+                            alignItems: 'center', // Centra verticalmente los elementos
+                        }}
+                    >
+                        <Typography variant="body1" sx={{ marginRight: '10px' }}>
+                            Líneas ingresadas: {textArrayCount}
+                        </Typography>
+                        <Typography
+                            variant="body1"
+                            sx={{
+                                marginRight: '10px',
+                                color: 'red',
+                                fontSize: '40px',
+                                fontWeight: 'bold',
+                            }}
+                        >
+                            Válidos: {uniqueTextArrayCount}
+                        </Typography>
+                        <Typography
+                            variant="body1"
+                            sx={{
+                                marginRight: '10px',
+                                color: 'green',
+                                fontSize: '40px',
+                                fontWeight: 'bold',
+                            }}
+                        >
+                            {`===> Se requieren: ${selected?.CANTIDAD} series`}
+                        </Typography>
+                    </Box>
+
+                    <Grid container spacing={2}>
+                        {/* Columna Izquierda - TextField para ingresar IMEIs */}
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                rows={100}
+                                fullWidth
+                                multiline
+                                label="Lista IMEIs SAP"
+                                value={valueNew}
+                                onChange={handleTextChange}
+                                disabled={buttonDisabled}
+                            />
+                        </Grid>
+
+                        {/* Columna Derecha - Tabla de Series Disponibles */}
+                        <Grid item xs={12} md={6}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={handleGuardarSeriesDisponiblesSAP}
+                            >
+                                Alerta Guardar Series
+                            </Button>
+
+                            {seriesDisponibles && (
+                                <Box sx={{ width: '100%' }}>
+                                    <Typography variant="h6" gutterBottom>
+                                        Series Disponibles en SAP
+                                    </Typography>
+                                    <TableContainer sx={{ maxHeight: 400, border: '1px solid #e0e0e0', borderRadius: 1 }}>
+                                        <Table stickyHeader size="small">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
+                                                        #
+                                                    </TableCell>
+                                                    <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
+                                                        Serie (IMEI)
+                                                    </TableCell>
+                                                    <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
+                                                        Código
+                                                    </TableCell>
+                                                    <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
+                                                        Producto
+                                                    </TableCell>
+                                                    <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
+                                                        Bodega
+                                                    </TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {(() => {
+                                                    try {
+                                                        const parsedData = JSON.parse(seriesDisponibles);
+                                                        const dataArray = parsedData?.data || [];
+                                                        return dataArray.map((item, index) => (
+                                                            <TableRow
+                                                                key={index}
+                                                                sx={{
+                                                                    '&:nth-of-type(odd)': {
+                                                                        backgroundColor: '#fafafa'
+                                                                    },
+                                                                    '&:hover': {
+                                                                        backgroundColor: '#e3f2fd'
+                                                                    }
+                                                                }}
+                                                            >
+                                                                <TableCell sx={{ fontFamily: 'monospace' }}>
+                                                                    {index + 1}
+                                                                </TableCell>
+                                                                <TableCell sx={{ fontFamily: 'monospace', fontWeight: 'bold' }}>
+                                                                    {item.IntrSerial}
+                                                                </TableCell>
+                                                                <TableCell sx={{ fontFamily: 'monospace' }}>
+                                                                    {item.ItemCode}
+                                                                </TableCell>
+                                                                <TableCell sx={{ fontSize: '0.875rem' }}>
+                                                                    {item.ItemName}
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Box>
+                                                                        <Typography variant="caption" display="block">
+                                                                            {item.WhsCode}
+                                                                        </Typography>
+                                                                        <Typography variant="caption" color="text.secondary">
+                                                                            {item.WhsName}
+                                                                        </Typography>
+                                                                    </Box>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        ));
+                                                    } catch (error) {
+                                                        return (
+                                                            <TableRow>
+                                                                <TableCell colSpan={5} align="center">
+                                                                    <Typography color="error">
+                                                                        Error al procesar los datos: {error.message}
+                                                                    </Typography>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        );
+                                                    }
+                                                })()}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+
+                                    {(() => {
+                                        try {
+                                            const parsedData = JSON.parse(seriesDisponibles);
+                                            const dataArray = parsedData?.data || [];
+                                            return (
+                                                <Box sx={{ mt: 2, p: 2, backgroundColor: '#f5f5f5', borderRadius: 1 }}>
+                                                    <Typography variant="body2" color="primary">
+                                                        📊 Total de series disponibles: <strong>{dataArray.length}</strong>
+                                                    </Typography>
+                                                    <Typography variant="caption" color="text.secondary">
+                                                        Las series se muestran con su información completa de SAP
+                                                    </Typography>
+                                                </Box>
+                                            );
+                                        } catch (error) {
+                                            return null;
+                                        }
+                                    })()}
+                                </Box>
+                            )}
+                        </Grid>
+                    </Grid>
+
+
+
+
+                </DialogContent>
+            </Dialog>
+
+
+
+
+
+
+            <Dialog
+                open={openVerListaSeries}
+                onClose={handleCloseVerListaSeries}
+                fullScreen
+                sx={{ padding: '16px' }}
+            >
+                <AppBar position="relative">
+                    <Toolbar>
+                        <IconButton color="inherit" edge="start" onClick={handleCloseVerListaSeries}>
+                            <Iconify icon="eva:close-fill" />
+                        </IconButton>
+                        <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                            Series del Producto: {selected?.PRODUCTO_ID}
+                        </Typography>
+                        <Button color="inherit" onClick={() => obtenerSeriesGuardadas()}>
+                            Refrescar
+                        </Button>
+                    </Toolbar>
+                </AppBar>
+
+                <DialogContent
+                    dividers={scroll === 'paper'}
+                    sx={{ padding: '16px' }}
+                >
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            mb: 2
+                        }}
+                    >
+                        <Typography variant="body1" sx={{ marginRight: '10px' }}>
+                            Total de series guardadas: {seriesGuardadas.length}
+                        </Typography>
+                        <Typography variant="body1" sx={{ marginRight: '10px', color: 'green' }}>
+                            Producto: {selected?.NOMBRE}
+                        </Typography>
+                    </Box>
+
+                    {seriesGuardadas.length > 0 ? (
+                        <TableContainer sx={{ maxHeight: 600, border: '1px solid #e0e0e0', borderRadius: 1 }}>
+                            <Table stickyHeader size="small">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
+                                            #
+                                        </TableCell>
+                                        <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
+                                            Serie (IMEI)
+                                        </TableCell>
+
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {seriesGuardadas.map((serie, index) => (
+                                        <TableRow
+                                            key={index}
+                                            sx={{
+                                                '&:nth-of-type(odd)': {
+                                                    backgroundColor: '#fafafa'
+                                                },
+                                                '&:hover': {
+                                                    backgroundColor: '#e3f2fd'
+                                                }
+                                            }}
+                                        >
+                                            <TableCell sx={{ fontFamily: 'monospace' }}>
+                                                {index + 1}
+                                            </TableCell>
+                                            <TableCell sx={{ fontFamily: 'monospace', fontWeight: 'bold' }}>
+                                                {serie.INTERNAL_SERIAL || 'N/A'}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    ) : (
+                        <Box sx={{ textAlign: 'center', py: 4 }}>
+                            <Typography variant="h6" color="text.secondary">
+                                No hay series guardadas para este producto
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                                Las series aparecerán aquí una vez que sean cargadas desde SAP
+                            </Typography>
+                        </Box>
+                    )}
+                </DialogContent>
+            </Dialog>
+
         </>
     );
 }
 
 
 export const top100Films = [
-    {title: 'Centro Distribución HT', id: "019"},
-    {title: 'Cuenca', id: "002"},
-    {title: 'Quito', id: "006"},
+    { title: 'Centro Distribución HT', id: "019" },
+    { title: 'Cuenca', id: "002" },
+    { title: 'Quito', id: "006" },
     // {title: 'Guayaquil', id: "015"},
-    {title: 'Manta', id: "024"},
-    {title: 'Colón', id: "030"}
+    { title: 'Manta', id: "024" },
+    { title: 'Colón', id: "030" }
 ]
 
 export const top100FilmsAlphacell = [
-    {title: 'BODEGA', id: "001"},
-    {title: 'MOVISTAR RESERVA', id: "002"},
-    {title: 'MOVISTAR ENTREGADO', id: "003"},
-    {title: 'DEPRATI', id: "004"},
-    {title: 'CRESA CONSIGNACIÓN', id: "005"},
-    {title: 'COMPUTRONSA CONSIGNACIÓN', id: "006"},
-    {title: 'BODEGA CDHT QUITO', id: "007"},
-    {title: 'GUAYAQUIL SERVIENTREGA', id: "009"},
-    {title: 'INVENTARIO TRANSITO IMPORTACIONES', id: "099"}
+    { title: 'BODEGA', id: "001" },
+    { title: 'MOVISTAR RESERVA', id: "002" },
+    { title: 'MOVISTAR ENTREGADO', id: "003" },
+    { title: 'DEPRATI', id: "004" },
+    { title: 'CRESA CONSIGNACIÓN', id: "005" },
+    { title: 'COMPUTRONSA CONSIGNACIÓN', id: "006" },
+    { title: 'BODEGA CDHT QUITO', id: "007" },
+    { title: 'GUAYAQUIL SERVIENTREGA', id: "009" },
+    { title: 'INVENTARIO TRANSITO IMPORTACIONES', id: "099" }
 ]
 
 export const top100FilmsMovilCelistic = [
-    {title: 'CARAPUNGO - CENTRO DISTRIBUCION MOVILCELISTIC', id: "DISTLF"},
-    {title: 'MACHALA - MAYORISTAS MOVILCELISTIC MACHALA', id: "003"},
-    {title: 'CUENCA - MAYORISTAS MOVILCELISTIC CUENCA', id: "004"},
-    {title: 'COLON - MAYORISTAS MOVILCELISTIC COLON', id: "030"},
-    {title: 'MANTA - MAYORISTAS MOVILCELISTIC MANTA', id: "024"},
-    {title: 'CARAPUNGO - ⚠️OPERADORAS CARRIER', id: "005"},
+    { title: 'CARAPUNGO - CENTRO DISTRIBUCION MOVILCELISTIC', id: "DISTLF" },
+    { title: 'MACHALA - MAYORISTAS MOVILCELISTIC MACHALA', id: "003" },
+    { title: 'CUENCA - MAYORISTAS MOVILCELISTIC CUENCA', id: "004" },
+    { title: 'COLON - MAYORISTAS MOVILCELISTIC COLON', id: "030" },
+    { title: 'MANTA - MAYORISTAS MOVILCELISTIC MANTA', id: "024" },
+    { title: 'CARAPUNGO - ⚠️OPERADORAS CARRIER', id: "005" },
     // {title: 'QUITO - XIAOMI TERMINALES', id: "T1CARACO"}
 ]
 
 export const boxes = [
-    {title: '1', id: 1},
-    {title: '2', id: 2},
-    {title: '3', id: 3},
-    {title: '4', id: 4},
-    {title: '5', id: 5},
-    {title: '6', id: 6},
-    {title: '7', id: 7},
-    {title: '8', id: 8},
-    {title: '9', id: 9}
+    { title: '1', id: 1 },
+    { title: '2', id: 2 },
+    { title: '3', id: 3 },
+    { title: '4', id: 4 },
+    { title: '5', id: 5 },
+    { title: '6', id: 6 },
+    { title: '7', id: 7 },
+    { title: '8', id: 8 },
+    { title: '9', id: 9 }
 ]
 
 // Función para verificar si un código está presente en el JSON

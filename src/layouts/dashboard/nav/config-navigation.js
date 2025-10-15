@@ -12,27 +12,33 @@ const icon = (name) => (
 );
 
 const ICONS = {
-    blog: icon('ic_blog'),
-    cart: icon('ic_cart'),
-    chat: icon('ic_chat'),
-    mail: icon('ic_mail'),
-    user: icon('ic_user'),
-    file: icon('ic_file'),
-    lock: icon('ic_lock'),
-    label: icon('ic_label'),
-    blank: icon('ic_blank'),
-    kanban: icon('ic_kanban'),
-    folder: icon('ic_folder'),
-    banking: icon('ic_banking'),
-    booking: icon('ic_booking'),
-    invoice: icon('ic_invoice'),
-    calendar: icon('ic_calendar'),
-    disabled: icon('ic_disabled'),
-    external: icon('ic_external'),
-    menuItem: icon('ic_menu_item'),
-    ecommerce: icon('ic_ecommerce'),
-    analytics: icon('ic_analytics'),
-    dashboard: icon('ic_dashboard'),
+  job: icon('ic-job'),
+  blog: icon('ic-blog'),
+  chat: icon('ic-chat'),
+  mail: icon('ic-mail'),
+  user: icon('ic-user'),
+  file: icon('ic-file'),
+  lock: icon('ic-lock'),
+  tour: icon('ic-tour'),
+  order: icon('ic-order'),
+  label: icon('ic-label'),
+  blank: icon('ic-blank'),
+  kanban: icon('ic-kanban'),
+  folder: icon('ic-folder'),
+  course: icon('ic-course'),
+  params: icon('ic-params'),
+  banking: icon('ic-banking'),
+  booking: icon('ic-booking'),
+  invoice: icon('ic-invoice'),
+  product: icon('ic-product'),
+  calendar: icon('ic-calendar'),
+  disabled: icon('ic-disabled'),
+  external: icon('ic-external'),
+  subpaths: icon('ic-subpaths'),
+  menuItem: icon('ic-menu-item'),
+  ecommerce: icon('ic-ecommerce'),
+  analytics: icon('ic-analytics'),
+  dashboard: icon('ic-dashboard'),
 };
 
 const navConfig = [
@@ -86,7 +92,7 @@ const navConfig = [
             {
                 title: 'ecommerce',
                 path: PATH_DASHBOARD.eCommerce.root,
-                icon: ICONS.cart,
+                icon: ICONS.ecommerce,
                 children: [
                     {title: 'Power BI', path: PATH_DASHBOARD.powerBI.vendedor},
                     {title: 'tienda', path: PATH_DASHBOARD.eCommerce.list},
@@ -103,7 +109,7 @@ const navConfig = [
             {
                 title: 'Pedidos',
                 path: PATH_DASHBOARD.invoice.root,
-                icon: ICONS.invoice,
+                icon: ICONS.order,
                 children: [
                     {title: 'Lista', path: PATH_DASHBOARD.invoice.list},
                     {title: 'IMEIs', path: PATH_DASHBOARD.invoice.sap},
@@ -117,7 +123,7 @@ const navConfig = [
             {
                 title: 'Gestión',
                 path: PATH_DASHBOARD.gestion.root,
-                icon: ICONS.blog,
+                icon: ICONS.folder,
                 children: [
                     {title: 'Mayoristas', path: PATH_DASHBOARD.gestion.mayorista},
                     {title: 'C. Finales', path: PATH_DASHBOARD.gestion.cfinal},
@@ -133,9 +139,9 @@ const navConfig = [
     {
         subheader: 'INFINIX',
         items: [
-            {title: 'tienda', path: PATH_DASHBOARD.eCommerce.list, icon: ICONS.calendar,},
-            {title: 'Clientes', path: PATH_DASHBOARD.eCommerce.clientes, icon: ICONS.kanban,},
-            {title: 'Lista', path: PATH_DASHBOARD.invoice.list, icon: ICONS.banking,},
+            {title: 'tienda', path: PATH_DASHBOARD.eCommerce.list, icon: ICONS.ecommerce},
+            {title: 'Clientes', path: PATH_DASHBOARD.eCommerce.clientes, icon: ICONS.user},
+            {title: 'Lista', path: PATH_DASHBOARD.invoice.list, icon: ICONS.order},
         ],
     },
 
@@ -144,10 +150,10 @@ const navConfig = [
     {
         subheader: 'ALPHACELL',
         items: [
-            {title: 'tienda', path: PATH_DASHBOARD.eCommerce.list, icon: ICONS.analytics},
-            {title: 'ordenes', path: PATH_DASHBOARD.invoice.list, icon: ICONS.analytics},
-            {title: 'Catálogo', path: PATH_DASHBOARD.eCommerce.catalogo, icon: ICONS.analytics},
-            {title: 'Tracking', path: PATH_DASHBOARD.user.tracking, icon: ICONS.analytics},
+            {title: 'tienda', path: PATH_DASHBOARD.eCommerce.list, icon: ICONS.ecommerce},
+            {title: 'ordenes', path: PATH_DASHBOARD.invoice.list, icon: ICONS.order},
+            {title: 'Catálogo', path: PATH_DASHBOARD.eCommerce.catalogo, icon: ICONS.product},
+            {title: 'Tracking', path: PATH_DASHBOARD.user.tracking, icon: ICONS.label},
         ],
     },
 
@@ -156,9 +162,9 @@ const navConfig = [
     {
         subheader: 'TOMEBAMBA',
         items: [
-            {title: 'tienda', path: PATH_DASHBOARD.eCommerce.list, icon: ICONS.analytics},
-            {title: 'ordenes', path: PATH_DASHBOARD.invoice.list, icon: ICONS.analytics},
-            {title: 'catalogo', path: PATH_DASHBOARD.eCommerce.tomebamba_catalogo, icon: ICONS.analytics},
+            {title: 'tienda', path: PATH_DASHBOARD.eCommerce.list, icon: ICONS.ecommerce},
+            {title: 'ordenes', path: PATH_DASHBOARD.invoice.list, icon: ICONS.order},
+            {title: 'catalogo', path: PATH_DASHBOARD.eCommerce.tomebamba_catalogo, icon: ICONS.product},
         ],
     },
 
@@ -167,11 +173,11 @@ const navConfig = [
     {
         subheader: 'SERVICIO TÉCNICO',
         items: [
-            {title: 'Ingresar Orden', path: PATH_DASHBOARD.st.ingresarOrden, icon: ICONS.external},
-            {title: 'Servientrega', path: PATH_DASHBOARD.st.garantia, icon: ICONS.folder},
-            {title: 'Gestión Orden', path: PATH_DASHBOARD.st.gestionOrden, icon: ICONS.file},
-            {title: 'Crear NC SAP', path: PATH_DASHBOARD.st.crearNC, icon: ICONS.blank},
-            {title: 'Reporte ST', path: PATH_DASHBOARD.st.reporteOrden, icon: ICONS.disabled},
+            {title: 'Ingresar Orden', path: PATH_DASHBOARD.st.ingresarOrden, icon: ICONS.order},
+            {title: 'Servientrega', path: PATH_DASHBOARD.st.garantia, icon: ICONS.external},
+            {title: 'Gestión Orden', path: PATH_DASHBOARD.st.gestionOrden, icon: ICONS.params},
+            {title: 'Crear NC SAP', path: PATH_DASHBOARD.st.crearNC, icon: ICONS.invoice},
+            {title: 'Reporte ST', path: PATH_DASHBOARD.st.reporteOrden, icon: ICONS.analytics},
             // { title: 'create', path: PATH_DASHBOARD.blog.new },
         ],
     },
@@ -182,10 +188,10 @@ const navConfig = [
     {
         subheader: 'CLIENTES',
         items: [
-            {title: 'dashboard', path: PATH_DASHBOARD.root, icon: ICONS.analytics},
-            {title: 'tienda', path: PATH_DASHBOARD.eCommerce.shop, icon: ICONS.cart},
-            {title: 'ordenes', path: PATH_DASHBOARD.invoice.list, icon: ICONS.booking},
-            {title: 'Servicio Técnico', path: PATH_DASHBOARD.st.ingresarOrden, icon: ICONS.chat},
+            {title: 'dashboard', path: PATH_DASHBOARD.root, icon: ICONS.dashboard},
+            {title: 'tienda', path: PATH_DASHBOARD.eCommerce.shop, icon: ICONS.ecommerce},
+            {title: 'ordenes', path: PATH_DASHBOARD.invoice.list, icon: ICONS.order},
+            {title: 'Servicio Técnico', path: PATH_DASHBOARD.st.ingresarOrden, icon: ICONS.folder},
             {title: 'Programa HT Recompensas', path: PATH_DASHBOARD.customer.root, icon: ICONS.banking},
         ],
     },
@@ -195,12 +201,12 @@ const navConfig = [
     {
         subheader: 'CRÉDITO PVP',
         items: [
-            {title: 'Cliente', path: PATH_DASHBOARD.blank, icon: ICONS.analytics},
-            {title: 'Equifax', path: PATH_DASHBOARD.blank, icon: ICONS.blog},
-            {title: 'Perfil Económico', path: PATH_DASHBOARD.blank, icon: ICONS.cart},
+            {title: 'Cliente', path: PATH_DASHBOARD.blank, icon: ICONS.user},
+            {title: 'Equifax', path: PATH_DASHBOARD.blank, icon: ICONS.lock},
+            {title: 'Perfil Económico', path: PATH_DASHBOARD.blank, icon: ICONS.analytics},
             {title: 'Referencias', path: PATH_DASHBOARD.blank, icon: ICONS.file},
-            {title: 'Productos', path: PATH_DASHBOARD.blank, icon: ICONS.user},
-            {title: 'Documentos Imprimir', path: PATH_DASHBOARD.blank, icon: ICONS.banking},
+            {title: 'Productos', path: PATH_DASHBOARD.blank, icon: ICONS.product},
+            {title: 'Documentos Imprimir', path: PATH_DASHBOARD.blank, icon: ICONS.folder},
         ],
     },
 
@@ -209,8 +215,8 @@ const navConfig = [
     {
         subheader: 'RRHH',
         items: [
-            {title: 'Marcar', path: PATH_DASHBOARD.rrhh.marcar, icon: ICONS.analytics},
-            {title: 'Reporte', path: PATH_DASHBOARD.rrhh.reporte_rrhh, icon: ICONS.blog},
+            {title: 'Marcar', path: PATH_DASHBOARD.rrhh.marcar, icon: ICONS.booking},
+            {title: 'Reporte', path: PATH_DASHBOARD.rrhh.reporte_rrhh, icon: ICONS.analytics},
         ],
     },
 
@@ -219,10 +225,21 @@ const navConfig = [
     {
         subheader: 'UANATACA - MAYORISTAS',
         items: [
-            {title: 'Crear Natural', path: PATH_DASHBOARD.credito.natural_crear, icon: ICONS.blog},
-            {title: 'Crear Jurídica', path: PATH_DASHBOARD.credito.juridica_crear, icon: ICONS.blog},
-            {title: 'Consultar', path: PATH_DASHBOARD.credito.cargar, icon: ICONS.analytics},
+            {title: 'Crear Natural', path: PATH_DASHBOARD.credito.natural_crear, icon: ICONS.user},
+            {title: 'Crear Jurídica', path: PATH_DASHBOARD.credito.juridica_crear, icon: ICONS.user},
+            {title: 'Consultar', path: PATH_DASHBOARD.credito.cargar, icon: ICONS.folder},
             // {title: 'Equifax', path: PATH_DASHBOARD.credito.auth_equifax, icon: ICONS.blog},
+        ],
+    },
+
+    // 10 - Gestión de Pedidos y Despacho
+    // ----------------------------------------------------------------------
+    {
+        subheader: 'GESTIÓN PEDIDOS Y DESPACHO',
+        items: [
+            {title: 'Jefe de Operaciones', path: PATH_DASHBOARD.credito.natural_crear, icon: ICONS.params},
+            {title: 'Producción', path: PATH_DASHBOARD.credito.juridica_crear, icon: ICONS.job},
+            {title: 'Despacho', path: PATH_DASHBOARD.credito.cargar, icon: ICONS.booking},
         ],
     },
 
