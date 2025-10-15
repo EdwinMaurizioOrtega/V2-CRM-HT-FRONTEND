@@ -49,6 +49,7 @@ import { DOCUMENTACION, PAYMENT_OPTIONS_V2, TIPO_CREDITO, TIPO_PRECIO, BANCOS_LI
 
 import datos from '/data/datos.json'; // Ajusta la ruta según la ubicación de tu archivo JSON
 import datos_promo from '/data/promo.json'; // JSON Promoción
+import { set } from 'lodash';
 
 // ----------------------------------------------------------------------
 
@@ -847,7 +848,7 @@ export default function InvoiceDetails({ invoice }) {
             if (response.status === 200) {
                 window.location.href = '/dashboard/invoice/list/';
             }
-            
+
         } catch (error) {
             console.error('Error al crear la factura:', error);
             if (error.response) {
@@ -1439,6 +1440,12 @@ export default function InvoiceDetails({ invoice }) {
         setTextArrayCount(0);
         setUniqueTextArrayCount(0);
         setButtonDisabled(false); // Asegúrate de habilitar el botón después de limpiar.
+        setSeriesDisponibles('{"data": []}');
+        setSelected(false);
+        setOpenCargarSeries(false);
+        
+        // Recargar la página
+        window.location.reload();
     };
 
 
@@ -1468,13 +1475,18 @@ export default function InvoiceDetails({ invoice }) {
 
             if (response.status === 200) {
                 //console.log(response);
-                //console.log("hola.......");
-                alert(JSON.stringify(response.data));
+               
+                //alert(JSON.stringify(response.data));
 
                 setSeriesDisponibles(JSON.stringify(response.data));
+
+                //Recargar la página
+                window.location.reload();
             } else {
                 // La solicitud POST no se realizó correctamente
                 console.error('Error en la solicitud POST:', response.status);
+                alert(JSON.stringify(response.status));
+
             }
 
         } catch (error) {
@@ -2697,20 +2709,21 @@ export default function InvoiceDetails({ invoice }) {
             >
                 <AppBar position="relative">
                     <Toolbar>
-                        <IconButton color="inherit" edge="start" onClick={handleCloseCargarSeries}>
+                        {/* <IconButton color="inherit" edge="start" onClick={handleCloseCargarSeries}>
                             <Iconify icon="eva:close-fill" />
-                        </IconButton>
-                        <IconButton color="inherit" onClick={handlePrintClick} disabled={buttonDisabled}>
-                            <FileCopySvgIcon />
-                        </IconButton>
+                        </IconButton> */}
+                        <Button autoFocus color="inherit" onClick={handlePrintClick} disabled={buttonDisabled}>
+                            Formatear Series
+                        </Button>
                         <Button autoFocus color="inherit" onClick={() => {
                             handleCargarSeriesSAP();
                         }}>
-                            Subir
+                            Validar Series en SAP
                         </Button>
                         <Button color="inherit" onClick={handleClearClick} style={{ marginLeft: '10px' }}>
-                            Limpiar
+                            Cerrar
                         </Button>
+                        
                     </Toolbar>
                 </AppBar>
 
@@ -2726,6 +2739,7 @@ export default function InvoiceDetails({ invoice }) {
                             alignItems: 'center', // Centra verticalmente los elementos
                         }}
                     >
+                        
                         <Typography variant="body1" sx={{ marginRight: '10px' }}>
                             Líneas ingresadas: {textArrayCount}
                         </Typography>
@@ -2752,6 +2766,7 @@ export default function InvoiceDetails({ invoice }) {
                             {`===> Se requieren: ${selected?.CANTIDAD} series`}
                         </Typography>
                     </Box>
+                    {selected?.PRODUCTO_ID} {selected?.NOMBRE}
 
                     <Grid container spacing={2}>
                         {/* Columna Izquierda - TextField para ingresar IMEIs */}
@@ -2774,13 +2789,13 @@ export default function InvoiceDetails({ invoice }) {
                                 color="primary"
                                 onClick={handleGuardarSeriesDisponiblesSAP}
                             >
-                                Alerta Guardar Series
+                                Guardar Series en el Producto
                             </Button>
 
                             {seriesDisponibles && (
                                 <Box sx={{ width: '100%' }}>
                                     <Typography variant="h6" gutterBottom>
-                                        Series Disponibles en SAP
+                                        Estas se van a guardar en el producto {selected?.PRODUCTO_ID} {selected?.NOMBRE}:
                                     </Typography>
                                     <TableContainer sx={{ maxHeight: 400, border: '1px solid #e0e0e0', borderRadius: 1 }}>
                                         <Table stickyHeader size="small">
