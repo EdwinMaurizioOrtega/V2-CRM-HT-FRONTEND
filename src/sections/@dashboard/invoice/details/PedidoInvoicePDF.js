@@ -6,7 +6,7 @@ import { Page, View, Text, Image, Document } from '@react-pdf/renderer';
 import styles from './InvoiceStyle';
 import { Divider, Link, TableCell } from "@mui/material";
 
-import React from 'react';
+import React, { use } from 'react';
 import { fontWeight } from "@mui/system";
 import { fCurrency } from "../../../../utils/formatNumber";
 
@@ -25,7 +25,7 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
     // //console.log("invoice: "+ JSON.stringify(invoice[0]));
     // //console.log("invoice: "+ invoice.PEDIDO_PROV);
 
-    //console.log("invoice: " + invoice);
+    console.log("usergggggg: " + JSON.stringify(user));
     const {
         items = [],
         ID,
@@ -102,7 +102,7 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
                     <Image source="/logo/logo_group_ht.jpeg" style={{ height: 62 }} />
                     <View style={{ alignItems: 'flex-end', flexDirection: 'column' }}>
                         <Text style={styles.h3}>{status}</Text>
-                        <Text> {`Lidenar S.A. RUC: 0992537442001`} </Text>
+                        <Text> {user.EMPRESA == '0992537442001' ? 'Lidenar S.A. RUC: 0992537442001' : 'MovilCelistic S.A. RUC: 1792161037001'} </Text>
                         <Text> {`Pedido de Venta: ${ID}`} </Text>
                         {/* <Text> {`SAP: ${DOCNUM}`} </Text> */}
                     </View>
@@ -127,9 +127,19 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
                         <Text style={styles.body1}>
                             <Text style={{ fontWeight: 'bold' }}>TLF: </Text>
                             {Celular}</Text>
-                        <Text style={styles.body1}>
+                        {/* <Text style={styles.body1}>
                             <Text style={{ fontWeight: 'bold' }}>ESTABLECIMIENTO: </Text>
                             {BODEGA}
+                        </Text> */}
+
+                        <Text style={styles.body1}>
+                            <Text style={{ fontWeight: 'bold' }}>ESTABLECIMIENTO: </Text>
+                            {/* RUC Lidenar */}
+                            {user.EMPRESA === '0992537442001' ?
+                                getTextFromCodigo(BODEGA) + ' ' + BODEGA
+                                : 
+                                getTextFromCodigoMovilCelistic(BODEGA) + ' ' + BODEGA
+                            }
                         </Text>
 
                         <Text style={styles.body1}>
@@ -425,7 +435,7 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
 
                 {/* Pie de página con numeración */}
                 <View style={styles.footer} fixed>
-                    <Text 
+                    <Text
                         style={[styles.body2, { textAlign: 'center', color: '#666' }]}
                         render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`}
                         fixed
@@ -454,3 +464,87 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
 
     }
 }
+
+
+function getTextFromCodigo(rowCodigo) {
+    switch (rowCodigo) {
+        case '019':
+            return "CENTRO_DE_DISTRIBUCION_HT";
+        case '002':
+            return "MAYORISTAS_CUENCA";
+        case '006':
+            return "MAYORISTAS_QUITO";
+        case '015':
+            return "INACTIVA";
+        case '024':
+            return "MAYORISTAS_MANTA";
+        case '030':
+            return "MAYORISTAS_GUAYAQUIL";
+        case '009':
+            return "SAMSUNG_BAHIA";
+        case '014':
+            return "BODEGA_COMBO";
+        case '001':
+            return "SAMSUNG_CARACOL_QUITO";
+        case '011':
+            return "SAMSUNG_CUENCA";
+        case '016':
+            return "SAMSUNG_MALL_GUAYAQUIL";
+        case '017':
+            return "SAMSUNG_MALL_CUENCA";
+        case '020':
+            return "SAMSUNG_MANTA";
+        case '022':
+            return "SAMSUNG_PORTOVIEJO";
+        case '003':
+            return "PADRE_AGUIRRE";
+        default:
+            return "...";
+    }
+}
+
+function getTextFromCodigoMovilCelistic(rowCodigo) {
+    switch (rowCodigo) {
+        case 'DISTLF':
+            return "CENTRO DISTRIBUCION MOVILCELISTIC";
+        case '003':
+            return "MAYORISTAS MOVILCELISTIC MACHALA";
+        case '004':
+            return "MAYORISTAS MOVILCELISTIC CUENCA";
+        case 'T1CARACO':
+            return "CARACOL XIAOMI TERMINALES";
+        case 'T1CUENCA':
+            return "CUENCA XIAOMI TERMINALES";
+        case 'T1MACHAL':
+            return "MACHALA XIAOMI TERMINALES";
+        case 'T3CARACO':
+            return "CARACOL XIAOMI ACCESORIOS";
+        case 'T3CUENCA':
+            return "CUENCA XIAOMI ACCESORIOS";
+        case 'T3MACHAL':
+            return "MACHALA XIAOMI ACCESORIOS";
+        case 'T2CARACO':
+            return "CARACOL XIAOMI ELECTRODOMESTICOS";
+        case 'T2CUENCA':
+            return "CARACOL XIAOMI ELECTRODOMESTICOS";
+        case 'T2MACHAL':
+            return "MACHALA XIAOMI ELECTRODOMESTICOS";
+
+        case '030':
+            return "MAYORISTAS MOVILCELISTIC COLON";
+        case '024':
+            return "MAYORISTAS MOVILCELISTIC MANTA";
+
+        case '020':
+            return "MALL GUAYAQUIL";
+        case '021':
+            return "MALL CUENCA";
+
+        case '005':
+            return "⚠️OPERADORAS CARRIER";
+
+        default:
+            return "...";
+    }
+}
+
