@@ -203,10 +203,11 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
                             <View style={styles.tableCell_3}>
                                 <Text style={styles.subtitle2}>TPRECIO</Text>
                             </View>
-                            {/*
+                            
                             <View style={styles.tableCell_3}>
-                                <Text style={styles.subtitle2}>CPRECIO</Text>
+                                <Text style={styles.subtitle2}>COMENTARIO</Text>
                             </View>
+                            {/*
                             <View style={styles.tableCell_3}>
                                 <Text style={styles.subtitle2}>%DESC.</Text>
                             </View> */}
@@ -264,10 +265,10 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
                                     }
 
                                 </View>
-                                {/* <View style={styles.tableCell_3}>
+                                <View style={styles.tableCell_3}>
                                     <Text>{item.COMENTARIOPRECIO}</Text>
                                 </View>
-
+{/* 
                                 <View style={styles.tableCell_3}>
                                     <Text>{item.DISCOUNTPERCENTSAP}</Text>
                                 </View> */}
@@ -460,7 +461,7 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
         };
 
         const payActual = strings[pri];
-        return payActual || "Tipo no definido.";
+        return payActual || "-";
 
     }
 }

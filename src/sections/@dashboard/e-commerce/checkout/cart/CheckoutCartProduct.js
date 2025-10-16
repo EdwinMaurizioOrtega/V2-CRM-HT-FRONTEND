@@ -37,7 +37,7 @@ export default function CheckoutCartProduct({row, onDelete, onDecrease, onIncrea
         };
 
         const payActual = strings[pri];
-        return payActual || "Tipo no definido.";
+        return payActual || "-";
 
     }
 
@@ -52,7 +52,7 @@ export default function CheckoutCartProduct({row, onDelete, onDecrease, onIncrea
         };
 
         const payActual = strings[pri];
-        return payActual || "Tipo no definido.";
+        return payActual || "-";
 
     }
 

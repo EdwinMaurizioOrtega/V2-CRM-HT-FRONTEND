@@ -682,7 +682,7 @@ export default function InvoiceDetails({ invoice }) {
         };
 
         const payActual = strings[pri];
-        return payActual || "Tipo no definido.";
+        return payActual || "-";
 
     }
 
