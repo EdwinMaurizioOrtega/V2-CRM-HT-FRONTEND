@@ -1871,6 +1871,14 @@ export default function InvoiceDetails({ invoice }) {
                                     </>
                                     )}
 
+                                     {(user.ROLE === "0" || user.ROLE === "1" || user.ROLE === "2") && (<>
+
+                                        <TableCell align="right">Precio unitario</TableCell>
+                                        <TableCell align="right">Total</TableCell>
+
+                                    </>
+                                    )}
+
                                     {user.ROLE !== '0' ? (
                                         user.ROLE !== '2' ? (
                                             <>
@@ -2009,6 +2017,29 @@ export default function InvoiceDetails({ invoice }) {
                                         )
                                         }
 
+
+{(user.ROLE === "0" || user.ROLE === "2" || user.ROLE === "1") && (
+                                            <>
+                                                <TableCell
+                                                    align="left">
+                                                    <Box display="flex" flexDirection="row">
+
+                                                        <Typography variant="body2" sx={{ mb: 0.5 }}>
+                                                            {fCurrency(
+                                                                row.PRECIOUNITARIOVENTA)}
+                                                        </Typography>
+                                                    </Box>
+                                                </TableCell>
+
+                                                <TableCell
+                                                    align="right">{fCurrency(row.PRECIOUNITARIOVENTA * row.CANTIDAD)}</TableCell>
+
+                                            </>
+                                        )
+                                        }
+
+
+
                                         <TableCell align="right">
                                             <IconButton color={openPopover ? 'inherit' : 'default'}
 
@@ -2023,10 +2054,13 @@ export default function InvoiceDetails({ invoice }) {
                                         </TableCell>
 
                                         {(user.ROLE === "8") && (
+<>
 
-                                            // <TableCell align="left">{row.ID}</TableCell>
+
+                                            {/* <TableCell align="left">{row.ID}</TableCell> */}
 
                                             <TableCell align="left">{row.SERIES_COUNT}</TableCell>
+                                            </>
                                         )}
 
                                     </TableRow>
