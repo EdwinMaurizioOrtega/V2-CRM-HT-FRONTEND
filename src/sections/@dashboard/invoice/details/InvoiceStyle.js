@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
   h3: { fontSize: 16, fontWeight: 700 },
   h4: { fontSize: 13, fontWeight: 700 },
   body1: { fontSize: 10 },
+  body2: { fontSize: 8 },
   subtitle2: { fontSize: 9, fontWeight: 700 },
   alignRight: { textAlign: 'right' },
   page: {
