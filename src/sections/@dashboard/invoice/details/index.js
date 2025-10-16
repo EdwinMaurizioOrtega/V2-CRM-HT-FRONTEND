@@ -1871,7 +1871,7 @@ export default function InvoiceDetails({ invoice }) {
                                     </>
                                     )}
 
-                                     {(user.ROLE === "0" || user.ROLE === "1" || user.ROLE === "2") && (<>
+                                    {(user.ROLE === "0" || user.ROLE === "1" || user.ROLE === "2") && (<>
 
                                         <TableCell align="right">Precio unitario</TableCell>
                                         <TableCell align="right">Total</TableCell>
@@ -2018,7 +2018,7 @@ export default function InvoiceDetails({ invoice }) {
                                         }
 
 
-{(user.ROLE === "0" || user.ROLE === "2" || user.ROLE === "1") && (
+                                        {(user.ROLE === "0" || user.ROLE === "2" || user.ROLE === "1") && (
                                             <>
                                                 <TableCell
                                                     align="left">
@@ -2053,17 +2053,33 @@ export default function InvoiceDetails({ invoice }) {
                                             </IconButton>
                                         </TableCell>
 
-                                        {(user.ROLE === "8") && (
-<>
+                                {(user.ROLE === "8") && (
+                                    <>
 
 
-                                            {/* <TableCell align="left">{row.ID}</TableCell> */}
+                                        {/* <TableCell align="left">{row.ID}</TableCell> */}
 
-                                            <TableCell align="left">{row.SERIES_COUNT}</TableCell>
-                                            </>
-                                        )}
-
-                                    </TableRow>
+                                        <TableCell 
+                                            align="left"
+                                            sx={{
+                                                backgroundColor: 
+                                                    parseInt(row.SERIES_COUNT) === 0 
+                                                        ? 'inherit' 
+                                                        : parseInt(row.SERIES_COUNT) === parseInt(row.CANTIDAD)
+                                                            ? 'rgba(76, 175, 80, 0.2)' // Verde claro
+                                                            : 'rgba(255, 193, 7, 0.2)', // Amarillo/Naranja claro
+                                                fontWeight: parseInt(row.SERIES_COUNT) !== 0 ? 'bold' : 'normal'
+                                            }}
+                                        >
+                                            {parseInt(row.SERIES_COUNT) === 0 
+                                                ? row.SERIES_COUNT 
+                                                : parseInt(row.SERIES_COUNT) === parseInt(row.CANTIDAD)
+                                                    ? `${row.SERIES_COUNT} ✅`
+                                                    : `${row.SERIES_COUNT} (Faltan: ${parseInt(row.CANTIDAD) - parseInt(row.SERIES_COUNT)})`
+                                            }
+                                        </TableCell>
+                                    </>
+                                )}                                    </TableRow>
 
                                 ))}
 
