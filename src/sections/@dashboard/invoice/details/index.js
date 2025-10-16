@@ -2066,8 +2066,10 @@ export default function InvoiceDetails({ invoice }) {
                                                     parseInt(row.SERIES_COUNT) === 0 
                                                         ? 'inherit' 
                                                         : parseInt(row.SERIES_COUNT) === parseInt(row.CANTIDAD)
-                                                            ? 'rgba(76, 175, 80, 0.2)' // Verde claro
-                                                            : 'rgba(255, 193, 7, 0.2)', // Amarillo/Naranja claro
+                                                            ? 'rgba(76, 175, 80, 0.2)' // Verde claro - completo
+                                                            : parseInt(row.SERIES_COUNT) > parseInt(row.CANTIDAD)
+                                                                ? 'rgba(244, 67, 54, 0.2)' // Rojo claro - excedido
+                                                                : 'rgba(255, 193, 7, 0.2)', // Amarillo/Naranja claro - incompleto
                                                 fontWeight: parseInt(row.SERIES_COUNT) !== 0 ? 'bold' : 'normal'
                                             }}
                                         >
@@ -2075,7 +2077,9 @@ export default function InvoiceDetails({ invoice }) {
                                                 ? row.SERIES_COUNT 
                                                 : parseInt(row.SERIES_COUNT) === parseInt(row.CANTIDAD)
                                                     ? `${row.SERIES_COUNT} ✅`
-                                                    : `${row.SERIES_COUNT} (Faltan: ${parseInt(row.CANTIDAD) - parseInt(row.SERIES_COUNT)})`
+                                                    : parseInt(row.SERIES_COUNT) > parseInt(row.CANTIDAD)
+                                                        ? `${row.SERIES_COUNT} ⚠️ (Excede: +${parseInt(row.SERIES_COUNT) - parseInt(row.CANTIDAD)})`
+                                                        : `${row.SERIES_COUNT} (Faltan: ${parseInt(row.CANTIDAD) - parseInt(row.SERIES_COUNT)})`
                                             }
                                         </TableCell>
                                     </>
