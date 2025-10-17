@@ -1866,29 +1866,29 @@ export default function InvoiceDetails({ invoice }) {
                                     {
                                         (user.ROLE === "9" || user.ROLE === "10") ? (
                                             <>
-                                            <TableCell align="left">Stock SAP</TableCell>
+                                                {/* <TableCell align="left">Stock SAP</TableCell>
                                             <TableCell align="left">R/PorCargarSeries</TableCell>
-                                            <TableCell align="left">R/PorFacturar</TableCell>
-                                            <TableCell align="left">
-                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                                                    Disponible
-                                                    <Tooltip title="Cantidad disponible en inventario para esta bodega (Stock SAP - Reservado Por Facturar).">
-                                                        <IconButton 
-                                                            size="small" 
-                                                            sx={{ 
-                                                                width: 20, 
-                                                                height: 20, 
-                                                                color: 'text.secondary',
-                                                                '&:hover': {
-                                                                    color: 'primary.main'
-                                                                }
-                                                            }}
-                                                        >
-                                                            <Iconify icon="eva:question-mark-circle-outline" width={16} height={16} />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </Box>
-                                            </TableCell>
+                                            <TableCell align="left">R/PorFacturar</TableCell> */}
+                                                <TableCell align="left">
+                                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                                        Disponible
+                                                        <Tooltip title="Cantidad disponible en inventario para esta bodega (Stock SAP - Reservado Por Facturar - Reservado Por Cargar Series).">
+                                                            <IconButton
+                                                                size="small"
+                                                                sx={{
+                                                                    width: 20,
+                                                                    height: 20,
+                                                                    color: 'text.secondary',
+                                                                    '&:hover': {
+                                                                        color: 'primary.main'
+                                                                    }
+                                                                }}
+                                                            >
+                                                                <Iconify icon="eva:question-mark-circle-outline" width={16} height={16} />
+                                                            </IconButton>
+                                                        </Tooltip>
+                                                    </Box>
+                                                </TableCell>
 
                                             </>
                                         ) : null
@@ -1996,17 +1996,11 @@ export default function InvoiceDetails({ invoice }) {
                                             (user.ROLE === "9" || user.ROLE === "10") ? (
 
                                                 <>
-                                                    <TableCell align="left" >
+                                                    {/* <TableCell align="left" >{Number(row.STOCK_POR_BODEGA)}</TableCell> */}
 
-                                                        {Number(row.STOCK_POR_BODEGA)}</TableCell>
+                                                    {/* <TableCell align="left" >{Number(row.RESERVADO_CARGAR_SERIES)}</TableCell> */}
 
-                                                        <TableCell align="left" >
-
-                                                        {Number(row.RESERVADO_CARGAR_SERIES)}</TableCell>
-
-                                                    <TableCell align="left" >
-
-                                                        {Number(row.RESERVADO_POR_BODEGA)}</TableCell>
+                                                    {/* <TableCell align="left" >{Number(row.RESERVADO_POR_BODEGA)}</TableCell> */}
 
                                                     <TableCell align="left"
                                                         style={{ backgroundColor: Number(row.DISPONIBLE_POR_BODEGA) <= 0 ? 'rgba(255, 0, 0, 0.08)' : 'rgba(0, 171, 85, 0.08)' }}>
@@ -2101,11 +2095,13 @@ export default function InvoiceDetails({ invoice }) {
                                             </IconButton>
                                         </TableCell>
 
+                                        {/* <TableCell align="left">{row.ID}</TableCell> */}
+
+
                                         {(user.ROLE === "8") && (
                                             <>
 
 
-                                                {/* <TableCell align="left">{row.ID}</TableCell> */}
 
                                                 <TableCell
                                                     align="left"
