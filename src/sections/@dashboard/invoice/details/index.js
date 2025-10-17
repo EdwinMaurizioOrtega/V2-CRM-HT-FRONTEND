@@ -1866,9 +1866,29 @@ export default function InvoiceDetails({ invoice }) {
                                     {
                                         (user.ROLE === "9" || user.ROLE === "10") ? (
                                             <>
-                                            <TableCell align="left">Stock</TableCell>
-                                            <TableCell align="left">Reservado</TableCell>
-                                            <TableCell align="left">Disponible</TableCell>
+                                            <TableCell align="left">Stock SAP</TableCell>
+                                            <TableCell align="left">R/PorCargarSeries</TableCell>
+                                            <TableCell align="left">R/PorFacturar</TableCell>
+                                            <TableCell align="left">
+                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                                    Disponible
+                                                    <Tooltip title="Cantidad disponible en inventario para esta bodega (Stock SAP - Reservado Por Facturar).">
+                                                        <IconButton 
+                                                            size="small" 
+                                                            sx={{ 
+                                                                width: 20, 
+                                                                height: 20, 
+                                                                color: 'text.secondary',
+                                                                '&:hover': {
+                                                                    color: 'primary.main'
+                                                                }
+                                                            }}
+                                                        >
+                                                            <Iconify icon="eva:question-mark-circle-outline" width={16} height={16} />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                </Box>
+                                            </TableCell>
 
                                             </>
                                         ) : null
@@ -1979,6 +1999,10 @@ export default function InvoiceDetails({ invoice }) {
                                                     <TableCell align="left" >
 
                                                         {Number(row.STOCK_POR_BODEGA)}</TableCell>
+
+                                                        <TableCell align="left" >
+
+                                                        {Number(row.RESERVADO_CARGAR_SERIES)}</TableCell>
 
                                                     <TableCell align="left" >
 
