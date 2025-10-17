@@ -222,7 +222,17 @@ export default function InvoiceDetails({ invoice }) {
 
     const vaciarListaSeriesProducto = async () => {
 
-        //console.log("Vaciar lista series producto" + selected.ID)
+        console.log("Vaciar lista series producto: " + selected.ID)
+
+        // Actualizar una orden.
+            const response = await axios.delete(`/hanadb/api/orders/vaciar_series_por_id_detalle_orden?empresa=${user.EMPRESA}&id_detalle_orden=${selected.ID}`
+            );
+
+            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            if (response.status === 200) {
+                router.reload();
+            }
+
 
     };
 
@@ -612,6 +622,7 @@ export default function InvoiceDetails({ invoice }) {
             "024": "Manta",
             "030": "Colón",
             "008": "Consignación",
+            "039": "Bodega Claro"
         };
 
         const bodegaActual = strings[ware];
@@ -3139,7 +3150,8 @@ export const top100Films = [
     // {title: 'Guayaquil', id: "015"},
     { title: 'Manta', id: "024" },
     { title: 'Colón', id: "030" },
-    { title: 'Consignación', id: "008" }
+    { title: 'Consignación', id: "008" },
+    { title: 'Bodega Claro', id: "039" }
 ]
 
 export const top100FilmsAlphacell = [

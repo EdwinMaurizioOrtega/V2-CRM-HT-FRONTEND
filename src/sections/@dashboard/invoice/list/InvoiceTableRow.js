@@ -757,7 +757,7 @@ export default function InvoiceTableRow({
                 </MenuItem>
                 }
 
-                {[0, 1, 8, 22, 23].includes(ESTADO) && (user.ROLE === "9" || user.ROLE === "10") ? (
+                {[0, 1, 7, 8, 22, 23].includes(ESTADO) && (user.ROLE === "9" || user.ROLE === "10") ? (
                     <MenuItem
                         onClick={() => {
                             sendOrderToBagRow();
@@ -765,7 +765,7 @@ export default function InvoiceTableRow({
                         }}
                     >
                         <Iconify icon="eva:shopping-bag-outline" />
-                        Cartera
+                        Retornar a Cartera
                     </MenuItem>
 
                 ) : null
