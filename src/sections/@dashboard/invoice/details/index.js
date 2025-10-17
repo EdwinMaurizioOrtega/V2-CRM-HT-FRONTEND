@@ -1932,11 +1932,9 @@ export default function InvoiceDetails({ invoice }) {
                                     ) : null
                                     }
 
+                                        {/* <TableCell align="left">ID Detalle</TableCell> */}
 
                                     {(user.ROLE === "8") && (
-
-                                        // <TableCell align="left">ID Detalle</TableCell>
-
                                         <TableCell align="left">Nro. Series Cargadas</TableCell>
                                     )}
 
@@ -2107,7 +2105,6 @@ export default function InvoiceDetails({ invoice }) {
                                         </TableCell>
 
                                         {/* <TableCell align="left">{row.ID}</TableCell> */}
-
 
                                         {(user.ROLE === "8") && (
                                             <>
