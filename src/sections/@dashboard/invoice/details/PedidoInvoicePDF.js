@@ -25,7 +25,7 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
     // //console.log("invoice: "+ JSON.stringify(invoice[0]));
     // //console.log("invoice: "+ invoice.PEDIDO_PROV);
 
-    console.log("usergggggg: " + JSON.stringify(user));
+    //console.log("usergggggg: " + JSON.stringify(user));
     const {
         items = [],
         ID,

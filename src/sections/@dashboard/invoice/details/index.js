@@ -219,11 +219,18 @@ export default function InvoiceDetails({ invoice }) {
         setOpenVerListaSeries(false);
     };
 
+
+    const vaciarListaSeriesProducto = async () => {
+
+        //console.log("Vaciar lista series producto" + selected.ID)
+
+    };
+
     // Nueva función para obtener las series guardadas de la API
     const obtenerSeriesGuardadas = async () => {
         try {
 
-            console.log("ID de orden:", selected.ID);
+            //console.log("ID de orden:", selected.ID);
 
             const response = await axios.post(`/hanadb/api/orders/series_by_id_detalle_orden`, {
                 empresa: user.EMPRESA,
@@ -231,7 +238,7 @@ export default function InvoiceDetails({ invoice }) {
             });
 
             if (response.status === 200) {
-                console.log("Series obtenidas exitosamente:", response.data.data);
+                //console.log("Series obtenidas exitosamente:", response.data.data);
                 setSeriesGuardadas(response.data.data);
             } else {
                 console.error('Error al obtener las series:', response.status);
@@ -570,7 +577,7 @@ export default function InvoiceDetails({ invoice }) {
     const handleBancoSeleccionado = async (event, value) => {
 
         try {
-            console.log(value.AcctCode); // Log the selected element
+            //console.log(value.AcctCode); // Log the selected element
             //console.log(ID); // Log ID de la orden
             // Actualizar una orden.
             // const response = await axios.put('/hanadb/api/orders/order/change_payment', {
@@ -604,6 +611,7 @@ export default function InvoiceDetails({ invoice }) {
             // "015": "Guayaquil",
             "024": "Manta",
             "030": "Colón",
+            "008": "Consignación",
         };
 
         const bodegaActual = strings[ware];
@@ -752,9 +760,9 @@ export default function InvoiceDetails({ invoice }) {
 
         if (FORMADEPAGO === '-1') {
 
-            console.log("Código de cuenta de transferencia: " + transferAccount.AcctCode);
-            console.log("Número de referencia: " + transferReference);
-            console.log("Total en dólares de referencia: " + totalDolaresReferencia);
+            //console.log("Código de cuenta de transferencia: " + transferAccount.AcctCode);
+            //console.log("Número de referencia: " + transferReference);
+            //console.log("Total en dólares de referencia: " + totalDolaresReferencia);
 
 
             // Validar que todos los campos requeridos estén presentes
@@ -828,8 +836,8 @@ export default function InvoiceDetails({ invoice }) {
         try {
             setLoading(true);
 
-            console.log("Enviando datos a la API:");
-            console.log("- ID_ORDER:", ID);
+            //console.log("Enviando datos a la API:");
+            //console.log("- ID_ORDER:", ID);
 
             // Preparar los datos base
             const requestData = {
@@ -841,8 +849,8 @@ export default function InvoiceDetails({ invoice }) {
             // Actualizar una orden.
             const response = await axios.post('/hanadb/api/orders/factura_sap', requestData);
 
-            console.log("Factura creada en el SAP.");
-            console.log("Código de estado:", response.status);
+            //console.log("Factura creada en el SAP.");
+            //console.log("Código de estado:", response.status);
 
             // Se completó con éxito (código de estado 200)
             if (response.status === 200) {
@@ -1402,14 +1410,14 @@ export default function InvoiceDetails({ invoice }) {
 
         // Reemplazar los saltos de línea (\n) por una cadena vacía
         const sinSaltosDeLinea = valueNew.replace(/\n/g, '');
-        console.log("SinSaltosDeLinea: " + sinSaltosDeLinea);
+        //console.log("SinSaltosDeLinea: " + sinSaltosDeLinea);
         // Convertir la cadena a un array de strings
         const listaDeStrings = sinSaltosDeLinea.split(',').map(String);
-        console.log("ListaDeStrings: " + listaDeStrings);
+        //console.log("ListaDeStrings: " + listaDeStrings);
 
-        console.log("Selected: " + JSON.stringify(selected));
-        console.log("Selected: " + JSON.stringify(selected.PRODUCTO_ID));
-        console.log("User: " + JSON.stringify(user.WAREHOUSE));
+        //console.log("Selected: " + JSON.stringify(selected));
+        //console.log("Selected: " + JSON.stringify(selected.PRODUCTO_ID));
+        //console.log("User: " + JSON.stringify(user.WAREHOUSE));
 
         try {
             const response = await axios.post(`/hanadb/api/orders/sap/validate_series_by_bodega_producto_in_sap`, {
@@ -1450,18 +1458,18 @@ export default function InvoiceDetails({ invoice }) {
 
 
     const handleGuardarSeriesDisponiblesSAP = async () => {
-        console.log("selected.ID: " + selected.ID);
+        //console.log("selected.ID: " + selected.ID);
 
 
         const parsedData = JSON.parse(seriesDisponibles);
         const dataArray = parsedData?.data || [];
         const seriesList = dataArray.map(item => item.IntrSerial);
 
-        console.log("Lista de Series:", seriesList);
-        console.log("Total de series:", seriesList.length);
+        //console.log("Lista de Series:", seriesList);
+        //console.log("Total de series:", seriesList.length);
 
         // Si quieres solo la lista como string separado por comas:
-        console.log("Series separadas por comas:", seriesList.join(', '));
+        //console.log("Series separadas por comas:", seriesList.join(', '));
         const seriesListPorComa = seriesList.join(', ');
 
 
@@ -1765,7 +1773,7 @@ export default function InvoiceDetails({ invoice }) {
                                                                 getOptionLabel={(option) => option.AcctName}
                                                                 onChange={(event, value) => {
                                                                     setTransferAccount(value);
-                                                                    console.log("Banco seleccionado:", value);
+                                                                    //console.log("Banco seleccionado:", value);
                                                                 }}
                                                                 renderInput={(params) => <TextField {...params} label="Seleccionar Banco"
                                                                     margin="none" />}
@@ -1780,7 +1788,7 @@ export default function InvoiceDetails({ invoice }) {
                                                                 getOptionLabel={(option) => option.AcctName}
                                                                 onChange={(event, value) => {
                                                                     setTransferAccount(value);
-                                                                    console.log("Banco seleccionado:", value);
+                                                                    //console.log("Banco seleccionado:", value);
                                                                 }}
                                                                 renderInput={(params) => <TextField {...params} label="Seleccionar Banco"
                                                                     margin="none" />}
@@ -1857,7 +1865,12 @@ export default function InvoiceDetails({ invoice }) {
 
                                     {
                                         (user.ROLE === "9" || user.ROLE === "10") ? (
+                                            <>
+                                            <TableCell align="left">Stock</TableCell>
+                                            <TableCell align="left">Reservado</TableCell>
                                             <TableCell align="left">Disponible</TableCell>
+
+                                            </>
                                         ) : null
                                     }
                                     {(user.ROLE === "9" || user.ROLE === "10") && (<>
@@ -1961,10 +1974,21 @@ export default function InvoiceDetails({ invoice }) {
 
                                         {
                                             (user.ROLE === "9" || user.ROLE === "10") ? (
-                                                <TableCell align="left"
-                                                    style={{ backgroundColor: Number(row.DISPONIBLE_POR_BODEGA) <= 0 ? 'rgba(255, 0, 0, 0.08)' : 'rgba(0, 171, 85, 0.08)' }}>
 
-                                                    {Number(row.DISPONIBLE_POR_BODEGA)}</TableCell>
+                                                <>
+                                                    <TableCell align="left" >
+
+                                                        {Number(row.STOCK_POR_BODEGA)}</TableCell>
+
+                                                    <TableCell align="left" >
+
+                                                        {Number(row.RESERVADO_POR_BODEGA)}</TableCell>
+
+                                                    <TableCell align="left"
+                                                        style={{ backgroundColor: Number(row.DISPONIBLE_POR_BODEGA) <= 0 ? 'rgba(255, 0, 0, 0.08)' : 'rgba(0, 171, 85, 0.08)' }}>
+
+                                                        {Number(row.DISPONIBLE_POR_BODEGA)}</TableCell>
+                                                </>
 
                                             ) : null
                                         }
@@ -2053,37 +2077,37 @@ export default function InvoiceDetails({ invoice }) {
                                             </IconButton>
                                         </TableCell>
 
-                                {(user.ROLE === "8") && (
-                                    <>
+                                        {(user.ROLE === "8") && (
+                                            <>
 
 
-                                        {/* <TableCell align="left">{row.ID}</TableCell> */}
+                                                {/* <TableCell align="left">{row.ID}</TableCell> */}
 
-                                        <TableCell 
-                                            align="left"
-                                            sx={{
-                                                backgroundColor: 
-                                                    parseInt(row.SERIES_COUNT) === 0 
-                                                        ? 'inherit' 
+                                                <TableCell
+                                                    align="left"
+                                                    sx={{
+                                                        backgroundColor:
+                                                            parseInt(row.SERIES_COUNT) === 0
+                                                                ? 'inherit'
+                                                                : parseInt(row.SERIES_COUNT) === parseInt(row.CANTIDAD)
+                                                                    ? 'rgba(76, 175, 80, 0.2)' // Verde claro - completo
+                                                                    : parseInt(row.SERIES_COUNT) > parseInt(row.CANTIDAD)
+                                                                        ? 'rgba(244, 67, 54, 0.2)' // Rojo claro - excedido
+                                                                        : 'rgba(255, 193, 7, 0.2)', // Amarillo/Naranja claro - incompleto
+                                                        fontWeight: parseInt(row.SERIES_COUNT) !== 0 ? 'bold' : 'normal'
+                                                    }}
+                                                >
+                                                    {parseInt(row.SERIES_COUNT) === 0
+                                                        ? row.SERIES_COUNT
                                                         : parseInt(row.SERIES_COUNT) === parseInt(row.CANTIDAD)
-                                                            ? 'rgba(76, 175, 80, 0.2)' // Verde claro - completo
+                                                            ? `${row.SERIES_COUNT} ✅`
                                                             : parseInt(row.SERIES_COUNT) > parseInt(row.CANTIDAD)
-                                                                ? 'rgba(244, 67, 54, 0.2)' // Rojo claro - excedido
-                                                                : 'rgba(255, 193, 7, 0.2)', // Amarillo/Naranja claro - incompleto
-                                                fontWeight: parseInt(row.SERIES_COUNT) !== 0 ? 'bold' : 'normal'
-                                            }}
-                                        >
-                                            {parseInt(row.SERIES_COUNT) === 0 
-                                                ? row.SERIES_COUNT 
-                                                : parseInt(row.SERIES_COUNT) === parseInt(row.CANTIDAD)
-                                                    ? `${row.SERIES_COUNT} ✅`
-                                                    : parseInt(row.SERIES_COUNT) > parseInt(row.CANTIDAD)
-                                                        ? `${row.SERIES_COUNT} ⚠️ (Excede: +${parseInt(row.SERIES_COUNT) - parseInt(row.CANTIDAD)})`
-                                                        : `${row.SERIES_COUNT} (Faltan: ${parseInt(row.CANTIDAD) - parseInt(row.SERIES_COUNT)})`
-                                            }
-                                        </TableCell>
-                                    </>
-                                )}                                    </TableRow>
+                                                                ? `${row.SERIES_COUNT} ⚠️ (Excede: +${parseInt(row.SERIES_COUNT) - parseInt(row.CANTIDAD)})`
+                                                                : `${row.SERIES_COUNT} (Faltan: ${parseInt(row.CANTIDAD) - parseInt(row.SERIES_COUNT)})`
+                                                    }
+                                                </TableCell>
+                                            </>
+                                        )}                                    </TableRow>
 
                                 ))}
 
@@ -2604,6 +2628,15 @@ export default function InvoiceDetails({ invoice }) {
                             Ver Series
                         </MenuItem>
 
+                        <MenuItem
+                            onClick={() => {
+                                vaciarListaSeriesProducto();
+                            }}
+                        >
+                            <Iconify icon="eva:edit-fill" />
+                            Vaciar Series
+                        </MenuItem>
+
 
                     </MenuPopover>
                 ) : null
@@ -3085,7 +3118,8 @@ export const top100Films = [
     { title: 'Quito', id: "006" },
     // {title: 'Guayaquil', id: "015"},
     { title: 'Manta', id: "024" },
-    { title: 'Colón', id: "030" }
+    { title: 'Colón', id: "030" },
+    { title: 'Consignación', id: "008" }
 ]
 
 export const top100FilmsAlphacell = [
