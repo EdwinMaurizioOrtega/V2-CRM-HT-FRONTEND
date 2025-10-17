@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 // @mui
 import {
     Link,
@@ -17,14 +17,14 @@ import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
-import {useAuthContext} from "../../../../auth/useAuthContext";
-import {HOST_API_KEY} from "../../../../config-global";
+import { useAuthContext } from "../../../../auth/useAuthContext";
+import { HOST_API_KEY } from "../../../../config-global";
 import axios from "../../../../utils/axios";
-import {useRouter} from "next/router";
-import {PAYMENT_OPTIONS_V2, TABULAR_ANULAR_PEDIDOS} from "../../../../utils/constants";
+import { useRouter } from "next/router";
+import { PAYMENT_OPTIONS_V2, TABULAR_ANULAR_PEDIDOS } from "../../../../utils/constants";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import {top100FilmsMovilCelistic} from "../details";
-import {PATH_DASHBOARD} from "../../../../routes/paths";
+import { top100FilmsMovilCelistic } from "../details";
+import { PATH_DASHBOARD } from "../../../../routes/paths";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
 // ----------------------------------------------------------------------
@@ -39,17 +39,17 @@ InvoiceTableRow.propTypes = {
 };
 
 export default function InvoiceTableRow({
-                                            row,
-                                            selected,
-                                            onSelectRow,
-                                            onViewRow,
-                                            onEditRow,
-                                            onDeleteRow,
-                                        }) {
+    row,
+    selected,
+    onSelectRow,
+    onViewRow,
+    onEditRow,
+    onDeleteRow,
+}) {
 
     //console.log("row: " + JSON.stringify(row));
 
-    const {user} = useAuthContext();
+    const { user } = useAuthContext();
 
     const {
         ID,
@@ -161,7 +161,7 @@ export default function InvoiceTableRow({
                     byteNumbers[i] = byteCharacters.charCodeAt(i);
                 }
                 const byteArray = new Uint8Array(byteNumbers);
-                const pdfBlob = new Blob([byteArray], {type: 'application/pdf'});
+                const pdfBlob = new Blob([byteArray], { type: 'application/pdf' });
                 const pdfUrl = URL.createObjectURL(pdfBlob);
                 window.open(pdfUrl, '_blank');
 
@@ -193,7 +193,7 @@ export default function InvoiceTableRow({
         setTabAnular(newValue); // Usa el valor directamente
     };
 
-//Anúla una orden
+    //Anúla una orden
     const onAnularRow = async () => {
         //console.log("Número de orden: " + ID);
         ////console.log("Observación anulación orden: " + valueNew);
@@ -334,7 +334,7 @@ export default function InvoiceTableRow({
         // //console.log(`Nuevo precio unitario ${valueNew}`);
     };
 
-//Anúla una orden
+    //Anúla una orden
     const onRowOBS = async () => {
         //console.log("Número de orden: " + ID);
         //console.log("Observación de cartera: " + valueNewOBS);
@@ -490,7 +490,7 @@ export default function InvoiceTableRow({
         <>
 
             <TableRow hover selected={selected}
-                      style={{backgroundColor: user.ROLE === "8" && FECHA_IMPRESION != null ? '#ffdab9' : 'transparent',}}
+                style={{ backgroundColor: user.ROLE === "8" && FECHA_IMPRESION != null ? '#ffdab9' : 'transparent', }}
             >
                 {/* <TableCell padding="checkbox"> */}
                 {/*     <Checkbox checked={selected} onClick={onSelectRow}/> */}
@@ -498,7 +498,7 @@ export default function InvoiceTableRow({
 
                 <TableCell align="right">
                     <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
-                        <Iconify icon="eva:more-vertical-fill"/>
+                        <Iconify icon="eva:more-vertical-fill" />
                     </IconButton>
                 </TableCell>
 
@@ -509,11 +509,11 @@ export default function InvoiceTableRow({
                         {
                             // Hipertronics
                             CLIENTEID == 'CL0190003701001' ? (
-                                <Avatar src="/logo/logo_tomebamba.png" alt="1X"/>
+                                <Avatar src="/logo/logo_tomebamba.png" alt="1X" />
 
                             ) : (
                                 //Tomebamba
-                                <Avatar src="/logo/logo_single.svg" alt="1X"/>
+                                <Avatar src="/logo/logo_single.svg" alt="1X" />
                             )
 
                         }
@@ -521,7 +521,7 @@ export default function InvoiceTableRow({
                         <div>
                             <Typography variant="subtitle2" noWrap>
                                 {VENDEDOR.split(" ").map((word, index) =>
-                                    index === 2 ? <><br/>{word} </> : word + " "
+                                    index === 2 ? <><br />{word} </> : word + " "
                                 )}
                             </Typography>
 
@@ -529,15 +529,15 @@ export default function InvoiceTableRow({
                                 noWrap
                                 variant="body2"
                                 onClick={onViewRow}
-                                sx={{color: 'text.disabled', cursor: 'pointer'}}
+                                sx={{ color: 'text.disabled', cursor: 'pointer' }}
                             >
                                 {`INV-${ID}`}
                             </Link>
                             {NUMEROFACTURAE4 && (
                                 <Tooltip title={NUMEROFACTURAE4}>
-                                    <IconButton color="primary" sx={{width: 40, height: 40}}>
+                                    <IconButton color="primary" sx={{ width: 40, height: 40 }}>
                                         <Badge badgeContent={1} color="error">
-                                            <NotificationsIcon/>
+                                            <NotificationsIcon />
                                         </Badge>
                                     </IconButton>
                                 </Tooltip>
@@ -621,17 +621,17 @@ export default function InvoiceTableRow({
 
                 <TableCell align="center">{Cliente}</TableCell>
 
-                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
                     {Celular}
                 </TableCell>
                 {
                     user.ROLE !== '31' ? (
-                        <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
                             {Tipo}
                         </TableCell>
                     ) : null
                 }
-                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
                     {Ciudad}
                 </TableCell>
 
@@ -639,61 +639,63 @@ export default function InvoiceTableRow({
                 {/* <TableCell align="center" sx={{textTransform: 'capitalize'}}> */}
                 {/*     {VENDEDOR} */}
                 {/* </TableCell> */}
-                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
                     {CITY}
                 </TableCell>
 
-                <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                {!(ESTADO === 7 || ESTADO === 0) ? (
+                    <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
 
-                    {NUMEROGUIA === '000000000' ? (
-                        URL_INVOICE_SELLER !== null ? (
-                            <>
-                                <IconButton
-                                    component="a"
-                                    href={URL_INVOICE_SELLER}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    sx={{ml: 1}}
-                                >
-                                    <VisibilityIcon/>
-                                </IconButton>
-                            </>
+                        {NUMEROGUIA === '000000000' ? (
+                            URL_INVOICE_SELLER !== null ? (
+                                <>
+                                    <IconButton
+                                        component="a"
+                                        href={URL_INVOICE_SELLER}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        sx={{ ml: 1 }}
+                                    >
+                                        <VisibilityIcon />
+                                    </IconButton>
+                                </>
+                            ) : (
+                                <CardContent>
+                                    <Label>{NUMEROGUIA}</Label>
+                                </CardContent>
+                            )
                         ) : (
-                            <CardContent>
-                                <Label>{NUMEROGUIA}</Label>
-                            </CardContent>
-                        )
-                    ) : (
-                        <>
-                            <Button
-                                variant="text"
-                                onClick={() => VerGuia(NUMEROGUIA)}
-                                sx={{color: 'text.disabled', cursor: 'pointer'}}
-                                disabled={isLoading} // Disable the button while loading
-                            >
-                                {isLoading ? 'Cargando...' : NUMEROGUIA}
-                            </Button>
-                        </>
-                    )}
+                            <>
+                                <Button
+                                    variant="text"
+                                    onClick={() => VerGuia(NUMEROGUIA)}
+                                    sx={{ color: 'text.disabled', cursor: 'pointer' }}
+                                    disabled={isLoading} // Disable the button while loading
+                                >
+                                    {isLoading ? 'Cargando...' : NUMEROGUIA}
+                                </Button>
+                            </>
+                        )}
 
-                </TableCell>
+                    </TableCell>
+                ): null }
 
                 {
                     user.ROLE !== '31' ? (
                         <>
-                
-                            <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+
+                            <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
                                 {NOMBREUSUARIOENTREGARA}
                             </TableCell>
                             {/* { */
                             }
                             {/*     user.ROLE === "9" || user.ROLE === "8" ? ( */
                             }
-                            <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                            <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
                                 {DOCNUM}
                             </TableCell>
 
-                            <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+                            <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
                                 {USUARIOAPROBO}
                             </TableCell>
                         </>
@@ -710,8 +712,8 @@ export default function InvoiceTableRow({
                 <TableCell align="left">{NUMEROFACTURALIDENAR}</TableCell>
                 <TableCell align="left">
                     {OBSERVACION_ANULACION && (
-                        <Tooltip title={OBSERVACION_ANULACION} sx={{maxWidth: 500}}>
-                            <Button color="inherit" sx={{fontSize: '2rem'}}>☹️</Button>
+                        <Tooltip title={OBSERVACION_ANULACION} sx={{ maxWidth: 500 }}>
+                            <Button color="inherit" sx={{ fontSize: '2rem' }}>☹️</Button>
                         </Tooltip>
                     )}
                 </TableCell>
@@ -730,7 +732,7 @@ export default function InvoiceTableRow({
                 open={openPopover}
                 onClose={handleClosePopover}
                 arrow="right-top"
-                sx={{width: 160}}
+                sx={{ width: 160 }}
             >
                 <MenuItem
                     onClick={() => {
@@ -738,11 +740,11 @@ export default function InvoiceTableRow({
                         handleClosePopover();
                     }}
                 >
-                    <Iconify icon="eva:eye-fill"/>
+                    <Iconify icon="eva:eye-fill" />
                     Ver
                 </MenuItem>
 
-                <Divider sx={{borderStyle: 'dashed'}}/>
+                <Divider sx={{ borderStyle: 'dashed' }} />
 
                 {ESTADO === 15 && ['7', '10'].includes(user.ROLE) && <MenuItem
                     onClick={() => {
@@ -750,7 +752,7 @@ export default function InvoiceTableRow({
                         handleClosePopover();
                     }}
                 >
-                    <Iconify icon="eva:shopping-bag-outline"/>
+                    <Iconify icon="eva:shopping-bag-outline" />
                     Aprobar V.
                 </MenuItem>
                 }
@@ -762,7 +764,7 @@ export default function InvoiceTableRow({
                             handleClosePopover();
                         }}
                     >
-                        <Iconify icon="eva:shopping-bag-outline"/>
+                        <Iconify icon="eva:shopping-bag-outline" />
                         Cartera
                     </MenuItem>
 
@@ -776,7 +778,7 @@ export default function InvoiceTableRow({
                             handleClosePopover();
                         }}
                     >
-                        <Iconify icon="eva:shopping-bag-outline"/>
+                        <Iconify icon="eva:shopping-bag-outline" />
                         Observación
                     </MenuItem>
 
@@ -804,14 +806,14 @@ export default function InvoiceTableRow({
                             handleClosePopover();
                         }}
                     >
-                        <Iconify icon="eva:shopping-bag-outline"/>
+                        <Iconify icon="eva:shopping-bag-outline" />
                         Priorizar Fac.
                     </MenuItem>
 
                 ) : null
                 }
 
-                <Divider sx={{borderStyle: 'dashed'}}/>
+                <Divider sx={{ borderStyle: 'dashed' }} />
 
                 {(ESTADO === 6 || ESTADO === 22) && (user.ROLE === "9" || user.ROLE === "10") ? (
                     <MenuItem
@@ -819,9 +821,9 @@ export default function InvoiceTableRow({
                             handleOpenConfirmAnular();
                             handleClosePopover();
                         }}
-                        sx={{color: 'error.main'}}
+                        sx={{ color: 'error.main' }}
                     >
-                        <Iconify icon="eva:trash-2-outline"/>
+                        <Iconify icon="eva:trash-2-outline" />
                         Anular
                     </MenuItem>
                 ) : null
@@ -849,7 +851,7 @@ export default function InvoiceTableRow({
                 {/*   Borrar */}
                 {/* </MenuItem> */}
 
-                <Divider sx={{borderStyle: 'dashed'}}/>
+                <Divider sx={{ borderStyle: 'dashed' }} />
 
                 {ESTADO === 10 && user.ROLE === "2" ? (
                     <>
@@ -859,7 +861,7 @@ export default function InvoiceTableRow({
                                 handleClosePopover();
                             }}
                         >
-                            <Iconify icon="eva:shopping-bag-outline"/>
+                            <Iconify icon="eva:shopping-bag-outline" />
                             Aprobar Ejec.S.
                         </MenuItem>
 
@@ -869,14 +871,14 @@ export default function InvoiceTableRow({
                                 handleClosePopover();
                             }}
                         >
-                            <Iconify icon="eva:shopping-bag-outline"/>
+                            <Iconify icon="eva:shopping-bag-outline" />
                             Anular Ejec.S.
                         </MenuItem>
                     </>
                 ) : null
                 }
 
-                <Divider sx={{borderStyle: 'dashed'}}/>
+                <Divider sx={{ borderStyle: 'dashed' }} />
 
                 {ESTADO === 13 && user.ROLE === "1" ? (
                     <>
@@ -886,7 +888,7 @@ export default function InvoiceTableRow({
                                 handleClosePopover();
                             }}
                         >
-                            <Iconify icon="eva:shopping-bag-outline"/>
+                            <Iconify icon="eva:shopping-bag-outline" />
                             Aprobar Com..
                         </MenuItem>
 
@@ -896,7 +898,7 @@ export default function InvoiceTableRow({
                                 handleClosePopover();
                             }}
                         >
-                            <Iconify icon="eva:shopping-bag-outline"/>
+                            <Iconify icon="eva:shopping-bag-outline" />
                             Anular Com..
                         </MenuItem>
                     </>
@@ -912,14 +914,14 @@ export default function InvoiceTableRow({
                 content="¿Estás seguro de que quieres anular la orden?"
                 action={
                     <>
-                        <Box sx={{width: '100%'}}>
+                        <Box sx={{ width: '100%' }}>
                             <Autocomplete
                                 fullWidth
                                 options={TABULAR_ANULAR_PEDIDOS}
                                 getOptionLabel={(option) => option.title}
                                 onChange={handleAutocompleteChangeTabAnular}
                                 renderInput={(params) => <TextField {...params} label="Tabulación"
-                                                                    margin="none"/>}
+                                    margin="none" />}
                             />
                             {/* <TextField */}
                             {/*     label="Observaciones al anular." */}
