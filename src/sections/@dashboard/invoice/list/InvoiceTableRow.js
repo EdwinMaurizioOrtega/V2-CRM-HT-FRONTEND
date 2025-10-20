@@ -240,12 +240,30 @@ export default function InvoiceTableRow({
     const sendOrderToBagRow = async () => {
         //console.log("Número de orden: " + ID);
 
+        let estado_orden;
+
+        // 7: Pendiente de cargar series
+        if (ESTADO === 7) {
+            estado_orden = 6; // Pendiente de aprobar crédito
+        }
+
+        //0: Pendiente de facturar
+        if (ESTADO === 0) {
+            estado_orden = 7; // Pendiente de cargar series
+        }
+
+        //8: Anulado
+        if (ESTADO === 8) {
+            estado_orden = 6; // Pendiente de aprobar crédito
+        }
+
         try {
             const response = await axios.put('/hanadb/api/orders/order/to_bag', {
                 params: {
                     ID_ORDER: ID,
                     DOCNUM: Number(DOCNUM),
-                    empresa: user.EMPRESA
+                    empresa: user.EMPRESA,
+                    NEW_ESTADO: Number(estado_orden)
                 }
             });
 
@@ -757,15 +775,15 @@ export default function InvoiceTableRow({
                 </MenuItem>
                 }
 
-                {[0, 1, 7, 8, 22, 23].includes(ESTADO) && (user.ROLE === "9" || user.ROLE === "10") ? (
+                {[7, 0, 8].includes(ESTADO) && (user.ROLE === "9" || user.ROLE === "10") ? (
                     <MenuItem
                         onClick={() => {
                             sendOrderToBagRow();
                             handleClosePopover();
                         }}
                     >
-                        <Iconify icon="eva:shopping-bag-outline" />
-                        Retornar a Cartera
+                        <Iconify icon="eva:alert-triangle-outline" />
+                        Retornar Estado
                     </MenuItem>
 
                 ) : null
