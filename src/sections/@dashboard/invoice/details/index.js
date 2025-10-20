@@ -225,13 +225,13 @@ export default function InvoiceDetails({ invoice }) {
         console.log("Vaciar lista series producto: " + selected.ID)
 
         // Actualizar una orden.
-            const response = await axios.delete(`/hanadb/api/orders/vaciar_series_por_id_detalle_orden?empresa=${user.EMPRESA}&id_detalle_orden=${selected.ID}`
-            );
+        const response = await axios.delete(`/hanadb/api/orders/vaciar_series_por_id_detalle_orden?empresa=${user.EMPRESA}&id_detalle_orden=${selected.ID}`
+        );
 
-            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
-            if (response.status === 200) {
-                router.reload();
-            }
+        // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+        if (response.status === 200) {
+            router.reload();
+        }
 
 
     };
@@ -1867,7 +1867,15 @@ export default function InvoiceDetails({ invoice }) {
                                         (user.ROLE === "9" || user.ROLE === "10") && (
                                             <>
                                                 <TableCell align="left">Tipo Precio</TableCell>
-                                                <TableCell align="left">Comentario Precio</TableCell>
+                                            </>
+
+                                        )}
+                                    <TableCell align="left">Comentario Precio</TableCell>
+
+
+                                    {
+                                        (user.ROLE === "9" || user.ROLE === "10") && (
+                                            <>
                                                 <TableCell align="left">%Desc.</TableCell>
                                             </>
                                         )
@@ -1932,7 +1940,7 @@ export default function InvoiceDetails({ invoice }) {
                                     ) : null
                                     }
 
-                                        {/* <TableCell align="left">ID Detalle</TableCell> */}
+                                    {/* <TableCell align="left">ID Detalle</TableCell> */}
 
                                     {(user.ROLE === "8") && (
                                         <TableCell align="left">Nro. Series Cargadas</TableCell>
@@ -1992,8 +2000,12 @@ export default function InvoiceDetails({ invoice }) {
                                         {(user.ROLE === "9" || user.ROLE === "10") && (
                                             <>
                                                 <TableCell align="left">{namePriceType(row.TIPOPRECIO)}</TableCell>
+                                            </>
+                                        )}
+                                        <TableCell align="left">{row.COMENTARIOPRECIO}</TableCell>
 
-                                                <TableCell align="left">{row.COMENTARIOPRECIO}</TableCell>
+                                        {(user.ROLE === "9" || user.ROLE === "10") && (
+                                            <>
                                                 <TableCell align="left">{row.DISCOUNTPERCENTSAP}</TableCell>
                                             </>
                                         )}

@@ -204,9 +204,9 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
                                 <Text style={styles.subtitle2}>TPRECIO</Text>
                             </View>
                             
-                            <View style={styles.tableCell_3}>
+                            {/* <View style={styles.tableCell_3}>
                                 <Text style={styles.subtitle2}>COMENTARIO</Text>
-                            </View>
+                            </View> */}
                             {/*
                             <View style={styles.tableCell_3}>
                                 <Text style={styles.subtitle2}>%DESC.</Text>
@@ -265,9 +265,9 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
                                     }
 
                                 </View>
-                                <View style={styles.tableCell_3}>
+                                {/* <View style={styles.tableCell_3}>
                                     <Text>{item.COMENTARIOPRECIO}</Text>
-                                </View>
+                                </View> */}
 {/* 
                                 <View style={styles.tableCell_3}>
                                     <Text>{item.DISCOUNTPERCENTSAP}</Text>
