@@ -657,7 +657,8 @@ export default function InvoiceDetails({ invoice }) {
             "004": "CUENCA - MAYORISTAS MOVILCELISTIC CUENCA",
             "030": "COLON - MAYORISTAS MOVILCELISTIC COLON",
             "024": "MANTA - MAYORISTAS MOVILCELISTIC MANTA",
-            "005": "CARAPUNGO - ⚠️OPERADORAS CARRIER",
+            "005": "CARAPUNGO - ⚠️ PENDIENTE OPERADORAS CARRIERS",
+            "CARRIERS": "CARAPUNGO - ⚠️ OPERADORAS CARRIERS",
             // "T1CARACO": "QUITO - XIAOMI TERMINALES"
         };
 
@@ -2295,75 +2296,236 @@ export default function InvoiceDetails({ invoice }) {
                 </Grid>
 
 
+                { user.COMPANY !== 'TOMEBAMBA' && (
+
                 <Grid container>
                     <Grid item xs={12} md={9} sx={{ py: 3 }}>
-                        <Typography variant="subtitle2" sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold' }}>
-                            📍 INFORMACIÓN DE ENTREGA
+                        <Typography 
+                            variant="h6" 
+                            sx={{ 
+                                mb: 3, 
+                                color: 'primary.main', 
+                                fontWeight: 'bold',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 1
+                            }}
+                        >
+                            <Box 
+                                sx={{ 
+                                    bgcolor: 'primary.lighter',
+                                    p: 1,
+                                    borderRadius: 1.5,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                📍
+                            </Box>
+                            INFORMACIÓN DE ENTREGA
                         </Typography>
 
                         {(() => {
                             try {
                                 const deliveryInfo = JSON.parse(OBSERVACIONESB);
                                 return (
-                                    <Card sx={{ p: 2, bgcolor: 'grey.50', border: '1px solid', borderColor: 'grey.200' }}>
-                                        <Grid container spacing={2}>
-                                            <Grid item xs={12} sm={6}>
-                                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                                                    <Typography variant="body2" sx={{ fontWeight: 'bold', mr: 1, color: 'text.secondary' }}>
-                                                        🏠 Dirección:
-                                                    </Typography>
-                                                </Box>
-                                                <Typography variant="body2" sx={{ ml: 3, color: 'text.primary' }}>
-                                                    {deliveryInfo.DIRECCION || 'No especificada'}
-                                                </Typography>
-                                            </Grid>
-
-                                            <Grid item xs={12} sm={6}>
-                                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                                                    <Typography variant="body2" sx={{ fontWeight: 'bold', mr: 1, color: 'text.secondary' }}>
-                                                        🏢 Sucursal:
-                                                    </Typography>
-                                                </Box>
-                                                <Typography variant="body2" sx={{ ml: 3, color: 'text.primary' }}>
-                                                    {deliveryInfo.NAME_SERVIENTREGA || 'No especificada'}
-                                                </Typography>
-                                            </Grid>
-
-                                            <Grid item xs={12} sm={6}>
-                                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                                                    <Typography variant="body2" sx={{ fontWeight: 'bold', mr: 1, color: 'text.secondary' }}>
-                                                        🌍 Provincia:
-                                                    </Typography>
-                                                </Box>
-                                                <Typography variant="body2" sx={{ ml: 3, color: 'text.primary' }}>
-                                                    {deliveryInfo.PROVINCIA || 'No especificada'}
-                                                </Typography>
-                                            </Grid>
-
-                                            <Grid item xs={12} sm={6}>
-                                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                                                    <Typography variant="body2" sx={{ fontWeight: 'bold', mr: 1, color: 'text.secondary' }}>
-                                                        📮 Código Postal:
-                                                    </Typography>
-                                                </Box>
-                                                <Typography variant="body2" sx={{ ml: 3, color: 'text.primary' }}>
-                                                    {deliveryInfo.ZIPCODE || 'No especificado'}
-                                                </Typography>
-                                            </Grid>
-
-                                            {deliveryInfo.TIPO && (
-                                                <Grid item xs={12}>
-                                                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                                                        <Typography variant="body2" sx={{ fontWeight: 'bold', mr: 1, color: 'text.secondary' }}>
-                                                            🏷️ Tipo:
+                                    <Card 
+                                        sx={{ 
+                                            p: 3, 
+                                            bgcolor: 'background.neutral',
+                                            border: '2px solid',
+                                            borderColor: 'primary.light',
+                                            borderRadius: 2,
+                                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+                                            transition: 'transform 0.2s, box-shadow 0.2s',
+                                            '&:hover': {
+                                                transform: 'translateY(-2px)',
+                                                boxShadow: '0 8px 20px rgba(0, 0, 0, 0.12)'
+                                            }
+                                        }}
+                                    >
+                                        <Grid container spacing={3}>
+                                            {/* Dirección */}
+                                            <Grid item xs={12}>
+                                                <Box 
+                                                    sx={{ 
+                                                        p: 2, 
+                                                        bgcolor: 'background.paper',
+                                                        borderRadius: 1.5,
+                                                        border: '1px solid',
+                                                        borderColor: 'divider'
+                                                    }}
+                                                >
+                                                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                                                        <Box 
+                                                            sx={{ 
+                                                                bgcolor: 'info.lighter',
+                                                                p: 0.75,
+                                                                borderRadius: 1,
+                                                                mr: 1.5,
+                                                                display: 'flex',
+                                                                alignItems: 'center'
+                                                            }}
+                                                        >
+                                                            🏠
+                                                        </Box>
+                                                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: 'text.secondary' }}>
+                                                            Dirección de Entrega
                                                         </Typography>
                                                     </Box>
-                                                    <Label
-                                                        color="info"
-                                                        sx={{ ml: 3, textTransform: 'capitalize' }}
+                                                    <Typography 
+                                                        variant="body1" 
+                                                        sx={{ 
+                                                            ml: 5, 
+                                                            color: 'text.primary',
+                                                            fontWeight: 500,
+                                                            lineHeight: 1.6
+                                                        }}
                                                     >
-                                                        {deliveryInfo.TIPO}
-                                                    </Label>
+                                                        {deliveryInfo.DIRECCION || 'No especificada'}
+                                                    </Typography>
+                                                </Box>
+                                            </Grid>
+
+                                            {/* Provincia */}
+                                            <Grid item xs={12} sm={6}>
+                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                                    <Box 
+                                                        sx={{ 
+                                                            bgcolor: 'success.lighter',
+                                                            p: 1,
+                                                            borderRadius: 1,
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            minWidth: 40
+                                                        }}
+                                                    >
+                                                        🌍
+                                                    </Box>
+                                                    <Box>
+                                                        <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
+                                                            Provincia
+                                                        </Typography>
+                                                        <Typography variant="body1" sx={{ fontWeight: 600, color: 'text.primary' }}>
+                                                            {deliveryInfo.PROVINCIA || 'No especificada'}
+                                                        </Typography>
+                                                    </Box>
+                                                </Box>
+                                            </Grid>
+
+                                            {/* Cantón */}
+                                            <Grid item xs={12} sm={6}>
+                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                                    <Box 
+                                                        sx={{ 
+                                                            bgcolor: 'warning.lighter',
+                                                            p: 1,
+                                                            borderRadius: 1,
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            minWidth: 40
+                                                        }}
+                                                    >
+                                                        �️
+                                                    </Box>
+                                                    <Box>
+                                                        <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
+                                                            Cantón
+                                                        </Typography>
+                                                        <Typography variant="body1" sx={{ fontWeight: 600, color: 'text.primary' }}>
+                                                            {deliveryInfo.CANTON || 'No especificada'}
+                                                        </Typography>
+                                                    </Box>
+                                                </Box>
+                                            </Grid>
+
+                                            {/* Parroquia */}
+                                            <Grid item xs={12} sm={6}>
+                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                                    <Box 
+                                                        sx={{ 
+                                                            bgcolor: 'error.lighter',
+                                                            p: 1,
+                                                            borderRadius: 1,
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            minWidth: 40
+                                                        }}
+                                                    >
+                                                        📍
+                                                    </Box>
+                                                    <Box>
+                                                        <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
+                                                            Parroquia
+                                                        </Typography>
+                                                        <Typography variant="body1" sx={{ fontWeight: 600, color: 'text.primary' }}>
+                                                            {deliveryInfo.PARROQUIA || 'No especificada'}
+                                                        </Typography>
+                                                    </Box>
+                                                </Box>
+                                            </Grid>
+
+                                            {/* Código Postal */}
+                                            <Grid item xs={12} sm={6}>
+                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                                    <Box 
+                                                        sx={{ 
+                                                            bgcolor: 'secondary.lighter',
+                                                            p: 1,
+                                                            borderRadius: 1,
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            minWidth: 40
+                                                        }}
+                                                    >
+                                                        📮
+                                                    </Box>
+                                                    <Box>
+                                                        <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
+                                                            Código Postal
+                                                        </Typography>
+                                                        <Typography variant="body1" sx={{ fontWeight: 600, color: 'text.primary' }}>
+                                                            {deliveryInfo.ZIPCODE || 'No especificado'}
+                                                        </Typography>
+                                                    </Box>
+                                                </Box>
+                                            </Grid>
+
+                                            {/* Tipo - Si existe */}
+                                            {deliveryInfo.TIPO && (
+                                                <Grid item xs={12}>
+                                                    <Box 
+                                                        sx={{ 
+                                                            p: 2,
+                                                            bgcolor: 'info.lighter',
+                                                            borderRadius: 1.5,
+                                                            border: '1px dashed',
+                                                            borderColor: 'info.main',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: 1.5
+                                                        }}
+                                                    >
+                                                        <Typography variant="body2" sx={{ fontWeight: 600, color: 'info.darker' }}>
+                                                            🏷️ ID Dirección:
+                                                        </Typography>
+                                                        <Label
+                                                            color="info"
+                                                            sx={{ 
+                                                                fontSize: '0.875rem',
+                                                                py: 1,
+                                                                px: 2,
+                                                                fontWeight: 600
+                                                            }}
+                                                        >
+                                                            {deliveryInfo.TIPO}
+                                                        </Label>
+                                                    </Box>
                                                 </Grid>
                                             )}
                                         </Grid>
@@ -2371,12 +2533,33 @@ export default function InvoiceDetails({ invoice }) {
                                 );
                             } catch (error) {
                                 return (
-                                    <Card sx={{ p: 2, bgcolor: 'warning.lighter', border: '1px solid', borderColor: 'warning.light' }}>
-                                        <Typography variant="body2" sx={{ color: 'warning.dark' }}>
-                                            ⚠️ Información de entrega no disponible o formato inválido
-                                        </Typography>
-                                        <Typography variant="caption" sx={{ color: 'text.secondary', mt: 1, display: 'block' }}>
-                                            Datos originales: {OBSERVACIONESB}
+                                    <Card 
+                                        sx={{ 
+                                            p: 3, 
+                                            bgcolor: 'warning.lighter', 
+                                            border: '2px solid', 
+                                            borderColor: 'warning.main',
+                                            borderRadius: 2
+                                        }}
+                                    >
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
+                                            <Box 
+                                                sx={{ 
+                                                    bgcolor: 'warning.main',
+                                                    color: 'white',
+                                                    p: 1,
+                                                    borderRadius: 1,
+                                                    fontSize: '1.5rem'
+                                                }}
+                                            >
+                                                ⚠️
+                                            </Box>
+                                            <Typography variant="subtitle1" sx={{ color: 'warning.darker', fontWeight: 600 }}>
+                                                Información de entrega no disponible
+                                            </Typography>
+                                        </Box>
+                                        <Typography variant="caption" sx={{ color: 'text.secondary', mt: 1, display: 'block', ml: 6 }}>
+                                            Formato inválido o datos no especificados
                                         </Typography>
                                     </Card>
                                 );
@@ -2385,6 +2568,8 @@ export default function InvoiceDetails({ invoice }) {
                     </Grid>
 
                 </Grid>
+
+                )}
 
                 <Divider sx={{ mt: 5 }} />
 
@@ -3181,7 +3366,8 @@ export const top100FilmsMovilCelistic = [
     { title: 'CUENCA - MAYORISTAS MOVILCELISTIC CUENCA', id: "004" },
     { title: 'COLON - MAYORISTAS MOVILCELISTIC COLON', id: "030" },
     { title: 'MANTA - MAYORISTAS MOVILCELISTIC MANTA', id: "024" },
-    { title: 'CARAPUNGO - ⚠️OPERADORAS CARRIER', id: "005" },
+    { title: 'CARAPUNGO - ⚠️PENDIENTE OPERADORAS CARRIERS', id: "005" },
+    { title: 'CARAPUNGO - ⚠️OPERADORAS CARRIER', id: "CARRIERS" },
     // {title: 'QUITO - XIAOMI TERMINALES', id: "T1CARACO"}
 ]
 

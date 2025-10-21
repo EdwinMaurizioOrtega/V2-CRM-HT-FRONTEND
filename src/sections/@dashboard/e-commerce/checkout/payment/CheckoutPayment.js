@@ -392,9 +392,7 @@ export default function CheckoutPayment({
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={8}>
-                    <CheckoutDelivery billing={billing} total={total} onApplyComment={onApplyComment}
-                                      onApplyShipping={onApplyShipping} onApplyServientrega={onApplyServientrega}
-                                      deliveryOptions={DELIVERY_OPTIONS}/>
+
 
                     <CheckoutWarehouse
                         onApplyWarehouse={onApplyWarehouse}

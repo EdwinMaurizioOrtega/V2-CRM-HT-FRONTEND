@@ -123,7 +123,7 @@ export default function EcommerceCheckoutPage() {
             Cupo: '120000.000000',
             DebtLine: '120000.000000',
             Direccion: 'AV. ESPAÑA 17-30 Y TURUHUAICO',
-            ENVIO: '[{"CANTON":"CUENCA","CARDCODE":"CL0190003701001","CODE_SERVIENTREGA":"4","DIRECCION":"AV. ESPAÑA 17-30 Y TURUHUAICO","NAME_SERVIENTREGA":"CUENCA (AZUAY)","PROVINCIA":"AZUAY","TIPO":"MATRIZ","U_LS_LATITUD":"-2.8853418","U_LS_LONGITUD":"-78.9833596","ZIPCODE":"010105"}]',
+            ENVIO: '[{"CANTON":"CUENCA","CARDCODE":"CL0190003701001","CODE_SERVIENTREGA":"4","DIRECCION":"AV. ESPAÑA 17-30 Y TURUHUAICO","NAME_SERVIENTREGA":"CUENCA (AZUAY)","PROVINCIA":"AZUAY","PARROQUIA":"EL VECINO","TIPO":"MATRIZ","U_LS_LATITUD":"-2.8853418","U_LS_LONGITUD":"-78.9833596","ZIPCODE":"010105"}]',
             Endeudamiento: '0.000000',
             Free_Text: 'CLIENTE TIENE DEMANDAS EN EL 2015 Y 2016 POR CONTRAVENCIONES DE TRÁNSITO DE CUARTA CLASE, EN EL 2017 POR EL COBRO DE PAGARÉ A LA ORDEN,  EL 2018 POR DEFECTOS Y VICIOS OCULTOS Y POR  INDEMNIZACIÓN, REPARACIÓN, RESPOSICIÓN Y DEVOLUCIÓN POR GARANTÍAS DE LOS PRODUCTOS, EN EL 2022 POR INDEMNIZACIÓN POR DESPIDO INTEMPESTIVO Y EN EL 2023 UNA DEMANDA POR NULIDAD DE SENTENCIA. (02/04/2024)\r\rSEGUN WHATSAPP G.GENERAL APRUEBA VENTA DE 500 CHIPS (10/04/2024)',
             GLN: null,
@@ -230,11 +230,11 @@ export default function EcommerceCheckoutPage() {
         dispatch(createBilling(address));
         // dispatch(nextStep());
         //console.log(address);
-        if (address.TIENE_PLATAFORMA_CREDITO === 'NO') {
-            handleOpen();
-        } else {
-            dispatch(nextStep());
-        }
+        // if (address.TIENE_PLATAFORMA_CREDITO === 'NO') {
+        //     handleOpen();
+        // } else {
+        //     dispatch(nextStep());
+        // }
     };
 
 // Comentario envío.
@@ -301,46 +301,7 @@ export default function EcommerceCheckoutPage() {
     const handleClose = () => setOpen(false);
 
 
-    const handleSave = async () => {
 
-        //console.log('DataX', checkout.billing.ID);
-
-        //console.log("Opciones seleccionadas:", selectedOptions);
-        if (selectedOptions.some((option) => option.id === 6)) {
-            //console.log("Motivo de 'Otro':", otroMotivo);
-        }
-
-        const otroSeleccionado = selectedOptions.some((option) => option.title === "Otro");
-
-        if (otroSeleccionado) {
-            //console.log("Motivo de 'Otro':", otroMotivo);
-        }
-
-        try {
-
-            const response = await axios.post('/hanadb/api/orders/save_credit_platforms_selected_customer', {
-                empresa: user.EMPRESA,
-                card_code: checkout.billing.ID, // La cédula del cliente
-                selected_options: selectedOptions,
-                reason: otroSeleccionado ? otroMotivo : null,
-                nro_locales: Number(numeroLocales),
-            });
-
-            //console.log('Status: ', response.status);
-            if (response.status === 200) {
-                //console.log('La solicitud devolvió un estado 200.');
-                handleClose();
-                dispatch(nextStep());
-            } else {
-                //console.log('La solicitud no devolvió un estado 200.');
-                // Realizar alguna acción adicional en caso de que el estado de respuesta no sea 201
-            }
-        } catch (error) {
-            //console.log('Error al crear la orden:', error);
-            // Manejar el error al crear la orden
-        }
-
-    };
 
 
     const handleDespuesSave = async () => {
@@ -396,6 +357,22 @@ export default function EcommerceCheckoutPage() {
                                 checkout={checkout}
                                 onBackStep={handleBackStep}
                                 onCreateBilling={handleCreateBilling}
+                                onNextStep={handleNextStep}
+                                deliveryOptions={[
+                                    {
+                                        value: 0,
+                                        title: 'Gratis',
+                                        description: 'Retiro en oficina o entrega sin costo'
+                                    },
+                                    {
+                                        value: 1,
+                                        title: 'Servientrega',
+                                        description: 'Envío por courier'
+                                    },
+                                ]}
+                                onApplyShipping={handleApplyShipping}
+                                onApplyServientrega={handleApplyServientrega}
+                                onApplyComment={handleApplyComment}
                             />
                         )}
                         {activeStep === 2 && billing && (
@@ -412,83 +389,6 @@ export default function EcommerceCheckoutPage() {
                                 onReset={handleReset}
                             />
                         )}
-
-
-                        <Modal open={open} onClose={handleClose}>
-                            <Box
-                                sx={{
-                                    position: "absolute",
-                                    top: "50%",
-                                    left: "50%",
-                                    transform: "translate(-50%, -50%)",
-                                    width: 600,
-                                    bgcolor: "background.paper",
-                                    borderRadius: 2,
-                                    boxShadow: 24,
-                                    p: 4,
-                                }}
-                            >
-                                <Typography variant="h6"> EL CLIENTE CON QUE PLATAFORMA DE CRÉDITO TRABAJA</Typography>
-
-                                <TextField
-                                    required
-                                    type="number"
-                                    fullWidth
-                                    margin="normal"
-                                    label="¿Cuantos locales tienes su cliente?"
-                                    value={numeroLocales}
-                                    onChange={(e) => {
-                                        const value = e.target.value;
-                                        if (/^\d*$/.test(value)) {
-                                            setNumeroLocales(value);
-                                        }
-                                    }}
-                                    error={numeroLocales === ''}
-                                    helperText={numeroLocales === '' ? 'Este campo es requerido' : ''}
-                                />
-
-                                <Autocomplete
-                                    fullWidth
-                                    multiple
-                                    options={plataformas_de_credito}
-                                    disableCloseOnSelect
-                                    getOptionLabel={(option) => option.title}
-                                    onChange={(_, newValue) => setSelectedOptions(newValue)}
-                                    renderOption={(props, option, {selected}) => (
-                                        <li {...props}>
-                                            <Checkbox checked={selected}/>
-                                            {option.title}
-                                        </li>
-                                    )}
-                                    renderInput={(params) => (
-                                        <TextField {...params} label="Opciones"/>
-                                    )}
-                                />
-
-                                {/* Input adicional si se selecciona "Otro" */}
-                                {selectedOptions.some((option) => option.id === 6) && (
-                                    <TextField
-                                        fullWidth
-                                        margin="normal"
-                                        label="Motivo (si seleccionó 'Otro')"
-                                        value={otroMotivo}
-                                        onChange={(e) => setOtroMotivo(e.target.value)}
-                                    />
-                                )}
-
-                                <Box sx={{display: "flex", justifyContent: "space-between", mt: 2}}>
-                                    <Button onClick={handleClose} variant="outlined">
-                                        Cancelar
-                                    </Button>
-                                    <Button onClick={handleDespuesSave} variant="outlined">
-                                        Contestar después
-                                    </Button>
-                                    <Button onClick={handleSave} variant="contained">
-                                        Guardar
-                                    </Button>
-                                </Box>
-                            </Box>
-                        </Modal>
 
                     </>
                 )}
