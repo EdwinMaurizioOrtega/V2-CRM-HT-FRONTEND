@@ -50,6 +50,7 @@ import { DOCUMENTACION, PAYMENT_OPTIONS_V2, TIPO_CREDITO, TIPO_PRECIO, BANCOS_LI
 import datos from '/data/datos.json'; // Ajusta la ruta según la ubicación de tu archivo JSON
 import datos_promo from '/data/promo.json'; // JSON Promoción
 import { set } from 'lodash';
+import { el } from 'date-fns/locale';
 
 // ----------------------------------------------------------------------
 
@@ -928,18 +929,12 @@ export default function InvoiceDetails({ invoice }) {
         //Enviamos los datos al servidor,
         if (valueGuia.length === 9) {
 
-            // if (valueFactura.length === 17) {
+            setLoading(true); // Establecer loading a true antes de hacer la llamada a la API
 
-            // if (valueFactura || valueValorFactura) {
             try {
-
-                setLoading(true); // Establecer loading a true antes de hacer la llamada a la API
-
                 // Actualizar una orden.
                 const response = await axios.put('/hanadb/api/orders/order/facturar', {
                     ID_ORDER: ID,
-                    // NUMERO_FACTURA: `${valueFactura}`,
-                    // VALOR_FACTURA: `${valueValorFactura}`,
                     NUMERO_GUIA: `${valueGuia}`,
                     empresa: user.EMPRESA,
                     IDUSUARIOENTREGARA: Number(idEmpleadoEntregar),
@@ -947,30 +942,33 @@ export default function InvoiceDetails({ invoice }) {
                     ESTADO: Number(estadoInvoice),
                 });
 
-
-                //console.log("Orden Facturada.");
-                //console.log("Código de estado:", response.status);
-
                 // Se completó con éxito (código de estado 200)
                 if (response.status === 200) {
+                    enqueueSnackbar('Orden facturada correctamente', { variant: 'success' });
                     router.push('/dashboard/invoice/list/');
                 }
 
-                setLoading(false); // Restablecer loading a false después de que se completa la llamada a la API, independientemente de si fue exitosa o falló
-
             } catch (error) {
-                // Manejar el error de la petición PUT aquí
-                console.error('Error al actualizar la orden:', error);
-                setLoading(false); // Restablecer loading a false después de que se completa la llamada a la API, independientemente de si fue exitosa o falló
-
+                console.error('Error al facturar la orden:', error);
+                
+                // Extraer el mensaje de error del backend
+                let errorMessage = 'Error al facturar la orden. Por favor, intenta de nuevo.';
+                
+                if (error.response?.data?.message) {
+                    errorMessage = error.response.data.message;
+                } else if (typeof error.response?.data === 'string') {
+                    errorMessage = error.response.data;
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+                
+                // Mostrar el error con enqueueSnackbar
+                enqueueSnackbar(errorMessage, { variant: 'error' });
+                
+            } finally {
+                setLoading(false);
             }
-            // } else {
-            //     enqueueSnackbar('Los campos con * son obligatorios.', {variant: 'error'})
-            // }
 
-            // } else {
-            //     enqueueSnackbar('El número de factura debe tener 17 caracteres, incluido los guiones.', {variant: 'error'})
-            // }
         } else {
             enqueueSnackbar('El número de guía debe tener 9 caracteres.', { variant: 'error' })
         }
@@ -3366,7 +3364,7 @@ export const top100FilmsMovilCelistic = [
     { title: 'CUENCA - MAYORISTAS MOVILCELISTIC CUENCA', id: "004" },
     { title: 'COLON - MAYORISTAS MOVILCELISTIC COLON', id: "030" },
     { title: 'MANTA - MAYORISTAS MOVILCELISTIC MANTA', id: "024" },
-    { title: 'CARAPUNGO - ⚠️PENDIENTE OPERADORAS CARRIERS', id: "005" },
+    { title: 'CARAPUNGO - ⚠️ PENDIENTE OPERADORAS CARRIERS', id: "005" },
     { title: 'CARAPUNGO - ⚠️OPERADORAS CARRIER', id: "CARRIERS" },
     // {title: 'QUITO - XIAOMI TERMINALES', id: "T1CARACO"}
 ]
