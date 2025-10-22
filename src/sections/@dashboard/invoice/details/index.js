@@ -223,7 +223,7 @@ export default function InvoiceDetails({ invoice }) {
 
     const vaciarListaSeriesProducto = async () => {
 
-        console.log("Vaciar lista series producto: " + selected.ID)
+        //console.log("Vaciar lista series producto: " + selected.ID)
 
         // Actualizar una orden.
         const response = await axios.delete(`/hanadb/api/orders/vaciar_series_por_id_detalle_orden?empresa=${user.EMPRESA}&id_detalle_orden=${selected.ID}`

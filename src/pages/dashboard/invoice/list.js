@@ -497,8 +497,8 @@ export default function InvoiceListPage() {
 
                 if (user.ROLE == '8') {
                     // Filtrar solo las bodegas que coincidan con user.WAREHOUSE
-                    console.log("Usuario con rol 8 (Bodega):", user.WAREHOUSE);
-                    console.log("Datos completos de Servientrega:", result.data);
+                    //console.log("Usuario con rol 8 (Bodega):", user.WAREHOUSE);
+                    //console.log("Datos completos de Servientrega:", result.data);
                     
                     // Parsear user.WAREHOUSE si es string, o usar directamente si es array
                     let userWarehouses;
@@ -516,8 +516,8 @@ export default function InvoiceListPage() {
                         userWarehouses.includes(item.BODEGA)
                     );
                     
-                    console.log("Bodegas del usuario:", userWarehouses);
-                    console.log("Datos filtrados por bodega:", filteredData);
+                    //console.log("Bodegas del usuario:", userWarehouses);
+                    //console.log("Datos filtrados por bodega:", filteredData);
                     
                     setDataServientrega(filteredData);
                 } else if (user.ROLE == '10') {

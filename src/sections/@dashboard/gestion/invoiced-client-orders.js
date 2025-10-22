@@ -227,7 +227,7 @@ export default function InvoicedClientOrders({ userID, currentPartner, open, onC
                     const response = await axios.get(`/hanadb/api/customers/total_billed_and_voided?USER_ID=${userID}&ID_CLIENTE=${currentPartner.ID}`);
 
                     if (response.status === 200) {
-                        console.log("DATA_AnalyticsConversionRates: " + JSON.stringify(response.data));
+                        //console.log("DATA_AnalyticsConversionRates: " + JSON.stringify(response.data));
 
                         const ventasAuxAnuladoFacturado = response.data.data.map((partner, index) => ({
                             id: index + 1, // Puedes ajustar la lógica según tus necesidades

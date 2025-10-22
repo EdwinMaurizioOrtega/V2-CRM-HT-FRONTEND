@@ -17,7 +17,7 @@ AnalyticsConversionRates.propTypes = {
 export default function AnalyticsConversionRates({ title, subheader, chart, ...other }) {
   const { colors, series, options } = chart;
 
-    console.log("chart.chart ", chart);
+    //console.log("chart.chart ", chart);
 
 
   const chartSeries = series.map((i) => i.value);

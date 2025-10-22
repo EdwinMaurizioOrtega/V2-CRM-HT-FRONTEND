@@ -195,7 +195,7 @@ export default function Autorizacion_Equifax_UANATACA(data) {
             const textoCompleto = `${enteroTexto} DÓLARES DE LOS ESTADOS UNIDOS DE AMÉRICA CON ${decimalTexto} CENTAVO${decimal !== 1 ? 'S' : ''}`;
 
             setTexto(textoCompleto.toUpperCase());
-            console.log(textoCompleto);
+            //console.log(textoCompleto);
         } else {
             setTexto('');
         }

@@ -106,7 +106,7 @@ export default function DataPage() {
 
     const onSubmit = async (data) => {
 
-        console.log("data: " + data);
+        //console.log("data: " + data);
 
         // Crear prospecto.
         const response = await axios.post('/hanadb/api/customers/create_prospecto_cartera', {
@@ -171,7 +171,7 @@ export default function DataPage() {
                     upload(fieldName)
                         .then(response => {
                             // Puedes manejar el resultado aquí si necesitas
-                            console.log(`Archivo ${fieldName} subido correctamente`);
+                            //console.log(`Archivo ${fieldName} subido correctamente`);
                         })
                         .catch(error => {
                             console.error(`Error subiendo ${fieldName}:`, error);

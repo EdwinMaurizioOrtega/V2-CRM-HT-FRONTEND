@@ -289,7 +289,7 @@ export default function CargarArchivosCreditoPage() {
     }
 
     const VerFotoRegistroCivil = (row) => {
-        console.log(row);
+        //console.log(row);
         // const SESSION_ID = row.row.SESSION_ID;
         // console.log(SESSION_ID);
 
@@ -310,7 +310,7 @@ export default function CargarArchivosCreditoPage() {
 
                 const response = await axios.get(url);
                 setBusinessPartners(response.data); // Suponiendo que el response.data contiene los registros
-                console.log(response.data);
+                //console.log(response.data);
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
             } finally {
@@ -322,9 +322,9 @@ export default function CargarArchivosCreditoPage() {
     }, [user]); // Dependencia: se ejecuta al montar y cuando cambie user
 
     const onRowOBS = async () => {
-        console.log("Número ID_EMPRESA: " + selectedIdEmpresa);
-        console.log("Observación de cartera: " + valueNewOBS);
-        console.log("USER_ID: " + user?.ID);
+        //console.log("Número ID_EMPRESA: " + selectedIdEmpresa);
+        //console.log("Observación de cartera: " + valueNewOBS);
+        //console.log("USER_ID: " + user?.ID);
 
         try {
             const response = await axios.put('/hanadb/api/customers/obs_cartera_uanataca', {

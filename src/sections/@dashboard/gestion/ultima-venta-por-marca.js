@@ -93,7 +93,7 @@ export default function CustomerUltimaVentaPorMarca({currentPartner, open, onClo
                 const response = await axios.get(`${HOST_API_KEY}/hanadb/api/customers/ultima-venta-por-marca?EMPRESA=${user?.EMPRESA}&CARD_CODE=${currentPartner.ID}&USER_NAME=${user.DISPLAYNAME}`);
 
                 if (response.status === 200) {
-                    console.log("DATA: " + JSON.stringify(response.data));
+                    //console.log("DATA: " + JSON.stringify(response.data));
 
                     const businessPartnersWithId = response.data.data.map((partner, index) => ({
                         ...partner,

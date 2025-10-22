@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
 
 export default function PagarePDF({valor, texto, data}) {
 
-    console.log("valor: ", valor);
-    console.log("texto: ", texto);
+    //console.log("valor: ", valor);
+    //console.log("texto: ", texto);
 
     const fechaActual = new Date();
 
