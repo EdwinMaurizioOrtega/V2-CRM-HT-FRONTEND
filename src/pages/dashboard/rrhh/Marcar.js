@@ -205,8 +205,15 @@ export default function MarcarPage() {
             
             console.log("Canvas dimensions:", canvas.width, "x", canvas.height);
             
-            // Dibujar frame actual del video en el canvas
+            // APLICAR EFECTO ESPEJO: voltear horizontalmente
+            context.translate(canvas.width, 0);
+            context.scale(-1, 1);
+            
+            // Dibujar frame actual del video en el canvas (ya volteado)
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Resetear transformación para futuras operaciones
+            context.setTransform(1, 0, 0, 1, 0, 0);
             
             // Convertir canvas a base64
             const photoData = canvas.toDataURL('image/jpeg', 0.9);
