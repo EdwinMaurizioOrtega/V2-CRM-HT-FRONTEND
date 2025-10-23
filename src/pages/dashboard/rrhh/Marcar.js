@@ -376,7 +376,8 @@ export default function MarcarPage() {
                                                         backgroundColor: '#000',
                                                         border: '3px solid #2196f3',
                                                         display: 'block',
-                                                        margin: '0 auto'
+                                                        margin: '0 auto',
+                                                        transform: 'scaleX(-1)'
                                                     }}
                                                 />
                                             </Box>
