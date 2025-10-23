@@ -375,9 +375,128 @@ export default function MarcarPage() {
 
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={12}>
-                        <Card sx={{ p: 3, textAlign: "center" }}>
-                            <h2>Reloj Biométrico Grupo HT</h2>
-                            <p>Fecha y Hora actual: {dateTime.toLocaleString("es-ES")}</p>
+                        <Card sx={{ 
+                            p: 4, 
+                            textAlign: "center",
+                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            color: 'white',
+                            boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
+                            borderRadius: 3
+                        }}>
+                            <Box sx={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                justifyContent: 'center',
+                                mb: 2,
+                                gap: 2
+                            }}>
+                                <CameraAltIcon sx={{ fontSize: 40, color: 'white' }} />
+                                <Typography variant="h3" sx={{ fontWeight: 'bold', color: 'white' }}>
+                                    Reloj Biométrico Grupo HT
+                                </Typography>
+                            </Box>
+
+                            <Box sx={{ 
+                                backgroundColor: 'rgba(255,255,255,0.95)',
+                                borderRadius: 2,
+                                p: 2,
+                                mb: 3,
+                                display: 'inline-block',
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                            }}>
+                                <Typography variant="h6" sx={{ color: '#667eea', fontWeight: 'bold' }}>
+                                    📅 {dateTime.toLocaleDateString("es-ES", { 
+                                        weekday: 'long', 
+                                        year: 'numeric', 
+                                        month: 'long', 
+                                        day: 'numeric' 
+                                    })}
+                                </Typography>
+                                <Typography variant="h4" sx={{ color: '#764ba2', fontWeight: 'bold', mt: 1 }}>
+                                    🕐 {dateTime.toLocaleTimeString("es-ES")}
+                                </Typography>
+                            </Box>
+                        </Card>
+
+                        <Card sx={{ 
+                            p: 4, 
+                            textAlign: "center",
+                            mt: 3,
+                            boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+                            borderRadius: 3
+                        }}>
+
+                            {/* Políticas de Marcación */}
+                            {!photoTaken && !coordinates && (
+                                <>
+                                    <Box sx={{ 
+                                        background: 'linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%)',
+                                        borderRadius: 3,
+                                        p: 3,
+                                        mb: 2,
+                                        textAlign: 'left',
+                                        border: '2px solid #2196f3',
+                                        boxShadow: '0 4px 12px rgba(33,150,243,0.2)'
+                                    }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                                            <Box sx={{ 
+                                                backgroundColor: '#2196f3',
+                                                borderRadius: '50%',
+                                                width: 40,
+                                                height: 40,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                mr: 2
+                                            }}>
+                                                <Typography variant="h5">📋</Typography>
+                                            </Box>
+                                            <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#1976d2' }}>
+                                                Políticas de Marcación
+                                            </Typography>
+                                        </Box>
+                                        <Typography variant="body2" component="div" sx={{ color: '#1565c0' }}>
+                                            <ul style={{ margin: 0, paddingLeft: '20px', lineHeight: '1.8' }}>
+                                                <li><strong>✓ La foto debe mostrar claramente tu rostro</strong></li>
+                                                <li><strong>✓ El fondo de la imagen debe ser la empresa o tu lugar de trabajo</strong></li>
+                                                <li>✓ Asegúrate de estar en un lugar bien iluminado</li>
+                                                <li>✓ No uses accesorios que oculten tu rostro (gafas oscuras, gorras, etc.)</li>
+                                                <li>✓ La foto será registrada con tus coordenadas GPS y hora exacta</li>
+                                            </ul>
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ 
+                                        background: 'linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%)',
+                                        borderRadius: 3,
+                                        p: 3,
+                                        mb: 3,
+                                        textAlign: 'left',
+                                        border: '3px solid #ff9800',
+                                        boxShadow: '0 4px 12px rgba(255,152,0,0.3)'
+                                    }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                                            <Box sx={{ 
+                                                backgroundColor: '#ff9800',
+                                                borderRadius: '50%',
+                                                width: 40,
+                                                height: 40,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                mr: 2
+                                            }}>
+                                                <Typography variant="h5">⚠️</Typography>
+                                            </Box>
+                                            <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#e65100' }}>
+                                                ADVERTENCIA IMPORTANTE
+                                            </Typography>
+                                        </Box>
+                                        <Typography variant="body1" sx={{ fontWeight: 'bold', color: '#e65100' }}>
+                                            Cualquier alteración en el GPS o la hora del sistema será penalizada según las políticas de la empresa.
+                                        </Typography>
+                                    </Box>
+                                </>
+                            )}
 
                             {/* Mostrar errores */}
                             {cameraError && (
@@ -390,65 +509,126 @@ export default function MarcarPage() {
                             {!photoTaken && !coordinates && (
                                 <Box sx={{ mb: 3 }}>
                                     {!isCameraOpen ? (
-                                        <Button
-                                            variant="contained"
-                                            color="secondary"
-                                            startIcon={<CameraAltIcon />}
-                                            onClick={openCamera}
-                                            size="large"
-                                        >
-                                            ABRIR CÁMARA PARA MARCAR ASISTENCIA
-                                        </Button>
+                                        <Box>
+                                            <Button
+                                                variant="contained"
+                                                color="secondary"
+                                                startIcon={<CameraAltIcon sx={{ fontSize: 28 }} />}
+                                                onClick={openCamera}
+                                                size="large"
+                                                sx={{
+                                                    py: 2,
+                                                    px: 4,
+                                                    fontSize: '1.1rem',
+                                                    fontWeight: 'bold',
+                                                    borderRadius: 3,
+                                                    boxShadow: '0 8px 20px rgba(156,39,176,0.4)',
+                                                    background: 'linear-gradient(135deg, #9c27b0 0%, #e91e63 100%)',
+                                                    '&:hover': {
+                                                        boxShadow: '0 12px 28px rgba(156,39,176,0.6)',
+                                                        transform: 'translateY(-2px)',
+                                                    },
+                                                    transition: 'all 0.3s ease'
+                                                }}
+                                            >
+                                                MARCAR ASISTENCIA
+                                            </Button>
+                                        </Box>
                                     ) : (
                                         <Box>
                                             <Box sx={{ 
-                                                mb: 2, 
-                                                p: 2, 
-                                                backgroundColor: '#f5f5f5',
-                                                borderRadius: 2,
-                                                border: '2px dashed #ccc'
+                                                mb: 3, 
+                                                p: 3, 
+                                                background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+                                                borderRadius: 3,
+                                                border: '3px solid #667eea',
+                                                boxShadow: '0 8px 24px rgba(102,126,234,0.3)'
                                             }}>
-                                                <Typography variant="caption" color="primary" sx={{ mb: 1, display: 'block' }}>
-                                                    Estado: {isCameraOpen ? '🎥 Cámara abierta' : '📷 Cámara cerrada'} | 
-                                                    Video: {videoReady ? '✅ Listo' : '⏳ Cargando...'} | 
-                                                    Stream: {stream ? '✓ Activo' : '✗ Inactivo'}
-                                                </Typography>
-                                                <video
-                                                    ref={videoRef}
-                                                    autoPlay
-                                                    playsInline
-                                                    muted
-                                                    style={{
-                                                        width: '100%',
-                                                        maxWidth: '500px',
-                                                        height: 'auto',
-                                                        minHeight: '300px',
-                                                        borderRadius: '8px',
-                                                        backgroundColor: '#000',
-                                                        border: '3px solid #2196f3',
-                                                        display: 'block',
-                                                        margin: '0 auto',
-                                                        transform: 'scaleX(-1)'
-                                                    }}
-                                                />
+                                                <Box sx={{ 
+                                                    backgroundColor: 'rgba(102,126,234,0.1)',
+                                                    borderRadius: 2,
+                                                    p: 1.5,
+                                                    mb: 2,
+                                                    border: '2px dashed #667eea'
+                                                }}>
+                                                    <Typography variant="body2" sx={{ fontWeight: 'bold', color: '#667eea' }}>
+                                                        {isCameraOpen ? '🎥 Cámara Abierta' : '📷 Cámara Cerrada'} | 
+                                                        {videoReady ? ' ✅ Video Listo' : ' ⏳ Cargando Video...'} | 
+                                                        {stream ? ' ✓ Stream Activo' : ' ✗ Sin Stream'}
+                                                    </Typography>
+                                                </Box>
+                                                <Box sx={{
+                                                    position: 'relative',
+                                                    borderRadius: 3,
+                                                    overflow: 'hidden',
+                                                    boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+                                                    border: '4px solid #667eea'
+                                                }}>
+                                                    <video
+                                                        ref={videoRef}
+                                                        autoPlay
+                                                        playsInline
+                                                        muted
+                                                        style={{
+                                                            width: '100%',
+                                                            maxWidth: '600px',
+                                                            height: 'auto',
+                                                            minHeight: '400px',
+                                                            backgroundColor: '#000',
+                                                            display: 'block',
+                                                            margin: '0 auto',
+                                                            transform: 'scaleX(-1)'
+                                                        }}
+                                                    />
+                                                </Box>
                                             </Box>
                                             {!videoReady && (
-                                                <Alert severity="info" sx={{ mb: 2 }}>
-                                                    ⏳ Preparando cámara... Por favor espera.
-                                                </Alert>
+                                                <Box sx={{
+                                                    background: 'linear-gradient(135deg, #e3f2fd 0%, #90caf9 100%)',
+                                                    borderRadius: 2,
+                                                    p: 2,
+                                                    mb: 2,
+                                                    border: '2px solid #2196f3'
+                                                }}>
+                                                    <Typography variant="body1" sx={{ fontWeight: 'bold', color: '#1565c0' }}>
+                                                        ⏳ Preparando cámara... Por favor espera.
+                                                    </Typography>
+                                                </Box>
                                             )}
                                             {videoReady && (
-                                                <Alert severity="success" sx={{ mb: 2 }}>
-                                                    ✅ Cámara lista - Puedes capturar la foto
-                                                </Alert>
+                                                <Box sx={{
+                                                    background: 'linear-gradient(135deg, #e8f5e9 0%, #81c784 100%)',
+                                                    borderRadius: 2,
+                                                    p: 2,
+                                                    mb: 3,
+                                                    border: '2px solid #4caf50'
+                                                }}>
+                                                    <Typography variant="body1" sx={{ fontWeight: 'bold', color: '#2e7d32' }}>
+                                                        ✅ Cámara lista - Puedes capturar la foto
+                                                    </Typography>
+                                                </Box>
                                             )}
                                             <Button
                                                 variant="contained"
                                                 color="primary"
-                                                startIcon={<PhotoCameraIcon />}
+                                                startIcon={<PhotoCameraIcon sx={{ fontSize: 28 }} />}
                                                 onClick={takePhoto}
                                                 size="large"
                                                 disabled={!videoReady}
+                                                sx={{
+                                                    py: 2,
+                                                    px: 4,
+                                                    fontSize: '1.1rem',
+                                                    fontWeight: 'bold',
+                                                    borderRadius: 3,
+                                                    boxShadow: '0 8px 20px rgba(33,150,243,0.4)',
+                                                    background: videoReady ? 'linear-gradient(135deg, #2196f3 0%, #21cbf3 100%)' : undefined,
+                                                    '&:hover': {
+                                                        boxShadow: videoReady ? '0 12px 28px rgba(33,150,243,0.6)' : undefined,
+                                                        transform: videoReady ? 'translateY(-2px)' : undefined,
+                                                    },
+                                                    transition: 'all 0.3s ease'
+                                                }}
                                             >
                                                 CAPTURAR FOTO
                                             </Button>
@@ -461,20 +641,39 @@ export default function MarcarPage() {
                             {/* Vista previa de la foto tomada */}
                             {photoTaken && !coordinates && (
                                 <Box sx={{ mb: 3 }}>
-                                    <Typography variant="h6" color="success.main" sx={{ mb: 2 }}>
-                                        ✓ Foto capturada correctamente
-                                    </Typography>
-                                    <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: 'block' }}>
-                                        Debug: Foto existe = {photoTaken ? 'Sí' : 'No'}, 
-                                        Tamaño = {photoTaken ? `${Math.round(photoTaken.length / 1024)}KB` : '0KB'}
-                                    </Typography>
+                                    <Box sx={{
+                                        background: 'linear-gradient(135deg, #e8f5e9 0%, #a5d6a7 100%)',
+                                        borderRadius: 3,
+                                        p: 3,
+                                        mb: 3,
+                                        border: '3px solid #4caf50',
+                                        boxShadow: '0 8px 24px rgba(76,175,80,0.3)'
+                                    }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
+                                            <CheckCircleIcon sx={{ fontSize: 40, color: '#2e7d32', mr: 1 }} />
+                                            <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#2e7d32' }}>
+                                                Foto Capturada Correctamente
+                                            </Typography>
+                                        </Box>
+                                        <Typography variant="caption" sx={{ 
+                                            color: '#1b5e20', 
+                                            display: 'block',
+                                            textAlign: 'center',
+                                            mb: 2
+                                        }}>
+                                            Tamaño: {photoTaken ? `${Math.round(photoTaken.length / 1024)}KB` : '0KB'}
+                                        </Typography>
+                                    </Box>
+                                    
                                     <Box sx={{ 
                                         display: 'flex', 
                                         justifyContent: 'center',
-                                        mb: 2,
-                                        backgroundColor: '#f5f5f5',
-                                        padding: 2,
-                                        borderRadius: 2
+                                        mb: 3,
+                                        p: 3,
+                                        background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+                                        borderRadius: 3,
+                                        border: '3px solid #667eea',
+                                        boxShadow: '0 8px 24px rgba(102,126,234,0.3)'
                                     }}>
                                         {photoTaken ? (
                                             <img
@@ -482,10 +681,11 @@ export default function MarcarPage() {
                                                 alt="Foto capturada"
                                                 style={{
                                                     width: '100%',
-                                                    maxWidth: '400px',
-                                                    borderRadius: '8px',
-                                                    border: '2px solid #4caf50',
-                                                    display: 'block'
+                                                    maxWidth: '500px',
+                                                    borderRadius: '12px',
+                                                    border: '4px solid #4caf50',
+                                                    display: 'block',
+                                                    boxShadow: '0 8px 24px rgba(0,0,0,0.3)'
                                                 }}
                                                 onError={(e) => {
                                                     console.error("❌ Error loading image:", e);
@@ -505,25 +705,65 @@ export default function MarcarPage() {
                                         variant="outlined"
                                         color="warning"
                                         onClick={retakePhoto}
-                                        sx={{ mr: 2 }}
+                                        sx={{ 
+                                            mr: 2,
+                                            py: 1.5,
+                                            px: 3,
+                                            fontSize: '1rem',
+                                            fontWeight: 'bold',
+                                            borderRadius: 2,
+                                            borderWidth: '2px',
+                                            '&:hover': {
+                                                borderWidth: '2px',
+                                                transform: 'translateY(-2px)',
+                                                boxShadow: '0 4px 12px rgba(255,152,0,0.3)'
+                                            },
+                                            transition: 'all 0.3s ease'
+                                        }}
                                     >
-                                        RETOMAR FOTO
+                                        🔄 RETOMAR FOTO
                                     </Button>
                                 </Box>
                             )}
 
                             {/* Botón MARCAR o Loading */}
                             {loading ? (
-                                <CircularProgress color="primary" />
+                                <Box sx={{ 
+                                    display: 'flex', 
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: 2,
+                                    p: 3
+                                }}>
+                                    <CircularProgress size={60} thickness={4} sx={{ color: '#667eea' }} />
+                                    <Typography variant="h6" sx={{ color: '#667eea', fontWeight: 'bold' }}>
+                                        📤 Registrando asistencia...
+                                    </Typography>
+                                </Box>
                             ) : (
                                 photoTaken && !coordinates && ( // Solo mostrar si hay foto y no se ha marcado
                                     <Button
                                         variant="contained"
-                                        color="primary"
+                                        color="success"
                                         onClick={handleMark}
                                         disabled={loading}
                                         size="large"
-                                        sx={{ mt: 2 }}
+                                        startIcon={<CheckCircleIcon sx={{ fontSize: 28 }} />}
+                                        sx={{ 
+                                            mt: 2,
+                                            py: 2,
+                                            px: 5,
+                                            fontSize: '1.2rem',
+                                            fontWeight: 'bold',
+                                            borderRadius: 3,
+                                            boxShadow: '0 8px 20px rgba(76,175,80,0.4)',
+                                            background: 'linear-gradient(135deg, #4caf50 0%, #8bc34a 100%)',
+                                            '&:hover': {
+                                                boxShadow: '0 12px 28px rgba(76,175,80,0.6)',
+                                                transform: 'translateY(-2px)',
+                                            },
+                                            transition: 'all 0.3s ease'
+                                        }}
                                     >
                                         MARCAR ASISTENCIA
                                     </Button>
@@ -532,46 +772,108 @@ export default function MarcarPage() {
 
                             {/* Información después de marcar */}
                             {coordinates && (
-                                <Box sx={{ mt: 3 }}>
-                                    <img
-                                        src={photoTaken}
-                                        alt="Foto registrada"
-                                        style={{
-                                            width: '100%',
-                                            maxWidth: '300px',
-                                            borderRadius: '8px',
-                                            marginBottom: '16px'
-                                        }}
-                                    />
-                                    <p><strong>Usuario:</strong> {user.DISPLAYNAME}</p>
-                                    {markedDate && markedTime && (
-                                        <p>
-                                            <strong>Fecha de la marca:</strong> {markedDate} <br /> 
-                                            <strong>Hora de la marca:</strong> {markedTime}
-                                        </p>
-                                    )}
-                                    <p>
-                                        <strong>Coordenadas:</strong> Lat: {coordinates.latitude}, Lng: {coordinates.longitude}
-                                        <br />
-                                        <a
+                                <Box sx={{ 
+                                    mt: 4,
+                                    p: 4,
+                                    background: 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)',
+                                    borderRadius: 3,
+                                    border: '4px solid #4caf50',
+                                    boxShadow: '0 12px 32px rgba(76,175,80,0.4)'
+                                }}>
+                                    <Box sx={{ textAlign: 'center', mb: 3 }}>
+                                        <CheckCircleIcon sx={{ fontSize: 80, color: '#4caf50', mb: 2 }} />
+                                        <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#2e7d32', mb: 1 }}>
+                                            ¡Asistencia Registrada!
+                                        </Typography>
+                                        <Typography variant="body1" sx={{ color: '#1b5e20' }}>
+                                            Tu marcación ha sido guardada exitosamente
+                                        </Typography>
+                                    </Box>
+
+                                    <Box sx={{
+                                        backgroundColor: 'white',
+                                        borderRadius: 2,
+                                        p: 2,
+                                        mb: 3,
+                                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                                    }}>
+                                        <img
+                                            src={photoTaken}
+                                            alt="Foto registrada"
+                                            style={{
+                                                width: '100%',
+                                                maxWidth: '400px',
+                                                borderRadius: '12px',
+                                                border: '3px solid #4caf50',
+                                                display: 'block',
+                                                margin: '0 auto',
+                                                boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+                                            }}
+                                        />
+                                    </Box>
+
+                                    <Box sx={{
+                                        backgroundColor: 'rgba(255,255,255,0.8)',
+                                        borderRadius: 2,
+                                        p: 3
+                                    }}>
+                                        <Typography variant="h6" sx={{ color: '#2e7d32', mb: 2, fontWeight: 'bold' }}>
+                                            📋 Detalles de la Marcación
+                                        </Typography>
+                                        
+                                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                                            <Typography variant="body1" sx={{ color: '#1b5e20' }}>
+                                                <strong>👤 Usuario:</strong> {user.DISPLAYNAME}
+                                            </Typography>
+                                        </Box>
+
+                                        {markedDate && markedTime && (
+                                            <>
+                                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                                                    <Typography variant="body1" sx={{ color: '#1b5e20' }}>
+                                                        <strong>📅 Fecha:</strong> {markedDate}
+                                                    </Typography>
+                                                </Box>
+                                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                                                    <Typography variant="body1" sx={{ color: '#1b5e20' }}>
+                                                        <strong>🕐 Hora:</strong> {markedTime}
+                                                    </Typography>
+                                                </Box>
+                                            </>
+                                        )}
+
+                                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                                            <Typography variant="body1" sx={{ color: '#1b5e20' }}>
+                                                <strong>📍 Coordenadas:</strong> Lat: {coordinates.latitude.toFixed(6)}, Lng: {coordinates.longitude.toFixed(6)}
+                                            </Typography>
+                                        </Box>
+
+                                        <Button
+                                            variant="contained"
+                                            size="large"
                                             href={`https://www.google.com/maps?q=${coordinates.latitude},${coordinates.longitude}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            style={{ color: '#1976d2', textDecoration: 'underline' }}
+                                            sx={{
+                                                background: 'linear-gradient(135deg, #2196f3 0%, #21cbf3 100%)',
+                                                color: 'white',
+                                                fontWeight: 'bold',
+                                                borderRadius: 2,
+                                                py: 1.5,
+                                                px: 3,
+                                                '&:hover': {
+                                                    boxShadow: '0 6px 16px rgba(33,150,243,0.4)',
+                                                    transform: 'translateY(-2px)'
+                                                },
+                                                transition: 'all 0.3s ease'
+                                            }}
                                         >
-                                            Ver en Google Maps
-                                        </a>
-                                    </p>
+                                            🗺️ Ver Ubicación en Google Maps
+                                        </Button>
+                                    </Box>
                                 </Box>
                             )}
 
-                            <div style={{ marginTop: "10px" }}>
-                                {dataValid ? (
-                                    <CheckCircleIcon style={{ color: "green", fontSize: 40 }} />
-                                ) : (
-                                    <CancelIcon style={{ color: "red", fontSize: 40 }} />
-                                )}
-                            </div>
                         </Card>
                     </Grid>
                 </Grid>
