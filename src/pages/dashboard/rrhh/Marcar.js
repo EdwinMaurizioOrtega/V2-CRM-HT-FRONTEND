@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 // next
 import Head from 'next/head';
 // @mui
-import {Button, Card, CircularProgress, Container, Grid} from '@mui/material';
+import {Button, Card, CircularProgress, Container, Grid, Box, Typography, Alert} from '@mui/material';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
 // layouts
@@ -13,6 +13,8 @@ import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
 import {useAuthContext} from "../../../auth/useAuthContext";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 // utils
 import axios from "../../../utils/axios";
 
@@ -38,6 +40,16 @@ export default function MarcarPage() {
     const [markedTime, setMarkedTime] = useState(null);
     const [dataValid, setDataValid] = useState(false);
     const [loading, setLoading] = useState(false);
+    
+    // Estados para la cámara y foto
+    const [isCameraOpen, setIsCameraOpen] = useState(false);
+    const [photoTaken, setPhotoTaken] = useState(null);
+    const [stream, setStream] = useState(null);
+    const [cameraError, setCameraError] = useState(null);
+    const [videoReady, setVideoReady] = useState(false);
+    
+    const videoRef = useRef(null);
+    const canvasRef = useRef(null);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -46,11 +58,164 @@ export default function MarcarPage() {
         return () => clearInterval(interval);
     }, []);
 
+    // Limpiar stream de cámara al desmontar componente
+    useEffect(() => {
+        return () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+        };
+    }, [stream]);
+
     const formatTime24 = (date) => {
         return date.toLocaleTimeString("es-ES", { hour12: false });
     };
 
+    // Abrir cámara
+    const openCamera = async () => {
+        setCameraError(null);
+        setVideoReady(false);
+        try {
+            console.log("🎥 Solicitando acceso a la cámara...");
+            const mediaStream = await navigator.mediaDevices.getUserMedia({ 
+                video: { 
+                    facingMode: 'user',
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                }, 
+                audio: false 
+            });
+            
+            console.log("✓ Cámara autorizada, configurando stream...");
+            setStream(mediaStream);
+            setIsCameraOpen(true);
+            
+            if (videoRef.current) {
+                videoRef.current.srcObject = mediaStream;
+                
+                // Esperar a que el video esté realmente listo
+                const checkVideoReady = () => {
+                    if (videoRef.current && 
+                        videoRef.current.videoWidth > 0 && 
+                        videoRef.current.videoHeight > 0) {
+                        console.log("✓ Video listo:", videoRef.current.videoWidth, "x", videoRef.current.videoHeight);
+                        setVideoReady(true);
+                    } else {
+                        console.log("Esperando dimensiones del video...");
+                        setTimeout(checkVideoReady, 100);
+                    }
+                };
+                
+                // Iniciar el video y esperar a que esté listo
+                videoRef.current.play()
+                    .then(() => {
+                        console.log("✓ Video playing");
+                        checkVideoReady();
+                    })
+                    .catch(err => {
+                        console.error("Error al reproducir video:", err);
+                        setCameraError("Error al iniciar el video");
+                    });
+            }
+        } catch (error) {
+            console.error("❌ Error al acceder a la cámara:", error);
+            setCameraError("No se pudo acceder a la cámara. Por favor, verifica los permisos.");
+            setIsCameraOpen(false);
+        }
+    };
+
+    // Tomar foto
+    const takePhoto = () => {
+        try {
+            setCameraError(null);
+            
+            if (!videoRef.current || !canvasRef.current) {
+                setCameraError("Error: Referencias no disponibles");
+                console.error("videoRef or canvasRef is null");
+                return;
+            }
+
+            const video = videoRef.current;
+            const canvas = canvasRef.current;
+            
+            console.log("=== CAPTURANDO FOTO ===");
+            console.log("Video readyState:", video.readyState);
+            console.log("Video width:", video.videoWidth);
+            console.log("Video height:", video.videoHeight);
+            console.log("Video paused:", video.paused);
+            
+            // Verificar que el video tenga dimensiones válidas
+            if (video.videoWidth === 0 || video.videoHeight === 0) {
+                setCameraError("El video no está listo. Espera un momento e intenta nuevamente.");
+                return;
+            }
+            
+            if (video.readyState !== video.HAVE_ENOUGH_DATA) {
+                setCameraError("El video aún está cargando. Espera un momento.");
+                return;
+            }
+            
+            const context = canvas.getContext('2d');
+            
+            if (!context) {
+                setCameraError("Error al obtener contexto del canvas");
+                return;
+            }
+            
+            // Establecer dimensiones del canvas
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            console.log("Canvas dimensions:", canvas.width, "x", canvas.height);
+            
+            // Dibujar frame actual del video en el canvas
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Convertir canvas a base64
+            const photoData = canvas.toDataURL('image/jpeg', 0.9);
+            console.log("Photo data length:", photoData.length);
+            console.log("Photo data starts with:", photoData.substring(0, 30));
+            
+            if (photoData && photoData.length > 100) {
+                console.log("✓ Foto guardada correctamente");
+                console.log("Tamaño de la foto:", photoData.length, "caracteres");
+                console.log("Tipo de dato:", typeof photoData);
+                
+                // Detener la cámara primero
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                }
+                setIsCameraOpen(false);
+                setVideoReady(false);
+                
+                // Establecer la foto al final para asegurar que se renderice
+                setPhotoTaken(photoData);
+                console.log("Estado photoTaken actualizado");
+            } else {
+                setCameraError("Error: La foto capturada está vacía");
+                console.error("photoData length:", photoData ? photoData.length : "null");
+            }
+            
+        } catch (error) {
+            console.error("Error en takePhoto:", error);
+            setCameraError("Error al capturar la foto: " + error.message);
+        }
+    };
+
+    // Retomar foto
+    const retakePhoto = () => {
+        setPhotoTaken(null);
+        setVideoReady(false);
+        openCamera();
+    };
+
     const handleMark = () => {
+        // Validar que se haya tomado la foto
+        if (!photoTaken) {
+            setCameraError("Debes tomar una foto antes de marcar la asistencia");
+            return;
+        }
+
         setLoading(true); // Desactivar botón y mostrar loading
         const now = new Date();
         setMarkedDate(now.toLocaleDateString());
@@ -88,6 +253,7 @@ export default function MarcarPage() {
                 user_id: user.ID,
                 latitude: latitude,
                 longitude: longitude,
+                photo: photoTaken, // Enviar foto en base64
             });
 
             //console.log('Status crear registro:', response.status);
@@ -125,39 +291,170 @@ export default function MarcarPage() {
                             <h2>Reloj Biométrico Lidenar</h2>
                             <p>Fecha y Hora actual: {dateTime.toLocaleString("es-ES")}</p>
 
+                            {/* Mostrar errores */}
+                            {cameraError && (
+                                <Alert severity="error" sx={{ mb: 2 }}>
+                                    {cameraError}
+                                </Alert>
+                            )}
+
+                            {/* Sección de cámara */}
+                            {!photoTaken && !coordinates && (
+                                <Box sx={{ mb: 3 }}>
+                                    {!isCameraOpen ? (
+                                        <Button
+                                            variant="contained"
+                                            color="secondary"
+                                            startIcon={<CameraAltIcon />}
+                                            onClick={openCamera}
+                                            size="large"
+                                        >
+                                            ABRIR CÁMARA
+                                        </Button>
+                                    ) : (
+                                        <Box>
+                                            <video
+                                                ref={videoRef}
+                                                autoPlay
+                                                playsInline
+                                                muted
+                                                style={{
+                                                    width: '100%',
+                                                    maxWidth: '500px',
+                                                    borderRadius: '8px',
+                                                    marginBottom: '16px',
+                                                    backgroundColor: '#000'
+                                                }}
+                                            />
+                                            <br />
+                                            {!videoReady && (
+                                                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                                                    Preparando cámara...
+                                                </Typography>
+                                            )}
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                startIcon={<PhotoCameraIcon />}
+                                                onClick={takePhoto}
+                                                size="large"
+                                                disabled={!videoReady}
+                                            >
+                                                CAPTURAR FOTO
+                                            </Button>
+                                        </Box>
+                                    )}
+                                    <canvas ref={canvasRef} style={{ display: 'none' }} />
+                                </Box>
+                            )}
+
+                            {/* Vista previa de la foto tomada */}
+                            {photoTaken && !coordinates && (
+                                <Box sx={{ mb: 3 }}>
+                                    <Typography variant="h6" color="success.main" sx={{ mb: 2 }}>
+                                        ✓ Foto capturada correctamente
+                                    </Typography>
+                                    <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: 'block' }}>
+                                        Debug: Foto existe = {photoTaken ? 'Sí' : 'No'}, 
+                                        Tamaño = {photoTaken ? `${Math.round(photoTaken.length / 1024)}KB` : '0KB'}
+                                    </Typography>
+                                    <Box sx={{ 
+                                        display: 'flex', 
+                                        justifyContent: 'center',
+                                        mb: 2,
+                                        backgroundColor: '#f5f5f5',
+                                        padding: 2,
+                                        borderRadius: 2
+                                    }}>
+                                        {photoTaken ? (
+                                            <img
+                                                src={photoTaken}
+                                                alt="Foto capturada"
+                                                style={{
+                                                    width: '100%',
+                                                    maxWidth: '400px',
+                                                    borderRadius: '8px',
+                                                    border: '2px solid #4caf50',
+                                                    display: 'block'
+                                                }}
+                                                onError={(e) => {
+                                                    console.error("❌ Error loading image:", e);
+                                                    console.error("Image src length:", photoTaken ? photoTaken.length : 0);
+                                                    console.error("Image src preview:", photoTaken ? photoTaken.substring(0, 100) : 'null');
+                                                    setCameraError("Error al cargar la imagen capturada");
+                                                }}
+                                                onLoad={() => {
+                                                    console.log("✅ Image loaded successfully!");
+                                                }}
+                                            />
+                                        ) : (
+                                            <Typography color="error">No hay foto disponible</Typography>
+                                        )}
+                                    </Box>
+                                    <Button
+                                        variant="outlined"
+                                        color="warning"
+                                        onClick={retakePhoto}
+                                        sx={{ mr: 2 }}
+                                    >
+                                        RETOMAR FOTO
+                                    </Button>
+                                </Box>
+                            )}
+
                             {/* Botón MARCAR o Loading */}
                             {loading ? (
                                 <CircularProgress color="primary" />
                             ) : (
-                                !coordinates && ( // Ocultar botón después de marcar
+                                photoTaken && !coordinates && ( // Solo mostrar si hay foto y no se ha marcado
                                     <Button
                                         variant="contained"
                                         color="primary"
                                         onClick={handleMark}
-                                        disabled={loading} // Deshabilitar mientras carga
+                                        disabled={loading}
+                                        size="large"
+                                        sx={{ mt: 2 }}
                                     >
-                                        MARCAR
+                                        MARCAR ASISTENCIA
                                     </Button>
                                 )
                             )}
 
-                            {coordinates && <p>Usuario: {user.DISPLAYNAME}</p>}
-                            {markedDate && markedTime && (
-                                <p>Fecha de la marca: {markedDate} <br /> Hora de la marca: {markedTime}</p>
-                            )}
+                            {/* Información después de marcar */}
                             {coordinates && (
-                                <p>
-                                    Coordenadas: Lat: {coordinates.latitude}, Lng: {coordinates.longitude}
-                                    <br />
-                                    <a
-                                        href={`https://www.google.com/maps?q=${coordinates.latitude},${coordinates.longitude}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        Ver en Google Maps
-                                    </a>
-                                </p>
+                                <Box sx={{ mt: 3 }}>
+                                    <img
+                                        src={photoTaken}
+                                        alt="Foto registrada"
+                                        style={{
+                                            width: '100%',
+                                            maxWidth: '300px',
+                                            borderRadius: '8px',
+                                            marginBottom: '16px'
+                                        }}
+                                    />
+                                    <p><strong>Usuario:</strong> {user.DISPLAYNAME}</p>
+                                    {markedDate && markedTime && (
+                                        <p>
+                                            <strong>Fecha de la marca:</strong> {markedDate} <br /> 
+                                            <strong>Hora de la marca:</strong> {markedTime}
+                                        </p>
+                                    )}
+                                    <p>
+                                        <strong>Coordenadas:</strong> Lat: {coordinates.latitude}, Lng: {coordinates.longitude}
+                                        <br />
+                                        <a
+                                            href={`https://www.google.com/maps?q=${coordinates.latitude},${coordinates.longitude}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{ color: '#1976d2', textDecoration: 'underline' }}
+                                        >
+                                            Ver en Google Maps
+                                        </a>
+                                    </p>
+                                </Box>
                             )}
+
                             <div style={{ marginTop: "10px" }}>
                                 {dataValid ? (
                                     <CheckCircleIcon style={{ color: "green", fontSize: 40 }} />
