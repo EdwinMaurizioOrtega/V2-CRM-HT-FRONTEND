@@ -75,8 +75,10 @@ export default function MarcarPage() {
     const openCamera = async () => {
         setCameraError(null);
         setVideoReady(false);
+        
         try {
             console.log("🎥 Solicitando acceso a la cámara...");
+            
             const mediaStream = await navigator.mediaDevices.getUserMedia({ 
                 video: { 
                     facingMode: 'user',
@@ -86,40 +88,75 @@ export default function MarcarPage() {
                 audio: false 
             });
             
-            console.log("✓ Cámara autorizada, configurando stream...");
+            console.log("✓ Cámara autorizada!");
+            console.log("Stream activo:", mediaStream.active);
+            console.log("Video tracks:", mediaStream.getVideoTracks().length);
+            
+            if (mediaStream.getVideoTracks().length === 0) {
+                throw new Error("No hay tracks de video en el stream");
+            }
+            
             setStream(mediaStream);
             setIsCameraOpen(true);
             
-            if (videoRef.current) {
-                videoRef.current.srcObject = mediaStream;
-                
-                // Esperar a que el video esté realmente listo
-                const checkVideoReady = () => {
-                    if (videoRef.current && 
-                        videoRef.current.videoWidth > 0 && 
-                        videoRef.current.videoHeight > 0) {
-                        console.log("✓ Video listo:", videoRef.current.videoWidth, "x", videoRef.current.videoHeight);
-                        setVideoReady(true);
-                    } else {
-                        console.log("Esperando dimensiones del video...");
-                        setTimeout(checkVideoReady, 100);
-                    }
-                };
-                
-                // Iniciar el video y esperar a que esté listo
-                videoRef.current.play()
-                    .then(() => {
-                        console.log("✓ Video playing");
-                        checkVideoReady();
-                    })
-                    .catch(err => {
-                        console.error("Error al reproducir video:", err);
-                        setCameraError("Error al iniciar el video");
-                    });
+            // Esperar un momento antes de asignar el stream al video
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            if (!videoRef.current) {
+                console.error("❌ videoRef.current es null!");
+                setCameraError("Error: No se pudo acceder al elemento de video");
+                return;
             }
+            
+            console.log("📹 Asignando stream al elemento video...");
+            videoRef.current.srcObject = mediaStream;
+            
+            console.log("🎬 Intentando reproducir video...");
+            
+            // Forzar reproducción
+            try {
+                await videoRef.current.play();
+                console.log("✓ Video.play() exitoso");
+            } catch (playError) {
+                console.error("Error en play():", playError);
+            }
+            
+            // Verificar estado del video repetidamente
+            let attempts = 0;
+            const maxAttempts = 50; // 5 segundos máximo
+            
+            const checkVideoReady = () => {
+                attempts++;
+                
+                if (!videoRef.current) {
+                    console.error("videoRef se perdió");
+                    return;
+                }
+                
+                const width = videoRef.current.videoWidth;
+                const height = videoRef.current.videoHeight;
+                const readyState = videoRef.current.readyState;
+                
+                console.log(`Intento ${attempts}: ${width}x${height}, readyState: ${readyState}`);
+                
+                if (width > 0 && height > 0) {
+                    console.log("✅ VIDEO LISTO:", width, "x", height);
+                    setVideoReady(true);
+                } else if (attempts < maxAttempts) {
+                    setTimeout(checkVideoReady, 100);
+                } else {
+                    console.error("❌ Timeout esperando video");
+                    setCameraError("El video no se inició correctamente. Intenta de nuevo.");
+                }
+            };
+            
+            checkVideoReady();
+            
         } catch (error) {
             console.error("❌ Error al acceder a la cámara:", error);
-            setCameraError("No se pudo acceder a la cámara. Por favor, verifica los permisos.");
+            console.error("Error name:", error.name);
+            console.error("Error message:", error.message);
+            setCameraError(`Error: ${error.message || 'No se pudo acceder a la cámara'}`);
             setIsCameraOpen(false);
         }
     };
@@ -313,24 +350,45 @@ export default function MarcarPage() {
                                         </Button>
                                     ) : (
                                         <Box>
-                                            <video
-                                                ref={videoRef}
-                                                autoPlay
-                                                playsInline
-                                                muted
-                                                style={{
-                                                    width: '100%',
-                                                    maxWidth: '500px',
-                                                    borderRadius: '8px',
-                                                    marginBottom: '16px',
-                                                    backgroundColor: '#000'
-                                                }}
-                                            />
-                                            <br />
-                                            {!videoReady && (
-                                                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                                                    Preparando cámara...
+                                            <Box sx={{ 
+                                                mb: 2, 
+                                                p: 2, 
+                                                backgroundColor: '#f5f5f5',
+                                                borderRadius: 2,
+                                                border: '2px dashed #ccc'
+                                            }}>
+                                                <Typography variant="caption" color="primary" sx={{ mb: 1, display: 'block' }}>
+                                                    Estado: {isCameraOpen ? '🎥 Cámara abierta' : '📷 Cámara cerrada'} | 
+                                                    Video: {videoReady ? '✅ Listo' : '⏳ Cargando...'} | 
+                                                    Stream: {stream ? '✓ Activo' : '✗ Inactivo'}
                                                 </Typography>
+                                                <video
+                                                    ref={videoRef}
+                                                    autoPlay
+                                                    playsInline
+                                                    muted
+                                                    style={{
+                                                        width: '100%',
+                                                        maxWidth: '500px',
+                                                        height: 'auto',
+                                                        minHeight: '300px',
+                                                        borderRadius: '8px',
+                                                        backgroundColor: '#000',
+                                                        border: '3px solid #2196f3',
+                                                        display: 'block',
+                                                        margin: '0 auto'
+                                                    }}
+                                                />
+                                            </Box>
+                                            {!videoReady && (
+                                                <Alert severity="info" sx={{ mb: 2 }}>
+                                                    ⏳ Preparando cámara... Por favor espera.
+                                                </Alert>
+                                            )}
+                                            {videoReady && (
+                                                <Alert severity="success" sx={{ mb: 2 }}>
+                                                    ✅ Cámara lista - Puedes capturar la foto
+                                                </Alert>
                                             )}
                                             <Button
                                                 variant="contained"
