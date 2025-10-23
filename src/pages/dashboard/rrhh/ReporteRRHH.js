@@ -63,7 +63,40 @@ export default function ReporteRRhhPage() {
                     </Link>
                 );
             }
-        }
+        },
+        {
+            field: 'preview',
+            headerName: 'Evidencia Marcación',
+            width: 150,
+            renderCell: (params) => {
+                const imageUrl = params.row.IMAGE_URL_EVIDENCIA;
+                
+                // Verificar si no hay imagen o es "<NULL>"
+                if (!imageUrl || imageUrl === '' || imageUrl === null || imageUrl === '<NULL>') {
+                    return (
+                        <span style={{ 
+                            color: '#d32f2f', 
+                            fontWeight: 'bold',
+                            fontSize: '12px'
+                        }}>
+                            Sin foto
+                        </span>
+                    );
+                }
+
+                return (
+                    <Button
+                        variant="contained"
+                        size="small"
+                        color="primary"
+                        onClick={() => window.open(imageUrl, '_blank')}
+                    >
+                        Ver Foto
+                    </Button>
+                );
+            }
+        },
+
     ];
 
     // Cargar datos del endpoint cuando el componente se monta
@@ -72,6 +105,7 @@ export default function ReporteRRhhPage() {
             try {
                 const response = await axios.get('/hanadb/api/rrhh/get_all_registros_reloj_biometrico_online');
                 setBusinessPartners(response.data);  // Suponiendo que el response.data contiene los registros
+                console.log("response.data ", response.data);
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
             } finally {

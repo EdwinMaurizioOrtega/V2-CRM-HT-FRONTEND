@@ -253,7 +253,7 @@ export default function MarcarPage() {
         openCamera();
     };
 
-    const handleMark = () => {
+    const handleMark = async () => {
         // Validar que se haya tomado la foto
         if (!photoTaken) {
             setCameraError("Debes tomar una foto antes de marcar la asistencia");
@@ -265,49 +265,93 @@ export default function MarcarPage() {
         setMarkedDate(now.toLocaleDateString());
         setMarkedTime(formatTime24(now));
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const { latitude, longitude } = position.coords;
-                    setCoordinates({ latitude, longitude });
-                    setDataValid(true);
-                    //console.log("Fecha de la marca:", now.toLocaleDateString());
-                    //console.log("Hora de la marca:", formatTime24(now));
-                    //console.log("Coordenadas:", `Lat: ${latitude}, Lng: ${longitude}`);
+        try {
+            // 1. Primero subir la foto al servidor de imágenes
+            console.log("📤 Subiendo foto al servidor...");
+            const photoUrl = await uploadPhotoToServer(photoTaken);
+            console.log("✅ Foto subida exitosamente:", photoUrl);
 
-                    // Enviar datos a la API
-                    sendToAPI(latitude, longitude);
-                },
-                (error) => {
-                    console.error("Error obteniendo ubicación:", error);
-                    setDataValid(false);
-                    setLoading(false); // Ocultar loading si hay error
-                }
-            );
-        } else {
-            console.error("Geolocalización no soportada en este navegador");
-            setDataValid(false);
+            // 2. Luego obtener coordenadas GPS
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const { latitude, longitude } = position.coords;
+                        setCoordinates({ latitude, longitude });
+                        setDataValid(true);
+
+                        // 3. Enviar datos a la API con la URL de la foto
+                        sendToAPI(latitude, longitude, photoUrl);
+                    },
+                    (error) => {
+                        console.error("Error obteniendo ubicación:", error);
+                        setDataValid(false);
+                        setLoading(false);
+                    }
+                );
+            } else {
+                console.error("Geolocalización no soportada en este navegador");
+                setDataValid(false);
+                setLoading(false);
+            }
+        } catch (error) {
+            console.error("Error al subir la foto:", error);
+            setCameraError("Error al subir la foto. Por favor, intenta de nuevo.");
             setLoading(false);
         }
     };
 
-    const sendToAPI = async (latitude, longitude) => {
+    // Función para subir la foto al servidor y obtener la URL
+    const uploadPhotoToServer = async (base64Photo) => {
+        // Convertir base64 a Blob
+        const response = await fetch(base64Photo);
+        const blob = await response.blob();
+        
+        // Crear archivo con nombre único usando timestamp
+        const timestamp = new Date().getTime();
+        const fileName = `asistencia_${user.ID}_${timestamp}.jpg`;
+        const file = new File([blob], fileName, { type: 'image/jpeg' });
+
+        // Crear FormData
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // Subir archivo
+        const uploadResponse = await fetch('https://imagen.hipertronics.us/ht/cloud/upload_web_files', {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (uploadResponse.status !== 200) {
+            throw new Error('Failed to upload file');
+        }
+
+        const data = await uploadResponse.json();
+
+        if (data.status === 'success') {
+            return data.link; // Retornar la URL de la imagen
+        } else {
+            throw new Error('Error en la respuesta del servidor');
+        }
+    };
+
+    const sendToAPI = async (latitude, longitude, photoUrl) => {
         try {
             const response = await axios.post('/hanadb/api/rrhh/crear_registro_reloj_biometrico_online', {
                 user_id: user.ID,
                 latitude: latitude,
                 longitude: longitude,
-                photo: photoTaken, // Enviar foto en base64
+                image_url_evidencia: photoUrl, // Enviar URL de la foto en lugar de base64
             });
 
-            //console.log('Status crear registro:', response.status);
+            console.log('Status crear registro:', response.status);
             if (response.status === 200) {
-                //console.log('Gracias');
+                console.log('✅ Asistencia marcada correctamente');
             } else {
-                //console.log('La solicitud no devolvió un estado 200.');
+                console.log('⚠️ La solicitud no devolvió un estado 200.');
             }
         } catch (error) {
             console.error('Error en la solicitud:', error);
+            setCameraError('Error al registrar asistencia. Por favor, intenta de nuevo.');
         } finally {
             setLoading(false); // Ocultar loading después de enviar los datos
         }
@@ -332,7 +376,7 @@ export default function MarcarPage() {
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={12}>
                         <Card sx={{ p: 3, textAlign: "center" }}>
-                            <h2>Reloj Biométrico Lidenar</h2>
+                            <h2>Reloj Biométrico Grupo HT</h2>
                             <p>Fecha y Hora actual: {dateTime.toLocaleString("es-ES")}</p>
 
                             {/* Mostrar errores */}
@@ -353,7 +397,7 @@ export default function MarcarPage() {
                                             onClick={openCamera}
                                             size="large"
                                         >
-                                            ABRIR CÁMARA
+                                            ABRIR CÁMARA PARA MARCAR ASISTENCIA
                                         </Button>
                                     ) : (
                                         <Box>
