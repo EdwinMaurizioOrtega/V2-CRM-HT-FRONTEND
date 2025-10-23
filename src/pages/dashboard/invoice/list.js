@@ -1152,7 +1152,7 @@ export default function InvoiceListPage() {
                                 percent={100}
                                 //price={user.COMPANY !== 'TOMEBAMBA' && sumBy(tableData, (item) => Number(item.SUBTOTAL))}
                                 price={user.COMPANY !== 'TOMEBAMBA' && sumBy(
-                                    tableData.filter((item) => item.ESTADO === 6 || item.ESTADO === 1 || item.ESTADO === 0 || item.ESTADO === 22),
+                                    tableData.filter((item) => item.ESTADO === 6 || item.ESTADO === 7 || item.ESTADO === 1 || item.ESTADO === 0 || item.ESTADO === 22),
                                     (item) => Number(item.SUBTOTAL))}
                                 icon="solar:bill-list-bold-duotone"
                                 color={theme.palette.info.main}
