@@ -1011,7 +1011,8 @@ function nameWarehouse(ware) {
         "006": "Quito",
         // "015": "Guayaquil",
         "024": "Manta",
-        "030": "Colón"
+        "030": "Colón",
+        "010": "Cuenca Centro"
     };
 
     const bodegaActual = strings[ware];
@@ -1043,10 +1044,12 @@ function nameWarehouseMovilCelistic(ware) {
     const strings = {
         "DISTLF": "CARAPUNGO - CENTRO DISTRIBUCION MOVILCELISTIC",
         "003": "MACHALA - MAYORISTAS MOVILCELISTIC MACHALA",
-        "004": "CUENCA - MAYORISTAS MOVILCELISTIC CUENCA",
+        "004": "CUENCA - MAYORISTAS MOVILCELISTIC CUENCA TURI",
         "030": "COLON - MAYORISTAS MOVILCELISTIC COLON",
         "024": "MANTA - MAYORISTAS MOVILCELISTIC MANTA",
         "005": "CARAPUNGO - ⚠️OPERADORAS CARRIER",
+        "010": "CUENCA - MAYORISTAS MOVILCELISTIC CUENCA CENTRO"
+
         // "T1CARACO": "QUITO - XIAOMI TERMINALES"
     };
 
