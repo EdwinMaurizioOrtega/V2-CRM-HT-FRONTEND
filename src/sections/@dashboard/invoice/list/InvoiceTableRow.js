@@ -82,7 +82,8 @@ export default function InvoiceTableRow({
         URL_INVOICE_SELLER,
         NOMBREUSUARIOENTREGARA,
         OBSERVACION_ANULACION,
-        USUARIOAPROBO
+        USUARIOAPROBO,
+        SUBTOTAL,
     } = row;
 
     const router = useRouter();
@@ -728,6 +729,19 @@ export default function InvoiceTableRow({
                 <TableCell align="left">{FECHAAPROBO}</TableCell>
                 <TableCell align="left">{FECHAFACTURACION}</TableCell>
                 <TableCell align="left">{NUMEROFACTURALIDENAR}</TableCell>
+                <TableCell align="right">
+                    <Stack spacing={0.5} alignItems="flex-end">
+                        <Typography variant="body2" sx={{ fontWeight: 700, color: 'success.main' }}>
+                            ${(parseFloat(SUBTOTAL || 0) * 1.15).toFixed(2)}
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: 'text.disabled' }}>
+                            Subtotal: ${parseFloat(SUBTOTAL || 0).toFixed(2)}
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                            IVA 15%: ${(parseFloat(SUBTOTAL || 0) * 0.15).toFixed(2)}
+                        </Typography>
+                    </Stack>
+                </TableCell>
                 <TableCell align="left">
                     {OBSERVACION_ANULACION && (
                         <Tooltip title={OBSERVACION_ANULACION} sx={{ maxWidth: 500 }}>
