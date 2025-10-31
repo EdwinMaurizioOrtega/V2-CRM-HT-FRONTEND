@@ -3364,13 +3364,14 @@ export default function InvoiceDetails({ invoice }) {
 
 export const top100Films = [
     { title: 'Centro Distribución HT', id: "019" },
-    { title: 'Cuenca', id: "002" },
+    { title: 'Cuenca Turi', id: "002" },
     { title: 'Quito', id: "006" },
     // {title: 'Guayaquil', id: "015"},
     { title: 'Manta', id: "024" },
     { title: 'Colón', id: "030" },
     { title: 'Consignación', id: "008" },
-    { title: 'Bodega Claro', id: "039" }
+    { title: 'Bodega Claro', id: "039" },
+    { title: 'Cuenca Centro', id: "010" }
 ]
 
 export const top100FilmsAlphacell = [
@@ -3388,11 +3389,13 @@ export const top100FilmsAlphacell = [
 export const top100FilmsMovilCelistic = [
     { title: 'CARAPUNGO - CENTRO DISTRIBUCION MOVILCELISTIC', id: "DISTLF" },
     { title: 'MACHALA - MAYORISTAS MOVILCELISTIC MACHALA', id: "003" },
-    { title: 'CUENCA - MAYORISTAS MOVILCELISTIC CUENCA', id: "004" },
+    { title: 'CUENCA - MAYORISTAS MOVILCELISTIC CUENCA TURI', id: "004" },
     { title: 'COLON - MAYORISTAS MOVILCELISTIC COLON', id: "030" },
     { title: 'MANTA - MAYORISTAS MOVILCELISTIC MANTA', id: "024" },
     { title: 'CARAPUNGO - ⚠️ PENDIENTE OPERADORAS CARRIERS', id: "005" },
     { title: 'CARAPUNGO - ⚠️OPERADORAS CARRIER', id: "CARRIERS" },
+    { title: 'CUENCA CENTRO', id: "010" }
+
     // {title: 'QUITO - XIAOMI TERMINALES', id: "T1CARACO"}
 ]
 
