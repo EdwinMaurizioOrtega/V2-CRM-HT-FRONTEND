@@ -869,17 +869,121 @@ export default function InvoiceDetails({ invoice }) {
 
             // Se completó con éxito (código de estado 200)
             if (response.status === 200) {
-                window.location.href = '/dashboard/invoice/list/';
+                // Verificar si la respuesta tiene un mensaje de éxito
+                const responseData = response.data;
+                
+                if (responseData?.status === 'success') {
+                    // Mostrar mensaje de éxito con Snackbar
+                    enqueueSnackbar(
+                        `✅ Factura creada exitosamente | Orden: ${responseData.data?.order_id || ID} | Factura SAP: ${responseData.data?.numero_factura || 'N/A'}`, 
+                        { 
+                            variant: 'success',
+                            autoHideDuration: 5000,
+                            anchorOrigin: {
+                                vertical: 'top',
+                                horizontal: 'center',
+                            },
+                        }
+                    );
+                    
+                    // Esperar un momento antes de redirigir para que el usuario vea el mensaje
+                    setTimeout(() => {
+                        window.location.href = '/dashboard/invoice/list/';
+                    }, 2000);
+                    
+                } else if (responseData?.status === 'fail') {
+                    // Error del backend en formato fail
+                    enqueueSnackbar(
+                        responseData.message || '❌ Error al crear la factura', 
+                        { 
+                            variant: 'error',
+                            autoHideDuration: 8000,
+                            anchorOrigin: {
+                                vertical: 'top',
+                                horizontal: 'center',
+                            },
+                        }
+                    );
+                } else {
+                    // Respuesta inesperada pero exitosa
+                    enqueueSnackbar('Factura procesada correctamente', { variant: 'success' });
+                    setTimeout(() => {
+                        window.location.href = '/dashboard/invoice/list/';
+                    }, 2000);
+                }
             }
 
         } catch (error) {
             console.error('Error al crear la factura:', error);
+            
+            // Extraer el mensaje de error más descriptivo posible
+            let errorMessage = '❌ Error al crear la factura en SAP';
+            let errorDetails = '';
+            
             if (error.response) {
-                console.error('Detalles del error:', error.response.data);
-                alert(`Error del servidor: ${error.response.data.message || error.response.data}`);
+                // El servidor respondió con un código de estado fuera del rango 2xx
+                console.error('Respuesta de error del servidor:', error.response);
+                
+                if (error.response.data) {
+                    if (typeof error.response.data === 'string') {
+                        // Si la respuesta es un string simple
+                        errorMessage = error.response.data;
+                    } else if (error.response.data.message) {
+                        // Si hay un campo message en el objeto
+                        errorMessage = error.response.data.message;
+                    } else if (error.response.data.error) {
+                        // Si hay un campo error en el objeto
+                        errorMessage = error.response.data.error;
+                    } else {
+                        // Intentar mostrar el objeto completo
+                        errorMessage = 'Error del servidor';
+                        errorDetails = JSON.stringify(error.response.data, null, 2);
+                    }
+                }
+                
+                // Agregar el código de estado HTTP como detalle
+                errorDetails = errorDetails ? `${errorDetails}\n\nCódigo HTTP: ${error.response.status}` : `Código HTTP: ${error.response.status}`;
+                
+            } else if (error.request) {
+                // La solicitud se hizo pero no se recibió respuesta
+                errorMessage = '❌ No se recibió respuesta del servidor';
+                errorDetails = 'Verifica tu conexión a internet o contacta con el administrador';
             } else {
-                alert('Error de conexión con el servidor');
+                // Algo pasó al configurar la solicitud
+                errorMessage = '❌ Error al enviar la solicitud';
+                errorDetails = error.message;
             }
+            
+            // Mostrar el error con enqueueSnackbar
+            enqueueSnackbar(
+                errorMessage, 
+                { 
+                    variant: 'error',
+                    autoHideDuration: 10000,
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                    },
+                }
+            );
+            
+            // Si hay detalles adicionales, mostrarlos en un segundo snackbar
+            if (errorDetails) {
+                setTimeout(() => {
+                    enqueueSnackbar(
+                        errorDetails, 
+                        { 
+                            variant: 'info',
+                            autoHideDuration: 8000,
+                            anchorOrigin: {
+                                vertical: 'top',
+                                horizontal: 'center',
+                            },
+                        }
+                    );
+                }, 500);
+            }
+            
         } finally {
             setLoading(false);
         }
@@ -2588,7 +2692,7 @@ export default function InvoiceDetails({ invoice }) {
                             {/* Pendiente factuaración / Solo le va a aparecer el ROL de crédito */}
                             {(ESTADO === 0 && user.ROLE === "9") &&
                                 <Button onClick={() => !loading && crearFacturaSAP()} disabled={loading}>
-                                    {loading ? 'CREANDO FACTURA...' : 'CREAR FACTURA EN SAP'}
+                                    {loading ? 'CREANDO FACTURA...' : ' FACTURA CREAREN SAP'}
                                 </Button>
                             }
 
