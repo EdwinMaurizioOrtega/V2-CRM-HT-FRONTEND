@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 // form
-import {useForm} from 'react-hook-form';
-import {yupResolver} from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
-import {Grid, Button} from '@mui/material';
-import {LoadingButton} from '@mui/lab';
+import { Grid, Button } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 // components
 import Iconify from '../../../../../components/iconify';
 import FormProvider from '../../../../../components/hook-form';
@@ -15,9 +15,9 @@ import CheckoutDelivery from './CheckoutDelivery';
 import CheckoutBillingInfo from './CheckoutBillingInfo';
 import CheckoutPaymentMethods from './CheckoutPaymentMethods';
 import CheckoutWarehouse from './CheckoutWarehouse';
-import {useState} from "react";
-import {useSnackbar} from "../../../../../components/snackbar";
-import {useAuthContext} from "../../../../../auth/useAuthContext";
+import { useState } from "react";
+import { useSnackbar } from "../../../../../components/snackbar";
+import { useAuthContext } from "../../../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -71,7 +71,7 @@ const WAREHOUSE_OPTIONS = [
     {
         id: '002',
         value: '002',
-        title: 'MAYORISTA CUENCA',
+        title: 'MAYORISTA CUENCA TURI',
         description: 'Matriz en la ciudad de Cuenca.',
     },
     {
@@ -97,6 +97,12 @@ const WAREHOUSE_OPTIONS = [
         value: '030',
         title: 'PARQUE EMP. COLÓN',
         description: 'SUCURSAL en la ciudad de GUAYAQUIL.',
+    },
+    {
+        id: '010',
+        value: '010',
+        title: 'MAYORISTA CUENCA CENTRO',
+        description: 'SUCURSAL en la ciudad de CUENCA.',
     },
 ];
 
@@ -138,8 +144,8 @@ const WAREHOUSE_OPTIONS_MOVILCELISTIC = [
     {
         id: '004',
         value: '004',
-        title: 'MAYORISTAS MOVILCELISTIC CUENCA',
-        description: 'CUENCA',
+        title: 'MAYORISTAS MOVILCELISTIC CUENCA TURI',
+        description: 'CUENCA TURI',
     },
     {
         id: '030',
@@ -159,6 +165,13 @@ const WAREHOUSE_OPTIONS_MOVILCELISTIC = [
         title: '⚠️OPERADORAS CARRIER',
         description: 'CARAPUNGO',
     },
+    {
+        id: '010',
+        value: '010',
+        title: 'MAYORISTA CUENCA CENTRO',
+        description: 'SUCURSAL en la ciudad de CUENCA.',
+    },
+
 ]
 
 
@@ -262,9 +275,9 @@ const PAYMENT_OPTIONS = [
 ];
 
 const CARDS_OPTIONS = [
-    {value: 'ViSa1', label: '**** **** **** 1212 - Jimmy Holland'},
-    {value: 'ViSa2', label: '**** **** **** 2424 - Shawn Stokes'},
-    {value: 'MasterCard', label: '**** **** **** 4545 - Cole Armstrong'},
+    { value: 'ViSa1', label: '**** **** **** 1212 - Jimmy Holland' },
+    { value: 'ViSa2', label: '**** **** **** 2424 - Shawn Stokes' },
+    { value: 'MasterCard', label: '**** **** **** 4545 - Cole Armstrong' },
 ];
 
 CheckoutPayment.propTypes = {
@@ -281,21 +294,21 @@ CheckoutPayment.propTypes = {
 };
 
 export default function CheckoutPayment({
-                                            checkout,
-                                            onReset,
-                                            onNextStep,
-                                            onBackStep,
-                                            onGotoStep,
-                                            onApplyComment,
-                                            onApplyShipping,
-                                            onApplyServientrega,
-                                            onApplyWarehouse,
-                                            onApplyMethod,
-                                        }) {
+    checkout,
+    onReset,
+    onNextStep,
+    onBackStep,
+    onGotoStep,
+    onApplyComment,
+    onApplyShipping,
+    onApplyServientrega,
+    onApplyWarehouse,
+    onApplyMethod,
+}) {
 
-    const {user} = useAuthContext();
+    const { user } = useAuthContext();
 
-    const {total, discount, subtotal, iva, comment, shipping, servientrega, warehouse, method, billing} = checkout;
+    const { total, discount, subtotal, iva, comment, shipping, servientrega, warehouse, method, billing } = checkout;
 
     const PaymentSchema = Yup.object().shape({
         payment: Yup.string().required('¡Se requiere forma de pago!'),
@@ -316,10 +329,10 @@ export default function CheckoutPayment({
 
     const {
         handleSubmit,
-        formState: {isSubmitting},
+        formState: { isSubmitting },
     } = methods;
 
-    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     const onSnackbarAction = (data, color, anchor) => {
         enqueueSnackbar(`${data}`, {
@@ -400,21 +413,21 @@ export default function CheckoutPayment({
                     />
 
                     <CheckoutPaymentMethods onApplyMethod={onApplyMethod} paymentOptions={PAYMENT_OPTIONS}
-                                            sx={{my: 3}}
+                        sx={{ my: 3 }}
                     />
 
                     <Button
                         size="small"
                         color="inherit"
                         onClick={onBackStep}
-                        startIcon={<Iconify icon="eva:arrow-ios-back-fill"/>}
+                        startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
                     >
                         Atrás
                     </Button>
                 </Grid>
 
                 <Grid item xs={12} md={4}>
-                    <CheckoutBillingInfo onBackStep={onBackStep} billing={billing}/>
+                    <CheckoutBillingInfo onBackStep={onBackStep} billing={billing} />
 
                     <CheckoutSummary
                         enableEdit

@@ -617,13 +617,14 @@ export default function InvoiceDetails({ invoice }) {
         //console.log(`Bodega: ${ware}`);
         const strings = {
             "019": "Centro Distribución HT",
-            "002": "Cuenca",
+            "002": "Cuenca Turi",
             "006": "Quito",
             // "015": "Guayaquil",
             "024": "Manta",
             "030": "Colón",
             "008": "Consignación",
-            "039": "Bodega Claro"
+            "039": "Bodega Claro",
+            "010": "Cuenca Centro"
         };
 
         const bodegaActual = strings[ware];
@@ -655,11 +656,12 @@ export default function InvoiceDetails({ invoice }) {
         const strings = {
             "DISTLF": "CARAPUNGO - CENTRO DISTRIBUCION MOVILCELISTIC",
             "003": "MACHALA - MAYORISTAS MOVILCELISTIC MACHALA",
-            "004": "CUENCA - MAYORISTAS MOVILCELISTIC CUENCA",
+            "004": "CUENCA - MAYORISTAS MOVILCELISTIC TURI",
             "030": "COLON - MAYORISTAS MOVILCELISTIC COLON",
             "024": "MANTA - MAYORISTAS MOVILCELISTIC MANTA",
             "005": "CARAPUNGO - ⚠️ PENDIENTE OPERADORAS CARRIERS",
             "CARRIERS": "CARAPUNGO - ⚠️ OPERADORAS CARRIERS",
+            "010": "CUENCA - MAYORISTAS MOVILCELISTIC CENTRO",
             // "T1CARACO": "QUITO - XIAOMI TERMINALES"
         };
 
