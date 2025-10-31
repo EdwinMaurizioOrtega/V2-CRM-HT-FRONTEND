@@ -1,20 +1,20 @@
 // @mui
-import {Table, TableRow, TableBody, TableCell, TableContainer} from '@mui/material';
+import { Table, TableRow, TableBody, TableCell, TableContainer } from '@mui/material';
 // components
 import Scrollbar from '../../../../components/scrollbar';
-import {TableHeadCustom} from '../../../../components/table';
-import {useEffect, useState} from "react";
-import {useDispatch} from "../../../../redux/store";
-import {HOST_API_KEY} from "../../../../config-global";
-import {fNumber} from "../../../../utils/formatNumber";
-import {useAuthContext} from "../../../../auth/useAuthContext";
+import { TableHeadCustom } from '../../../../components/table';
+import { useEffect, useState } from "react";
+import { useDispatch } from "../../../../redux/store";
+import { HOST_API_KEY } from "../../../../config-global";
+import { fNumber } from "../../../../utils/formatNumber";
+import { useAuthContext } from "../../../../auth/useAuthContext";
 import PropTypes from "prop-types";
 import InvoiceTableRow from "../../../@dashboard/invoice/list/InvoiceTableRow";
 
 // ----------------------------------------------------------------------
 
 function createData(name, calories, fat, carbs, protein) {
-    return {name, calories, fat, carbs, protein};
+    return { name, calories, fat, carbs, protein };
 }
 
 const TABLE_DATA = [
@@ -26,11 +26,11 @@ const TABLE_DATA = [
 ];
 
 const TABLE_HEAD = [
-    {id: 'dessert', label: 'BODEGA'},
-    {id: 'fat', label: 'CANTIDAD', align: 'right'},
-    {id: 'carbs', label: 'RESERVADO', align: 'right'},
-    {id: 'protein', label: 'DISPONIBLE', align: 'right'},
-    {id: 'calories', label: 'CODIGO', align: 'right'},
+    { id: 'dessert', label: 'BODEGA' },
+    { id: 'fat', label: 'CANTIDAD', align: 'right' },
+    { id: 'carbs', label: 'RESERVADO', align: 'right' },
+    { id: 'protein', label: 'DISPONIBLE', align: 'right' },
+    { id: 'calories', label: 'CODIGO', align: 'right' },
 ];
 
 // ----------------------------------------------------------------------
@@ -39,11 +39,11 @@ BasicTable.propTypes = {
     validateStock: PropTypes.func,
 };
 
-export default function BasicTable({code, validateStock}) {
+export default function BasicTable({ code, validateStock }) {
 
     const dispatch = useDispatch();
 
-    const {user} = useAuthContext();
+    const { user } = useAuthContext();
 
     const [loading, setLoading] = useState(true);
 
@@ -120,12 +120,12 @@ export default function BasicTable({code, validateStock}) {
     return (
         <>
             {loading ? (
-                <LoadingComponent/>
+                <LoadingComponent />
             ) : (
-                <TableContainer sx={{mt: 3, overflow: 'unset'}}>
+                <TableContainer sx={{ mt: 3, overflow: 'unset' }}>
                     <Scrollbar>
-                        <Table sx={{minWidth: 800}}>
-                            <TableHeadCustom headLabel={filteredTableHead}/>
+                        <Table sx={{ minWidth: 800 }}>
+                            <TableHeadCustom headLabel={filteredTableHead} />
 
                             <TableBody>
 
@@ -137,17 +137,17 @@ export default function BasicTable({code, validateStock}) {
                                             stockProduct
                                                 .filter((row) => row.BODEGA === '019')
                                                 .map((filteredRow) => (
-                                                        <TableRow key={filteredRow.BODEGA}>
-                                                            <TableCell>{getTextFromCodigo(filteredRow.BODEGA)}</TableCell>
-                                                            <TableCell
-                                                                align="right">{fNumber(filteredRow.CANTIDAD)}</TableCell>
-                                                            <TableCell
-                                                                align="right">{fNumber(filteredRow.RESERVADO)}</TableCell>
-                                                            <TableCell
-                                                                align="right">{fNumber(filteredRow.DISPONIBLE)}</TableCell>
-                                                            <TableCell align="right">{filteredRow.CODIGO}</TableCell>
-                                                        </TableRow>
-                                                    )
+                                                    <TableRow key={filteredRow.BODEGA}>
+                                                        <TableCell>{getTextFromCodigo(filteredRow.BODEGA)}</TableCell>
+                                                        <TableCell
+                                                            align="right">{fNumber(filteredRow.CANTIDAD)}</TableCell>
+                                                        <TableCell
+                                                            align="right">{fNumber(filteredRow.RESERVADO)}</TableCell>
+                                                        <TableCell
+                                                            align="right">{fNumber(filteredRow.DISPONIBLE)}</TableCell>
+                                                        <TableCell align="right">{filteredRow.CODIGO}</TableCell>
+                                                    </TableRow>
+                                                )
                                                 )
 
                                         ) : (
@@ -200,17 +200,17 @@ export default function BasicTable({code, validateStock}) {
                                                 stockProduct
                                                     .filter((row) => row.BODEGA === '019' || row.BODEGA === '002' || row.BODEGA === '030')
                                                     .map((filteredRow) => (
-                                                            <TableRow key={filteredRow.BODEGA}>
-                                                                <TableCell>{getTextFromCodigo(filteredRow.BODEGA)}</TableCell>
-                                                                <TableCell
-                                                                    align="right">{fNumber(filteredRow.CANTIDAD)}</TableCell>
-                                                                <TableCell
-                                                                    align="right">{fNumber(filteredRow.RESERVADO)}</TableCell>
-                                                                <TableCell
-                                                                    align="right">{fNumber(filteredRow.DISPONIBLE)}</TableCell>
-                                                                <TableCell align="right">{filteredRow.CODIGO}</TableCell>
-                                                            </TableRow>
-                                                        )
+                                                        <TableRow key={filteredRow.BODEGA}>
+                                                            <TableCell>{getTextFromCodigo(filteredRow.BODEGA)}</TableCell>
+                                                            <TableCell
+                                                                align="right">{fNumber(filteredRow.CANTIDAD)}</TableCell>
+                                                            <TableCell
+                                                                align="right">{fNumber(filteredRow.RESERVADO)}</TableCell>
+                                                            <TableCell
+                                                                align="right">{fNumber(filteredRow.DISPONIBLE)}</TableCell>
+                                                            <TableCell align="right">{filteredRow.CODIGO}</TableCell>
+                                                        </TableRow>
+                                                    )
                                                     )
                                             )
 
@@ -239,23 +239,23 @@ export default function BasicTable({code, validateStock}) {
                                         //MovilCelistic
 
                                         user.COMPANY === 'TOMEBAMBA' ? (
-                                                stockProduct
-                                                    .filter((row) => row.BODEGA === 'DISTLF')
-                                                    .map((filteredRow) => (
-                                                            <TableRow key={filteredRow.BODEGA}>
-                                                                <TableCell>{getTextFromCodigoMovilCelistic(filteredRow.BODEGA)}</TableCell>
-                                                                <TableCell
-                                                                    align="right">{fNumber(filteredRow.CANTIDAD)}</TableCell>
-                                                                <TableCell
-                                                                    align="right">{fNumber(filteredRow.RESERVADO)}</TableCell>
-                                                                <TableCell
-                                                                    align="right">{fNumber(filteredRow.DISPONIBLE)}</TableCell>
-                                                                <TableCell align="right">{filteredRow.CODIGO}</TableCell>
-                                                            </TableRow>
-                                                        )
-                                                    )
+                                            stockProduct
+                                                .filter((row) => row.BODEGA === 'DISTLF')
+                                                .map((filteredRow) => (
+                                                    <TableRow key={filteredRow.BODEGA}>
+                                                        <TableCell>{getTextFromCodigoMovilCelistic(filteredRow.BODEGA)}</TableCell>
+                                                        <TableCell
+                                                            align="right">{fNumber(filteredRow.CANTIDAD)}</TableCell>
+                                                        <TableCell
+                                                            align="right">{fNumber(filteredRow.RESERVADO)}</TableCell>
+                                                        <TableCell
+                                                            align="right">{fNumber(filteredRow.DISPONIBLE)}</TableCell>
+                                                        <TableCell align="right">{filteredRow.CODIGO}</TableCell>
+                                                    </TableRow>
+                                                )
+                                                )
 
-                                            ) : (
+                                        ) : (
 
                                             stockProduct.map((row) => (
                                                 <TableRow key={row.BODEGA}>
@@ -285,7 +285,7 @@ const LoadingComponent = () => {
     return (
         <>
             {/* <p className="ml-2 mb-0">Cargando...</p> */}
-            <img src="/assets/images/loading.gif" height="100px" alt="Loading"/>
+            <img src="/assets/images/loading.gif" height="100px" alt="Loading" />
 
         </>
 
@@ -298,7 +298,7 @@ function getTextFromCodigo(rowCodigo) {
         case '019':
             return "CENTRO_DE_DISTRIBUCION_HT";
         case '002':
-            return "MAYORISTAS_CUENCA";
+            return "MAYORISTAS_CUENCA_TURI";
         case '006':
             return "MAYORISTAS_QUITO";
         case '015':
@@ -325,6 +325,8 @@ function getTextFromCodigo(rowCodigo) {
             return "SAMSUNG_PORTOVIEJO";
         case '003':
             return "PADRE_AGUIRRE";
+        case '010':
+            return "MAYORISTAS_CUENCA_CENTRO";
         default:
             return "...";
     }
@@ -368,7 +370,7 @@ function getTextFromCodigoMovilCelistic(rowCodigo) {
         case '003':
             return "MAYORISTAS MOVILCELISTIC MACHALA";
         case '004':
-            return "MAYORISTAS MOVILCELISTIC CUENCA";
+            return "MAYORISTAS MOVILCELISTIC CUENCA TURI";
         case 'T1CARACO':
             return "CARACOL XIAOMI TERMINALES";
         case 'T1CUENCA':
@@ -400,7 +402,8 @@ function getTextFromCodigoMovilCelistic(rowCodigo) {
 
         case '005':
             return "⚠️OPERADORAS CARRIER";
-
+        case '010':
+            return "MAYORISTAS MOVILCELISTIC CUENCA CENTRO";
         default:
             return "...";
     }
