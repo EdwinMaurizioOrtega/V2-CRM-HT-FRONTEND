@@ -98,41 +98,34 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
     return (
         <Document>
             <Page size="A4" style={styles.page}>
-                <View style={[styles.gridContainer, styles.mb40]}>
-                    <Image source="/logo/logo_group_ht.jpeg" style={{ height: 62 }} />
+                <View style={[styles.gridContainer, { marginBottom: 15 }]} fixed>
+                    <Image source="/logo/logo_group_ht.jpeg" style={{ height: 50 }} />
                     <View style={{ alignItems: 'flex-end', flexDirection: 'column' }}>
-                        <Text style={styles.h3}>{status}</Text>
-                        <Text> {user.EMPRESA == '0992537442001' ? 'Lidenar S.A. RUC: 0992537442001' : 'MovilCelistic S.A. RUC: 1792161037001'} </Text>
-                        <Text> {`Pedido de Venta: ${ID}`} </Text>
-                        {/* <Text> {`SAP: ${DOCNUM}`} </Text> */}
+                        <Text style={[styles.h3, { fontSize: 12 }]}>{status}</Text>
+                        <Text style={{ fontSize: 9 }}> {user.EMPRESA == '0992537442001' ? 'Lidenar S.A. RUC: 0992537442001' : 'MovilCelistic S.A. RUC: 1792161037001'} </Text>
+                        <Text style={{ fontSize: 9 }}> {`Pedido de Venta: ${ID}`} </Text>
                     </View>
                 </View>
-                <View style={[styles.gridContainer, styles.mb8, { justifyContent: 'center', alignItems: 'center' }]}>
-                    <Text style={styles.h4}>Razón Social: {Cliente}</Text>
+                <View style={[styles.gridContainer, { justifyContent: 'center', alignItems: 'center', marginBottom: 10 }]}>
+                    <Text style={[styles.h4, { fontSize: 11 }]}>Razón Social: {Cliente}</Text>
                 </View>
-                <View style={[styles.gridContainer, styles.mb40]}>
+                <View style={[styles.gridContainer, { marginBottom: 15 }]}>
                     <View style={styles.col6}>
-                        {/*<Text style={[styles.overline, styles.mb8]}>Invoice from</Text>*/}
-                        {/*<Text style={styles.body1}>{PROCEDENCIA}</Text>*/}
-                        <Text style={styles.body1}>
+                        <Text style={[styles.body1, { fontSize: 8, marginBottom: 2 }]}>
                             <Text style={{ fontWeight: 'bold' }}>TIPO: </Text>
                             {Tipo}</Text>
-                        <Text style={styles.body1}>
+                        <Text style={[styles.body1, { fontSize: 8, marginBottom: 2 }]}>
 
                             <Text style={{ fontWeight: 'bold' }}>CI/RUC: </Text>
                             {CLIENTEID}</Text>
-                        <Text style={styles.body1}>
+                        <Text style={[styles.body1, { fontSize: 8, marginBottom: 2 }]}>
                             <Text style={{ fontWeight: 'bold' }}>CIUDAD: </Text>
                             {Ciudad}</Text>
-                        <Text style={styles.body1}>
+                        <Text style={[styles.body1, { fontSize: 8, marginBottom: 2 }]}>
                             <Text style={{ fontWeight: 'bold' }}>TLF: </Text>
                             {Celular}</Text>
-                        {/* <Text style={styles.body1}>
-                            <Text style={{ fontWeight: 'bold' }}>ESTABLECIMIENTO: </Text>
-                            {BODEGA}
-                        </Text> */}
 
-                        <Text style={styles.body1}>
+                        <Text style={[styles.body1, { fontSize: 8, marginBottom: 2 }]}>
                             <Text style={{ fontWeight: 'bold' }}>ESTABLECIMIENTO: </Text>
                             {/* RUC Lidenar */}
                             {user.EMPRESA === '0992537442001' ?
@@ -142,7 +135,7 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
                             }
                         </Text>
 
-                        <Text style={styles.body1}>
+                        <Text style={[styles.body1, { fontSize: 8 }]}>
                             <Text style={{ fontWeight: 'bold' }}>FECHA DE TRASLADO: </Text>
                             {new Date().toLocaleString('es-EC', {
                                 timeZone: 'America/Guayaquil',
@@ -156,74 +149,39 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
                             })}
                         </Text>
 
-
-                        {/*<Text style={styles.body1}>TOTAL: {TOTAL}</Text>*/}
                     </View>
 
                     <View style={styles.col6}>
-                        {/*<Text style={[styles.overline, styles.mb8]}>Invoice to</Text>*/}
-
-                        {/*<Text style={styles.body1}>DESCRIPCION: {DESCRIPCION}</Text>*/}
-                        {/*<Text style={styles.body1}>USUARIO: {USUARIO}</Text>*/}
-                        <Text style={styles.body1}>
+                
+                        <Text style={[styles.body1, { fontSize: 8 }]}>
                             <Text style={{ fontWeight: 'bold' }}>VENDEDOR: </Text>
                             {VENDEDOR}</Text>
-                        {/*<Text style={styles.body1}>DIMENSIONES: {DATO4}</Text>*/}
                     </View>
                 </View>
 
-                {/*<View style={[styles.gridContainer, styles.mb40]}>*/}
-                {/*  <View style={styles.col6}>*/}
-                {/*    <Text style={[styles.overline, styles.mb8]}>Date create</Text>*/}
-                {/*    <Text style={styles.body1}>{fDate(FEC_INGRESO)}</Text>*/}
-                {/*  </View>*/}
-                {/*  <View style={styles.col6}>*/}
-                {/*    <Text style={[styles.overline, styles.mb8]}>Due date</Text>*/}
-                {/*    <Text style={styles.body1}>{fDate(FEC_INGRESO)}</Text>*/}
-                {/*  </View>*/}
-                {/*</View>*/}
+                <Text style={[styles.overline, { fontSize: 9, marginBottom: 5 }]}>DETALLES</Text>
 
-                <Text style={[styles.overline, styles.mb8]}>DETALLES</Text>
-
-                <View style={[styles.table, styles.mb40]}>
+                <View style={[styles.table, { marginBottom: 15 }]}>
                     <View style={styles.tableHeader}>
                         <View style={styles.tableRow}>
                             <View style={styles.tableCell_1}>
-                                <Text style={styles.subtitle2}>#</Text>
+                                <Text style={[styles.subtitle2, { fontSize: 8 }]}>#</Text>
                             </View>
-
-                            {/*<View style={styles.tableCell_3}>*/}
-                            {/*  <Text style={styles.subtitle2}>PEDIDO_PROV</Text>*/}
-                            {/*</View>*/}
 
                             <View style={styles.tableCell_2}>
-                                <Text style={styles.subtitle2}>DESCRIPCIÓN</Text>
+                                <Text style={[styles.subtitle2, { fontSize: 8 }]}>DESCRIPCIÓN</Text>
                             </View>
 
                             <View style={styles.tableCell_3}>
-                                <Text style={styles.subtitle2}>TPRECIO</Text>
-                            </View>
-                            
-                            {/* <View style={styles.tableCell_3}>
-                                <Text style={styles.subtitle2}>COMENTARIO</Text>
-                            </View> */}
-                            {/*
-                            <View style={styles.tableCell_3}>
-                                <Text style={styles.subtitle2}>%DESC.</Text>
-                            </View> */}
-
-                            <View style={styles.tableCell_3}>
-                                <Text style={styles.subtitle2}>CANTIDAD</Text>
+                                <Text style={[styles.subtitle2, { fontSize: 8 }]}>TPRECIO</Text>
                             </View>
 
-                            {/*<View style={[styles.tableCell_3, styles.alignRight]}>*/}
-                            {/*  <Text style={styles.subtitle2}>Total</Text>*/}
-                            {/*</View>*/}
-                            {/* <View style={styles.tableCell_3}>
-                                <Text style={styles.subtitle2}>PUNIT.</Text>
-                            </View> */}
                             <View style={styles.tableCell_3}>
-                                <Text style={styles.subtitle2}>TOTAL</Text>
+                                <Text style={[styles.subtitle2, { fontSize: 8 }]}>CANTIDAD</Text>
+                            </View>
+
+                            <View style={styles.tableCell_3}>
+                                <Text style={[styles.subtitle2, { fontSize: 8 }]}>TOTAL</Text>
                             </View>
                         </View>
                     </View>
@@ -232,73 +190,56 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
                         {items.map((item, index) => (
                             <View style={styles.tableRow} key={index + 1}>
                                 <View style={styles.tableCell_1}>
-                                    <Text>{index + 1}</Text>
+                                    <Text style={{ fontSize: 8 }}>{index + 1}</Text>
                                 </View>
-
-                                {/*<View style={styles.tableCell_3}>*/}
-                                {/*  <Text>{item.PEDIDO_PROV}</Text>*/}
-                                {/*</View>*/}
 
                                 <View style={styles.tableCell_2}>
                                     <Text
-                                        style={styles.subtitle1}>{item.NOMBRE !== null ? item.NOMBRE : 'VALOR DEL ENVIO'}</Text>
-                                    <Text style={styles.subtitle2}>{item.PRODUCTO_ID}</Text>
-                                    {/*<Text>{item.ARTICULO}</Text>*/}
+                                        style={[styles.subtitle1, { fontSize: 8 }]}>{item.NOMBRE !== null ? item.NOMBRE : 'VALOR DEL ENVIO'}</Text>
+                                    <Text style={[styles.subtitle2, { fontSize: 7 }]}>{item.PRODUCTO_ID}</Text>
                                 </View>
 
                                 <View style={styles.tableCell_3}>
 
                                     {empresa === "LD" ? (
                                         user.ROLE === '0' || user.ROLE === '2' ? (
-                                            <Text>{namePriceType(item.TM_TIPO_PRECIO)}</Text>
+                                            <Text style={{ fontSize: 8 }}>{namePriceType(item.TM_TIPO_PRECIO)}</Text>
                                         ) : (
-                                            <Text>{namePriceType(item.TIPOPRECIO)}</Text>
+                                            <Text style={{ fontSize: 8 }}>{namePriceType(item.TIPOPRECIO)}</Text>
                                         )
 
                                     ) : (
 
                                         user.ROLE === '1' ? (
-                                            <Text>{namePriceType(item.TM_TIPO_PRECIO)}</Text>
+                                            <Text style={{ fontSize: 8 }}>{namePriceType(item.TM_TIPO_PRECIO)}</Text>
                                         ) : null
                                     )
 
                                     }
 
                                 </View>
-                                {/* <View style={styles.tableCell_3}>
-                                    <Text>{item.COMENTARIOPRECIO}</Text>
-                                </View> */}
-{/* 
+                            
                                 <View style={styles.tableCell_3}>
-                                    <Text>{item.DISCOUNTPERCENTSAP}</Text>
-                                </View> */}
-                                <View style={styles.tableCell_3}>
-                                    <Text>{item.CANTIDAD}</Text>
+                                    <Text style={{ fontSize: 8 }}>{item.CANTIDAD}</Text>
                                 </View>
-
-                                {/*<View style={[styles.tableCell_3, styles.alignRight]}>*/}
-                                {/*  <Text>{fCurrency(item.price * item.quantity)}</Text>*/}
-                                {/*</View>*/}
 
                                 {empresa === "LD" ? (
 
                                     user.ROLE === '0' || user.ROLE === '2' ? (
                                         <>
                                             <View style={styles.tableCell_3}>
-                                                <Text>{fCurrency(item.TM_PRECIO_UNITARIO_VENTA)}</Text>
+                                                <Text style={{ fontSize: 8 }}>{fCurrency(item.TM_PRECIO_UNITARIO_VENTA)}</Text>
                                             </View>
                                             <View style={styles.tableCell_3}>
-                                                <Text>{fCurrency(item.TM_PRECIO_UNITARIO_VENTA * item.CANTIDAD)}</Text>
+                                                <Text style={{ fontSize: 8 }}>{fCurrency(item.TM_PRECIO_UNITARIO_VENTA * item.CANTIDAD)}</Text>
                                             </View>
                                         </>
 
                                     ) : (
                                         <>
-                                            {/* <View style={styles.tableCell_3}>
-                                                <Text>{fCurrency(item.PRECIOUNITARIOVENTA)}</Text>
-                                            </View> */}
+                                        
                                             <View style={styles.tableCell_3}>
-                                                <Text>{fCurrency(item.PRECIOUNITARIOVENTA * item.CANTIDAD)}</Text>
+                                                <Text style={{ fontSize: 8 }}>{fCurrency(item.PRECIOUNITARIOVENTA * item.CANTIDAD)}</Text>
                                             </View>
                                         </>
 
@@ -308,10 +249,10 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
                                     user.ROLE === '1' ? (
                                         <>
                                             <View style={styles.tableCell_3}>
-                                                <Text>{fCurrency(item.TM_PRECIO_UNITARIO_VENTA)}</Text>
+                                                <Text style={{ fontSize: 8 }}>{fCurrency(item.TM_PRECIO_UNITARIO_VENTA)}</Text>
                                             </View>
                                             <View style={styles.tableCell_3}>
-                                                <Text>{fCurrency(item.TM_PRECIO_UNITARIO_VENTA * item.CANTIDAD)}</Text>
+                                                <Text style={{ fontSize: 8 }}>{fCurrency(item.TM_PRECIO_UNITARIO_VENTA * item.CANTIDAD)}</Text>
                                             </View>
                                         </>
                                     ) : null
@@ -336,11 +277,11 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
                             <View style={styles.tableCell_2} />
                             <View style={styles.tableCell_3} />
                             <View style={{ width: '20%' }}>
-                                <Text style={{ fontWeight: 'bold' }}>SUBTOTAL:</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: 9 }}>SUBTOTAL:</Text>
 
                             </View>
                             <View style={[styles.tableCell_3, styles.alignRight]}>
-                                <Text>{fCurrency(subtotalTotal)}</Text>
+                                <Text style={{ fontSize: 9 }}>{fCurrency(subtotalTotal)}</Text>
                             </View>
 
                         </View>
@@ -351,10 +292,10 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
                             <View style={styles.tableCell_2} />
                             <View style={styles.tableCell_3} />
                             <View style={{ width: '20%' }}>
-                                <Text style={{ fontWeight: 'bold' }}>IVA:</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: 9 }}>IVA:</Text>
                             </View>
                             <View style={[styles.tableCell_3, styles.alignRight]}>
-                                <Text>{fCurrency(ivaTotal)}</Text>
+                                <Text style={{ fontSize: 9 }}>{fCurrency(ivaTotal)}</Text>
                             </View>
 
                         </View>
@@ -365,74 +306,36 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
                             <View style={styles.tableCell_2} />
                             <View style={styles.tableCell_3} />
                             <View style={{ width: '20%' }}>
-                                <Text style={{ fontWeight: 'bold' }}>TOTAL:</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: 9 }}>TOTAL:</Text>
                             </View>
                             <View style={[styles.tableCell_3, styles.alignRight]}>
-                                <Text>{fCurrency(totalConIva)}</Text>
+                                <Text style={{ fontSize: 9 }}>{fCurrency(totalConIva)}</Text>
                             </View>
 
                         </View>
 
-                        {/*<View style={[styles.tableRow, styles.noBorder]}>*/}
-                        {/*    <View style={styles.tableCell_3}>*/}
-                        {/*        <Text style={styles.h4}>NÚM. CAJAS/BULTOS</Text>*/}
-                        {/*    </View>*/}
-                        {/*    <View style={[styles.tableCell_3, styles.alignRight]}>*/}
-                        {/*        <Text style={styles.h4}>{fCurrency(100)}</Text>*/}
-                        {/*    </View>*/}
-                        {/*  <View style={styles.tableCell_1} />*/}
-                        {/*  <View style={styles.tableCell_2} />*/}
-                        {/*  <View style={styles.tableCell_3} />*/}
-
-                        {/*</View>*/}
                     </View>
 
 
                 </View>
 
-                <View style={[styles.gridContainer, styles.mb8]}>
-                    <Text style={[styles.overline, styles.mb8, { textAlign: 'justify' }]}>El presente documento no sustituye la factura original emitida y registrada ante el Servicio de Rentas Internas (SRI), la cual constituye el comprobante oficial de venta. No obstante, este documento se considera un instrumento complementario y habilitante para efectos de reclamaciones, trámites o gestiones ante aseguradoras, entidades financieras o terceros relacionados con la obligación aquí detallada.
+                <View style={{ marginBottom: 10, marginTop: 5 }}>
+                    <Text style={[styles.overline, { fontSize: 7, textAlign: 'justify', lineHeight: 1.3 }]}>El presente documento no sustituye la factura original emitida y registrada ante el Servicio de Rentas Internas (SRI), la cual constituye el comprobante oficial de venta. No obstante, este documento se considera un instrumento complementario y habilitante para efectos de reclamaciones, trámites o gestiones ante aseguradoras, entidades financieras o terceros relacionados con la obligación aquí detallada.
                         Su emisión y entrega implican constancia expresa de recepción por parte del cliente, constituyéndose en un adendum de la factura original, con plena validez jurídica y probatoria respecto al cumplimiento, reclamo o reconocimiento posterior de la deuda o transacción descrita.
                     </Text>
                 </View>
 
-                <View style={[styles.gridContainer, styles.mb40]}>
+                <View style={[styles.gridContainer, { marginTop: 5, marginBottom: 5 }]} fixed>
                     <View style={styles.col6}>
-                        <Text style={styles.body1}>___________________________</Text>
-                        <Text style={styles.body1}>Firma de Recepción.</Text>
+                        <Text style={{ fontSize: 8, marginBottom: 2 }}>____________________</Text>
+                        <Text style={{ fontSize: 8 }}>Firma de Recepción</Text>
                     </View>
 
                     <View style={styles.col6}>
-                        <Text style={styles.body1}>___________________________</Text>
-                        <Text style={styles.body1}>N de cedula.</Text>
+                        <Text style={{ fontSize: 8, marginBottom: 2 }}>____________________</Text>
+                        <Text style={{ fontSize: 8 }}>N° de cédula</Text>
                     </View>
                 </View>
-
-                {/*     <View style={styles.col6}> */}
-                {/*         /!*<Text style={[styles.overline, styles.mb8]}>Invoice to</Text>*!/ */}
-
-                {/*         /!*<Text style={styles.body1}>DESCRIPCION: {DESCRIPCION}</Text>*!/ */}
-                {/*         /!*<Text style={styles.body1}>USUARIO: {USUARIO}</Text>*!/ */}
-                {/*         <Text style={styles.body1}>CANTIDAD DE TERMINALES: _______________________________</Text> */}
-                {/*         <Text style={styles.body1}>HORA DE RECIBIDO: _______________________________________</Text> */}
-                {/*         <Text style={styles.body1}>CARGO: ___________________________________________________</Text> */}
-                {/*     </View> */}
-                {/* </View> */}
-
-                {/* <View style={[styles.gridContainer, styles.footer]}> */}
-
-                {/*     <View style={styles.col8}> */}
-                {/*         <Text style={styles.subtitle2}>NOTAS: </Text> */}
-                {/*         /!*<Text>*!/ */}
-                {/*         /!*  We appreciate your business. Should you need us to add VAT or extra notes let us know!*!/ */}
-                {/*         /!*</Text>*!/ */}
-                {/*     </View> */}
-                {/*     <View style={[styles.col4, styles.alignRight]}> */}
-                {/*         <Text style={styles.subtitle2}>USUARIO: </Text> */}
-                {/*         /!*<Text style={styles.body1}>USUARIO: {USUARIO}</Text>*!/ */}
-                {/*         /!*<Text>{USUARIO}</Text>*!/ */}
-                {/*     </View> */}
-                {/* </View> */}
 
                 {/* Pie de página con numeración */}
                 <View style={styles.footer} fixed>
