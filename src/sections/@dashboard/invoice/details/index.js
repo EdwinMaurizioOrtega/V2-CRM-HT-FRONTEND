@@ -45,7 +45,7 @@ import { HOST_API_KEY } from "../../../../config-global";
 import { useBoolean } from "../../../../hooks/use-boolean";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import PedidoInvoicePDF from "./PedidoInvoicePDF";
-import { DOCUMENTACION, PAYMENT_OPTIONS_V2, TIPO_CREDITO, TIPO_PRECIO, BANCOS_LIDENAR, BANCOS_MOVILCELISTIC } from "../../../../utils/constants";
+import { DOCUMENTACION, PAYMENT_OPTIONS_V2, TIPO_CREDITO, TIPO_PRECIO, BANCOS_LIDENAR, BANCOS_MOVILCELISTIC, ROLE } from "../../../../utils/constants";
 
 import datos from '/data/datos.json'; // Ajusta la ruta según la ubicación de tu archivo JSON
 import datos_promo from '/data/promo.json'; // JSON Promoción
@@ -235,6 +235,56 @@ export default function InvoiceDetails({ invoice }) {
         }
 
 
+    };
+
+    // Nueva función para eliminar una serie individual
+    const eliminarSerieIndividual = async (internalSerial) => {
+        try {
+            const response = await axios.delete(
+                `/hanadb/api/orders/delete_single_serie?empresa=${user.EMPRESA}&internal_serial=${internalSerial}&id_detalle_orden=${selected.ID}`
+            );
+
+            if (response.status === 200) {
+                enqueueSnackbar('Serie eliminada exitosamente', {
+                    variant: 'success',
+                    autoHideDuration: 2000
+                });
+                // Refrescar la lista de series después de eliminar
+                await obtenerSeriesGuardadas();
+            }
+        } catch (error) {
+            const errorMessage = error.response?.data?.message || 'Error al eliminar la serie';
+            enqueueSnackbar(errorMessage, {
+                variant: 'error',
+                autoHideDuration: 3000
+            });
+            console.error('Error al eliminar serie:', error);
+        }
+    };
+
+    // Nueva función para marcar una serie como nota de crédito
+    const marcarSerieComoNotaCredito = async (internalSerial) => {
+        try {
+            const response = await axios.put(
+                `/hanadb/api/orders/mark_serie_nota_credito?empresa=${user.EMPRESA}&internal_serial=${internalSerial}&id_detalle_orden=${selected.ID}`
+            );
+
+            if (response.status === 200) {
+                enqueueSnackbar('Serie marcada como nota de crédito exitosamente', {
+                    variant: 'success',
+                    autoHideDuration: 2000
+                });
+                // Refrescar la lista de series después de marcar
+                await obtenerSeriesGuardadas();
+            }
+        } catch (error) {
+            const errorMessage = error.response?.data?.message || 'Error al marcar la serie como nota de crédito';
+            enqueueSnackbar(errorMessage, {
+                variant: 'error',
+                autoHideDuration: 3000
+            });
+            console.error('Error al marcar serie como nota de crédito:', error);
+        }
     };
 
     // Nueva función para obtener las series guardadas de la API
@@ -871,12 +921,12 @@ export default function InvoiceDetails({ invoice }) {
             if (response.status === 200) {
                 // Verificar si la respuesta tiene un mensaje de éxito
                 const responseData = response.data;
-                
+
                 if (responseData?.status === 'success') {
                     // Mostrar mensaje de éxito con Snackbar
                     enqueueSnackbar(
-                        `✅ Factura creada exitosamente | Orden: ${responseData.data?.order_id || ID} | Factura SAP: ${responseData.data?.numero_factura || 'N/A'}`, 
-                        { 
+                        `✅ Factura creada exitosamente | Orden: ${responseData.data?.order_id || ID} | Factura SAP: ${responseData.data?.numero_factura || 'N/A'}`,
+                        {
                             variant: 'success',
                             autoHideDuration: 5000,
                             anchorOrigin: {
@@ -885,17 +935,17 @@ export default function InvoiceDetails({ invoice }) {
                             },
                         }
                     );
-                    
+
                     // Esperar un momento antes de redirigir para que el usuario vea el mensaje
                     setTimeout(() => {
                         window.location.href = '/dashboard/invoice/list/';
                     }, 2000);
-                    
+
                 } else if (responseData?.status === 'fail') {
                     // Error del backend en formato fail
                     enqueueSnackbar(
-                        responseData.message || '❌ Error al crear la factura', 
-                        { 
+                        responseData.message || '❌ Error al crear la factura',
+                        {
                             variant: 'error',
                             autoHideDuration: 8000,
                             anchorOrigin: {
@@ -915,15 +965,15 @@ export default function InvoiceDetails({ invoice }) {
 
         } catch (error) {
             console.error('Error al crear la factura:', error);
-            
+
             // Extraer el mensaje de error más descriptivo posible
             let errorMessage = '❌ Error al crear la factura en SAP';
             let errorDetails = '';
-            
+
             if (error.response) {
                 // El servidor respondió con un código de estado fuera del rango 2xx
                 console.error('Respuesta de error del servidor:', error.response);
-                
+
                 if (error.response.data) {
                     if (typeof error.response.data === 'string') {
                         // Si la respuesta es un string simple
@@ -940,10 +990,10 @@ export default function InvoiceDetails({ invoice }) {
                         errorDetails = JSON.stringify(error.response.data, null, 2);
                     }
                 }
-                
+
                 // Agregar el código de estado HTTP como detalle
                 errorDetails = errorDetails ? `${errorDetails}\n\nCódigo HTTP: ${error.response.status}` : `Código HTTP: ${error.response.status}`;
-                
+
             } else if (error.request) {
                 // La solicitud se hizo pero no se recibió respuesta
                 errorMessage = '❌ No se recibió respuesta del servidor';
@@ -953,11 +1003,11 @@ export default function InvoiceDetails({ invoice }) {
                 errorMessage = '❌ Error al enviar la solicitud';
                 errorDetails = error.message;
             }
-            
+
             // Mostrar el error con enqueueSnackbar
             enqueueSnackbar(
-                errorMessage, 
-                { 
+                errorMessage,
+                {
                     variant: 'error',
                     autoHideDuration: 10000,
                     anchorOrigin: {
@@ -966,13 +1016,13 @@ export default function InvoiceDetails({ invoice }) {
                     },
                 }
             );
-            
+
             // Si hay detalles adicionales, mostrarlos en un segundo snackbar
             if (errorDetails) {
                 setTimeout(() => {
                     enqueueSnackbar(
-                        errorDetails, 
-                        { 
+                        errorDetails,
+                        {
                             variant: 'info',
                             autoHideDuration: 8000,
                             anchorOrigin: {
@@ -983,7 +1033,7 @@ export default function InvoiceDetails({ invoice }) {
                     );
                 }, 500);
             }
-            
+
         } finally {
             setLoading(false);
         }
@@ -2922,7 +2972,7 @@ export default function InvoiceDetails({ invoice }) {
                         }
 
                         {/* Opciones para estado 8 (Anulado) - Gestión de series */}
-                        {(ESTADO === 8) && (
+                        {(user?.ROLE === '9') && (
                             <>
                                 <MenuItem
                                     onClick={() => {
@@ -2934,14 +2984,17 @@ export default function InvoiceDetails({ invoice }) {
                                     Ver Series
                                 </MenuItem>
 
-                                <MenuItem
-                                    onClick={() => {
-                                        vaciarListaSeriesProducto();
-                                    }}
-                                >
-                                    <Iconify icon="eva:edit-fill" />
-                                    Vaciar Series
-                                </MenuItem>
+
+                                {(ESTADO === 8) && (
+                                    <MenuItem
+                                        onClick={() => {
+                                            vaciarListaSeriesProducto();
+                                        }}
+                                    >
+                                        <Iconify icon="eva:edit-fill" />
+                                        Vaciar Series
+                                    </MenuItem>
+                                )}
                             </>
                         )}
                     </MenuPopover>
@@ -3421,7 +3474,9 @@ export default function InvoiceDetails({ invoice }) {
                                         <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
                                             Serie (IMEI)
                                         </TableCell>
-
+                                        <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5', textAlign: 'center' }}>
+                                            Acciones
+                                        </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -3443,8 +3498,49 @@ export default function InvoiceDetails({ invoice }) {
                                             <TableCell sx={{ fontFamily: 'monospace', fontWeight: 'bold' }}>
                                                 {serie.INTERNAL_SERIAL || 'N/A'}
                                             </TableCell>
+                                            <TableCell sx={{ textAlign: 'center' }}>
+
+                                                 {(ESTADO === 22 || ESTADO === 23 || ESTADO === 1) && (
+                                                <Tooltip title="Marcar como nota de crédito">
+                                                    <IconButton
+                                                        color="warning"
+                                                        size="small"
+                                                        onClick={() => marcarSerieComoNotaCredito(serie.INTERNAL_SERIAL)}
+                                                        sx={{
+                                                            '&:hover': {
+                                                                backgroundColor: 'rgba(255, 152, 0, 0.1)'
+                                                            }
+                                                        }}
+                                                        disabled={serie.INTERNAL_SERIAL?.includes('_NOTA_DE_CREDITO')}
+                                                    >
+                                                        <Iconify icon="eva:file-text-outline" />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                 )}
+                                                {(ESTADO === 8) && (
+                                                    <Tooltip title="Eliminar serie">
+                                                        <IconButton
+                                                            color="error"
+                                                            size="small"
+                                                            onClick={() => eliminarSerieIndividual(serie.INTERNAL_SERIAL)}
+                                                            sx={{
+                                                                '&:hover': {
+                                                                    backgroundColor: 'rgba(255, 0, 0, 0.1)'
+                                                                }
+                                                            }}
+                                                        >
+                                                            <Iconify icon="eva:trash-2-outline" />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                )}
+
+                                            </TableCell>
+
+
+
                                         </TableRow>
                                     ))}
+
                                 </TableBody>
                             </Table>
                         </TableContainer>
