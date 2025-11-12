@@ -60,7 +60,8 @@ export default function ReporteRRhhPage() {
         paseoShopping: false,     // ID: 6
         quicentroSur: false,      // ID: 7
         recreo: false,            // ID: 8
-        sanLuis: false            // ID: 9
+        sanLuis: false,           // ID: 9
+        administrador: false      // ID: 10
     });
 
     // Mapeo de ubicaciones con sus IDs y nombres
@@ -73,7 +74,8 @@ export default function ReporteRRhhPage() {
         paseoShopping: { id: 6, nombre: 'PASEO SHOPPING' },
         quicentroSur: { id: 7, nombre: 'QUICENTRO SUR' },
         recreo: { id: 8, nombre: 'RECREO' },
-        sanLuis: { id: 9, nombre: 'SAN LUIS' }
+        sanLuis: { id: 9, nombre: 'SAN LUIS' },
+        administrador: { id: 10, nombre: 'ADMINISTRADOR' }
     };
 
     // Función para manejar el cambio de checkboxes
@@ -250,7 +252,8 @@ export default function ReporteRRhhPage() {
             paseoShopping: false,
             quicentroSur: false,
             recreo: false,
-            sanLuis: false
+            sanLuis: false,
+            administrador: false
         });
     };
 
@@ -450,6 +453,16 @@ export default function ReporteRRhhPage() {
                                             }
                                             label="[9] SAN LUIS"
                                         />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={ubicaciones.administrador}
+                                                    onChange={handleUbicacionChange}
+                                                    name="administrador"
+                                                />
+                                            }
+                                            label="[10] ADMINISTRADOR"
+                                        />
                                     </FormGroup>
 
                                     {getFilteredData().length > 0 && <ExcelDownload data={getFilteredData()}/>}
@@ -510,7 +523,8 @@ function ExcelDownload({data}) {
         paseoShopping: { id: 6, nombre: 'PASEO SHOPPING' },
         quicentroSur: { id: 7, nombre: 'QUICENTRO SUR' },
         recreo: { id: 8, nombre: 'RECREO' },
-        sanLuis: { id: 9, nombre: 'SAN LUIS' }
+        sanLuis: { id: 9, nombre: 'SAN LUIS' },
+        administrador: { id: 10, nombre: 'ADMINISTRADOR' }
     };
 
     // Función para obtener el nombre de la sucursal
