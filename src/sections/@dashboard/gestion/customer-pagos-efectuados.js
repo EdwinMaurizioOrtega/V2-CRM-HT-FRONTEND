@@ -8,12 +8,17 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 import Label from "../../../components/label";
 import React, { useEffect, useState } from "react";
 import axios from '../../../utils/axios';
 import { HOST_API_KEY } from "../../../config-global";
 import { useAuthContext } from "../../../auth/useAuthContext";
 import { alpha, useTheme } from '@mui/material/styles';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { es } from 'date-fns/locale';
 import {
     DataGrid,
     GridToolbarColumnsButton,
@@ -191,6 +196,28 @@ export default function CustomerPagosEfectuados({ currentPartner, open, onClose 
     const { user } = useAuthContext();
 
     const [businessPartnersInvoiced, setBusinessPartnersInvoiced] = useState([]);
+    const [allData, setAllData] = useState([]); // Guardar todos los datos
+    
+    // Calcular fecha de hace 12 meses
+    const today = new Date();
+    const twelveMonthsAgo = new Date();
+    twelveMonthsAgo.setMonth(today.getMonth() - 12);
+    
+    const [fechaInicio, setFechaInicio] = useState(twelveMonthsAgo);
+    const [fechaFin, setFechaFin] = useState(today);
+
+    // Función para filtrar datos por rango de fechas
+    const filtrarPorFechas = (datos, inicio, fin) => {
+        if (!inicio || !fin) return datos;
+        
+        const fechaInicioTime = new Date(inicio).setHours(0, 0, 0, 0);
+        const fechaFinTime = new Date(fin).setHours(23, 59, 59, 999);
+        
+        return datos.filter(item => {
+            const fechaItem = new Date(item.FECHA_CONTABILIZACION).getTime();
+            return fechaItem >= fechaInicioTime && fechaItem <= fechaFinTime;
+        });
+    };
 
     useEffect(() => {
 
@@ -208,9 +235,11 @@ export default function CustomerPagosEfectuados({ currentPartner, open, onClose 
                         id: index + 1, // Puedes ajustar la lógica según tus necesidades
                     }));
 
-                    setBusinessPartnersInvoiced(businessPartnersWithId);
-
-                } else {
+                                    setAllData(businessPartnersWithId); // Guardar todos los datos
+                    
+                    // Filtrar por últimos 12 meses por defecto
+                    const datosFiltrados = filtrarPorFechas(businessPartnersWithId, fechaInicio, fechaFin);
+                    setBusinessPartnersInvoiced(datosFiltrados);                } else {
                     // La solicitud POST no se realizó correctamente
                     console.error('Error en la solicitud POST:', response.status);
                 }
@@ -222,6 +251,14 @@ export default function CustomerPagosEfectuados({ currentPartner, open, onClose 
 
         fetchData();
     }, [currentPartner.ID]);
+
+    // Actualizar datos cuando cambian las fechas
+    useEffect(() => {
+        if (allData.length > 0) {
+            const datosFiltrados = filtrarPorFechas(allData, fechaInicio, fechaFin);
+            setBusinessPartnersInvoiced(datosFiltrados);
+        }
+    }, [fechaInicio, fechaFin, allData]);
 
     // Primero, crear un mapa de todas las notas de crédito por U_SYP_DOCORIGEN
     const notasCreditoMap = {};
@@ -484,6 +521,119 @@ export default function CustomerPagosEfectuados({ currentPartner, open, onClose 
                     </Typography>
                 </Box>
             </Alert>
+
+            {/* Filtro de fechas */}
+            <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
+                <Box
+                    sx={{
+                        mb: 4,
+                        p: 3,
+                        borderRadius: '16px',
+                        background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.05)}, ${alpha(theme.palette.primary.light, 0.02)})`,
+                        border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+                    }}
+                >
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                        <Box
+                            sx={{
+                                width: 36,
+                                height: 36,
+                                borderRadius: '10px',
+                                background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '18px',
+                                boxShadow: `0 4px 8px ${alpha(theme.palette.primary.main, 0.3)}`
+                            }}
+                        >
+                            📅
+                        </Box>
+                        <Typography variant="h6" sx={{ fontWeight: 700, color: theme.palette.text.primary }}>
+                            Rango de Fechas
+                        </Typography>
+                    </Box>
+                    <Grid container spacing={2} alignItems="center">
+                        <Grid item xs={12} sm={5}>
+                            <DatePicker
+                                label="Fecha Inicio"
+                                value={fechaInicio}
+                                onChange={(newValue) => setFechaInicio(newValue)}
+                                slotProps={{
+                                    textField: {
+                                        fullWidth: true,
+                                        size: "small",
+                                        sx: {
+                                            '& .MuiOutlinedInput-root': {
+                                                borderRadius: '12px',
+                                                background: theme.palette.background.paper,
+                                            }
+                                        }
+                                    }
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={5}>
+                            <DatePicker
+                                label="Fecha Fin"
+                                value={fechaFin}
+                                onChange={(newValue) => setFechaFin(newValue)}
+                                slotProps={{
+                                    textField: {
+                                        fullWidth: true,
+                                        size: "small",
+                                        sx: {
+                                            '& .MuiOutlinedInput-root': {
+                                                borderRadius: '12px',
+                                                background: theme.palette.background.paper,
+                                            }
+                                        }
+                                    }
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={2}>
+                            <Button
+                                variant="outlined"
+                                size="small"
+                                onClick={() => {
+                                    const hoy = new Date();
+                                    const hace12Meses = new Date();
+                                    hace12Meses.setMonth(hoy.getMonth() - 12);
+                                    setFechaInicio(hace12Meses);
+                                    setFechaFin(hoy);
+                                }}
+                                sx={{
+                                    borderRadius: '12px',
+                                    textTransform: 'none',
+                                    fontWeight: 600,
+                                    height: '40px',
+                                    width: '100%',
+                                    border: `1px solid ${alpha(theme.palette.warning.main, 0.3)}`,
+                                    color: theme.palette.warning.main,
+                                    '&:hover': {
+                                        background: `linear-gradient(135deg, ${alpha(theme.palette.warning.main, 0.1)}, ${alpha(theme.palette.warning.dark, 0.1)})`,
+                                        border: `1px solid ${alpha(theme.palette.warning.main, 0.5)}`,
+                                    }
+                                }}
+                            >
+                                🔄 12 meses
+                            </Button>
+                        </Grid>
+                    </Grid>
+                    <Typography 
+                        variant="caption" 
+                        sx={{ 
+                            display: 'block',
+                            mt: 1.5,
+                            color: theme.palette.text.secondary,
+                            fontStyle: 'italic'
+                        }}
+                    >
+                        📊 Mostrando datos del {fechaInicio?.toLocaleDateString('es-EC')} al {fechaFin?.toLocaleDateString('es-EC')} • {businessPartnersInvoiced.length} registros
+                    </Typography>
+                </Box>
+            </LocalizationProvider>
 
             {currentPartner ? (<>
                 <Stack spacing={2}>

@@ -1,8 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 // next
 import Head from 'next/head';
 // @mui
-import {Box, Button, Card, Container, Grid, LinearProgress, Stack} from '@mui/material';
+import {Box, Button, Card, Container, Grid, LinearProgress, FormGroup, FormControlLabel, Checkbox, Typography, TextField, Stack} from '@mui/material';
+import {DatePicker} from '@mui/x-date-pickers/DatePicker';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
+import {es} from 'date-fns/locale';
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
 // layouts
@@ -23,7 +27,6 @@ import {
 } from "@mui/x-data-grid";
 import axios from "../../../utils/axios";
 import Link from "next/link";
-import {LoadingButton} from "@mui/lab";
 import {useAuthContext} from "../../../auth/useAuthContext";
 import * as XLSX from "xlsx";
 
@@ -34,16 +37,100 @@ ReporteRRhhPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 // ----------------------------------------------------------------------
 
 export default function ReporteRRhhPage() {
+
+    const { user } = useAuthContext();
+
     const {themeStretch} = useSettingsContext();
 
     // Estado para almacenar los datos y el estado de carga
     const [businessPartners, setBusinessPartners] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
+
+    // Estados para el rango de fechas
+    const [fechaInicio, setFechaInicio] = useState(null);
+    const [fechaFin, setFechaFin] = useState(null);
+
+    // Estados para los checkboxes de ubicaciones
+    const [ubicaciones, setUbicaciones] = useState({
+        kleberGranda: false,      // ID: 1
+        ambatoCentro: false,      // ID: 2
+        cci: false,               // ID: 3
+        mallDeLosAndes: false,    // ID: 4
+        malteria: false,          // ID: 5
+        paseoShopping: false,     // ID: 6
+        quicentroSur: false,      // ID: 7
+        recreo: false,            // ID: 8
+        sanLuis: false            // ID: 9
+    });
+
+    // Mapeo de ubicaciones con sus IDs y nombres
+    const ubicacionConfig = {
+        kleberGranda: { id: 1, nombre: 'KLEBER GRANDA' },
+        ambatoCentro: { id: 2, nombre: 'AMBATO CENTRO' },
+        cci: { id: 3, nombre: 'CCI' },
+        mallDeLosAndes: { id: 4, nombre: 'MALL DE LOS ANDES' },
+        malteria: { id: 5, nombre: 'MALTERIA' },
+        paseoShopping: { id: 6, nombre: 'PASEO SHOPPING' },
+        quicentroSur: { id: 7, nombre: 'QUICENTRO SUR' },
+        recreo: { id: 8, nombre: 'RECREO' },
+        sanLuis: { id: 9, nombre: 'SAN LUIS' }
+    };
+
+    // Función para manejar el cambio de checkboxes
+    const handleUbicacionChange = (event) => {
+        setUbicaciones({
+            ...ubicaciones,
+            [event.target.name]: event.target.checked
+        });
+    };
+
+    // Filtrar datos según las ubicaciones seleccionadas
+    const getFilteredData = () => {
+        // Primero filtrar por COMPANY si el usuario es de MC
+        let filteredByCompany = businessPartners;
+        if (user.COMPANY === 'MC') {
+            filteredByCompany = businessPartners.filter(partner => partner.COMPANY === 'MC');
+        }
+
+        const selectedUbicaciones = Object.keys(ubicaciones).filter(key => ubicaciones[key]);
+
+        // Si no hay ninguna ubicación seleccionada, mostrar todos los datos filtrados por company
+        if (selectedUbicaciones.length === 0) {
+            return filteredByCompany;
+        }
+
+        // Obtener los IDs de las ubicaciones seleccionadas
+        const selectedIds = selectedUbicaciones.map(key => ubicacionConfig[key].id);
+
+        // Filtrar los datos según el campo SUCURSAL
+        return filteredByCompany.filter(partner => {
+            // Filtra por el campo SUCURSAL que viene de la API (números del 0 al 9)
+            return selectedIds.includes(Number(partner.SUCURSAL));
+        });
+    };
 
     // Define las columnas para el DataGrid
     const baseColumns = [
         { field: 'ID', headerName: 'ID', width: 90 },
         { field: 'COMPANY', headerName: 'EMPRESA', width: 100 },
+        {
+            field: 'SUCURSAL',
+            headerName: 'SUCURSAL',
+            width: 200,
+            renderCell: (params) => {
+                const sucursalId = Number(params.row.SUCURSAL);
+
+                // Buscar el nombre de la ubicación según el ID
+                const ubicacion = Object.values(ubicacionConfig).find(ub => ub.id === sucursalId);
+
+                if (ubicacion) {
+                    return `[${sucursalId}] ${ubicacion.nombre}`;
+                }
+
+                // Si no encuentra la ubicación o es 0 (por defecto)
+                return sucursalId === 0 ? '[0] SIN ASIGNAR' : `[${sucursalId}] Desconocido`;
+            }
+        },
         { field: 'USER_ID', headerName: 'User ID', width: 100 },
         { field: 'MARKED_DATE', headerName: 'Marked Date', width: 100 },
         { field: 'MARKED_TIME', headerName: 'Marked Time', width: 100 },
@@ -99,22 +186,73 @@ export default function ReporteRRhhPage() {
 
     ];
 
-    // Cargar datos del endpoint cuando el componente se monta
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('/hanadb/api/rrhh/get_all_registros_reloj_biometrico_online');
-                setBusinessPartners(response.data);  // Suponiendo que el response.data contiene los registros
-                console.log("response.data ", response.data);
-            } catch (error) {
-                console.error('Error al obtener los datos:', error);
-            } finally {
-                setLoading(false); // Deja de mostrar el loading cuando termine
-            }
-        };
+    // Función para cargar datos con rango de fechas
+    const fetchDataByDateRange = async () => {
+        if (!fechaInicio || !fechaFin) {
+            alert('Por favor seleccione ambas fechas');
+            return;
+        }
 
-        fetchData();
-    }, []); // Se ejecuta solo una vez al montar el componente
+        setLoading(true);
+        try {
+            // Formatear fechas a YYYY-MM-DD
+            const formatDate = (date) => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
+
+            const startDate = formatDate(fechaInicio);
+            const endDate = formatDate(fechaFin);
+
+            const response = await axios.get('/hanadb/api/rrhh/get_all_registros_reloj_biometrico_online', {
+                params: {
+                    fecha_inicio: startDate,
+                    fecha_fin: endDate
+                }
+            });
+
+            setBusinessPartners(response.data);
+            console.log("response.data ", response.data);
+
+            if (response.data.length > 0) {
+                console.log("Ejemplo de registro:", response.data[0]);
+                console.log("Campos disponibles:", Object.keys(response.data[0]));
+                console.log("Campo SUCURSAL del primer registro:", response.data[0].SUCURSAL);
+                console.log("Total de registros:", response.data.length);
+
+                // Si el usuario es MC, mostrar cuántos registros son de MC
+                if (user.COMPANY === 'MC') {
+                    const mcRecords = response.data.filter(item => item.COMPANY === 'MC');
+                    console.log("Registros filtrados por COMPANY='MC':", mcRecords.length);
+                }
+            }
+        } catch (error) {
+            console.error('Error al obtener los datos:', error);
+            alert('Error al cargar los datos');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Función para limpiar filtros
+    const handleLimpiarFiltros = () => {
+        setFechaInicio(null);
+        setFechaFin(null);
+        setBusinessPartners([]);
+        setUbicaciones({
+            kleberGranda: false,
+            ambatoCentro: false,
+            cci: false,
+            mallDeLosAndes: false,
+            malteria: false,
+            paseoShopping: false,
+            quicentroSur: false,
+            recreo: false,
+            sanLuis: false
+        });
+    };
 
     return (
         <>
@@ -140,31 +278,200 @@ export default function ReporteRRhhPage() {
                     ]}
                 />
 
-
-
+                {/* Selector de Rango de Fechas */}
+                <Card sx={{ p: 3, mb: 3 }}>
+                    <Typography variant="h6" sx={{ mb: 3 }}>
+                        Seleccionar Rango de Fechas
+                    </Typography>
+                    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
+                        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center">
+                            <DatePicker
+                                label="Fecha Inicio"
+                                value={fechaInicio}
+                                onChange={(newValue) => setFechaInicio(newValue)}
+                                renderInput={(params) => <TextField {...params} fullWidth />}
+                                slotProps={{
+                                    textField: {
+                                        fullWidth: true
+                                    }
+                                }}
+                            />
+                            <DatePicker
+                                label="Fecha Fin"
+                                value={fechaFin}
+                                onChange={(newValue) => setFechaFin(newValue)}
+                                renderInput={(params) => <TextField {...params} fullWidth />}
+                                minDate={fechaInicio}
+                                slotProps={{
+                                    textField: {
+                                        fullWidth: true
+                                    }
+                                }}
+                            />
+                            <Button
+                                variant="contained"
+                                onClick={fetchDataByDateRange}
+                                disabled={!fechaInicio || !fechaFin || loading}
+                                sx={{ minWidth: 150, height: 56 }}
+                            >
+                                {loading ? 'Cargando...' : 'Consultar'}
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                onClick={handleLimpiarFiltros}
+                                sx={{ minWidth: 150, height: 56 }}
+                            >
+                                Limpiar
+                            </Button>
+                        </Stack>
+                    </LocalizationProvider>
+                </Card>
 
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={12}>
                         <Card sx={{p: 3, textAlign: "center"}}>
-                                {businessPartners.length > 0 && <ExcelDownload data={businessPartners}/>}
-                            <DataGrid
-                                rows={businessPartners?.map((partner, index) => ({
-                                    ...partner,
-                                    id: partner.ID || index + 1, // Usa el ID real si existe, de lo contrario, el índice
-                                })) || []}
-                                columns={baseColumns}
-                                rowHeight={100} // Define la altura de las filas
-                                pagination
-                                pageSize={10} // Número de filas por página
-                                slots={{
-                                    toolbar: CustomToolbar,
-                                    noRowsOverlay: () => <EmptyContent title="No Data"/>,
-                                    noResultsOverlay: () => <EmptyContent title="No results found"/>,
-                                    loadingOverlay: LinearProgress, // Usa LinearProgress como indicador de carga
+                            {(user.COMPANY === 'HT') && (
+                                <>
+                                    {businessPartners.length > 0 && <ExcelDownload data={businessPartners}/>}
+                                    <DataGrid
+                                        rows={businessPartners?.map((partner, index) => ({
+                                            ...partner,
+                                            id: partner.ID || index + 1,
+                                        })) || []}
+                                        columns={baseColumns}
+                                        rowHeight={100}
+                                        pagination
+                                        pageSize={10}
+                                        slots={{
+                                            toolbar: CustomToolbar,
+                                            noRowsOverlay: () => <EmptyContent title="No Data"/>,
+                                            noResultsOverlay: () => <EmptyContent title="No results found"/>,
+                                            loadingOverlay: LinearProgress,
+                                        }}
+                                        loading={loading}
+                                    />
+                                </>
+                            )}
 
-                                }}
-                                loading={loading} // Activa el loading
-                            />
+                            {(user.COMPANY === 'MC') && (
+                                <>
+                                    <Typography variant="h6" sx={{ mb: 3, textAlign: 'left' }}>
+                                        Filtrar por Ubicación
+                                    </Typography>
+
+                                    <FormGroup sx={{ mb: 3, display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: 2 }}>
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={ubicaciones.kleberGranda}
+                                                    onChange={handleUbicacionChange}
+                                                    name="kleberGranda"
+                                                />
+                                            }
+                                            label="[1] KLEBER GRANDA"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={ubicaciones.ambatoCentro}
+                                                    onChange={handleUbicacionChange}
+                                                    name="ambatoCentro"
+                                                />
+                                            }
+                                            label="[2] AMBATO CENTRO"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={ubicaciones.cci}
+                                                    onChange={handleUbicacionChange}
+                                                    name="cci"
+                                                />
+                                            }
+                                            label="[3] CCI"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={ubicaciones.mallDeLosAndes}
+                                                    onChange={handleUbicacionChange}
+                                                    name="mallDeLosAndes"
+                                                />
+                                            }
+                                            label="[4] MALL DE LOS ANDES"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={ubicaciones.malteria}
+                                                    onChange={handleUbicacionChange}
+                                                    name="malteria"
+                                                />
+                                            }
+                                            label="[5] MALTERIA"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={ubicaciones.paseoShopping}
+                                                    onChange={handleUbicacionChange}
+                                                    name="paseoShopping"
+                                                />
+                                            }
+                                            label="[6] PASEO SHOPPING"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={ubicaciones.quicentroSur}
+                                                    onChange={handleUbicacionChange}
+                                                    name="quicentroSur"
+                                                />
+                                            }
+                                            label="[7] QUICENTRO SUR"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={ubicaciones.recreo}
+                                                    onChange={handleUbicacionChange}
+                                                    name="recreo"
+                                                />
+                                            }
+                                            label="[8] RECREO"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={ubicaciones.sanLuis}
+                                                    onChange={handleUbicacionChange}
+                                                    name="sanLuis"
+                                                />
+                                            }
+                                            label="[9] SAN LUIS"
+                                        />
+                                    </FormGroup>
+
+                                    {getFilteredData().length > 0 && <ExcelDownload data={getFilteredData()}/>}
+                                    <DataGrid
+                                        rows={getFilteredData()?.map((partner, index) => ({
+                                            ...partner,
+                                            id: partner.ID || index + 1,
+                                        })) || []}
+                                        columns={baseColumns}
+                                        rowHeight={100}
+                                        pagination
+                                        pageSize={10}
+                                        slots={{
+                                            toolbar: CustomToolbar,
+                                            noRowsOverlay: () => <EmptyContent title="No Data"/>,
+                                            noResultsOverlay: () => <EmptyContent title="No results found"/>,
+                                            loadingOverlay: LinearProgress,
+                                        }}
+                                        loading={loading}
+                                    />
+                                </>
+                            )}
                         </Card>
                     </Grid>
                 </Grid>
@@ -193,6 +500,31 @@ function ExcelDownload({data}) {
 
     const {user} = useAuthContext();
 
+    // Mapeo de ubicaciones con sus IDs y nombres (mismo que en el componente principal)
+    const ubicacionConfig = {
+        kleberGranda: { id: 1, nombre: 'KLEBER GRANDA' },
+        ambatoCentro: { id: 2, nombre: 'AMBATO CENTRO' },
+        cci: { id: 3, nombre: 'CCI' },
+        mallDeLosAndes: { id: 4, nombre: 'MALL DE LOS ANDES' },
+        malteria: { id: 5, nombre: 'MALTERIA' },
+        paseoShopping: { id: 6, nombre: 'PASEO SHOPPING' },
+        quicentroSur: { id: 7, nombre: 'QUICENTRO SUR' },
+        recreo: { id: 8, nombre: 'RECREO' },
+        sanLuis: { id: 9, nombre: 'SAN LUIS' }
+    };
+
+    // Función para obtener el nombre de la sucursal
+    const getSucursalNombre = (sucursalId) => {
+        const id = Number(sucursalId);
+        const ubicacion = Object.values(ubicacionConfig).find(ub => ub.id === id);
+
+        if (ubicacion) {
+            return `[${id}] ${ubicacion.nombre}`;
+        }
+
+        return id === 0 ? '[0] SIN ASIGNAR' : `[${id}] Desconocido`;
+    };
+
     //console.log("data: "+data);
 
     const handleExportToExcel = () => {
@@ -205,29 +537,48 @@ function ExcelDownload({data}) {
         ws['!cols'] = [
             { wch: 10 },   // A - ID
             { wch: 10 },   // B - EMPRESA
-            { wch: 10 },   // C - USER_ID
-            { wch: 15 },   // D - MARKED_DATE
-            { wch: 15 },   // E - MARKED_TIME
-            { wch: 45 },   // F - DISPLAYNAME
-            { wch: 20 },   // F - LATITUDE
-            { wch: 20 },   // F - LONGITUDE
-            { wch: 50 },   // G - UBICACION (¡Aquí se agranda!)
+            { wch: 25 },   // C - SUCURSAL (aumentado para mostrar el nombre completo)
+            { wch: 10 },   // D - USER_ID
+            { wch: 15 },   // E - MARKED_DATE
+            { wch: 15 },   // F - MARKED_TIME
+            { wch: 45 },   // G - DISPLAYNAME
+            { wch: 15 },   // H - LATITUDE
+            { wch: 15 },   // I - LONGITUDE
+            { wch: 60 },   // J - UBICACION_GOOGLE_MAPS (URL completa)
+            { wch: 80 },   // K - URL_EVIDENCIA (URL completa)
         ];
+
+        // Ordenar los datos por USER_ID para agruparlos
+        const sortedData = [...data].sort((a, b) => {
+            // Ordenar por USER_ID primero
+            if (a.USER_ID < b.USER_ID) return -1;
+            if (a.USER_ID > b.USER_ID) return 1;
+
+            // Si tienen el mismo USER_ID, ordenar por fecha y hora
+            if (a.MARKED_DATE < b.MARKED_DATE) return -1;
+            if (a.MARKED_DATE > b.MARKED_DATE) return 1;
+
+            if (a.MARKED_TIME < b.MARKED_TIME) return -1;
+            if (a.MARKED_TIME > b.MARKED_TIME) return 1;
+
+            return 0;
+        });
 
         // Agregar los datos JSON a la hoja de trabajo según el mapeo
         XLSX.utils.sheet_add_json(
             ws,
-            data.map((item) => ({
+            sortedData.map((item) => ({
                 ID: item.ID,
                 EMPRESA: item.COMPANY,
+                SUCURSAL: getSucursalNombre(item.SUCURSAL),
                 USER_ID: item.USER_ID,
                 MARKED_DATE: item.MARKED_DATE,
                 MARKED_TIME: item.MARKED_TIME,
                 DISPLAYNAME: item.DISPLAYNAME,
                 LATITUDE: `${item.LATITUDE}`,
                 LONGITUDE: `${item.LONGITUDE}`,
-                UBICACION: { f: `HYPERLINK("https://www.google.com/maps?q=${item.LATITUDE},${item.LONGITUDE}", "Ver en Google Map")` },
-
+                UBICACION_GOOGLE_MAPS: `https://www.google.com/maps?q=${item.LATITUDE},${item.LONGITUDE}`,
+                URL_EVIDENCIA: item.IMAGE_URL_EVIDENCIA || 'Sin evidencia',
             })),
             {origin: 'A1'}
         );
@@ -272,8 +623,20 @@ function ExcelDownload({data}) {
             password: 'miPassword',    // Establecer la contraseña
         };
 
+        // Generar nombre de archivo con fecha y hora
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+
+        const timestamp = `${year}${month}${day}_${hours}${minutes}${seconds}`;
+        const fileName = `${user.DISPLAYNAME}_${timestamp}.xlsx`;
+
         XLSX.utils.book_append_sheet(wb, ws, `${user.DISPLAYNAME}`);
-        XLSX.writeFile(wb, `${user.DISPLAYNAME}.xlsx`);
+        XLSX.writeFile(wb, fileName);
     };
 
     return (
