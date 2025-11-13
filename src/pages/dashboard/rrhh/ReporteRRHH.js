@@ -1,19 +1,19 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 // next
 import Head from 'next/head';
 // @mui
-import {Box, Button, Card, Container, Grid, LinearProgress, FormGroup, FormControlLabel, Checkbox, Typography, TextField, Stack} from '@mui/material';
-import {DatePicker} from '@mui/x-date-pickers/DatePicker';
-import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
-import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
-import {es} from 'date-fns/locale';
+import { Box, Button, Card, Container, Grid, LinearProgress, FormGroup, FormControlLabel, Checkbox, Typography, TextField, Stack } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { es } from 'date-fns/locale';
 // routes
-import {PATH_DASHBOARD} from '../../../routes/paths';
+import { PATH_DASHBOARD } from '../../../routes/paths';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
 
 // ----------------------------------------------------------------------
-import {useSettingsContext} from "../../../components/settings";
+import { useSettingsContext } from "../../../components/settings";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
 import EmptyContent from "../../../components/empty-content";
 import {
@@ -27,7 +27,7 @@ import {
 } from "@mui/x-data-grid";
 import axios from "../../../utils/axios";
 import Link from "next/link";
-import {useAuthContext} from "../../../auth/useAuthContext";
+import { useAuthContext } from "../../../auth/useAuthContext";
 import * as XLSX from "xlsx";
 
 // ----------------------------------------------------------------------
@@ -39,8 +39,9 @@ ReporteRRhhPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function ReporteRRhhPage() {
 
     const { user } = useAuthContext();
+    console.log("User en ReporteRRHH:", user);
 
-    const {themeStretch} = useSettingsContext();
+    const { themeStretch } = useSettingsContext();
 
     // Estado para almacenar los datos y el estado de carga
     const [businessPartners, setBusinessPartners] = useState([]);
@@ -159,12 +160,12 @@ export default function ReporteRRhhPage() {
             width: 150,
             renderCell: (params) => {
                 const imageUrl = params.row.IMAGE_URL_EVIDENCIA;
-                
+
                 // Verificar si no hay imagen o es "<NULL>"
                 if (!imageUrl || imageUrl === '' || imageUrl === null || imageUrl === '<NULL>') {
                     return (
-                        <span style={{ 
-                            color: '#d32f2f', 
+                        <span style={{
+                            color: '#d32f2f',
                             fontWeight: 'bold',
                             fontSize: '12px'
                         }}>
@@ -332,10 +333,10 @@ export default function ReporteRRhhPage() {
 
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={12}>
-                        <Card sx={{p: 3, textAlign: "center"}}>
+                        <Card sx={{ p: 3, textAlign: "center" }}>
                             {(user.COMPANY === 'HT') && (
                                 <>
-                                    {businessPartners.length > 0 && <ExcelDownload data={businessPartners}/>}
+                                    {businessPartners.length > 0 && <ExcelDownload data={businessPartners} />}
                                     <DataGrid
                                         rows={businessPartners?.map((partner, index) => ({
                                             ...partner,
@@ -347,8 +348,8 @@ export default function ReporteRRhhPage() {
                                         pageSize={10}
                                         slots={{
                                             toolbar: CustomToolbar,
-                                            noRowsOverlay: () => <EmptyContent title="No Data"/>,
-                                            noResultsOverlay: () => <EmptyContent title="No results found"/>,
+                                            noRowsOverlay: () => <EmptyContent title="No Data" />,
+                                            noResultsOverlay: () => <EmptyContent title="No results found" />,
                                             loadingOverlay: LinearProgress,
                                         }}
                                         loading={loading}
@@ -363,109 +364,131 @@ export default function ReporteRRhhPage() {
                                     </Typography>
 
                                     <FormGroup sx={{ mb: 3, display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: 2 }}>
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={ubicaciones.kleberGranda}
-                                                    onChange={handleUbicacionChange}
-                                                    name="kleberGranda"
-                                                />
-                                            }
-                                            label="[1] KLEBER GRANDA"
-                                        />
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={ubicaciones.ambatoCentro}
-                                                    onChange={handleUbicacionChange}
-                                                    name="ambatoCentro"
-                                                />
-                                            }
-                                            label="[2] AMBATO CENTRO"
-                                        />
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={ubicaciones.cci}
-                                                    onChange={handleUbicacionChange}
-                                                    name="cci"
-                                                />
-                                            }
-                                            label="[3] CCI"
-                                        />
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={ubicaciones.mallDeLosAndes}
-                                                    onChange={handleUbicacionChange}
-                                                    name="mallDeLosAndes"
-                                                />
-                                            }
-                                            label="[4] MALL DE LOS ANDES"
-                                        />
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={ubicaciones.malteria}
-                                                    onChange={handleUbicacionChange}
-                                                    name="malteria"
-                                                />
-                                            }
-                                            label="[5] MALTERIA"
-                                        />
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={ubicaciones.paseoShopping}
-                                                    onChange={handleUbicacionChange}
-                                                    name="paseoShopping"
-                                                />
-                                            }
-                                            label="[6] PASEO SHOPPING"
-                                        />
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={ubicaciones.quicentroSur}
-                                                    onChange={handleUbicacionChange}
-                                                    name="quicentroSur"
-                                                />
-                                            }
-                                            label="[7] QUICENTRO SUR"
-                                        />
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={ubicaciones.recreo}
-                                                    onChange={handleUbicacionChange}
-                                                    name="recreo"
-                                                />
-                                            }
-                                            label="[8] RECREO"
-                                        />
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={ubicaciones.sanLuis}
-                                                    onChange={handleUbicacionChange}
-                                                    name="sanLuis"
-                                                />
-                                            }
-                                            label="[9] SAN LUIS"
-                                        />
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={ubicaciones.administrador}
-                                                    onChange={handleUbicacionChange}
-                                                    name="administrador"
-                                                />
-                                            }
-                                            label="[10] ADMINISTRADOR"
-                                        />
+
+                                        {(user.SUCURSAL === 1 || user.SUCURSAL === 10) && (
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        checked={ubicaciones.kleberGranda}
+                                                        onChange={handleUbicacionChange}
+                                                        name="kleberGranda"
+                                                    />
+                                                }
+                                                label="[1] KLEBER GRANDA"
+                                            />
+                                        )}
+                                        {(user.SUCURSAL === 2 || user.SUCURSAL === 10) && (
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        checked={ubicaciones.ambatoCentro}
+                                                        onChange={handleUbicacionChange}
+                                                        name="ambatoCentro"
+                                                    />
+                                                }
+                                                label="[2] AMBATO CENTRO"
+                                            />
+                                        )}
+
+                                        {(user.SUCURSAL === 3 || user.SUCURSAL === 10) && (
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        checked={ubicaciones.cci}
+                                                        onChange={handleUbicacionChange}
+                                                        name="cci"
+                                                    />
+                                                }
+                                                label="[3] CCI"
+                                            />
+                                        )}
+                                        {(user.SUCURSAL === 4 || user.SUCURSAL === 10) && (
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        checked={ubicaciones.mallDeLosAndes}
+                                                        onChange={handleUbicacionChange}
+                                                        name="mallDeLosAndes"
+                                                    />
+                                                }
+                                                label="[4] MALL DE LOS ANDES"
+                                            />
+                                        )}
+                                        {(user.SUCURSAL === 5 || user.SUCURSAL === 10) && (
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        checked={ubicaciones.malteria}
+                                                        onChange={handleUbicacionChange}
+                                                        name="malteria"
+                                                    />
+                                                }
+                                                label="[5] MALTERIA"
+                                            />
+                                        )}
+                                        {(user.SUCURSAL === 6 || user.SUCURSAL === 10) && (
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        checked={ubicaciones.paseoShopping}
+                                                        onChange={handleUbicacionChange}
+                                                        name="paseoShopping"
+                                                    />
+                                                }
+                                                label="[6] PASEO SHOPPING"
+                                            />
+                                        )}
+                                        {(user.SUCURSAL === 7 || user.SUCURSAL === 10) && (
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        checked={ubicaciones.quicentroSur}
+                                                        onChange={handleUbicacionChange}
+                                                        name="quicentroSur"
+                                                    />
+                                                }
+                                                label="[7] QUICENTRO SUR"
+                                            />
+                                        )}
+                                        {(user.SUCURSAL === 8 || user.SUCURSAL === 10) && (
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        checked={ubicaciones.recreo}
+                                                        onChange={handleUbicacionChange}
+                                                        name="recreo"
+                                                    />
+                                                }
+                                                label="[8] RECREO"
+                                            />
+                                        )}
+                                        {(user.SUCURSAL === 9 || user.SUCURSAL === 10) && (
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        checked={ubicaciones.sanLuis}
+                                                        onChange={handleUbicacionChange}
+                                                        name="sanLuis"
+                                                    />
+                                                }
+                                                label="[9] SAN LUIS"
+                                            />
+                                        )}
+                                        {(user.SUCURSAL === 10) && (
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        checked={ubicaciones.administrador}
+                                                        onChange={handleUbicacionChange}
+                                                        name="administrador"
+                                                    />
+                                                }
+                                                label="[10] ADMINISTRADOR"
+                                            />
+                                        )}
                                     </FormGroup>
 
-                                    {getFilteredData().length > 0 && <ExcelDownload data={getFilteredData()}/>}
+                                    {getFilteredData().length > 0 && <ExcelDownload data={getFilteredData()} />}
                                     <DataGrid
                                         rows={getFilteredData()?.map((partner, index) => ({
                                             ...partner,
@@ -477,8 +500,8 @@ export default function ReporteRRhhPage() {
                                         pageSize={10}
                                         slots={{
                                             toolbar: CustomToolbar,
-                                            noRowsOverlay: () => <EmptyContent title="No Data"/>,
-                                            noResultsOverlay: () => <EmptyContent title="No results found"/>,
+                                            noRowsOverlay: () => <EmptyContent title="No Data" />,
+                                            noResultsOverlay: () => <EmptyContent title="No results found" />,
                                             loadingOverlay: LinearProgress,
                                         }}
                                         loading={loading}
@@ -498,20 +521,20 @@ export default function ReporteRRhhPage() {
 function CustomToolbar() {
     return (
         <GridToolbarContainer>
-            <GridToolbarQuickFilter/>
-            <Box sx={{flexGrow: 1}}/>
-            <GridToolbarColumnsButton/>
-            <GridToolbarFilterButton/>
-            <GridToolbarDensitySelector/>
-            <GridToolbarExport/>
+            <GridToolbarQuickFilter />
+            <Box sx={{ flexGrow: 1 }} />
+            <GridToolbarColumnsButton />
+            <GridToolbarFilterButton />
+            <GridToolbarDensitySelector />
+            <GridToolbarExport />
         </GridToolbarContainer>
     );
 }
 
 
-function ExcelDownload({data}) {
+function ExcelDownload({ data }) {
 
-    const {user} = useAuthContext();
+    const { user } = useAuthContext();
 
     // Mapeo de ubicaciones con sus IDs y nombres (mismo que en el componente principal)
     const ubicacionConfig = {
@@ -594,12 +617,12 @@ function ExcelDownload({data}) {
                 UBICACION_GOOGLE_MAPS: `https://www.google.com/maps?q=${item.LATITUDE},${item.LONGITUDE}`,
                 URL_EVIDENCIA: item.IMAGE_URL_EVIDENCIA || 'Sin evidencia',
             })),
-            {origin: 'A1'}
+            { origin: 'A1' }
         );
 
-        for(let R = 3; R <= 25; ++R) {
-            for(let C = 1; C <= 6; ++C) {
-                const cell_address = {c: C, r: R};
+        for (let R = 3; R <= 25; ++R) {
+            for (let C = 1; C <= 6; ++C) {
+                const cell_address = { c: C, r: R };
                 /* if an A1-style address is needed, encode the address */
                 var cell_ref = XLSX.utils.encode_cell(cell_address);
 
