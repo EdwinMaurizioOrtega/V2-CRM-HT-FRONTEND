@@ -457,11 +457,11 @@ export default function MarcarPage() {
                                         </Box>
                                         <Typography variant="body2" component="div" sx={{ color: '#1565c0' }}>
                                             <ul style={{ margin: 0, paddingLeft: '20px', lineHeight: '1.8' }}>
-                                                <li><strong>✓ La foto debe mostrar claramente tu rostro</strong></li>
-                                                <li><strong>✓ El fondo de la imagen debe ser la empresa o tu lugar de trabajo</strong></li>
+                                                <li><strong>✓ La foto debe mostrar claramente tu rostro.</strong></li>
+                                                <li><strong>✓ El fondo de la imagen debe ser en el punto de venta (con la pared de marca de fondo).</strong></li>
                                                 <li>✓ Asegúrate de estar en un lugar bien iluminado</li>
                                                 <li>✓ No uses accesorios que oculten tu rostro (gafas oscuras, gorras, etc.)</li>
-                                                <li>✓ La foto será registrada con tus coordenadas GPS y hora exacta</li>
+                                                <li>✓ La foto será registrada con tus coordenadas GPS y hora exacta.</li>
                                             </ul>
                                         </Typography>
                                     </Box>
