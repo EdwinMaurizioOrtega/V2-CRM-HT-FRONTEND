@@ -4,7 +4,7 @@ import {HOST_SOCKET} from "../../config-global";
 
 const GeoLocationComponent = ({ user }) => {
     useEffect(() => {
-        const socket = io(`${HOST_SOCKET}`);
+        // const socket = io(`${HOST_SOCKET}`);
 
             // Obtener las coordenadas usando la geolocalización del navegador
             if ("geolocation" in navigator) {
@@ -17,14 +17,14 @@ const GeoLocationComponent = ({ user }) => {
                         //console.log("longitude:" + longitude);
 
                         // Enviar las coordenadas al servidor de socket
-                        socket.emit("coordinates", {
-                            latitud: latitude.toString(),
-                            longitud: longitude.toString(),
-                            user_name: user.DISPLAYNAME,
-                            user_id: Number(user.ID),
-                            room_map: 'Lidenar',
-                            company: user.COMPANY
-                        });
+                        // socket.emit("coordinates", {
+                        //     latitud: latitude.toString(),
+                        //     longitud: longitude.toString(),
+                        //     user_name: user.DISPLAYNAME,
+                        //     user_id: Number(user.ID),
+                        //     room_map: 'Lidenar',
+                        //     company: user.COMPANY
+                        // });
                     },
                     (error) => {
                         console.error("Error al obtener la posición:", error.message);
@@ -42,9 +42,9 @@ const GeoLocationComponent = ({ user }) => {
         // return () => clearInterval(intervalId);
 
         // Limpiar la conexión del socket al desmontar el componente
-        return () => {
-            socket.disconnect();
-        };
+        // return () => {
+        //     socket.disconnect();
+        // };
 
     }, [user]);
 
