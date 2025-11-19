@@ -539,9 +539,11 @@ export default function InvoiceTableRow({
 
                         <div>
                             <Typography variant="subtitle2" noWrap>
-                                {VENDEDOR.split(" ").map((word, index) =>
-                                    index === 2 ? <><br />{word} </> : word + " "
-                                )}
+                                {VENDEDOR.split(" ").map((word, index) => (
+                                    <React.Fragment key={index}>
+                                        {index === 2 ? <><br />{word} </> : word + " "}
+                                    </React.Fragment>
+                                ))}
                             </Typography>
 
                             <Link
