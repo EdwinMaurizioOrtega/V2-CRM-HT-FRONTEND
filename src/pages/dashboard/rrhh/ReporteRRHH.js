@@ -87,26 +87,58 @@ export default function ReporteRRhhPage() {
         });
     };
 
-    // Filtrar datos según las ubicaciones seleccionadas
+    // Filtrar datos según las ubicaciones seleccionadas y rango de fechas
     const getFilteredData = () => {
-        // Primero filtrar por COMPANY si el usuario es de MC
+        // Primero filtrar por COMPANY
         let filteredByCompany = businessPartners;
+
         if (user.COMPANY === 'MC') {
             filteredByCompany = businessPartners.filter(partner => partner.COMPANY === 'MC');
         }
 
+        if (user.COMPANY === 'HT') {
+            filteredByCompany = businessPartners.filter(partner => partner.COMPANY === 'HT' || partner.COMPANY === 'NU');
+        }
+
+        // Filtrar por rango de fechas si están seleccionadas
+        let filteredByDate = filteredByCompany;
+        if (fechaInicio && fechaFin) {
+            const formatDate = (date) => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
+
+            const startDate = formatDate(fechaInicio);
+            const endDate = formatDate(fechaFin);
+
+            console.log("Filtro de fechas - Inicio:", startDate, "Fin:", endDate);
+            console.log("Total registros antes de filtrar por fecha:", filteredByCompany.length);
+
+            filteredByDate = filteredByCompany.filter(partner => {
+                const markedDate = partner.MARKED_DATE;
+                return markedDate >= startDate && markedDate <= endDate;
+            });
+
+            console.log("Total registros después de filtrar por fecha:", filteredByDate.length);
+            if (filteredByDate.length > 0) {
+                console.log("Ejemplo de registro filtrado:", filteredByDate[0]);
+            }
+        }
+
         const selectedUbicaciones = Object.keys(ubicaciones).filter(key => ubicaciones[key]);
 
-        // Si no hay ninguna ubicación seleccionada, mostrar todos los datos filtrados por company
+        // Si no hay ninguna ubicación seleccionada, mostrar todos los datos filtrados por company y fecha
         if (selectedUbicaciones.length === 0) {
-            return filteredByCompany;
+            return filteredByDate;
         }
 
         // Obtener los IDs de las ubicaciones seleccionadas
         const selectedIds = selectedUbicaciones.map(key => ubicacionConfig[key].id);
 
         // Filtrar los datos según el campo SUCURSAL
-        return filteredByCompany.filter(partner => {
+        return filteredByDate.filter(partner => {
             // Filtra por el campo SUCURSAL que viene de la API (números del 0 al 9)
             return selectedIds.includes(Number(partner.SUCURSAL));
         });
@@ -230,6 +262,11 @@ export default function ReporteRRhhPage() {
                     const mcRecords = response.data.filter(item => item.COMPANY === 'MC');
                     console.log("Registros filtrados por COMPANY='MC':", mcRecords.length);
                 }
+
+                if (user.COMPANY === 'HT') {
+                    const htRecords = response.data.filter(item => item.COMPANY === 'HT' || item.COMPANY === 'NU');
+                    console.log("Registros filtrados por COMPANY='HT' o 'NU':", htRecords.length);
+                }
             }
         } catch (error) {
             console.error('Error al obtener los datos:', error);
@@ -336,9 +373,9 @@ export default function ReporteRRhhPage() {
                         <Card sx={{ p: 3, textAlign: "center" }}>
                             {(user.COMPANY === 'HT') && (
                                 <>
-                                    {businessPartners.length > 0 && <ExcelDownload data={businessPartners} />}
+                                    {getFilteredData().length > 0 && <ExcelDownload data={getFilteredData()} />}
                                     <DataGrid
-                                        rows={businessPartners?.map((partner, index) => ({
+                                        rows={getFilteredData()?.map((partner, index) => ({
                                             ...partner,
                                             id: partner.ID || index + 1,
                                         })) || []}
