@@ -177,6 +177,78 @@ export default function InvoiceTableRow({
             });
     };
 
+
+    const ConsultarFactura = (fac) => {
+
+        console.log("Factura: "+fac);
+        console.log("RUC: "+user.EMPRESA);
+
+        setIsLoading(true); // Set loading to true when starting the fetch
+
+        //console.log("Guia: " + guia);
+        var dataToSend = {
+            num_fac: fac,
+            empresa: user.EMPRESA
+        };
+
+        console.log("dataToSend: "+JSON.stringify(dataToSend));
+
+        // URL del servidor al que deseas enviar los datos
+        const url = `${HOST_API_KEY}/hanadb/api/orders/get_consultar_factura_stupendo`;
+
+        console.log("URL de solicitud:", url);
+
+        // Realizar la solicitud con Axios
+        axios.post(url, dataToSend)
+            .then((response) => {
+                // Aquí puedes manejar la respuesta del servidor (response.data)
+                console.log("Respuesta del servidor:", response.data);
+
+                if (!response.data || !response.data.base64File) {
+                    console.error("No se recibió el archivo base64 del servidor");
+                    alert("No se pudo obtener la factura del servidor");
+                    return;
+                }
+
+                var pdfDecode = response.data.base64File;
+
+                console.log("Longitud del PDF base64:", pdfDecode.length);
+
+                try {
+                    const byteCharacters = atob(pdfDecode);
+                    const byteNumbers = new Array(byteCharacters.length);
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    const byteArray = new Uint8Array(byteNumbers);
+                    const pdfBlob = new Blob([byteArray], { type: 'application/pdf' });
+                    const pdfUrl = URL.createObjectURL(pdfBlob);
+
+                    console.log("PDF Blob creado:", pdfBlob.size, "bytes");
+                    console.log("Abriendo PDF en nueva ventana...");
+
+                    const newWindow = window.open(pdfUrl, '_blank');
+                    if (!newWindow) {
+                        console.error("El navegador bloqueó la ventana emergente");
+                        alert("Por favor, permita ventanas emergentes para ver la factura");
+                    }
+                } catch (decodeError) {
+                    console.error("Error al decodificar el PDF:", decodeError);
+                    alert("Error al procesar el PDF recibido");
+                }
+
+            })
+            .catch((error) => {
+                // Aquí puedes manejar errores en la solicitud
+                console.error("Error en la solicitud:", error);
+                console.error("Detalles del error:", error.response?.data || error.message);
+                alert("Error al consultar la factura: " + (error.response?.data?.message || error.message));
+            })
+            .finally(() => {
+                setIsLoading(false); // Set loading to false regardless of success or error
+            });
+    }
+
     const handleImprimir = () => {
         //console.log('Botón clickeado');
         // Puedes agregar más lógica aquí según tus necesidades
@@ -730,7 +802,19 @@ export default function InvoiceTableRow({
                 <TableCell align="left">{FECHACREACION}</TableCell>
                 <TableCell align="left">{FECHAAPROBO}</TableCell>
                 <TableCell align="left">{FECHAFACTURACION}</TableCell>
-                <TableCell align="left">{NUMEROFACTURALIDENAR}</TableCell>
+                <TableCell align="left">
+                    {NUMEROFACTURALIDENAR}
+                    {NUMEROFACTURALIDENAR !== null &&  <IconButton
+                        onClick={() => ConsultarFactura(NUMEROFACTURALIDENAR)}
+                        sx={{ color: 'text.disabled' }}
+                        disabled={isLoading} // Disable the button while loading
+                    >
+                        {isLoading ? <Iconify icon="svg-spinners:bars-scale" /> : <Iconify icon="eva:eye-fill" />}
+                    </IconButton>
+                    }
+
+
+                </TableCell>
                 <TableCell align="right">
                     <Stack spacing={0.5} alignItems="flex-end">
                         <Typography variant="body2" sx={{ fontWeight: 700, color: 'success.main' }}>
