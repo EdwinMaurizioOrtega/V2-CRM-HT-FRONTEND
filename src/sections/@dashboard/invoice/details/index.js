@@ -773,7 +773,9 @@ export default function InvoiceDetails({ invoice }) {
     } else {
 
         items.forEach((row) => {
-            const subtotal = row.PRECIOUNITARIOVENTA * row.CANTIDAD;
+            const descuento = (row.DISCOUNTPERCENTSAP || 0) / 100;
+            const precioConDescuento = row.PRECIOUNITARIOVENTA * (1 - descuento);
+            const subtotal = precioConDescuento * row.CANTIDAD;
             subtotalTotal += subtotal;
         });
 
@@ -1093,6 +1095,7 @@ export default function InvoiceDetails({ invoice }) {
                     ID_ORDER: ID,
                     NUMERO_GUIA: `${valueGuia}`,
                     empresa: user.EMPRESA,
+                    ID_USER: user.ID,
                     IDUSUARIOENTREGARA: Number(idEmpleadoEntregar),
                     NOMBREUSUARIOENTREGARA: nombreUsuarioEntregara,
                     ESTADO: Number(estadoInvoice),
@@ -1471,10 +1474,12 @@ export default function InvoiceDetails({ invoice }) {
             const { [id]: omitido, ...resto } = preciosActualizados;
             setPreciosActualizados(resto);
         } else {
+            // Quitar el IVA del 15% - si el valor viene con IVA incluido (ej: 115), dividimos entre 1.15 para obtener el valor base (100)
+            const valorSinIVA = valorNumerico / 1.15;
             // Agregar o actualizar valor
             setPreciosActualizados(prev => ({
                 ...prev,
-                [id]: valorNumerico,
+                [id]: valorSinIVA,
             }));
         }
         ////console.log("JSON actualizado:", JSON.stringify(preciosActualizados, null, 2));
@@ -2800,7 +2805,7 @@ export default function InvoiceDetails({ invoice }) {
 
                             <Button variant="contained" color="success"
                                 onClick={() => !loading && handleChangePedidoFactura()} disabled={loading}>
-                                {loading ? 'GUARDANDO...' : ' Enviar al área de facturación'}
+                                {loading ? 'GUARDANDO...' : ' Enviar al área de facturación.'}
                             </Button>
 
                         </Grid>
