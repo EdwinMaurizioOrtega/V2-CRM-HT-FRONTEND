@@ -951,7 +951,7 @@ export default function InvoiceDetails({invoice}) {
 
                     // Esperar un momento antes de redirigir para que el usuario vea el mensaje
                     //setTimeout(() => {
-                        window.location.href = '/dashboard/invoice/list/';
+                    window.location.href = '/dashboard/invoice/list/';
                     //}, 2000);
 
                 } else if (responseData?.status === 'fail') {
@@ -971,7 +971,7 @@ export default function InvoiceDetails({invoice}) {
                     // Respuesta inesperada pero exitosa
                     enqueueSnackbar('Factura procesada correctamente', {variant: 'success'});
                     ///setTimeout(() => {
-                        window.location.href = '/dashboard/invoice/list/';
+                    window.location.href = '/dashboard/invoice/list/';
                     //}, 2000);
                 }
             }
@@ -1033,17 +1033,17 @@ export default function InvoiceDetails({invoice}) {
             // Si hay detalles adicionales, mostrarlos en un segundo snackbar
             if (errorDetails) {
                 //setTimeout(() => {
-                    enqueueSnackbar(
-                        errorDetails,
-                        {
-                            variant: 'info',
-                            autoHideDuration: 8000,
-                            anchorOrigin: {
-                                vertical: 'top',
-                                horizontal: 'center',
-                            },
-                        }
-                    );
+                enqueueSnackbar(
+                    errorDetails,
+                    {
+                        variant: 'info',
+                        autoHideDuration: 8000,
+                        anchorOrigin: {
+                            vertical: 'top',
+                            horizontal: 'center',
+                        },
+                    }
+                );
                 //}, 500);
             }
 
@@ -2044,7 +2044,6 @@ export default function InvoiceDetails({invoice}) {
                                         )}
 
 
-
                                     {
                                         (user.ROLE === "9" || user.ROLE === "10") && (
                                             <>
@@ -2090,7 +2089,12 @@ export default function InvoiceDetails({invoice}) {
                                     {(user.ROLE === "9" || user.ROLE === "10") && (<>
 
                                             <TableCell align="left">Costo</TableCell>
-                                            <TableCell align="left">Comentario Precio</TableCell>
+                                        </>
+                                    )}
+                                    <TableCell align="left">Comentario Precio</TableCell>
+
+                                    {(user.ROLE === "9" || user.ROLE === "10") && (<>
+
                                             <TableCell align="right">Precio unitario</TableCell>
                                             <TableCell align="right">Total</TableCell>
 
@@ -2217,10 +2221,10 @@ export default function InvoiceDetails({invoice}) {
                                             </>
 
                                         )}
+                                        <TableCell align="left">{row.COMENTARIOPRECIO}</TableCell>
 
                                         {(user.ROLE === "9" || user.ROLE === "10") && (
                                             <>
-                                                <TableCell align="left">{row.COMENTARIOPRECIO}</TableCell>
 
                                                 <TableCell
                                                     align="left">
@@ -2247,16 +2251,16 @@ export default function InvoiceDetails({invoice}) {
 
                                                 <TableCell
                                                     align="right">{fCurrency(
-                                                        (() => {
-                                                            const descuento = (row.DISCOUNTPERCENTSAP || 0) / 100;
-                                                            // Si el descuento es 100%, retornar 0 explícitamente
-                                                            if (row.DISCOUNTPERCENTSAP >= 100) {
-                                                                return 0;
-                                                            }
-                                                            const precioConDescuento = row.PRECIOUNITARIOVENTA * (1 - descuento);
-                                                            return precioConDescuento * row.CANTIDAD;
-                                                        })()
-                                                    )}</TableCell>
+                                                    (() => {
+                                                        const descuento = (row.DISCOUNTPERCENTSAP || 0) / 100;
+                                                        // Si el descuento es 100%, retornar 0 explícitamente
+                                                        if (row.DISCOUNTPERCENTSAP >= 100) {
+                                                            return 0;
+                                                        }
+                                                        const precioConDescuento = row.PRECIOUNITARIOVENTA * (1 - descuento);
+                                                        return precioConDescuento * row.CANTIDAD;
+                                                    })()
+                                                )}</TableCell>
 
                                             </>
                                         )
@@ -2856,8 +2860,8 @@ export default function InvoiceDetails({invoice}) {
                                     Enviar al área de facturación.
                                 </Button>
                             ) : (
-                                <Box sx={{ width: '100%' }}>
-                                    <LinearProgress color="success" />
+                                <Box sx={{width: '100%'}}>
+                                    <LinearProgress color="success"/>
                                 </Box>
                             )}
 
