@@ -22,7 +22,8 @@ import {
     CircularProgress,
     Dialog,
     DialogContent, Toolbar, AppBar, LinearProgress,
-    SvgIcon
+    SvgIcon,
+    Alert
 } from '@mui/material';
 
 import Link from 'next/link';
@@ -145,6 +146,8 @@ export default function InvoiceDetails({invoice}) {
 
     const [textArrayCount, setTextArrayCount] = useState(0);
     const [uniqueTextArrayCount, setUniqueTextArrayCount] = useState(0);
+
+    const [errorMessage, setErrorMessage] = useState('');
 
 
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
@@ -947,9 +950,9 @@ export default function InvoiceDetails({invoice}) {
                     );
 
                     // Esperar un momento antes de redirigir para que el usuario vea el mensaje
-                    setTimeout(() => {
+                    //setTimeout(() => {
                         window.location.href = '/dashboard/invoice/list/';
-                    }, 2000);
+                    //}, 2000);
 
                 } else if (responseData?.status === 'fail') {
                     // Error del backend en formato fail
@@ -967,9 +970,9 @@ export default function InvoiceDetails({invoice}) {
                 } else {
                     // Respuesta inesperada pero exitosa
                     enqueueSnackbar('Factura procesada correctamente', {variant: 'success'});
-                    setTimeout(() => {
+                    ///setTimeout(() => {
                         window.location.href = '/dashboard/invoice/list/';
-                    }, 2000);
+                    //}, 2000);
                 }
             }
 
@@ -1029,7 +1032,7 @@ export default function InvoiceDetails({invoice}) {
 
             // Si hay detalles adicionales, mostrarlos en un segundo snackbar
             if (errorDetails) {
-                setTimeout(() => {
+                //setTimeout(() => {
                     enqueueSnackbar(
                         errorDetails,
                         {
@@ -1041,7 +1044,7 @@ export default function InvoiceDetails({invoice}) {
                             },
                         }
                     );
-                }, 500);
+                //}, 500);
             }
 
         } finally {
@@ -1068,7 +1071,7 @@ export default function InvoiceDetails({invoice}) {
                 if (valueGuia === '000000000' && CLIENTEID === 'CL1791251237001') {
                     idEmpleadoEntregar = 0;
                     nombreUsuarioEntregara = '';
-                    estadoInvoice = 0
+                    estadoInvoice = 22
                 } else {
                     alert("Seleccionar un empleado es obligatorio cuando la guía es => 000000000")
                     return; // Stop the execution of the function if the condition is met
@@ -1079,13 +1082,13 @@ export default function InvoiceDetails({invoice}) {
                 idEmpleadoEntregar = empleadoEntregar.CODE
                 nombreUsuarioEntregara = empleadoEntregar.NOMBRE
                 //Facturado - Pendiente de cargar evidencia vendedor
-                estadoInvoice = 0;
+                estadoInvoice = 22;
             }
 
             if (valueGuia !== '000000000') {
                 idEmpleadoEntregar = 0;
                 nombreUsuarioEntregara = '';
-                estadoInvoice = 0
+                estadoInvoice = 1
             }
 
             //console.log("ID empleado seleccionado: " + idEmpleadoEntregar)
@@ -1111,6 +1114,7 @@ export default function InvoiceDetails({invoice}) {
 
                 // Se completó con éxito (código de estado 200)
                 if (response.status === 200) {
+                    setErrorMessage('');
                     enqueueSnackbar('Orden facturada correctamente', {variant: 'success'});
                     router.push('/dashboard/invoice/list/');
                 }
@@ -1130,6 +1134,7 @@ export default function InvoiceDetails({invoice}) {
                 }
 
                 // Mostrar el error con enqueueSnackbar
+                setErrorMessage(errorMessage);
                 enqueueSnackbar(errorMessage, {variant: 'error'});
 
             } finally {
@@ -2201,7 +2206,7 @@ export default function InvoiceDetails({invoice}) {
                                         }
 
                                         {(user.ROLE === "9" || user.ROLE === "10") &&
-                                            <TableCell align="left">{fCurrency(row.COSTO)}</TableCell>}
+                                            <TableCell align="left">{fCurrency(row.COSTO * 1.15)}</TableCell>}
 
                                         {user.ROLE === '0' || user.ROLE === '2' && (
                                             <>
@@ -2845,10 +2850,34 @@ export default function InvoiceDetails({invoice}) {
 
                             )}
 
-                            <Button variant="contained" color="success"
-                                    onClick={() => !loading && handleChangePedidoFactura()} disabled={loading}>
-                                {loading ? 'GUARDANDO...' : ' Enviar al área de facturación.'}
-                            </Button>
+                            {!loading ? (
+                                <Button variant="contained" color="success"
+                                        onClick={() => handleChangePedidoFactura()}>
+                                    Enviar al área de facturación.
+                                </Button>
+                            ) : (
+                                <Box sx={{ width: '100%' }}>
+                                    <LinearProgress color="success" />
+                                </Box>
+                            )}
+
+                            {errorMessage && (
+                                <Alert
+                                    severity="error"
+                                    onClose={() => setErrorMessage('')}
+                                    sx={{
+                                        mt: 2,
+                                        fontSize: '16px',
+                                        fontWeight: 'bold',
+                                        '& .MuiAlert-message': {
+                                            fontSize: '16px',
+                                            fontWeight: 'bold'
+                                        }
+                                    }}
+                                >
+                                    {errorMessage}
+                                </Alert>
+                            )}
 
                         </Grid>
 
