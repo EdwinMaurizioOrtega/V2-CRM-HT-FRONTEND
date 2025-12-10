@@ -723,6 +723,7 @@ export default function InvoiceDetails({invoice}) {
             "005": "CARAPUNGO - ⚠️ PENDIENTE OPERADORAS CARRIERS",
             "CARRIERS": "CARAPUNGO - ⚠️ OPERADORAS CARRIERS",
             "010": "CUENCA - MAYORISTAS MOVILCELISTIC CENTRO",
+            "EA": "CONSIGNACION EA"
             // "T1CARACO": "QUITO - XIAOMI TERMINALES"
         };
 
@@ -3662,6 +3663,7 @@ export const top100FilmsMovilCelistic = [
     {title: 'MANTA - MAYORISTAS MOVILCELISTIC MANTA', id: "024"},
     {title: 'CARAPUNGO - ⚠️ PENDIENTE OPERADORAS CARRIERS', id: "005"},
     {title: 'CARAPUNGO - ⚠️OPERADORAS CARRIER', id: "CARRIERS"},
+    {title: 'CONSIGNACION EA', id: "EA"},
     {title: 'CUENCA CENTRO', id: "010"}
 
     // {title: 'QUITO - XIAOMI TERMINALES', id: "T1CARACO"}
