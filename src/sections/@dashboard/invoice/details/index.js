@@ -2437,7 +2437,7 @@ export default function InvoiceDetails({invoice}) {
                     </Box>
                 )}
 
-                {(user.ROLE === "9" || user.ROLE === "10") && (
+                {(user.ROLE === "8" || user.ROLE === "9" || user.ROLE === "10") && (
                     <>
 
                         {(ESTADO === 6) && (
