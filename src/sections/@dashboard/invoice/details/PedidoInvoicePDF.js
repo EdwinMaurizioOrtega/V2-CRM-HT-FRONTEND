@@ -45,6 +45,7 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
         ValidComm,
         GLN,
         Balance,
+        OBSERVACIONES,
         OBSERVACIONESB,
         DOCNUM
     } = invoice;
@@ -317,6 +318,10 @@ export default function PedidoInvoicePDF({ invoice, user, empresa }) {
                     </View>
 
 
+                </View>
+
+                <View style={{ marginBottom: 10 }}>
+                    <Text style={{ fontSize: 9 }}>Observaciones: {OBSERVACIONES}</Text>
                 </View>
 
                 <View style={{ marginBottom: 10, marginTop: 5 }}>
