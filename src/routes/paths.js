@@ -145,6 +145,9 @@ export const PATH_DASHBOARD = {
         cargar: path(ROOTS_DASHBOARD, '/credito/cargar_archivos_credito'),
         auth_equifax: path(ROOTS_DASHBOARD, '/credito/auth_equifax_uanataca'),
     },
+    reports: {
+        manifest: path(ROOTS_DASHBOARD, '/reports/manifest'),
+    },
     customer: {
         root: path(ROOTS_DASHBOARD, '/customer'),
     }

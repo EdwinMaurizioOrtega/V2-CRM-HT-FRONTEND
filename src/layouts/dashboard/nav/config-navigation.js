@@ -237,9 +237,9 @@ const navConfig = [
     {
         subheader: 'GESTIÓN PEDIDOS Y DESPACHO',
         items: [
-            {title: 'Jefe de Operaciones', path: PATH_DASHBOARD.credito.natural_crear, icon: ICONS.params},
-            {title: 'Producción', path: PATH_DASHBOARD.credito.juridica_crear, icon: ICONS.job},
-            {title: 'Despacho', path: PATH_DASHBOARD.credito.cargar, icon: ICONS.booking},
+            {title: 'Manifiesto', path: PATH_DASHBOARD.reports.manifest, icon: ICONS.params},
+        //     {title: 'Producción', path: PATH_DASHBOARD.credito.juridica_crear, icon: ICONS.job},
+        //     {title: 'Despacho', path: PATH_DASHBOARD.credito.cargar, icon: ICONS.booking},
         ],
     },
 
