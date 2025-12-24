@@ -10,19 +10,20 @@ import {
     Card,
     CardContent,
     Container,
-    Grid, IconButton,
-    LinearProgress, MenuItem, TableCell, TextField, Tooltip
+    Grid, 
+    IconButton,
+    MenuItem, 
+    TextField, 
+    Tooltip,
+    Stack,
+    Typography,
+    Chip,
+    alpha,
+    CircularProgress
 } from "@mui/material";
 import {useSettingsContext} from "../../../components/settings";
 import {useRouter} from "next/router";
 import EmptyContent from "../../../components/empty-content";
-import {
-    DataGrid,
-    GridToolbarColumnsButton,
-    GridToolbarContainer, GridToolbarDensitySelector, GridToolbarExport,
-    GridToolbarFilterButton,
-    GridToolbarQuickFilter
-} from "@mui/x-data-grid";
 import axios from "../../../utils/axios";
 import {useAuthContext} from "../../../auth/useAuthContext";
 import Iconify from "../../../components/iconify";
@@ -35,6 +36,66 @@ CargarArchivosCreditoPage.getLayout = (page) => <DashboardLayout>{page}</Dashboa
 
 // ----------------------------------------------------------------------
 
+// Definición de estados del proceso de crédito
+const CREDIT_STATES = [
+    { 
+        value: 0, 
+        label: 'Evaluación de Crédito', 
+        color: '#4ECDC4',
+        icon: '⚖️',
+        description: 'En proceso de evaluación crediticia'
+    },
+    { 
+        value: 1, 
+        label: 'Aprobación de Crédito', 
+        color: '#5CDB95',
+        icon: '✅',
+        description: 'Crédito aprobado'
+    },
+    { 
+        value: 2, 
+        label: 'Firma de Documentación', 
+        color: '#FF6B6B',
+        icon: '📝',
+        description: 'Pendiente de firma de documentos'
+    },
+    { 
+        value: 3, 
+        label: 'Firma de Pagaré', 
+        color: '#95E1D3',
+        icon: '✍️',
+        description: 'Pendiente de firma de pagaré'
+    },
+    { 
+        value: 4, 
+        label: 'Crédito Nominado', 
+        color: '#F38181',
+        icon: '💼',
+        description: 'Crédito asignado a cliente específico'
+    },
+    { 
+        value: 5, 
+        label: 'Crédito Innominado', 
+        color: '#AA96DA',
+        icon: '🏦',
+        description: 'Crédito genérico disponible'
+    },
+    { 
+        value: 6, 
+        label: 'Crédito Interno', 
+        color: '#FFB84D',
+        icon: '🏢',
+        description: 'Crédito interno de la empresa'
+    },
+    { 
+        value: 7, 
+        label: 'Crédito Negado', 
+        color: '#E74C3C',
+        icon: '❌',
+        description: 'Solicitud de crédito rechazada'
+    }
+];
+
 export default function CargarArchivosCreditoPage() {
 
     const {user} = useAuthContext();
@@ -46,12 +107,22 @@ export default function CargarArchivosCreditoPage() {
 
     const [businessPartners, setBusinessPartners] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
+    const [lastUpdate, setLastUpdate] = useState(null);
+    const [currentTab, setCurrentTab] = useState(0);
 
     const [openPopover, setOpenPopover] = useState(null);
     const [openOBS, setOpenOBS] = useState(false);
+    const [openChangeState, setOpenChangeState] = useState(false);
     const [valueNewOBS, setValueNewOBS] = useState('Ninguno..');
+    const [selectedNewState, setSelectedNewState] = useState(0);
 // Estado para guardar el ID seleccionado
     const [selectedIdEmpresa, setSelectedIdEmpresa] = useState(null);
+    const [selectedPartner, setSelectedPartner] = useState(null);
+    const [draggedCard, setDraggedCard] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filterType, setFilterType] = useState('all'); // 'all', 'N', 'J'
+    const [filterVendedor, setFilterVendedor] = useState('all');
     const handleChangeOBS = (event) => {
         setValueNewOBS(event.target.value);
         // //console.log(`Nuevo precio unitario ${valueNew}`);
@@ -60,11 +131,24 @@ export default function CargarArchivosCreditoPage() {
     const handleCloseOBS = () => {
         setOpenOBS(false);
     };
-    const handleOpenPopover = (event, params) => {
+    
+    const handleOpenChangeState = () => {
+        setOpenChangeState(true);
+    };
+
+    const handleCloseChangeState = () => {
+        setOpenChangeState(false);
+    };
+
+    const handleChangeNewState = (event) => {
+        setSelectedNewState(event.target.value);
+    };
+
+    const handleOpenPopover = (event, partner) => {
         setOpenPopover(event.currentTarget);
-        //console.log( JSON.stringify( params.row.ID_EMPRESA));
-        // Guardamos el ID de la fila seleccionada
-        setSelectedIdEmpresa(params.row.ID_EMPRESA);
+        setSelectedPartner(partner);
+        setSelectedIdEmpresa(partner.ID_EMPRESA);
+        setSelectedNewState(partner.ESTADO_CREDITO ?? 0);
     };
 
     const handleClosePopover = () => {
@@ -75,187 +159,103 @@ export default function CargarArchivosCreditoPage() {
         setOpenOBS(true);
     };
 
-    // Define las columnas para el DataGrid
-    const baseColumns = [
+    // Manejador para cambiar de tab
+    const handleChangeTab = (event, newValue) => {
+        setCurrentTab(newValue);
+    };
 
-        {
-            type: 'actions',
-            field: 'actions',
-            headerName: 'ACCIONES',
-            align: 'center',
-            headerAlign: 'center',
-            width: 120,
-            sortable: false,
-            filterable: false,
-            disableColumnMenu: true,
-            getActions: (params) => [
-                <TableCell align="right">
-                    <IconButton color={openPopover ? 'inherit' : 'default'} onClick={(event) =>handleOpenPopover(event, params)}>
-                        <Iconify icon="eva:more-vertical-fill"/>
-                    </IconButton>
-                    {params.row.OBSERVACIONES_CREDITO
-                        && params.row.OBSERVACIONES_CREDITO !== "<NULL>"
-                        && (
-                            <Tooltip title={params.row.OBSERVACIONES_CREDITO}>
-                                <IconButton color="primary" sx={{ width: 40, height: 40 }}>
-                                    <Badge badgeContent={1} color="error">
-                                        <NotificationsIcon />
-                                    </Badge>
-                                </IconButton>
-                            </Tooltip>
-                        )}
+    // Filtrar datos según el tab actual
+    const filteredBusinessPartners = businessPartners?.filter(
+        (partner) => (partner.ESTADO_CREDITO ?? 0) === currentTab
+    ) || [];
 
-                </TableCell>
+    // Obtener el conteo por cada estado
+    const getStateCount = (state) => {
+        return businessPartners?.filter(
+            (partner) => (partner.ESTADO_CREDITO ?? 0) === state
+        ).length || 0;
+    };
 
-            ],
-        },
+    // Handlers para drag & drop
+    const handleDragStart = (partner) => {
+        setDraggedCard(partner);
+    };
 
-        // {field: 'id', headerName: 'ID', width: 90},
-        {field: 'CREATED_AT', headerName: 'CREACIÓN', width: 250},
-        {field: 'DISPLAYNAME', headerName: 'VENDEDOR', width: 350},
-        {field: 'RUC', headerName: 'RUC', width: 200},
-        {field: 'NOMBRE', headerName: 'NOMBRE_EMPRESARIAL', width: 300},
-        {field: 'NOMBRE_REPRESENTANTE', headerName: 'NOMBRE_REPRESENTANTE', width: 400},
-        {field: 'TIPO_PERSONA', headerName: 'T_P', width: 100},
-        {
-            field: 'VER INFORMACIÓN',
-            headerName: 'VER INFORMACIÓN',
-            flex: 1,
-            minWidth: 180,
-            renderCell: (params) => {
-                return (
-                    <Button
-                        component="label"
-                        variant="outlined"
-                        onClick={() => {
-                            VerInformacionCliente(params);
-                        }}
-                    >
-                        VER INFORMACIÓN
-                    </Button>
-                );
-            },
-        },
-        {
-            field: 'VER EN UANATAC',
-            headerName: 'VER EN UANATAC',
-            flex: 1,
-            minWidth: 180,
-            renderCell: (params) => {
-                return (
-                    <Button
-                        component="label"
-                        variant="outlined"
-                        onClick={() => {
-                            VerInformacionUanataca(params);
-                        }}
-                    >
-                        VER EN UANATAC
-                    </Button>
-                );
-            },
-        },
-        {
-            field: 'verFirma',
-            headerName: 'COPIAR ENLACE FIRMA SOLICITUD+AUTORIZACION',
-            flex: 1,
-            minWidth: 180,
-            renderHeader: () => (
-        <Box sx={{
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            textAlign: 'center',
-            lineHeight: 1.2,
-            fontWeight: 'bold'
-        }}>
-            COPIAR ENLACE FIRMA SOLICITUD+AUTORIZACION
-        </Box>
-    ),
-            renderCell: (params) => {
+    const handleDragOver = (e) => {
+        e.preventDefault();
+    };
 
-                const SOO = params.row.SOO;
-                // Si viene null, undefined, vacío o como "<NULL>" => no mostramos el botón
-                if (!SOO || SOO === "<NULL>") {
-                    return null;
-                }
+    const handleDrop = async (newState) => {
+        if (!draggedCard || draggedCard.ESTADO_CREDITO === newState) {
+            setDraggedCard(null);
+            return;
+        }
 
-                return (
-                    <Button
-                        component="label"
-                        variant="outlined"
-                        onClick={() => {
-                            VerFirmaUanataca(SOO);
-                        }}
-                    >
-                        COPIAR ENLACE
-                    </Button>
-                );
-            },
-        },
+        try {
+            const response = await axios.put('/hanadb/api/customers/cambiar_estado_credito', {
+                ID_REGISTRO: draggedCard.ID_EMPRESA,
+                ESTADO_CREDITO: newState,
+                USER_ID: Number(user?.ID),
+            });
 
-        {
-            field: 'verFirmaPagare',
-            headerName: 'COPIAR ENLACE FIRMA PAGARE',
-            flex: 1,
-            minWidth: 180,
-            renderHeader: () => (
-        <Box sx={{
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            textAlign: 'center',
-            lineHeight: 1.2,
-            fontWeight: 'bold'
-        }}>
-            COPIAR ENLACE FIRMA PAGARE
-        </Box>
-    ),
-            renderCell: (params) => {
+            if (response.status === 200) {
+                fetchData(true);
+            }
+        } catch (error) {
+            console.error('Error al cambiar el estado del crédito:', error);
+            alert('Error al cambiar el estado. Por favor, intenta nuevamente.');
+        } finally {
+            setDraggedCard(null);
+        }
+    };
 
-                const SOO_PAGARE = params.row.SOO_PAGARE;
-                // Si viene null, undefined, vacío o como "<NULL>" => no mostramos el botón
-                if (!SOO_PAGARE || SOO_PAGARE === "<NULL>") {
-                    return null;
-                }
+    // Función de filtrado avanzado
+    const getFilteredPartners = () => {
+        let filtered = businessPartners || [];
 
-                return (
-                    <Button
-                        component="label"
-                        variant="outlined"
-                        onClick={() => {
-                            VerFirmaUanataca(SOO_PAGARE);
-                        }}
-                    >
-                        COPIAR ENLACE
-                    </Button>
-                );
-            },
-        },
+        // Filtro por búsqueda de texto
+        if (searchQuery.trim()) {
+            const query = searchQuery.toLowerCase();
+            filtered = filtered.filter(partner => 
+                partner.NOMBRE?.toLowerCase().includes(query) ||
+                partner.RUC?.toLowerCase().includes(query) ||
+                partner.NOMBRE_REPRESENTANTE?.toLowerCase().includes(query) ||
+                partner.DISPLAYNAME?.toLowerCase().includes(query)
+            );
+        }
 
-        // {
-        //     field: 'verFotoRegistroCivil',
-        //     headerName: 'FOTO REGISTRO CIVIL',
-        //     flex: 1,
-        //     minWidth: 180,
-        //     renderCell: (params) => {
-        //         return (
-        //             <Button
-        //                 component="label"
-        //                 variant="outlined"
-        //                 onClick={() => {
-        //                     VerFotoRegistroCivil(params);
-        //                 }}
-        //             >
-        //                 Ver
-        //             </Button>
-        //         );
-        //     },
-        // },
+        // Filtro por tipo de persona
+        if (filterType !== 'all') {
+            filtered = filtered.filter(partner => partner.TIPO_PERSONA === filterType);
+        }
 
+        // Filtro por vendedor (solo para admin)
+        if (filterVendedor !== 'all' && user?.ROLE !== '7') {
+            filtered = filtered.filter(partner => partner.DISPLAYNAME === filterVendedor);
+        }
 
-    ];
+        return filtered;
+    };
 
-    const VerInformacionCliente = (row) => {
-        const { TIPO_PERSONA, RUC } = row.row;
+    // Obtener lista única de vendedores para el filtro
+    const uniqueVendedores = [...new Set(businessPartners?.map(p => p.DISPLAYNAME).filter(Boolean))] || [];
+
+    // Obtener conteo filtrado por estado
+    const getFilteredStateCount = (state) => {
+        return getFilteredPartners().filter(
+            (partner) => (partner.ESTADO_CREDITO ?? 0) === state
+        ).length;
+    };
+
+    // Limpiar filtros
+    const handleClearFilters = () => {
+        setSearchQuery('');
+        setFilterType('all');
+        setFilterVendedor('all');
+    };
+
+    const VerInformacionCliente = (partner) => {
+        const { TIPO_PERSONA, RUC } = partner;
 
         const url =
             TIPO_PERSONA === 'N'
@@ -266,11 +266,9 @@ export default function CargarArchivosCreditoPage() {
 
     }
 
-    const VerInformacionUanataca = (row) => {
-        //console.log(row.row);
-        const url = `https://console.nexxit.dev/#login`; // Asegúrate de que el ID esté disponible
+    const VerInformacionUanataca = () => {
+        const url = `https://console.nexxit.dev/#login`;
         window.open(url, "_blank");
-
     }
 
 
@@ -295,31 +293,216 @@ export default function CargarArchivosCreditoPage() {
 
     }
 
-    // Cargar datos del endpoint cuando el componente se monta
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                let url = '';
+    // Componente de Tarjeta Kanban
+    const CreditCard = ({ partner }) => {
+        const state = CREDIT_STATES.find(s => s.value === (partner.ESTADO_CREDITO ?? 0));
+        const hasNotification = partner.OBSERVACIONES_CREDITO && partner.OBSERVACIONES_CREDITO !== "<NULL>";
 
-                // Vendedor
-                if (user?.ROLE === '7') {
-                    url = `/hanadb/api/customers/lista_validar_info_prospecto_cartera_by_user?id_user=${user?.ID}`;
-                } else {
-                    url = '/hanadb/api/customers/lista_validar_info_prospecto_cartera';
-                }
+        return (
+            <Card
+                draggable
+                onDragStart={() => handleDragStart(partner)}
+                sx={{
+                    mb: 2,
+                    cursor: 'grab',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                        transform: 'translateY(-4px)',
+                        boxShadow: '0 12px 24px rgba(0,0,0,0.15)',
+                    },
+                    '&:active': {
+                        cursor: 'grabbing',
+                        opacity: 0.8,
+                    },
+                    borderLeft: 4,
+                    borderColor: state?.color || '#ccc',
+                }}
+            >
+                <CardContent sx={{ p: 2 }}>
+                    {/* Header con acciones */}
+                    <Stack direction="row" justifyContent="space-between" alignItems="flex-start" mb={1.5}>
+                        <Chip
+                            label={partner.TIPO_PERSONA === 'N' ? 'Natural' : 'Jurídica'}
+                            size="small"
+                            sx={{
+                                bgcolor: alpha(state?.color || '#ccc', 0.15),
+                                color: state?.color,
+                                fontWeight: 'bold',
+                                fontSize: '0.7rem',
+                            }}
+                        />
+                        <Stack direction="row" spacing={0.5}>
+                            {hasNotification && (
+                                <Tooltip title={partner.OBSERVACIONES_CREDITO}>
+                                    <IconButton size="small" color="error">
+                                        <Badge badgeContent={1} color="error">
+                                            <NotificationsIcon fontSize="small" />
+                                        </Badge>
+                                    </IconButton>
+                                </Tooltip>
+                            )}
+                            <IconButton 
+                                size="small" 
+                                onClick={(e) => handleOpenPopover(e, partner)}
+                                sx={{ 
+                                    bgcolor: alpha(state?.color || '#ccc', 0.1),
+                                    '&:hover': { bgcolor: alpha(state?.color || '#ccc', 0.2) }
+                                }}
+                            >
+                                <Iconify icon="eva:more-vertical-fill" width={18} />
+                            </IconButton>
+                        </Stack>
+                    </Stack>
 
-                const response = await axios.get(url);
-                setBusinessPartners(response.data); // Suponiendo que el response.data contiene los registros
-                //console.log(response.data);
-            } catch (error) {
-                console.error('Error al obtener los datos:', error);
-            } finally {
-                setLoading(false); // Deja de mostrar el loading cuando termine
+                    {/* Información principal */}
+                    <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 700, mb: 1, lineHeight: 1.3 }}>
+                        {partner.NOMBRE}
+                    </Typography>
+
+                    {/* RUC */}
+                    <Stack direction="row" alignItems="center" spacing={0.5} mb={0.5}>
+                        <Iconify icon="mdi:card-account-details" width={16} color={state?.color} />
+                        <Typography variant="body2" sx={{ fontWeight: 600, color: 'text.secondary', fontSize: '0.85rem' }}>
+                            {partner.RUC}
+                        </Typography>
+                    </Stack>
+
+                    {/* Representante */}
+                    <Stack direction="row" alignItems="center" spacing={0.5} mb={0.5}>
+                        <Iconify icon="mdi:account" width={16} color={state?.color} />
+                        <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.8rem' }} noWrap>
+                            {partner.NOMBRE_REPRESENTANTE}
+                        </Typography>
+                    </Stack>
+
+                    {/* Vendedor */}
+                    <Stack direction="row" alignItems="center" spacing={0.5} mb={1.5}>
+                        <Iconify icon="mdi:account-tie" width={16} color={state?.color} />
+                        <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.8rem' }} noWrap>
+                            {partner.DISPLAYNAME}
+                        </Typography>
+                    </Stack>
+
+                    {/* Fecha de creación */}
+                    <Typography variant="caption" sx={{ color: 'text.disabled', display: 'block', mb: 2 }}>
+                        📅 {partner.CREATED_AT}
+                    </Typography>
+
+                    {/* Botones de acción */}
+                    <Stack spacing={1}>
+                        <Button
+                            fullWidth
+                            variant="outlined"
+                            size="small"
+                            startIcon={<Iconify icon="eva:eye-outline" />}
+                            onClick={() => VerInformacionCliente(partner)}
+                            sx={{
+                                borderColor: state?.color,
+                                color: state?.color,
+                                '&:hover': {
+                                    borderColor: state?.color,
+                                    bgcolor: alpha(state?.color || '#ccc', 0.08),
+                                },
+                            }}
+                        >
+                            Ver Información
+                        </Button>
+
+                        {partner.SOO && partner.SOO !== "<NULL>" && (
+                            <Button
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                startIcon={<Iconify icon="mdi:file-document-outline" />}
+                                onClick={() => VerFirmaUanataca(partner.SOO)}
+                                sx={{
+                                    borderColor: alpha(state?.color || '#ccc', 0.5),
+                                    color: 'text.secondary',
+                                    fontSize: '0.75rem',
+                                }}
+                            >
+                                Copiar Firma Doc
+                            </Button>
+                        )}
+
+                        {partner.SOO_PAGARE && partner.SOO_PAGARE !== "<NULL>" && (
+                            <Button
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                startIcon={<Iconify icon="mdi:file-sign" />}
+                                onClick={() => VerFirmaUanataca(partner.SOO_PAGARE)}
+                                sx={{
+                                    borderColor: alpha(state?.color || '#ccc', 0.5),
+                                    color: 'text.secondary',
+                                    fontSize: '0.75rem',
+                                }}
+                            >
+                                Copiar Firma Pagaré
+                            </Button>
+                        )}
+                    </Stack>
+                </CardContent>
+            </Card>
+        );
+    };
+
+    // 🚀 ESTRATEGIA RECOMENDADA: Cargar todos los datos UNA VEZ
+    // Ventajas:
+    // - Una sola petición HTTP (más eficiente)
+    // - Cambio de tabs instantáneo (mejor UX)
+    // - Filtrado local super rápido
+    // - Contadores en tiempo real
+    // - Búsqueda global disponible
+    
+    const fetchData = async (isRefresh = false) => {
+        try {
+            // Mostrar loading solo en carga inicial, no en refresh
+            if (!isRefresh) {
+                setLoading(true);
+            } else {
+                setRefreshing(true);
             }
-        };
 
-        fetchData();
-    }, [user]); // Dependencia: se ejecuta al montar y cuando cambie user
+            let url = '';
+
+            // Vendedor: solo sus prospectos
+            if (user?.ROLE === '7') {
+                url = `/hanadb/api/customers/lista_validar_info_prospecto_cartera_by_user?id_user=${user?.ID}`;
+            } else {
+                // Admin/Otros: todos los prospectos
+                url = '/hanadb/api/customers/lista_validar_info_prospecto_cartera';
+            }
+
+            const response = await axios.get(url);
+            setBusinessPartners(response.data);
+            setLastUpdate(new Date()); // Registrar hora de actualización
+            
+            // Mostrar mensaje de éxito solo en refresh manual
+            if (isRefresh) {
+                // Opcional: agregar toast notification
+                console.log('✅ Datos actualizados correctamente');
+            }
+        } catch (error) {
+            console.error('❌ Error al obtener los datos:', error);
+            // Opcional: mostrar toast de error
+        } finally {
+            setLoading(false);
+            setRefreshing(false);
+        }
+    };
+
+    // Cargar datos al montar el componente
+    useEffect(() => {
+        if (user?.ID) {
+            fetchData();
+        }
+    }, [user?.ID]); // Solo recargar si cambia el usuario
+
+    // Función para refresh manual
+    const handleRefreshData = () => {
+        fetchData(true);
+    };
 
     const onRowOBS = async () => {
         //console.log("Número ID_EMPRESA: " + selectedIdEmpresa);
@@ -337,20 +520,40 @@ export default function CargarArchivosCreditoPage() {
             //console.log('Cambiando estado');
             //console.log("Código de estado:", response.status);
 
-            // Recargar la misma ruta solo si la petición PUT se completó con éxito (código de estado 200)
+            // ✅ MEJOR PRÁCTICA: Recargar solo los datos, no toda la página
             if (response.status === 200) {
-
-                //setTimeout(() => {
-                router.reload();
-                //}, 5000); // Tiempo de espera de 5 segundos (5000 milisegundos)
+                // Recargar datos sin reload completo = Mejor UX
+                fetchData(true);
+                handleCloseOBS();
             }
 
         } catch (error) {
-            // Manejar el error de la petición DELETE aquí
             console.error('Error al cambiar el status de la orden:', error);
+            alert('Error al guardar la observación. Intenta nuevamente.');
         }
+    };
 
+    const onChangeState = async () => {
+        try {
+            const response = await axios.put('/hanadb/api/customers/cambiar_estado_credito', {
+                ID_REGISTRO: selectedIdEmpresa,
+                ESTADO_CREDITO: selectedNewState,
+                USER_ID: Number(user?.ID),
+            });
 
+            if (response.status === 200) {
+                // ✅ MEJOR PRÁCTICA: Recargar solo los datos, no toda la página
+                // Ventaja: Mantiene el scroll, no pierde el contexto
+                fetchData(true);
+                handleCloseChangeState();
+                // Opcional: Cambiar al tab del nuevo estado
+                setCurrentTab(selectedNewState);
+            }
+
+        } catch (error) {
+            console.error('Error al cambiar el estado del crédito:', error);
+            alert('Error al cambiar el estado. Por favor, intenta nuevamente.');
+        }
     };
 
     return (
@@ -361,7 +564,7 @@ export default function CargarArchivosCreditoPage() {
 
             <Container maxWidth={false}>
                 <CustomBreadcrumbs
-                    heading="Validar Información"
+                    heading="Gestión de Créditos"
                     links={[
                         {name: 'Dashboard', href: PATH_DASHBOARD.root},
                         {name: 'Crédito', href: PATH_DASHBOARD.blog.root},
@@ -369,91 +572,435 @@ export default function CargarArchivosCreditoPage() {
                     ]}
                 />
 
-                <Grid container spacing={3}>
-                    <Grid item xs={12} md={12}>
-                        <Card sx={{p: 3, textAlign: "center"}}>
-
-                            <CardContent>
-
-                                <DataGrid
-                                    rows={businessPartners?.map((partner, index) => ({
-                                        ...partner,
-                                        id: partner.ID || index + 1, // Usa el ID real si existe, de lo contrario, el índice
-                                    })) || []}
-                                    columns={baseColumns}
-                                    rowHeight={100} // Define la altura de las filas
-                                    pagination
-                                    pageSize={10} // Número de filas por página
-                                    slots={{
-                                        toolbar: CustomToolbar,
-                                        noRowsOverlay: () => <EmptyContent title="No Data"/>,
-                                        noResultsOverlay: () => <EmptyContent title="No results found"/>,
-                                        loadingOverlay: LinearProgress, // Usa LinearProgress como indicador de carga
-
+                {/* Header con estadísticas */}
+                <Box
+                    sx={{
+                        mb: 4,
+                        p: 3,
+                        borderRadius: 2,
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        color: 'white',
+                        boxShadow: '0 10px 40px rgba(102, 126, 234, 0.4)',
+                    }}
+                >
+                    <Grid container alignItems="center" spacing={2}>
+                        <Grid item xs={12} md={8}>
+                            <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
+                                🎯 Sistema de Gestión de Créditos
+                            </Typography>
+                            <Typography variant="body1" sx={{ opacity: 0.9 }}>
+                                Administra y controla todos los estados del proceso crediticio
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} md={4} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
+                            <Stack spacing={1} alignItems={{ xs: 'flex-start', md: 'flex-end' }}>
+                                <Button
+                                    variant="contained"
+                                    onClick={handleRefreshData}
+                                    disabled={refreshing}
+                                    startIcon={refreshing ? <CircularProgress size={20} color="inherit" /> : <Iconify icon="eva:refresh-fill" />}
+                                    sx={{
+                                        bgcolor: 'white',
+                                        color: '#667eea',
+                                        '&:hover': {
+                                            bgcolor: 'rgba(255, 255, 255, 0.9)',
+                                        },
                                     }}
-                                    loading={loading} // Activa el loading
-                                />
-
-
-
-                                <MenuPopover
-                                    open={openPopover}
-                                    onClose={handleClosePopover}
-                                    arrow="right-top"
-                                    sx={{width: 160}}
                                 >
-                                    <MenuItem
-                                        onClick={() => {
-                                            handleOpenOBS();
-                                            handleClosePopover();
+                                    {refreshing ? 'Actualizando...' : 'Actualizar'}
+                                </Button>
+                                {lastUpdate && (
+                                    <Typography variant="caption" sx={{ opacity: 0.8 }}>
+                                        Última actualización: {lastUpdate.toLocaleTimeString('es-ES')}
+                                    </Typography>
+                                )}
+                            </Stack>
+                        </Grid>
+                    </Grid>
+                </Box>
+
+                {/* Tabs con diseño moderno */}
+                <Card
+                    sx={{
+                        mb: 3,
+                        borderRadius: 3,
+                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
+                        overflow: 'hidden',
+                    }}
+                >
+                    <Box
+                        sx={{
+                            background: 'linear-gradient(to right, #f8f9fa, #ffffff)',
+                            p: 2,
+                        }}
+                    >
+                        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
+                            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                                📋 Vista Kanban Board
+                            </Typography>
+                            <Chip
+                                label={`${getFilteredPartners().length} de ${businessPartners?.length || 0}`}
+                                sx={{
+                                    bgcolor: '#667eea',
+                                    color: 'white',
+                                    fontWeight: 'bold',
+                                }}
+                            />
+                        </Stack>
+                        <Typography variant="body2" color="text.secondary" mb={2}>
+                            💡 Arrastra las tarjetas entre columnas para cambiar su estado
+                        </Typography>
+
+                        {/* Barra de búsqueda y filtros */}
+                        <Stack spacing={2}>
+                            <TextField
+                                fullWidth
+                                placeholder="🔍 Buscar por nombre, RUC, representante o vendedor..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                InputProps={{
+                                    startAdornment: (
+                                        <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', mr: 1 }} />
+                                    ),
+                                    endAdornment: searchQuery && (
+                                        <IconButton size="small" onClick={() => setSearchQuery('')}>
+                                            <Iconify icon="eva:close-fill" />
+                                        </IconButton>
+                                    ),
+                                }}
+                                sx={{
+                                    '& .MuiOutlinedInput-root': {
+                                        bgcolor: 'white',
+                                        '&:hover': {
+                                            bgcolor: alpha('#667eea', 0.02),
+                                        },
+                                        '&.Mui-focused': {
+                                            bgcolor: 'white',
+                                        },
+                                    },
+                                }}
+                            />
+
+                            <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap">
+                                {/* Filtro por tipo de persona */}
+                                <TextField
+                                    select
+                                    size="small"
+                                    value={filterType}
+                                    onChange={(e) => setFilterType(e.target.value)}
+                                    sx={{ minWidth: 180, bgcolor: 'white' }}
+                                    SelectProps={{
+                                        displayEmpty: true,
+                                    }}
+                                >
+                                    <MenuItem value="all">📋 Todos los tipos</MenuItem>
+                                    <MenuItem value="N">👤 Persona Natural</MenuItem>
+                                    <MenuItem value="J">🏢 Persona Jurídica</MenuItem>
+                                </TextField>
+
+                                {/* Filtro por vendedor (solo para admin) */}
+                                {user?.ROLE !== '7' && uniqueVendedores.length > 0 && (
+                                    <TextField
+                                        select
+                                        size="small"
+                                        value={filterVendedor}
+                                        onChange={(e) => setFilterVendedor(e.target.value)}
+                                        sx={{ minWidth: 200, bgcolor: 'white' }}
+                                        SelectProps={{
+                                            displayEmpty: true,
                                         }}
                                     >
-                                        <Iconify icon="eva:shopping-bag-outline"/>
-                                        Observación
+                                        <MenuItem value="all">👥 Todos los vendedores</MenuItem>
+                                        {uniqueVendedores.map((vendedor) => (
+                                            <MenuItem key={vendedor} value={vendedor}>
+                                                {vendedor}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                )}
+
+                                {/* Botón limpiar filtros */}
+                                {(searchQuery || filterType !== 'all' || filterVendedor !== 'all') && (
+                                    <Button
+                                        variant="outlined"
+                                        size="small"
+                                        startIcon={<Iconify icon="eva:refresh-outline" />}
+                                        onClick={handleClearFilters}
+                                        sx={{
+                                            borderColor: alpha('#667eea', 0.3),
+                                            color: '#667eea',
+                                            '&:hover': {
+                                                borderColor: '#667eea',
+                                                bgcolor: alpha('#667eea', 0.08),
+                                            },
+                                        }}
+                                    >
+                                        Limpiar Filtros
+                                    </Button>
+                                )}
+
+                                <Box sx={{ flexGrow: 1 }} />
+
+                                {/* Indicador de filtros activos */}
+                                {(searchQuery || filterType !== 'all' || filterVendedor !== 'all') && (
+                                    <Chip
+                                        label={`🔍 Filtrando resultados`}
+                                        size="small"
+                                        color="primary"
+                                        sx={{ fontWeight: 600 }}
+                                    />
+                                )}
+                            </Stack>
+                        </Stack>
+                    </Box>
+                </Card>
+
+                {/* Kanban Board */}
+                {loading ? (
+                    <Card sx={{ p: 5, textAlign: 'center' }}>
+                        <CircularProgress size={60} />
+                        <Typography variant="h6" sx={{ mt: 2 }}>
+                            Cargando créditos...
+                        </Typography>
+                    </Card>
+                ) : (
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            gap: 2,
+                            overflowX: 'auto',
+                            pb: 2,
+                            minHeight: '70vh',
+                            '&::-webkit-scrollbar': {
+                                height: 8,
+                            },
+                            '&::-webkit-scrollbar-track': {
+                                bgcolor: alpha('#000', 0.05),
+                                borderRadius: 4,
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                                bgcolor: alpha('#667eea', 0.3),
+                                borderRadius: 4,
+                                '&:hover': {
+                                    bgcolor: alpha('#667eea', 0.5),
+                                },
+                            },
+                        }}
+                    >
+                        {CREDIT_STATES.map((state) => {
+                            const statePartners = getFilteredPartners().filter(
+                                (partner) => (partner.ESTADO_CREDITO ?? 0) === state.value
+                            ) || [];
+
+                            return (
+                                <Box
+                                    key={state.value}
+                                    onDragOver={handleDragOver}
+                                    onDrop={() => handleDrop(state.value)}
+                                    sx={{
+                                        minWidth: 320,
+                                        maxWidth: 320,
+                                        bgcolor: alpha(state.color, 0.03),
+                                        borderRadius: 2,
+                                        p: 2,
+                                        border: '2px solid',
+                                        borderColor: draggedCard && draggedCard.ESTADO_CREDITO !== state.value
+                                            ? alpha(state.color, 0.5)
+                                            : alpha(state.color, 0.15),
+                                        transition: 'all 0.3s ease',
+                                        '&:hover': {
+                                            borderColor: alpha(state.color, 0.4),
+                                            bgcolor: alpha(state.color, 0.06),
+                                        },
+                                    }}
+                                >
+                                    {/* Header de columna */}
+                                    <Stack direction="row" alignItems="center" spacing={1} mb={2}>
+                                        <Box sx={{ fontSize: '24px' }}>{state.icon}</Box>
+                                        <Box sx={{ flex: 1 }}>
+                                            <Typography variant="subtitle1" sx={{ fontWeight: 700, fontSize: '0.95rem' }}>
+                                                {state.label}
+                                            </Typography>
+                                            <Typography variant="caption" color="text.secondary">
+                                                {state.description}
+                                            </Typography>
+                                        </Box>
+                                        <Chip
+                                            label={statePartners.length}
+                                            size="small"
+                                            sx={{
+                                                bgcolor: state.color,
+                                                color: 'white',
+                                                fontWeight: 'bold',
+                                                minWidth: 32,
+                                            }}
+                                        />
+                                    </Stack>
+
+                                    {/* Tarjetas */}
+                                    <Box
+                                        sx={{
+                                            maxHeight: 'calc(100vh - 420px)',
+                                            overflowY: 'auto',
+                                            pr: 1,
+                                            '&::-webkit-scrollbar': {
+                                                width: 6,
+                                            },
+                                            '&::-webkit-scrollbar-track': {
+                                                bgcolor: alpha(state.color, 0.05),
+                                                borderRadius: 3,
+                                            },
+                                            '&::-webkit-scrollbar-thumb': {
+                                                bgcolor: alpha(state.color, 0.3),
+                                                borderRadius: 3,
+                                                '&:hover': {
+                                                    bgcolor: alpha(state.color, 0.5),
+                                                },
+                                            },
+                                        }}
+                                    >
+                                        {statePartners.length === 0 ? (
+                                            <Box
+                                                sx={{
+                                                    textAlign: 'center',
+                                                    py: 4,
+                                                    color: 'text.disabled',
+                                                }}
+                                            >
+                                                <Iconify icon="eva:inbox-outline" width={48} sx={{ mb: 1, opacity: 0.3 }} />
+                                                <Typography variant="body2">
+                                                    {searchQuery || filterType !== 'all' || filterVendedor !== 'all' 
+                                                        ? 'Sin coincidencias' 
+                                                        : 'No hay registros'}
+                                                </Typography>
+                                            </Box>
+                                        ) : (
+                                            statePartners.map((partner) => (
+                                                <CreditCard key={partner.ID_EMPRESA || partner.RUC} partner={partner} />
+                                            ))
+                                        )}
+                                    </Box>
+                                </Box>
+                            );
+                        })}
+                    </Box>
+                )}
+
+                <MenuPopover
+                    open={openPopover}
+                    onClose={handleClosePopover}
+                    arrow="right-top"
+                    sx={{width: 200}}
+                >
+                    <MenuItem
+                        onClick={() => {
+                            handleOpenChangeState();
+                            handleClosePopover();
+                        }}
+                        sx={{ py: 1.5 }}
+                    >
+                        <Iconify icon="eva:swap-outline" sx={{ mr: 1 }}/>
+                        Cambiar Estado
+                    </MenuItem>
+                    
+                    <MenuItem
+                        onClick={() => {
+                            handleOpenOBS();
+                            handleClosePopover();
+                        }}
+                        sx={{ py: 1.5 }}
+                    >
+                        <Iconify icon="eva:message-circle-outline" sx={{ mr: 1 }}/>
+                        Observación
+                    </MenuItem>
+
+                    <MenuItem
+                        onClick={() => {
+                            VerInformacionUanataca();
+                            handleClosePopover();
+                        }}
+                        sx={{ py: 1.5 }}
+                    >
+                        <Iconify icon="mdi:web" sx={{ mr: 1 }}/>
+                        Ver en Uanataca
+                    </MenuItem>
+                </MenuPopover>
+
+                <ConfirmDialog
+                    open={openChangeState}
+                    onClose={handleCloseChangeState}
+                    title="Cambiar Estado del Crédito"
+                    content={
+                        <Box sx={{ pt: 2 }}>
+                            <Typography variant="body2" sx={{ mb: 2, color: 'text.secondary' }}>
+                                Selecciona el nuevo estado para este crédito:
+                            </Typography>
+                            <TextField
+                                select
+                                fullWidth
+                                label="Nuevo Estado"
+                                value={selectedNewState}
+                                onChange={handleChangeNewState}
+                                sx={{ mb: 2 }}
+                            >
+                                {CREDIT_STATES.map((state) => (
+                                    <MenuItem key={state.value} value={state.value}>
+                                        <Stack direction="row" alignItems="center" spacing={1}>
+                                            <Box sx={{ fontSize: '20px' }}>{state.icon}</Box>
+                                            <Box>
+                                                <Typography variant="subtitle2">
+                                                    {state.label}
+                                                </Typography>
+                                                <Typography variant="caption" color="text.secondary">
+                                                    {state.description}
+                                                </Typography>
+                                            </Box>
+                                        </Stack>
                                     </MenuItem>
+                                ))}
+                            </TextField>
+                        </Box>
+                    }
+                    action={
+                        <Button 
+                            variant="contained" 
+                            onClick={() => {
+                                onChangeState();
+                                handleCloseChangeState();
+                            }}
+                            sx={{
+                                bgcolor: CREDIT_STATES[selectedNewState]?.color,
+                                '&:hover': {
+                                    bgcolor: CREDIT_STATES[selectedNewState]?.color,
+                                    opacity: 0.9,
+                                },
+                            }}
+                        >
+                            Cambiar Estado
+                        </Button>
+                    }
+                />
 
-
-                                </MenuPopover>
-
-
-                                <ConfirmDialog
-                                    open={openOBS}
-                                    onClose={handleCloseOBS}
-                                    title="Observación Cartera (UANATACA)"
-                                    action={
-                                        <>
-                                            <TextField
-                                                label="Nota"
-                                                value={valueNewOBS}
-                                                onChange={handleChangeOBS}
-                                            />
-                                            <Button variant="contained" color="error" onClick={() => {
-                                                onRowOBS();
-                                            }}>
-                                                Guardar.
-                                            </Button>
-                                        </>
-                                    }
-                                />
-                            </CardContent>
-
-                        </Card>
-                    </Grid>
-                </Grid>
+                <ConfirmDialog
+                    open={openOBS}
+                    onClose={handleCloseOBS}
+                    title="Observación Cartera (UANATACA)"
+                    action={
+                        <>
+                            <TextField
+                                label="Nota"
+                                value={valueNewOBS}
+                                onChange={handleChangeOBS}
+                            />
+                            <Button variant="contained" color="error" onClick={() => {
+                                onRowOBS();
+                            }}>
+                                Guardar.
+                            </Button>
+                        </>
+                    }
+                />
             </Container>
         </>
     )
-}
-
-function CustomToolbar() {
-    return (
-        <GridToolbarContainer>
-            <GridToolbarQuickFilter/>
-            <Box sx={{flexGrow: 1}}/>
-            <GridToolbarColumnsButton/>
-            <GridToolbarFilterButton/>
-            <GridToolbarDensitySelector/>
-            <GridToolbarExport/>
-        </GridToolbarContainer>
-    );
 }
