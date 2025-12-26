@@ -96,6 +96,16 @@ const CREDIT_STATES = [
     }
 ];
 
+// Catálogo de tipos de cliente
+const TIPOS_CLIENTE = [
+    { value: 106, label: 'Mayoristas', icon: '🏢', color: '#3498db' },
+    { value: 124, label: 'Master Dealer', icon: '👑', color: '#9b59b6' },
+    { value: 122, label: 'Minoristas', icon: '🏪', color: '#e74c3c' },
+    { value: 123, label: 'Corporativo', icon: '🏛️', color: '#2ecc71' },
+    { value: 112, label: 'Retail', icon: '🛒', color: '#f39c12' },
+    { value: 115, label: 'Operadoras', icon: '📱', color: '#1abc9c' },
+];
+
 export default function CargarArchivosCreditoPage() {
 
     const {user} = useAuthContext();
@@ -114,8 +124,10 @@ export default function CargarArchivosCreditoPage() {
     const [openPopover, setOpenPopover] = useState(null);
     const [openOBS, setOpenOBS] = useState(false);
     const [openChangeState, setOpenChangeState] = useState(false);
+    const [openChangeTipoCliente, setOpenChangeTipoCliente] = useState(false);
     const [valueNewOBS, setValueNewOBS] = useState('Ninguno..');
     const [selectedNewState, setSelectedNewState] = useState(0);
+    const [selectedTipoCliente, setSelectedTipoCliente] = useState(null);
 // Estado para guardar el ID seleccionado
     const [selectedIdEmpresa, setSelectedIdEmpresa] = useState(null);
     const [selectedPartner, setSelectedPartner] = useState(null);
@@ -144,11 +156,24 @@ export default function CargarArchivosCreditoPage() {
         setSelectedNewState(event.target.value);
     };
 
+    const handleOpenChangeTipoCliente = () => {
+        setOpenChangeTipoCliente(true);
+    };
+
+    const handleCloseChangeTipoCliente = () => {
+        setOpenChangeTipoCliente(false);
+    };
+
+    const handleChangeTipoCliente = (event) => {
+        setSelectedTipoCliente(event.target.value);
+    };
+
     const handleOpenPopover = (event, partner) => {
         setOpenPopover(event.currentTarget);
         setSelectedPartner(partner);
         setSelectedIdEmpresa(partner.ID_EMPRESA);
         setSelectedNewState(partner.ESTADO_CREDITO ?? 0);
+        setSelectedTipoCliente(partner.TIPO_CLIENTE ?? null);
     };
 
     const handleClosePopover = () => {
@@ -354,6 +379,27 @@ export default function CargarArchivosCreditoPage() {
                         </Stack>
                     </Stack>
 
+                    {/* Tipo de Cliente */}
+                    {partner.TIPO_CLIENTE && (
+                        <Box sx={{ mb: 1.5 }}>
+                            <Chip 
+                                icon={<Box sx={{ fontSize: '14px' }}>{TIPOS_CLIENTE.find(t => t.value === partner.TIPO_CLIENTE)?.icon}</Box>}
+                                label={TIPOS_CLIENTE.find(t => t.value === partner.TIPO_CLIENTE)?.label || 'Sin tipo'}
+                                size="small"
+                                sx={{
+                                    bgcolor: alpha(TIPOS_CLIENTE.find(t => t.value === partner.TIPO_CLIENTE)?.color || '#ccc', 0.15),
+                                    color: TIPOS_CLIENTE.find(t => t.value === partner.TIPO_CLIENTE)?.color || '#666',
+                                    fontWeight: 600,
+                                    fontSize: '0.7rem',
+                                    height: '24px',
+                                    '& .MuiChip-icon': {
+                                        marginLeft: '6px',
+                                    }
+                                }}
+                            />
+                        </Box>
+                    )}
+
                     {/* Información principal */}
                     <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 700, mb: 1, lineHeight: 1.3 }}>
                         {partner.NOMBRE}
@@ -553,6 +599,30 @@ export default function CargarArchivosCreditoPage() {
         } catch (error) {
             console.error('Error al cambiar el estado del crédito:', error);
             alert('Error al cambiar el estado. Por favor, intenta nuevamente.');
+        }
+    };
+
+    const onUpdateTipoCliente = async () => {
+        if (!selectedTipoCliente) {
+            alert('⚠️ Por favor selecciona un tipo de cliente');
+            return;
+        }
+
+        try {
+            const response = await axios.put('/hanadb/api/customers/actualizar_tipo_cliente', {
+                tipo_cliente: selectedTipoCliente,
+                idEmpresa: selectedIdEmpresa,
+            });
+
+            if (response.status === 200) {
+                alert('✅ Tipo de cliente actualizado exitosamente');
+                fetchData(true);
+                handleCloseChangeTipoCliente();
+                handleClosePopover();
+            }
+        } catch (error) {
+            console.error('Error al actualizar tipo de cliente:', error);
+            alert('❌ Error al actualizar tipo de cliente. Intenta nuevamente.');
         }
     };
 
@@ -902,6 +972,17 @@ export default function CargarArchivosCreditoPage() {
                         <Iconify icon="eva:swap-outline" sx={{ mr: 1 }}/>
                         Cambiar Estado
                     </MenuItem>
+
+                    <MenuItem
+                        onClick={() => {
+                            handleOpenChangeTipoCliente();
+                            handleClosePopover();
+                        }}
+                        sx={{ py: 1.5 }}
+                    >
+                        <Iconify icon="mdi:account-group" sx={{ mr: 1 }}/>
+                        Tipo de Cliente
+                    </MenuItem>
                     
                     <MenuItem
                         onClick={() => {
@@ -998,6 +1079,72 @@ export default function CargarArchivosCreditoPage() {
                                 Guardar.
                             </Button>
                         </>
+                    }
+                />
+
+                <ConfirmDialog
+                    open={openChangeTipoCliente}
+                    onClose={handleCloseChangeTipoCliente}
+                    title="Cambiar Tipo de Cliente"
+                    content={
+                        <Box sx={{ pt: 2 }}>
+                            <Typography variant="body2" sx={{ mb: 3, color: 'text.secondary' }}>
+                                Selecciona el tipo de cliente para: <strong>{selectedPartner?.NOMBRE}</strong>
+                            </Typography>
+                            <TextField
+                                select
+                                fullWidth
+                                label="Tipo de Cliente"
+                                value={selectedTipoCliente || ''}
+                                onChange={handleChangeTipoCliente}
+                                helperText="Categoría de cliente según clasificación empresarial"
+                            >
+                                {TIPOS_CLIENTE.map((tipo) => (
+                                    <MenuItem key={tipo.value} value={tipo.value}>
+                                        <Stack direction="row" alignItems="center" spacing={1.5}>
+                                            <Box 
+                                                sx={{ 
+                                                    fontSize: '24px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    width: 40,
+                                                    height: 40,
+                                                    borderRadius: '8px',
+                                                    bgcolor: alpha(tipo.color, 0.1),
+                                                }}
+                                            >
+                                                {tipo.icon}
+                                            </Box>
+                                            <Box>
+                                                <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                                                    {tipo.label}
+                                                </Typography>
+                                                <Typography variant="caption" sx={{ color: tipo.color, fontWeight: 500 }}>
+                                                    Código: {tipo.value}
+                                                </Typography>
+                                            </Box>
+                                        </Stack>
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Box>
+                    }
+                    action={
+                        <Button 
+                            variant="contained" 
+                            onClick={onUpdateTipoCliente}
+                            disabled={!selectedTipoCliente}
+                            sx={{
+                                bgcolor: selectedTipoCliente ? TIPOS_CLIENTE.find(t => t.value === selectedTipoCliente)?.color : 'grey',
+                                '&:hover': {
+                                    bgcolor: selectedTipoCliente ? TIPOS_CLIENTE.find(t => t.value === selectedTipoCliente)?.color : 'grey',
+                                    opacity: 0.9,
+                                },
+                            }}
+                        >
+                            💾 Guardar Tipo
+                        </Button>
                     }
                 />
             </Container>
