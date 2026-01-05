@@ -1,8 +1,8 @@
 import DashboardLayout from "../../../layouts/dashboard";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
-import {PATH_DASHBOARD} from "../../../routes/paths";
+import { PATH_DASHBOARD } from "../../../routes/paths";
 import {
     Badge,
     Box,
@@ -10,10 +10,10 @@ import {
     Card,
     CardContent,
     Container,
-    Grid, 
+    Grid,
     IconButton,
-    MenuItem, 
-    TextField, 
+    MenuItem,
+    TextField,
     Tooltip,
     Stack,
     Typography,
@@ -21,11 +21,11 @@ import {
     alpha,
     CircularProgress
 } from "@mui/material";
-import {useSettingsContext} from "../../../components/settings";
-import {useRouter} from "next/router";
+import { useSettingsContext } from "../../../components/settings";
+import { useRouter } from "next/router";
 import EmptyContent from "../../../components/empty-content";
 import axios from "../../../utils/axios";
-import {useAuthContext} from "../../../auth/useAuthContext";
+import { useAuthContext } from "../../../auth/useAuthContext";
 import Iconify from "../../../components/iconify";
 import MenuPopover from "../../../components/menu-popover";
 import ConfirmDialog from "../../../components/confirm-dialog";
@@ -36,64 +36,90 @@ CargarArchivosCreditoPage.getLayout = (page) => <DashboardLayout>{page}</Dashboa
 
 // ----------------------------------------------------------------------
 
-// Definición de estados del proceso de crédito
+// ============================================================
+// 📋 ESTADOS DEL PROCESO DE CRÉDITO - FLUJO LÓGICO
+// ============================================================
+// Orden reorganizado según el flujo natural del proceso crediticio:
+// 1. Solicitud y Evaluación Inicial (0, 8)
+// 2. Decisión de Aprobación (1, 7)
+// 3. Proceso de Firma (2, 3)
+// 4. Tipo de Crédito Asignado (4, 5, 6)
+// ============================================================
+
 const CREDIT_STATES = [
-    { 
-        value: 0, 
-        label: 'Evaluación de Crédito', 
+    // ========== FASE 1: EVALUACIÓN INICIAL ==========
+    {
+        value: 0,
+        label: 'Evaluación de Crédito',
         color: '#4ECDC4',
         icon: '⚖️',
-        description: 'En proceso de evaluación crediticia'
+        description: 'En proceso de evaluación crediticia',
+        phase: 'Evaluación'
     },
-    { 
-        value: 1, 
-        label: 'Aprobación de Crédito', 
+    {
+        value: 8,
+        label: 'Pendiente Documentación - Información',
+        color: '#FFA726',
+        icon: '📝',
+        description: 'Pendiente de cargar documentos e información',
+        phase: 'Evaluación'
+    },
+    {
+        value: 2,
+        label: 'Firma de Documentación',
+        color: '#42A5F5',
+        icon: '📄',
+        description: 'Pendiente de firma de documentos',
+        phase: 'Formalización'
+    },
+    {
+        value: 1,
+        label: 'Aprobación de Crédito',
         color: '#5CDB95',
         icon: '✅',
-        description: 'Crédito aprobado'
+        description: 'Crédito aprobado - Continuar con firma',
+        phase: 'Decisión'
     },
-    { 
-        value: 2, 
-        label: 'Firma de Documentación', 
-        color: '#FF6B6B',
-        icon: '📝',
-        description: 'Pendiente de firma de documentos'
-    },
-    { 
-        value: 3, 
-        label: 'Firma de Pagaré', 
-        color: '#95E1D3',
+    {
+        value: 3,
+        label: 'Firma de Pagaré',
+        color: '#66BB6A',
         icon: '✍️',
-        description: 'Pendiente de firma de pagaré'
+        description: 'Pendiente de firma de pagaré',
+        phase: 'Formalización'
     },
-    { 
-        value: 4, 
-        label: 'Crédito Nominado', 
-        color: '#F38181',
+    {
+        value: 4,
+        label: 'Crédito Nominado',
+        color: '#AB47BC',
         icon: '💼',
-        description: 'Crédito asignado a cliente específico'
+        description: 'Crédito asignado a cliente específico',
+        phase: 'Asignación'
     },
-    { 
-        value: 5, 
-        label: 'Crédito Innominado', 
-        color: '#AA96DA',
+    {
+        value: 5,
+        label: 'Crédito Innominado',
+        color: '#7E57C2',
         icon: '🏦',
-        description: 'Crédito genérico disponible'
+        description: 'Crédito genérico disponible',
+        phase: 'Asignación'
     },
-    { 
-        value: 6, 
-        label: 'Crédito Interno', 
-        color: '#FFB84D',
+    {
+        value: 6,
+        label: 'Crédito Interno',
+        color: '#FF7043',
         icon: '🏢',
-        description: 'Crédito interno de la empresa'
+        description: 'Crédito interno de la empresa',
+        phase: 'Asignación'
     },
-    { 
-        value: 7, 
-        label: 'Crédito Negado', 
+    {
+        value: 7,
+        label: 'Crédito Negado',
         color: '#E74C3C',
         icon: '❌',
-        description: 'Solicitud de crédito rechazada'
-    }
+        description: 'Solicitud de crédito rechazada - Proceso finalizado',
+        phase: 'Decisión'
+    },
 ];
 
 // Catálogo de tipos de cliente
@@ -108,9 +134,9 @@ const TIPOS_CLIENTE = [
 
 export default function CargarArchivosCreditoPage() {
 
-    const {user} = useAuthContext();
+    const { user } = useAuthContext();
 
-    const {themeStretch} = useSettingsContext();
+    const { themeStretch } = useSettingsContext();
 
     const router = useRouter();
     // const {id} = router.query; // Captura el parámetro "id"
@@ -128,7 +154,7 @@ export default function CargarArchivosCreditoPage() {
     const [valueNewOBS, setValueNewOBS] = useState('Ninguno..');
     const [selectedNewState, setSelectedNewState] = useState(0);
     const [selectedTipoCliente, setSelectedTipoCliente] = useState(null);
-// Estado para guardar el ID seleccionado
+    // Estado para guardar el ID seleccionado
     const [selectedIdEmpresa, setSelectedIdEmpresa] = useState(null);
     const [selectedPartner, setSelectedPartner] = useState(null);
     const [draggedCard, setDraggedCard] = useState(null);
@@ -143,7 +169,7 @@ export default function CargarArchivosCreditoPage() {
     const handleCloseOBS = () => {
         setOpenOBS(false);
     };
-    
+
     const handleOpenChangeState = () => {
         setOpenChangeState(true);
     };
@@ -241,7 +267,7 @@ export default function CargarArchivosCreditoPage() {
         // Filtro por búsqueda de texto
         if (searchQuery.trim()) {
             const query = searchQuery.toLowerCase();
-            filtered = filtered.filter(partner => 
+            filtered = filtered.filter(partner =>
                 partner.NOMBRE?.toLowerCase().includes(query) ||
                 partner.RUC?.toLowerCase().includes(query) ||
                 partner.NOMBRE_REPRESENTANTE?.toLowerCase().includes(query) ||
@@ -366,10 +392,10 @@ export default function CargarArchivosCreditoPage() {
                                     </IconButton>
                                 </Tooltip>
                             )}
-                            <IconButton 
-                                size="small" 
+                            <IconButton
+                                size="small"
                                 onClick={(e) => handleOpenPopover(e, partner)}
-                                sx={{ 
+                                sx={{
                                     bgcolor: alpha(state?.color || '#ccc', 0.1),
                                     '&:hover': { bgcolor: alpha(state?.color || '#ccc', 0.2) }
                                 }}
@@ -382,7 +408,7 @@ export default function CargarArchivosCreditoPage() {
                     {/* Tipo de Cliente */}
                     {partner.TIPO_CLIENTE && (
                         <Box sx={{ mb: 1.5 }}>
-                            <Chip 
+                            <Chip
                                 icon={<Box sx={{ fontSize: '14px' }}>{TIPOS_CLIENTE.find(t => t.value === partner.TIPO_CLIENTE)?.icon}</Box>}
                                 label={TIPOS_CLIENTE.find(t => t.value === partner.TIPO_CLIENTE)?.label || 'Sin tipo'}
                                 size="small"
@@ -500,7 +526,7 @@ export default function CargarArchivosCreditoPage() {
     // - Filtrado local super rápido
     // - Contadores en tiempo real
     // - Búsqueda global disponible
-    
+
     const fetchData = async (isRefresh = false) => {
         try {
             // Mostrar loading solo en carga inicial, no en refresh
@@ -523,7 +549,7 @@ export default function CargarArchivosCreditoPage() {
             const response = await axios.get(url);
             setBusinessPartners(response.data);
             setLastUpdate(new Date()); // Registrar hora de actualización
-            
+
             // Mostrar mensaje de éxito solo en refresh manual
             if (isRefresh) {
                 // Opcional: agregar toast notification
@@ -636,9 +662,9 @@ export default function CargarArchivosCreditoPage() {
                 <CustomBreadcrumbs
                     heading="Gestión de Créditos"
                     links={[
-                        {name: 'Dashboard', href: PATH_DASHBOARD.root},
-                        {name: 'Crédito', href: PATH_DASHBOARD.blog.root},
-                        {name: 'Validar Información'},
+                        { name: 'Dashboard', href: PATH_DASHBOARD.root },
+                        { name: 'Crédito', href: PATH_DASHBOARD.blog.root },
+                        { name: 'Validar Información' },
                     ]}
                 />
 
@@ -939,8 +965,8 @@ export default function CargarArchivosCreditoPage() {
                                             >
                                                 <Iconify icon="eva:inbox-outline" width={48} sx={{ mb: 1, opacity: 0.3 }} />
                                                 <Typography variant="body2">
-                                                    {searchQuery || filterType !== 'all' || filterVendedor !== 'all' 
-                                                        ? 'Sin coincidencias' 
+                                                    {searchQuery || filterType !== 'all' || filterVendedor !== 'all'
+                                                        ? 'Sin coincidencias'
                                                         : 'No hay registros'}
                                                 </Typography>
                                             </Box>
@@ -960,7 +986,7 @@ export default function CargarArchivosCreditoPage() {
                     open={openPopover}
                     onClose={handleClosePopover}
                     arrow="right-top"
-                    sx={{width: 200}}
+                    sx={{ width: 200 }}
                 >
                     <MenuItem
                         onClick={() => {
@@ -969,7 +995,7 @@ export default function CargarArchivosCreditoPage() {
                         }}
                         sx={{ py: 1.5 }}
                     >
-                        <Iconify icon="eva:swap-outline" sx={{ mr: 1 }}/>
+                        <Iconify icon="eva:swap-outline" sx={{ mr: 1 }} />
                         Cambiar Estado
                     </MenuItem>
 
@@ -980,10 +1006,10 @@ export default function CargarArchivosCreditoPage() {
                         }}
                         sx={{ py: 1.5 }}
                     >
-                        <Iconify icon="mdi:account-group" sx={{ mr: 1 }}/>
+                        <Iconify icon="mdi:account-group" sx={{ mr: 1 }} />
                         Tipo de Cliente
                     </MenuItem>
-                    
+
                     <MenuItem
                         onClick={() => {
                             handleOpenOBS();
@@ -991,7 +1017,7 @@ export default function CargarArchivosCreditoPage() {
                         }}
                         sx={{ py: 1.5 }}
                     >
-                        <Iconify icon="eva:message-circle-outline" sx={{ mr: 1 }}/>
+                        <Iconify icon="eva:message-circle-outline" sx={{ mr: 1 }} />
                         Observación
                     </MenuItem>
 
@@ -1002,7 +1028,7 @@ export default function CargarArchivosCreditoPage() {
                         }}
                         sx={{ py: 1.5 }}
                     >
-                        <Iconify icon="mdi:web" sx={{ mr: 1 }}/>
+                        <Iconify icon="mdi:web" sx={{ mr: 1 }} />
                         Ver en Uanataca
                     </MenuItem>
                 </MenuPopover>
@@ -1043,8 +1069,8 @@ export default function CargarArchivosCreditoPage() {
                         </Box>
                     }
                     action={
-                        <Button 
-                            variant="contained" 
+                        <Button
+                            variant="contained"
                             onClick={() => {
                                 onChangeState();
                                 handleCloseChangeState();
@@ -1102,8 +1128,8 @@ export default function CargarArchivosCreditoPage() {
                                 {TIPOS_CLIENTE.map((tipo) => (
                                     <MenuItem key={tipo.value} value={tipo.value}>
                                         <Stack direction="row" alignItems="center" spacing={1.5}>
-                                            <Box 
-                                                sx={{ 
+                                            <Box
+                                                sx={{
                                                     fontSize: '24px',
                                                     display: 'flex',
                                                     alignItems: 'center',
@@ -1131,8 +1157,8 @@ export default function CargarArchivosCreditoPage() {
                         </Box>
                     }
                     action={
-                        <Button 
-                            variant="contained" 
+                        <Button
+                            variant="contained"
                             onClick={onUpdateTipoCliente}
                             disabled={!selectedTipoCliente}
                             sx={{
