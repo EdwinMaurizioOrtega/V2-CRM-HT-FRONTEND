@@ -30,6 +30,7 @@ import Iconify from "../../../components/iconify";
 import MenuPopover from "../../../components/menu-popover";
 import ConfirmDialog from "../../../components/confirm-dialog";
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import * as XLSX from 'xlsx';
 
 
 CargarArchivosCreditoPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -192,6 +193,130 @@ export default function CargarArchivosCreditoPage() {
 
     const handleChangeTipoCliente = (event) => {
         setSelectedTipoCliente(event.target.value);
+    };
+
+    // Función para exportar a Excel
+    const exportToExcel = () => {
+        try {
+            // Obtener todos los datos filtrados
+            const dataToExport = getFilteredPartners();
+
+            if (!dataToExport || dataToExport.length === 0) {
+                alert('⚠️ No hay datos para exportar');
+                return;
+            }
+
+            // Preparar datos para Excel con toda la información
+            const excelData = dataToExport.map((partner, index) => {
+                // Obtener estado y tipo de cliente
+                const estado = CREDIT_STATES.find(s => s.value === (partner.ESTADO_CREDITO ?? 0));
+                const tipoCliente = TIPOS_CLIENTE.find(t => t.value === partner.TIPO_CLIENTE);
+
+                return {
+                    'N°': index + 1,
+                    'ID Empresa': partner.ID_EMPRESA || '',
+                    'Nombre/Razón Social': partner.NOMBRE || '',
+                    'RUC/Cédula': partner.RUC || '',
+                    'Tipo Persona': partner.TIPO_PERSONA === 'N' ? 'Natural' : 'Jurídica',
+                    'Representante Legal': partner.NOMBRE_REPRESENTANTE || '',
+                    'Cédula Representante': partner.CEDULA_REPRESENTANTE || '',
+                    'Estado Crédito': estado?.label || 'Sin Estado',
+                    'Fase': estado?.phase || '',
+                    'Tipo Cliente': tipoCliente?.label || 'Sin Clasificar',
+                    'Vendedor': partner.DISPLAYNAME || '',
+                    'Teléfono': partner.TELEFONO || '',
+                    'Email': partner.EMAIL || '',
+                    'Dirección': partner.DIRECCION || '',
+                    'Ciudad': partner.CIUDAD || '',
+                    'Provincia': partner.PROVINCIA || '',
+                    'Monto Solicitado': partner.MONTO_SOLICITADO || '',
+                    'Plazo (meses)': partner.PLAZO_MESES || '',
+                    'Tasa Interés': partner.TASA_INTERES || '',
+                    'Observaciones': partner.OBSERVACIONES_CREDITO && partner.OBSERVACIONES_CREDITO !== '<NULL>' 
+                        ? partner.OBSERVACIONES_CREDITO 
+                        : '',
+                    'Estado Documentación': partner.SOO && partner.SOO !== '<NULL>' ? 'Documentos Cargados' : 'Pendiente',
+                    'Estado Pagaré': partner.SOO_PAGARE && partner.SOO_PAGARE !== '<NULL>' ? 'Pagaré Firmado' : 'Pendiente',
+                    'Fecha Creación': partner.CREATED_AT || '',
+                    'Última Actualización': partner.UPDATED_AT || '',
+                    'Usuario Creación': partner.CREATED_BY_USER || '',
+                    'Usuario Actualización': partner.UPDATED_BY_USER || '',
+                };
+            });
+
+            // Crear workbook y worksheet
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.json_to_sheet(excelData);
+
+            // Ajustar ancho de columnas
+            const colWidths = [
+                { wch: 5 },   // N°
+                { wch: 12 },  // ID Empresa
+                { wch: 35 },  // Nombre
+                { wch: 15 },  // RUC
+                { wch: 12 },  // Tipo Persona
+                { wch: 30 },  // Representante
+                { wch: 15 },  // Cédula Rep
+                { wch: 30 },  // Estado Crédito
+                { wch: 15 },  // Fase
+                { wch: 18 },  // Tipo Cliente
+                { wch: 25 },  // Vendedor
+                { wch: 15 },  // Teléfono
+                { wch: 30 },  // Email
+                { wch: 40 },  // Dirección
+                { wch: 15 },  // Ciudad
+                { wch: 15 },  // Provincia
+                { wch: 15 },  // Monto
+                { wch: 12 },  // Plazo
+                { wch: 12 },  // Tasa
+                { wch: 50 },  // Observaciones
+                { wch: 20 },  // Estado Doc
+                { wch: 20 },  // Estado Pagaré
+                { wch: 20 },  // Fecha Creación
+                { wch: 20 },  // Última Act
+                { wch: 20 },  // Usuario Creación
+                { wch: 20 },  // Usuario Act
+            ];
+            ws['!cols'] = colWidths;
+
+            // Agregar worksheet al workbook
+            XLSX.utils.book_append_sheet(wb, ws, 'Gestión de Créditos');
+
+            // Crear hoja adicional con resumen por estado
+            const resumenEstados = CREDIT_STATES.map(estado => ({
+                'Estado': estado.label,
+                'Fase': estado.phase,
+                'Total': getFilteredPartners().filter(p => (p.ESTADO_CREDITO ?? 0) === estado.value).length,
+                'Porcentaje': `${((getFilteredPartners().filter(p => (p.ESTADO_CREDITO ?? 0) === estado.value).length / dataToExport.length) * 100).toFixed(2)}%`
+            }));
+            const wsResumen = XLSX.utils.json_to_sheet(resumenEstados);
+            wsResumen['!cols'] = [{ wch: 40 }, { wch: 20 }, { wch: 10 }, { wch: 12 }];
+            XLSX.utils.book_append_sheet(wb, wsResumen, 'Resumen por Estado');
+
+            // Crear hoja adicional con resumen por tipo de cliente
+            const resumenTipos = TIPOS_CLIENTE.map(tipo => ({
+                'Tipo Cliente': tipo.label,
+                'Total': getFilteredPartners().filter(p => p.TIPO_CLIENTE === tipo.value).length,
+                'Porcentaje': `${((getFilteredPartners().filter(p => p.TIPO_CLIENTE === tipo.value).length / dataToExport.length) * 100).toFixed(2)}%`
+            }));
+            const wsTipos = XLSX.utils.json_to_sheet(resumenTipos);
+            wsTipos['!cols'] = [{ wch: 25 }, { wch: 10 }, { wch: 12 }];
+            XLSX.utils.book_append_sheet(wb, wsTipos, 'Resumen por Tipo Cliente');
+
+            // Generar nombre de archivo con fecha
+            const fecha = new Date().toISOString().split('T')[0];
+            const hora = new Date().toTimeString().split(' ')[0].replace(/:/g, '-');
+            const fileName = `Reporte_Gestion_Creditos_${fecha}_${hora}.xlsx`;
+
+            // Descargar archivo
+            XLSX.writeFile(wb, fileName);
+
+            // Mensaje de éxito
+            alert(`✅ Reporte generado exitosamente\n📊 ${dataToExport.length} registros exportados\n📄 Archivo: ${fileName}`);
+        } catch (error) {
+            console.error('Error al generar el reporte:', error);
+            alert('❌ Error al generar el reporte. Por favor, intenta nuevamente.');
+        }
     };
 
     const handleOpenPopover = (event, partner) => {
@@ -981,6 +1106,43 @@ export default function CargarArchivosCreditoPage() {
                         })}
                     </Box>
                 )}
+
+                {/* Botón para exportar a Excel */}
+                <Box
+                    sx={{
+                        mt: 4,
+                        mb: 3,
+                        display: 'flex',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Button
+                        variant="contained"
+                        size="large"
+                        onClick={exportToExcel}
+                        startIcon={<Iconify icon="vscode-icons:file-type-excel" width={24} />}
+                        sx={{
+                            background: 'linear-gradient(135deg, #1D6F42 0%, #28a745 100%)',
+                            color: 'white',
+                            px: 4,
+                            py: 1.5,
+                            borderRadius: 3,
+                            boxShadow: '0 8px 24px rgba(29, 111, 66, 0.4)',
+                            fontWeight: 'bold',
+                            fontSize: '1rem',
+                            textTransform: 'none',
+                            minWidth: 280,
+                            '&:hover': {
+                                background: 'linear-gradient(135deg, #155d35 0%, #20893a 100%)',
+                                boxShadow: '0 12px 32px rgba(29, 111, 66, 0.6)',
+                                transform: 'translateY(-2px)',
+                            },
+                            transition: 'all 0.3s ease',
+                        }}
+                    >
+                        📊 Exportar Reporte Excel
+                    </Button>
+                </Box>
 
                 <MenuPopover
                     open={openPopover}
