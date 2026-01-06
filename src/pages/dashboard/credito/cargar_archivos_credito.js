@@ -976,6 +976,42 @@ export default function CargarArchivosCreditoPage() {
                     </Box>
                 </Card>
 
+                {/* Botón para exportar a Excel */}
+                <Box
+                    sx={{
+                        mb: 3,
+                        display: 'flex',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Button
+                        variant="contained"
+                        size="large"
+                        onClick={exportToExcel}
+                        startIcon={<Iconify icon="vscode-icons:file-type-excel" width={24} />}
+                        sx={{
+                            background: 'linear-gradient(135deg, #1D6F42 0%, #28a745 100%)',
+                            color: 'white',
+                            px: 4,
+                            py: 1.5,
+                            borderRadius: 3,
+                            boxShadow: '0 8px 24px rgba(29, 111, 66, 0.4)',
+                            fontWeight: 'bold',
+                            fontSize: '1rem',
+                            textTransform: 'none',
+                            minWidth: 280,
+                            '&:hover': {
+                                background: 'linear-gradient(135deg, #155d35 0%, #20893a 100%)',
+                                boxShadow: '0 12px 32px rgba(29, 111, 66, 0.6)',
+                                transform: 'translateY(-2px)',
+                            },
+                            transition: 'all 0.3s ease',
+                        }}
+                    >
+                        📊 Exportar Reporte Excel
+                    </Button>
+                </Box>
+
                 {/* Kanban Board */}
                 {loading ? (
                     <Card sx={{ p: 5, textAlign: 'center' }}>
@@ -1106,43 +1142,6 @@ export default function CargarArchivosCreditoPage() {
                         })}
                     </Box>
                 )}
-
-                {/* Botón para exportar a Excel */}
-                <Box
-                    sx={{
-                        mt: 4,
-                        mb: 3,
-                        display: 'flex',
-                        justifyContent: 'center',
-                    }}
-                >
-                    <Button
-                        variant="contained"
-                        size="large"
-                        onClick={exportToExcel}
-                        startIcon={<Iconify icon="vscode-icons:file-type-excel" width={24} />}
-                        sx={{
-                            background: 'linear-gradient(135deg, #1D6F42 0%, #28a745 100%)',
-                            color: 'white',
-                            px: 4,
-                            py: 1.5,
-                            borderRadius: 3,
-                            boxShadow: '0 8px 24px rgba(29, 111, 66, 0.4)',
-                            fontWeight: 'bold',
-                            fontSize: '1rem',
-                            textTransform: 'none',
-                            minWidth: 280,
-                            '&:hover': {
-                                background: 'linear-gradient(135deg, #155d35 0%, #20893a 100%)',
-                                boxShadow: '0 12px 32px rgba(29, 111, 66, 0.6)',
-                                transform: 'translateY(-2px)',
-                            },
-                            transition: 'all 0.3s ease',
-                        }}
-                    >
-                        📊 Exportar Reporte Excel
-                    </Button>
-                </Box>
 
                 <MenuPopover
                     open={openPopover}
