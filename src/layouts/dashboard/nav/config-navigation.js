@@ -243,6 +243,17 @@ const navConfig = [
         ],
     },
 
+    // 11 - REPORTES
+    // ----------------------------------------------------------------------
+    {
+        subheader: 'REPORTES',
+        items: [
+            {title: 'Reporte utilidad vendedor', path: PATH_DASHBOARD.reports.utilidad_vendedor, icon: ICONS.user},
+            {title: 'Reporte numero guias', path: PATH_DASHBOARD.reports.numero_guias, icon: ICONS.user},
+
+        ],
+    },
+
     // DEMO MENU STATES
     {
         subheader: '-_-',

@@ -147,6 +147,8 @@ export const PATH_DASHBOARD = {
     },
     reports: {
         manifest: path(ROOTS_DASHBOARD, '/reports/manifest'),
+        utilidad_vendedor: path(ROOTS_DASHBOARD, '/reports/UtilidadVendedor'),
+        numero_guias: path(ROOTS_DASHBOARD, '/reports/NumeroGuia'),
     },
     customer: {
         root: path(ROOTS_DASHBOARD, '/customer'),
