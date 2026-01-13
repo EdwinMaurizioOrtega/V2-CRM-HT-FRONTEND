@@ -9,7 +9,6 @@ import {
     Typography,
     CircularProgress,
 } from '@mui/material';
-import { DataGrid, GridToolbarContainer, GridToolbarQuickFilter, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -30,19 +29,6 @@ import * as XLSX from 'xlsx';
 NumeroGuiaPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
-
-function CustomToolbar() {
-    return (
-        <GridToolbarContainer>
-            <GridToolbarQuickFilter />
-            <Box sx={{ flexGrow: 1 }} />
-            <GridToolbarColumnsButton />
-            <GridToolbarFilterButton />
-            <GridToolbarDensitySelector />
-            <GridToolbarExport />
-        </GridToolbarContainer>
-    );
-}
 
 function ExcelDownload({ data }) {
     const handleExportToExcel = () => {
@@ -171,82 +157,6 @@ export default function NumeroGuiaPage() {
         setData([]);
     };
 
-    // Definir las columnas del DataGrid
-    const columns = [
-        {
-            field: 'ID',
-            headerName: 'ID',
-            flex: 0.5,
-            minWidth: 80,
-        },
-        {
-            field: 'NUMEROFACTURALIDENAR',
-            headerName: 'Número Factura',
-            flex: 1,
-            minWidth: 150,
-        },
-        {
-            field: 'FECHAFACTURACION',
-            headerName: 'Fecha Facturación',
-            flex: 1,
-            minWidth: 150,
-        },
-        {
-            field: 'CLIENTEID',
-            headerName: 'Cliente ID',
-            flex: 0.7,
-            minWidth: 100,
-        },
-        {
-            field: 'NOMBRE',
-            headerName: 'Nombre Cliente',
-            flex: 2,
-            minWidth: 250,
-        },
-        {
-            field: 'EMPRESA',
-            headerName: 'Empresa',
-            flex: 0.5,
-            minWidth: 80,
-            renderCell: (params) => (
-                <Box
-                    sx={{
-                        backgroundColor: params.value === 'HT' ? '#e3f2fd' : '#fff3e0',
-                        color: params.value === 'HT' ? '#1976d2' : '#f57c00',
-                        padding: '4px 12px',
-                        borderRadius: '4px',
-                        fontWeight: 'bold',
-                    }}
-                >
-                    {params.value}
-                </Box>
-            ),
-        },
-        {
-            field: 'total_con_iva',
-            headerName: 'Total con IVA',
-            flex: 1,
-            minWidth: 130,
-            type: 'number',
-            valueFormatter: (params) => {
-                const value = parseFloat(params.value);
-                return !isNaN(value) ? `$${value.toFixed(2)}` : '$0.00';
-            },
-        },
-        {
-            field: 'NUMEROGUIA',
-            headerName: 'Número Guía',
-            flex: 1,
-            minWidth: 150,
-        },
-        {
-            field: 'NOMBREUSUARIOENTREGARA',
-            headerName: 'Usuario Entregará',
-            flex: 1.5,
-            minWidth: 200,
-        },
-    ];
-
     return (
         <>
             <Container maxWidth="xl">
@@ -254,7 +164,7 @@ export default function NumeroGuiaPage() {
                     📦 Reporte de Órdenes con Número de Guía
                 </Typography>
 
-                <Card sx={{ p: 3, mb: 3, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}>
+                <Card sx={{ p: 3, mb: 3, background: 'linear-gradient(135deg, #1D6F42 0%, #28a745 100%)', color: 'white' }}>
                     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
                         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center">
                             <DatePicker
@@ -295,7 +205,7 @@ export default function NumeroGuiaPage() {
                                     minWidth: 150,
                                     height: 56,
                                     bgcolor: 'white',
-                                    color: '#667eea',
+                                    color: '#1D6F42',
                                     '&:hover': {
                                         bgcolor: 'rgba(255,255,255,0.9)',
                                     }
@@ -324,43 +234,38 @@ export default function NumeroGuiaPage() {
                 </Card>
 
                 {data.length > 0 && (
-                    <Card sx={{ p: 3 }}>
-                        <Box sx={{ mb: 2 }}>
-                            <Typography variant="h6" gutterBottom>
-                                📊 Resultados: {data.length} registros encontrados
-                            </Typography>
-                            <ExcelDownload data={data} />
-                        </Box>
-                        <DataGrid
-                            rows={data.map((item, index) => ({
-                                ...item,
-                                id: item.ID || index + 1,
-                            }))}
-                            columns={columns}
-                            pageSize={10}
-                            rowsPerPageOptions={[10, 25, 50, 100]}
-                            disableSelectionOnClick
-                            autoHeight
-                            components={{
-                                Toolbar: CustomToolbar,
-                            }}
-                            sx={{
-                                '& .MuiDataGrid-cell': {
-                                    borderBottom: '1px solid #f0f0f0',
-                                },
-                                '& .MuiDataGrid-columnHeaders': {
-                                    backgroundColor: '#f5f5f5',
-                                    fontWeight: 'bold',
-                                },
-                            }}
-                        />
+                    <Card sx={{ 
+                        p: 4,
+                        textAlign: 'center',
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+                        borderRadius: 3,
+                        background: 'linear-gradient(135deg, rgba(29, 111, 66, 0.05) 0%, rgba(40, 167, 69, 0.05) 100%)',
+                    }}>
+                        <Typography variant="h6" sx={{ mb: 3, color: 'text.secondary' }}>
+                            ✅ {data.length} registros encontrados
+                        </Typography>
+                        <ExcelDownload data={data} />
+                        <Typography variant="caption" sx={{ display: 'block', mt: 2, color: 'text.secondary' }}>
+                            El archivo Excel incluirá todos los campos del reporte
+                        </Typography>
                     </Card>
                 )}
 
-                {data.length === 0 && !loading && fechaInicio && fechaFin && (
-                    <Card sx={{ p: 5, textAlign: 'center' }}>
-                        <Typography variant="h6" color="text.secondary">
-                            No se encontraron resultados para el rango de fechas seleccionado
+                {!loading && data.length === 0 && (
+                    <Card sx={{ 
+                        p: 10, 
+                        textAlign: 'center',
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+                        borderRadius: 3
+                    }}>
+                        <Box sx={{ mb: 3 }}>
+                            <Iconify icon="eva:file-text-outline" width={120} sx={{ color: 'text.disabled', opacity: 0.3 }} />
+                        </Box>
+                        <Typography variant="h5" sx={{ mb: 1 }}>
+                            No hay datos
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                            Selecciona un rango de fechas y presiona 'Consultar' para generar el reporte
                         </Typography>
                     </Card>
                 )}

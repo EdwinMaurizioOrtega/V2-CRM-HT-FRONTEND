@@ -9,6 +9,7 @@ import { es } from 'date-fns/locale';
 import * as XLSX from "xlsx";
 import axios from '../../../utils/axios';
 import Iconify from '../../../components/iconify';
+import { useAuthContext } from '../../../auth/useAuthContext';
 
 function ExcelDownload({ data }) {
     const handleExportToExcel = () => {
@@ -94,6 +95,7 @@ function ExcelDownload({ data }) {
 
 export default function UtilidadVendedorView() {
     const theme = useTheme();
+    const { user } = useAuthContext();
     const [fechaInicio, setFechaInicio] = useState(null);
     const [fechaFin, setFechaFin] = useState(null);
     const [data, setData] = useState([]);
@@ -123,7 +125,8 @@ export default function UtilidadVendedorView() {
             const response = await axios.get('/hanadb/api/power_bi/utilidad_vendedor', {
                 params: {
                     fecha_inicio: formattedStartDate,
-                    fecha_fin: formattedEndDate
+                    fecha_fin: formattedEndDate,
+                    empresa: user.EMPRESA
                 }
             });
 
