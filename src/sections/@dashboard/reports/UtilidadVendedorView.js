@@ -26,6 +26,7 @@ function ExcelDownload({ data }) {
             'Cantidad': item.Cantidad,
             'Sum of Neto': item['Sum of Neto'],
             'Sum of Costo': item['Sum of Costo'],
+            'Item Code': item.ItemCode,
             'Nombre Item': item['Nombre Item2'],
             'Costo Unitario': item.C_U,
             'Neto Unitario': item.N_U,
