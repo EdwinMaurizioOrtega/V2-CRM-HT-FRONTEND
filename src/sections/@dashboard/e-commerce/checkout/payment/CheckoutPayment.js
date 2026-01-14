@@ -279,7 +279,7 @@ const PAYMENT_OPTIONS = [
         icons: [],
     },
 ];
-// hola hola hola
+// 
 
 const CARDS_OPTIONS = [
     { value: 'ViSa1', label: '**** **** **** 1212 - Jimmy Holland' },
