@@ -292,6 +292,10 @@ export const TABULAR_ANULAR_PEDIDOS = [
         id: 12,
         title: "Anulación factura en SAP."
     },
+    {
+        id: 13,
+        title: "Por documentación incompleta."
+    },
 ]
 
 
