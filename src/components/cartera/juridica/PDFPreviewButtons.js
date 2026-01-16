@@ -48,7 +48,7 @@ export default function PDFPreviewButtons(data) {
 
         //console.log("dataE: " + JSON.stringify(data.data.empresa.CEDULA_REPRESENTANTE));
 
-        const solicitudBase64 = await getPdfBase64(<SolicitudPDF data={data}/>);
+        const solicitudBase64 = await getPdfBase64(<SolicitudPDF data={data} user={user}/>);
         const autorizacionBase64 = await getPdfBase64(<AutorizacionPDF data={data}/>);
 
 
@@ -315,11 +315,11 @@ export default function PDFPreviewButtons(data) {
 
                 {/* { user ? ( */}
                 <>
-                    <Button variant="contained" color="primary" onClick={() => abrirBlob(<SolicitudPDF data={data}/>)}>
+                    <Button variant="contained" color="primary" onClick={() => abrirBlob(<SolicitudPDF data={data} user={user} />)}>
                         Solicitud Creación/Actualización Datos
                     </Button>
                     <Button variant="contained" color="secondary"
-                            onClick={() => abrirBlob(<AutorizacionPDF data={data}/>)}>
+                            onClick={() => abrirBlob(<AutorizacionPDF data={data} user={user} />)}>
                         Autorización
                     </Button>
 
@@ -347,7 +347,7 @@ export default function PDFPreviewButtons(data) {
                     />
 
                     <Button variant="contained" color="success"
-                            onClick={() => abrirBlob(<PagarePDF valor={valor} texto={texto} data={data}/>)}>
+                            onClick={() => abrirBlob(<PagarePDF valor={valor} texto={texto} data={data} user={user} />)}>
                         PAGARÉ
                     </Button>
 

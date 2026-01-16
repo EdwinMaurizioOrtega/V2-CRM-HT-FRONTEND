@@ -114,7 +114,8 @@ const styles = StyleSheet.create( {
 
 });
 
-export default function SolicitudPDF(data) {
+export default function SolicitudPDF({ data, user }) {
+
     //console.log("data_data: " + JSON.stringify(data));
 
     //console.log("data?.empresa?.NOMBRE: "+data?.empresa?.NOMBRE);
@@ -137,12 +138,24 @@ export default function SolicitudPDF(data) {
     const mes = fechaActual.toLocaleString("es-EC", { month: "long" }); // "abril", "mayo", etc.
     const anio = fechaActual.getFullYear();
 
+    // Determinar el logo y nombre de empresa según el RUC
+    let url_logo_header = "/logo/header_ht.png"; // Default: Lidenar
+    let nombre_empresa = "LIDENAR S.A."; // Default: Lidenar
+    let url_logo_footer = "/logo/footer_ht.png";
+    
+    if (user?.EMPRESA === '1792161037001') {
+        // MovilCelistic
+        url_logo_header = "/logo/header_mc.png";
+        nombre_empresa = "MOVILCELISTIC DEL ECUADOR S.A.";
+        url_logo_footer = "/logo/footer_mc.png";
+    }
+
     return (
         <Document>
             <Page size="A4" style={styles.page}>
 
                 <View style={[styles.gridContainer, styles.mb40, { position: 'relative'}]}>
-                    <Image source="/logo/header.png" style={{ height: 'auto' }} />
+                    <Image source={url_logo_header} style={{ height: 'auto' }} />
                     <Text style={{
                         position: 'absolute',
                         bottom: 0,   // Separación desde abajo
@@ -253,35 +266,35 @@ export default function SolicitudPDF(data) {
 
                 <View style={styles.section}>
                     <Text style={styles.text}>
-                        Al firmar el presente formulario, el suscrito autoriza a LIDENAR S.A. para que solicite a la(s)
+                        Al firmar el presente formulario, el suscrito autoriza a {nombre_empresa} para que solicite a la(s)
                         Sociedad(es) de Información Crediticia Nacional(es) o Extranjera(s), que considere necesaria(s),
-                        relativa a su historial crediticio. De igual manera, LIDENAR S.A queda autorizado para realizar revisiones
+                        relativa a su historial crediticio. De igual manera, {nombre_empresa} queda autorizado para realizar revisiones
                         periódicas y proporcionar información sobre el historial crediticio a dicha(s) sociedad(es) que considere
                         necesaria(s). Dicha autorización permanecerá en vigencia en tanto las partes sostengan relaciones comerciales.
 
                         La información proporcionada ratifica que conoce plenamente la naturaleza, alcance y sus consecuencias
-                        de la información que se solicitará en forma periódica para su análisis financiero y crediticio. LIDENAR S.A
+                        de la información que se solicitará en forma periódica para su análisis financiero y crediticio. {nombre_empresa}
                         hace del conocimiento del suscrito la política de privacidad y manejo de datos personales, en la que en todo
                         momento buscará que el tratamiento de los mismos sea legítimo, controlado e informado, a efecto de garantizar
                         la privacidad y el derecho a la autodeterminación informativa de sus datos.
 
                         El suscrito declara que conoce la Ley de Burós de Información Crediticia, así como los derechos que le amparan.
-                        El suscrito reconoce que LIDENAR S.A. sólo obtiene los datos personales de sus clientes ya sea directamente y de
+                        El suscrito reconoce que {nombre_empresa} sólo obtiene los datos personales de sus clientes ya sea directamente y de
                         forma personal del mismo titular, o bien, a través de los medios electrónicos, ópticos, sonoros, visuales, o
                         cualquier otra tecnología con la finalidad de acreditar la identificación del solicitante, con el único propósito
-                        de que LIDENAR S.A. se encuentre en posibilidades de celebrar el contrato de crédito que, en su caso y por acuerdo
+                        de que {nombre_empresa} se encuentre en posibilidades de celebrar el contrato de crédito que, en su caso y por acuerdo
                         mutuo con el solicitante se pretenda formalizar, para mantener y custodiar el expediente en información respectiva.
 
-                        Asimismo, LIDENAR S.A, podrá usar la información del suscrito en su carácter de solicitante para contactarle,
-                        entender mejor sus necesidades, mejorar sus productos u ofertarle nuevos. El suscrito reconoce que LIDENAR S.A
+                        Asimismo, {nombre_empresa}, podrá usar la información del suscrito en su carácter de solicitante para contactarle,
+                        entender mejor sus necesidades, mejorar sus productos u ofertarle nuevos. El suscrito reconoce que {nombre_empresa}
                         podrá compartir los datos personales del suscrito a cualquier empresa que le preste servicios externos, en el
-                        entendido de que LIDENAR S.A les proporcionará únicamente la información personal que necesiten para llevar a cabo
-                        los servicios, y que LIDENAR S.A les solicita que protejan dicha información y no la utilicen para otros fines.
+                        entendido de que {nombre_empresa} les proporcionará únicamente la información personal que necesiten para llevar a cabo
+                        los servicios, y que {nombre_empresa} les solicita que protejan dicha información y no la utilicen para otros fines.
 
                         En caso de que el suscrito desee ejercer sus derechos de acceso, rectificación, cancelación u oposición, deberá
-                        contactar a LIDENAR S.A.
+                        contactar a {nombre_empresa}.
 
-                        Autorizo mediante este acto a la empresa LIDENAR a compilar, almacenar, tratar, consultar, usar, procesar,
+                        Autorizo mediante este acto a la empresa {nombre_empresa} a compilar, almacenar, tratar, consultar, usar, procesar,
                         compartir, circular y/o suprimir los datos personales de conformidad con los términos y condiciones que se
                         establecen en este formulario y los documentos.
 
@@ -290,12 +303,12 @@ export default function SolicitudPDF(data) {
                         de toda la información incluso con fines estadísticos, comerciales, informativos, seguimiento del servicio,
                         mercadeo, notificación y contacto del cliente.
 
-                        En cualquier momento, podré solicitar a la empresa LIDENAR por escrito la modificación de mis datos personales,
+                        En cualquier momento, podré solicitar a la empresa {nombre_empresa} por escrito la modificación de mis datos personales,
                         la misma será aplicable siempre y cuando sea formulada en los términos legales mediante una comunicación escrita.
 
-                        Toda la información que la empresa LIDENAR mantenga, recolecte, reciba u obtenga y que me concierna, de manera
+                        Toda la información que la empresa {nombre_empresa} mantenga, recolecte, reciba u obtenga y que me concierna, de manera
                         directa o indirecta en forma verbal, escrita, gráfica, en medio magnético o bajo cualquier otra forma, que no sea
-                        de dominio público, deberá tener una base legal. En consecuencia, la empresa LIDENAR tomará todas las medidas
+                        de dominio público, deberá tener una base legal. En consecuencia, la empresa {nombre_empresa} tomará todas las medidas
                         necesarias para que esta información no llegue a manos de terceros no autorizados, se obliga a no utilizarla para
                         ninguna finalidad distinta a la de cumplir con las obligaciones que se deriven directamente de la ejecución y
                         cumplimiento del presente documento.
@@ -308,7 +321,7 @@ export default function SolicitudPDF(data) {
                 </View>
 
                 <View style={[styles.gridContainer, styles.mb40]}>
-                    <Image source="/logo/footer.png" style={{ height: 'auto' }} />
+                    <Image source={url_logo_footer} style={{ height: 20 }} />
                 </View>
             </Page>
         </Document>

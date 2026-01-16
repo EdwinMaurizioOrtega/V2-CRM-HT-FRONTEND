@@ -51,7 +51,7 @@ export default function Autorizacion_Equifax_UANATACA(data) {
 
         //console.log("dataE: " + JSON.stringify(data.data.empresa.CEDULA_REPRESENTANTE));
 
-        const solicitudBase64 = await getPdfBase64(<SolicitudPDF data={data}/>);
+        const solicitudBase64 = await getPdfBase64(<SolicitudPDF data={data} user={user}/>);
         const autorizacionBase64 = await getPdfBase64(<AutorizacionPDF data={data}/>);
 
 

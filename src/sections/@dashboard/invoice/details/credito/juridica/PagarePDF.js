@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export default function PagarePDF({valor, texto, data}) {
+export default function PagarePDF({valor, texto, data, user}) {
 
     //console.log("valor: ", valor);
     //console.log("texto: ", texto);
@@ -56,20 +56,30 @@ export default function PagarePDF({valor, texto, data}) {
     const mes = fechaActual.toLocaleString("es-EC", { month: "long" }); // "abril", "mayo", etc.
     const anio = fechaActual.getFullYear();
 
+     // Determinar el logo y nombre de empresa según el RUC
+    let url_logo_header = "/logo/header_ht.png"; // Default: Lidenar
+    let nombre_empresa = "LIDENAR S.A."; // Default: Lidenar
+    
+    if (user.EMPRESA === '1792161037001') {
+        // MovilCelistic
+            let url_logo_header = "/logo/header_mc.png"; // Default: Lidenar
+        nombre_empresa = "MOVILCELISTIC DEL ECUADOR S.A.";
+    }
+
     return (
         <Document>
             {/*Versión 2*/}
             <Page size="A4" style={styles.page}>
 
                 <View style={styles.section}>
-                    <Text style={styles.header}>PAGARÉ A LA ORDEN DE LIDENAR S.A.</Text>
+                    <Text style={styles.header}>PAGARÉ A LA ORDEN DE {nombre_empresa}</Text>
 
                     <Text style={{ marginBottom: 10 }}>VENCIMIENTO: {dia} {mes} {anio + 1}</Text>
                     <Text style={{ marginBottom: 10 }}>POR: USD. {fCurrency(valor)}</Text>
 
                     <Text style={styles.text}>
                         Debo y pagaré incondicionalmente, en nombre y representación de la compañía que legalmente represento,
-                        a la orden de <Text style={{ fontFamily: 'Times-Bold' }}>LIDENAR S.A.</Text>, en sus oficinas ubicadas en las calles Padre Aguirre 9-68 y Gran Colombia, en la ciudad de Cuenca, provincia del Azuay, la cantidad de USD. {fCurrency(valor)} ({texto}), en la moneda de curso legal que se encuentre vigente en el Ecuador a la fecha de vencimiento señalada en el encabezado del presente documento, o al mero requerimiento verbal del acreedor.
+                        a la orden de <Text style={{ fontFamily: 'Times-Bold' }}>{nombre_empresa}</Text>, en sus oficinas ubicadas en las calles Padre Aguirre 9-68 y Gran Colombia, en la ciudad de Cuenca, provincia del Azuay, la cantidad de USD. {fCurrency(valor)} ({texto}), en la moneda de curso legal que se encuentre vigente en el Ecuador a la fecha de vencimiento señalada en el encabezado del presente documento, o al mero requerimiento verbal del acreedor.
                     </Text>
 
                     <Text style={styles.text}>
@@ -77,15 +87,15 @@ export default function PagarePDF({valor, texto, data}) {
                     </Text>
 
                     <Text style={styles.text}>
-                        Se obliga también a cubrir todos los impuestos, tasas, gastos judiciales y extrajudiciales, incluidos los honorarios profesionales de los abogados de <Text style={{ fontFamily: 'Times-Bold' }}>LIDENAR S.A.</Text>, que ocasione la ejecución de este pagaré, bastando para su reconocimiento la simple aseveración del acreedor en la correspondiente demanda.
+                        Se obliga también a cubrir todos los impuestos, tasas, gastos judiciales y extrajudiciales, incluidos los honorarios profesionales de los abogados de <Text style={{ fontFamily: 'Times-Bold' }}>{nombre_empresa}</Text>, que ocasione la ejecución de este pagaré, bastando para su reconocimiento la simple aseveración del acreedor en la correspondiente demanda.
                     </Text>
 
                     <Text style={styles.text}>
-                        El pago no podrá realizarse por partes, y será exigible en su totalidad en caso de incumplimiento, autorizando a <Text style={{ fontFamily: 'Times-Bold' }}>LIDENAR S.A.</Text> a declarar vencida anticipadamente la totalidad de la obligación y a iniciar su recaudación por vía judicial, sin necesidad de requerimiento previo ni notificación adicional, bastando su afirmación de mora en el escrito inicial.
+                        El pago no podrá realizarse por partes, y será exigible en su totalidad en caso de incumplimiento, autorizando a <Text style={{ fontFamily: 'Times-Bold' }}>{nombre_empresa}</Text> a declarar vencida anticipadamente la totalidad de la obligación y a iniciar su recaudación por vía judicial, sin necesidad de requerimiento previo ni notificación adicional, bastando su afirmación de mora en el escrito inicial.
                     </Text>
 
                     <Text style={styles.text}>
-                        Autorizo a <Text style={{ fontFamily: 'Times-Bold' }}>LIDENAR S.A.</Text> a aplicar como pago parcial o total cualquier depósito, valor o documento de propiedad de la compañía deudora que se encuentre en su poder, independientemente de su naturaleza o finalidad.
+                        Autorizo a <Text style={{ fontFamily: 'Times-Bold' }}>{nombre_empresa}</Text> a aplicar como pago parcial o total cualquier depósito, valor o documento de propiedad de la compañía deudora que se encuentre en su poder, independientemente de su naturaleza o finalidad.
                     </Text>
 
                     <Text style={styles.text}>
@@ -97,7 +107,7 @@ export default function PagarePDF({valor, texto, data}) {
                     </Text>
 
                     <Text style={styles.text}>
-                        Declaro que, en mi calidad de representante legal de la compañía deudora, cuento con las facultades suficientes para suscribir este pagaré y obligar válidamente a la sociedad. Eximo expresamente a <Text style={{ fontFamily: 'Times-Bold' }}>LIDENAR S.A.</Text> de cualquier responsabilidad por eventuales limitaciones internas o estatutarias que afecten dicha representación.
+                        Declaro que, en mi calidad de representante legal de la compañía deudora, cuento con las facultades suficientes para suscribir este pagaré y obligar válidamente a la sociedad. Eximo expresamente a <Text style={{ fontFamily: 'Times-Bold' }}>{nombre_empresa}</Text> de cualquier responsabilidad por eventuales limitaciones internas o estatutarias que afecten dicha representación.
                     </Text>
 
                     <Text style={styles.text}>

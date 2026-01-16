@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export default function AutorizacionPDF(data) {
+export default function AutorizacionPDF({data, user}) {
 
     //console.log("data_autorizacion: " + JSON.stringify(data));
 
@@ -48,10 +48,19 @@ export default function AutorizacionPDF(data) {
 
     const fechaActual = new Date();
 
-
     const dia = fechaActual.getDate();
     const mes = fechaActual.toLocaleString("es-EC", { month: "long" }); // "abril", "mayo", etc.
     const anio = fechaActual.getFullYear();
+
+     // Determinar el logo y nombre de empresa según el RUC
+    let url_logo_header = "/logo/logo_ht.png"; // Default: Lidenar
+    let nombre_empresa = "LIDENAR S.A."; // Default: Lidenar
+    
+    if (user?.EMPRESA === '1792161037001') {
+        // MovilCelistic
+        url_logo_header = "/logo/logo_mc.png"; // Default: MOVILCELISTIC
+        nombre_empresa = "MOVILCELISTIC DEL ECUADOR S.A.";
+    }
 
     return (
         <Document>
@@ -62,7 +71,7 @@ export default function AutorizacionPDF(data) {
                 <View style={styles.section_cero}>
 
                     <View style={[styles.gridContainer, styles.mb40]}>
-                        <Image source="/logo/logo_aut.png" style={{ height: 'auto' }} />
+                        <Image source={url_logo_header} style={{ height: 'auto' }} />
                     </View>
 
                 </View>
@@ -78,9 +87,9 @@ export default function AutorizacionPDF(data) {
 
                     <Text style={styles.paragraph}>
                         <Text style={{ fontStyle: 'italic' }}>
-                            Autorizo (amos) expresa e irrevocablemente a LIDENAR SA para que obtenga cuantas veces sean necesarias,
+                            Autorizo (amos) expresa e irrevocablemente a {nombre_empresa} para que obtenga cuantas veces sean necesarias,
                             de cualquier fuente de información, incluidos los burós de crédito, mi información de riesgos crediticios,
-                            de igual LIDENAR SA queda expresamente autorizado para que pueda transferir o entregar dicha información
+                            de igual {nombre_empresa} queda expresamente autorizado para que pueda transferir o entregar dicha información
                             a los burós de crédito y/o a la Central de Riesgos si fuere pertinente”.
                         </Text>
                     </Text>
