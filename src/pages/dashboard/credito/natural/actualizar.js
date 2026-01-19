@@ -2417,7 +2417,7 @@ export default function DataPage() {
                         </Card>
 
                         {/* Generar los PDFs */}
-                        {(user?.ROLE === '9' || user?.ROLE === '10') && (
+                        {/* {(user?.ROLE === '9' || user?.ROLE === '10') && ( */}
                             <Card sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
@@ -2427,7 +2427,7 @@ export default function DataPage() {
                             }}>
                                 <PDFPreviewButtons data={dataProspectoAux} />
                             </Card>
-                        )}
+                        {/* )} */}
                     </Grid>
                 </Grid>
 
