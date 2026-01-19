@@ -202,7 +202,7 @@ export default function PDFPreviewButtons(data) {
 
         //console.log("dataE: " + JSON.stringify(data.data.empresa.CEDULA_REPRESENTANTE));
 
-        const pagareBase64 = await getPdfBase64(<PagarePDF valor={valor} texto={texto} data={data}/>);
+        const pagareBase64 = await getPdfBase64(<PagarePDF valor={valor} texto={texto} data={data} user={user}/>);
 
 
         const nombre = data.data.empresa.NOMBRE_REPRESENTANTE || "";
