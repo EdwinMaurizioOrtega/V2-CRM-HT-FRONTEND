@@ -83,10 +83,10 @@ export default function AutorizacionPDF({data, user}) {
                     <Text style={styles.text}>Cuenca, {dia} de {mes} del {anio}</Text>
 
                     <Text style={styles.text}>Yo,</Text>
-                    <Text style={styles.line}>{data?.data?.data?.empresa?.NOMBRE_REPRESENTANTE}</Text>
-                    <Text style={styles.text}>con número de cédula: {data?.data?.data?.empresa?.CEDULA_REPRESENTANTE}</Text>
-                    {/* <Text style={styles.text}>Representante Legal de {data?.data?.data?.empresa?.NOMBRE}</Text> */}
-                    {/* <Text style={styles.text}>Con número de RUC {data?.data?.data?.empresa?.RUC}</Text> */}
+                    <Text style={styles.line}>{data?.data?.empresa?.NOMBRE_REPRESENTANTE}</Text>
+                    <Text style={styles.text}>con número de cédula: {data?.data?.empresa?.CEDULA_REPRESENTANTE}</Text>
+                    {/* <Text style={styles.text}>Representante Legal de {data?.data?.empresa?.NOMBRE}</Text> */}
+                    {/* <Text style={styles.text}>Con número de RUC {data?.data?.empresa?.RUC}</Text> */}
 
                     <Text style={styles.paragraph}>
                         <Text style={{ fontStyle: 'italic' }}>
@@ -99,9 +99,9 @@ export default function AutorizacionPDF({data, user}) {
 
                     <Text style={[styles.text, { marginTop: 20 }]}>Atentamente,</Text>
 
-                    {/* <Text style={styles.line}>{data?.data?.data?.empresa?.NOMBRE_REPRESENTANTE}</Text> */}
-                    <Text style={styles.text}>Nombre: {data?.data?.data?.empresa?.NOMBRE_REPRESENTANTE}</Text>
-                    <Text style={styles.text}>CI.: {data?.data?.data?.empresa?.CEDULA_REPRESENTANTE}</Text>
+                    {/* <Text style={styles.line}>{data?.data?.empresa?.NOMBRE_REPRESENTANTE}</Text> */}
+                    <Text style={styles.text}>Nombre: {data?.data?.empresa?.NOMBRE_REPRESENTANTE}</Text>
+                    <Text style={styles.text}>CI.: {data?.data?.empresa?.CEDULA_REPRESENTANTE}</Text>
                 </View>
 
             </Page>
