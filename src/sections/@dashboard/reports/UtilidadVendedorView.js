@@ -14,6 +14,7 @@ import { useAuthContext } from '../../../auth/useAuthContext';
 function ExcelDownload({ data }) {
     const handleExportToExcel = () => {
         const exportData = data.map(item => ({
+            'Número de Factura': item['Numero Factura'],
             'Fecha': item.DocDate,
             'Vendedor': item.Vendedor,
             'Nombre Cliente': item['Nombre Cliente'],
@@ -37,6 +38,7 @@ function ExcelDownload({ data }) {
 
         // Ajustar ancho de columnas
         ws['!cols'] = [
+            { wch: 18 },  // Número de Factura
             { wch: 12 },  // Fecha
             { wch: 25 },  // Vendedor
             { wch: 30 },  // Nombre Cliente
