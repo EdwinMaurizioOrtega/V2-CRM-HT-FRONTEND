@@ -1,10 +1,10 @@
-import {pdf} from '@react-pdf/renderer';
-import {Box, Button, Card, Stack, TextField} from '@mui/material';
+import { pdf } from '@react-pdf/renderer';
+import { Box, Button, Card, Stack, TextField } from '@mui/material';
 import SolicitudPDF from "../../../sections/@dashboard/invoice/details/credito/juridica/SolicitudPDF";
 import AutorizacionPDF from "../../../sections/@dashboard/invoice/details/credito/juridica/AutorizacionPDF";
 import PagarePDF from "../../../sections/@dashboard/invoice/details/credito/juridica/PagarePDF";
-import {useState} from "react";
-import {useAuthContext} from "../../../auth/useAuthContext";
+import { useState } from "react";
+import { useAuthContext } from "../../../auth/useAuthContext";
 import axios from "../../../utils/axios";
 // import SolicitudPDF from './pdfs/SolicitudPDF';
 // import OtroPDF from './pdfs/OtroPDF';
@@ -13,7 +13,7 @@ import n2words from 'n2words';
 
 export default function PDFPreviewButtons(data) {
 
-    const {user} = useAuthContext();
+    const { user } = useAuthContext();
 
     //console.log("user-aaa: ", user);
 
@@ -48,8 +48,8 @@ export default function PDFPreviewButtons(data) {
 
         //console.log("dataE: " + JSON.stringify(data.data.empresa.CEDULA_REPRESENTANTE));
 
-        const solicitudBase64 = await getPdfBase64(<SolicitudPDF data={data} user={user}/>);
-        const autorizacionBase64 = await getPdfBase64(<AutorizacionPDF data={data}/>);
+        const solicitudBase64 = await getPdfBase64(<SolicitudPDF data={data} user={user} />);
+        const autorizacionBase64 = await getPdfBase64(<AutorizacionPDF data={data} />);
 
 
         const nombre = data.data.empresa.NOMBRE_REPRESENTANTE || "";
@@ -186,8 +186,8 @@ export default function PDFPreviewButtons(data) {
             const decimal = Math.round((numero - entero) * 100);
 
             // Convierte números a texto (en minúsculas)
-            const enteroTexto = n2words(entero, {lang: 'es'});
-            const decimalTexto = n2words(decimal, {lang: 'es'});
+            const enteroTexto = n2words(entero, { lang: 'es' });
+            const decimalTexto = n2words(decimal, { lang: 'es' });
 
             const textoCompleto = `${enteroTexto} DÓLARES DE LOS ESTADOS UNIDOS DE AMÉRICA CON ${decimalTexto} CENTAVO${decimal !== 1 ? 'S' : ''}`;
 
@@ -202,7 +202,7 @@ export default function PDFPreviewButtons(data) {
 
         //console.log("dataE: " + JSON.stringify(data.data.empresa.CEDULA_REPRESENTANTE));
 
-        const pagareBase64 = await getPdfBase64(<PagarePDF valor={valor} texto={texto} data={data} user={user}/>);
+        const pagareBase64 = await getPdfBase64(<PagarePDF valor={valor} texto={texto} data={data} user={user} />);
 
 
         const nombre = data.data.empresa.NOMBRE_REPRESENTANTE || "";
@@ -313,63 +313,68 @@ export default function PDFPreviewButtons(data) {
 
             <Stack spacing={2} direction="row">
 
-                {/* { user ? ( */}
-                <>
-                    <Button variant="contained" color="primary" onClick={() => abrirBlob(<SolicitudPDF data={data} user={user} />)}>
-                        Solicitud Creación/Actualización Datos
-                    </Button>
-                    <Button variant="contained" color="secondary"
+                {(user?.ROLE === '9' || user?.ROLE === '10' || user?.ROLE === '7') && (
+                    <>
+                        <Button variant="contained" color="primary" onClick={() => abrirBlob(<SolicitudPDF data={data} user={user} />)}>
+                            Solicitud Creación/Actualización Datos
+                        </Button>
+                        <Button variant="contained" color="secondary"
                             onClick={() => abrirBlob(<AutorizacionPDF data={data} user={user} />)}>
-                        Autorización
-                    </Button>
+                            Autorización
+                        </Button>
+                    </>
 
-                    <Button
+                )}
+
+
+                {(user?.ROLE === '9' || user?.ROLE === '10') && (
+                    <>
+                        <Button
                             onClick={() => enviarUANATACA()}>
-                        <div style={{display: 'flex', alignItems: 'center'}}>
-                            <img
-                                src="/images/uanataca-logo.png"
-                                alt="UANATACA"
-                                style={{
-                                    height: '50px',
-                                    width: 'auto',
-                                    display: 'block'
-                                }}
-                            />
-                        </div>
-                    </Button>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <img
+                                    src="/images/uanataca-logo.png"
+                                    alt="UANATACA"
+                                    style={{
+                                        height: '50px',
+                                        width: 'auto',
+                                        display: 'block'
+                                    }}
+                                />
+                            </div>
+                        </Button>
 
-                    <TextField
-                        label="VALOR DEL PAGARÉ"
-                        variant="outlined"
-                        fullWidth
-                        onChange={handleChange}
+                        <TextField
+                            label="VALOR DEL PAGARÉ"
+                            variant="outlined"
+                            fullWidth
+                            onChange={handleChange}
 
-                    />
+                        />
 
-                    <Button variant="contained" color="success"
+                        <Button variant="contained" color="success"
                             onClick={() => abrirBlob(<PagarePDF valor={valor} texto={texto} data={data} user={user} />)}>
-                        PAGARÉ
-                    </Button>
+                            PAGARÉ
+                        </Button>
 
-                    <Button
-                        onClick={() => enviarPagareUANATACA()}>
-                        <div style={{display: 'flex', alignItems: 'center'}}>
-                            <img
-                                src="/images/uanataca-logo.png"
-                                alt="UANATACA"
-                                style={{
-                                    height: '50px',
-                                    width: 'auto',
-                                    display: 'block'
-                                }}
-                            />
-                        </div>
-                    </Button>
+                        <Button
+                            onClick={() => enviarPagareUANATACA()}>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <img
+                                    src="/images/uanataca-logo.png"
+                                    alt="UANATACA"
+                                    style={{
+                                        height: '50px',
+                                        width: 'auto',
+                                        display: 'block'
+                                    }}
+                                />
+                            </div>
+                        </Button>
 
-                </>
+                    </>
 
-                {/* ) : null } */}
-
+                )}
             </Stack>
 
             {/* 📄 Vista embebida del PDF */}
@@ -379,7 +384,7 @@ export default function PDFPreviewButtons(data) {
                         src={pdfUrl}
                         width="100%"
                         height="100%"
-                        style={{border: 'none'}}
+                        style={{ border: 'none' }}
                         title="Vista previa del PDF"
                     />
                 </Box>

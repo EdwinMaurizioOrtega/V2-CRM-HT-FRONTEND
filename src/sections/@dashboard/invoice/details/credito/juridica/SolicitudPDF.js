@@ -116,7 +116,7 @@ const styles = StyleSheet.create( {
 
 export default function SolicitudPDF({ data, user }) {
 
-    //console.log("data_data: " + JSON.stringify(data));
+    console.log("data_data: " + JSON.stringify(data));
 
     //console.log("data?.empresa?.NOMBRE: "+data?.empresa?.NOMBRE);
 
@@ -173,14 +173,14 @@ export default function SolicitudPDF({ data, user }) {
 
                 <View style={styles.section}>
                     <Text style={styles.heading}>1. IDENTIFICACIÓN DEL CLIENTE</Text>
-                    <Text>Nombre de la empresa o compañia: {data?.data?.data?.empresa?.NOMBRE}</Text>
-                <Text>RUC: {data?.data?.data?.empresa?.RUC}</Text>
-                <Text>Nombre del representante: {data?.data?.data?.empresa?.NOMBRE_REPRESENTANTE}</Text>
-                <Text>E-mail: {data?.data?.data?.empresa?.EMAIL}</Text>
-                <Text>Dirección de trabajo: {data?.data?.data?.empresa?.DIRECCION_TRABAJO}</Text>
-                <Text>Dirección de domicilio: {data?.data?.data?.empresa?.DIRECCION_DOMICILIO}</Text>
-                <Text>Ciudad: {data?.data?.data?.empresa?.CIUDAD}</Text>
-                <Text>Provincia: {data?.data?.data?.empresa?.PROVINCIA}</Text>
+                    <Text>Nombre de la empresa o compañia: {data?.data?.empresa?.NOMBRE}</Text>
+                <Text>RUC: {data?.data?.empresa?.RUC}</Text>
+                <Text>Nombre del representante: {data?.data?.empresa?.NOMBRE_REPRESENTANTE}</Text>
+                <Text>E-mail: {data?.data?.empresa?.EMAIL}</Text>
+                <Text>Dirección de trabajo: {data?.data?.empresa?.DIRECCION_TRABAJO}</Text>
+                <Text>Dirección de domicilio: {data?.data?.empresa?.DIRECCION_DOMICILIO}</Text>
+                <Text>Ciudad: {data?.data?.empresa?.CIUDAD}</Text>
+                <Text>Provincia: {data?.data?.empresa?.PROVINCIA}</Text>
                 </View>
 
                 <View style={styles.section_ch}>
@@ -188,8 +188,8 @@ export default function SolicitudPDF({ data, user }) {
                     <View style={styles.gridContainer_ch}>
                         {documentosMap.map((doc, index) => {
                             const tieneDocumento =
-                                data?.data?.data?.documentos?.[doc.key] &&
-                                data?.data?.data?.documentos[doc.key] !== "";
+                                data?.data?.documentos?.[doc.key] &&
+                                data?.data?.documentos[doc.key] !== "";
 
                             return (
                                 <View style={styles.gridItem_ch} key={index}>
@@ -214,7 +214,7 @@ export default function SolicitudPDF({ data, user }) {
                         <Text style={[styles.tableCell, styles.col4]}>Teléfono</Text>
                     </View>
                     {/* Filas dinámicas */}
-                    {data?.data?.data?.referencias_comerciales?.map((ref, index) => (
+                    {data?.data?.referencias_comerciales?.map((ref, index) => (
                         <View style={styles.tableRow} key={index}>
                             <Text style={[styles.tableCell, styles.col1]}>{ref.COMPANIA}</Text>
                             <Text style={[styles.tableCell, styles.col2]}>{ref.TIPO_CREDITO}</Text>
@@ -236,7 +236,7 @@ export default function SolicitudPDF({ data, user }) {
                         <Text style={[styles.tableCell, styles.col4]}>Teléfono</Text>
                     </View>
                     {/* Filas dinámicas */}
-                    {data?.data?.data?.referencias_bancarias?.map((ref, index) => (
+                    {data?.data?.referencias_bancarias?.map((ref, index) => (
                         <View style={styles.tableRow} key={index}>
                             <Text style={[styles.tableCell, styles.col1]}>{ref.ENTIDAD_FINANCIERA}</Text>
                             <Text style={[styles.tableCell, styles.col2]}>{ref.INICIO_RELACION}</Text>
@@ -254,7 +254,7 @@ export default function SolicitudPDF({ data, user }) {
                 <View style={styles.section}>
                     <Text style={styles.heading}>3. DIRECCIONES ENVIOS AUTORIZADOS</Text>
 
-                    {data?.data?.data?.direcciones_adicionales
+                    {data?.data?.direcciones_adicionales
                         ?.filter(dir => dir.DIRECCION && dir.DIRECCION.trim() !== "")
                         .map((dir, index) => (
                             <Text style={styles.listItem} key={dir.ID_DIRECCION}>
