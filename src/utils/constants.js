@@ -276,10 +276,10 @@ export const TABULAR_ANULAR_PEDIDOS = [
         id: 8,
         title: "Cliente solicita que facturen a otro RUC/Cédula."
     },
-    {
-        id: 9,
-        title: "Forma de pago incorrecta."
-    },
+    // {
+    //     id: 9,
+    //     title: "Forma de pago incorrecta."
+    // },
     {
         id: 10,
         title: "No cargarón promociones."
@@ -295,6 +295,18 @@ export const TABULAR_ANULAR_PEDIDOS = [
     {
         id: 13,
         title: "Por documentación incompleta."
+    },
+    {
+        id: 14,
+        title: "Pedido duplicado."
+    },
+    {
+        id: 15,
+        title: "Comentario incorrecto."
+    },
+    {
+        id: 16,
+        title: "Proforma."
     },
 ]
 
