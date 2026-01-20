@@ -70,8 +70,7 @@ export default function Login() {
                     <Stack spacing={2}>
 
                         <Alert key="error" severity="error">
-                            <AlertTitle sx={{textTransform: 'capitalize'}}> Error de Geolocalización </AlertTitle>
-                            {error}
+                             {error}
                         </Alert>
                         <Button color="info" size="small" variant="soft" onClick={handleOpenSettings}>
                             Instrucciones
@@ -82,13 +81,13 @@ export default function Login() {
                         <Stack spacing={2} sx={{mb: 5, position: 'relative'}}>
                             <Typography variant="h4">Iniciar sesión en Lidenar</Typography>
 
-                            <Stack direction="row" spacing={0.5}>
+                            {/* <Stack direction="row" spacing={0.5}>
                                 <Typography variant="body2">¿Nuevo usuario?</Typography>
 
                                 <Link component={NextLink} href={PATH_AUTH.register} variant="subtitle2">
                                     Crea una cuenta
                                 </Link>
-                            </Stack>
+                            </Stack> */}
 
                             <Tooltip title={method} placement="left">
                                 <Box
@@ -104,7 +103,9 @@ export default function Login() {
                         {/*   Use email : <strong>sistemas@hipertronics.us</strong> / password :<strong> ,2023;MongoDB</strong> */}
                         {/* </Alert> */}
 
-                        {loading ? (
+                        <AuthLoginForm />
+
+                        {/* {loading ? (
                             <Stack alignItems="center" justifyContent="center" sx={{ height: '100px' }}>
                                 <CircularProgress />
                             </Stack>
@@ -144,9 +145,9 @@ export default function Login() {
 
                             </>
 
-                        )}
+                        )} */}
 
-                        <AuthWithSocial/>
+                        {/* <AuthWithSocial/>
                         {latitude && longitude ? (
                         <Stack spacing={2} sx={{mb: 5, position: 'relative'}}>
                             <Label variant="filled" color="primary" startIcon={<Iconify icon="eva:info-fill"/>}>
@@ -157,7 +158,7 @@ export default function Login() {
                             </Label>
                         </Stack>
                             ) : null
-                        }
+                        } */}
 
                     </div>
                 )}
