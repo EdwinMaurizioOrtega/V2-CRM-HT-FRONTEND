@@ -104,11 +104,13 @@ export default function SolicitudPDF({ data, user }) {
     // Determinar el logo y nombre de empresa según el RUC
     let url_logo_header = "/logo/header_ht.png"; // Default: Lidenar
     let nombre_empresa = "LIDENAR S.A."; // Default: Lidenar
+    let url_logo_footer = "/logo/footer_ht.png";
     
     if (user.EMPRESA === '1792161037001') {
         // MovilCelistic
         url_logo_header = "/logo/header_mc.png"; // Default: Lidenar
         nombre_empresa = "MOVILCELISTIC DEL ECUADOR S.A.";
+        url_logo_footer = "/logo/footer_mc.png";
     }
 
 
@@ -309,7 +311,7 @@ export default function SolicitudPDF({ data, user }) {
             </View>
 
             <View style={[styles.gridContainer, styles.mb40]}>
-                <Image source="/logo/footer.png" style={{ height: 'auto' }} />
+                <Image source={url_logo_footer} style={{ height: 'auto' }} />
             </View>
         </Page>
     </Document>);
