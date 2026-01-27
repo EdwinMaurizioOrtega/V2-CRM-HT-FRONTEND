@@ -254,17 +254,17 @@ export default function DataPage() {
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={2}>
 
-                                            <Block label="Representante (Dos Nombres - Dos Apellidos)">
+                                            <Block label="Dos Nombres - Dos Apellidos">
                                                 <RHFTextField name="nombre_del_representante"
-                                                              label="Representante (Dos Nombres - Dos Apellidos)"
+                                                              label="Dos Nombres - Dos Apellidos"
                                                               inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('nombre_del_representante')}
                                                 />
                                             </Block>
 
-                                            <Block label="Cédula del representante">
+                                            <Block label="Cédula">
                                                 <RHFTextField name="cedula_del_representante"
-                                                              label="Cédula del representante"
+                                                              label="Cédula"
                                                               onKeyPress={(e) => {
                                                                   if (!/[0-9]/.test(e.key)) e.preventDefault();
                                                               }}
@@ -286,9 +286,9 @@ export default function DataPage() {
                                                               }}
                                                 />
                                             </Block>
-                                            <Block label="Nombre de la empresa o compañia">
+                                            <Block label="Dos Nombres - Dos Apellidos">
                                                 <RHFTextField name="nombre_de_la_empresa_o_compania"
-                                                              label="Nombre de la empresa o compania"
+                                                              label="Dos Nombres - Dos Apellidos"
                                                               inputProps={{style: {textTransform: 'uppercase'}}}
                                                               onChange={handleUpper('nombre_de_la_empresa_o_compania')}
                                                 />

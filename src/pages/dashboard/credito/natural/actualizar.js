@@ -719,10 +719,10 @@ export default function DataPage() {
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={2}>
 
-                                            <Block label="Nombre del representante">
+                                            <Block label="Dos Nombres - Dos Apellidos">
                                                 <Stack direction="row" alignItems="center" spacing={2}>
                                                     <RHFTextField name="nombre_del_representante"
-                                                                  label="Nombre del representante"
+                                                                  label="Dos Nombres - Dos Apellidos"
                                                     />
                                                     {watch("nombre_del_representante") ? (
                                                         <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
@@ -741,10 +741,10 @@ export default function DataPage() {
                                                 </Stack>
                                             </Block>
 
-                                            <Block label="Cédula del representante">
+                                            <Block label="Cédula">
                                                 <Stack direction="row" alignItems="center" spacing={2}>
                                                     <RHFTextField name="cedula_del_representante"
-                                                                  label="Cédula del representante"
+                                                                  label="Cédula"
                                                     />
                                                     {watch("cedula_del_representante") ? (
                                                         <CheckCircleIcon style={{color: "green", fontSize: 40}}/>
@@ -762,10 +762,10 @@ export default function DataPage() {
                                                     </Button>
                                                 </Stack>
                                             </Block>
-                                            <Block label="Nombre de la empresa o compañia">
+                                            <Block label="Dos Nombres - Dos Apellidos">
                                                 <Stack direction="row" alignItems="center" spacing={2}>
                                                     <RHFTextField name="nombre_de_la_empresa_o_compania"
-                                                                  label="Nombre de la empresa o compania"
+                                                                  label="Dos Nombres - Dos Apellidos"
                                                     />
                                                     {watch("nombre_de_la_empresa_o_compania") ? (
                                                         <CheckCircleIcon style={{color: "green", fontSize: 40}}/>

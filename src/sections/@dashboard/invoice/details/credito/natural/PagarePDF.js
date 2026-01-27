@@ -135,7 +135,7 @@ export default function PagarePDF({valor, texto, data, user}) {
                     <Text style={styles.text}>f. ______________________________</Text>
                     {/* <Text style={styles.text}>Razón Social de la Deudora: {data?.data?.empresa?.NOMBRE || "___________________________"}</Text> */}
                     {/* <Text style={styles.text}>RUC No.: {data?.data?.empresa?.RUC || "___________________________"}</Text> */}
-                    <Text style={styles.text}>Representante Legal: {data?.data?.empresa?.NOMBRE_REPRESENTANTE || "___________________________"}</Text>
+                    <Text style={styles.text}>Nombre: {data?.data?.empresa?.NOMBRE_REPRESENTANTE || "___________________________"}</Text>
                     <Text style={styles.text}>C.C.: {data?.data?.empresa?.CEDULA_REPRESENTANTE || "___________________________"}</Text>
                 </View>
 

@@ -137,9 +137,9 @@ export default function SolicitudPDF({ data, user }) {
             <View style={styles.section}>
                 <Text style={styles.heading}>1. IDENTIFICACIÓN DEL CLIENTE</Text>
 
-                <Text>Nombre del representante: {data?.data?.empresa?.NOMBRE_REPRESENTANTE}</Text>
-                <Text>Cédula del representante: {data?.data?.empresa?.CEDULA_REPRESENTANTE}</Text>
-                <Text>Nombre de la empresa o compañia: {data?.data?.empresa?.NOMBRE}</Text>
+                <Text>Nombre: {data?.data?.empresa?.NOMBRE_REPRESENTANTE}</Text>
+                <Text>Cédula: {data?.data?.empresa?.CEDULA_REPRESENTANTE}</Text>
+                {/* <Text>Nombre de la empresa o compañia: {data?.data?.empresa?.NOMBRE}</Text> */}
                 <Text>RUC: {data?.data?.empresa?.RUC}</Text>
                 <Text>E-mail: {data?.data?.empresa?.EMAIL}</Text>
                 <Text>Dirección de trabajo: {data?.data?.empresa?.DIRECCION_TRABAJO}</Text>
