@@ -82,24 +82,21 @@ export default function PagarePDF({valor, texto, data, user}) {
                     <Text style={{ marginBottom: 10 }}>POR: USD. {fCurrency(valor)}</Text>
 
                     <Text style={styles.text}>
-                        Debo y pagaré incondicionalmente, en nombre y representación de la compañía que legalmente represento,
-                        a la orden de <Text style={{ fontFamily: 'Times-Bold' }}>{nombre_empresa}</Text>, en sus oficinas ubicadas en las calles Padre Aguirre 9-68 y Gran Colombia, en la ciudad de Cuenca, provincia del Azuay, la cantidad de USD. {fCurrency(valor)} ({texto}), en la moneda de curso legal que se encuentre vigente en el Ecuador a la fecha de vencimiento señalada en el encabezado del presente documento, o al mero requerimiento verbal del acreedor.
+                        Debo y pagaré incondicionalmente a la orden de la compañía, <Text style={{ fontFamily: 'Times-Bold' }}>{nombre_empresa}</Text>, en sus oficinas ubicadas en las calles Padre Aguirre 9-68 y Gran Colombia, en la ciudad de Cuenca, provincia del Azuay, la cantidad de USD. {fCurrency(valor)} ({texto}), en la moneda de curso legal que se encuentre vigente en el Ecuador a la fecha de vencimiento señalada en el encabezado del presente documento, o al mero requerimiento verbal del acreedor.
                     </Text>
 
                     <Text style={styles.text}>
-                        La compañía deudora se obliga a pagar los intereses que se calcularán sobre el saldo de capital pendiente, conforme a la tasa de interés ordinaria máxima legal vigente, y en caso de mora, con la tasa moratoria establecida por la Junta de Política y Regulación Monetaria y Financiera.
+                    Me obligo, además, a pagar los intereses que se calcularán sobre el saldo de capital pendiente, conforme a la tasa de interés ordinaria máxima legal vigente, y en caso de mora, con la tasa moratoria establecida por la Junta de Política y Regulación Monetaria y Financiera. 
                     </Text>
 
                     <Text style={styles.text}>
-                        Se obliga también a cubrir todos los impuestos, tasas, gastos judiciales y extrajudiciales, incluidos los honorarios profesionales de los abogados de <Text style={{ fontFamily: 'Times-Bold' }}>{nombre_empresa}</Text>, que ocasione la ejecución de este pagaré, bastando para su reconocimiento la simple aseveración del acreedor en la correspondiente demanda.
+                    Me obligo también a cubrir todos los impuestos, tasas, gastos judiciales y extrajudiciales, incluidos los honorarios profesionales de los abogados de {nombre_empresa}, que ocasionare la ejecución de este pagaré, bastando para su reconocimiento la simple aseveración del acreedor en la correspondiente demanda. 
                     </Text>
+                    <Text style={styles.text}>
+                    Estipulo expresamente que el pago de esta obligación no podrá realizarse por partes, ni aun por mis herederos o sucesores, y que será exigible en su totalidad en caso de incumplimiento, autorizando a {nombre_empresa} a declarar vencida anticipadamente la totalidad de la deuda y a iniciar su recaudación por vía judicial, sin necesidad de requerimiento previo ni notificación adicional, bastando su afirmación de mora en el escrito inicial.                     </Text>
 
                     <Text style={styles.text}>
-                        El pago no podrá realizarse por partes, y será exigible en su totalidad en caso de incumplimiento, autorizando a <Text style={{ fontFamily: 'Times-Bold' }}>{nombre_empresa}</Text> a declarar vencida anticipadamente la totalidad de la obligación y a iniciar su recaudación por vía judicial, sin necesidad de requerimiento previo ni notificación adicional, bastando su afirmación de mora en el escrito inicial.
-                    </Text>
-
-                    <Text style={styles.text}>
-                        Autorizo a <Text style={{ fontFamily: 'Times-Bold' }}>{nombre_empresa}</Text> a aplicar como pago parcial o total cualquier depósito, valor o documento de propiedad de la compañía deudora que se encuentre en su poder, independientemente de su naturaleza o finalidad.
+                        Asimismo, autorizo a <Text style={{ fontFamily: 'Times-Bold' }}>{nombre_empresa}</Text> a aplicar como pago parcial o total cualquier depósito, valor o documento de propiedad de la compañía deudora que se encuentre en su poder, independientemente de su naturaleza o finalidad.
                     </Text>
 
                     <Text style={styles.text}>
