@@ -96,27 +96,26 @@ export default function PagarePDF({valor, texto, data, user}) {
                     Estipulo expresamente que el pago de esta obligación no podrá realizarse por partes, ni aun por mis herederos o sucesores, y que será exigible en su totalidad en caso de incumplimiento, autorizando a {nombre_empresa} a declarar vencida anticipadamente la totalidad de la deuda y a iniciar su recaudación por vía judicial, sin necesidad de requerimiento previo ni notificación adicional, bastando su afirmación de mora en el escrito inicial.                     </Text>
 
                     <Text style={styles.text}>
-                        Asimismo, autorizo a <Text style={{ fontFamily: 'Times-Bold' }}>{nombre_empresa}</Text> a aplicar como pago parcial o total cualquier depósito, valor o documento de propiedad de la compañía deudora que se encuentre en su poder, independientemente de su naturaleza o finalidad.
+                        Asimismo, autorizo a <Text style={{ fontFamily: 'Times-Bold' }}>{nombre_empresa}</Text> a aplicar como pago parcial o total cualquier depósito, valor o documento de mi propiedad que se encuentre en su poder, independientemente de su naturaleza o finalidad.
                     </Text>
 
                     <Text style={styles.text}>
-                        En caso de controversia, las partes se someten expresamente a los jueces de lo Civil del cantón Cuenca, renunciando a cualquier otro fuero o domicilio.
-                    </Text>
+                    En caso de controversia, las partes se someten de forma expresa y voluntaria a los jueces de lo Civil del cantón Cuenca, renunciando a cualquier otro fuero o domicilio.                     </Text>
 
                     <Text style={styles.text}>
-                        Este pagaré se emite sin protesto, con expresa dispensa de presentación para el pago y de aviso por falta de pago.
+                    Este pagaré se emite sin protesto, con expresa dispensa de presentación para el pago y de aviso por falta de pago.                     
                     </Text>
 
-                    <Text style={styles.text}>
+                    {/* <Text style={styles.text}>
                         Declaro que, en mi calidad de representante legal de la compañía deudora, cuento con las facultades suficientes para suscribir este pagaré y obligar válidamente a la sociedad. Eximo expresamente a <Text style={{ fontFamily: 'Times-Bold' }}>{nombre_empresa}</Text> de cualquier responsabilidad por eventuales limitaciones internas o estatutarias que afecten dicha representación.
+                    </Text> */}
+
+                    <Text style={styles.text}>
+                    En caso de iniciarse un proceso judicial relacionado con el incumplimiento de pago, la citación podrá efectuarse válidamente mediante boleta enviada al correo electrónico señalado por el deudor, conforme a lo previsto en el artículo 55.1 del Código Orgánico General de Procesos.                     
                     </Text>
 
                     <Text style={styles.text}>
-                        En caso de iniciarse un proceso judicial relacionado con el incumplimiento de pago, la citación podrá efectuarse válidamente mediante boleta enviada al correo electrónico señalado por la compañía deudora, conforme a lo previsto en el artículo 55.1 del Código Orgánico General de Procesos. En consecuencia, el representante legal declara conocer y aceptar expresamente que dicho correo electrónico constituirá el domicilio procesal de la sociedad para efectos de citación y notificación, reconociendo plena validez jurídica a la citación practicada por esa vía.
-                    </Text>
-
-                    <Text style={styles.text}>
-                        Para tales efectos, señalo como correo electrónico para citación judicial: {data?.data?.empresa?.EMAIL || "____________________________________________"}
+                        En consecuencia, el deudor declara conocer y aceptar expresamente que dicho correo electrónico constituirá su domicilio procesal para efectos de citación y notificación, reconociendo plena validez jurídica a la citación practicada por esa vía. Para tales efectos, señalo como correo electrónico para citación judicial:  {data?.data?.empresa?.EMAIL || "____________________________________________"}
                     </Text>
 
                     <Text style={styles.text}>
