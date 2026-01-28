@@ -860,11 +860,15 @@ export default function InvoiceDetails({invoice}) {
                 return;
             }
 
-            if (parseFloat(totalDolaresReferencia) > totalConIva) {
-                alert(`El monto ingresado ($${totalDolaresReferencia}) no puede ser mayor al total de la orden ($${totalConIva.toFixed(2)})`);
+            const montoIngresado = parseFloat(totalDolaresReferencia);
+            const montoMinimo = totalConIva - 1;
+            const montoMaximo = totalConIva + 1;
+
+            if (montoIngresado < montoMinimo || montoIngresado > montoMaximo) {
+                alert(`El monto ingresado ($${totalDolaresReferencia}) debe estar entre $${montoMinimo.toFixed(2)} y $${montoMaximo.toFixed(2)}. Total de la orden: $${totalConIva.toFixed(2)}`);
                 return;
             }
-
+            
         }
 
         try {
