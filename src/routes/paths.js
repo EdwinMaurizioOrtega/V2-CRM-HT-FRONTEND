@@ -149,6 +149,16 @@ export const PATH_DASHBOARD = {
         manifest: path(ROOTS_DASHBOARD, '/reports/manifest'),
         utilidad_vendedor: path(ROOTS_DASHBOARD, '/reports/UtilidadVendedor'),
         numero_guias: path(ROOTS_DASHBOARD, '/reports/NumeroGuia'),
+        reporte_general_ordenes: path(ROOTS_DASHBOARD, '/reports/ReporteGeneralOrdenes'),
+    },
+    tevcol: {
+        control_inventario: path(ROOTS_DASHBOARD, '/tevcol/control_inventario'),
+        solicitar_transferencia: path(ROOTS_DASHBOARD, '/tevcol/solicitar_transferencia'),
+        aprobacion_transferencia: path(ROOTS_DASHBOARD, '/tevcol/aprobacion_transferencia'),
+        cargar_series_transferencia: path(ROOTS_DASHBOARD, '/tevcol/cargar_series_transferencia'),
+        aceptar_transferencia: path(ROOTS_DASHBOARD, '/tevcol/aceptar_transferencia'),
+        
+        
     },
     customer: {
         root: path(ROOTS_DASHBOARD, '/customer'),
