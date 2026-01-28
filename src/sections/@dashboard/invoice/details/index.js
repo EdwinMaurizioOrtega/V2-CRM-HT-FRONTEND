@@ -859,6 +859,12 @@ export default function InvoiceDetails({invoice}) {
                 alert("Por favor ingresa un monto válido para el total en dólares");
                 return;
             }
+
+            if (parseFloat(totalDolaresReferencia) > totalConIva) {
+                alert(`El monto ingresado ($${totalDolaresReferencia}) no puede ser mayor al total de la orden ($${totalConIva.toFixed(2)})`);
+                return;
+            }
+
         }
 
         try {
