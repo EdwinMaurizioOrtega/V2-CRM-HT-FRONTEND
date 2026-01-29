@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     signatureBlock: {
-        marginTop: 50,
+        marginTop: 80,
     },
     logoContainer: {
         alignItems: 'center',
