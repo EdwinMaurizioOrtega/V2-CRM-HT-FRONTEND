@@ -1,11 +1,11 @@
 import Head from 'next/head';
 import AuthGuard from '../../../auth/AuthGuard';
 import DashboardLayout from '../../../layouts/dashboard';
-import GestionTransferenciasView from '../../../sections/@dashboard/tevcol/GestionTransferencias';
+import GestionTransferenciaBodegasView from '../../../sections/@dashboard/tevcol/GestionTransferenciaBodegas';
 
 // ----------------------------------------------------------------------
 
-AceptarTransferenciaPage.getLayout = (page) => (
+GestionTransferenciaBodegasPage.getLayout = (page) => (
   <AuthGuard>
     <DashboardLayout>{page}</DashboardLayout>
   </AuthGuard>
@@ -13,14 +13,14 @@ AceptarTransferenciaPage.getLayout = (page) => (
 
 // ----------------------------------------------------------------------
 
-export default function AceptarTransferenciaPage() {
+export default function GestionTransferenciaBodegasPage() {
   return (
     <>
       <Head>
         <title>Gestión de Transferencias | HT</title>
       </Head>
 
-      <GestionTransferenciasView />
+      <GestionTransferenciaBodegasView />
     </>
   );
 }

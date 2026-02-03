@@ -260,7 +260,9 @@ const navConfig = [
         subheader: 'TEVCOL',
         items: [
             { title: 'Control Inventario Bodega', path: PATH_DASHBOARD.tevcol.control_inventario, icon: ICONS.user },
-            { title: 'Gestión de Transferencias', path: PATH_DASHBOARD.tevcol.solicitar_transferencia, icon: ICONS.invoice },
+            { title: 'Gestión Transferencias Bodegas', path: PATH_DASHBOARD.tevcol.gestion_transferencia_bodega, icon: ICONS.invoice },
+            { title: 'Gestión Transferencias Importaciones', path: PATH_DASHBOARD.tevcol.gestion_transferencia_importaciones, icon: ICONS.invoice },
+
         ],
     },
 

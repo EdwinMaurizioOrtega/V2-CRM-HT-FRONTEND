@@ -153,12 +153,8 @@ export const PATH_DASHBOARD = {
     },
     tevcol: {
         control_inventario: path(ROOTS_DASHBOARD, '/tevcol/control_inventario'),
-        solicitar_transferencia: path(ROOTS_DASHBOARD, '/tevcol/solicitar_transferencia'),
-        aprobacion_transferencia: path(ROOTS_DASHBOARD, '/tevcol/aprobacion_transferencia'),
-        cargar_series_transferencia: path(ROOTS_DASHBOARD, '/tevcol/cargar_series_transferencia'),
-        aceptar_transferencia: path(ROOTS_DASHBOARD, '/tevcol/aceptar_transferencia'),
-        
-        
+        gestion_transferencia_bodega: path(ROOTS_DASHBOARD, '/tevcol/gestion_transferencia_bodegas'),
+        gestion_transferencia_importaciones: path(ROOTS_DASHBOARD, '/tevcol/gestion_tranferencia_importaciones'),
     },
     customer: {
         root: path(ROOTS_DASHBOARD, '/customer'),
