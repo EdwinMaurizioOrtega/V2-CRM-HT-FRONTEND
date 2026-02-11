@@ -1,11 +1,11 @@
 import Head from 'next/head';
 import AuthGuard from '../../../auth/AuthGuard';
 import DashboardLayout from '../../../layouts/dashboard';
-import GestionTransferenciasView from '../../../sections/@dashboard/tevcol/GestionTransferencias';
+import GestionTransferenciaImportacionesView from '../../../sections/@dashboard/tevcol/GestionTransferenciaImportaciones';
 
 // ----------------------------------------------------------------------
 
-CargarSeriesTransferenciaPage.getLayout = (page) => (
+GestionTransferenciaImportacionesPage.getLayout = (page) => (
   <AuthGuard>
     <DashboardLayout>{page}</DashboardLayout>
   </AuthGuard>
@@ -13,14 +13,14 @@ CargarSeriesTransferenciaPage.getLayout = (page) => (
 
 // ----------------------------------------------------------------------
 
-export default function CargarSeriesTransferenciaPage() {
+export default function GestionTransferenciaImportacionesPage() {
   return (
     <>
       <Head>
         <title>Gestión de Transferencias | HT</title>
       </Head>
 
-      <GestionTransferenciasView />
+      <GestionTransferenciaImportacionesView />
     </>
   );
 }

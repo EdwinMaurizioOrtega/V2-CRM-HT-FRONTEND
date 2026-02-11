@@ -1064,7 +1064,7 @@ export default function InvoiceDetails({invoice}) {
     };
 
 
-    const handleChangePedidoFactura = async () => {
+    const handleChangePedidoPendienteFacturar = async () => {
 
         // //console.log(ID);
         //console.log(JSON.stringify(user));
@@ -1082,7 +1082,7 @@ export default function InvoiceDetails({invoice}) {
                 if (valueGuia === '000000000' && CLIENTEID === 'CL1791251237001') {
                     idEmpleadoEntregar = 0;
                     nombreUsuarioEntregara = '';
-                    estadoInvoice = 22
+                    // estadoInvoice = 22
                 } else {
                     alert("Seleccionar un empleado es obligatorio cuando la guía es => 000000000")
                     return; // Stop the execution of the function if the condition is met
@@ -1093,13 +1093,13 @@ export default function InvoiceDetails({invoice}) {
                 idEmpleadoEntregar = empleadoEntregar.CODE
                 nombreUsuarioEntregara = empleadoEntregar.NOMBRE
                 //Facturado - Pendiente de cargar evidencia vendedor
-                estadoInvoice = 22;
+                // estadoInvoice = 22;
             }
 
             if (valueGuia !== '000000000') {
                 idEmpleadoEntregar = 0;
                 nombreUsuarioEntregara = '';
-                estadoInvoice = 1
+                // estadoInvoice = 1
             }
 
             //console.log("ID empleado seleccionado: " + idEmpleadoEntregar)
@@ -1113,7 +1113,7 @@ export default function InvoiceDetails({invoice}) {
 
             try {
                 // Actualizar una orden.
-                const response = await axios.put('/hanadb/api/orders/order/facturar', {
+                const response = await axios.put('/hanadb/api/orders/order/pendiente_facturar', {
                     ID_ORDER: ID,
                     NUMERO_GUIA: `${valueGuia}`,
                     empresa: user.EMPRESA,
@@ -2809,7 +2809,7 @@ export default function InvoiceDetails({invoice}) {
                             {/* Pendiente factuaración / Solo le va a aparecer el ROL de crédito */}
                             {(ESTADO === 0 && user.ROLE === "9") &&
                                 <Button onClick={() => !loading && crearFacturaSAP()} disabled={loading}>
-                                    {loading ? 'CREANDO FACTURA...' : ' FACTURA CREAREN SAP'}
+                                    {loading ? 'CREANDO FACTURA...' : ' FACTURA CREAR EN SAP'}
                                 </Button>
                             }
 
@@ -2867,7 +2867,7 @@ export default function InvoiceDetails({invoice}) {
 
                             {!loading ? (
                                 <Button variant="contained" color="success"
-                                        onClick={() => handleChangePedidoFactura()}>
+                                        onClick={() => handleChangePedidoPendienteFacturar()}>
                                     Enviar al área de facturación.
                                 </Button>
                             ) : (

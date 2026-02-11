@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Card,
@@ -156,6 +156,7 @@ const ACTION_MODULES = [
     icon: CheckCircleOutline,
     color: '#FFA726',
     gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+    badge: 2,
   },
   {
     id: 'cargar_series',
@@ -164,6 +165,7 @@ const ACTION_MODULES = [
     icon: Inventory,
     color: '#7635DC',
     gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+    badge: 1,
   },
   {
     id: 'aceptar',
@@ -172,50 +174,23 @@ const ACTION_MODULES = [
     icon: CheckCircleOutline,
     color: '#00A76F',
     gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+    badge: 1,
   },
 ];
 
 const BODEGAS_LIDENAR = [
-  { value: '019', label: '019 - CENTRO DE DISTRIBUCIÓN HT' },
-  { value: '002', label: '002 - MAYORISTA CUENCA' },
-  { value: '006', label: '006 - MAYORISTA QUITO' },
-  { value: '030', label: '030 - MAYORISTA GUAYAQUIL' },
-  { value: '024', label: '024 - MAYORISTA MANTA' },
-  { value: '001', label: '001 - SAMSUNG CARACOL QUITO' },
-  { value: '015', label: '015 - INACTIVA' },
-  { value: '009', label: '009 - SAMSUNG BAHIA' },
-  { value: '014', label: '014 - BODEGA COMBO' },
-  { value: '011', label: '011 - SAMSUNG CUENCA' },
-  { value: '016', label: '016 - SAMSUNG MALL GUAYAQUIL' },
-  { value: '017', label: '017 - SAMSUNG MALL CUENCA' },
-  { value: '020', label: '020 - SAMSUNG MANTA' },
-  { value: '022', label: '022 - SAMSUNG PORTOVIEJO' },
-  { value: '003', label: '003 - PADRE AGUIRRE' },
+  { value: '019', label: '019 - CDHT QUITO CARAPUNGO' },
+  { value: '002', label: '002 - LIDENAR CUENCA - SUBIDA A TURI ' },
 ];
 
 const BODEGAS_MOVILCELISTIC = [
-  { value: 'DISTLF', label: 'DISTLF - CENTRO DISTRIBUCIÓN MOVILCELISTIC' },
-  { value: '003', label: '003 - MAYORISTAS MOVILCELISTIC MACHALA' },
-  { value: '004', label: '004 - MAYORISTAS MOVILCELISTIC CUENCA' },
-  { value: 'T1CARACO', label: 'T1CARACO - CARACOL XIAOMI TERMINALES' },
-  { value: 'T1CUENCA', label: 'T1CUENCA - CUENCA XIAOMI TERMINALES' },
-  { value: 'T1MACHAL', label: 'T1MACHAL - MACHALA XIAOMI TERMINALES' },
-  { value: 'T3CARACO', label: 'T3CARACO - CARACOL XIAOMI ACCESORIOS' },
-  { value: 'T3CUENCA', label: 'T3CUENCA - CUENCA XIAOMI ACCESORIOS' },
-  { value: 'T3MACHAL', label: 'T3MACHAL - MACHALA XIAOMI ACCESORIOS' },
-  { value: 'T2CARACO', label: 'T2CARACO - CARACOL XIAOMI ELECTRODOMESTICOS' },
-  { value: 'T2CUENCA', label: 'T2CUENCA - CUENCA XIAOMI ELECTRODOMESTICOS' },
-  { value: 'T2MACHAL', label: 'T2MACHAL - MACHALA XIAOMI ELECTRODOMESTICOS' },
-  { value: '030', label: '030 - MAYORISTAS MOVILCELISTIC COLON' },
-  { value: '024', label: '024 - MAYORISTAS MOVILCELISTIC MANTA' },
-  { value: '020', label: '020 - MALL GUAYAQUIL' },
-  { value: '021', label: '021 - MALL CUENCA' },
-  { value: '005', label: '005 - OPERADORAS CARRIER' },
+  { value: 'DISTLF', label: 'DISTLF - CDHT QUITO CARAPUNGO' },
+  { value: '004', label: '004 - MOVILCELISTIC BODEGA 3' },
 ];
 
 // ----------------------------------------------------------------------
 
-export default function GestionTransferenciaBodegasView() {
+export default function GestionTransferenciaImportacionesView() {
   const { themeStretch } = useSettingsContext();
   const { user } = useAuthContext();
   const theme = useTheme();
@@ -273,7 +248,6 @@ export default function GestionTransferenciaBodegasView() {
   // Estado para Aceptar Transferencia
   const [transferenciasParaAceptar, setTransferenciasParaAceptar] = useState([]);
   const [loadingAceptar, setLoadingAceptar] = useState(false);
-  const [procesandoTransferencia, setProcesandoTransferencia] = useState(null); // ID de la transferencia en proceso
 
   // Estado para transferencias del usuario actual
   const [transferenciasUsuario, setTransferenciasUsuario] = useState([]);
@@ -284,24 +258,7 @@ export default function GestionTransferenciaBodegasView() {
     open: false,
     transferencia: null,
     productos: [],
-    series: {}, // Series agrupadas por producto ID
     loading: false,
-    loadingSeries: false,
-    editMode: false,
-    productosEditados: [],
-    expandedProduct: null, // ID del producto con series expandidas
-    // Nuevos estados para agregar/eliminar productos
-    productosDisponibles: [],
-    loadingProductosDisponibles: false,
-    productoActual: {
-      codigo: '',
-      descripcion: '',
-      cantidad: '',
-      cantidadDisponible: 0,
-      producto: null,
-    },
-    productosNuevos: [], // Productos agregados
-    productosEliminados: [], // IDs de productos a eliminar
   });
 
   const bodegas = user?.EMPRESA === '0992537442001' ? BODEGAS_LIDENAR : BODEGAS_MOVILCELISTIC;
@@ -329,66 +286,6 @@ export default function GestionTransferenciaBodegasView() {
   };
 
   const visibleModules = getVisibleModules();
-
-  // Función helper para normalizar warehouse para comparaciones
-  const normalizeWarehouse = (warehouse) => {
-    if (!warehouse) return '';
-    // Si es un array, tomar el primer elemento
-    if (Array.isArray(warehouse)) {
-      return warehouse[0] || '';
-    }
-    // Si es un string que parece un array, parsearlo
-    if (typeof warehouse === 'string' && warehouse.startsWith('[')) {
-      try {
-        const parsed = JSON.parse(warehouse);
-        return Array.isArray(parsed) ? (parsed[0] || '') : warehouse;
-      } catch (e) {
-        return warehouse;
-      }
-    }
-    return warehouse;
-  };
-
-  // Función para calcular contadores de cada módulo
-  const getModuleCounters = () => {
-    const counters = {
-      aprobar: 0,
-      cargar_series: 0,
-      aceptar: 0,
-    };
-
-    if (!transferenciasUsuario || transferenciasUsuario.length === 0) {
-      return counters;
-    }
-
-    const userWarehouse = normalizeWarehouse(user?.WAREHOUSE);
-
-    transferenciasUsuario.forEach(transferencia => {
-      switch (transferencia.ESTADO) {
-        case 0: // PENDIENTE_APROBACION
-          counters.aprobar++;
-          break;
-        case 1: // PENDIENTE_CARGAR_SERIES
-          // Solo contar si es de la bodega del usuario (bodega origen)
-          if (userWarehouse && normalizeWarehouse(transferencia.BODEGA_ORIGEN) === userWarehouse) {
-            counters.cargar_series++;
-          }
-          break;
-        case 2: // PENDIENTE_RECEPCION
-          // Solo contar si es de la bodega del usuario (bodega destino)
-          if (userWarehouse && normalizeWarehouse(transferencia.BODEGA_DESTINO) === userWarehouse) {
-            counters.aceptar++;
-          }
-          break;
-        default:
-          break;
-      }
-    });
-
-    return counters;
-  };
-
-  const moduleCounters = getModuleCounters();
 
   // Función para cargar productos por bodega
   const fetchProductosPorBodega = async (bodega) => {
@@ -453,23 +350,7 @@ export default function GestionTransferenciaBodegasView() {
       open: true,
       transferencia,
       productos: [],
-      series: {},
       loading: true,
-      loadingSeries: false,
-      expandedProduct: null,
-      editMode: false,
-      productosEditados: [],
-      productosDisponibles: [],
-      loadingProductosDisponibles: false,
-      productoActual: {
-        codigo: '',
-        descripcion: '',
-        cantidad: '',
-        cantidadDisponible: 0,
-        producto: null,
-      },
-      productosNuevos: [],
-      productosEliminados: [],
     });
 
     try {
@@ -484,11 +365,6 @@ export default function GestionTransferenciaBodegasView() {
           productos: data.productos || [],
           loading: false,
         }));
-
-        // Si el estado es >= 1 (PENDIENTE_CARGAR_SERIES o mayor), cargar las series
-        if (transferencia.ESTADO >= 1) {
-          handleCargarSeries(transferencia.ID);
-        }
       } else {
         console.error('Error al cargar detalle:', response.statusText);
         setModalDetalle(prev => ({ ...prev, loading: false }));
@@ -499,434 +375,14 @@ export default function GestionTransferenciaBodegasView() {
     }
   };
 
-  // Función para cargar series de una transferencia
-  const handleCargarSeries = async (transferenciaId) => {
-    setModalDetalle(prev => ({ ...prev, loadingSeries: true }));
-
-    try {
-      const response = await fetch(
-        `${HOST_API_KEY}/transferencias/${transferenciaId}/series`
-      );
-      
-      if (response.ok) {
-        const data = await response.json();
-        
-        // Agrupar series por DETALLE_ID (producto)
-        const seriesAgrupadas = {};
-        if (data.series && Array.isArray(data.series)) {
-          data.series.forEach(serie => {
-            if (!seriesAgrupadas[serie.DETALLE_ID]) {
-              seriesAgrupadas[serie.DETALLE_ID] = [];
-            }
-            seriesAgrupadas[serie.DETALLE_ID].push(serie);
-          });
-        }
-
-        setModalDetalle(prev => ({
-          ...prev,
-          series: seriesAgrupadas,
-          loadingSeries: false,
-        }));
-      } else {
-        console.error('Error al cargar series:', response.statusText);
-        setModalDetalle(prev => ({ ...prev, loadingSeries: false }));
-      }
-    } catch (error) {
-      console.error('Error al cargar series:', error);
-      setModalDetalle(prev => ({ ...prev, loadingSeries: false }));
-    }
-  };
-
-  // Función para expandir/contraer series de un producto
-  const handleToggleSeriesProducto = (productoId) => {
-    setModalDetalle(prev => ({
-      ...prev,
-      expandedProduct: prev.expandedProduct === productoId ? null : productoId,
-    }));
-  };
-
   // Función para cerrar el modal
   const handleCerrarDetalle = () => {
     setModalDetalle({
       open: false,
       transferencia: null,
       productos: [],
-      series: {},
       loading: false,
-      loadingSeries: false,
-      editMode: false,
-      productosEditados: [],
-      expandedProduct: null,
-      productosDisponibles: [],
-      loadingProductosDisponibles: false,
-      productoActual: {
-        codigo: '',
-        descripcion: '',
-        cantidad: '',
-        cantidadDisponible: 0,
-        producto: null,
-      },
-      productosNuevos: [],
-      productosEliminados: [],
     });
-  };
-
-  // Función para activar modo edición
-  const handleActivarEdicion = async () => {
-    setModalDetalle(prev => ({
-      ...prev,
-      editMode: true,
-      productosEditados: prev.productos.map(p => ({
-        ...p,
-        CANTIDAD_EDITADA: p.CANTIDAD_SOLICITADA,
-      })),
-      loadingProductosDisponibles: true,
-    }));
-
-    // Cargar productos disponibles de la bodega origen
-    if (modalDetalle.transferencia?.BODEGA_ORIGEN && user?.EMPRESA) {
-      try {
-        const response = await fetch(
-          `${HOST_API_KEY}/warehouse/products?empresa=${user.EMPRESA}&bodega=${modalDetalle.transferencia.BODEGA_ORIGEN}`
-        );
-        
-        if (response.ok) {
-          const data = await response.json();
-          setModalDetalle(prev => ({
-            ...prev,
-            productosDisponibles: data,
-            loadingProductosDisponibles: false,
-          }));
-        } else {
-          console.error('Error al cargar productos:', response.statusText);
-          setModalDetalle(prev => ({
-            ...prev,
-            productosDisponibles: [],
-            loadingProductosDisponibles: false,
-          }));
-        }
-      } catch (error) {
-        console.error('Error en la petición:', error);
-        setModalDetalle(prev => ({
-          ...prev,
-          productosDisponibles: [],
-          loadingProductosDisponibles: false,
-        }));
-      }
-    }
-  };
-
-  // Función para cancelar edición
-  const handleCancelarEdicion = () => {
-    setModalDetalle(prev => ({
-      ...prev,
-      editMode: false,
-      productosEditados: [],
-      productosDisponibles: [],
-      productoActual: {
-        codigo: '',
-        descripcion: '',
-        cantidad: '',
-        cantidadDisponible: 0,
-        producto: null,
-      },
-      productosNuevos: [],
-      productosEliminados: [],
-    }));
-  };
-
-  // Función para cambiar cantidad editada
-  const handleCambiarCantidad = (index, nuevaCantidad) => {
-    setModalDetalle(prev => ({
-      ...prev,
-      productosEditados: prev.productosEditados.map((producto, i) => 
-        i === index ? { ...producto, CANTIDAD_EDITADA: nuevaCantidad } : producto
-      ),
-    }));
-  };
-
-  // Función para agregar nuevo producto en el modal (con guardado inmediato)
-  const handleAgregarProductoModal = async () => {
-    if (!modalDetalle.productoActual.codigo || 
-        !modalDetalle.productoActual.descripcion || 
-        !modalDetalle.productoActual.cantidad) {
-      alert('❌ Por favor complete todos los campos del producto');
-      return;
-    }
-    
-    // Validar cantidad disponible
-    const cantidad = parseInt(modalDetalle.productoActual.cantidad, 10);
-    if (modalDetalle.productoActual.cantidadDisponible && 
-        cantidad > modalDetalle.productoActual.cantidadDisponible) {
-      alert(`❌ La cantidad solicitada (${cantidad}) excede la cantidad disponible (${modalDetalle.productoActual.cantidadDisponible})`);
-      return;
-    }
-
-    // Verificar que no exista ya en productos editados
-    const yaExiste = modalDetalle.productosEditados.some(
-      p => p.ITEM_CODE === modalDetalle.productoActual.codigo
-    );
-    
-    if (yaExiste) {
-      alert('❌ Este producto ya está en la lista');
-      return;
-    }
-
-    if (!window.confirm(`¿Desea agregar el producto ${modalDetalle.productoActual.codigo} con cantidad ${cantidad}?`)) {
-      return;
-    }
-
-    try {
-      // Agregar el producto inmediatamente al backend
-      const response = await fetch(
-        `${HOST_API_KEY}/transferencias/${modalDetalle.transferencia.ID}/productos`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            productos_nuevos: [{
-              codigo: modalDetalle.productoActual.codigo,
-              descripcion: modalDetalle.productoActual.descripcion,
-              cantidad: cantidad,
-            }],
-            actualizado_por_id: user.ID,
-            actualizado_por_nombre: user.DISPLAYNAME,
-          })
-        }
-      );
-
-      const responseText = await response.text();
-      let result;
-      try {
-        result = JSON.parse(responseText);
-      } catch (parseError) {
-        result = { success: false, message: responseText };
-      }
-
-      if (response.ok && result.success) {
-        alert(`✅ ${result.message || 'Producto agregado exitosamente'}`);
-        
-        // Recargar el detalle para ver el producto agregado
-        handleVerDetalle(modalDetalle.transferencia);
-        
-        // Actualizar listas
-        fetchTransferenciasParaAprobar();
-        fetchTransferenciasUsuario();
-      } else {
-        alert(`❌ Error al agregar producto: ${result.message || 'Error desconocido'}`);
-      }
-    } catch (error) {
-      console.error('❌ Error al agregar producto:', error);
-      alert(`❌ Error al conectar con el servidor: ${error.message}`);
-    }
-  };
-
-  // Función para marcar producto para eliminar
-  const handleMarcarParaEliminar = (producto, index) => {
-    if (!window.confirm(`¿Está seguro que desea eliminar el producto ${producto.ITEM_CODE}?`)) {
-      return;
-    }
-
-    setModalDetalle(prev => {
-      // Si es un producto nuevo (sin ID), solo quitarlo de las listas
-      if (producto.ES_NUEVO) {
-        return {
-          ...prev,
-          productosEditados: prev.productosEditados.filter((_, i) => i !== index),
-          productosNuevos: prev.productosNuevos.filter(p => p.tempId !== producto.tempId),
-        };
-      }
-
-      // Si es un producto existente, marcarlo para eliminar
-      return {
-        ...prev,
-        productosEditados: prev.productosEditados.filter((_, i) => i !== index),
-        productosEliminados: [...prev.productosEliminados, producto.ID],
-      };
-    });
-  };
-
-  // Función para guardar cantidades editadas, productos nuevos y eliminados
-  const handleGuardarCantidades = async () => {
-    if (!modalDetalle.transferencia?.ID) return;
-
-    // Validar que todas las cantidades sean válidas
-    const cantidadesInvalidas = modalDetalle.productosEditados.some(
-      p => !p.CANTIDAD_EDITADA || parseInt(p.CANTIDAD_EDITADA) <= 0
-    );
-
-    if (cantidadesInvalidas) {
-      alert('❌ Por favor ingrese cantidades válidas para todos los productos');
-      return;
-    }
-
-    // Validar que quede al menos un producto
-    if (modalDetalle.productosEditados.length === 0 && modalDetalle.productosEliminados.length > 0) {
-      alert('❌ La transferencia debe tener al menos un producto');
-      return;
-    }
-
-    // Preparar resumen de cambios
-    const productosActualizados = modalDetalle.productosEditados
-      .filter(p => !p.ES_NUEVO && p.ID && p.CANTIDAD_EDITADA !== p.CANTIDAD_SOLICITADA)
-      .map(p => ({
-        id: p.ID,
-        cantidad: parseInt(p.CANTIDAD_EDITADA),
-      }));
-
-    const hayActualizaciones = productosActualizados.length > 0;
-    const hayNuevos = modalDetalle.productosNuevos.length > 0;
-    const hayEliminados = modalDetalle.productosEliminados.length > 0;
-
-    if (!hayActualizaciones && !hayNuevos && !hayEliminados) {
-      alert('ℹ️ No hay cambios para guardar');
-      return;
-    }
-
-    // Mensaje de confirmación
-    let mensajeConfirmacion = '¿Está seguro que desea guardar los cambios?\n\n';
-    if (hayActualizaciones) {
-      mensajeConfirmacion += `📝 Se actualizarán ${productosActualizados.length} cantidade(s)\n`;
-    }
-    if (hayNuevos) {
-      mensajeConfirmacion += `✅ Se agregarán ${modalDetalle.productosNuevos.length} producto(s) nuevo(s)\n`;
-    }
-    if (hayEliminados) {
-      mensajeConfirmacion += `❌ Se eliminarán ${modalDetalle.productosEliminados.length} producto(s)\n`;
-    }
-
-    if (!window.confirm(mensajeConfirmacion)) {
-      return;
-    }
-
-    try {
-      let errores = [];
-      let exitosos = [];
-
-      // 1. Actualizar cantidades de productos existentes
-      if (hayActualizaciones) {
-        const requestBody = {
-          productos: productosActualizados,
-          actualizado_por_id: user.ID,
-          actualizado_por_nombre: user.DISPLAYNAME,
-        };
-
-        console.log('📤 Actualizando cantidades:', requestBody);
-
-        const response = await fetch(
-          `${HOST_API_KEY}/transferencias/${modalDetalle.transferencia.ID}/cantidades`,
-          {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(requestBody),
-          }
-        );
-
-        const responseText = await response.text();
-        let result;
-        try {
-          result = JSON.parse(responseText);
-        } catch (parseError) {
-          throw new Error(`Error al actualizar cantidades: ${responseText}`);
-        }
-
-        if (response.ok && result.success) {
-          exitosos.push(result.message);
-        } else {
-          errores.push(result.message || 'Error al actualizar cantidades');
-        }
-      }
-
-      // 2. Agregar productos nuevos
-      if (hayNuevos) {
-        const requestBody = {
-          productos_nuevos: modalDetalle.productosNuevos.map(p => ({
-            codigo: p.ITEM_CODE,
-            descripcion: p.ITEM_NAME,
-            cantidad: parseInt(p.CANTIDAD_EDITADA),
-          })),
-          actualizado_por_id: user.ID,
-          actualizado_por_nombre: user.DISPLAYNAME,
-        };
-
-        console.log('📤 Agregando productos:', requestBody);
-
-        const response = await fetch(
-          `${HOST_API_KEY}/transferencias/${modalDetalle.transferencia.ID}/productos`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(requestBody),
-          }
-        );
-
-        const responseText = await response.text();
-        let result;
-        try {
-          result = JSON.parse(responseText);
-        } catch (parseError) {
-          throw new Error(`Error al agregar productos: ${responseText}`);
-        }
-
-        if (response.ok && result.success) {
-          exitosos.push(result.message);
-        } else {
-          errores.push(result.message || 'Error al agregar productos');
-        }
-      }
-
-      // 3. Eliminar productos
-      if (hayEliminados) {
-        const requestBody = {
-          productos_ids: modalDetalle.productosEliminados,
-          actualizado_por_id: user.ID,
-          actualizado_por_nombre: user.DISPLAYNAME,
-        };
-
-        console.log('📤 Eliminando productos:', requestBody);
-
-        const response = await fetch(
-          `${HOST_API_KEY}/transferencias/${modalDetalle.transferencia.ID}/productos`,
-          {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(requestBody),
-          }
-        );
-
-        const responseText = await response.text();
-        let result;
-        try {
-          result = JSON.parse(responseText);
-        } catch (parseError) {
-          throw new Error(`Error al eliminar productos: ${responseText}`);
-        }
-
-        if (response.ok && result.success) {
-          exitosos.push(result.message);
-        } else {
-          errores.push(result.message || 'Error al eliminar productos');
-        }
-      }
-
-      // Mostrar resultado final
-      if (errores.length > 0) {
-        alert(`⚠️ Operación completada con errores:\n\n${exitosos.join('\n')}\n\n❌ Errores:\n${errores.join('\n')}`);
-      } else {
-        alert(`✅ Todos los cambios se guardaron exitosamente:\n\n${exitosos.join('\n')}`);
-      }
-
-      // Recargar el detalle
-      handleVerDetalle(modalDetalle.transferencia);
-      // Actualizar listas
-      fetchTransferenciasParaAprobar();
-      fetchTransferenciasUsuario();
-    } catch (error) {
-      console.error('❌ Error al guardar cambios:', error);
-      alert(`❌ Error al conectar con el servidor: ${error.message}`);
-    }
   };
 
   // Función para cargar transferencias pendientes de aprobación
@@ -1386,24 +842,20 @@ export default function GestionTransferenciaBodegasView() {
     }
 
     if (!window.confirm(
-      `¿Está seguro que desea guardar ${seriesActual.series.length} serie(s) para el producto ${seriesActual.item_code}?\n\n⚠️ Las series serán validadas en SAP antes de guardar.`
+      `¿Está seguro que desea guardar ${seriesActual.series.length} serie(s) para el producto ${seriesActual.item_code}?`
     )) {
       return;
     }
 
-    setButtonDisabled(true);
-
     try {
-      // Usar endpoint V2 con validación en SAP
       const response = await fetch(
-        `${HOST_API_KEY}/transferencias/${seriesActual.transferencia}/series-v2`,
+        `${HOST_API_KEY}/transferencias/${seriesActual.transferencia}/series`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            empresa: user.EMPRESA,
             series: seriesActual.series,
             bodega: transferenciaSeleccionada.BODEGA_ORIGEN,
             item_code: seriesActual.item_code,
@@ -1416,25 +868,7 @@ export default function GestionTransferenciaBodegasView() {
       const result = await response.json();
 
       if (response.ok && result.success) {
-        // Mostrar información detallada sobre las series
-        let mensaje = `${result.message}\n\n`;
-        mensaje += `📊 Resumen:\n`;
-        mensaje += `✅ Series cargadas: ${result.series_cargadas}\n`;
-        
-        if (result.series_invalidas && result.series_invalidas.length > 0) {
-          mensaje += `\n❌ Series rechazadas (no disponibles en SAP):\n`;
-          result.series_invalidas.forEach((serie, index) => {
-            if (index < 5) {
-              mensaje += `   - ${serie}\n`;
-            }
-          });
-          if (result.series_invalidas.length > 5) {
-            mensaje += `   ... y ${result.series_invalidas.length - 5} más\n`;
-          }
-        }
-
-        alert(mensaje);
-
+        alert(`✅ ${result.message}`);
         // Recargar productos para ver las series actualizadas
         fetchProductosTransferencia(seriesActual.transferencia);
         // Limpiar solo las series y producto seleccionado
@@ -1456,8 +890,6 @@ export default function GestionTransferenciaBodegasView() {
     } catch (error) {
       console.error('Error al guardar series:', error);
       alert('❌ Error al conectar con el servidor. Por favor intente nuevamente.');
-    } finally {
-      setButtonDisabled(false);
     }
   };
 
@@ -1474,16 +906,14 @@ export default function GestionTransferenciaBodegasView() {
     }
 
     if (!window.confirm(
-      `¿Está seguro que desea recibir la transferencia TRF-${id}?\n\nOrigen: ${transferenciaSeleccionada.BODEGA_ORIGEN}\nDestino: ${transferenciaSeleccionada.BODEGA_DESTINO}\n\nEsto procesará el traslado físico de inventario en SAP y marcará la transferencia como completada.`
+      `¿Está seguro que desea recibir la transferencia TRF-${id}?\n\nOrigen: ${transferenciaSeleccionada.BODEGA_ORIGEN}\nDestino: ${transferenciaSeleccionada.BODEGA_DESTINO}\n\nEsto marcará la transferencia como completada.`
     )) {
       return;
     }
 
-    setProcesandoTransferencia(id);
-
     try {
       const response = await fetch(
-        `${HOST_API_KEY}/transferencias/${id}/recibir-v2`,
+        `${HOST_API_KEY}/transferencias/${id}/recibir`,
         {
           method: 'POST',
           headers: {
@@ -1511,8 +941,6 @@ export default function GestionTransferenciaBodegasView() {
     } catch (error) {
       console.error('Error al recibir transferencia:', error);
       alert('❌ Error al conectar con el servidor. Por favor intente nuevamente.');
-    } finally {
-      setProcesandoTransferencia(null);
     }
   };
 
@@ -2061,16 +1489,16 @@ export default function GestionTransferenciaBodegasView() {
                     )}
 
                     <Grid item xs={12}>
-                      <Stack direction="row" spacing={2} alignItems="center">
+                      <Stack direction="row" spacing={2}>
                         <Button
                           variant="contained"
                           color="primary"
                           onClick={handleGuardarSeries}
-                          disabled={seriesActual.series.length === 0 || buttonDisabled}
+                          disabled={seriesActual.series.length === 0}
                           size="large"
                           startIcon={<SendIcon />}
                         >
-                          {buttonDisabled ? 'Validando en SAP...' : 'Guardar Series (Validación SAP)'}
+                          Guardar Series del Producto
                         </Button>
                         <Button
                           variant="outlined"
@@ -2083,13 +1511,9 @@ export default function GestionTransferenciaBodegasView() {
                             series: [],
                           })}
                           size="large"
-                          disabled={buttonDisabled}
                         >
                           Cancelar
                         </Button>
-                        <Typography variant="caption" color="text.secondary" sx={{ ml: 2 }}>
-                          ⚠️ Las series serán validadas automáticamente en SAP antes de guardar
-                        </Typography>
                       </Stack>
                     </Grid>
                   </>
@@ -2195,10 +1619,8 @@ export default function GestionTransferenciaBodegasView() {
                                 color="success"
                                 size="small"
                                 onClick={() => handleAceptarTransferencia(transferencia.ID)}
-                                disabled={procesandoTransferencia !== null}
-                                startIcon={procesandoTransferencia === transferencia.ID ? <CircularProgress size={16} color="inherit" /> : null}
                               >
-                                {procesandoTransferencia === transferencia.ID ? 'Recibiendo transferencia...' : 'Recibir e Ingresar'}
+                                Recibir e Ingresar
                               </Button>
                             </Stack>
                           </TableCell>
@@ -2246,7 +1668,6 @@ export default function GestionTransferenciaBodegasView() {
           <Grid container spacing={3}>
             {visibleModules.map((module) => {
               const Icon = module.icon;
-              const counter = moduleCounters[module.id] || 0;
               
               return (
                 <Grid key={module.id} item xs={12} sm={6} md={3}>
@@ -2288,8 +1709,8 @@ export default function GestionTransferenciaBodegasView() {
                     {/* Content */}
                     <Box sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column', position: 'relative' }}>
                       <Stack spacing={2} sx={{ flex: 1 }}>
-                        {/* Badge - Solo mostrar para módulos con contador (no para solicitar) */}
-                        {module.id !== 'solicitar' && counter > 0 && (
+                        {/* Badge */}
+                        {module.badge > 0 && (
                           <Box sx={{ position: 'absolute', top: 16, right: 16 }}>
                             <Avatar
                               sx={{
@@ -2305,7 +1726,7 @@ export default function GestionTransferenciaBodegasView() {
                                 },
                               }}
                             >
-                              {counter}
+                              {module.badge}
                             </Avatar>
                           </Box>
                         )}
@@ -2540,40 +1961,9 @@ export default function GestionTransferenciaBodegasView() {
 
               {/* Productos */}
               <Box>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
-                  <Typography variant="subtitle2" color="text.secondary">
-                    Productos ({modalDetalle.productos.length})
-                  </Typography>
-                  {modalDetalle.transferencia?.ESTADO === 0 && !modalDetalle.editMode && (
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      onClick={handleActivarEdicion}
-                      disabled={modalDetalle.loading}
-                    >
-                      Editar Productos y Cantidades
-                    </Button>
-                  )}
-                  {modalDetalle.editMode && (
-                    <Stack direction="row" spacing={1}>
-                      <Button
-                        size="small"
-                        variant="contained"
-                        color="primary"
-                        onClick={handleGuardarCantidades}
-                      >
-                        Guardar Cambios
-                      </Button>
-                      <Button
-                        size="small"
-                        variant="outlined"
-                        onClick={handleCancelarEdicion}
-                      >
-                        Cancelar
-                      </Button>
-                    </Stack>
-                  )}
-                </Stack>
+                <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                  Productos ({modalDetalle.productos.length})
+                </Typography>
                 
                 {modalDetalle.loading ? (
                   <Stack alignItems="center" spacing={2} sx={{ py: 3 }}>
@@ -2593,221 +1983,31 @@ export default function GestionTransferenciaBodegasView() {
                           <TableCell>Código</TableCell>
                           <TableCell>Descripción</TableCell>
                           <TableCell align="center">Cantidad</TableCell>
-                          {modalDetalle.transferencia?.ESTADO >= 1 && (
-                            <TableCell align="center">Series/IMEIs</TableCell>
-                          )}
-                          {modalDetalle.editMode && (
-                            <TableCell align="center">Acciones</TableCell>
-                          )}
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {(modalDetalle.editMode ? modalDetalle.productosEditados : modalDetalle.productos).map((producto, index) => {
-                          const seriesProducto = modalDetalle.series[producto.ID] || [];
-                          const isExpanded = modalDetalle.expandedProduct === producto.ID;
-                          const uniqueKey = producto.ID || producto.tempId || `producto-${index}`;
-                          
-                          return (
-                            <Fragment key={uniqueKey}>
-                              <TableRow sx={producto.ES_NUEVO ? { bgcolor: alpha(theme.palette.success.main, 0.08) } : {}}>
-                                <TableCell>
-                                  {index + 1}
-                                  {producto.ES_NUEVO && (
-                                    <Chip label="Nuevo" size="small" color="success" sx={{ ml: 0.5 }} />
-                                  )}
-                                </TableCell>
-                                <TableCell>
-                                  <Typography variant="body2" fontWeight={600}>
-                                    {producto.ITEM_CODE}
-                                  </Typography>
-                                </TableCell>
-                                <TableCell>{producto.ITEM_NAME}</TableCell>
-                                <TableCell align="center">
-                                  {modalDetalle.editMode ? (
-                                    <TextField
-                                      type="number"
-                                      size="small"
-                                      value={producto.CANTIDAD_EDITADA}
-                                      onChange={(e) => handleCambiarCantidad(index, e.target.value)}
-                                      inputProps={{ min: 1, style: { textAlign: 'center' } }}
-                                      sx={{ width: 80 }}
-                                    />
-                                  ) : (
-                                    <Chip
-                                      label={producto.CANTIDAD_SOLICITADA}
-                                      size="small"
-                                      color="primary"
-                                      variant="outlined"
-                                    />
-                                  )}
-                                </TableCell>
-                                {modalDetalle.transferencia?.ESTADO >= 1 && (
-                                  <TableCell align="center">
-                                    {modalDetalle.loadingSeries ? (
-                                      <CircularProgress size={20} />
-                                    ) : seriesProducto.length > 0 ? (
-                                      <Button
-                                        size="small"
-                                        variant="outlined"
-                                        onClick={() => handleToggleSeriesProducto(producto.ID)}
-                                        startIcon={isExpanded ? '▼' : '▶'}
-                                      >
-                                        Ver {seriesProducto.length} serie(s)
-                                      </Button>
-                                    ) : (
-                                      <Chip
-                                        label="Sin series"
-                                        size="small"
-                                        color="warning"
-                                        variant="outlined"
-                                      />
-                                    )}
-                                  </TableCell>
-                                )}
-                                {modalDetalle.editMode && (
-                                  <TableCell align="center">
-                                    <IconButton
-                                      size="small"
-                                      color="error"
-                                      onClick={() => handleMarcarParaEliminar(producto, index)}
-                                    >
-                                      <DeleteIcon fontSize="small" />
-                                    </IconButton>
-                                  </TableCell>
-                                )}
-                              </TableRow>
-                              {isExpanded && seriesProducto.length > 0 && (
-                                <TableRow key={`series-${index}`}>
-                                  <TableCell colSpan={modalDetalle.transferencia?.ESTADO >= 1 ? 5 : 4} sx={{ bgcolor: alpha(theme.palette.primary.main, 0.04), p: 2 }}>
-                                    <Typography variant="subtitle2" sx={{ mb: 1, color: 'primary.main' }}>
-                                      Series / IMEIs cargadas:
-                                    </Typography>
-                                    <Grid container spacing={1}>
-                                      {seriesProducto.map((serie, idx) => (
-                                        <Grid item xs={12} sm={6} md={4} key={idx}>
-                                          <Paper
-                                            variant="outlined"
-                                            sx={{
-                                              p: 1.5,
-                                              bgcolor: 'background.paper',
-                                              borderColor: 'primary.light',
-                                            }}
-                                          >
-                                            <Stack direction="row" spacing={1} alignItems="center">
-                                              <Chip
-                                                label={idx + 1}
-                                                size="small"
-                                                color="primary"
-                                                sx={{ width: 32, height: 24 }}
-                                              />
-                                              <Typography
-                                                variant="body2"
-                                                fontFamily="monospace"
-                                                sx={{ fontWeight: 600 }}
-                                              >
-                                                {serie.SERIE_IMEI}
-                                              </Typography>
-                                            </Stack>
-                                            {serie.CARGADO_POR_NOMBRE && (
-                                              <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>
-                                                Por: {serie.CARGADO_POR_NOMBRE}
-                                              </Typography>
-                                            )}
-                                          </Paper>
-                                        </Grid>
-                                      ))}
-                                    </Grid>
-                                  </TableCell>
-                                </TableRow>
-                              )}
-                            </Fragment>
-                          );
-                        })}
+                        {modalDetalle.productos.map((producto, index) => (
+                          <TableRow key={index}>
+                            <TableCell>{index + 1}</TableCell>
+                            <TableCell>
+                              <Typography variant="body2" fontWeight={600}>
+                                {producto.ITEM_CODE}
+                              </Typography>
+                            </TableCell>
+                            <TableCell>{producto.ITEM_NAME}</TableCell>
+                            <TableCell align="center">
+                              <Chip
+                                label={producto.CANTIDAD_SOLICITADA}
+                                size="small"
+                                color="primary"
+                                variant="outlined"
+                              />
+                            </TableCell>
+                          </TableRow>
+                        ))}
                       </TableBody>
                     </Table>
                   </TableContainer>
-                )}
-
-                {/* Sección para agregar nuevos productos (solo en modo edición) */}
-                {modalDetalle.editMode && (
-                  <Box sx={{ mt: 3, p: 2, bgcolor: alpha(theme.palette.primary.main, 0.04), borderRadius: 1 }}>
-                    <Typography variant="subtitle2" color="primary" sx={{ mb: 2 }}>
-                      Agregar Nuevo Producto
-                    </Typography>
-                    
-                    {modalDetalle.loadingProductosDisponibles ? (
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        <CircularProgress size={20} />
-                        <Typography variant="body2" color="text.secondary">
-                          Cargando productos disponibles...
-                        </Typography>
-                      </Stack>
-                    ) : (
-                      <Grid container spacing={2}>
-                        <Grid item xs={12} md={7}>
-                          <Autocomplete
-                            fullWidth
-                            options={modalDetalle.productosDisponibles}
-                            getOptionLabel={(option) => `${option.ItemCode} - ${option.ItemName} (Disponibles: ${option.CANTIDAD_SERIES})`}
-                            value={modalDetalle.productoActual.producto || null}
-                            onChange={(event, newValue) => {
-                              if (newValue) {
-                                setModalDetalle(prev => ({
-                                  ...prev,
-                                  productoActual: {
-                                    codigo: newValue.ItemCode,
-                                    descripcion: newValue.ItemName,
-                                    cantidad: prev.productoActual.cantidad,
-                                    cantidadDisponible: newValue.CANTIDAD_SERIES,
-                                    producto: newValue,
-                                  },
-                                }));
-                              }
-                            }}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                label="Seleccionar Producto"
-                                placeholder="Buscar por código o descripción..."
-                                size="small"
-                              />
-                            )}
-                          />
-                        </Grid>
-
-                        <Grid item xs={12} md={3}>
-                          <TextField
-                            fullWidth
-                            type="number"
-                            label="Cantidad"
-                            size="small"
-                            value={modalDetalle.productoActual.cantidad}
-                            onChange={(e) => setModalDetalle(prev => ({
-                              ...prev,
-                              productoActual: {
-                                ...prev.productoActual,
-                                cantidad: e.target.value,
-                              },
-                            }))}
-                            helperText={modalDetalle.productoActual.cantidadDisponible ? `Disponibles: ${modalDetalle.productoActual.cantidadDisponible}` : ''}
-                            inputProps={{ min: 1, max: modalDetalle.productoActual.cantidadDisponible || undefined }}
-                          />
-                        </Grid>
-
-                        <Grid item xs={12} md={2}>
-                          <Button
-                            fullWidth
-                            variant="contained"
-                            onClick={handleAgregarProductoModal}
-                            disabled={!modalDetalle.productoActual.codigo || !modalDetalle.productoActual.cantidad}
-                            startIcon={<AddIcon />}
-                          >
-                            Agregar
-                          </Button>
-                        </Grid>
-                      </Grid>
-                    )}
-                  </Box>
                 )}
               </Box>
             </Stack>
