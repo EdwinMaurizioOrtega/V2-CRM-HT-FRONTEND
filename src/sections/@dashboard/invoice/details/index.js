@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 // @mui
-import {styled} from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import {
     Box,
     Card,
@@ -23,14 +23,16 @@ import {
     Dialog,
     DialogContent, Toolbar, AppBar, LinearProgress,
     SvgIcon,
-    Alert
+    Alert,
+    Checkbox,
+    FormControlLabel
 } from '@mui/material';
 
 import Link from 'next/link';
 // utils
-import {useEffect, useState} from "react";
-import {useRouter} from "next/router";
-import {fCurrency, fNumberSin} from '../../../../utils/formatNumber';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { fCurrency, fNumberSin } from '../../../../utils/formatNumber';
 // components
 import Label from '../../../../components/label';
 import Image from '../../../../components/image';
@@ -39,12 +41,12 @@ import Iconify from "../../../../components/iconify";
 import MenuPopover from "../../../../components/menu-popover";
 import ConfirmDialog from "../../../../components/confirm-dialog";
 import axios from "../../../../utils/axios";
-import {useAuthContext} from "../../../../auth/useAuthContext";
+import { useAuthContext } from "../../../../auth/useAuthContext";
 import React from 'react';
-import {useSnackbar} from "../../../../components/snackbar";
-import {HOST_API_KEY} from "../../../../config-global";
-import {useBoolean} from "../../../../hooks/use-boolean";
-import {PDFDownloadLink} from "@react-pdf/renderer";
+import { useSnackbar } from "../../../../components/snackbar";
+import { HOST_API_KEY } from "../../../../config-global";
+import { useBoolean } from "../../../../hooks/use-boolean";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 import PedidoInvoicePDF from "./PedidoInvoicePDF";
 import {
     DOCUMENTACION,
@@ -58,12 +60,12 @@ import {
 
 import datos from '/data/datos.json'; // Ajusta la ruta según la ubicación de tu archivo JSON
 import datos_promo from '/data/promo.json'; // JSON Promoción
-import {set} from 'lodash';
-import {el} from 'date-fns/locale';
+import { set } from 'lodash';
+import { el } from 'date-fns/locale';
 
 // ----------------------------------------------------------------------
 
-const StyledRowResult = styled(TableRow)(({theme}) => ({
+const StyledRowResult = styled(TableRow)(({ theme }) => ({
     '& td': {
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(1),
@@ -105,7 +107,7 @@ function insertLineBreaks(text, maxLength) {
 }
 
 
-export default function InvoiceDetails({invoice}) {
+export default function InvoiceDetails({ invoice }) {
 
     //console.log("InvoiceDetail: " + JSON.stringify(invoice));
 
@@ -113,7 +115,7 @@ export default function InvoiceDetails({invoice}) {
 
     const router = useRouter();
 
-    const {user} = useAuthContext();
+    const { user } = useAuthContext();
 
     const [selected, setSelected] = useState(false);
 
@@ -144,13 +146,15 @@ export default function InvoiceDetails({invoice}) {
 
     const [buttonDisabled, setButtonDisabled] = useState(false);
 
+    const [pedidoRetenido, setPedidoRetenido] = useState(false);
+
     const [textArrayCount, setTextArrayCount] = useState(0);
     const [uniqueTextArrayCount, setUniqueTextArrayCount] = useState(0);
 
     const [errorMessage, setErrorMessage] = useState('');
 
 
-    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     const handleOpenDiscountPercentage = () => {
         setOpenDiscountPercentage(true);
@@ -163,8 +167,8 @@ export default function InvoiceDetails({invoice}) {
     const FileCopySvgIcon = (props) => (
         <SvgIcon {...props}>
             <path fill-rule="evenodd" clip-rule="evenodd"
-                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
-                  fill="currentColor"></path>
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                fill="currentColor"></path>
         </SvgIcon>
     );
 
@@ -354,8 +358,11 @@ export default function InvoiceDetails({invoice}) {
         OBSERVACIONES,
         DOCNUM,
         DISCOUNT,
-        U_LS_ASEGURADORA
+        U_LS_ASEGURADORA,
+        PEDIDO_RETENIDO
     } = invoice;
+
+    //console.log("Pedido retenido: " + PEDIDO_RETENIDO)
 
     //console.log("OBSERVACIONES: " + OBSERVACIONES)
     //console.log("Row Detail Order: " + JSON.stringify(items))
@@ -868,7 +875,7 @@ export default function InvoiceDetails({invoice}) {
                 alert(`El monto ingresado ($${totalDolaresReferencia}) debe estar entre $${montoMinimo.toFixed(2)} y $${montoMaximo.toFixed(2)}. Total de la orden: $${totalConIva.toFixed(2)}`);
                 return;
             }
-            
+
         }
 
         try {
@@ -886,6 +893,7 @@ export default function InvoiceDetails({invoice}) {
                 ID_USER: user.ID,
                 OBSERVACION_APROBACION: observacionA,
                 empresa: user.EMPRESA,
+                pedido_retenido: pedidoRetenido
             };
 
             // Agregar datos adicionales si es transferencia
@@ -980,7 +988,7 @@ export default function InvoiceDetails({invoice}) {
                     );
                 } else {
                     // Respuesta inesperada pero exitosa
-                    enqueueSnackbar('Factura procesada correctamente', {variant: 'success'});
+                    enqueueSnackbar('Factura procesada correctamente', { variant: 'success' });
                     ///setTimeout(() => {
                     window.location.href = '/dashboard/invoice/list/';
                     //}, 2000);
@@ -1126,7 +1134,7 @@ export default function InvoiceDetails({invoice}) {
                 // Se completó con éxito (código de estado 200)
                 if (response.status === 200) {
                     setErrorMessage('');
-                    enqueueSnackbar('Orden facturada correctamente', {variant: 'success'});
+                    enqueueSnackbar('Orden facturada correctamente', { variant: 'success' });
                     router.push('/dashboard/invoice/list/');
                 }
 
@@ -1146,14 +1154,14 @@ export default function InvoiceDetails({invoice}) {
 
                 // Mostrar el error con enqueueSnackbar
                 setErrorMessage(errorMessage);
-                enqueueSnackbar(errorMessage, {variant: 'error'});
+                enqueueSnackbar(errorMessage, { variant: 'error' });
 
             } finally {
                 setLoading(false);
             }
 
         } else {
-            enqueueSnackbar('El número de guía debe tener 9 caracteres.', {variant: 'error'})
+            enqueueSnackbar('El número de guía debe tener 9 caracteres.', { variant: 'error' })
         }
 
     }
@@ -1342,7 +1350,7 @@ export default function InvoiceDetails({invoice}) {
             byteNumbers[i] = byteCharacters.charCodeAt(i);
         }
         const byteArray = new Uint8Array(byteNumbers);
-        const pdfBlob = new Blob([byteArray], {type: 'application/pdf'});
+        const pdfBlob = new Blob([byteArray], { type: 'application/pdf' });
         const pdfUrl = URL.createObjectURL(pdfBlob);
         window.open(pdfUrl, '_blank');
     };
@@ -1495,7 +1503,7 @@ export default function InvoiceDetails({invoice}) {
 
         if (!nuevoValor || isNaN(valorNumerico) || valorNumerico === 0) {
             // Eliminar si es 0 o inválido
-            const {[id]: omitido, ...resto} = preciosActualizados;
+            const { [id]: omitido, ...resto } = preciosActualizados;
             setPreciosActualizados(resto);
         } else {
             // Quitar el IVA del 15% - si el valor viene con IVA incluido (ej: 115), dividimos entre 1.15 para obtener el valor base (100)
@@ -1699,29 +1707,72 @@ export default function InvoiceDetails({invoice}) {
 
     }
 
+    const liberarOrden = async () => {
+
+        try {
+            const response = await axios.put('/hanadb/api/orders/order/liberar_orden_retenida', {
+                ID_ORDER: ID,
+                empresa: user.EMPRESA,
+            });
+
+            if (response.status === 200) {
+                router.reload();
+            }
+
+        } catch (error) {
+            console.error('Error al liberar la orden:', error);
+        }
+
+    }
+
+    const handleDespacharOrden = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.put('/hanadb/api/orders/order/despachar_orden', {
+                ID_ORDER: ID,
+                empresa: user.EMPRESA,
+                ID_USER: user.ID,
+            });
+
+            if (response.status === 200) {
+                enqueueSnackbar('Orden despachada exitosamente', { variant: 'success' });
+                window.location.href = '/dashboard/invoice/list/';
+            }
+        } catch (error) {
+            console.error('Error al despachar la orden:', error);
+            enqueueSnackbar(
+                error?.response?.data?.message || 'Error al despachar la orden',
+                { variant: 'error' }
+            );
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return (
         <>
             {/* <InvoiceToolbar invoice={invoice} /> */}
-            <Card sx={{pt: 5, px: 5}}>
+            <Card sx={{ pt: 5, px: 5 }}>
                 <Grid container>
-                    <Grid item xs={12} sm={6} sx={{mb: 5}}>
-                        <Image disabledEffect alt="logo" src="/logo/logo_full.svg" sx={{maxWidth: 120}}/>
+
+                    <Grid item xs={12} sm={6} sx={{ mb: 5 }}>
+                        <Image disabledEffect alt="logo" src="/logo/logo_full.svg" sx={{ maxWidth: 120 }} />
 
                         {/*{user.COMPANY === 'HT' || user.COMPANY === 'ALPHACELL' ? (*/}
                         <PDFDownloadLink
-                            document={<PedidoInvoicePDF invoice={invoice} user={user} empresa="LD"/>}
+                            document={<PedidoInvoicePDF invoice={invoice} user={user} empresa="LD" />}
                             fileName={`PEDIDO_CLIENTE_${invoice.ID}`}
-                            style={{textDecoration: 'none'}}
+                            style={{ textDecoration: 'none' }}
                         >
-                            {({loading}) => (
+                            {({ loading }) => (
                                 <Tooltip title="Descargar LD">
                                     <IconButton
                                         onClick={user.ROLE === "8" ? () => handleDownloadClick(ID) : undefined}
                                     >
                                         {loading ? (
-                                            <CircularProgress size={24} color="inherit"/>
+                                            <CircularProgress size={24} color="inherit" />
                                         ) : (
-                                            <Iconify icon="eva:download-fill"/>
+                                            <Iconify icon="eva:download-fill" />
                                         )}
                                     </IconButton>
                                 </Tooltip>
@@ -1733,19 +1784,19 @@ export default function InvoiceDetails({invoice}) {
                             user.ROLE === '1' ? (
 
                                 <PDFDownloadLink
-                                    document={<PedidoInvoicePDF invoice={invoice} user={user} empresa="TM"/>}
+                                    document={<PedidoInvoicePDF invoice={invoice} user={user} empresa="TM" />}
                                     fileName={`PEDIDO_CLIENTE_${invoice.ID}`}
-                                    style={{textDecoration: 'none'}}
+                                    style={{ textDecoration: 'none' }}
                                 >
-                                    {({loading}) => (
+                                    {({ loading }) => (
                                         <Tooltip title="Descargar TM">
                                             <IconButton
                                                 onClick={user.ROLE === "8" ? () => handleDownloadClick(ID) : undefined}
                                             >
                                                 {loading ? (
-                                                    <CircularProgress size={24} color="inherit"/>
+                                                    <CircularProgress size={24} color="inherit" />
                                                 ) : (
-                                                    <Iconify icon="eva:download-fill"/>
+                                                    <Iconify icon="eva:download-fill" />
                                                 )}
                                             </IconButton>
                                         </Tooltip>
@@ -1757,8 +1808,8 @@ export default function InvoiceDetails({invoice}) {
 
                     </Grid>
 
-                    <Grid item xs={12} sm={6} sx={{mb: 5}}>
-                        <Box sx={{textAlign: {sm: 'right'}}}>
+                    <Grid item xs={12} sm={6} sx={{ mb: 5 }}>
+                        <Box sx={{ textAlign: { sm: 'right' } }}>
                             {/* <Label */}
                             {/*   variant="soft" */}
                             {/*   color={ */}
@@ -1830,8 +1881,8 @@ export default function InvoiceDetails({invoice}) {
                         user.ROLE !== '2' ? (
                             <>
 
-                                <Grid item xs={12} sm={6} sx={{mb: 5}}>
-                                    <Typography paragraph variant="overline" sx={{color: 'text.disabled'}}>
+                                <Grid item xs={12} sm={6} sx={{ mb: 5 }}>
+                                    <Typography paragraph variant="overline" sx={{ color: 'text.disabled' }}>
                                         FACTURA A:
                                     </Typography>
                                     <Label color="success">{Cliente}</Label>
@@ -1858,7 +1909,7 @@ export default function InvoiceDetails({invoice}) {
                                                 Clientes: {fCurrency(OrdersBal)}</Typography>
                                             <Label color="success">Aseguradora: {U_LS_ASEGURADORA}</Label>
 
-                                            <div style={{whiteSpace: 'pre-line', fontSize: '15px'}}>
+                                            <div style={{ whiteSpace: 'pre-line', fontSize: '15px' }}>
                                                 <span>
                                                     Comentario: {insertLineBreaks(Free_Text, 40)}
                                                 </span>
@@ -1870,8 +1921,8 @@ export default function InvoiceDetails({invoice}) {
 
                                 </Grid>
 
-                                <Grid item xs={12} sm={6} sx={{mb: 5}}>
-                                    <Typography paragraph variant="overline" sx={{color: 'text.disabled'}}>
+                                <Grid item xs={12} sm={6} sx={{ mb: 5 }}>
+                                    <Typography paragraph variant="overline" sx={{ color: 'text.disabled' }}>
                                         Orden de
                                     </Typography>
 
@@ -1880,19 +1931,19 @@ export default function InvoiceDetails({invoice}) {
                                     <Typography variant="body2">{CITY}</Typography>
 
                                     {/* <Typography variant="body2">Phone: {invoiceFrom.phone}</Typography> */}
-                                    <Typography variant="overline" sx={{color: 'text.disabled'}}>
+                                    <Typography variant="overline" sx={{ color: 'text.disabled' }}>
                                         fecha de creación
                                     </Typography>
 
                                     <Typography variant="body2">{FECHACREACION}</Typography>
 
-                                    <Typography variant="overline" sx={{color: 'text.disabled'}}>
+                                    <Typography variant="overline" sx={{ color: 'text.disabled' }}>
                                         opciones
                                     </Typography>
 
                                     {user.ROLE !== '31' ? (
                                         <>
-                                            <Grid item xs={12} sm={5} sx={{mb: 1}}>
+                                            <Grid item xs={12} sm={5} sx={{ mb: 1 }}>
 
                                                 {/* <Typography variant="body2">{fDate(dueDate)}</Typography> */}
 
@@ -1929,13 +1980,13 @@ export default function InvoiceDetails({invoice}) {
                                                             handleChangeWarehouse(event, value);
                                                         }} // Add onChange event handler
                                                         renderInput={(params) => <TextField {...params} label="-_-"
-                                                                                            margin="none"/>}
+                                                            margin="none" />}
                                                     />
                                                 )}
 
                                             </Grid>
 
-                                            <Grid item xs={12} sm={7} sx={{mb: 1}}>
+                                            <Grid item xs={12} sm={7} sx={{ mb: 1 }}>
 
                                                 <Typography variant="body2">Forma de pago
                                                     actual: {nameFormaPago(FORMADEPAGO)}</Typography>
@@ -1951,7 +2002,7 @@ export default function InvoiceDetails({invoice}) {
                                                                 handleChangePayment(event, value);
                                                             }}
                                                             renderInput={(params) => <TextField {...params} label="-_-"
-                                                                                                margin="none"/>}
+                                                                margin="none" />}
                                                         />
                                                     </>
                                                 )}
@@ -1971,8 +2022,8 @@ export default function InvoiceDetails({invoice}) {
                                                                     //console.log("Banco seleccionado:", value);
                                                                 }}
                                                                 renderInput={(params) => <TextField {...params}
-                                                                                                    label="Seleccionar Banco"
-                                                                                                    margin="none"/>}
+                                                                    label="Seleccionar Banco"
+                                                                    margin="none" />}
                                                             />
                                                         )}
 
@@ -1987,8 +2038,8 @@ export default function InvoiceDetails({invoice}) {
                                                                     //console.log("Banco seleccionado:", value);
                                                                 }}
                                                                 renderInput={(params) => <TextField {...params}
-                                                                                                    label="Seleccionar Banco"
-                                                                                                    margin="none"/>}
+                                                                    label="Seleccionar Banco"
+                                                                    margin="none" />}
                                                             />
                                                         )}
 
@@ -2023,22 +2074,49 @@ export default function InvoiceDetails({invoice}) {
                         ) : null
                     ) : null}
 
-                    <Grid item xs={12} sm={6} sx={{mb: 5}}>
+                    <Grid item xs={12} sm={6} sx={{ mb: 5 }}>
 
                     </Grid>
 
-                    <Grid item xs={12} sm={6} sx={{mb: 5}}>
+                    <Grid item xs={12} sm={6} sx={{ mb: 5 }}>
 
                     </Grid>
+
+
+                    <Typography
+                        variant="h6"
+                        sx={{
+                            mb: 3,
+                            color: PEDIDO_RETENIDO ? 'error.main' : 'success.main',
+                            fontWeight: 'bold',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 1
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                bgcolor: PEDIDO_RETENIDO ? 'error.lighter' : 'success.lighter',
+                                p: 1,
+                                borderRadius: 1.5,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            {PEDIDO_RETENIDO ? '🚫' : '✅'}
+                        </Box>
+                        {PEDIDO_RETENIDO ? 'ORDEN RETENIDA' : 'ORDEN NO RETENIDA'}
+                    </Typography>
                 </Grid>
 
-                <TableContainer sx={{overflow: 'unset'}}>
+                <TableContainer sx={{ overflow: 'unset' }}>
                     <Scrollbar>
-                        <Table sx={{minWidth: 960}}>
+                        <Table sx={{ minWidth: 960 }}>
                             <TableHead
                                 sx={{
                                     borderBottom: (theme) => `solid 1px ${theme.palette.divider}`,
-                                    '& th': {backgroundColor: 'transparent'},
+                                    '& th': { backgroundColor: 'transparent' },
                                 }}
                             >
                                 <TableRow>
@@ -2071,7 +2149,7 @@ export default function InvoiceDetails({invoice}) {
                                             <TableCell align="left">R/PorCargarSeries</TableCell>
                                             <TableCell align="left">R/PorFacturar</TableCell> */}
                                                 <TableCell align="left">
-                                                    <Box sx={{display: 'flex', alignItems: 'center', gap: 0.5}}>
+                                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                                         Disponible
                                                         <Tooltip
                                                             title="Cantidad disponible en inventario para esta bodega (Stock SAP - Reservado Por Facturar - Reservado Por Cargar Series).">
@@ -2087,7 +2165,7 @@ export default function InvoiceDetails({invoice}) {
                                                                 }}
                                                             >
                                                                 <Iconify icon="eva:question-mark-circle-outline"
-                                                                         width={16} height={16}/>
+                                                                    width={16} height={16} />
                                                             </IconButton>
                                                         </Tooltip>
                                                     </Box>
@@ -2099,25 +2177,25 @@ export default function InvoiceDetails({invoice}) {
 
                                     {(user.ROLE === "9" || user.ROLE === "10") && (<>
 
-                                            <TableCell align="left">Costo</TableCell>
-                                        </>
+                                        <TableCell align="left">Costo</TableCell>
+                                    </>
                                     )}
                                     <TableCell align="left">Comentario Precio</TableCell>
 
                                     {(user.ROLE === "9" || user.ROLE === "10") && (<>
 
-                                            <TableCell align="right">Precio unitario</TableCell>
-                                            <TableCell align="right">Total</TableCell>
+                                        <TableCell align="right">Precio unitario</TableCell>
+                                        <TableCell align="right">Total</TableCell>
 
-                                        </>
+                                    </>
                                     )}
 
                                     {(user.ROLE === "0" || user.ROLE === "1" || user.ROLE === "2") && (<>
 
-                                            <TableCell align="right">Precio unitario</TableCell>
-                                            <TableCell align="right">Total</TableCell>
+                                        <TableCell align="right">Precio unitario</TableCell>
+                                        <TableCell align="right">Total</TableCell>
 
-                                        </>
+                                    </>
                                     )}
 
                                     {user.ROLE !== '0' ? (
@@ -2149,7 +2227,7 @@ export default function InvoiceDetails({invoice}) {
                                         <TableCell>{index + 1}</TableCell>
 
                                         <TableCell align="left">
-                                            <Box sx={{maxWidth: 560}}>
+                                            <Box sx={{ maxWidth: 560 }}>
                                                 <Typography
                                                     variant="subtitle2"
                                                     // sx={{
@@ -2165,7 +2243,7 @@ export default function InvoiceDetails({invoice}) {
                                                 <Typography variant="body2" sx={{
                                                     color: 'text.secondary',
                                                     backgroundColor: row.PRODUCTO_ID === '07.62.02'
-                                                    || row.PRODUCTO_ID === '07.62.01' ? 'yellow' : 'inherit'
+                                                        || row.PRODUCTO_ID === '07.62.01' ? 'yellow' : 'inherit'
                                                 }} noWrap>
                                                     {row.PRODUCTO_ID}
                                                 </Typography>
@@ -2212,7 +2290,7 @@ export default function InvoiceDetails({invoice}) {
                                                     {/* <TableCell align="left" >{Number(row.RESERVADO_POR_BODEGA)}</TableCell> */}
 
                                                     <TableCell align="left"
-                                                               style={{backgroundColor: Number(row.DISPONIBLE_POR_BODEGA) <= 0 ? 'rgba(255, 0, 0, 0.08)' : 'rgba(0, 171, 85, 0.08)'}}>
+                                                        style={{ backgroundColor: Number(row.DISPONIBLE_POR_BODEGA) <= 0 ? 'rgba(255, 0, 0, 0.08)' : 'rgba(0, 171, 85, 0.08)' }}>
 
                                                         {Number(row.DISPONIBLE_POR_BODEGA)}</TableCell>
                                                 </>
@@ -2242,7 +2320,7 @@ export default function InvoiceDetails({invoice}) {
                                                     <Box display="flex" flexDirection="column">
 
 
-                                                        <Typography variant="body2" sx={{mb: 0.5}}>
+                                                        <Typography variant="body2" sx={{ mb: 0.5 }}>
                                                             {fCurrency(
                                                                 row.PRECIOUNITARIOVENTA)}
                                                         </Typography>
@@ -2252,8 +2330,8 @@ export default function InvoiceDetails({invoice}) {
                                                                 onChange={(e) => handlePrecioChange(row.ID, e.target.value)}
                                                                 size="small"
                                                                 variant="standard"
-                                                                inputProps={{style: {textAlign: 'right'}}}
-                                                                sx={{width: 100}} // o el valor que desees: 100, '80px', '10ch', etc.
+                                                                inputProps={{ style: { textAlign: 'right' } }}
+                                                                sx={{ width: 100 }} // o el valor que desees: 100, '80px', '10ch', etc.
                                                             />
                                                         )}
                                                     </Box>
@@ -2262,16 +2340,16 @@ export default function InvoiceDetails({invoice}) {
 
                                                 <TableCell
                                                     align="right">{fCurrency(
-                                                    (() => {
-                                                        const descuento = (row.DISCOUNTPERCENTSAP || 0) / 100;
-                                                        // Si el descuento es 100%, retornar 0 explícitamente
-                                                        if (row.DISCOUNTPERCENTSAP >= 100) {
-                                                            return 0;
-                                                        }
-                                                        const precioConDescuento = row.PRECIOUNITARIOVENTA * (1 - descuento);
-                                                        return precioConDescuento * row.CANTIDAD;
-                                                    })()
-                                                )}</TableCell>
+                                                        (() => {
+                                                            const descuento = (row.DISCOUNTPERCENTSAP || 0) / 100;
+                                                            // Si el descuento es 100%, retornar 0 explícitamente
+                                                            if (row.DISCOUNTPERCENTSAP >= 100) {
+                                                                return 0;
+                                                            }
+                                                            const precioConDescuento = row.PRECIOUNITARIOVENTA * (1 - descuento);
+                                                            return precioConDescuento * row.CANTIDAD;
+                                                        })()
+                                                    )}</TableCell>
 
                                             </>
                                         )
@@ -2284,7 +2362,7 @@ export default function InvoiceDetails({invoice}) {
                                                     align="left">
                                                     <Box display="flex" flexDirection="row">
 
-                                                        <Typography variant="body2" sx={{mb: 0.5}}>
+                                                        <Typography variant="body2" sx={{ mb: 0.5 }}>
                                                             {fCurrency(
                                                                 row.PRECIOUNITARIOVENTA)}
                                                         </Typography>
@@ -2303,11 +2381,11 @@ export default function InvoiceDetails({invoice}) {
                                             <IconButton color={openPopover ? 'inherit' : 'default'}
 
 
-                                                        onClick={(event) => handleOpenPopover(event, row)}
+                                                onClick={(event) => handleOpenPopover(event, row)}
 
 
                                             >
-                                                <Iconify icon="eva:more-vertical-fill"/>
+                                                <Iconify icon="eva:more-vertical-fill" />
                                             </IconButton>
                                         </TableCell>
 
@@ -2348,32 +2426,32 @@ export default function InvoiceDetails({invoice}) {
                                 {(user.ROLE === "9" || user.ROLE === "10") && (
                                     <>
                                         <StyledRowResult>
-                                            <TableCell colSpan={3}/>
+                                            <TableCell colSpan={3} />
 
-                                            <TableCell align="right" sx={{typography: 'body1'}}>
-                                                <Box sx={{mt: 2}}/>
+                                            <TableCell align="right" sx={{ typography: 'body1' }}>
+                                                <Box sx={{ mt: 2 }} />
                                                 Subtotal
                                             </TableCell>
 
 
-                                            <TableCell align="right" width={120} sx={{typography: 'body1'}}>
-                                                <Box sx={{mt: 2}}/>
+                                            <TableCell align="right" width={120} sx={{ typography: 'body1' }}>
+                                                <Box sx={{ mt: 2 }} />
                                                 {fCurrency(subtotalTotal)}
                                             </TableCell>
 
                                         </StyledRowResult>
 
                                         <StyledRowResult>
-                                            <TableCell colSpan={3}/>
+                                            <TableCell colSpan={3} />
 
-                                            <TableCell align="right" sx={{typography: 'body1'}}>
+                                            <TableCell align="right" sx={{ typography: 'body1' }}>
                                                 Discount
                                             </TableCell>
 
                                             <TableCell
                                                 align="right"
                                                 width={120}
-                                                sx={{color: 'error.main', typography: 'body1'}}
+                                                sx={{ color: 'error.main', typography: 'body1' }}
                                             >
                                                 {DISCOUNT && fCurrency(-DISCOUNT)}
 
@@ -2382,7 +2460,7 @@ export default function InvoiceDetails({invoice}) {
                                                         <TextField
                                                             value={valueNew}
                                                             onChange={handleChange}
-                                                            sx={{width: 75}} // 🔥 Establece el ancho en 10px
+                                                            sx={{ width: 75 }} // 🔥 Establece el ancho en 10px
                                                         />
                                                         {(ESTADO === 6) && (
 
@@ -2400,25 +2478,25 @@ export default function InvoiceDetails({invoice}) {
                                         </StyledRowResult>
 
                                         <StyledRowResult>
-                                            <TableCell colSpan={3}/>
+                                            <TableCell colSpan={3} />
 
-                                            <TableCell align="right" sx={{typography: 'body1'}}>
+                                            <TableCell align="right" sx={{ typography: 'body1' }}>
                                                 IVA
                                             </TableCell>
 
-                                            <TableCell align="right" width={120} sx={{typography: 'body1'}}>
+                                            <TableCell align="right" width={120} sx={{ typography: 'body1' }}>
                                                 {fCurrency(ivaTotal)}
                                             </TableCell>
                                         </StyledRowResult>
 
                                         <StyledRowResult>
-                                            <TableCell colSpan={3}/>
+                                            <TableCell colSpan={3} />
 
-                                            <TableCell align="right" sx={{typography: 'h6'}}>
+                                            <TableCell align="right" sx={{ typography: 'h6' }}>
                                                 Total
                                             </TableCell>
 
-                                            <TableCell align="right" width={140} sx={{typography: 'h6'}}>
+                                            <TableCell align="right" width={140} sx={{ typography: 'h6' }}>
                                                 {fCurrency(totalConIva)}
                                             </TableCell>
                                         </StyledRowResult>
@@ -2440,7 +2518,7 @@ export default function InvoiceDetails({invoice}) {
                         border: '1px solid',
                         borderColor: 'grey.200'
                     }}>
-                        <Typography variant="subtitle1" sx={{fontWeight: 'bold', color: 'primary.main'}}>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
                             📦 Total de series
                             cargadas: {items.reduce((total, item) => total + (parseInt(item.SERIES_COUNT) || 0), 0)}
                         </Typography>
@@ -2451,7 +2529,7 @@ export default function InvoiceDetails({invoice}) {
                     <>
 
                         {(ESTADO === 6) && (
-                            <Box sx={{display: 'flex', justifyContent: 'end', width: '100%', px: 2, py: 1}}>
+                            <Box sx={{ display: 'flex', justifyContent: 'end', width: '100%', px: 2, py: 1 }}>
                                 <Button variant="contained" onClick={enviarPrecios}>
                                     Enviar precios actualizados
                                 </Button>
@@ -2471,10 +2549,10 @@ export default function InvoiceDetails({invoice}) {
                 )}
 
 
-                <Divider sx={{mt: 5}}/>
+                <Divider sx={{ mt: 5 }} />
 
                 <Grid container>
-                    <Grid item xs={12} md={9} sx={{py: 3}}>
+                    <Grid item xs={12} md={9} sx={{ py: 3 }}>
                         <Typography variant="subtitle2">NOTAS</Typography>
 
                         <Typography variant="body2">
@@ -2484,7 +2562,7 @@ export default function InvoiceDetails({invoice}) {
                             correspondiente. Agradecemos su colaboración. </Typography>
                     </Grid>
 
-                    <Grid item xs={12} md={3} sx={{py: 3, textAlign: 'right'}}>
+                    <Grid item xs={12} md={3} sx={{ py: 3, textAlign: 'right' }}>
                         <Typography variant="subtitle2">¿Tengo una pregunta?</Typography>
 
                         <Link href="https://wa.me/593939991111">
@@ -2499,7 +2577,7 @@ export default function InvoiceDetails({invoice}) {
                 {user.COMPANY !== 'TOMEBAMBA' && (
 
                     <Grid container>
-                        <Grid item xs={12} md={9} sx={{py: 3}}>
+                        <Grid item xs={12} md={9} sx={{ py: 3 }}>
                             <Typography
                                 variant="h6"
                                 sx={{
@@ -2525,6 +2603,10 @@ export default function InvoiceDetails({invoice}) {
                                 </Box>
                                 INFORMACIÓN DE ENTREGA
                             </Typography>
+
+
+
+
 
                             {(() => {
                                 try {
@@ -2557,7 +2639,7 @@ export default function InvoiceDetails({invoice}) {
                                                             borderColor: 'divider'
                                                         }}
                                                     >
-                                                        <Box sx={{display: 'flex', alignItems: 'center', mb: 1.5}}>
+                                                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
                                                             <Box
                                                                 sx={{
                                                                     bgcolor: 'info.lighter',
@@ -2571,7 +2653,7 @@ export default function InvoiceDetails({invoice}) {
                                                                 🏠
                                                             </Box>
                                                             <Typography variant="subtitle2"
-                                                                        sx={{fontWeight: 700, color: 'text.secondary'}}>
+                                                                sx={{ fontWeight: 700, color: 'text.secondary' }}>
                                                                 Dirección de Entrega
                                                             </Typography>
                                                         </Box>
@@ -2591,7 +2673,7 @@ export default function InvoiceDetails({invoice}) {
 
                                                 {/* Provincia */}
                                                 <Grid item xs={12} sm={6}>
-                                                    <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
+                                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                                                         <Box
                                                             sx={{
                                                                 bgcolor: 'success.lighter',
@@ -2613,7 +2695,7 @@ export default function InvoiceDetails({invoice}) {
                                                                 Provincia
                                                             </Typography>
                                                             <Typography variant="body1"
-                                                                        sx={{fontWeight: 600, color: 'text.primary'}}>
+                                                                sx={{ fontWeight: 600, color: 'text.primary' }}>
                                                                 {deliveryInfo.PROVINCIA || 'No especificada'}
                                                             </Typography>
                                                         </Box>
@@ -2622,7 +2704,7 @@ export default function InvoiceDetails({invoice}) {
 
                                                 {/* Cantón */}
                                                 <Grid item xs={12} sm={6}>
-                                                    <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
+                                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                                                         <Box
                                                             sx={{
                                                                 bgcolor: 'warning.lighter',
@@ -2644,7 +2726,7 @@ export default function InvoiceDetails({invoice}) {
                                                                 Cantón
                                                             </Typography>
                                                             <Typography variant="body1"
-                                                                        sx={{fontWeight: 600, color: 'text.primary'}}>
+                                                                sx={{ fontWeight: 600, color: 'text.primary' }}>
                                                                 {deliveryInfo.CANTON || 'No especificada'}
                                                             </Typography>
                                                         </Box>
@@ -2653,7 +2735,7 @@ export default function InvoiceDetails({invoice}) {
 
                                                 {/* Parroquia */}
                                                 <Grid item xs={12} sm={6}>
-                                                    <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
+                                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                                                         <Box
                                                             sx={{
                                                                 bgcolor: 'error.lighter',
@@ -2675,7 +2757,7 @@ export default function InvoiceDetails({invoice}) {
                                                                 Parroquia
                                                             </Typography>
                                                             <Typography variant="body1"
-                                                                        sx={{fontWeight: 600, color: 'text.primary'}}>
+                                                                sx={{ fontWeight: 600, color: 'text.primary' }}>
                                                                 {deliveryInfo.PARROQUIA || 'No especificada'}
                                                             </Typography>
                                                         </Box>
@@ -2684,7 +2766,7 @@ export default function InvoiceDetails({invoice}) {
 
                                                 {/* Código Postal */}
                                                 <Grid item xs={12} sm={6}>
-                                                    <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
+                                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                                                         <Box
                                                             sx={{
                                                                 bgcolor: 'secondary.lighter',
@@ -2706,7 +2788,7 @@ export default function InvoiceDetails({invoice}) {
                                                                 Código Postal
                                                             </Typography>
                                                             <Typography variant="body1"
-                                                                        sx={{fontWeight: 600, color: 'text.primary'}}>
+                                                                sx={{ fontWeight: 600, color: 'text.primary' }}>
                                                                 {deliveryInfo.ZIPCODE || 'No especificado'}
                                                             </Typography>
                                                         </Box>
@@ -2729,7 +2811,7 @@ export default function InvoiceDetails({invoice}) {
                                                             }}
                                                         >
                                                             <Typography variant="body2"
-                                                                        sx={{fontWeight: 600, color: 'info.darker'}}>
+                                                                sx={{ fontWeight: 600, color: 'info.darker' }}>
                                                                 🏷️ ID Dirección:
                                                             </Typography>
                                                             <Label
@@ -2760,7 +2842,7 @@ export default function InvoiceDetails({invoice}) {
                                                 borderRadius: 2
                                             }}
                                         >
-                                            <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5, mb: 1}}>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
                                                 <Box
                                                     sx={{
                                                         bgcolor: 'warning.main',
@@ -2773,12 +2855,12 @@ export default function InvoiceDetails({invoice}) {
                                                     ⚠️
                                                 </Box>
                                                 <Typography variant="subtitle1"
-                                                            sx={{color: 'warning.darker', fontWeight: 600}}>
+                                                    sx={{ color: 'warning.darker', fontWeight: 600 }}>
                                                     Información de entrega no disponible
                                                 </Typography>
                                             </Box>
                                             <Typography variant="caption"
-                                                        sx={{color: 'text.secondary', mt: 1, display: 'block', ml: 6}}>
+                                                sx={{ color: 'text.secondary', mt: 1, display: 'block', ml: 6 }}>
                                                 Formato inválido o datos no especificados
                                             </Typography>
                                         </Card>
@@ -2791,19 +2873,33 @@ export default function InvoiceDetails({invoice}) {
 
                 )}
 
-                <Divider sx={{mt: 5}}/>
+                <Divider sx={{ mt: 5 }} />
 
                 {(user.ROLE === "9" || user.ROLE === "10") &&
                     <Grid container>
-                        <Grid item xs={12} md={12} sx={{py: 3, textAlign: 'center'}}>
+                        <Grid item xs={12} md={12} sx={{ py: 3, textAlign: 'center' }}>
                             {/* <Button onClick={enviarOrdenSAP}>CREAR ORDEN DE VENTA SAP</Button> */}
 
                             {/* Enviar a pendiente cargar series */}
                             {(ESTADO === 6) &&
                                 <Button onClick={() => !loading && enviarOrdenPendienteCargaSeries()}
-                                        disabled={loading}>
+                                    disabled={loading}>
                                     {loading ? 'CREANDO...' : 'ENVIAR A PENDIENTE CARGAR SERIES'}
                                 </Button>
+                            }
+
+                            {/* Retenido */}
+                            {(ESTADO === 6 && user.ROLE === "9") &&
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={pedidoRetenido}
+                                            onChange={(e) => setPedidoRetenido(e.target.checked)}
+                                            color="warning"
+                                        />
+                                    }
+                                    label="Pedido Retenido"
+                                />
                             }
 
                             {/* Pendiente factuaración / Solo le va a aparecer el ROL de crédito */}
@@ -2813,13 +2909,21 @@ export default function InvoiceDetails({invoice}) {
                                 </Button>
                             }
 
+
+
+                            {(ESTADO === 5 && user.ROLE === "9") &&
+                                <Button onClick={() => !loading && liberarOrden()} disabled={loading}>
+                                    {loading ? 'LIBERANDO ORDEN...' : 'LIBERAR ORDEN'}
+                                </Button>
+                            }
+
                         </Grid>
                     </Grid>
                 }
 
-                {user.ROLE === "8" &&
+                {(user.ROLE === "8" && ESTADO === 7) &&
                     <Grid container>
-                        <Grid item xs={12} md={12} sx={{py: 6}}>
+                        <Grid item xs={12} md={12} sx={{ py: 6 }}>
 
                             <TextField
                                 required
@@ -2832,7 +2936,7 @@ export default function InvoiceDetails({invoice}) {
                                         handleChangeGuia(e);
                                     }
                                 }}
-                                inputProps={{maxLength: 9}}
+                                inputProps={{ maxLength: 9 }}
                                 error={valueGuia.length !== 9}
                                 helperText={valueGuia.length !== 9 ? 'El número de guía debe tener 9 caracteres' : ''}
                             />
@@ -2858,7 +2962,7 @@ export default function InvoiceDetails({invoice}) {
                                     options={dataEmpladosVenta}
                                     getOptionLabel={(option) => option.NOMBRE || ''}
                                     renderInput={(params) => <TextField {...params} label="Entregar a: "
-                                                                        margin="none"/>}
+                                        margin="none" />}
                                     onChange={(event, newValue) => handleChangeEmpleadoEntregar(event, newValue)}
 
                                 />
@@ -2867,12 +2971,12 @@ export default function InvoiceDetails({invoice}) {
 
                             {!loading ? (
                                 <Button variant="contained" color="success"
-                                        onClick={() => handleChangePedidoPendienteFacturar()}>
+                                    onClick={() => handleChangePedidoPendienteFacturar()}>
                                     Enviar al área de facturación.
                                 </Button>
                             ) : (
-                                <Box sx={{width: '100%'}}>
-                                    <LinearProgress color="success"/>
+                                <Box sx={{ width: '100%' }}>
+                                    <LinearProgress color="success" />
                                 </Box>
                             )}
 
@@ -2898,6 +3002,21 @@ export default function InvoiceDetails({invoice}) {
 
                     </Grid>
                 }
+
+
+                {/* Para uso de bodega con estado 3 - Por despachar */}
+                {(user.ROLE === "8" && ESTADO === 3) &&
+                    <Grid container>
+
+                        <Button variant="contained" color="success"
+                            onClick={() => handleDespacharOrden()}>
+                            DESPACHAR ORDEN
+                        </Button>
+
+                    </Grid>
+
+                }
+
             </Card>
 
 
@@ -2994,7 +3113,7 @@ export default function InvoiceDetails({invoice}) {
                         open={openPopover}
                         onClose={handleClosePopover}
                         arrow="right-top"
-                        sx={{width: 160}}
+                        sx={{ width: 160 }}
                     >
 
                         {(ESTADO === 6) && (
@@ -3008,7 +3127,7 @@ export default function InvoiceDetails({invoice}) {
                                         handleClosePopover();
                                     }}
                                 >
-                                    <Iconify icon="eva:edit-fill"/>
+                                    <Iconify icon="eva:edit-fill" />
                                     Precio Unitario.
                                 </MenuItem>
                                 <MenuItem
@@ -3017,7 +3136,7 @@ export default function InvoiceDetails({invoice}) {
                                         handleClosePopover();
                                     }}
                                 >
-                                    <Iconify icon="eva:edit-fill"/>
+                                    <Iconify icon="eva:edit-fill" />
                                     Cantidad.
                                 </MenuItem>
 
@@ -3027,7 +3146,7 @@ export default function InvoiceDetails({invoice}) {
                                         handleClosePopover();
                                     }}
                                 >
-                                    <Iconify icon="eva:edit-fill"/>
+                                    <Iconify icon="eva:edit-fill" />
                                     %Desc.
                                 </MenuItem>
 
@@ -3037,20 +3156,20 @@ export default function InvoiceDetails({invoice}) {
                                         handleClosePopover();
                                     }}
                                 >
-                                    <Iconify icon="eva:edit-fill"/>
+                                    <Iconify icon="eva:edit-fill" />
                                     Producto.
                                 </MenuItem>
 
-                                <Divider sx={{borderStyle: 'dashed'}}/>
+                                <Divider sx={{ borderStyle: 'dashed' }} />
 
                                 <MenuItem
                                     onClick={() => {
                                         handleOpenConfirm();
                                         handleClosePopover();
                                     }}
-                                    sx={{color: 'error.main'}}
+                                    sx={{ color: 'error.main' }}
                                 >
-                                    <Iconify icon="eva:trash-2-outline"/>
+                                    <Iconify icon="eva:trash-2-outline" />
                                     Borrar
                                 </MenuItem>
 
@@ -3067,7 +3186,7 @@ export default function InvoiceDetails({invoice}) {
                                         handleClosePopover();
                                     }}
                                 >
-                                    <Iconify icon="eva:edit-fill"/>
+                                    <Iconify icon="eva:edit-fill" />
                                     Ver Series
                                 </MenuItem>
 
@@ -3078,7 +3197,7 @@ export default function InvoiceDetails({invoice}) {
                                             vaciarListaSeriesProducto();
                                         }}
                                     >
-                                        <Iconify icon="eva:edit-fill"/>
+                                        <Iconify icon="eva:edit-fill" />
                                         Vaciar Series
                                     </MenuItem>
                                 )}
@@ -3096,7 +3215,7 @@ export default function InvoiceDetails({invoice}) {
                         open={openPopover}
                         onClose={handleClosePopover}
                         arrow="right-top"
-                        sx={{width: 160}}
+                        sx={{ width: 160 }}
                     >
 
                         <MenuItem
@@ -3105,7 +3224,7 @@ export default function InvoiceDetails({invoice}) {
                                 handleClosePopover();
                             }}
                         >
-                            <Iconify icon="eva:edit-fill"/>
+                            <Iconify icon="eva:edit-fill" />
                             Cargar Series
                         </MenuItem>
 
@@ -3115,7 +3234,7 @@ export default function InvoiceDetails({invoice}) {
                                 handleClosePopover();
                             }}
                         >
-                            <Iconify icon="eva:edit-fill"/>
+                            <Iconify icon="eva:edit-fill" />
                             Ver Series
                         </MenuItem>
 
@@ -3124,7 +3243,7 @@ export default function InvoiceDetails({invoice}) {
                                 vaciarListaSeriesProducto();
                             }}
                         >
-                            <Iconify icon="eva:edit-fill"/>
+                            <Iconify icon="eva:edit-fill" />
                             Vaciar Series
                         </MenuItem>
 
@@ -3141,7 +3260,7 @@ export default function InvoiceDetails({invoice}) {
                         open={openPopover}
                         onClose={handleClosePopover}
                         arrow="right-top"
-                        sx={{width: 160}}
+                        sx={{ width: 160 }}
                     >
 
                         {/* <MenuItem
@@ -3159,9 +3278,9 @@ export default function InvoiceDetails({invoice}) {
                                 handleOpenConfirm();
                                 handleClosePopover();
                             }}
-                            sx={{color: 'error.main'}}
+                            sx={{ color: 'error.main' }}
                         >
-                            <Iconify icon="eva:trash-2-outline"/>
+                            <Iconify icon="eva:trash-2-outline" />
                             Borrar
                         </MenuItem>
 
@@ -3302,7 +3421,7 @@ export default function InvoiceDetails({invoice}) {
                 open={openCargarSeries}
                 onClose={handleCloseCargarSeries}
                 fullScreen
-                sx={{padding: '16px'}}
+                sx={{ padding: '16px' }}
             >
                 <AppBar position="relative">
                     <Toolbar>
@@ -3317,7 +3436,7 @@ export default function InvoiceDetails({invoice}) {
                         }}>
                             Validar Series en SAP
                         </Button>
-                        <Button color="inherit" onClick={handleClearClick} style={{marginLeft: '10px'}}>
+                        <Button color="inherit" onClick={handleClearClick} style={{ marginLeft: '10px' }}>
                             Cerrar
                         </Button>
 
@@ -3326,7 +3445,7 @@ export default function InvoiceDetails({invoice}) {
 
                 <DialogContent
                     dividers={scroll === 'paper'}
-                    sx={{padding: '16px'}}
+                    sx={{ padding: '16px' }}
 
                 >
 
@@ -3337,7 +3456,7 @@ export default function InvoiceDetails({invoice}) {
                         }}
                     >
 
-                        <Typography variant="body1" sx={{marginRight: '10px'}}>
+                        <Typography variant="body1" sx={{ marginRight: '10px' }}>
                             Líneas ingresadas: {textArrayCount}
                         </Typography>
                         <Typography
@@ -3390,27 +3509,27 @@ export default function InvoiceDetails({invoice}) {
                             </Button>
 
                             {seriesDisponibles && (
-                                <Box sx={{width: '100%'}}>
+                                <Box sx={{ width: '100%' }}>
                                     <Typography variant="h6" gutterBottom>
                                         Estas se van a guardar en el producto {selected?.PRODUCTO_ID} {selected?.NOMBRE}:
                                     </Typography>
-                                    <TableContainer sx={{maxHeight: 400, border: '1px solid #e0e0e0', borderRadius: 1}}>
+                                    <TableContainer sx={{ maxHeight: 400, border: '1px solid #e0e0e0', borderRadius: 1 }}>
                                         <Table stickyHeader size="small">
                                             <TableHead>
                                                 <TableRow>
-                                                    <TableCell sx={{fontWeight: 'bold', backgroundColor: '#f5f5f5'}}>
+                                                    <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
                                                         #
                                                     </TableCell>
-                                                    <TableCell sx={{fontWeight: 'bold', backgroundColor: '#f5f5f5'}}>
+                                                    <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
                                                         Serie (IMEI)
                                                     </TableCell>
-                                                    <TableCell sx={{fontWeight: 'bold', backgroundColor: '#f5f5f5'}}>
+                                                    <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
                                                         Código
                                                     </TableCell>
-                                                    <TableCell sx={{fontWeight: 'bold', backgroundColor: '#f5f5f5'}}>
+                                                    <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
                                                         Producto
                                                     </TableCell>
-                                                    <TableCell sx={{fontWeight: 'bold', backgroundColor: '#f5f5f5'}}>
+                                                    <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
                                                         Bodega
                                                     </TableCell>
                                                 </TableRow>
@@ -3432,17 +3551,17 @@ export default function InvoiceDetails({invoice}) {
                                                                     }
                                                                 }}
                                                             >
-                                                                <TableCell sx={{fontFamily: 'monospace'}}>
+                                                                <TableCell sx={{ fontFamily: 'monospace' }}>
                                                                     {index + 1}
                                                                 </TableCell>
                                                                 <TableCell
-                                                                    sx={{fontFamily: 'monospace', fontWeight: 'bold'}}>
+                                                                    sx={{ fontFamily: 'monospace', fontWeight: 'bold' }}>
                                                                     {item.IntrSerial}
                                                                 </TableCell>
-                                                                <TableCell sx={{fontFamily: 'monospace'}}>
+                                                                <TableCell sx={{ fontFamily: 'monospace' }}>
                                                                     {item.ItemCode}
                                                                 </TableCell>
-                                                                <TableCell sx={{fontSize: '0.875rem'}}>
+                                                                <TableCell sx={{ fontSize: '0.875rem' }}>
                                                                     {item.ItemName}
                                                                 </TableCell>
                                                                 <TableCell>
@@ -3451,7 +3570,7 @@ export default function InvoiceDetails({invoice}) {
                                                                             {item.WhsCode}
                                                                         </Typography>
                                                                         <Typography variant="caption"
-                                                                                    color="text.secondary">
+                                                                            color="text.secondary">
                                                                             {item.WhsName}
                                                                         </Typography>
                                                                     </Box>
@@ -3479,7 +3598,7 @@ export default function InvoiceDetails({invoice}) {
                                             const parsedData = JSON.parse(seriesDisponibles);
                                             const dataArray = parsedData?.data || [];
                                             return (
-                                                <Box sx={{mt: 2, p: 2, backgroundColor: '#f5f5f5', borderRadius: 1}}>
+                                                <Box sx={{ mt: 2, p: 2, backgroundColor: '#f5f5f5', borderRadius: 1 }}>
                                                     <Typography variant="body2" color="primary">
                                                         📊 Total de series
                                                         disponibles: <strong>{dataArray.length}</strong>
@@ -3507,14 +3626,14 @@ export default function InvoiceDetails({invoice}) {
                 open={openVerListaSeries}
                 onClose={handleCloseVerListaSeries}
                 fullScreen
-                sx={{padding: '16px'}}
+                sx={{ padding: '16px' }}
             >
                 <AppBar position="relative">
                     <Toolbar>
                         <IconButton color="inherit" edge="start" onClick={handleCloseVerListaSeries}>
-                            <Iconify icon="eva:close-fill"/>
+                            <Iconify icon="eva:close-fill" />
                         </IconButton>
-                        <Typography sx={{ml: 2, flex: 1}} variant="h6" component="div">
+                        <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                             Series del Producto: {selected?.PRODUCTO_ID}
                         </Typography>
                         <Button color="inherit" onClick={() => obtenerSeriesGuardadas()}>
@@ -3525,7 +3644,7 @@ export default function InvoiceDetails({invoice}) {
 
                 <DialogContent
                     dividers={scroll === 'paper'}
-                    sx={{padding: '16px'}}
+                    sx={{ padding: '16px' }}
                 >
                     <Box
                         sx={{
@@ -3534,27 +3653,27 @@ export default function InvoiceDetails({invoice}) {
                             mb: 2
                         }}
                     >
-                        <Typography variant="body1" sx={{marginRight: '10px'}}>
+                        <Typography variant="body1" sx={{ marginRight: '10px' }}>
                             Total de series guardadas: {seriesGuardadas.length}
                         </Typography>
-                        <Typography variant="body1" sx={{marginRight: '10px', color: 'green'}}>
+                        <Typography variant="body1" sx={{ marginRight: '10px', color: 'green' }}>
                             Producto: {selected?.NOMBRE}
                         </Typography>
                     </Box>
 
                     {seriesGuardadas.length > 0 ? (
-                        <TableContainer sx={{maxHeight: 600, border: '1px solid #e0e0e0', borderRadius: 1}}>
+                        <TableContainer sx={{ maxHeight: 600, border: '1px solid #e0e0e0', borderRadius: 1 }}>
                             <Table stickyHeader size="small">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell sx={{fontWeight: 'bold', backgroundColor: '#f5f5f5'}}>
+                                        <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
                                             #
                                         </TableCell>
-                                        <TableCell sx={{fontWeight: 'bold', backgroundColor: '#f5f5f5'}}>
+                                        <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
                                             Serie (IMEI)
                                         </TableCell>
                                         <TableCell
-                                            sx={{fontWeight: 'bold', backgroundColor: '#f5f5f5', textAlign: 'center'}}>
+                                            sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5', textAlign: 'center' }}>
                                             Acciones
                                         </TableCell>
                                     </TableRow>
@@ -3572,13 +3691,13 @@ export default function InvoiceDetails({invoice}) {
                                                 }
                                             }}
                                         >
-                                            <TableCell sx={{fontFamily: 'monospace'}}>
+                                            <TableCell sx={{ fontFamily: 'monospace' }}>
                                                 {index + 1}
                                             </TableCell>
-                                            <TableCell sx={{fontFamily: 'monospace', fontWeight: 'bold'}}>
+                                            <TableCell sx={{ fontFamily: 'monospace', fontWeight: 'bold' }}>
                                                 {serie.INTERNAL_SERIAL || 'N/A'}
                                             </TableCell>
-                                            <TableCell sx={{textAlign: 'center'}}>
+                                            <TableCell sx={{ textAlign: 'center' }}>
 
                                                 {(ESTADO === 22 || ESTADO === 23 || ESTADO === 1) && (
                                                     <Tooltip title="Marcar como nota de crédito">
@@ -3593,7 +3712,7 @@ export default function InvoiceDetails({invoice}) {
                                                             }}
                                                             disabled={serie.INTERNAL_SERIAL?.includes('_NOTA_DE_CREDITO')}
                                                         >
-                                                            <Iconify icon="eva:file-text-outline"/>
+                                                            <Iconify icon="eva:file-text-outline" />
                                                         </IconButton>
                                                     </Tooltip>
                                                 )}
@@ -3609,7 +3728,7 @@ export default function InvoiceDetails({invoice}) {
                                                                 }
                                                             }}
                                                         >
-                                                            <Iconify icon="eva:trash-2-outline"/>
+                                                            <Iconify icon="eva:trash-2-outline" />
                                                         </IconButton>
                                                     </Tooltip>
                                                 )}
@@ -3624,11 +3743,11 @@ export default function InvoiceDetails({invoice}) {
                             </Table>
                         </TableContainer>
                     ) : (
-                        <Box sx={{textAlign: 'center', py: 4}}>
+                        <Box sx={{ textAlign: 'center', py: 4 }}>
                             <Typography variant="h6" color="text.secondary">
                                 No hay series guardadas para este producto
                             </Typography>
-                            <Typography variant="body2" color="text.secondary" sx={{mt: 1}}>
+                            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                                 Las series aparecerán aquí una vez que sean cargadas desde SAP
                             </Typography>
                         </Box>
@@ -3642,53 +3761,53 @@ export default function InvoiceDetails({invoice}) {
 
 
 export const top100Films = [
-    {title: 'Centro Distribución HT', id: "019"},
-    {title: 'Cuenca Turi', id: "002"},
-    {title: 'Quito', id: "006"},
+    { title: 'Centro Distribución HT', id: "019" },
+    { title: 'Cuenca Turi', id: "002" },
+    { title: 'Quito', id: "006" },
     // {title: 'Guayaquil', id: "015"},
-    {title: 'Manta', id: "024"},
-    {title: 'Colón', id: "030"},
-    {title: 'Consignación', id: "008"},
-    {title: 'Bodega Claro', id: "039"},
-    {title: 'Cuenca Centro', id: "010"}
+    { title: 'Manta', id: "024" },
+    { title: 'Colón', id: "030" },
+    { title: 'Consignación', id: "008" },
+    { title: 'Bodega Claro', id: "039" },
+    { title: 'Cuenca Centro', id: "010" }
 ]
 
 export const top100FilmsAlphacell = [
-    {title: 'BODEGA', id: "001"},
-    {title: 'MOVISTAR RESERVA', id: "002"},
-    {title: 'MOVISTAR ENTREGADO', id: "003"},
-    {title: 'DEPRATI', id: "004"},
-    {title: 'CRESA CONSIGNACIÓN', id: "005"},
-    {title: 'COMPUTRONSA CONSIGNACIÓN', id: "006"},
-    {title: 'BODEGA CDHT QUITO', id: "007"},
-    {title: 'GUAYAQUIL SERVIENTREGA', id: "009"},
-    {title: 'INVENTARIO TRANSITO IMPORTACIONES', id: "099"}
+    { title: 'BODEGA', id: "001" },
+    { title: 'MOVISTAR RESERVA', id: "002" },
+    { title: 'MOVISTAR ENTREGADO', id: "003" },
+    { title: 'DEPRATI', id: "004" },
+    { title: 'CRESA CONSIGNACIÓN', id: "005" },
+    { title: 'COMPUTRONSA CONSIGNACIÓN', id: "006" },
+    { title: 'BODEGA CDHT QUITO', id: "007" },
+    { title: 'GUAYAQUIL SERVIENTREGA', id: "009" },
+    { title: 'INVENTARIO TRANSITO IMPORTACIONES', id: "099" }
 ]
 
 export const top100FilmsMovilCelistic = [
-    {title: 'CARAPUNGO - CENTRO DISTRIBUCION MOVILCELISTIC', id: "DISTLF"},
-    {title: 'MACHALA - MAYORISTAS MOVILCELISTIC MACHALA', id: "003"},
-    {title: 'CUENCA - MAYORISTAS MOVILCELISTIC CUENCA TURI', id: "004"},
-    {title: 'COLON - MAYORISTAS MOVILCELISTIC COLON', id: "030"},
-    {title: 'MANTA - MAYORISTAS MOVILCELISTIC MANTA', id: "024"},
-    {title: 'CARAPUNGO - ⚠️ PENDIENTE OPERADORAS CARRIERS', id: "005"},
-    {title: 'CARAPUNGO - ⚠️OPERADORAS CARRIER', id: "CARRIERS"},
-    {title: 'CONSIGNACION EA', id: "EA"},
-    {title: 'CUENCA CENTRO', id: "010"}
+    { title: 'CARAPUNGO - CENTRO DISTRIBUCION MOVILCELISTIC', id: "DISTLF" },
+    { title: 'MACHALA - MAYORISTAS MOVILCELISTIC MACHALA', id: "003" },
+    { title: 'CUENCA - MAYORISTAS MOVILCELISTIC CUENCA TURI', id: "004" },
+    { title: 'COLON - MAYORISTAS MOVILCELISTIC COLON', id: "030" },
+    { title: 'MANTA - MAYORISTAS MOVILCELISTIC MANTA', id: "024" },
+    { title: 'CARAPUNGO - ⚠️ PENDIENTE OPERADORAS CARRIERS', id: "005" },
+    { title: 'CARAPUNGO - ⚠️OPERADORAS CARRIER', id: "CARRIERS" },
+    { title: 'CONSIGNACION EA', id: "EA" },
+    { title: 'CUENCA CENTRO', id: "010" }
 
     // {title: 'QUITO - XIAOMI TERMINALES', id: "T1CARACO"}
 ]
 
 export const boxes = [
-    {title: '1', id: 1},
-    {title: '2', id: 2},
-    {title: '3', id: 3},
-    {title: '4', id: 4},
-    {title: '5', id: 5},
-    {title: '6', id: 6},
-    {title: '7', id: 7},
-    {title: '8', id: 8},
-    {title: '9', id: 9}
+    { title: '1', id: 1 },
+    { title: '2', id: 2 },
+    { title: '3', id: 3 },
+    { title: '4', id: 4 },
+    { title: '5', id: 5 },
+    { title: '6', id: 6 },
+    { title: '7', id: 7 },
+    { title: '8', id: 8 },
+    { title: '9', id: 9 }
 ]
 
 // Función para verificar si un código está presente en el JSON

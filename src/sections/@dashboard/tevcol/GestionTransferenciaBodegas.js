@@ -391,13 +391,13 @@ export default function GestionTransferenciaBodegasView() {
   const moduleCounters = getModuleCounters();
 
   // Función para cargar productos por bodega
-  const fetchProductosPorBodega = async (bodega) => {
-    if (!bodega || !user?.EMPRESA) return;
+  const fetchProductosPorBodega = async (bodegaOrigen, bodegaDestino) => {
+    if (!bodegaOrigen || !bodegaDestino || !user?.EMPRESA) return;
     
     setLoadingProductos(true);
     try {
       const response = await fetch(
-        `${HOST_API_KEY}/warehouse/products?empresa=${user.EMPRESA}&bodega=${bodega}`
+        `${HOST_API_KEY}/warehouse/products?empresa=${user.EMPRESA}&bodega_origen=${bodegaOrigen}&bodega_destino=${bodegaDestino}`
       );
       
       if (response.ok) {
@@ -1066,8 +1066,24 @@ export default function GestionTransferenciaBodegasView() {
 
   // Handler para cambio de bodega origen
   const handleBodegaOrigenChange = (bodega) => {
-    setSolicitudData({ ...solicitudData, bodegaOrigen: bodega });
-    fetchProductosPorBodega(bodega);
+    setSolicitudData(prev => {
+      const updated = { ...prev, bodegaOrigen: bodega };
+      if (bodega && updated.bodegaDestino) {
+        fetchProductosPorBodega(bodega, updated.bodegaDestino);
+      }
+      return updated;
+    });
+  };
+
+  // Handler para cambio de bodega destino
+  const handleBodegaDestinoChange = (bodega) => {
+    setSolicitudData(prev => {
+      const updated = { ...prev, bodegaDestino: bodega };
+      if (updated.bodegaOrigen && bodega) {
+        fetchProductosPorBodega(updated.bodegaOrigen, bodega);
+      }
+      return updated;
+    });
   };
 
   // Handlers para Solicitar Transferencia
@@ -1549,7 +1565,7 @@ export default function GestionTransferenciaBodegasView() {
                   select
                   label="Bodega Destino"
                   value={solicitudData.bodegaDestino}
-                  onChange={(e) => setSolicitudData({ ...solicitudData, bodegaDestino: e.target.value })}
+                  onChange={(e) => handleBodegaDestinoChange(e.target.value)}
                 >
                   {bodegas.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
@@ -1585,13 +1601,13 @@ export default function GestionTransferenciaBodegasView() {
                 )}
               </Grid>
 
-              {solicitudData.bodegaOrigen && (
+              {solicitudData.bodegaOrigen && solicitudData.bodegaDestino && (
                 <>
                   <Grid item xs={12} md={8}>
                     <Autocomplete
                       fullWidth
                       options={productosDisponibles}
-                      getOptionLabel={(option) => `${option.ItemCode} - ${option.ItemName} (Disponibles: ${option.CANTIDAD_SERIES})`}
+                      getOptionLabel={(option) => `${option.ItemCode} - ${option.ItemName} (Origen: ${option.DISPONIBLES_BODEGA_ORIGEN} | Destino: ${option.DISPONIBLES_BODEGA_DESTINO})`}
                       loading={loadingProductos}
                       value={productoActual.producto || null}
                       onChange={(event, newValue) => {
@@ -1600,7 +1616,7 @@ export default function GestionTransferenciaBodegasView() {
                             ...productoActual,
                             codigo: newValue.ItemCode,
                             descripcion: newValue.ItemName,
-                            cantidadDisponible: newValue.CANTIDAD_SERIES,
+                            cantidadDisponible: newValue.DISPONIBLES_BODEGA_ORIGEN,
                             producto: newValue,
                           });
                         }
@@ -1621,7 +1637,7 @@ export default function GestionTransferenciaBodegasView() {
                           }}
                         />
                       )}
-                      disabled={!solicitudData.bodegaOrigen || loadingProductos}
+                      disabled={!solicitudData.bodegaOrigen || !solicitudData.bodegaDestino || loadingProductos}
                     />
                   </Grid>
 
@@ -1651,10 +1667,10 @@ export default function GestionTransferenciaBodegasView() {
                 </>
               )}
 
-              {!solicitudData.bodegaOrigen && (
+              {(!solicitudData.bodegaOrigen || !solicitudData.bodegaDestino) && (
                 <Grid item xs={12}>
                   <Alert severity="info">
-                    Seleccione primero una bodega de origen para ver los productos disponibles
+                    Seleccione la bodega de origen y destino para ver los productos disponibles
                   </Alert>
                 </Grid>
               )}
@@ -2748,7 +2764,7 @@ export default function GestionTransferenciaBodegasView() {
                           <Autocomplete
                             fullWidth
                             options={modalDetalle.productosDisponibles}
-                            getOptionLabel={(option) => `${option.ItemCode} - ${option.ItemName} (Disponibles: ${option.CANTIDAD_SERIES})`}
+                            getOptionLabel={(option) => `${option.ItemCode} - ${option.ItemName} (Origen: ${option.DISPONIBLES_BODEGA_ORIGEN} | Destino: ${option.DISPONIBLES_BODEGA_DESTINO})`}
                             value={modalDetalle.productoActual.producto || null}
                             onChange={(event, newValue) => {
                               if (newValue) {
@@ -2758,7 +2774,7 @@ export default function GestionTransferenciaBodegasView() {
                                     codigo: newValue.ItemCode,
                                     descripcion: newValue.ItemName,
                                     cantidad: prev.productoActual.cantidad,
-                                    cantidadDisponible: newValue.CANTIDAD_SERIES,
+                                    cantidadDisponible: newValue.DISPONIBLES_BODEGA_ORIGEN,
                                     producto: newValue,
                                   },
                                 }));
