@@ -669,6 +669,8 @@ export default function InvoiceTableRow({
                             (ESTADO === 6 ? 'LD: Por Aprobar Crédito' : '') ||
                             (ESTADO === 7 ? 'Pend. Cargar Series' : '') ||
                             (ESTADO === 0 ? 'LD: Por Facturar' : '') ||
+                            (ESTADO === 3 ? 'LD: Por Empacar' : '') ||
+                            (ESTADO === 5 ? 'LD: Retenido' : '') ||
                             (ESTADO === 22 ? 'LD: F/Pend. Cargar Evidencia' : '') ||
                             (ESTADO === 23 ? 'LD: F/Pend. Validar Cartera' : '') ||
                             (ESTADO === 1 ? 'LD: Facturado' : '') ||

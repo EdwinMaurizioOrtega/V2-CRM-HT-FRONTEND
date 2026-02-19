@@ -376,7 +376,7 @@ export default function InvoiceDetails({ invoice }) {
 
     useEffect(() => {
         // Aquí se ejecuta después del montaje del componente
-        setObservacionA(OBSERVACIONES !== '' ? OBSERVACIONES : 'Ninguno...');
+        setObservacionA(OBSERVACIONES && OBSERVACIONES !== '' ? OBSERVACIONES : 'Ninguno...');
 
         // También puedes poner otros efectos secundarios aquí si es necesario
 
@@ -891,9 +891,9 @@ export default function InvoiceDetails({ invoice }) {
             const requestData = {
                 ID_ORDER: ID,
                 ID_USER: user.ID,
-                OBSERVACION_APROBACION: observacionA,
+                OBSERVACION_APROBACION: observacionA || '',
                 empresa: user.EMPRESA,
-                pedido_retenido: pedidoRetenido
+                pedido_retenido: pedidoRetenido,
             };
 
             // Agregar datos adicionales si es transferencia
