@@ -1195,6 +1195,24 @@ export default function InvoiceListPage() {
                                 color={theme.palette.warning.main}
                             />
 
+                            <InvoiceAnalytic
+                                title="Retenidos"
+                                total={getLengthByStatus(5)}
+                                percent={getPercentByStatus(5)}
+                                price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(5)}
+                                icon="solar:sort-by-time-bold-duotone"
+                                color={theme.palette.warning.main}
+                            />
+
+                            <InvoiceAnalytic
+                                title="Por Empacar"
+                                total={getLengthByStatus(3)}
+                                percent={getPercentByStatus(3)}
+                                price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(3)}
+                                icon="solar:sort-by-time-bold-duotone"
+                                color={theme.palette.warning.main}
+                            />
+
                             {user.COMPANY === 'HT' && user.ROLE !== '31' && <InvoiceAnalytic
                                 title="F/Pend.Cargar Evidencia."
                                 total={getLengthByStatus(22)}
@@ -1592,15 +1610,15 @@ const getTabs = (user, tableData, getLengthByStatus,
 
             return [
                 { value: 'all', label: 'Total', color: 'info', count: tableData.length },
-                { value: 15, label: 'Pendiente Aprobar Vendedor', color: 'success', count: getLengthByStatus(15) },
+                { value: 15, label: 'Pendiente Aprobar Vendedor', color: 'secondary', count: getLengthByStatus(15) },
                 { value: 6, label: 'Pendiente Aprobar Crédito', color: 'success', count: getLengthByStatus(6) },
-                { value: 7, label: 'Pendiente Cargar Series', color: 'success', count: getLengthByStatus(7) },
+                { value: 7, label: 'Pendiente Cargar Series', color: 'primary', count: getLengthByStatus(7) },
                 { value: 0, label: 'Pendiente Facturar', color: 'warning', count: getLengthByStatus(0) },
-                { value: 5, label: 'Retenidos', color: 'warning', count: getLengthByStatus(5) },
-                { value: 3, label: 'Por Empacar', color: 'warning', count: getLengthByStatus(3) },
+                { value: 5, label: 'Retenidos', color: 'error', count: getLengthByStatus(5) },
+                { value: 3, label: 'Por Empacar', color: 'secondary', count: getLengthByStatus(3) },
                 { value: 22, label: 'F/Pend. Cargar Evidencia', color: 'info', count: getLengthByStatus(22) },
-                { value: 23, label: 'F/Pend. Validar Cartera', color: 'info', count: getLengthByStatus(23) },
-                { value: 1, label: 'Fact./Entregado', color: 'error', count: getLengthByStatus(1) },
+                { value: 23, label: 'F/Pend. Validar Cartera', color: 'primary', count: getLengthByStatus(23) },
+                { value: 1, label: 'Fact./Entregado', color: 'success', count: getLengthByStatus(1) },
                 { value: 8, label: 'Anulado', color: 'default', count: getLengthByStatus(8) },
 
                 //{value: 'con', label: 'CON GUIA', color: 'default', count: getLengthByNumeroConGuia('000000000')},
