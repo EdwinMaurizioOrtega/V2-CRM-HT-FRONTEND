@@ -24,13 +24,15 @@ export default function GeneralAnalyticsPage() {
 
     useEffect(() => {
 
-        //Lidenar
-        if (user.EMPRESA === '0992537442001') {
-            setUrlEmpresa('https://app.powerbi.com/view?r=eyJrIjoiYzdjZTliNTMtYjViMi00YzczLWFkMDgtYjQ0ZTE2ZTNiMTJjIiwidCI6Ijk2ZTEzNWRiLWZmZDItNDdiZS1iZDJlLWYxMjQ2MTY2YWZmZCIsImMiOjR9')
-        } else {
-            // MovilCelistic
-            setUrlEmpresa('https://app.powerbi.com/view?r=eyJrIjoiMTgwODFlMjUtMzdkOC00YTU4LTlhZTMtYTdkYTMwODk2NWM5IiwidCI6Ijk2ZTEzNWRiLWZmZDItNDdiZS1iZDJlLWYxMjQ2MTY2YWZmZCIsImMiOjR9')
-        }
+        // //Lidenar
+        // if (user.EMPRESA === '0992537442001') {
+        //     setUrlEmpresa('https://app.powerbi.com/view?r=eyJrIjoiYzdjZTliNTMtYjViMi00YzczLWFkMDgtYjQ0ZTE2ZTNiMTJjIiwidCI6Ijk2ZTEzNWRiLWZmZDItNDdiZS1iZDJlLWYxMjQ2MTY2YWZmZCIsImMiOjR9')
+        // } else {
+        //     // MovilCelistic
+        //     setUrlEmpresa('https://app.powerbi.com/view?r=eyJrIjoiMTgwODFlMjUtMzdkOC00YTU4LTlhZTMtYTdkYTMwODk2NWM5IiwidCI6Ijk2ZTEzNWRiLWZmZDItNDdiZS1iZDJlLWYxMjQ2MTY2YWZmZCIsImMiOjR9')
+        // }
+
+        setUrlEmpresa('https://app.powerbi.com/view?r=eyJrIjoiMTU3YTRmOGEtODA1ZS00MDUyLTgyZDMtMjEzMDMzNTYzNzM5IiwidCI6Ijk2ZTEzNWRiLWZmZDItNDdiZS1iZDJlLWYxMjQ2MTY2YWZmZCIsImMiOjR9')
 
     }, [user]);
 
