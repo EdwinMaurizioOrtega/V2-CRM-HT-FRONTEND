@@ -251,6 +251,8 @@ const navConfig = [
             { title: 'Reporte utilidad vendedor', path: PATH_DASHBOARD.reports.utilidad_vendedor, icon: ICONS.user },
             { title: 'Reporte numero guias', path: PATH_DASHBOARD.reports.numero_guias, icon: ICONS.user },
             { title: 'Reporte General Ordenes', path: PATH_DASHBOARD.reports.reporte_general_ordenes, icon: ICONS.user },
+            { title: 'Series Facturadas', path: PATH_DASHBOARD.reports.series_facturadas, icon: ICONS.user },
+
         ],
     },
 
@@ -261,7 +263,7 @@ const navConfig = [
         items: [
             { title: 'Control Inventario Bodega', path: PATH_DASHBOARD.tevcol.control_inventario, icon: ICONS.user },
             { title: 'Gestión Transferencias Bodegas', path: PATH_DASHBOARD.tevcol.gestion_transferencia_bodega, icon: ICONS.invoice },
-            { title: 'Gestión Transferencias Importaciones', path: PATH_DASHBOARD.tevcol.gestion_transferencia_importaciones, icon: ICONS.invoice },
+            // { title: 'Gestión Transferencias Importaciones', path: PATH_DASHBOARD.tevcol.gestion_transferencia_importaciones, icon: ICONS.invoice },
 
         ],
     },

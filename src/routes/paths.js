@@ -150,11 +150,12 @@ export const PATH_DASHBOARD = {
         utilidad_vendedor: path(ROOTS_DASHBOARD, '/reports/UtilidadVendedor'),
         numero_guias: path(ROOTS_DASHBOARD, '/reports/NumeroGuia'),
         reporte_general_ordenes: path(ROOTS_DASHBOARD, '/reports/ReporteGeneralOrdenes'),
+        series_facturadas: path(ROOTS_DASHBOARD, '/reports/SeriesFacturadas'),
     },
     tevcol: {
         control_inventario: path(ROOTS_DASHBOARD, '/tevcol/control_inventario'),
         gestion_transferencia_bodega: path(ROOTS_DASHBOARD, '/tevcol/gestion_transferencia_bodegas'),
-        gestion_transferencia_importaciones: path(ROOTS_DASHBOARD, '/tevcol/gestion_transferencia_importaciones'),
+        // gestion_transferencia_importaciones: path(ROOTS_DASHBOARD, '/tevcol/gestion_transferencia_importaciones'),
     },
     customer: {
         root: path(ROOTS_DASHBOARD, '/customer'),
