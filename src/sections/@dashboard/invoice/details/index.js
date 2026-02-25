@@ -1507,7 +1507,7 @@ export default function InvoiceDetails({ invoice }) {
             setPreciosActualizados(resto);
         } else {
             // Quitar el IVA del 15% - si el valor viene con IVA incluido (ej: 115), dividimos entre 1.15 para obtener el valor base (100)
-            const valorSinIVA = valorNumerico / 1.15;
+            const valorSinIVA = Math.round((valorNumerico / 1.15) * 100) / 100;
             // Agregar o actualizar valor
             setPreciosActualizados(prev => ({
                 ...prev,
