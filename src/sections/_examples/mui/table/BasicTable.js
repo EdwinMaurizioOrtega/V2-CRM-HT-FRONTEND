@@ -295,8 +295,8 @@ const LoadingComponent = () => {
 
 function getTextFromCodigo(rowCodigo) {
     switch (rowCodigo) {
-        case '043':
-            return "CENTRO_DE_DISTRIBUCION_GUAYAQUIL";
+        // case '043':
+        //     return "CENTRO_DE_DISTRIBUCION_GUAYAQUIL";
         case '019':
             return "CENTRO_DE_DISTRIBUCION_QUITO";
         case '002':

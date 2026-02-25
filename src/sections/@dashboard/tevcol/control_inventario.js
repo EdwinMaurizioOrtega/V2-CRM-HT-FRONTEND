@@ -83,7 +83,7 @@ export default function ControlInventarioView() {
         if (user.EMPRESA === '0992537442001') {
             // LIDENAR
             return [
-                { value: '043', label: '043 - CENTRO DE DISTRIBUCIÓN GUAYAQUIL' },
+                // { value: '043', label: '043 - CENTRO DE DISTRIBUCIÓN GUAYAQUIL' },
                 { value: '019', label: '019 - CENTRO DE DISTRIBUCIÓN HT' },
                 { value: '002', label: '002 - MAYORISTA CUENCA' },
                 { value: '006', label: '006 - MAYORISTA QUITO' },
@@ -103,7 +103,7 @@ export default function ControlInventarioView() {
         } else if (user.EMPRESA === '1792161037001') {
             // MOVILCELISTIC
             return [
-                { value: '043', label: '043 - CENTRO DE DISTRIBUCIÓN GUAYAQUIL' },
+                // { value: '043', label: '043 - CENTRO DE DISTRIBUCIÓN GUAYAQUIL' },
                 { value: 'DISTLF', label: 'DISTLF - CENTRO DISTRIBUCIÓN MOVILCELISTIC' },
                 { value: '003', label: '003 - MAYORISTAS MOVILCELISTIC MACHALA' },
                 { value: '004', label: '004 - MAYORISTAS MOVILCELISTIC CUENCA' },

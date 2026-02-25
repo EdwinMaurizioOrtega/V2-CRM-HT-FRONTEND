@@ -684,7 +684,7 @@ export default function InvoiceDetails({ invoice }) {
     function nameWarehouse(ware) {
         //console.log(`Bodega: ${ware}`);
         const strings = {
-            "043": "Centro Distribución Guayaquil",
+            // "043": "Centro Distribución Guayaquil",
             "019": "Centro Distribución Quito",
             "002": "Cuenca Turi",
             "006": "Quito",
@@ -3762,7 +3762,7 @@ export default function InvoiceDetails({ invoice }) {
 
 
 export const top100Films = [
-        { title: 'Centro Distribución Guayaquil', id: "043" },
+    // { title: 'Centro Distribución Guayaquil', id: "043" },
 
     { title: 'Centro Distribución Quito', id: "019" },
     { title: 'Cuenca Turi', id: "002" },
@@ -3788,7 +3788,7 @@ export const top100FilmsAlphacell = [
 ]
 
 export const top100FilmsMovilCelistic = [
-            { title: 'Centro Distribución Guayaquil', id: "043" },
+    // { title: 'Centro Distribución Guayaquil', id: "043" },
 
     { title: 'CARAPUNGO - CENTRO DISTRIBUCION MOVILCELISTIC', id: "DISTLF" },
     { title: 'MACHALA - MAYORISTAS MOVILCELISTIC MACHALA', id: "003" },

@@ -1108,7 +1108,7 @@ function nameFormaPago(pay) {
 function nameWarehouse(ware) {
     //console.log(`Bodega: ${ware}`);
     const strings = {
-        "043": "Centro Distribución Guayaquil",
+        // "043": "Centro Distribución Guayaquil",
         "019": "Centro Distribución Quito",
         "002": "Cuenca",
         "006": "Quito",

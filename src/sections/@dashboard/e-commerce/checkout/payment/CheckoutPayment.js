@@ -61,12 +61,12 @@ const DELIVERY_OPTIONS = [
 
 const WAREHOUSE_OPTIONS = [
 
-    {
-        id: '043',
-        value: '043',
-        title: 'CENTRO DE DISTRIBUCIÓN GUAYAQUIL',
-        description: 'Matriz en la ciudad de Guayaquil.',
-    },
+    // {
+    //     id: '043',
+    //     value: '043',
+    //     title: 'CENTRO DE DISTRIBUCIÓN GUAYAQUIL',
+    //     description: 'Matriz en la ciudad de Guayaquil.',
+    // },
 
     {
         id: '019',
@@ -136,12 +136,12 @@ const WAREHOUSE_OPTIONS_ALPACELL = [
 ]
 
 const WAREHOUSE_OPTIONS_MOVILCELISTIC = [
-    {
-        id: '043',
-        value: '043',
-        title: 'CENTRO DE DISTRIBUCIÓN GUAYAQUIL',
-        description: 'Matriz en la ciudad de Guayaquil.',
-    },
+    // {
+    //     id: '043',
+    //     value: '043',
+    //     title: 'CENTRO DE DISTRIBUCIÓN GUAYAQUIL',
+    //     description: 'Matriz en la ciudad de Guayaquil.',
+    // },
     {
         id: 'DISTLF',
         value: 'DISTLF',
