@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { 
+import {
     Box, Button, Card, Container, Stack, Typography, alpha, useTheme, TextField, MenuItem
 } from '@mui/material';
 import * as XLSX from "xlsx";
@@ -42,8 +42,8 @@ function ExcelDownload({ data }) {
 
     return (
         <Box display="flex" justifyContent="center" alignItems="center" sx={{ mb: 2 }}>
-            <Button 
-                variant="contained" 
+            <Button
+                variant="contained"
                 onClick={handleExportToExcel}
                 startIcon={<Iconify icon="vscode-icons:file-type-excel" width={24} />}
                 sx={{
@@ -83,12 +83,44 @@ export default function ControlInventarioView() {
         if (user.EMPRESA === '0992537442001') {
             // LIDENAR
             return [
-                { value: '019', label: '019 - Centro Distribución HT' },
+                { value: '043', label: '043 - CENTRO DE DISTRIBUCIÓN GUAYAQUIL' },
+                { value: '019', label: '019 - CENTRO DE DISTRIBUCIÓN HT' },
+                { value: '002', label: '002 - MAYORISTA CUENCA' },
+                { value: '006', label: '006 - MAYORISTA QUITO' },
+                { value: '030', label: '030 - MAYORISTA GUAYAQUIL' },
+                { value: '024', label: '024 - MAYORISTA MANTA' },
+                { value: '001', label: '001 - SAMSUNG CARACOL QUITO' },
+                { value: '015', label: '015 - INACTIVA' },
+                { value: '009', label: '009 - SAMSUNG BAHIA' },
+                { value: '014', label: '014 - BODEGA COMBO' },
+                { value: '011', label: '011 - SAMSUNG CUENCA' },
+                { value: '016', label: '016 - SAMSUNG MALL GUAYAQUIL' },
+                { value: '017', label: '017 - SAMSUNG MALL CUENCA' },
+                { value: '020', label: '020 - SAMSUNG MANTA' },
+                { value: '022', label: '022 - SAMSUNG PORTOVIEJO' },
+                { value: '003', label: '003 - PADRE AGUIRRE' },
             ];
         } else if (user.EMPRESA === '1792161037001') {
             // MOVILCELISTIC
             return [
-                { value: 'DISTLF', label: 'DISTLF - Centro Distribución' },
+                { value: '043', label: '043 - CENTRO DE DISTRIBUCIÓN GUAYAQUIL' },
+                { value: 'DISTLF', label: 'DISTLF - CENTRO DISTRIBUCIÓN MOVILCELISTIC' },
+                { value: '003', label: '003 - MAYORISTAS MOVILCELISTIC MACHALA' },
+                { value: '004', label: '004 - MAYORISTAS MOVILCELISTIC CUENCA' },
+                { value: 'T1CARACO', label: 'T1CARACO - CARACOL XIAOMI TERMINALES' },
+                { value: 'T1CUENCA', label: 'T1CUENCA - CUENCA XIAOMI TERMINALES' },
+                { value: 'T1MACHAL', label: 'T1MACHAL - MACHALA XIAOMI TERMINALES' },
+                { value: 'T3CARACO', label: 'T3CARACO - CARACOL XIAOMI ACCESORIOS' },
+                { value: 'T3CUENCA', label: 'T3CUENCA - CUENCA XIAOMI ACCESORIOS' },
+                { value: 'T3MACHAL', label: 'T3MACHAL - MACHALA XIAOMI ACCESORIOS' },
+                { value: 'T2CARACO', label: 'T2CARACO - CARACOL XIAOMI ELECTRODOMESTICOS' },
+                { value: 'T2CUENCA', label: 'T2CUENCA - CUENCA XIAOMI ELECTRODOMESTICOS' },
+                { value: 'T2MACHAL', label: 'T2MACHAL - MACHALA XIAOMI ELECTRODOMESTICOS' },
+                { value: '030', label: '030 - MAYORISTAS MOVILCELISTIC COLON' },
+                { value: '024', label: '024 - MAYORISTAS MOVILCELISTIC MANTA' },
+                { value: '020', label: '020 - MALL GUAYAQUIL' },
+                { value: '021', label: '021 - MALL CUENCA' },
+                { value: '005', label: '005 - OPERADORAS CARRIER' },
             ];
         }
         return [];
@@ -139,8 +171,8 @@ export default function ControlInventarioView() {
                 </Box>
 
                 {/* FILTRO DE BODEGA */}
-                <Card sx={{ 
-                    p: 3, 
+                <Card sx={{
+                    p: 3,
                     background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.05)} 0%, ${alpha(theme.palette.primary.dark, 0.05)} 100%)`,
                     boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
                     borderRadius: 3
@@ -188,7 +220,7 @@ export default function ControlInventarioView() {
 
                 {/* BOTÓN DE DESCARGA EXCEL */}
                 {data.length > 0 && (
-                    <Card sx={{ 
+                    <Card sx={{
                         p: 4,
                         textAlign: 'center',
                         boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
@@ -206,8 +238,8 @@ export default function ControlInventarioView() {
                 )}
 
                 {!loading && data.length === 0 && (
-                    <Card sx={{ 
-                        p: 10, 
+                    <Card sx={{
+                        p: 10,
                         textAlign: 'center',
                         boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
                         borderRadius: 3

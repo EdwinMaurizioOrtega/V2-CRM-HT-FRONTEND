@@ -176,6 +176,7 @@ const ACTION_MODULES = [
 ];
 
 const BODEGAS_LIDENAR = [
+  { value: '043', label: '043 - CENTRO DE DISTRIBUCIÓN GUAYAQUIL' },
   { value: '019', label: '019 - CENTRO DE DISTRIBUCIÓN HT' },
   { value: '002', label: '002 - MAYORISTA CUENCA' },
   { value: '006', label: '006 - MAYORISTA QUITO' },
@@ -194,6 +195,7 @@ const BODEGAS_LIDENAR = [
 ];
 
 const BODEGAS_MOVILCELISTIC = [
+  { value: '043', label: '043 - CENTRO DE DISTRIBUCIÓN GUAYAQUIL' },
   { value: 'DISTLF', label: 'DISTLF - CENTRO DISTRIBUCIÓN MOVILCELISTIC' },
   { value: '003', label: '003 - MAYORISTAS MOVILCELISTIC MACHALA' },
   { value: '004', label: '004 - MAYORISTAS MOVILCELISTIC CUENCA' },
@@ -584,10 +586,10 @@ export default function GestionTransferenciaBodegasView() {
     }));
 
     // Cargar productos disponibles de la bodega origen
-    if (modalDetalle.transferencia?.BODEGA_ORIGEN && user?.EMPRESA) {
+    if (modalDetalle.transferencia?.BODEGA_ORIGEN && modalDetalle.transferencia?.BODEGA_DESTINO && user?.EMPRESA) {
       try {
         const response = await fetch(
-          `${HOST_API_KEY}/warehouse/products?empresa=${user.EMPRESA}&bodega=${modalDetalle.transferencia.BODEGA_ORIGEN}`
+          `${HOST_API_KEY}/warehouse/products?empresa=${user.EMPRESA}&bodega_origen=${modalDetalle.transferencia.BODEGA_ORIGEN}&bodega_destino=${modalDetalle.transferencia.BODEGA_DESTINO}`
         );
         
         if (response.ok) {
