@@ -50,6 +50,7 @@ import {
   Visibility as VisibilityIcon,
   Close as CloseIcon,
   CloudUpload as CloudUploadIcon,
+  PictureAsPdf as PictureAsPdfIcon,
 } from '@mui/icons-material';
 import { useSettingsContext } from '../../../components/settings';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
@@ -1064,6 +1065,60 @@ export default function GestionTransferenciaBodegasView() {
   const handleBackToDashboard = () => {
     setSelectedModule(null);
     setShowDashboard(true);
+  };
+
+  // Handler para consultar guía de remisión en Stupendo
+  const [loadingGuiaRemision, setLoadingGuiaRemision] = useState(null);
+  
+  const handleConsultarGuiaRemision = async (e, item) => {
+    e.stopPropagation(); // Evitar que abra el detalle
+    
+    if (!item.ESTABLECIMIENTO || !item.PTO_EMISION || !item.SECUENCIAL) {
+      alert('⚠️ Esta transferencia no tiene datos de guía de remisión registrados.');
+      return;
+    }
+
+    setLoadingGuiaRemision(item.ID);
+
+    try {
+      const response = await fetch(
+        `${HOST_API_KEY}/transferencias/consultar-guia-remision`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            establecimiento: item.ESTABLECIMIENTO,
+            pto_emision: item.PTO_EMISION,
+            secuencial: item.SECUENCIAL,
+            empresa: item.EMPRESA,
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok && result.base64File) {
+        const byteCharacters = atob(result.base64File);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const pdfBlob = new Blob([byteArray], { type: 'application/pdf' });
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+        const newWindow = window.open(pdfUrl, '_blank');
+        if (!newWindow) {
+          alert('Por favor, permita ventanas emergentes para ver la guía de remisión');
+        }
+      } else {
+        alert(`❌ ${result.message || 'No se pudo obtener la guía de remisión'}`);
+      }
+    } catch (error) {
+      console.error('Error al consultar guía de remisión:', error);
+      alert('❌ Error al conectar con el servidor.');
+    } finally {
+      setLoadingGuiaRemision(null);
+    }
   };
 
   // Handler para cambio de bodega origen
@@ -2451,17 +2506,39 @@ export default function GestionTransferenciaBodegasView() {
                         </Box>
 
                         <Stack alignItems="flex-end" spacing={0.5}>
-                          <IconButton
-                            size="small"
-                            sx={{
-                              bgcolor: alpha(theme.palette.primary.main, 0.08),
-                              '&:hover': {
-                                bgcolor: alpha(theme.palette.primary.main, 0.16),
-                              },
-                            }}
-                          >
-                            <VisibilityIcon fontSize="small" />
-                          </IconButton>
+                          <Stack direction="row" spacing={0.5}>
+                            <IconButton
+                              size="small"
+                              sx={{
+                                bgcolor: alpha(theme.palette.primary.main, 0.08),
+                                '&:hover': {
+                                  bgcolor: alpha(theme.palette.primary.main, 0.16),
+                                },
+                              }}
+                            >
+                              <VisibilityIcon fontSize="small" />
+                            </IconButton>
+                            {item.ESTABLECIMIENTO && item.PTO_EMISION && item.SECUENCIAL && (
+                              <IconButton
+                                size="small"
+                                onClick={(e) => handleConsultarGuiaRemision(e, item)}
+                                disabled={loadingGuiaRemision === item.ID}
+                                sx={{
+                                  bgcolor: alpha(theme.palette.error.main, 0.08),
+                                  '&:hover': {
+                                    bgcolor: alpha(theme.palette.error.main, 0.16),
+                                  },
+                                }}
+                                title="Ver Guía de Remisión (PDF)"
+                              >
+                                {loadingGuiaRemision === item.ID ? (
+                                  <CircularProgress size={16} color="error" />
+                                ) : (
+                                  <PictureAsPdfIcon fontSize="small" color="error" />
+                                )}
+                              </IconButton>
+                            )}
+                          </Stack>
                           <Typography variant="caption" color="text.disabled">
                             {new Date(item.FECHA_SOLICITUD).toLocaleDateString('es-EC', {
                               day: '2-digit',
