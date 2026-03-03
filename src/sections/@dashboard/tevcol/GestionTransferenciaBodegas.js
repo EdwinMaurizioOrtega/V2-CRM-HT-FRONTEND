@@ -1,4 +1,5 @@
 import { useState, useEffect, Fragment } from 'react';
+import { pdf } from '@react-pdf/renderer';
 import {
   Box,
   Card,
@@ -57,6 +58,7 @@ import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { useAuthContext } from '../../../auth/useAuthContext';
 import { HOST_API_KEY } from '../../../config-global';
+import TransferenciaPDF from './TransferenciaPDF';
 
 // ----------------------------------------------------------------------
 
@@ -491,6 +493,24 @@ export default function GestionTransferenciaBodegasView() {
         // Si el estado es >= 1 (PENDIENTE_CARGAR_SERIES o mayor), cargar las series
         if (transferencia.ESTADO >= 1) {
           handleCargarSeries(transferencia.ID);
+        }
+
+        // Para transferencias pendientes de aprobación, cargar stock disponible
+        if (transferencia.ESTADO === 0 && transferencia.BODEGA_ORIGEN && transferencia.BODEGA_DESTINO && user?.EMPRESA) {
+          try {
+            const stockResponse = await fetch(
+              `${HOST_API_KEY}/warehouse/products?empresa=${user.EMPRESA}&bodega_origen=${transferencia.BODEGA_ORIGEN}&bodega_destino=${transferencia.BODEGA_DESTINO}`
+            );
+            if (stockResponse.ok) {
+              const stockData = await stockResponse.json();
+              setModalDetalle(prev => ({
+                ...prev,
+                productosDisponibles: stockData,
+              }));
+            }
+          } catch (stockErr) {
+            console.error('Error al cargar stock disponible:', stockErr);
+          }
         }
       } else {
         console.error('Error al cargar detalle:', response.statusText);
@@ -1118,6 +1138,62 @@ export default function GestionTransferenciaBodegasView() {
       alert('❌ Error al conectar con el servidor.');
     } finally {
       setLoadingGuiaRemision(null);
+    }
+  };
+
+  // Handler para descargar PDF de transferencia con series
+  const [generandoPDF, setGenerandoPDF] = useState(false);
+
+  const handleDescargarPDFTransferencia = async () => {
+    if (!seriesActual.transferencia) return;
+
+    const transferenciaSeleccionada = transferenciasParaSeries.find(
+      t => t.ID === parseInt(seriesActual.transferencia)
+    );
+    if (!transferenciaSeleccionada) {
+      alert('❌ No se encontró la transferencia seleccionada');
+      return;
+    }
+
+    setGenerandoPDF(true);
+    try {
+      // Obtener detalle completo (productos)
+      const detalleResp = await fetch(`${HOST_API_KEY}/transferencias/${seriesActual.transferencia}`);
+      let productosData = productosTransferencia;
+      if (detalleResp.ok) {
+        const detalleData = await detalleResp.json();
+        productosData = detalleData.productos || productosTransferencia;
+      }
+
+      // Obtener series
+      let seriesData = {};
+      const seriesResp = await fetch(`${HOST_API_KEY}/transferencias/${seriesActual.transferencia}/series`);
+      if (seriesResp.ok) {
+        const seriesResult = await seriesResp.json();
+        if (seriesResult.series && Array.isArray(seriesResult.series)) {
+          seriesResult.series.forEach(serie => {
+            if (!seriesData[serie.DETALLE_ID]) seriesData[serie.DETALLE_ID] = [];
+            seriesData[serie.DETALLE_ID].push(serie);
+          });
+        }
+      }
+
+      // Generar PDF
+      const blob = await pdf(
+        <TransferenciaPDF
+          transferencia={transferenciaSeleccionada}
+          productos={productosData}
+          series={seriesData}
+        />
+      ).toBlob();
+
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    } catch (error) {
+      console.error('Error al generar PDF:', error);
+      alert('❌ Error al generar el PDF');
+    } finally {
+      setGenerandoPDF(false);
     }
   };
 
@@ -1947,6 +2023,19 @@ export default function GestionTransferenciaBodegasView() {
                         </MenuItem>
                       ))}
                     </TextField>
+                    {seriesActual.transferencia && (
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        size="small"
+                        startIcon={generandoPDF ? <CircularProgress size={16} color="inherit" /> : <PictureAsPdfIcon />}
+                        onClick={handleDescargarPDFTransferencia}
+                        disabled={generandoPDF}
+                        sx={{ mt: 2 }}
+                      >
+                        {generandoPDF ? 'Generando PDF...' : 'Descargar PDF'}
+                      </Button>
+                    )}
                   </Paper>
                 </Grid>
 
@@ -2437,7 +2526,8 @@ export default function GestionTransferenciaBodegasView() {
             })}
           </Grid>
 
-          {/* Recent Activity - Timeline style */}
+          {/* Recent Activity - Timeline style (oculto para ROLE 8 - Bodega) */}
+          {user?.ROLE !== '8' && (
           <Card sx={{ mt: 3, p: 3 }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
               <Typography variant="h6">Mis Solicitudes de Transferencia</Typography>
@@ -2557,6 +2647,7 @@ export default function GestionTransferenciaBodegasView() {
               </Stack>
             )}
           </Card>
+          )}
         </>
       ) : (
         <Card sx={{ p: 3 }}>
@@ -2688,6 +2779,12 @@ export default function GestionTransferenciaBodegasView() {
                           <TableCell>Código</TableCell>
                           <TableCell>Descripción</TableCell>
                           <TableCell align="center">Cantidad</TableCell>
+                          {modalDetalle.transferencia?.ESTADO === 0 && modalDetalle.productosDisponibles.length > 0 && (
+                            <>
+                              <TableCell align="center">Disp. Origen</TableCell>
+                              <TableCell align="center">Disp. Destino</TableCell>
+                            </>
+                          )}
                           {modalDetalle.transferencia?.ESTADO >= 1 && (
                             <TableCell align="center">Series/IMEIs</TableCell>
                           )}
@@ -2697,10 +2794,15 @@ export default function GestionTransferenciaBodegasView() {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {(modalDetalle.editMode ? modalDetalle.productosEditados : modalDetalle.productos).map((producto, index) => {
+                        {(modalDetalle.editMode ? modalDetalle.productosEditados : modalDetalle.productos)
+                          .slice()
+                          .sort((a, b) => (a.ITEM_NAME || '').localeCompare(b.ITEM_NAME || ''))
+                          .map((producto, index) => {
                           const seriesProducto = modalDetalle.series[producto.ID] || [];
                           const isExpanded = modalDetalle.expandedProduct === producto.ID;
                           const uniqueKey = producto.ID || producto.tempId || `producto-${index}`;
+                          // Buscar disponibilidad en stock
+                          const stockInfo = modalDetalle.productosDisponibles.find(p => p.ItemCode === producto.ITEM_CODE);
                           
                           return (
                             <Fragment key={uniqueKey}>
@@ -2736,6 +2838,26 @@ export default function GestionTransferenciaBodegasView() {
                                     />
                                   )}
                                 </TableCell>
+                                {modalDetalle.transferencia?.ESTADO === 0 && modalDetalle.productosDisponibles.length > 0 && (
+                                  <>
+                                    <TableCell align="center">
+                                      <Chip
+                                        label={stockInfo ? stockInfo.DISPONIBLES_BODEGA_ORIGEN : 0}
+                                        size="small"
+                                        color={stockInfo && stockInfo.DISPONIBLES_BODEGA_ORIGEN >= producto.CANTIDAD_SOLICITADA ? 'success' : 'error'}
+                                        variant="outlined"
+                                      />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      <Chip
+                                        label={stockInfo ? stockInfo.DISPONIBLES_BODEGA_DESTINO : 0}
+                                        size="small"
+                                        color="info"
+                                        variant="outlined"
+                                      />
+                                    </TableCell>
+                                  </>
+                                )}
                                 {modalDetalle.transferencia?.ESTADO >= 1 && (
                                   <TableCell align="center">
                                     {modalDetalle.loadingSeries ? (
