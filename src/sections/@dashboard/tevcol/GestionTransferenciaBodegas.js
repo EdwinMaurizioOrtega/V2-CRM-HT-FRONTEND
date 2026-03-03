@@ -321,7 +321,7 @@ export default function GestionTransferenciaBodegasView() {
     }
 
     // ROLE 9 (Crédito): Solo puede aprobar o rechazar solicitudes
-    if (user.ROLE === '9') {
+    if (user.ROLE === '9' || user.ROLE === '10') {
       return ACTION_MODULES.filter(module => 
         module.id === 'aprobar'
       );
