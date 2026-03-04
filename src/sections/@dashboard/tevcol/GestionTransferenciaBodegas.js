@@ -59,6 +59,7 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import { useAuthContext } from '../../../auth/useAuthContext';
 import { HOST_API_KEY } from '../../../config-global';
 import TransferenciaPDF from './TransferenciaPDF';
+import { ESLINT_DEFAULT_DIRS } from 'next/dist/lib/constants';
 
 // ----------------------------------------------------------------------
 
@@ -2526,8 +2527,7 @@ export default function GestionTransferenciaBodegasView() {
             })}
           </Grid>
 
-          {/* Recent Activity - Timeline style (oculto para ROLE 8 - Bodega) */}
-          {user?.ROLE !== '8' && (
+          {/* Recent Activity - Timeline style */}
           <Card sx={{ mt: 3, p: 3 }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
               <Typography variant="h6">Mis Solicitudes de Transferencia</Typography>
@@ -2543,11 +2543,21 @@ export default function GestionTransferenciaBodegasView() {
                   Cargando transferencias...
                 </Typography>
               </Stack>
-            ) : transferenciasUsuario.length === 0 ? (
-              <Alert severity="info">No tienes solicitudes de transferencia registradas</Alert>
-            ) : (
+            ) : (() => {
+              // Para ROLE 8 (Bodega), solo mostrar transferencias con series ya cargadas (ESTADO >= 1)
+              const listaFiltrada = user?.ROLE === '8'
+                ? transferenciasUsuario.filter(t => t.ESTADO >= 1)
+                : transferenciasUsuario;
+              
+              return listaFiltrada.length === 0 ? (
+                <Alert severity="info">
+                  {user?.ROLE === '8'
+                    ? 'No hay transferencias con series cargadas'
+                    : 'No tienes solicitudes de transferencia registradas'}
+                </Alert>
+              ) : (
               <Stack spacing={2}>
-                {transferenciasUsuario.map((item) => {
+                {listaFiltrada.map((item) => {
                   // Obtener información del estado usando el helper
                   const estadoInfo = getEstadoInfo(item.ESTADO);
 
@@ -2645,9 +2655,9 @@ export default function GestionTransferenciaBodegasView() {
                   );
                 })}
               </Stack>
-            )}
+              );
+            })()}
           </Card>
-          )}
         </>
       ) : (
         <Card sx={{ p: 3 }}>
