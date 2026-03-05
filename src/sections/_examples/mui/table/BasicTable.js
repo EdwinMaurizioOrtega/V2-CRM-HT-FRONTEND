@@ -373,20 +373,20 @@ function getTextFromCodigoMovilCelistic(rowCodigo) {
             return "MAYORISTAS MOVILCELISTIC MACHALA";
         case '004':
             return "MAYORISTAS MOVILCELISTIC CUENCA TURI";
-        case 'T1CARACOL':
-            return "CARACOL XIAOMI TERMINALES";
+        case 'T1CARACO':
+            return "CARACO XIAOMI TERMINALES";
         case 'T1CUENCA':
             return "CUENCA XIAOMI TERMINALES";
         case 'T1MACHAL':
             return "MACHALA XIAOMI TERMINALES";
-        case 'T3CARACOL':
-            return "CARACOL XIAOMI ACCESORIOS";
+        case 'T3CARACO':
+            return "CARACO XIAOMI ACCESORIOS";
         case 'T3CUENCA':
             return "CUENCA XIAOMI ACCESORIOS";
         case 'T3MACHAL':
             return "MACHALA XIAOMI ACCESORIOS";
-        case 'T2CARACOL':
-            return "CARACOL XIAOMI ELECTRODOMESTICOS";
+        case 'T2CARACO':
+            return "CARACO XIAOMI ELECTRODOMESTICOS";
         case 'T2CUENCA':
             return "CARACOL XIAOMI ELECTRODOMESTICOS";
         case 'T2MACHAL':

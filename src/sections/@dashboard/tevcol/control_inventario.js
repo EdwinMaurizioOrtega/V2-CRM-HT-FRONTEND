@@ -107,7 +107,7 @@ export default function ControlInventarioView() {
                 { value: 'DISTLF', label: 'DISTLF - CENTRO DISTRIBUCIÓN MOVILCELISTIC' },
                 { value: '003', label: '003 - MAYORISTAS MOVILCELISTIC MACHALA' },
                 { value: '004', label: '004 - MAYORISTAS MOVILCELISTIC CUENCA' },
-                { value: 'T1CARACOL', label: 'T1CARACOL - CARACOL XIAOMI TERMINALES' },
+                { value: 'T1CARACO', label: 'T1CARACO - CARACOL XIAOMI TERMINALES' },
                 { value: 'T1CUENCA', label: 'T1CUENCA - CUENCA XIAOMI TERMINALES' },
                 { value: 'T1MACHAL', label: 'T1MACHAL - MACHALA XIAOMI TERMINALES' },
                 { value: 'T3CARACOL', label: 'T3CARACOL - CARACOL XIAOMI ACCESORIOS' },
