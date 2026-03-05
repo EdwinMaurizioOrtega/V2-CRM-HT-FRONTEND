@@ -276,6 +276,9 @@ export default function GestionTransferenciaBodegasView() {
   const [validSeriesCount, setValidSeriesCount] = useState(0);
   const [buttonDisabled, setButtonDisabled] = useState(false);
 
+  // Estado para crear solicitud SAP
+  const [creandoSolicitudSAP, setCreandoSolicitudSAP] = useState(false);
+
   // Estado para Aceptar Transferencia
   const [transferenciasParaAceptar, setTransferenciasParaAceptar] = useState([]);
   const [loadingAceptar, setLoadingAceptar] = useState(false);
@@ -1611,6 +1614,75 @@ export default function GestionTransferenciaBodegasView() {
     }
   };
 
+  // Handler para crear la solicitud de transferencia en SAP
+  const handleCrearSolicitudSAP = async () => {
+    if (!seriesActual.transferencia) {
+      alert('❌ Por favor seleccione una transferencia');
+      return;
+    }
+
+    const transferenciaSeleccionada = transferenciasParaSeries.find(
+      t => t.ID === parseInt(seriesActual.transferencia)
+    );
+
+    if (!transferenciaSeleccionada) {
+      alert('❌ No se pudo encontrar la información de la transferencia');
+      return;
+    }
+
+    if (!window.confirm(
+      `¿Está seguro que desea crear la Solicitud de Transferencia en SAP para TRF-${seriesActual.transferencia}?\n\nEsto enviará la solicitud al SAP y cambiará el estado a "Pendiente Recepción".\n\n⚠️ Esta acción no se puede deshacer.`
+    )) {
+      return;
+    }
+
+    setCreandoSolicitudSAP(true);
+
+    try {
+      const response = await fetch(
+        `${HOST_API_KEY}/transferencias/${seriesActual.transferencia}/crear-solicitud-sap`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            empresa: user.EMPRESA,
+            bodega: transferenciaSeleccionada.BODEGA_ORIGEN,
+            usuario_id: user.ID,
+            usuario_nombre: user.DISPLAYNAME,
+          })
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(`✅ ${result.message}`);
+        // Recargar listas
+        fetchTransferenciasParaSeries();
+        fetchTransferenciasUsuario();
+        // Limpiar selección
+        setSeriesActual({
+          transferencia: '',
+          producto_id: null,
+          item_code: '',
+          item_name: '',
+          serie: '',
+          series: [],
+        });
+        setProductosTransferencia([]);
+      } else {
+        alert(`❌ ${result.message}`);
+      }
+    } catch (error) {
+      console.error('Error al crear solicitud SAP:', error);
+      alert('❌ Error al conectar con el servidor. Por favor intente nuevamente.');
+    } finally {
+      setCreandoSolicitudSAP(false);
+    }
+  };
+
   // Handlers para Aceptar Transferencia
   const handleAceptarTransferencia = async (id) => {
     // Buscar la transferencia para obtener información
@@ -2122,6 +2194,33 @@ export default function GestionTransferenciaBodegasView() {
                           </Table>
                         </TableContainer>
                       )}
+
+                      {/* Botón para crear solicitud en SAP cuando todas las series están completas */}
+                      {productosTransferencia.length > 0 && (() => {
+                        const todosCompletos = productosTransferencia.every(
+                          p => (p.SERIES_CARGADAS || 0) >= p.CANTIDAD_SOLICITADA
+                        );
+                        return todosCompletos ? (
+                          <Box sx={{ mt: 2, p: 2, bgcolor: alpha(theme.palette.success.main, 0.08), borderRadius: 1 }}>
+                            <Stack direction="row" spacing={2} alignItems="center">
+                              <CheckCircleOutline color="success" />
+                              <Typography variant="body2" color="success.dark" sx={{ flex: 1 }}>
+                                Todas las series han sido cargadas. Puede crear la solicitud de transferencia en SAP.
+                              </Typography>
+                              <Button
+                                variant="contained"
+                                color="success"
+                                onClick={handleCrearSolicitudSAP}
+                                disabled={creandoSolicitudSAP}
+                                startIcon={creandoSolicitudSAP ? <CircularProgress size={16} color="inherit" /> : <SendIcon />}
+                                size="large"
+                              >
+                                {creandoSolicitudSAP ? 'Creando en SAP...' : 'Crear Solicitud en SAP'}
+                              </Button>
+                            </Stack>
+                          </Box>
+                        ) : null;
+                      })()}
                     </Paper>
                   </Grid>
                 )}
