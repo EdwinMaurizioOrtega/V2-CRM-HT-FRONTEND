@@ -219,6 +219,8 @@ const BODEGAS_MOVILCELISTIC = [
   { value: '020', label: '020 - MALL GUAYAQUIL' },
   { value: '021', label: '021 - MALL CUENCA' },
   { value: '005', label: '005 - OPERADORAS CARRIER' },
+  { value: 'EA', label: 'EA - CONSIGNACION' },
+
 ];
 
 // ----------------------------------------------------------------------
