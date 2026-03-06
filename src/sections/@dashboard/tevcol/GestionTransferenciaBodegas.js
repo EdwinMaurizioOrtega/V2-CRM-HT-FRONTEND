@@ -196,6 +196,8 @@ const BODEGAS_LIDENAR = [
   { value: '020', label: '020 - SAMSUNG MANTA' },
   { value: '022', label: '022 - SAMSUNG PORTOVIEJO' },
   { value: '003', label: '003 - PADRE AGUIRRE' },
+  { value: '008', label: '008 - CONSIGNACION' },
+
 ];
 
 const BODEGAS_MOVILCELISTIC = [
