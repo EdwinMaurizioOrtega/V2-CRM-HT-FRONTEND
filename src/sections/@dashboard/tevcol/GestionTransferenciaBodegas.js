@@ -279,6 +279,7 @@ export default function GestionTransferenciaBodegasView() {
   const [textArrayCount, setTextArrayCount] = useState(0);
   const [validSeriesCount, setValidSeriesCount] = useState(0);
   const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [serieDuplicada, setSerieDuplicada] = useState('');
 
   // Estado para crear solicitud SAP
   const [creandoSolicitudSAP, setCreandoSolicitudSAP] = useState(false);
@@ -1561,9 +1562,15 @@ export default function GestionTransferenciaBodegasView() {
 
   const handleAgregarSerie = () => {
     if (seriesActual.serie && seriesActual.producto_id) {
+      const serieTrimmed = seriesActual.serie.trim();
+      if (seriesActual.series.includes(serieTrimmed)) {
+        setSerieDuplicada(serieTrimmed);
+        return;
+      }
+      setSerieDuplicada('');
       setSeriesActual({
         ...seriesActual,
-        series: [...seriesActual.series, seriesActual.serie],
+        series: [...seriesActual.series, serieTrimmed],
         serie: '',
       });
     }
@@ -2467,7 +2474,10 @@ export default function GestionTransferenciaBodegasView() {
                               fullWidth
                               label="Número de Serie / IMEI"
                               value={seriesActual.serie}
-                              onChange={(e) => setSeriesActual({ ...seriesActual, serie: e.target.value })}
+                              onChange={(e) => {
+                                setSeriesActual({ ...seriesActual, serie: e.target.value });
+                                if (serieDuplicada) setSerieDuplicada('');
+                              }}
                               onKeyPress={(e) => {
                                 if (e.key === 'Enter') {
                                   handleAgregarSerie();
@@ -2475,6 +2485,8 @@ export default function GestionTransferenciaBodegasView() {
                               }}
                               placeholder="Escanea o escribe el número de serie..."
                               autoFocus
+                              error={!!serieDuplicada}
+                              helperText={serieDuplicada ? `⚠️ Serie duplicada: ${serieDuplicada}` : ''}
                             />
                           </Grid>
 
@@ -2482,11 +2494,12 @@ export default function GestionTransferenciaBodegasView() {
                             <Button
                               fullWidth
                               variant="contained"
+                              color={serieDuplicada ? 'error' : 'primary'}
                               onClick={handleAgregarSerie}
                               disabled={!seriesActual.serie}
                               sx={{ height: '56px' }}
                             >
-                              <AddIcon />
+                              {serieDuplicada ? 'Duplicada' : <AddIcon />}
                             </Button>
                           </Grid>
 
