@@ -2339,19 +2339,39 @@ export default function GestionTransferenciaBodegasView() {
 
                       {/* Valorado de Mercadería */}
                       {productosTransferencia.length > 0 && (() => {
-                        const valoradoTotal = productosTransferencia.reduce((total, p) => {
+                        const subtotal = productosTransferencia.reduce((total, p) => {
                           const precio = p.PRECIO_NE != null ? Number(p.PRECIO_NE) : 0;
                           return total + (precio * p.CANTIDAD_SOLICITADA);
                         }, 0);
+                        const iva = subtotal * 0.15;
+                        const totalConIva = subtotal + iva;
                         return (
                           <Box sx={{ mt: 2, p: 2, bgcolor: alpha(theme.palette.info.main, 0.08), borderRadius: 1 }}>
-                            <Stack direction="row" spacing={2} alignItems="center" justifyContent="flex-end">
-                              <Typography variant="body2" color="info.dark">
-                                Valorado de Mercadería (Precio NE):
-                              </Typography>
-                              <Typography variant="h5" color="info.dark" fontWeight={700}>
-                                ${valoradoTotal.toFixed(2)}
-                              </Typography>
+                            <Stack spacing={0.5} alignItems="flex-end">
+                              <Stack direction="row" spacing={2} alignItems="center">
+                                <Typography variant="body2" color="info.dark">
+                                  Subtotal (sin IVA):
+                                </Typography>
+                                <Typography variant="body1" color="info.dark" fontWeight={600}>
+                                  ${subtotal.toFixed(2)}
+                                </Typography>
+                              </Stack>
+                              <Stack direction="row" spacing={2} alignItems="center">
+                                <Typography variant="body2" color="info.dark">
+                                  IVA (15%):
+                                </Typography>
+                                <Typography variant="body1" color="info.dark" fontWeight={600}>
+                                  ${iva.toFixed(2)}
+                                </Typography>
+                              </Stack>
+                              <Stack direction="row" spacing={2} alignItems="center">
+                                <Typography variant="body2" color="info.dark">
+                                  Valorado de Mercadería (con IVA):
+                                </Typography>
+                                <Typography variant="h5" color="info.dark" fontWeight={700}>
+                                  ${totalConIva.toFixed(2)}
+                                </Typography>
+                              </Stack>
                             </Stack>
                           </Box>
                         );
