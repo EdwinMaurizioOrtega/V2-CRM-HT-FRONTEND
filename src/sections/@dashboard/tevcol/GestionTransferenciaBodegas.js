@@ -487,7 +487,7 @@ export default function GestionTransferenciaBodegasView() {
 
     try {
       const response = await fetch(
-        `${HOST_API_KEY}/transferencias/${transferencia.ID}`
+        `${HOST_API_KEY}/transferencias/${transferencia.ID}?empresa=${user.EMPRESA}`
       );
       
       if (response.ok) {
@@ -536,7 +536,7 @@ export default function GestionTransferenciaBodegasView() {
 
     try {
       const response = await fetch(
-        `${HOST_API_KEY}/transferencias/${transferenciaId}/series`
+        `${HOST_API_KEY}/transferencias/${transferenciaId}/series?empresa=${user.EMPRESA}`
       );
       
       if (response.ok) {
@@ -717,6 +717,7 @@ export default function GestionTransferenciaBodegasView() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
+            empresa: user.EMPRESA,
             productos_nuevos: [{
               codigo: modalDetalle.productoActual.codigo,
               descripcion: modalDetalle.productoActual.descripcion,
@@ -839,6 +840,7 @@ export default function GestionTransferenciaBodegasView() {
       // 1. Actualizar cantidades de productos existentes
       if (hayActualizaciones) {
         const requestBody = {
+          empresa: user.EMPRESA,
           productos: productosActualizados,
           actualizado_por_id: user.ID,
           actualizado_por_nombre: user.DISPLAYNAME,
@@ -873,6 +875,7 @@ export default function GestionTransferenciaBodegasView() {
       // 2. Agregar productos nuevos
       if (hayNuevos) {
         const requestBody = {
+          empresa: user.EMPRESA,
           productos_nuevos: modalDetalle.productosNuevos.map(p => ({
             codigo: p.ITEM_CODE,
             descripcion: p.ITEM_NAME,
@@ -911,6 +914,7 @@ export default function GestionTransferenciaBodegasView() {
       // 3. Eliminar productos
       if (hayEliminados) {
         const requestBody = {
+          empresa: user.EMPRESA,
           productos_ids: modalDetalle.productosEliminados,
           actualizado_por_id: user.ID,
           actualizado_por_nombre: user.DISPLAYNAME,
@@ -1023,7 +1027,7 @@ export default function GestionTransferenciaBodegasView() {
     setLoadingProductosTransferencia(true);
     try {
       const response = await fetch(
-        `${HOST_API_KEY}/transferencias/${transferenciaId}`
+        `${HOST_API_KEY}/transferencias/${transferenciaId}?empresa=${user.EMPRESA}`
       );
       
       if (response.ok) {
@@ -1166,7 +1170,7 @@ export default function GestionTransferenciaBodegasView() {
     setGenerandoPDF(true);
     try {
       // Obtener detalle completo (productos)
-      const detalleResp = await fetch(`${HOST_API_KEY}/transferencias/${seriesActual.transferencia}`);
+      const detalleResp = await fetch(`${HOST_API_KEY}/transferencias/${seriesActual.transferencia}?empresa=${user.EMPRESA}`);
       let productosData = productosTransferencia;
       if (detalleResp.ok) {
         const detalleData = await detalleResp.json();
@@ -1175,7 +1179,7 @@ export default function GestionTransferenciaBodegasView() {
 
       // Obtener series
       let seriesData = {};
-      const seriesResp = await fetch(`${HOST_API_KEY}/transferencias/${seriesActual.transferencia}/series`);
+      const seriesResp = await fetch(`${HOST_API_KEY}/transferencias/${seriesActual.transferencia}/series?empresa=${user.EMPRESA}`);
       if (seriesResp.ok) {
         const seriesResult = await seriesResp.json();
         if (seriesResult.series && Array.isArray(seriesResult.series)) {
@@ -1335,6 +1339,7 @@ export default function GestionTransferenciaBodegasView() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          empresa: user.EMPRESA,
           aprobador_id: user.ID,
           aprobador_nombre: user.DISPLAYNAME,
         })
@@ -1369,6 +1374,7 @@ export default function GestionTransferenciaBodegasView() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          empresa: user.EMPRESA,
           aprobador_id: user.ID,
           aprobador_nombre: user.DISPLAYNAME,
         })
@@ -1618,6 +1624,102 @@ export default function GestionTransferenciaBodegasView() {
     }
   };
 
+  // Handler para vaciar todas las series de un producto
+  const handleVaciarSeriesProducto = async (producto) => {
+    if (!seriesActual.transferencia) return;
+
+    const seriesCargadas = producto.SERIES_CARGADAS || 0;
+    if (seriesCargadas === 0) {
+      alert('ℹ️ Este producto no tiene series cargadas');
+      return;
+    }
+
+    if (!window.confirm(
+      `¿Está seguro que desea eliminar TODAS las ${seriesCargadas} serie(s) del producto ${producto.ITEM_CODE}?\n\n${producto.ITEM_NAME}\n\n⚠️ Esta acción no se puede deshacer.`
+    )) {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${HOST_API_KEY}/transferencias/${seriesActual.transferencia}/vaciar-series`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            empresa: user.EMPRESA,
+            item_code: producto.ITEM_CODE,
+            usuario_id: user.ID,
+            usuario_nombre: user.DISPLAYNAME,
+          })
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(`✅ ${result.message}`);
+        // Recargar productos para actualizar conteos
+        fetchProductosTransferencia(seriesActual.transferencia);
+      } else {
+        alert(`❌ ${result.message}`);
+      }
+    } catch (error) {
+      console.error('Error al vaciar series:', error);
+      alert('❌ Error al conectar con el servidor. Por favor intente nuevamente.');
+    }
+  };
+
+  // Handler para devolver transferencia a Pendiente de Aprobación
+  const [devolviendoTransferencia, setDevolviendoTransferencia] = useState(false);
+
+  const handleDevolverTransferencia = async () => {
+    if (!seriesActual.transferencia) return;
+
+    if (!window.confirm(
+      `¿Está seguro que desea devolver la transferencia TRF-${seriesActual.transferencia} a "Pendiente de Aprobación"?\n\n⚠️ Se eliminarán TODAS las series cargadas.`
+    )) {
+      return;
+    }
+
+    setDevolviendoTransferencia(true);
+
+    try {
+      const response = await fetch(
+        `${HOST_API_KEY}/transferencias/${seriesActual.transferencia}/devolver`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            empresa: user.EMPRESA,
+            aprobador_id: user.ID,
+            aprobador_nombre: user.DISPLAYNAME,
+          })
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        alert(`✅ ${result.message}`);
+        // Limpiar selección y recargar listas
+        setSeriesActual({ transferencia: '', producto_id: null, item_code: '', item_name: '', serie: '', series: [] });
+        setProductosTransferencia([]);
+        fetchTransferenciasParaSeries();
+        fetchTransferenciasUsuario();
+      } else {
+        alert(`❌ ${result.message || 'No se pudo devolver la transferencia'}`);
+      }
+    } catch (error) {
+      console.error('Error al devolver transferencia:', error);
+      alert('❌ Error al conectar con el servidor.');
+    } finally {
+      setDevolviendoTransferencia(false);
+    }
+  };
+
   // Handler para crear la solicitud de transferencia en SAP
   const handleCrearSolicitudSAP = async () => {
     if (!seriesActual.transferencia) {
@@ -1716,6 +1818,7 @@ export default function GestionTransferenciaBodegasView() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
+            empresa: user.EMPRESA,
             bodega: transferenciaSeleccionada.BODEGA_DESTINO,
             recibido_por_id: user.ID,
             recibido_por_nombre: user.DISPLAYNAME,
@@ -2101,17 +2204,28 @@ export default function GestionTransferenciaBodegasView() {
                       ))}
                     </TextField>
                     {seriesActual.transferencia && (
-                      <Button
-                        variant="outlined"
-                        color="error"
-                        size="small"
-                        startIcon={generandoPDF ? <CircularProgress size={16} color="inherit" /> : <PictureAsPdfIcon />}
-                        onClick={handleDescargarPDFTransferencia}
-                        disabled={generandoPDF}
-                        sx={{ mt: 2 }}
-                      >
-                        {generandoPDF ? 'Generando PDF...' : 'Descargar PDF'}
-                      </Button>
+                      <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+                        <Button
+                          variant="outlined"
+                          color="error"
+                          size="small"
+                          startIcon={generandoPDF ? <CircularProgress size={16} color="inherit" /> : <PictureAsPdfIcon />}
+                          onClick={handleDescargarPDFTransferencia}
+                          disabled={generandoPDF}
+                        >
+                          {generandoPDF ? 'Generando PDF...' : 'Descargar PDF'}
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          color="warning"
+                          size="small"
+                          onClick={handleDevolverTransferencia}
+                          disabled={devolviendoTransferencia}
+                          startIcon={devolviendoTransferencia ? <CircularProgress size={16} color="inherit" /> : null}
+                        >
+                          {devolviendoTransferencia ? 'Devolviendo...' : 'Devolver a Pendiente Aprobación'}
+                        </Button>
+                      </Stack>
                     )}
                   </Paper>
                 </Grid>
@@ -2143,6 +2257,8 @@ export default function GestionTransferenciaBodegasView() {
                                 <TableCell>Descripción</TableCell>
                                 <TableCell align="center">Cantidad Solicitada</TableCell>
                                 <TableCell align="center">Series Cargadas</TableCell>
+                                <TableCell align="right">Precio NE</TableCell>
+                                <TableCell align="right">Subtotal</TableCell>
                                 <TableCell align="center">Acciones</TableCell>
                               </TableRow>
                             </TableHead>
@@ -2181,15 +2297,37 @@ export default function GestionTransferenciaBodegasView() {
                                         color={faltanSeries === 0 ? 'success' : 'warning'}
                                       />
                                     </TableCell>
+                                    <TableCell align="right">
+                                      <Typography variant="body2">
+                                        {producto.PRECIO_NE != null ? `$${Number(producto.PRECIO_NE).toFixed(2)}` : '-'}
+                                      </Typography>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                      <Typography variant="body2" fontWeight={600}>
+                                        {producto.PRECIO_NE != null ? `$${(Number(producto.PRECIO_NE) * producto.CANTIDAD_SOLICITADA).toFixed(2)}` : '-'}
+                                      </Typography>
+                                    </TableCell>
                                     <TableCell align="center">
-                                      <Button
-                                        variant={esSeleccionado ? "contained" : "outlined"}
-                                        size="small"
-                                        onClick={() => handleSeleccionarProducto(producto)}
-                                        disabled={faltanSeries === 0}
-                                      >
-                                        {esSeleccionado ? 'Seleccionado' : (faltanSeries === 0 ? 'Completo' : 'Asignar Series')}
-                                      </Button>
+                                      <Stack direction="row" spacing={1} justifyContent="center">
+                                        <Button
+                                          variant={esSeleccionado ? "contained" : "outlined"}
+                                          size="small"
+                                          onClick={() => handleSeleccionarProducto(producto)}
+                                          disabled={faltanSeries === 0}
+                                        >
+                                          {esSeleccionado ? 'Seleccionado' : (faltanSeries === 0 ? 'Completo' : 'Asignar Series')}
+                                        </Button>
+                                        {seriesCargadas > 0 && (
+                                          <Button
+                                            variant="outlined"
+                                            size="small"
+                                            color="error"
+                                            onClick={() => handleVaciarSeriesProducto(producto)}
+                                          >
+                                            Vaciar Series
+                                          </Button>
+                                        )}
+                                      </Stack>
                                     </TableCell>
                                   </TableRow>
                                 );
@@ -2198,6 +2336,26 @@ export default function GestionTransferenciaBodegasView() {
                           </Table>
                         </TableContainer>
                       )}
+
+                      {/* Valorado de Mercadería */}
+                      {productosTransferencia.length > 0 && (() => {
+                        const valoradoTotal = productosTransferencia.reduce((total, p) => {
+                          const precio = p.PRECIO_NE != null ? Number(p.PRECIO_NE) : 0;
+                          return total + (precio * p.CANTIDAD_SOLICITADA);
+                        }, 0);
+                        return (
+                          <Box sx={{ mt: 2, p: 2, bgcolor: alpha(theme.palette.info.main, 0.08), borderRadius: 1 }}>
+                            <Stack direction="row" spacing={2} alignItems="center" justifyContent="flex-end">
+                              <Typography variant="body2" color="info.dark">
+                                Valorado de Mercadería (Precio NE):
+                              </Typography>
+                              <Typography variant="h5" color="info.dark" fontWeight={700}>
+                                ${valoradoTotal.toFixed(2)}
+                              </Typography>
+                            </Stack>
+                          </Box>
+                        );
+                      })()}
 
                       {/* Botón para crear solicitud en SAP cuando todas las series están completas */}
                       {productosTransferencia.length > 0 && (() => {
