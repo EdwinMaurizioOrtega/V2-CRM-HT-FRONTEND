@@ -1694,8 +1694,6 @@ export default function GestionTransferenciaBodegasView() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             empresa: user.EMPRESA,
-            aprobador_id: user.ID,
-            aprobador_nombre: user.DISPLAYNAME,
           })
         }
       );
