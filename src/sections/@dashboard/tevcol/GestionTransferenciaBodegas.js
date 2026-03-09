@@ -453,11 +453,55 @@ export default function GestionTransferenciaBodegasView() {
     }
   };
 
-  // Cargar transferencias al montar el componente
+  // Cuando cambia la empresa en el header, resetear TODO y recargar datos
   useEffect(() => {
-    if (user?.EMPRESA) {
-      fetchTransferenciasUsuario();
-    }
+    if (!user?.EMPRESA) return;
+
+    // 1. Volver al dashboard
+    setSelectedModule(null);
+    setShowDashboard(true);
+
+    // 2. Resetear estado de Solicitar Transferencia
+    setSolicitudData({ bodegaOrigen: '', bodegaDestino: '', observaciones: '', productos: [] });
+    setProductoActual({ codigo: '', descripcion: '', cantidad: '', cantidadDisponible: 0, producto: null });
+    setProductosDisponibles([]);
+
+    // 3. Resetear estado de Aprobar
+    setTransferenciasParaAprobar([]);
+
+    // 4. Resetear estado de Cargar Series
+    setTransferenciasParaSeries([]);
+    setProductosTransferencia([]);
+    setSeriesActual({ transferencia: '', producto_id: null, item_code: '', item_name: '', serie: '', series: [] });
+    setOpenCargaMasiva(false);
+    setSeriesText('');
+    setTextArrayCount(0);
+    setValidSeriesCount(0);
+
+    // 5. Resetear estado de Aceptar/Recibir
+    setTransferenciasParaAceptar([]);
+    setProcesandoTransferencia(null);
+
+    // 6. Resetear modal de detalle
+    setModalDetalle({
+      open: false,
+      transferencia: null,
+      productos: [],
+      series: {},
+      loading: false,
+      loadingSeries: false,
+      editMode: false,
+      productosEditados: [],
+      expandedProduct: null,
+      productosDisponibles: [],
+      loadingProductosDisponibles: false,
+      productoActual: { codigo: '', descripcion: '', cantidad: '', cantidadDisponible: 0, producto: null },
+      productosNuevos: [],
+      productosEliminados: [],
+    });
+
+    // 7. Recargar datos principales
+    fetchTransferenciasUsuario();
   }, [user?.EMPRESA]);
 
   // Función para ver detalle de una transferencia
