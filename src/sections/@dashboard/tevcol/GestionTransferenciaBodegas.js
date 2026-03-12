@@ -1494,10 +1494,11 @@ export default function GestionTransferenciaBodegasView() {
   const handleValidarSeries = () => {
     setButtonDisabled(true);
 
+    // Dividir por saltos de línea, espacios, tabulaciones y comas
     const textArray = seriesText
-      .split('\n')
+      .split(/[\n\r\s,;]+/)
       .map((item) => item.trim())
-      .filter(Boolean); // Eliminar líneas vacías
+      .filter(Boolean); // Eliminar vacíos
 
     setTextArrayCount(textArray.length);
 
