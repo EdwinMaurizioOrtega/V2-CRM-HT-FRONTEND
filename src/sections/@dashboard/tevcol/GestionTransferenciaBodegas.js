@@ -3405,7 +3405,7 @@ export default function GestionTransferenciaBodegasView() {
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Carga Masiva de Series - {seriesActual.item_code}
+              Carga Masiva de Series - {seriesActual.item_code} - {seriesActual.item_name}
             </Typography>
             <Button
               autoFocus
