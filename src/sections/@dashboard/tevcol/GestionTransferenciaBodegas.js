@@ -712,12 +712,13 @@ export default function GestionTransferenciaBodegasView() {
   };
 
   // Función para cambiar cantidad editada
-  const handleCambiarCantidad = (index, nuevaCantidad) => {
+  const handleCambiarCantidad = (productoId, nuevaCantidad) => {
     setModalDetalle(prev => ({
       ...prev,
-      productosEditados: prev.productosEditados.map((producto, i) => 
-        i === index ? { ...producto, CANTIDAD_EDITADA: nuevaCantidad } : producto
-      ),
+      productosEditados: prev.productosEditados.map((producto) => {
+        const id = producto.ID || producto.tempId;
+        return id === productoId ? { ...producto, CANTIDAD_EDITADA: nuevaCantidad } : producto;
+      }),
     }));
   };
 
@@ -801,17 +802,19 @@ export default function GestionTransferenciaBodegasView() {
   };
 
   // Función para marcar producto para eliminar
-  const handleMarcarParaEliminar = (producto, index) => {
+  const handleMarcarParaEliminar = (producto) => {
     if (!window.confirm(`¿Está seguro que desea eliminar el producto ${producto.ITEM_CODE}?`)) {
       return;
     }
+
+    const productoId = producto.ID || producto.tempId;
 
     setModalDetalle(prev => {
       // Si es un producto nuevo (sin ID), solo quitarlo de las listas
       if (producto.ES_NUEVO) {
         return {
           ...prev,
-          productosEditados: prev.productosEditados.filter((_, i) => i !== index),
+          productosEditados: prev.productosEditados.filter(p => (p.ID || p.tempId) !== productoId),
           productosNuevos: prev.productosNuevos.filter(p => p.tempId !== producto.tempId),
         };
       }
@@ -819,7 +822,7 @@ export default function GestionTransferenciaBodegasView() {
       // Si es un producto existente, marcarlo para eliminar
       return {
         ...prev,
-        productosEditados: prev.productosEditados.filter((_, i) => i !== index),
+        productosEditados: prev.productosEditados.filter(p => (p.ID || p.tempId) !== productoId),
         productosEliminados: [...prev.productosEliminados, producto.ID],
       };
     });
@@ -3171,7 +3174,7 @@ export default function GestionTransferenciaBodegasView() {
                                       type="number"
                                       size="small"
                                       value={producto.CANTIDAD_EDITADA}
-                                      onChange={(e) => handleCambiarCantidad(index, e.target.value)}
+                                      onChange={(e) => handleCambiarCantidad(producto.ID || producto.tempId, e.target.value)}
                                       inputProps={{ min: 1, style: { textAlign: 'center' } }}
                                       sx={{ width: 80 }}
                                     />
@@ -3232,7 +3235,7 @@ export default function GestionTransferenciaBodegasView() {
                                     <IconButton
                                       size="small"
                                       color="error"
-                                      onClick={() => handleMarcarParaEliminar(producto, index)}
+                                      onClick={() => handleMarcarParaEliminar(producto)}
                                     >
                                       <DeleteIcon fontSize="small" />
                                     </IconButton>
