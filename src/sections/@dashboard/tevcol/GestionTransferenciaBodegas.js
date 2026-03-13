@@ -197,6 +197,7 @@ const BODEGAS_LIDENAR = [
   { value: '022', label: '022 - SAMSUNG PORTOVIEJO' },
   { value: '003', label: '003 - PADRE AGUIRRE' },
   { value: '008', label: '008 - CONSIGNACION' },
+  { value: '039', label: '039 - BODEGA CLARO' },
 
 ];
 
