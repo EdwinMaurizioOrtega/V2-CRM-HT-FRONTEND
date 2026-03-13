@@ -25,7 +25,10 @@ import {
     SvgIcon,
     Alert,
     Checkbox,
-    FormControlLabel
+    FormControlLabel,
+    Stack,
+    Chip,
+    Paper
 } from '@mui/material';
 
 import Link from 'next/link';
@@ -150,6 +153,8 @@ export default function InvoiceDetails({ invoice }) {
 
     const [textArrayCount, setTextArrayCount] = useState(0);
     const [uniqueTextArrayCount, setUniqueTextArrayCount] = useState(0);
+    const [validandoSAP, setValidandoSAP] = useState(false);
+    const [guardandoSeries, setGuardandoSeries] = useState(false);
 
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -1614,14 +1619,15 @@ export default function InvoiceDetails({ invoice }) {
 
         // Reemplazar los saltos de línea (\n) por una cadena vacía
         const sinSaltosDeLinea = valueNew.replace(/\n/g, '');
-        //console.log("SinSaltosDeLinea: " + sinSaltosDeLinea);
         // Convertir la cadena a un array de strings
-        const listaDeStrings = sinSaltosDeLinea.split(',').map(String);
-        //console.log("ListaDeStrings: " + listaDeStrings);
+        const listaDeStrings = sinSaltosDeLinea.split(',').map(String).filter(Boolean);
 
-        //console.log("Selected: " + JSON.stringify(selected));
-        //console.log("Selected: " + JSON.stringify(selected.PRODUCTO_ID));
-        //console.log("User: " + JSON.stringify(user.WAREHOUSE));
+        if (listaDeStrings.length === 0) {
+            alert('❌ No hay series para validar');
+            return;
+        }
+
+        setValidandoSAP(true);
 
         try {
             const response = await axios.post(`/hanadb/api/orders/sap/validate_series_by_bodega_producto_in_sap`, {
@@ -1632,18 +1638,19 @@ export default function InvoiceDetails({ invoice }) {
             });
 
             if (response.status === 200) {
-                //console.log(response);
-                //console.log("hola.......");
-                alert(JSON.stringify(response.data));
-
                 setSeriesDisponibles(JSON.stringify(response.data));
+                const dataArray = response.data?.data || [];
+                alert(`✅ Se encontraron ${dataArray.length} series disponibles en SAP`);
             } else {
-                // La solicitud POST no se realizó correctamente
                 console.error('Error en la solicitud POST:', response.status);
+                alert('❌ Error al validar series en SAP');
             }
 
         } catch (error) {
             console.error('Error fetching data:', error);
+            alert('❌ Error al conectar con el servidor');
+        } finally {
+            setValidandoSAP(false);
         }
     }
 
@@ -1662,20 +1669,21 @@ export default function InvoiceDetails({ invoice }) {
 
 
     const handleGuardarSeriesDisponiblesSAP = async () => {
-        //console.log("selected.ID: " + selected.ID);
-
 
         const parsedData = JSON.parse(seriesDisponibles);
         const dataArray = parsedData?.data || [];
         const seriesList = dataArray.map(item => item.IntrSerial);
 
-        //console.log("Lista de Series:", seriesList);
-        //console.log("Total de series:", seriesList.length);
+        if (seriesList.length === 0) {
+            alert('❌ No hay series validadas para guardar');
+            return;
+        }
 
-        // Si quieres solo la lista como string separado por comas:
-        //console.log("Series separadas por comas:", seriesList.join(', '));
-        const seriesListPorComa = seriesList.join(', ');
+        if (!window.confirm(
+            `¿Guardar ${seriesList.length} serie(s) validadas para el producto ${selected.PRODUCTO_ID}?`
+        )) return;
 
+        setGuardandoSeries(true);
 
         try {
             const response = await axios.post(`/hanadb/api/orders/save_series_by_id_detalle_orden`, {
@@ -1686,26 +1694,19 @@ export default function InvoiceDetails({ invoice }) {
             });
 
             if (response.status === 200) {
-                //console.log(response);
-
-                //alert(JSON.stringify(response.data));
-
                 setSeriesDisponibles(JSON.stringify(response.data));
-
-                //Recargar la página
                 window.location.reload();
             } else {
-                //
-                // La solicitud POST no se realizó correctamente
                 console.error('Error en la solicitud POST:', response.status);
-                alert(JSON.stringify(response.status));
-
+                alert(`❌ Error: ${response.status}`);
             }
 
         } catch (error) {
             console.error('Error fetching data:', error);
+            alert('❌ Error al conectar con el servidor');
+        } finally {
+            setGuardandoSeries(false);
         }
-
     }
 
     const liberarOrden = async () => {
@@ -3422,203 +3423,152 @@ export default function InvoiceDetails({ invoice }) {
                 open={openCargarSeries}
                 onClose={handleCloseCargarSeries}
                 fullScreen
-                sx={{ padding: '16px' }}
             >
-                <AppBar position="relative">
+                <AppBar position="relative" color="default" elevation={1}>
                     <Toolbar>
-                        {/* <IconButton color="inherit" edge="start" onClick={handleCloseCargarSeries}>
-                            <Iconify icon="eva:close-fill" />
-                        </IconButton> */}
-                        <Button autoFocus color="inherit" onClick={handlePrintClick} disabled={buttonDisabled}>
-                            Formatear Series
-                        </Button>
-                        <Button autoFocus color="inherit" onClick={() => {
-                            handleCargarSeriesSAP();
-                        }}>
-                            Validar Series en SAP
-                        </Button>
-                        <Button color="inherit" onClick={handleClearClick} style={{ marginLeft: '10px' }}>
+                        <Typography variant="h6" sx={{ flex: 1 }}>
+                            Cargar Series — {selected?.PRODUCTO_ID} {selected?.NOMBRE}
+                        </Typography>
+                        <Button color="inherit" onClick={handleClearClick}>
                             Cerrar
                         </Button>
-
                     </Toolbar>
                 </AppBar>
 
-                <DialogContent
-                    dividers={scroll === 'paper'}
-                    sx={{ padding: '16px' }}
+                <DialogContent sx={{ p: 2 }}>
+                    {/* Resumen del producto */}
+                    <Paper variant="outlined" sx={{ p: 2, mb: 2 }}>
+                        <Stack direction="row" spacing={3} alignItems="center" flexWrap="wrap">
+                            <Chip label={`Requeridas: ${selected?.CANTIDAD || 0}`} color="primary" variant="outlined" />
+                            <Chip label={`Ingresadas: ${textArrayCount}`} variant="outlined" />
+                            {uniqueTextArrayCount > 0 && (
+                                <Chip label={`Únicas: ${uniqueTextArrayCount}`} color="warning" />
+                            )}
+                        </Stack>
+                    </Paper>
 
-                >
-
-                    <Box
-                        sx={{
-                            display: 'flex', // Alinea los elementos horizontalmente
-                            alignItems: 'center', // Centra verticalmente los elementos
-                        }}
-                    >
-
-                        <Typography variant="body1" sx={{ marginRight: '10px' }}>
-                            Líneas ingresadas: {textArrayCount}
-                        </Typography>
-                        <Typography
-                            variant="body1"
-                            sx={{
-                                marginRight: '10px',
-                                color: 'red',
-                                fontSize: '40px',
-                                fontWeight: 'bold',
-                            }}
-                        >
-                            Válidos: {uniqueTextArrayCount}
-                        </Typography>
-                        <Typography
-                            variant="body1"
-                            sx={{
-                                marginRight: '10px',
-                                color: 'green',
-                                fontSize: '40px',
-                                fontWeight: 'bold',
-                            }}
-                        >
-                            {`===> Se requieren: ${selected?.CANTIDAD} series`}
-                        </Typography>
-                    </Box>
-                    {selected?.PRODUCTO_ID} {selected?.NOMBRE}
-
-                    <Grid container spacing={2}>
-                        {/* Columna Izquierda - TextField para ingresar IMEIs */}
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                rows={100}
-                                fullWidth
-                                multiline
-                                label="Lista IMEIs SAP"
-                                value={valueNew}
-                                onChange={handleTextChange}
-                                disabled={buttonDisabled}
-                            />
+                    <Grid container spacing={2} sx={{ height: 'calc(100vh - 180px)' }}>
+                        {/* Columna Izquierda - Ingreso de series */}
+                        <Grid item xs={12} md={5} sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                            <Stack spacing={1.5} sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                                <Stack direction="row" spacing={1}>
+                                    <Button
+                                        variant="outlined"
+                                        size="small"
+                                        onClick={handlePrintClick}
+                                        disabled={buttonDisabled || !valueNew}
+                                    >
+                                        1. Formatear
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        size="small"
+                                        onClick={handleCargarSeriesSAP}
+                                        disabled={validandoSAP || uniqueTextArrayCount === 0}
+                                    >
+                                        {validandoSAP ? 'Validando...' : '2. Validar en SAP'}
+                                    </Button>
+                                </Stack>
+                                <TextField
+                                    fullWidth
+                                    multiline
+                                    label="Pegar series aquí (una por línea)"
+                                    placeholder={"Ejemplo:\n357855570566493\n357855570557807\nR8AYB08M5JA"}
+                                    value={valueNew}
+                                    onChange={handleTextChange}
+                                    disabled={buttonDisabled}
+                                    sx={{ flex: 1, '& .MuiInputBase-root': { height: '100%', alignItems: 'flex-start' } }}
+                                    InputProps={{ sx: { height: '100%' } }}
+                                />
+                            </Stack>
                         </Grid>
 
-                        {/* Columna Derecha - Tabla de Series Disponibles */}
-                        <Grid item xs={12} md={6}>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={handleGuardarSeriesDisponiblesSAP}
-                            >
-                                Guardar Series en el Producto
-                            </Button>
-
-                            {seriesDisponibles && (
-                                <Box sx={{ width: '100%' }}>
-                                    <Typography variant="h6" gutterBottom>
-                                        Estas se van a guardar en el producto {selected?.PRODUCTO_ID} {selected?.NOMBRE}:
+                        {/* Columna Derecha - Resultados SAP */}
+                        <Grid item xs={12} md={7} sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                            {validandoSAP ? (
+                                <Stack alignItems="center" justifyContent="center" sx={{ flex: 1 }}>
+                                    <CircularProgress size={48} />
+                                    <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+                                        Validando series en SAP...
                                     </Typography>
-                                    <TableContainer sx={{ maxHeight: 400, border: '1px solid #e0e0e0', borderRadius: 1 }}>
-                                        <Table stickyHeader size="small">
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
-                                                        #
-                                                    </TableCell>
-                                                    <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
-                                                        Serie (IMEI)
-                                                    </TableCell>
-                                                    <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
-                                                        Código
-                                                    </TableCell>
-                                                    <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
-                                                        Producto
-                                                    </TableCell>
-                                                    <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
-                                                        Bodega
-                                                    </TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {(() => {
-                                                    try {
-                                                        const parsedData = JSON.parse(seriesDisponibles);
-                                                        const dataArray = parsedData?.data || [];
-                                                        return dataArray.map((item, index) => (
+                                </Stack>
+                            ) : (() => {
+                                try {
+                                    const parsedData = JSON.parse(seriesDisponibles || '{"data": []}');
+                                    const dataArray = parsedData?.data || [];
+                                    if (dataArray.length === 0) {
+                                        return (
+                                            <Stack alignItems="center" justifyContent="center" sx={{ flex: 1, color: 'text.secondary' }}>
+                                                <Typography variant="body1">
+                                                    Las series validadas aparecerán aquí
+                                                </Typography>
+                                                <Typography variant="caption" sx={{ mt: 1 }}>
+                                                    1. Pega las series a la izquierda → 2. Formatear → 3. Validar en SAP
+                                                </Typography>
+                                            </Stack>
+                                        );
+                                    }
+                                    return (
+                                        <Stack sx={{ flex: 1, overflow: 'hidden' }}>
+                                            <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1.5 }}>
+                                                <Typography variant="subtitle1" sx={{ flex: 1 }}>
+                                                    {dataArray.length} serie(s) disponibles en SAP
+                                                </Typography>
+                                                <Button
+                                                    variant="contained"
+                                                    color="success"
+                                                    onClick={handleGuardarSeriesDisponiblesSAP}
+                                                    disabled={guardandoSeries}
+                                                    startIcon={guardandoSeries ? <CircularProgress size={20} color="inherit" /> : <Iconify icon="eva:checkmark-circle-2-fill" />}
+                                                >
+                                                    {guardandoSeries ? 'Guardando...' : `Guardar ${dataArray.length} Serie(s)`}
+                                                </Button>
+                                            </Stack>
+                                            <TableContainer sx={{ flex: 1, border: '1px solid #e0e0e0', borderRadius: 1 }}>
+                                                <Table stickyHeader size="small">
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', width: 40 }}>#</TableCell>
+                                                            <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5' }}>Serie</TableCell>
+                                                            <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5' }}>Código</TableCell>
+                                                            <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5' }}>Producto</TableCell>
+                                                            <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5' }}>Bodega</TableCell>
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        {dataArray.map((item, index) => (
                                                             <TableRow
                                                                 key={index}
                                                                 sx={{
-                                                                    '&:nth-of-type(odd)': {
-                                                                        backgroundColor: '#fafafa'
-                                                                    },
-                                                                    '&:hover': {
-                                                                        backgroundColor: '#e3f2fd'
-                                                                    }
+                                                                    '&:nth-of-type(odd)': { bgcolor: '#fafafa' },
+                                                                    '&:hover': { bgcolor: '#e3f2fd' },
                                                                 }}
                                                             >
-                                                                <TableCell sx={{ fontFamily: 'monospace' }}>
-                                                                    {index + 1}
-                                                                </TableCell>
-                                                                <TableCell
-                                                                    sx={{ fontFamily: 'monospace', fontWeight: 'bold' }}>
-                                                                    {item.IntrSerial}
-                                                                </TableCell>
-                                                                <TableCell sx={{ fontFamily: 'monospace' }}>
-                                                                    {item.ItemCode}
-                                                                </TableCell>
-                                                                <TableCell sx={{ fontSize: '0.875rem' }}>
-                                                                    {item.ItemName}
-                                                                </TableCell>
+                                                                <TableCell sx={{ fontFamily: 'monospace' }}>{index + 1}</TableCell>
+                                                                <TableCell sx={{ fontFamily: 'monospace', fontWeight: 'bold' }}>{item.IntrSerial}</TableCell>
+                                                                <TableCell sx={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>{item.ItemCode}</TableCell>
+                                                                <TableCell sx={{ fontSize: '0.8rem' }}>{item.ItemName}</TableCell>
                                                                 <TableCell>
-                                                                    <Box>
-                                                                        <Typography variant="caption" display="block">
-                                                                            {item.WhsCode}
-                                                                        </Typography>
-                                                                        <Typography variant="caption"
-                                                                            color="text.secondary">
-                                                                            {item.WhsName}
-                                                                        </Typography>
-                                                                    </Box>
+                                                                    <Typography variant="caption" display="block">{item.WhsCode}</Typography>
+                                                                    <Typography variant="caption" color="text.secondary">{item.WhsName}</Typography>
                                                                 </TableCell>
                                                             </TableRow>
-                                                        ));
-                                                    } catch (error) {
-                                                        return (
-                                                            <TableRow>
-                                                                <TableCell colSpan={5} align="center">
-                                                                    <Typography color="error">
-                                                                        Error al procesar los datos: {error.message}
-                                                                    </Typography>
-                                                                </TableCell>
-                                                            </TableRow>
-                                                        );
-                                                    }
-                                                })()}
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-
-                                    {(() => {
-                                        try {
-                                            const parsedData = JSON.parse(seriesDisponibles);
-                                            const dataArray = parsedData?.data || [];
-                                            return (
-                                                <Box sx={{ mt: 2, p: 2, backgroundColor: '#f5f5f5', borderRadius: 1 }}>
-                                                    <Typography variant="body2" color="primary">
-                                                        📊 Total de series
-                                                        disponibles: <strong>{dataArray.length}</strong>
-                                                    </Typography>
-                                                    <Typography variant="caption" color="text.secondary">
-                                                        Las series se muestran con su información completa de SAP
-                                                    </Typography>
-                                                </Box>
-                                            );
-                                        } catch (error) {
-                                            return null;
-                                        }
-                                    })()}
-                                </Box>
-                            )}
+                                                        ))}
+                                                    </TableBody>
+                                                </Table>
+                                            </TableContainer>
+                                        </Stack>
+                                    );
+                                } catch (error) {
+                                    return (
+                                        <Typography color="error" sx={{ mt: 2 }}>
+                                            Error al procesar los datos: {error.message}
+                                        </Typography>
+                                    );
+                                }
+                            })()}
                         </Grid>
                     </Grid>
-
-
                 </DialogContent>
             </Dialog>
 

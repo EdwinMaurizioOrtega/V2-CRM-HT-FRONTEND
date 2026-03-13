@@ -280,6 +280,9 @@ export default function GestionTransferenciaBodegasView() {
   const [validSeriesCount, setValidSeriesCount] = useState(0);
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [serieDuplicada, setSerieDuplicada] = useState('');
+  const [seriesDisponibles, setSeriesDisponibles] = useState('{"data": []}');
+  const [validandoSAP, setValidandoSAP] = useState(false);
+  const [guardandoSeries, setGuardandoSeries] = useState(false);
 
   // Estado para crear solicitud SAP
   const [creandoSolicitudSAP, setCreandoSolicitudSAP] = useState(false);
@@ -1474,6 +1477,7 @@ export default function GestionTransferenciaBodegasView() {
     setTextArrayCount(0);
     setValidSeriesCount(0);
     setButtonDisabled(false);
+    setSeriesDisponibles('{"data": []}');
   };
 
   const handleCloseCargaMasiva = () => {
@@ -1482,6 +1486,7 @@ export default function GestionTransferenciaBodegasView() {
     setTextArrayCount(0);
     setValidSeriesCount(0);
     setButtonDisabled(false);
+    setSeriesDisponibles('{"data": []}');
   };
 
   const handleSeriesTextChange = (event) => {
@@ -1504,13 +1509,128 @@ export default function GestionTransferenciaBodegasView() {
 
     const uniqueTextArray = [...new Set(textArray)]; // Eliminar duplicados
 
-    // Validar con algoritmo Luhn
-    const validSeries = uniqueTextArray.filter((serie) => luhn_validate(serie));
+    setValidSeriesCount(uniqueTextArray.length);
 
-    setValidSeriesCount(validSeries.length);
-
-    const validatedSeries = validSeries.join(',\n');
+    const validatedSeries = uniqueTextArray.join(',\n');
     setSeriesText(validatedSeries);
+  };
+
+  const handleValidarSeriesSAP = async () => {
+    const transferenciaSeleccionada = transferenciasParaSeries.find(
+      t => t.ID === parseInt(seriesActual.transferencia)
+    );
+    if (!transferenciaSeleccionada) {
+      alert('❌ No se pudo encontrar la información de la transferencia');
+      return;
+    }
+
+    const sinSaltosDeLinea = seriesText.replace(/\n/g, '');
+    const listaDeStrings = sinSaltosDeLinea.split(',').map(String).filter(Boolean);
+
+    if (listaDeStrings.length === 0) {
+      alert('❌ No hay series para validar');
+      return;
+    }
+
+    setValidandoSAP(true);
+
+    try {
+      const response = await fetch(
+        `${HOST_API_KEY}/hanadb/api/orders/sap/validate_series_by_bodega_producto_in_sap`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            empresa: user.EMPRESA,
+            bodega: transferenciaSeleccionada.BODEGA_ORIGEN,
+            cod_producto: seriesActual.item_code,
+            series: listaDeStrings.join(','),
+          })
+        }
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+        setSeriesDisponibles(JSON.stringify(result));
+        const dataArray = result?.data || [];
+        alert(`✅ Se encontraron ${dataArray.length} series disponibles en SAP`);
+      } else {
+        alert('❌ Error al validar series en SAP');
+      }
+    } catch (error) {
+      console.error('Error validando series en SAP:', error);
+      alert('❌ Error al conectar con el servidor');
+    } finally {
+      setValidandoSAP(false);
+    }
+  };
+
+  const handleGuardarSeriesDesdeModal = async () => {
+    try {
+      const parsedData = JSON.parse(seriesDisponibles);
+      const dataArray = parsedData?.data || [];
+      if (dataArray.length === 0) {
+        alert('❌ No hay series validadas para guardar');
+        return;
+      }
+
+      const seriesList = dataArray.map(item => item.IntrSerial);
+
+      const transferenciaSeleccionada = transferenciasParaSeries.find(
+        t => t.ID === parseInt(seriesActual.transferencia)
+      );
+      if (!transferenciaSeleccionada) {
+        alert('❌ No se pudo encontrar la información de la transferencia');
+        return;
+      }
+
+      if (!window.confirm(
+        `¿Guardar ${seriesList.length} serie(s) validadas para el producto ${seriesActual.item_code}?`
+      )) return;
+
+      setGuardandoSeries(true);
+
+      const response = await fetch(
+        `${HOST_API_KEY}/transferencias/${seriesActual.transferencia}/series-v2`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            empresa: user.EMPRESA,
+            series: seriesList,
+            bodega: transferenciaSeleccionada.BODEGA_ORIGEN,
+            item_code: seriesActual.item_code,
+            usuario_id: user.ID,
+            usuario_nombre: user.DISPLAYNAME,
+          })
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        alert(`✅ ${result.message}`);
+        handleCloseCargaMasiva();
+        fetchProductosTransferencia(seriesActual.transferencia);
+        setSeriesActual({
+          ...seriesActual,
+          producto_id: null,
+          item_code: '',
+          item_name: '',
+          serie: '',
+          series: [],
+        });
+        fetchTransferenciasParaSeries();
+        fetchTransferenciasUsuario();
+      } else {
+        alert(`❌ Error: ${result.message || 'No se pudieron guardar las series'}`);
+      }
+    } catch (error) {
+      console.error('Error al guardar series:', error);
+      alert('❌ Error al conectar con el servidor');
+    } finally {
+      setGuardandoSeries(false);
+    }
   };
 
   const handleLimpiarSeries = () => {
@@ -1535,6 +1655,15 @@ export default function GestionTransferenciaBodegasView() {
     handleCloseCargaMasiva();
 
     alert(`✅ Se agregaron ${listaDeStrings.length} series al lote actual`);
+  };
+
+  const handleCerrarCargaMasiva = () => {
+    setSeriesText('');
+    setTextArrayCount(0);
+    setValidSeriesCount(0);
+    setButtonDisabled(false);
+    setSeriesDisponibles('{"data": []}');
+    setOpenCargaMasiva(false);
   };
 
   // Handlers para Cargar Series
@@ -1562,6 +1691,8 @@ export default function GestionTransferenciaBodegasView() {
       serie: '',
       series: [],
     });
+    // Abrir directamente el diálogo de carga masiva
+    handleOpenCargaMasiva();
   };
 
   const handleAgregarSerie = () => {
@@ -2363,12 +2494,13 @@ export default function GestionTransferenciaBodegasView() {
                                     <TableCell align="center">
                                       <Stack direction="row" spacing={1} justifyContent="center">
                                         <Button
-                                          variant={esSeleccionado ? "contained" : "outlined"}
+                                          variant="outlined"
                                           size="small"
                                           onClick={() => handleSeleccionarProducto(producto)}
                                           disabled={faltanSeries === 0}
+                                          startIcon={<CloudUploadIcon />}
                                         >
-                                          {esSeleccionado ? 'Seleccionado' : (faltanSeries === 0 ? 'Completo' : 'Asignar Series')}
+                                          {faltanSeries === 0 ? 'Completo' : 'Asignar Series'}
                                         </Button>
                                         {seriesCargadas > 0 && (
                                           <Button
@@ -2460,143 +2592,7 @@ export default function GestionTransferenciaBodegasView() {
                   </Grid>
                 )}
 
-                {/* Paso 3: Agregar Series al Producto Seleccionado */}
-                {seriesActual.producto_id && (
-                  <>
-                    <Grid item xs={12}>
-                      <Paper sx={{ p: 2, bgcolor: alpha(theme.palette.success.main, 0.04) }}>
-                        <Typography variant="subtitle2" color="success.main" sx={{ mb: 2 }}>
-                          Paso 3: Agregar Series para {seriesActual.item_code}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                          Producto: {seriesActual.item_name}
-                        </Typography>
 
-                        <Grid container spacing={2}>
-                          <Grid item xs={12} md={8}>
-                            <TextField
-                              fullWidth
-                              label="Número de Serie / IMEI"
-                              value={seriesActual.serie}
-                              onChange={(e) => {
-                                setSeriesActual({ ...seriesActual, serie: e.target.value });
-                                if (serieDuplicada) setSerieDuplicada('');
-                              }}
-                              onKeyPress={(e) => {
-                                if (e.key === 'Enter') {
-                                  handleAgregarSerie();
-                                }
-                              }}
-                              placeholder="Escanea o escribe el número de serie..."
-                              autoFocus
-                              error={!!serieDuplicada}
-                              helperText={serieDuplicada ? `⚠️ Serie duplicada: ${serieDuplicada}` : ''}
-                            />
-                          </Grid>
-
-                          <Grid item xs={12} md={2}>
-                            <Button
-                              fullWidth
-                              variant="contained"
-                              color={serieDuplicada ? 'error' : 'primary'}
-                              onClick={handleAgregarSerie}
-                              disabled={!seriesActual.serie}
-                              sx={{ height: '56px' }}
-                            >
-                              {serieDuplicada ? 'Duplicada' : <AddIcon />}
-                            </Button>
-                          </Grid>
-
-                          <Grid item xs={12} md={2}>
-                            <Button
-                              fullWidth
-                              variant="outlined"
-                              color="secondary"
-                              onClick={handleOpenCargaMasiva}
-                              startIcon={<CloudUploadIcon />}
-                              sx={{ height: '56px' }}
-                            >
-                              Carga Masiva
-                            </Button>
-                          </Grid>
-                        </Grid>
-                      </Paper>
-                    </Grid>
-
-                    {seriesActual.series.length > 0 && (
-                      <Grid item xs={12}>
-                        <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                          Series Agregadas ({seriesActual.series.length})
-                        </Typography>
-                        <TableContainer component={Paper}>
-                          <Table>
-                            <TableHead>
-                              <TableRow>
-                                <TableCell>#</TableCell>
-                                <TableCell>Serie / IMEI</TableCell>
-                                <TableCell align="center">Acciones</TableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              {seriesActual.series.map((serie, index) => (
-                                <TableRow key={index}>
-                                  <TableCell>{index + 1}</TableCell>
-                                  <TableCell>
-                                    <Typography variant="body2" fontFamily="monospace">
-                                      {serie}
-                                    </Typography>
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <IconButton
-                                      color="error"
-                                      size="small"
-                                      onClick={() => handleEliminarSerie(index)}
-                                    >
-                                      <DeleteIcon />
-                                    </IconButton>
-                                  </TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                      </Grid>
-                    )}
-
-                    <Grid item xs={12}>
-                      <Stack direction="row" spacing={2} alignItems="center">
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={handleGuardarSeries}
-                          disabled={seriesActual.series.length === 0 || buttonDisabled}
-                          size="large"
-                          startIcon={<SendIcon />}
-                        >
-                          {buttonDisabled ? 'Validando en SAP...' : 'Guardar Series (Validación SAP)'}
-                        </Button>
-                        <Button
-                          variant="outlined"
-                          onClick={() => setSeriesActual({
-                            ...seriesActual,
-                            producto_id: null,
-                            item_code: '',
-                            item_name: '',
-                            serie: '',
-                            series: [],
-                          })}
-                          size="large"
-                          disabled={buttonDisabled}
-                        >
-                          Cancelar
-                        </Button>
-                        <Typography variant="caption" color="text.secondary" sx={{ ml: 2 }}>
-                          ⚠️ Las series serán validadas automáticamente en SAP antes de guardar
-                        </Typography>
-                      </Stack>
-                    </Grid>
-                  </>
-                )}
               </Grid>
             )}
           </Box>
@@ -3388,123 +3384,172 @@ export default function GestionTransferenciaBodegasView() {
         </DialogActions>
       </Dialog>
 
-      {/* Dialog de Carga Masiva de Series - Fuera del condicional para que esté disponible siempre */}
+      {/* Dialog de Carga de Series */}
       <Dialog
         open={openCargaMasiva}
-        onClose={handleCloseCargaMasiva}
+        onClose={handleCerrarCargaMasiva}
         fullScreen
       >
-        <AppBar sx={{ position: 'relative' }}>
+        <AppBar position="relative" color="default" elevation={1}>
           <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleCloseCargaMasiva}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Carga Masiva de Series - {seriesActual.item_code} - {seriesActual.item_name}
+            <Typography variant="h6" sx={{ flex: 1 }}>
+              Cargar Series — {seriesActual.item_code} {seriesActual.item_name}
             </Typography>
-            <Button
-              autoFocus
-              color="inherit"
-              onClick={handleValidarSeries}
-              disabled={buttonDisabled || !seriesText}
-              startIcon={<CheckCircleOutline />}
-            >
-              Validar
-            </Button>
-            <Button
-              color="inherit"
-              onClick={handleLimpiarSeries}
-              sx={{ ml: 1 }}
-            >
-              Limpiar
-            </Button>
-            <Button
-              color="inherit"
-              onClick={handleCargarSeriesMasivas}
-              disabled={validSeriesCount === 0}
-              sx={{ ml: 1 }}
-              startIcon={<SendIcon />}
-            >
-              Cargar ({validSeriesCount})
+            <Button color="inherit" onClick={handleCerrarCargaMasiva}>
+              Cerrar
             </Button>
           </Toolbar>
         </AppBar>
 
-        <DialogContent sx={{ p: 3 }}>
-          {/* Contadores */}
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 3,
-              mb: 3,
-              p: 2,
-              bgcolor: alpha(theme.palette.primary.main, 0.08),
-              borderRadius: 2,
-            }}
-          >
-            <Typography variant="body1">
-              Líneas ingresadas: <strong>{textArrayCount}</strong>
-            </Typography>
-            <Typography
-              variant="h4"
-              sx={{
-                color: validSeriesCount > 0 ? 'success.main' : 'error.main',
-                fontWeight: 'bold',
-              }}
-            >
-              Válidos: {validSeriesCount}
-            </Typography>
-            <Typography
-              variant="h4"
-              sx={{
-                color: 'primary.main',
-                fontWeight: 'bold',
-              }}
-            >
-              Requeridos: {(() => {
+        <DialogContent sx={{ p: 2 }}>
+          {/* Resumen del producto */}
+          <Paper variant="outlined" sx={{ p: 2, mb: 2 }}>
+            <Stack direction="row" spacing={3} alignItems="center" flexWrap="wrap">
+              {(() => {
                 const producto = productosTransferencia.find(p => p.ID === seriesActual.producto_id);
                 const seriesCargadas = producto?.SERIES_CARGADAS || 0;
-                return (producto?.CANTIDAD_SOLICITADA || 0) - seriesCargadas;
+                const cantidadSolicitada = producto?.CANTIDAD_SOLICITADA || 0;
+                const faltantes = cantidadSolicitada - seriesCargadas;
+                return (
+                  <>
+                    <Chip label={`Solicitadas: ${cantidadSolicitada}`} color="primary" variant="outlined" />
+                    <Chip label={`Cargadas: ${seriesCargadas}`} color="success" variant="outlined" />
+                    <Chip
+                      label={`Faltan: ${faltantes}`}
+                      color={faltantes > 0 ? 'error' : 'success'}
+                    />
+                    <Chip label={`Ingresadas: ${textArrayCount}`} variant="outlined" />
+                    {validSeriesCount > 0 && (
+                      <Chip label={`Únicas: ${validSeriesCount}`} color="warning" />
+                    )}
+                  </>
+                );
               })()}
-            </Typography>
-          </Box>
+            </Stack>
+          </Paper>
 
-          {/* Alert informativo */}
-          <Alert severity="info" sx={{ mb: 2 }}>
-            <Typography variant="body2">
-              <strong>Instrucciones:</strong>
-            </Typography>
-            <Typography variant="body2" component="div">
-              1. Pegue o escriba las series (una por línea)<br />
-              2. Click en "Validar" para limpiar duplicados y verificar IMEIs<br />
-              3. Click en "Cargar" para agregar las series al lote actual<br />
-              4. No olvide hacer click en "Guardar Series del Producto" después de cerrar este diálogo
-            </Typography>
-          </Alert>
+          <Grid container spacing={2} sx={{ height: 'calc(100vh - 180px)' }}>
+            {/* Columna Izquierda - Ingreso de series */}
+            <Grid item xs={12} md={5} sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <Stack spacing={1.5} sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <Stack direction="row" spacing={1}>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={handleValidarSeries}
+                    disabled={buttonDisabled || !seriesText}
+                  >
+                    1. Formatear
+                  </Button>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={handleValidarSeriesSAP}
+                    disabled={validandoSAP || validSeriesCount === 0}
+                  >
+                    {validandoSAP ? 'Validando...' : '2. Validar en SAP'}
+                  </Button>
+                </Stack>
+                <TextField
+                  fullWidth
+                  multiline
+                  label="Pegar series aquí (una por línea)"
+                  placeholder={"Ejemplo:\n357855570566493\n357855570557807\nR8AYB08M5JA"}
+                  value={seriesText}
+                  onChange={handleSeriesTextChange}
+                  disabled={buttonDisabled}
+                  sx={{ flex: 1, '& .MuiInputBase-root': { height: '100%', alignItems: 'flex-start' } }}
+                  InputProps={{ sx: { height: '100%' } }}
+                />
+              </Stack>
+            </Grid>
 
-          {/* TextArea */}
-          <TextField
-            fullWidth
-            multiline
-            rows={30}
-            label="Lista de Series / IMEIs"
-            value={seriesText}
-            onChange={handleSeriesTextChange}
-            placeholder="357855570566493&#10;357855570557807&#10;358976543210987&#10;..."
-            disabled={buttonDisabled}
-            sx={{
-              '& .MuiInputBase-root': {
-                fontFamily: 'monospace',
-                fontSize: '14px',
-              },
-            }}
-          />
+            {/* Columna Derecha - Resultados SAP */}
+            <Grid item xs={12} md={7} sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+              {validandoSAP ? (
+                <Stack alignItems="center" justifyContent="center" sx={{ flex: 1 }}>
+                  <CircularProgress size={48} />
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+                    Validando series en SAP...
+                  </Typography>
+                </Stack>
+              ) : (() => {
+                try {
+                  const parsedData = JSON.parse(seriesDisponibles);
+                  const dataArray = parsedData?.data || [];
+                  if (dataArray.length === 0) {
+                    return (
+                      <Stack alignItems="center" justifyContent="center" sx={{ flex: 1, color: 'text.secondary' }}>
+                        <Typography variant="body1">
+                          Las series validadas aparecerán aquí
+                        </Typography>
+                        <Typography variant="caption" sx={{ mt: 1 }}>
+                          1. Pega las series a la izquierda → 2. Formatear → 3. Validar en SAP
+                        </Typography>
+                      </Stack>
+                    );
+                  }
+                  return (
+                    <Stack sx={{ flex: 1, overflow: 'hidden' }}>
+                      <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1.5 }}>
+                        <Typography variant="subtitle1" sx={{ flex: 1 }}>
+                          {dataArray.length} serie(s) disponibles en SAP
+                        </Typography>
+                        <Button
+                          variant="contained"
+                          color="success"
+                          onClick={handleGuardarSeriesDesdeModal}
+                          disabled={guardandoSeries}
+                          startIcon={guardandoSeries ? <CircularProgress size={20} color="inherit" /> : <SendIcon />}
+                        >
+                          {guardandoSeries ? 'Guardando...' : `Guardar ${dataArray.length} Serie(s)`}
+                        </Button>
+                      </Stack>
+                      <TableContainer sx={{ flex: 1, border: '1px solid #e0e0e0', borderRadius: 1 }}>
+                        <Table stickyHeader size="small">
+                          <TableHead>
+                            <TableRow>
+                              <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', width: 40 }}>#</TableCell>
+                              <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5' }}>Serie</TableCell>
+                              <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5' }}>Código</TableCell>
+                              <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5' }}>Producto</TableCell>
+                              <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5' }}>Bodega</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {dataArray.map((item, index) => (
+                              <TableRow
+                                key={index}
+                                sx={{
+                                  '&:nth-of-type(odd)': { bgcolor: '#fafafa' },
+                                  '&:hover': { bgcolor: '#e3f2fd' },
+                                }}
+                              >
+                                <TableCell sx={{ fontFamily: 'monospace' }}>{index + 1}</TableCell>
+                                <TableCell sx={{ fontFamily: 'monospace', fontWeight: 'bold' }}>{item.IntrSerial}</TableCell>
+                                <TableCell sx={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>{item.ItemCode}</TableCell>
+                                <TableCell sx={{ fontSize: '0.8rem' }}>{item.ItemName}</TableCell>
+                                <TableCell>
+                                  <Typography variant="caption" display="block">{item.WhsCode}</Typography>
+                                  <Typography variant="caption" color="text.secondary">{item.WhsName}</Typography>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </Stack>
+                  );
+                } catch (error) {
+                  return (
+                    <Typography color="error" sx={{ mt: 2 }}>
+                      Error al procesar los datos: {error.message}
+                    </Typography>
+                  );
+                }
+              })()}
+            </Grid>
+          </Grid>
         </DialogContent>
       </Dialog>
     </Container>
