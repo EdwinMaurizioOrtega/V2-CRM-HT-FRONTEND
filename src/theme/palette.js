@@ -6,6 +6,7 @@ import { alpha } from '@mui/material/styles';
 
 const GREY = {
   0: '#FFFFFF',
+  50: '#FCFDFD',
   100: '#F9FAFB',
   200: '#F4F6F8',
   300: '#DFE3E8',
@@ -13,25 +14,25 @@ const GREY = {
   500: '#919EAB',
   600: '#637381',
   700: '#454F5B',
-  800: '#212B36',
-  900: '#161C24',
+  800: '#1C252E',
+  900: '#141A21',
 };
 
 const PRIMARY = {
-  lighter: '#C8FACD',
-  light: '#5BE584',
-  main: '#00AB55',
-  dark: '#007B55',
-  darker: '#005249',
+  lighter: '#C8FAD6',
+  light: '#5BE49B',
+  main: '#00A76F',
+  dark: '#007867',
+  darker: '#004B50',
   contrastText: '#FFFFFF',
 };
 
 const SECONDARY = {
-  lighter: '#D6E4FF',
-  light: '#84A9FF',
-  main: '#3366FF',
-  dark: '#1939B7',
-  darker: '#091A7A',
+  lighter: '#EFD6FF',
+  light: '#C684FF',
+  main: '#8E33FF',
+  dark: '#5119B7',
+  darker: '#27097A',
   contrastText: '#FFFFFF',
 };
 
@@ -45,11 +46,11 @@ const INFO = {
 };
 
 const SUCCESS = {
-  lighter: '#D8FBDE',
-  light: '#86E8AB',
-  main: '#36B37E',
-  dark: '#1B806A',
-  darker: '#0A5554',
+  lighter: '#D3FCD2',
+  light: '#77ED8B',
+  main: '#22C55E',
+  dark: '#118D57',
+  darker: '#065E49',
   contrastText: '#FFFFFF',
 };
 
@@ -59,7 +60,7 @@ const WARNING = {
   main: '#FFAB00',
   dark: '#B76E00',
   darker: '#7A4100',
-  contrastText: GREY[800],
+  contrastText: '#1C252E',
 };
 
 const ERROR = {
@@ -80,7 +81,7 @@ const COMMON = {
   warning: WARNING,
   error: ERROR,
   grey: GREY,
-  divider: alpha(GREY[500], 0.24),
+  divider: alpha(GREY[500], 0.2),
   action: {
     hover: alpha(GREY[500], 0.08),
     selected: alpha(GREY[500], 0.16),

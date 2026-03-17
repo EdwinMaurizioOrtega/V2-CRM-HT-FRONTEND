@@ -11,17 +11,17 @@ export function pxToRem(value) {
 }
 
 export function responsiveFontSizes({ sm, md, lg }) {
-  return {
-    '@media (min-width:600px)': {
-      fontSize: pxToRem(sm),
-    },
-    '@media (min-width:900px)': {
-      fontSize: pxToRem(md),
-    },
-    '@media (min-width:1200px)': {
-      fontSize: pxToRem(lg),
-    },
-  };
+  const styles = {};
+  if (sm !== undefined) {
+    styles['@media (min-width:600px)'] = { fontSize: pxToRem(sm) };
+  }
+  if (md !== undefined) {
+    styles['@media (min-width:900px)'] = { fontSize: pxToRem(md) };
+  }
+  if (lg !== undefined) {
+    styles['@media (min-width:1200px)'] = { fontSize: pxToRem(lg) };
+  }
+  return styles;
 }
 
 export const primaryFont = Public_Sans({
@@ -45,9 +45,12 @@ export const secondaryFont = Barlow({
 
 const typography = {
   fontFamily: primaryFont.style.fontFamily,
+  fontWeightLight: 300,
   fontWeightRegular: 400,
-  fontWeightMedium: 600,
+  fontWeightMedium: 500,
+  fontWeightSemiBold: 600,
   fontWeightBold: 700,
+  fontWeightExtraBold: 800,
   h1: {
     fontWeight: 800,
     lineHeight: 80 / 64,
@@ -70,19 +73,19 @@ const typography = {
     fontWeight: 700,
     lineHeight: 1.5,
     fontSize: pxToRem(20),
-    ...responsiveFontSizes({ sm: 20, md: 24, lg: 24 }),
+    ...responsiveFontSizes({ md: 24 }),
   },
   h5: {
     fontWeight: 700,
     lineHeight: 1.5,
     fontSize: pxToRem(18),
-    ...responsiveFontSizes({ sm: 19, md: 20, lg: 20 }),
+    ...responsiveFontSizes({ sm: 19 }),
   },
   h6: {
-    fontWeight: 700,
+    fontWeight: 600,
     lineHeight: 28 / 18,
     fontSize: pxToRem(17),
-    ...responsiveFontSizes({ sm: 18, md: 18, lg: 18 }),
+    ...responsiveFontSizes({ sm: 18 }),
   },
   subtitle1: {
     fontWeight: 600,
@@ -116,7 +119,7 @@ const typography = {
     fontWeight: 700,
     lineHeight: 24 / 14,
     fontSize: pxToRem(14),
-    textTransform: 'capitalize',
+    textTransform: 'unset',
   },
 };
 
