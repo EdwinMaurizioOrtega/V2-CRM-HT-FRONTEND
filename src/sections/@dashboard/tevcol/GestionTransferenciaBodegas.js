@@ -34,6 +34,8 @@ import {
   DialogActions,
   AppBar,
   Toolbar,
+  Tab,
+  Tabs,
 } from '@mui/material';
 import { 
   Add as AddIcon, 
@@ -55,11 +57,13 @@ import {
 } from '@mui/icons-material';
 import { useSettingsContext } from '../../../components/settings';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
+import Label from '../../../components/label';
+import Iconify from '../../../components/iconify';
+import Scrollbar from '../../../components/scrollbar';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { useAuthContext } from '../../../auth/useAuthContext';
 import { HOST_API_KEY } from '../../../config-global';
 import TransferenciaPDF from './TransferenciaPDF';
-import { ESLINT_DEFAULT_DIRS } from 'next/dist/lib/constants';
 
 // ----------------------------------------------------------------------
 
@@ -98,50 +102,6 @@ const cleanWarehouse = (warehouse) => {
   
   return warehouseStr;
 };
-
-// KPIs del dashboard
-const DASHBOARD_KPIS = [
-  {
-    id: 'pendientes',
-    title: 'Solicitudes Pendientes',
-    value: '8',
-    change: '+12%',
-    trend: 'up',
-    icon: AccessTime,
-    color: '#FFA726',
-    bgColor: 'rgba(255, 167, 38, 0.12)',
-  },
-  {
-    id: 'en_proceso',
-    title: 'En Proceso',
-    value: '15',
-    change: '+5%',
-    trend: 'up',
-    icon: LocalShipping,
-    color: '#2065D1',
-    bgColor: 'rgba(32, 101, 209, 0.12)',
-  },
-  {
-    id: 'completadas',
-    title: 'Completadas (7d)',
-    value: '42',
-    change: '+23%',
-    trend: 'up',
-    icon: CheckCircleOutline,
-    color: '#00A76F',
-    bgColor: 'rgba(0, 167, 111, 0.12)',
-  },
-  {
-    id: 'total_items',
-    title: 'Items Transferidos',
-    value: '1,247',
-    change: '+18%',
-    trend: 'up',
-    icon: Inventory,
-    color: '#7635DC',
-    bgColor: 'rgba(118, 53, 220, 0.12)',
-  },
-];
 
 // Módulos de acción
 const ACTION_MODULES = [
@@ -231,8 +191,7 @@ export default function GestionTransferenciaBodegasView() {
   const { user } = useAuthContext();
   const theme = useTheme();
 
-  const [selectedModule, setSelectedModule] = useState(null);
-  const [showDashboard, setShowDashboard] = useState(true);
+  const [selectedModule, setSelectedModule] = useState('dashboard');
   
   // Estado para Solicitar Transferencia
   const [solicitudData, setSolicitudData] = useState({
@@ -463,8 +422,7 @@ export default function GestionTransferenciaBodegasView() {
     if (!user?.EMPRESA) return;
 
     // 1. Volver al dashboard
-    setSelectedModule(null);
-    setShowDashboard(true);
+    setSelectedModule('dashboard');
 
     // 2. Resetear estado de Solicitar Transferencia
     setSolicitudData({ bodegaOrigen: '', bodegaDestino: '', observaciones: '', productos: [] });
@@ -1131,24 +1089,18 @@ export default function GestionTransferenciaBodegasView() {
     }
   };
 
-  // Handlers para navegación
-  const handleSelectModule = (moduleId) => {
-    setSelectedModule(moduleId);
-    setShowDashboard(false);
+  // Handler para cambio de tab
+  const handleTabChange = (event, newValue) => {
+    setSelectedModule(newValue);
     
     // Cargar datos según el módulo seleccionado
-    if (moduleId === 'aprobar') {
+    if (newValue === 'aprobar') {
       fetchTransferenciasParaAprobar();
-    } else if (moduleId === 'cargar_series') {
+    } else if (newValue === 'cargar_series') {
       fetchTransferenciasParaSeries();
-    } else if (moduleId === 'aceptar') {
+    } else if (newValue === 'aceptar') {
       fetchTransferenciasParaRecibir();
     }
-  };
-
-  const handleBackToDashboard = () => {
-    setSelectedModule(null);
-    setShowDashboard(true);
   };
 
   // Handler para consultar guía de remisión en Stupendo
@@ -2036,9 +1988,6 @@ export default function GestionTransferenciaBodegasView() {
       case 'solicitar':
         return (
           <Box>
-            <Typography variant="h6" sx={{ mb: 3 }}>
-              Solicitar Nueva Transferencia
-            </Typography>
 
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
@@ -2227,10 +2176,7 @@ export default function GestionTransferenciaBodegasView() {
       case 'aprobar':
         return (
           <Box>
-            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-              <Typography variant="h6">
-                Aprobar Transferencias Pendientes
-              </Typography>
+            <Stack direction="row" justifyContent="flex-end" sx={{ mb: 2 }}>
               <Button
                 variant="outlined"
                 size="small"
@@ -2342,10 +2288,7 @@ export default function GestionTransferenciaBodegasView() {
       case 'cargar_series':
         return (
           <Box>
-            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-              <Typography variant="h6">
-                Cargar Series para Transferencias Aprobadas
-              </Typography>
+            <Stack direction="row" justifyContent="flex-end" sx={{ mb: 2 }}>
               <Button
                 variant="outlined"
                 size="small"
@@ -2602,10 +2545,7 @@ export default function GestionTransferenciaBodegasView() {
       case 'aceptar':
         return (
           <Box>
-            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-              <Typography variant="h6">
-                Recibir Transferencias
-              </Typography>
+            <Stack direction="row" justifyContent="flex-end" sx={{ mb: 2 }}>
               <Button
                 variant="outlined"
                 size="small"
@@ -2726,287 +2666,294 @@ export default function GestionTransferenciaBodegasView() {
           { name: 'TEVCOL', href: PATH_DASHBOARD.tevcol.control_inventario },
           { name: 'Transferencias' },
         ]}
-        action={
-          !showDashboard && (
-            <Button
-              variant="outlined"
-              onClick={handleBackToDashboard}
-              startIcon={<InsertChart />}
-            >
-              Ver Dashboard
-            </Button>
-          )
-        }
+        action={null}
       />
 
-      {showDashboard ? (
-        <>
-
-          {/* Action Modules - Estilo moderno con gradientes */}
-          <Grid container spacing={3}>
-            {visibleModules.map((module) => {
-              const Icon = module.icon;
-              const counter = moduleCounters[module.id] || 0;
-              
-              return (
-                <Grid key={module.id} item xs={12} sm={6} md={3}>
-                  <Card
-                    onClick={() => handleSelectModule(module.id)}
-                    sx={{
-                      height: 240,
-                      cursor: 'pointer',
-                      position: 'relative',
-                      overflow: 'hidden',
-                      transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                      '&:hover': {
-                        transform: 'translateY(-12px) scale(1.02)',
-                        boxShadow: `0 20px 40px ${alpha(module.color, 0.3)}`,
-                        '& .module-gradient': {
-                          opacity: 1,
-                        },
-                        '& .module-icon': {
-                          transform: 'scale(1.1) rotate(5deg)',
-                        },
-                      },
-                    }}
-                  >
-                    {/* Gradient Background */}
-                    <Box
-                      className="module-gradient"
-                      sx={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        background: module.gradient,
-                        opacity: 0.15,
-                        transition: 'opacity 0.4s',
-                      }}
-                    />
-
-                    {/* Content */}
-                    <Box sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column', position: 'relative' }}>
-                      <Stack spacing={2} sx={{ flex: 1 }}>
-                        {/* Badge - Solo mostrar para módulos con contador (no para solicitar) */}
-                        {module.id !== 'solicitar' && counter > 0 && (
-                          <Box sx={{ position: 'absolute', top: 16, right: 16 }}>
-                            <Avatar
-                              sx={{
-                                width: 32,
-                                height: 32,
-                                bgcolor: '#FF4842',
-                                fontSize: 14,
-                                fontWeight: 700,
-                                animation: 'pulse 2s infinite',
-                                '@keyframes pulse': {
-                                  '0%, 100%': { transform: 'scale(1)' },
-                                  '50%': { transform: 'scale(1.1)' },
-                                },
-                              }}
-                            >
-                              {counter}
-                            </Avatar>
-                          </Box>
-                        )}
-
-                        {/* Icon */}
-                        <Box
-                          className="module-icon"
-                          sx={{
-                            width: 72,
-                            height: 72,
-                            borderRadius: 3,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            background: module.gradient,
-                            color: 'white',
-                            transition: 'transform 0.4s',
-                            boxShadow: `0 8px 16px ${alpha(module.color, 0.3)}`,
-                          }}
-                        >
-                          <Icon sx={{ fontSize: 40 }} />
-                        </Box>
-
-                        {/* Text */}
-                        <Box sx={{ flex: 1 }}>
-                          <Typography variant="h5" sx={{ mb: 1, fontWeight: 700 }}>
-                            {module.title}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {module.description}
-                          </Typography>
-                        </Box>
-                      </Stack>
-
-                      {/* Arrow indicator */}
-                      <Stack direction="row" justifyContent="flex-end">
-                        <Box
-                          sx={{
-                            width: 40,
-                            height: 40,
-                            borderRadius: '50%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            bgcolor: alpha(module.color, 0.16),
-                            color: module.color,
-                          }}
-                        >
-                          →
-                        </Box>
-                      </Stack>
-                    </Box>
-                  </Card>
-                </Grid>
-              );
-            })}
-          </Grid>
-
-          {/* Recent Activity - Timeline style */}
-          <Card sx={{ mt: 3, p: 3 }}>
-            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-              <Typography variant="h6">Mis Solicitudes de Transferencia</Typography>
-              <Button size="small" onClick={fetchTransferenciasUsuario} disabled={loadingTransferencias}>
-                {loadingTransferencias ? 'Actualizando...' : 'Actualizar'}
-              </Button>
-            </Stack>
-            
-            {loadingTransferencias ? (
-              <Stack alignItems="center" spacing={2} sx={{ py: 4 }}>
-                <CircularProgress />
-                <Typography variant="body2" color="text.secondary">
-                  Cargando transferencias...
+      {/* Analytics Cards - estilo Invoice */}
+      <Card sx={{ mb: 3 }}>
+        <Scrollbar>
+          <Stack
+            direction="row"
+            divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
+            sx={{ py: 2 }}
+          >
+            {/* Total */}
+            <Stack direction="row" alignItems="center" justifyContent="center" sx={{ width: 1, minWidth: 200 }}>
+              <Stack alignItems="center" justifyContent="center" sx={{ position: 'relative' }}>
+                <Iconify icon="solar:bill-list-bold-duotone" width={24} sx={{ color: theme.palette.info.main, position: 'absolute' }} />
+                <CircularProgress variant="determinate" value={100} size={56} thickness={4} sx={{ color: theme.palette.info.main, opacity: 0.48 }} />
+                <CircularProgress variant="determinate" value={100} size={56} thickness={4} sx={{ top: 0, left: 0, opacity: 0.48, position: 'absolute', color: alpha(theme.palette.grey[500], 0.16) }} />
+              </Stack>
+              <Stack spacing={0.5} sx={{ ml: 2 }}>
+                <Typography variant="h6">Total</Typography>
+                <Typography variant="subtitle2">
+                  {transferenciasUsuario.length}{' '}
+                  <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>transferencias</Box>
                 </Typography>
               </Stack>
-            ) : (() => {
-              // Para ROLE 8 (Bodega), solo mostrar transferencias con series ya cargadas (ESTADO >= 1)
-              const listaFiltrada = user?.ROLE === '8'
-                ? transferenciasUsuario.filter(t => t.ESTADO >= 1)
-                : transferenciasUsuario;
-              
-              return listaFiltrada.length === 0 ? (
+            </Stack>
+
+            {/* Pendiente Aprobación */}
+            <Stack direction="row" alignItems="center" justifyContent="center" sx={{ width: 1, minWidth: 200 }}>
+              <Stack alignItems="center" justifyContent="center" sx={{ position: 'relative' }}>
+                <Iconify icon="solar:clock-circle-bold-duotone" width={24} sx={{ color: '#FFA726', position: 'absolute' }} />
+                <CircularProgress variant="determinate" value={transferenciasUsuario.length ? (transferenciasUsuario.filter(t => t.ESTADO === 0).length / transferenciasUsuario.length) * 100 : 0} size={56} thickness={4} sx={{ color: '#FFA726', opacity: 0.48 }} />
+                <CircularProgress variant="determinate" value={100} size={56} thickness={4} sx={{ top: 0, left: 0, opacity: 0.48, position: 'absolute', color: alpha(theme.palette.grey[500], 0.16) }} />
+              </Stack>
+              <Stack spacing={0.5} sx={{ ml: 2 }}>
+                <Typography variant="h6">Pend. Aprobación</Typography>
+                <Typography variant="subtitle2">
+                  {transferenciasUsuario.filter(t => t.ESTADO === 0).length}{' '}
+                  <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>transferencias</Box>
+                </Typography>
+              </Stack>
+            </Stack>
+
+            {/* Pendiente Series */}
+            <Stack direction="row" alignItems="center" justifyContent="center" sx={{ width: 1, minWidth: 200 }}>
+              <Stack alignItems="center" justifyContent="center" sx={{ position: 'relative' }}>
+                <Iconify icon="solar:document-add-bold-duotone" width={24} sx={{ color: '#2065D1', position: 'absolute' }} />
+                <CircularProgress variant="determinate" value={transferenciasUsuario.length ? (transferenciasUsuario.filter(t => t.ESTADO === 1).length / transferenciasUsuario.length) * 100 : 0} size={56} thickness={4} sx={{ color: '#2065D1', opacity: 0.48 }} />
+                <CircularProgress variant="determinate" value={100} size={56} thickness={4} sx={{ top: 0, left: 0, opacity: 0.48, position: 'absolute', color: alpha(theme.palette.grey[500], 0.16) }} />
+              </Stack>
+              <Stack spacing={0.5} sx={{ ml: 2 }}>
+                <Typography variant="h6">Pend. Series</Typography>
+                <Typography variant="subtitle2">
+                  {transferenciasUsuario.filter(t => t.ESTADO === 1).length}{' '}
+                  <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>transferencias</Box>
+                </Typography>
+              </Stack>
+            </Stack>
+
+            {/* Pendiente Recepción */}
+            <Stack direction="row" alignItems="center" justifyContent="center" sx={{ width: 1, minWidth: 200 }}>
+              <Stack alignItems="center" justifyContent="center" sx={{ position: 'relative' }}>
+                <Iconify icon="solar:delivery-bold-duotone" width={24} sx={{ color: '#FFC107', position: 'absolute' }} />
+                <CircularProgress variant="determinate" value={transferenciasUsuario.length ? (transferenciasUsuario.filter(t => t.ESTADO === 2).length / transferenciasUsuario.length) * 100 : 0} size={56} thickness={4} sx={{ color: '#FFC107', opacity: 0.48 }} />
+                <CircularProgress variant="determinate" value={100} size={56} thickness={4} sx={{ top: 0, left: 0, opacity: 0.48, position: 'absolute', color: alpha(theme.palette.grey[500], 0.16) }} />
+              </Stack>
+              <Stack spacing={0.5} sx={{ ml: 2 }}>
+                <Typography variant="h6">Pend. Recepción</Typography>
+                <Typography variant="subtitle2">
+                  {transferenciasUsuario.filter(t => t.ESTADO === 2).length}{' '}
+                  <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>transferencias</Box>
+                </Typography>
+              </Stack>
+            </Stack>
+
+            {/* Completadas */}
+            <Stack direction="row" alignItems="center" justifyContent="center" sx={{ width: 1, minWidth: 200 }}>
+              <Stack alignItems="center" justifyContent="center" sx={{ position: 'relative' }}>
+                <Iconify icon="solar:check-circle-bold-duotone" width={24} sx={{ color: '#00A76F', position: 'absolute' }} />
+                <CircularProgress variant="determinate" value={transferenciasUsuario.length ? (transferenciasUsuario.filter(t => t.ESTADO === 3).length / transferenciasUsuario.length) * 100 : 0} size={56} thickness={4} sx={{ color: '#00A76F', opacity: 0.48 }} />
+                <CircularProgress variant="determinate" value={100} size={56} thickness={4} sx={{ top: 0, left: 0, opacity: 0.48, position: 'absolute', color: alpha(theme.palette.grey[500], 0.16) }} />
+              </Stack>
+              <Stack spacing={0.5} sx={{ ml: 2 }}>
+                <Typography variant="h6">Completadas</Typography>
+                <Typography variant="subtitle2">
+                  {transferenciasUsuario.filter(t => t.ESTADO === 3).length}{' '}
+                  <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>transferencias</Box>
+                </Typography>
+              </Stack>
+            </Stack>
+          </Stack>
+        </Scrollbar>
+      </Card>
+
+      {/* Tabs de navegación - estilo Invoice */}
+      <Card>
+        <Tabs
+          value={selectedModule}
+          onChange={handleTabChange}
+          sx={{
+            px: 2.5,
+            boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+          }}
+        >
+          <Tab
+            value="dashboard"
+            label="Todas"
+            iconPosition="end"
+            icon={
+              <Label
+                variant={selectedModule === 'dashboard' ? 'filled' : 'soft'}
+                color="default"
+              >
+                {transferenciasUsuario.length}
+              </Label>
+            }
+          />
+          {visibleModules.map((module) => {
+            const counter = moduleCounters[module.id] || 0;
+            const colorMap = {
+              solicitar: 'info',
+              aprobar: 'warning',
+              cargar_series: 'secondary',
+              aceptar: 'success',
+            };
+            return (
+              <Tab
+                key={module.id}
+                value={module.id}
+                label={module.title}
+                iconPosition="end"
+                icon={
+                  <Label
+                    variant={(module.id === selectedModule && 'filled') || 'soft'}
+                    color={colorMap[module.id] || 'default'}
+                  >
+                    {counter}
+                  </Label>
+                }
+              />
+            );
+          })}
+        </Tabs>
+
+        <Divider />
+
+      {/* Contenido del tab seleccionado */}
+      {selectedModule === 'dashboard' ? (
+        <Box>
+          {loadingTransferencias ? (
+            <Stack alignItems="center" spacing={2} sx={{ py: 4 }}>
+              <CircularProgress />
+              <Typography variant="body2" color="text.secondary">
+                Cargando transferencias...
+              </Typography>
+            </Stack>
+          ) : (() => {
+            const listaFiltrada = user?.ROLE === '8'
+              ? transferenciasUsuario.filter(t => t.ESTADO >= 1)
+              : transferenciasUsuario;
+            
+            return listaFiltrada.length === 0 ? (
+              <Box sx={{ p: 3 }}>
                 <Alert severity="info">
                   {user?.ROLE === '8'
                     ? 'No hay transferencias con series cargadas'
                     : 'No tienes solicitudes de transferencia registradas'}
                 </Alert>
-              ) : (
-              <Stack spacing={2}>
-                {listaFiltrada.map((item) => {
-                  // Obtener información del estado usando el helper
-                  const estadoInfo = getEstadoInfo(item.ESTADO);
+              </Box>
+            ) : (
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Transferencia</TableCell>
+                    <TableCell>Solicitante</TableCell>
+                    <TableCell>Origen</TableCell>
+                    <TableCell>Destino</TableCell>
+                    <TableCell>Fecha</TableCell>
+                    <TableCell>Estado</TableCell>
+                    <TableCell align="right">Acciones</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+              {listaFiltrada.map((item) => {
+                const estadoInfo = getEstadoInfo(item.ESTADO);
+                const labelColorMap = {
+                  0: 'warning',
+                  1: 'info',
+                  2: 'secondary',
+                  3: 'success',
+                  4: 'default',
+                };
 
-                  return (
-                    <Paper
-                      key={item.ID}
-                      onClick={() => handleVerDetalle(item)}
-                      sx={{
-                        p: 2,
-                        transition: 'all 0.3s',
-                        cursor: 'pointer',
-                        '&:hover': {
-                          bgcolor: alpha(theme.palette.primary.main, 0.04),
-                          transform: 'translateX(8px)',
-                          boxShadow: theme.customShadows.z8,
-                        },
-                      }}
-                    >
-                      <Stack direction="row" alignItems="center" spacing={2}>
-                        <Avatar sx={{ bgcolor: alpha(estadoInfo.color, 0.16), color: estadoInfo.color }}>
-                          <SwapHoriz />
+                return (
+                  <TableRow
+                    key={item.ID}
+                    hover
+                    onClick={() => handleVerDetalle(item)}
+                    sx={{ cursor: 'pointer' }}
+                  >
+                    <TableCell>
+                      <Typography variant="subtitle2">TRF-{item.ID}</Typography>
+                    </TableCell>
+
+                    <TableCell>
+                      <Stack direction="row" alignItems="center" spacing={1.5}>
+                        <Avatar sx={{ width: 36, height: 36, bgcolor: alpha(estadoInfo.color, 0.16), color: estadoInfo.color, fontSize: 14 }}>
+                          {item.SOLICITANTE_NOMBRE ? item.SOLICITANTE_NOMBRE.charAt(0).toUpperCase() : '?'}
                         </Avatar>
-                        
-                        <Box sx={{ flex: 1 }}>
-                          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 0.5 }}>
-                            <Typography variant="subtitle2">TRF-{item.ID}</Typography>
-                            <Chip 
-                              label={estadoInfo.label} 
-                              size="small"
-                              sx={{
-                                bgcolor: alpha(estadoInfo.color, 0.16),
-                                color: estadoInfo.color,
-                                fontWeight: 600,
-                                fontSize: '0.75rem',
-                              }}
-                            />
-                          </Stack>
-                          <Typography variant="body2" color="text.secondary">
-                            {item.BODEGA_ORIGEN} → {item.BODEGA_DESTINO}
-                          </Typography>
-                          {item.OBSERVACIONES && (
-                            <Typography variant="caption" color="text.disabled" sx={{ display: 'block', mt: 0.5 }}>
-                              {item.OBSERVACIONES}
-                            </Typography>
-                          )}
-                        </Box>
-
-                        <Stack alignItems="flex-end" spacing={0.5}>
-                          <Stack direction="row" spacing={0.5}>
-                            <IconButton
-                              size="small"
-                              sx={{
-                                bgcolor: alpha(theme.palette.primary.main, 0.08),
-                                '&:hover': {
-                                  bgcolor: alpha(theme.palette.primary.main, 0.16),
-                                },
-                              }}
-                            >
-                              <VisibilityIcon fontSize="small" />
-                            </IconButton>
-                            {item.ESTABLECIMIENTO && item.PTO_EMISION && item.SECUENCIAL && (
-                              <IconButton
-                                size="small"
-                                onClick={(e) => handleConsultarGuiaRemision(e, item)}
-                                disabled={loadingGuiaRemision === item.ID}
-                                sx={{
-                                  bgcolor: alpha(theme.palette.error.main, 0.08),
-                                  '&:hover': {
-                                    bgcolor: alpha(theme.palette.error.main, 0.16),
-                                  },
-                                }}
-                                title="Ver Guía de Remisión (PDF)"
-                              >
-                                {loadingGuiaRemision === item.ID ? (
-                                  <CircularProgress size={16} color="error" />
-                                ) : (
-                                  <PictureAsPdfIcon fontSize="small" color="error" />
-                                )}
-                              </IconButton>
-                            )}
-                          </Stack>
-                          <Typography variant="caption" color="text.disabled">
-                            {new Date(item.FECHA_SOLICITUD).toLocaleDateString('es-EC', {
-                              day: '2-digit',
-                              month: 'short',
-                              year: 'numeric',
-                            })}
-                          </Typography>
-                          <Typography variant="caption" color="text.secondary">
-                            {item.SOLICITANTE_NOMBRE}
-                          </Typography>
-                        </Stack>
+                        <Typography variant="body2" noWrap>{item.SOLICITANTE_NOMBRE || 'N/A'}</Typography>
                       </Stack>
-                    </Paper>
-                  );
-                })}
-              </Stack>
-              );
-            })()}
-          </Card>
-        </>
+                    </TableCell>
+
+                    <TableCell>
+                      <Typography variant="body2">{cleanWarehouse(item.BODEGA_ORIGEN)}</Typography>
+                    </TableCell>
+
+                    <TableCell>
+                      <Typography variant="body2">{cleanWarehouse(item.BODEGA_DESTINO)}</Typography>
+                    </TableCell>
+
+                    <TableCell>
+                      <Typography variant="body2">
+                        {new Date(item.FECHA_SOLICITUD).toLocaleDateString('es-EC', {
+                          day: '2-digit',
+                          month: 'short',
+                          year: 'numeric',
+                        })}
+                      </Typography>
+                      <Typography variant="caption" color="text.disabled">
+                        {new Date(item.FECHA_SOLICITUD).toLocaleTimeString('es-EC', {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </Typography>
+                    </TableCell>
+
+                    <TableCell>
+                      <Label
+                        variant="soft"
+                        color={labelColorMap[item.ESTADO] || 'default'}
+                      >
+                        {estadoInfo.label}
+                      </Label>
+                    </TableCell>
+
+                    <TableCell align="right">
+                      <Stack direction="row" justifyContent="flex-end" spacing={0.5}>
+                        <IconButton size="small" onClick={(e) => { e.stopPropagation(); handleVerDetalle(item); }}>
+                          <VisibilityIcon fontSize="small" />
+                        </IconButton>
+                        {item.ESTABLECIMIENTO && item.PTO_EMISION && item.SECUENCIAL && (
+                          <IconButton
+                            size="small"
+                            onClick={(e) => handleConsultarGuiaRemision(e, item)}
+                            disabled={loadingGuiaRemision === item.ID}
+                            title="Ver Guía de Remisión (PDF)"
+                          >
+                            {loadingGuiaRemision === item.ID ? (
+                              <CircularProgress size={16} color="error" />
+                            ) : (
+                              <PictureAsPdfIcon fontSize="small" color="error" />
+                            )}
+                          </IconButton>
+                        )}
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            );          })()}
+        </Box>
       ) : (
-        <Card sx={{ p: 3 }}>
+        <Box sx={{ p: 3 }}>
           {renderModuleContent()}
-        </Card>
+        </Box>
       )}
+      </Card>
 
       {/* Modal de Detalle de Transferencia - Fuera del condicional para que esté disponible siempre */}
       <Dialog
         open={modalDetalle.open}
         onClose={handleCerrarDetalle}
-        maxWidth="md"
+        maxWidth="xl"
         fullWidth
       >
         <DialogTitle>
@@ -3132,6 +3079,8 @@ export default function GestionTransferenciaBodegasView() {
                               <TableCell align="center">Disp. Destino</TableCell>
                             </>
                           )}
+                          <TableCell align="right">Precio NE</TableCell>
+                          <TableCell align="right">Subtotal</TableCell>
                           {modalDetalle.transferencia?.ESTADO >= 1 && (
                             <TableCell align="center">Series/IMEIs</TableCell>
                           )}
@@ -3205,6 +3154,16 @@ export default function GestionTransferenciaBodegasView() {
                                     </TableCell>
                                   </>
                                 )}
+                                <TableCell align="right">
+                                  <Typography variant="body2">
+                                    {producto.PRECIO_NE != null ? `$${Number(producto.PRECIO_NE).toFixed(2)}` : '-'}
+                                  </Typography>
+                                </TableCell>
+                                <TableCell align="right">
+                                  <Typography variant="body2" fontWeight={600}>
+                                    {producto.PRECIO_NE != null ? `$${(Number(producto.PRECIO_NE) * producto.CANTIDAD_SOLICITADA).toFixed(2)}` : '-'}
+                                  </Typography>
+                                </TableCell>
                                 {modalDetalle.transferencia?.ESTADO >= 1 && (
                                   <TableCell align="center">
                                     {modalDetalle.loadingSeries ? (
@@ -3291,6 +3250,34 @@ export default function GestionTransferenciaBodegasView() {
                     </Table>
                   </TableContainer>
                 )}
+
+                {/* Valorado de Mercadería */}
+                {modalDetalle.productos.length > 0 && (() => {
+                  const subtotal = modalDetalle.productos.reduce((total, p) => {
+                    const precio = p.PRECIO_NE != null ? Number(p.PRECIO_NE) : 0;
+                    return total + (precio * p.CANTIDAD_SOLICITADA);
+                  }, 0);
+                  const iva = subtotal * 0.15;
+                  const totalConIva = subtotal + iva;
+                  return (
+                    <Box sx={{ mt: 2, p: 2, bgcolor: alpha(theme.palette.info.main, 0.08), borderRadius: 1 }}>
+                      <Stack spacing={0.5} alignItems="flex-end">
+                        <Stack direction="row" spacing={2} alignItems="center">
+                          <Typography variant="body2" color="info.dark">Subtotal (sin IVA):</Typography>
+                          <Typography variant="body1" color="info.dark" fontWeight={600}>${subtotal.toFixed(2)}</Typography>
+                        </Stack>
+                        <Stack direction="row" spacing={2} alignItems="center">
+                          <Typography variant="body2" color="info.dark">IVA (15%):</Typography>
+                          <Typography variant="body1" color="info.dark" fontWeight={600}>${iva.toFixed(2)}</Typography>
+                        </Stack>
+                        <Stack direction="row" spacing={2} alignItems="center">
+                          <Typography variant="body2" color="info.dark">Valorado de Mercadería (con IVA):</Typography>
+                          <Typography variant="h5" color="info.dark" fontWeight={700}>${totalConIva.toFixed(2)}</Typography>
+                        </Stack>
+                      </Stack>
+                    </Box>
+                  );
+                })()}
 
                 {/* Sección para agregar nuevos productos (solo en modo edición) */}
                 {modalDetalle.editMode && (
