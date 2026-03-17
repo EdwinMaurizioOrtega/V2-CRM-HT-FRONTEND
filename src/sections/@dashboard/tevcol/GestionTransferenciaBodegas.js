@@ -2670,92 +2670,87 @@ export default function GestionTransferenciaBodegasView() {
       />
 
       {/* Analytics Cards - estilo Invoice */}
-      <Card sx={{ mb: 3 }}>
-        <Scrollbar>
+      <Card sx={{ mb: { xs: 3, md: 5 } }}>
+        <Scrollbar sx={{ minHeight: 108 }}>
           <Stack
             direction="row"
             divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
             sx={{ py: 2 }}
           >
             {/* Total */}
-            <Stack direction="row" alignItems="center" justifyContent="center" sx={{ width: 1, minWidth: 200 }}>
-              <Stack alignItems="center" justifyContent="center" sx={{ position: 'relative' }}>
-                <Iconify icon="solar:bill-list-bold-duotone" width={24} sx={{ color: theme.palette.info.main, position: 'absolute' }} />
-                <CircularProgress variant="determinate" value={100} size={56} thickness={4} sx={{ color: theme.palette.info.main, opacity: 0.48 }} />
-                <CircularProgress variant="determinate" value={100} size={56} thickness={4} sx={{ top: 0, left: 0, opacity: 0.48, position: 'absolute', color: alpha(theme.palette.grey[500], 0.16) }} />
-              </Stack>
-              <Stack spacing={0.5} sx={{ ml: 2 }}>
-                <Typography variant="h6">Total</Typography>
-                <Typography variant="subtitle2">
-                  {transferenciasUsuario.length}{' '}
-                  <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>transferencias</Box>
-                </Typography>
-              </Stack>
-            </Stack>
+            <Box sx={{ width: 1, gap: 2.5, minWidth: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Box sx={{ display: 'flex', position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
+                <Iconify icon="solar:bill-list-bold-duotone" width={32} sx={{ color: theme.palette.info.main, position: 'absolute' }} />
+                <CircularProgress variant="determinate" value={100} size={56} thickness={2} sx={{ color: theme.palette.info.main, opacity: 0.48 }} />
+                <CircularProgress variant="determinate" value={100} size={56} thickness={3} sx={{ top: 0, left: 0, opacity: 0.48, position: 'absolute', color: alpha(theme.palette.grey[500], 0.16) }} />
+              </Box>
+              <div>
+                <Typography variant="subtitle1">Total</Typography>
+                <Box component="span" sx={{ my: 0.5, display: 'block', typography: 'body2', color: 'text.disabled' }}>
+                  {transferenciasUsuario.length} transferencias
+                </Box>
+              </div>
+            </Box>
 
             {/* Pendiente Aprobación */}
-            <Stack direction="row" alignItems="center" justifyContent="center" sx={{ width: 1, minWidth: 200 }}>
-              <Stack alignItems="center" justifyContent="center" sx={{ position: 'relative' }}>
-                <Iconify icon="solar:clock-circle-bold-duotone" width={24} sx={{ color: '#FFA726', position: 'absolute' }} />
-                <CircularProgress variant="determinate" value={transferenciasUsuario.length ? (transferenciasUsuario.filter(t => t.ESTADO === 0).length / transferenciasUsuario.length) * 100 : 0} size={56} thickness={4} sx={{ color: '#FFA726', opacity: 0.48 }} />
-                <CircularProgress variant="determinate" value={100} size={56} thickness={4} sx={{ top: 0, left: 0, opacity: 0.48, position: 'absolute', color: alpha(theme.palette.grey[500], 0.16) }} />
-              </Stack>
-              <Stack spacing={0.5} sx={{ ml: 2 }}>
-                <Typography variant="h6">Pend. Aprobación</Typography>
-                <Typography variant="subtitle2">
-                  {transferenciasUsuario.filter(t => t.ESTADO === 0).length}{' '}
-                  <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>transferencias</Box>
-                </Typography>
-              </Stack>
-            </Stack>
+            <Box sx={{ width: 1, gap: 2.5, minWidth: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Box sx={{ display: 'flex', position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
+                <Iconify icon="solar:clock-circle-bold-duotone" width={32} sx={{ color: theme.palette.warning.main, position: 'absolute' }} />
+                <CircularProgress variant="determinate" value={transferenciasUsuario.length ? (transferenciasUsuario.filter(t => t.ESTADO === 0).length / transferenciasUsuario.length) * 100 : 0} size={56} thickness={2} sx={{ color: theme.palette.warning.main, opacity: 0.48 }} />
+                <CircularProgress variant="determinate" value={100} size={56} thickness={3} sx={{ top: 0, left: 0, opacity: 0.48, position: 'absolute', color: alpha(theme.palette.grey[500], 0.16) }} />
+              </Box>
+              <div>
+                <Typography variant="subtitle1">Pend. Aprobación</Typography>
+                <Box component="span" sx={{ my: 0.5, display: 'block', typography: 'body2', color: 'text.disabled' }}>
+                  {transferenciasUsuario.filter(t => t.ESTADO === 0).length} transferencias
+                </Box>
+              </div>
+            </Box>
 
             {/* Pendiente Series */}
-            <Stack direction="row" alignItems="center" justifyContent="center" sx={{ width: 1, minWidth: 200 }}>
-              <Stack alignItems="center" justifyContent="center" sx={{ position: 'relative' }}>
-                <Iconify icon="solar:document-add-bold-duotone" width={24} sx={{ color: '#2065D1', position: 'absolute' }} />
-                <CircularProgress variant="determinate" value={transferenciasUsuario.length ? (transferenciasUsuario.filter(t => t.ESTADO === 1).length / transferenciasUsuario.length) * 100 : 0} size={56} thickness={4} sx={{ color: '#2065D1', opacity: 0.48 }} />
-                <CircularProgress variant="determinate" value={100} size={56} thickness={4} sx={{ top: 0, left: 0, opacity: 0.48, position: 'absolute', color: alpha(theme.palette.grey[500], 0.16) }} />
-              </Stack>
-              <Stack spacing={0.5} sx={{ ml: 2 }}>
-                <Typography variant="h6">Pend. Series</Typography>
-                <Typography variant="subtitle2">
-                  {transferenciasUsuario.filter(t => t.ESTADO === 1).length}{' '}
-                  <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>transferencias</Box>
-                </Typography>
-              </Stack>
-            </Stack>
+            <Box sx={{ width: 1, gap: 2.5, minWidth: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Box sx={{ display: 'flex', position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
+                <Iconify icon="solar:document-add-bold-duotone" width={32} sx={{ color: theme.palette.info.dark, position: 'absolute' }} />
+                <CircularProgress variant="determinate" value={transferenciasUsuario.length ? (transferenciasUsuario.filter(t => t.ESTADO === 1).length / transferenciasUsuario.length) * 100 : 0} size={56} thickness={2} sx={{ color: theme.palette.info.dark, opacity: 0.48 }} />
+                <CircularProgress variant="determinate" value={100} size={56} thickness={3} sx={{ top: 0, left: 0, opacity: 0.48, position: 'absolute', color: alpha(theme.palette.grey[500], 0.16) }} />
+              </Box>
+              <div>
+                <Typography variant="subtitle1">Pend. Series</Typography>
+                <Box component="span" sx={{ my: 0.5, display: 'block', typography: 'body2', color: 'text.disabled' }}>
+                  {transferenciasUsuario.filter(t => t.ESTADO === 1).length} transferencias
+                </Box>
+              </div>
+            </Box>
 
             {/* Pendiente Recepción */}
-            <Stack direction="row" alignItems="center" justifyContent="center" sx={{ width: 1, minWidth: 200 }}>
-              <Stack alignItems="center" justifyContent="center" sx={{ position: 'relative' }}>
-                <Iconify icon="solar:delivery-bold-duotone" width={24} sx={{ color: '#FFC107', position: 'absolute' }} />
-                <CircularProgress variant="determinate" value={transferenciasUsuario.length ? (transferenciasUsuario.filter(t => t.ESTADO === 2).length / transferenciasUsuario.length) * 100 : 0} size={56} thickness={4} sx={{ color: '#FFC107', opacity: 0.48 }} />
-                <CircularProgress variant="determinate" value={100} size={56} thickness={4} sx={{ top: 0, left: 0, opacity: 0.48, position: 'absolute', color: alpha(theme.palette.grey[500], 0.16) }} />
-              </Stack>
-              <Stack spacing={0.5} sx={{ ml: 2 }}>
-                <Typography variant="h6">Pend. Recepción</Typography>
-                <Typography variant="subtitle2">
-                  {transferenciasUsuario.filter(t => t.ESTADO === 2).length}{' '}
-                  <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>transferencias</Box>
-                </Typography>
-              </Stack>
-            </Stack>
+            <Box sx={{ width: 1, gap: 2.5, minWidth: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Box sx={{ display: 'flex', position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
+                <Iconify icon="solar:delivery-bold-duotone" width={32} sx={{ color: theme.palette.warning.dark, position: 'absolute' }} />
+                <CircularProgress variant="determinate" value={transferenciasUsuario.length ? (transferenciasUsuario.filter(t => t.ESTADO === 2).length / transferenciasUsuario.length) * 100 : 0} size={56} thickness={2} sx={{ color: theme.palette.warning.dark, opacity: 0.48 }} />
+                <CircularProgress variant="determinate" value={100} size={56} thickness={3} sx={{ top: 0, left: 0, opacity: 0.48, position: 'absolute', color: alpha(theme.palette.grey[500], 0.16) }} />
+              </Box>
+              <div>
+                <Typography variant="subtitle1">Pend. Recepción</Typography>
+                <Box component="span" sx={{ my: 0.5, display: 'block', typography: 'body2', color: 'text.disabled' }}>
+                  {transferenciasUsuario.filter(t => t.ESTADO === 2).length} transferencias
+                </Box>
+              </div>
+            </Box>
 
             {/* Completadas */}
-            <Stack direction="row" alignItems="center" justifyContent="center" sx={{ width: 1, minWidth: 200 }}>
-              <Stack alignItems="center" justifyContent="center" sx={{ position: 'relative' }}>
-                <Iconify icon="solar:check-circle-bold-duotone" width={24} sx={{ color: '#00A76F', position: 'absolute' }} />
-                <CircularProgress variant="determinate" value={transferenciasUsuario.length ? (transferenciasUsuario.filter(t => t.ESTADO === 3).length / transferenciasUsuario.length) * 100 : 0} size={56} thickness={4} sx={{ color: '#00A76F', opacity: 0.48 }} />
-                <CircularProgress variant="determinate" value={100} size={56} thickness={4} sx={{ top: 0, left: 0, opacity: 0.48, position: 'absolute', color: alpha(theme.palette.grey[500], 0.16) }} />
-              </Stack>
-              <Stack spacing={0.5} sx={{ ml: 2 }}>
-                <Typography variant="h6">Completadas</Typography>
-                <Typography variant="subtitle2">
-                  {transferenciasUsuario.filter(t => t.ESTADO === 3).length}{' '}
-                  <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>transferencias</Box>
-                </Typography>
-              </Stack>
-            </Stack>
+            <Box sx={{ width: 1, gap: 2.5, minWidth: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Box sx={{ display: 'flex', position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
+                <Iconify icon="solar:check-circle-bold-duotone" width={32} sx={{ color: theme.palette.success.main, position: 'absolute' }} />
+                <CircularProgress variant="determinate" value={transferenciasUsuario.length ? (transferenciasUsuario.filter(t => t.ESTADO === 3).length / transferenciasUsuario.length) * 100 : 0} size={56} thickness={2} sx={{ color: theme.palette.success.main, opacity: 0.48 }} />
+                <CircularProgress variant="determinate" value={100} size={56} thickness={3} sx={{ top: 0, left: 0, opacity: 0.48, position: 'absolute', color: alpha(theme.palette.grey[500], 0.16) }} />
+              </Box>
+              <div>
+                <Typography variant="subtitle1">Completadas</Typography>
+                <Box component="span" sx={{ my: 0.5, display: 'block', typography: 'body2', color: 'text.disabled' }}>
+                  {transferenciasUsuario.filter(t => t.ESTADO === 3).length} transferencias
+                </Box>
+              </div>
+            </Box>
           </Stack>
         </Scrollbar>
       </Card>
@@ -2766,7 +2761,7 @@ export default function GestionTransferenciaBodegasView() {
           value={selectedModule}
           onChange={handleTabChange}
           sx={{
-            px: 2.5,
+            px: { md: 2.5 },
             boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
           }}
         >
@@ -2836,8 +2831,8 @@ export default function GestionTransferenciaBodegasView() {
                 </Alert>
               </Box>
             ) : (
-            <TableContainer>
-              <Table>
+            <Scrollbar sx={{ minHeight: 444 }}>
+            <Table>
                 <TableHead>
                   <TableRow>
                     <TableCell>Transferencia</TableCell>
@@ -2939,7 +2934,7 @@ export default function GestionTransferenciaBodegasView() {
               })}
                 </TableBody>
               </Table>
-            </TableContainer>
+            </Scrollbar>
             );          })()}
         </Box>
       ) : (
