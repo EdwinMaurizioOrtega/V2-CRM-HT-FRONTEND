@@ -20,6 +20,10 @@ export default function List(theme) {
       },
     },
     MuiListItemText: {
+      defaultProps: {
+        primaryTypographyProps: { typography: 'subtitle2' },
+        secondaryTypographyProps: { component: 'span' },
+      },
       styleOverrides: {
         root: {
           marginTop: 0,

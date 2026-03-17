@@ -18,7 +18,7 @@ export default function Switch(theme) {
       width: 14,
       height: 14,
       boxShadow: 'none',
-      color: `${theme.palette.common.white} !important`,
+      color: theme.palette.common.white,
       ...(ownerState.size === 'small' && {
         width: 10,
         height: 10,
@@ -26,7 +26,7 @@ export default function Switch(theme) {
     },
     '& .MuiSwitch-track': {
       opacity: 1,
-      borderRadius: 14,
+      borderRadius: 10,
       backgroundColor: alpha(theme.palette.grey[500], 0.48),
     },
     '& .MuiSwitch-switchBase': {

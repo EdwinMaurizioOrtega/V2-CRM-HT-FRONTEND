@@ -5,10 +5,14 @@ export default function Skeleton(theme) {
     MuiSkeleton: {
       defaultProps: {
         animation: 'wave',
+        variant: 'rounded',
       },
       styleOverrides: {
         root: {
           backgroundColor: theme.palette.background.neutral,
+        },
+        rounded: {
+          borderRadius: Number(theme.shape.borderRadius) * 2,
         },
       },
     },

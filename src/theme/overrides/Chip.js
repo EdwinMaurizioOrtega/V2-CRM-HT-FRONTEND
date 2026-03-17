@@ -81,7 +81,10 @@ export default function Chip(theme) {
       },
 
       styleOverrides: {
-        root: ({ ownerState }) => rootStyle(ownerState),
+        root: ({ ownerState }) => [{ borderRadius: 10 }, ...rootStyle(ownerState)],
+        label: {
+          fontWeight: theme.typography.fontWeightMedium,
+        },
       },
     },
   };

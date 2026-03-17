@@ -8,6 +8,7 @@ export default function Tooltip(theme) {
       styleOverrides: {
         tooltip: {
           backgroundColor: theme.palette.grey[isLight ? 800 : 700],
+          borderRadius: theme.shape.borderRadius * 0.75,
         },
         arrow: {
           color: theme.palette.grey[isLight ? 800 : 700],

@@ -7,6 +7,7 @@ export default function Radio(theme) {
   return {
     MuiRadio: {
       defaultProps: {
+        size: 'small',
         icon: <RadioIcon />,
         checkedIcon: <RadioCheckedIcon />,
       },

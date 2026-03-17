@@ -8,13 +8,15 @@ export default function Autocomplete(theme) {
       styleOverrides: {
         root: {
           '& span.MuiAutocomplete-tag': {
-            ...theme.typography.body2,
+            ...theme.typography.subtitle2,
             width: 24,
             height: 24,
             lineHeight: '24px',
             textAlign: 'center',
             borderRadius: theme.shape.borderRadius,
             backgroundColor: alpha(theme.palette.grey[500], 0.16),
+            color: theme.palette.text.secondary,
+            padding: theme.spacing(0, 0.75),
           },
         },
         paper: {

@@ -87,14 +87,14 @@ export default function Button(theme) {
 
     const size = {
       ...(smallSize && {
-        height: 30,
+        minHeight: 30,
         fontSize: 13,
         ...(softVariant && {
           padding: '4px 10px',
         }),
       }),
       ...(largeSize && {
-        height: 48,
+        minHeight: 48,
         fontSize: 15,
         ...(softVariant && {
           padding: '8px 22px',
@@ -108,6 +108,7 @@ export default function Button(theme) {
   return {
     MuiButton: {
       defaultProps: {
+        color: 'inherit',
         disableElevation: true,
       },
 

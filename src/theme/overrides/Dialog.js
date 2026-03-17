@@ -12,17 +12,10 @@ export default function Dialog(theme) {
           '&.MuiDialog-paperFullScreen': {
             borderRadius: 0,
           },
-          '&.MuiDialog-paper .MuiDialogActions-root': {
-            padding: theme.spacing(3),
-          },
           '@media (max-width: 600px)': {
             margin: theme.spacing(2),
           },
-          '@media (max-width: 663.95px)': {
-            '&.MuiDialog-paperWidthSm.MuiDialog-paperScrollBody': {
-              maxWidth: '100%',
-            },
-          },
+
         },
         paperFullWidth: {
           width: '100%',
@@ -49,8 +42,12 @@ export default function Dialog(theme) {
       },
     },
     MuiDialogActions: {
+      defaultProps: {
+        disableSpacing: true,
+      },
       styleOverrides: {
         root: {
+          padding: theme.spacing(3),
           '& > :not(:first-of-type)': {
             marginLeft: theme.spacing(1.5),
           },

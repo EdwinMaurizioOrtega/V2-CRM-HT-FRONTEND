@@ -24,11 +24,13 @@ export default function Table(theme) {
     MuiTableCell: {
       styleOverrides: {
         root: {
-          borderBottom: 'none',
+          borderBottomStyle: 'dashed',
         },
         head: {
           color: theme.palette.text.secondary,
           backgroundColor: theme.palette.background.neutral,
+          fontWeight: theme.typography.fontWeightSemiBold,
+          fontSize: '0.875rem',
         },
         stickyHeader: {
           backgroundColor: theme.palette.background.paper,
@@ -61,9 +63,7 @@ export default function Table(theme) {
       },
 
       styleOverrides: {
-        root: {
-          borderTop: `solid 1px ${theme.palette.divider}`,
-        },
+        root: {},
         toolbar: {
           height: 64,
         },

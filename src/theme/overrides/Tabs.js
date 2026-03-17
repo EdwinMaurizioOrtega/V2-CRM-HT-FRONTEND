@@ -25,7 +25,7 @@ export default function Tabs(theme) {
           padding: 0,
           opacity: 1,
           minWidth: 48,
-          fontWeight: theme.typography.fontWeightMedium,
+          fontWeight: theme.typography.fontWeightSemiBold,
           '&:not(:last-of-type)': {
             marginRight: theme.spacing(3),
             [theme.breakpoints.up('sm')]: {

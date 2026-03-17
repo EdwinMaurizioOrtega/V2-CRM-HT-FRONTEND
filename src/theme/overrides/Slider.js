@@ -15,7 +15,7 @@ export default function Slider(theme) {
           },
         },
         rail: {
-          opacity: 0.32,
+          opacity: 0.12,
         },
         markLabel: {
           fontSize: 13,

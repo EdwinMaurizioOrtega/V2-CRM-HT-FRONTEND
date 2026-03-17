@@ -9,11 +9,13 @@ import Lists from './List';
 import Table from './Table';
 import Alert from './Alert';
 import Badge from './Badge';
+import Stack from './Stack';
 import Paper from './Paper';
 import Input from './Input';
 import Radio from './Radio';
 import Drawer from './Drawer';
 import Dialog from './Dialog';
+import AppBar from './AppBar';
 import Avatar from './Avatar';
 import Rating from './Rating';
 import Slider from './Slider';
@@ -54,6 +56,7 @@ export default function ComponentsOverrides(theme) {
     Input(theme),
     Radio(theme),
     Badge(theme),
+    Stack(theme),
     Lists(theme),
     Table(theme),
     Paper(theme),
@@ -63,6 +66,7 @@ export default function ComponentsOverrides(theme) {
     Button(theme),
     Rating(theme),
     Dialog(theme),
+    AppBar(theme),
     Avatar(theme),
     Slider(theme),
     Drawer(theme),

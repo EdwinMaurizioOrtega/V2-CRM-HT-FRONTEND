@@ -17,7 +17,7 @@ export default function TreeView(theme) {
           ...theme.typography.body2,
         },
         iconContainer: {
-          width: 'auto',
+          width: 18,
         },
       },
     },

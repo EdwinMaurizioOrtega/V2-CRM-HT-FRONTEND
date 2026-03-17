@@ -9,9 +9,9 @@ export default function Progress(theme) {
     const bufferVariant = ownerState.variant === 'buffer';
 
     const defaultStyle = {
-      borderRadius: 4,
+      borderRadius: 16,
       '& .MuiLinearProgress-bar': {
-        borderRadius: 4,
+        borderRadius: 16,
       },
       ...(bufferVariant && {
         backgroundColor: 'transparent',
@@ -29,8 +29,16 @@ export default function Progress(theme) {
 
   return {
     MuiLinearProgress: {
+      defaultProps: {
+        color: 'inherit',
+      },
       styleOverrides: {
         root: ({ ownerState }) => rootStyle(ownerState),
+      },
+    },
+    MuiCircularProgress: {
+      defaultProps: {
+        color: 'inherit',
       },
     },
   };

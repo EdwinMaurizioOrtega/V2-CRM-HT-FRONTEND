@@ -6,6 +6,7 @@ export default function Checkbox(theme) {
   return {
     MuiCheckbox: {
       defaultProps: {
+        size: 'small',
         icon: <CheckboxIcon />,
         checkedIcon: <CheckboxCheckedIcon />,
         indeterminateIcon: <CheckboxIndeterminateIcon />,

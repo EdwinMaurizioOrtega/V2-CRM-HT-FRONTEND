@@ -65,6 +65,7 @@ export default function Alert(theme) {
       styleOverrides: {
         root: {
           marginBottom: theme.spacing(0.5),
+          fontWeight: theme.typography.fontWeightSemiBold,
         },
       },
     },

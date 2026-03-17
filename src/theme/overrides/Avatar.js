@@ -1,5 +1,3 @@
-import { alpha } from '@mui/material/styles';
-
 // ----------------------------------------------------------------------
 
 export default function Avatar(theme) {
@@ -8,7 +6,7 @@ export default function Avatar(theme) {
       styleOverrides: {
         colorDefault: {
           color: theme.palette.text.secondary,
-          backgroundColor: alpha(theme.palette.grey[500], 0.24),
+          backgroundColor: theme.palette.grey[300],
         },
       },
     },
