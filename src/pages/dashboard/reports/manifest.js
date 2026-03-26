@@ -38,7 +38,7 @@ const WAREHOUSE_NAMES = {
   '019': 'CENTRO DE DISTRIBUCIÓN HT',
   '002': 'MAYORISTA CUENCA',
   '006': 'MAYORISTA QUITO',
-  '030': 'MAYORISTA COLÓN',
+  '030': 'MAYORISTA GUAYAQUIL',
   '024': 'MAYORISTA MANTA',
   '001': 'BODEGA ALPHACELL',
   'DISTLF': 'CENTRO DISTRIBUCIÓN MOVILCELISTIC',
@@ -48,6 +48,7 @@ const WAREHOUSE_NAMES = {
   '008': 'BODEGA 008',
   'CARRIERS': 'CARRIERS',
   'EA': 'BODEGA EA',
+  '043': 'PARQUE COLON',
 };
 
 const LIDENAR_WAREHOUSES = [
@@ -66,6 +67,7 @@ const LIDENAR_WAREHOUSES = [
   { code: '020', name: 'SAMSUNG MANTA' },
   { code: '022', name: 'SAMSUNG PORTOVIEJO' },
   { code: '003', name: 'PADRE AGUIRRE' },
+  { code: '043', name: 'PARQUE COLON' },
 ];
 
 const MOVILCELISTIC_WAREHOUSES = [
@@ -81,11 +83,12 @@ const MOVILCELISTIC_WAREHOUSES = [
   { code: 'T2CARACO', name: 'CARACO XIAOMI ELECTRODOMESTICOS' },
   { code: 'T2CUENCA', name: 'CUENCA XIAOMI ELECTRODOMESTICOS' },
   { code: 'T2MACHAL', name: 'MACHALA XIAOMI ELECTRODOMESTICOS' },
-  { code: '030', name: 'MAYORISTAS MOVILCELISTIC COLON' },
+  { code: '030', name: 'MAYORISTAS MOVILCELISTIC GUAYAQUIL' },
   { code: '024', name: 'MAYORISTAS MOVILCELISTIC MANTA' },
   { code: '020', name: 'MALL GUAYAQUIL' },
   { code: '021', name: 'MALL CUENCA' },
   { code: '005', name: 'OPERADORAS CARRIER' },
+  { code: '043', name: 'PARQUE COLON' },
 ];
 
 // Mapeo de RUC a nombres de empresa

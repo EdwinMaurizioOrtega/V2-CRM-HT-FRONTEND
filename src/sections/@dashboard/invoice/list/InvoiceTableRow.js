@@ -51,6 +51,11 @@ export default function InvoiceTableRow({
 
     const { user } = useAuthContext();
 
+    const isVisible = (cellId) => {
+        const hiddenCells = { '31': ['BODEGA', 'FORMADEPAGO', 'Tipo', 'NOMBREUSUARIOENTREGARA', 'USUARIOAPROBO', 'DOCNUM'] };
+        return !(hiddenCells[user?.ROLE] || []).includes(cellId);
+    };
+
     const {
         ID,
         ESTADO,
@@ -680,9 +685,8 @@ export default function InvoiceTableRow({
                         }
                     </Label>
                 </TableCell>
-                {user.ROLE !== '31' ? (
+                {isVisible('BODEGA') && (
                     <TableCell align="left">{
-
                         user.EMPRESA === '0992537442001' ? (
                             nameWarehouse(BODEGA) // Hipertronics
                         ) : user.EMPRESA === '0992264373001' ? (
@@ -692,25 +696,15 @@ export default function InvoiceTableRow({
                         ) : (
                             'No disponible' // Caso por defecto
                         )
-
                     }</TableCell>
-                ) : null
-                }
+                )}
 
 
-                {
-                    user.ROLE !== '31' ? (
-                        user.ROLE !== '0' ? (
-                            user.ROLE !== '2' ? (
-                                <TableCell align="left">{nameFormaPago(FORMADEPAGO)}</TableCell>
-                            ) : (
-                                <TableCell align="left">-</TableCell>
-                            )
-                        ) : (
-                            <TableCell align="left">-</TableCell>
-                        )
-                    ) : null
-                }
+                {isVisible('FORMADEPAGO') && (
+                    <TableCell align="left">
+                        {['0', '2'].includes(user.ROLE) ? '-' : nameFormaPago(FORMADEPAGO)}
+                    </TableCell>
+                )}
 
                 <TableCell align="left">{CLIENTEID}</TableCell>
 
@@ -719,13 +713,11 @@ export default function InvoiceTableRow({
                 <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
                     {Celular}
                 </TableCell>
-                {
-                    user.ROLE !== '31' ? (
-                        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-                            {Tipo}
-                        </TableCell>
-                    ) : null
-                }
+                {isVisible('Tipo') && (
+                    <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
+                        {Tipo}
+                    </TableCell>
+                )}
                 <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
                     {Ciudad}
                 </TableCell>
@@ -738,12 +730,11 @@ export default function InvoiceTableRow({
                     {CITY}
                 </TableCell>
 
-                {!(ESTADO === 7 || ESTADO === 0) ? (
-                    <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-
-                        {NUMEROGUIA === '000000000' ? (
-                            URL_INVOICE_SELLER !== null ? (
-                                <>
+                <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
+                    {!(ESTADO === 7 || ESTADO === 0) && (
+                        <>
+                            {NUMEROGUIA === '000000000' ? (
+                                URL_INVOICE_SELLER !== null ? (
                                     <IconButton
                                         component="a"
                                         href={URL_INVOICE_SELLER}
@@ -753,54 +744,40 @@ export default function InvoiceTableRow({
                                     >
                                         <VisibilityIcon />
                                     </IconButton>
-                                </>
+                                ) : (
+                                    <CardContent>
+                                        <Label>{NUMEROGUIA}</Label>
+                                    </CardContent>
+                                )
                             ) : (
-                                <CardContent>
-                                    <Label>{NUMEROGUIA}</Label>
-                                </CardContent>
-                            )
-                        ) : (
-                            <>
                                 <Button
                                     variant="text"
                                     onClick={() => VerGuia(NUMEROGUIA)}
                                     sx={{ color: 'text.disabled', cursor: 'pointer' }}
-                                    disabled={isLoading} // Disable the button while loading
+                                    disabled={isLoading}
                                 >
                                     {isLoading ? 'Cargando...' : NUMEROGUIA}
                                 </Button>
-                            </>
-                        )}
-
-                    </TableCell>
-                ): null }
-
-                {
-                    user.ROLE !== '31' ? (
-                        <>
-
-                            <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-                                {NOMBREUSUARIOENTREGARA}
-                            </TableCell>
-                            {/* { */
-                            }
-                            {/*     user.ROLE === "9" || user.ROLE === "8" ? ( */
-                            }
-                            <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-                                {DOCNUM}
-                            </TableCell>
-
-                            <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-                                {USUARIOAPROBO}
-                            </TableCell>
+                            )}
                         </>
-                    ) : null}
-                {/* //     ) : null */
-                }
-                {/* // */
-                }
-                {/* // } */
-                }
+                    )}
+                </TableCell>
+
+                {isVisible('NOMBREUSUARIOENTREGARA') && (
+                    <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
+                        {NOMBREUSUARIOENTREGARA}
+                    </TableCell>
+                )}
+                {isVisible('USUARIOAPROBO') && (
+                    <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
+                        {USUARIOAPROBO}
+                    </TableCell>
+                )}
+                {isVisible('DOCNUM') && (
+                    <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
+                        {DOCNUM}
+                    </TableCell>
+                )}
                 <TableCell align="left">{FECHACREACION}</TableCell>
                 <TableCell align="left">{FECHAAPROBO}</TableCell>
                 <TableCell align="left">{FECHAFACTURACION}</TableCell>

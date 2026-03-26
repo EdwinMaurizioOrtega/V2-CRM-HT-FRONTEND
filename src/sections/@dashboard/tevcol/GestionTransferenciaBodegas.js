@@ -158,6 +158,7 @@ const BODEGAS_LIDENAR = [
   { value: '003', label: '003 - PADRE AGUIRRE' },
   { value: '008', label: '008 - CONSIGNACION' },
   { value: '039', label: '039 - BODEGA CLARO' },
+  { value: '043', label: '043 - PARQUE COLON' },
 
 ];
 
@@ -175,13 +176,13 @@ const BODEGAS_MOVILCELISTIC = [
   { value: 'T2CARACO', label: 'T2CARACO - CARACOL XIAOMI ELECTRODOMESTICOS' },
   { value: 'T2CUENCA', label: 'T2CUENCA - CUENCA XIAOMI ELECTRODOMESTICOS' },
   { value: 'T2MACHAL', label: 'T2MACHAL - MACHALA XIAOMI ELECTRODOMESTICOS' },
-  { value: '030', label: '030 - MAYORISTAS MOVILCELISTIC COLON' },
+  { value: '030', label: '030 - MAYORISTAS MOVILCELISTIC GUAYAQUIL' },
   { value: '024', label: '024 - MAYORISTAS MOVILCELISTIC MANTA' },
   { value: '020', label: '020 - MALL GUAYAQUIL' },
   { value: '021', label: '021 - MALL CUENCA' },
   { value: '005', label: '005 - OPERADORAS CARRIER' },
   { value: 'EA', label: 'EA - CONSIGNACION' },
-
+  { value: '043', label: '043 - PARQUE COLON' },
 ];
 
 // ----------------------------------------------------------------------

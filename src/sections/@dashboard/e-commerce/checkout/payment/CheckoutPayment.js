@@ -102,7 +102,7 @@ const WAREHOUSE_OPTIONS = [
     {
         id: '030',
         value: '030',
-        title: 'PARQUE EMP. COLÓN',
+        title: 'MAYORISTA GUAYAQUIL',
         description: 'SUCURSAL en la ciudad de GUAYAQUIL.',
     },
     {
@@ -110,6 +110,12 @@ const WAREHOUSE_OPTIONS = [
         value: '010',
         title: 'MAYORISTA CUENCA CENTRO',
         description: 'SUCURSAL en la ciudad de CUENCA.',
+    },
+    {
+        id: '043',
+        value: '043',
+        title: 'PARQUE COLON',
+        description: 'SUCURSAL en la ciudad de GUAYAQUIL.',
     },
 ];
 
@@ -183,6 +189,13 @@ const WAREHOUSE_OPTIONS_MOVILCELISTIC = [
         value: '010',
         title: 'MAYORISTA CUENCA CENTRO',
         description: 'SUCURSAL en la ciudad de CUENCA.',
+    },
+
+    {
+        id: '043',
+        value: '043',
+        title: 'PARQUE COLON',
+        description: 'SUCURSAL en la ciudad de GUAYAQUIL.',
     },
 
 ]

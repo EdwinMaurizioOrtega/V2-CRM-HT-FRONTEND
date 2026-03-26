@@ -99,6 +99,7 @@ export default function ControlInventarioView() {
                 { value: '020', label: '020 - SAMSUNG MANTA' },
                 { value: '022', label: '022 - SAMSUNG PORTOVIEJO' },
                 { value: '003', label: '003 - PADRE AGUIRRE' },
+                { value: '043', label: '043 - PARQUE COLON' },
             ];
         } else if (user.EMPRESA === '1792161037001') {
             // MOVILCELISTIC
@@ -116,11 +117,12 @@ export default function ControlInventarioView() {
                 { value: 'T2CARACOL', label: 'T2CARACOL - CARACOL XIAOMI ELECTRODOMESTICOS' },
                 { value: 'T2CUENCA', label: 'T2CUENCA - CUENCA XIAOMI ELECTRODOMESTICOS' },
                 { value: 'T2MACHAL', label: 'T2MACHAL - MACHALA XIAOMI ELECTRODOMESTICOS' },
-                { value: '030', label: '030 - MAYORISTAS MOVILCELISTIC COLON' },
+                { value: '030', label: '030 - MAYORISTAS MOVILCELISTIC GUAYAQUIL' },
                 { value: '024', label: '024 - MAYORISTAS MOVILCELISTIC MANTA' },
                 { value: '020', label: '020 - MALL GUAYAQUIL' },
                 { value: '021', label: '021 - MALL CUENCA' },
                 { value: '005', label: '005 - OPERADORAS CARRIER' },
+                { value: '043', label: '043 - PARQUE COLON' },
             ];
         }
         return [];

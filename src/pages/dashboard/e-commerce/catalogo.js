@@ -64,8 +64,9 @@ const BODEGAS = [
     {value: '019', label: 'CENTRO DE DISTRIBUCIÓN HT'},
     {value: '002', label: 'MAYORISTA CUENCA'},
     {value: '006', label: 'MAYORISTA QUITO'},
-    {value: '030', label: 'MAYORISTA COLÓN'},
+    {value: '030', label: 'MAYORISTA GUAYAQUIL'},
     {value: '024', label: 'MAYORISTA MANTA'},
+    {value: '043', label: 'PARQUE COLON'},
 ];
 
 const BODEGAS_ALPHACELL = [
@@ -77,9 +78,10 @@ const BODEGAS_MOVILCELISTIC = [
     {value: '003', label: 'MAYORISTAS MOVILCELISTIC MACHALA'},
     {value: '004', label: 'MAYORISTAS MOVILCELISTIC CUENCA'},
 
-    {value: '030', label: 'MAYORISTAS MOVILCELISTIC COLON'},
+    {value: '030', label: 'MAYORISTAS MOVILCELISTIC GUAYAQUIL'},
     {value: '024', label: 'MAYORISTAS MOVILCELISTIC MANTA'},
     {value: '005', label: '⚠️OPERADORAS CARRIER'},
+    {value: '043', label: 'PARQUE COLON'},
 ];
 
 const CATEGORIAS_HT = [

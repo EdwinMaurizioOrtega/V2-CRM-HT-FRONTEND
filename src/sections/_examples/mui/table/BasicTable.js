@@ -295,8 +295,8 @@ const LoadingComponent = () => {
 
 function getTextFromCodigo(rowCodigo) {
     switch (rowCodigo) {
-        // case '043':
-        //     return "CENTRO_DE_DISTRIBUCION_GUAYAQUIL";
+        case '043':
+            return "PARQUE_COLON";
         case '019':
             return "CENTRO_DE_DISTRIBUCION_QUITO";
         case '002':
@@ -406,6 +406,8 @@ function getTextFromCodigoMovilCelistic(rowCodigo) {
             return "⚠️OPERADORAS CARRIER";
         case '010':
             return "MAYORISTAS MOVILCELISTIC CUENCA CENTRO";
+        case '043':
+            return "PARQUE_COLON";
         default:
             return "...";
     }
