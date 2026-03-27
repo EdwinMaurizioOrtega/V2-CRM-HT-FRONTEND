@@ -1085,13 +1085,13 @@ function nameFormaPago(pay) {
 function nameWarehouse(ware) {
     //console.log(`Bodega: ${ware}`);
     const strings = {
-        // "043": "Centro Distribución Guayaquil",
+        "043": "Parque Colón",
         "019": "Centro Distribución Quito",
         "002": "Cuenca",
         "006": "Quito",
         // "015": "Guayaquil",
         "024": "Manta",
-        "030": "Colón",
+        "030": "Mayoristas Colón",
         "010": "Cuenca Centro"
     };
 
@@ -1128,8 +1128,8 @@ function nameWarehouseMovilCelistic(ware) {
         "030": "COLON - MAYORISTAS MOVILCELISTIC COLON",
         "024": "MANTA - MAYORISTAS MOVILCELISTIC MANTA",
         "005": "CARAPUNGO - ⚠️OPERADORAS CARRIER",
-        "010": "CUENCA - MAYORISTAS MOVILCELISTIC CUENCA CENTRO"
-
+        "010": "CUENCA - MAYORISTAS MOVILCELISTIC CUENCA CENTRO",
+        "043": "Parque Colón",
         // "T1CARACO": "QUITO - XIAOMI TERMINALES"
     };
 

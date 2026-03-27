@@ -689,16 +689,16 @@ export default function InvoiceDetails({ invoice }) {
     function nameWarehouse(ware) {
         //console.log(`Bodega: ${ware}`);
         const strings = {
-            // "043": "Centro Distribución Guayaquil",
             "019": "Centro Distribución Quito",
             "002": "Cuenca Turi",
             "006": "Quito",
             // "015": "Guayaquil",
             "024": "Manta",
-            "030": "Colón",
+            "030": "Mayoristas Colón",
             "008": "Consignación",
             "039": "Bodega Claro",
-            "010": "Cuenca Centro"
+            "010": "Cuenca Centro",
+            "043": "Parque Colón"
         };
 
         const bodegaActual = strings[ware];
@@ -736,7 +736,8 @@ export default function InvoiceDetails({ invoice }) {
             "005": "CARAPUNGO - ⚠️ PENDIENTE OPERADORAS CARRIERS",
             "CARRIERS": "CARAPUNGO - ⚠️ OPERADORAS CARRIERS",
             "010": "CUENCA - MAYORISTAS MOVILCELISTIC CENTRO",
-            "EA": "CONSIGNACION EA"
+            "EA": "CONSIGNACION EA",
+            "043": "Parque Colón"
             // "T1CARACO": "QUITO - XIAOMI TERMINALES"
         };
 
@@ -3712,14 +3713,13 @@ export default function InvoiceDetails({ invoice }) {
 
 
 export const top100Films = [
-    // { title: 'Centro Distribución Guayaquil', id: "043" },
-
+    { title: 'Parque Colón', id: "043" },
     { title: 'Centro Distribución Quito', id: "019" },
     { title: 'Cuenca Turi', id: "002" },
     { title: 'Quito', id: "006" },
     // {title: 'Guayaquil', id: "015"},
     { title: 'Manta', id: "024" },
-    { title: 'Colón', id: "030" },
+    { title: 'Mayorista Colón', id: "030" },
     { title: 'Consignación', id: "008" },
     { title: 'Bodega Claro', id: "039" },
     { title: 'Cuenca Centro', id: "010" }
@@ -3738,8 +3738,7 @@ export const top100FilmsAlphacell = [
 ]
 
 export const top100FilmsMovilCelistic = [
-    // { title: 'Centro Distribución Guayaquil', id: "043" },
-
+    { title: 'Parque Colón', id: "043" },
     { title: 'CARAPUNGO - CENTRO DISTRIBUCION MOVILCELISTIC', id: "DISTLF" },
     { title: 'MACHALA - MAYORISTAS MOVILCELISTIC MACHALA', id: "003" },
     { title: 'CUENCA - MAYORISTAS MOVILCELISTIC CUENCA TURI', id: "004" },
