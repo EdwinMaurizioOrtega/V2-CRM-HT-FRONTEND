@@ -125,7 +125,7 @@ export default function UtilidadVendedorView() {
 
             console.log('Fechas formateadas:', formattedStartDate, formattedEndDate);
 
-            const response = await axios.get(`${process.env.DATA_ANALITICS}/b1t/api/power_bi/utilidad_vendedor`, {
+            const response = await axios.get(`/api/bi/utilidad_vendedor`, {
                 params: {
                     fecha_inicio: formattedStartDate,
                     fecha_fin: formattedEndDate,
