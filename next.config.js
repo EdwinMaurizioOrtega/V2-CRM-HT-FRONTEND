@@ -1,6 +1,14 @@
 module.exports = {
   swcMinify: false,
   trailingSlash: true,
+  async rewrites() {
+    return [
+      {
+        source: '/api/bi/:path*',
+        destination: 'http://bi.hipertronics.us:2143/b1t/api/power_bi/:path*',
+      },
+    ];
+  },
   env: {
 
     // HOST LOCAL PRIVATE
@@ -11,10 +19,12 @@ module.exports = {
     // HOST_API_KEY: 'http://192.168.0.154:7070',
     // HOST_API_KEY: 'http://localhost:7171',
     // HOST_SOCKET: 'ws://localhost:80',
+    // DATA_ANALITICS: 'http://localhost:2143',
 
     // HOST REMOTO
     HOST_API_KEY: 'https://crm.hipertronics.us',
-    HOST_SOCKET: 'wss://ss.hipertronics.us',
+    // HOST_SOCKET: 'wss://ss.hipertronics.us',
+    DATA_ANALITICS: 'http://bi.hipertronics.us:2143',
 
     // MAPBOX
     MAPBOX_API: '',
