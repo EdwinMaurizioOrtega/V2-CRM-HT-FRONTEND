@@ -8,6 +8,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { es } from 'date-fns/locale';
 import * as XLSX from "xlsx";
 import axios from '../../../utils/axios';
+import axiosRaw from 'axios';
 import Iconify from '../../../components/iconify';
 import { useAuthContext } from '../../../auth/useAuthContext';
 
@@ -125,7 +126,7 @@ export default function UtilidadVendedorView() {
 
             console.log('Fechas formateadas:', formattedStartDate, formattedEndDate);
 
-            const response = await axios.get(`/api/bi/utilidad_vendedor`, {
+            const response = await axiosRaw.get(`/api/bi/utilidad_vendedor`, {
                 params: {
                     fecha_inicio: formattedStartDate,
                     fecha_fin: formattedEndDate,
