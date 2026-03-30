@@ -4,6 +4,7 @@ import {
 } from '@mui/material';
 import * as XLSX from "xlsx";
 import axios from '../../../utils/axios';
+import axiosRaw from 'axios';
 import Iconify from '../../../components/iconify';
 import { useAuthContext } from '../../../auth/useAuthContext';
 
@@ -129,7 +130,7 @@ export default function ReporteGeneralOrdenesView() {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('/hanadb/api/power_bi/reporte_general_ordenes', {
+            const response = await axiosRaw.get('/api/bi/reporte_general_ordenes', {
                 params: {
                     empresa: user.EMPRESA
                 }
