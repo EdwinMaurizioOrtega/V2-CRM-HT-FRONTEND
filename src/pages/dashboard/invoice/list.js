@@ -88,6 +88,7 @@ const TABLE_HEAD = [
     { id: 'NUMEROFACTURALIDENAR', label: 'Nro. Factura', align: 'left' },
     { id: 'SUBTOTAL', label: 'SUBTOTAL', align: 'left' },
     { id: 'OBSERVACION_ANULACION', label: 'Obs. Anulación', align: 'center', width: 240 },
+    { id: 'USUARIO_FACTURADOR', label: 'Usuario Facturador', align: 'left' },
 ];
 // ----------------------------------------------------------------------
 

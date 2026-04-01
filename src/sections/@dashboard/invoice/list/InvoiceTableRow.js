@@ -89,6 +89,7 @@ export default function InvoiceTableRow({
         OBSERVACION_ANULACION,
         USUARIOAPROBO,
         SUBTOTAL,
+            USUARIO_FACTURADOR
     } = row;
 
     const router = useRouter();
@@ -814,7 +815,9 @@ export default function InvoiceTableRow({
                         </Tooltip>
                     )}
                 </TableCell>
-
+                <TableCell align="center">
+                    {USUARIO_FACTURADOR}
+                </TableCell>
 
                 {/* <TableCell align="left"> */
                 }
