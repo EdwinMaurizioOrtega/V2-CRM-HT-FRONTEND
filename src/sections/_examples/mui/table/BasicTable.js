@@ -135,7 +135,7 @@ export default function BasicTable({ code, validateStock }) {
 
                                         user.COMPANY === 'TOMEBAMBA' ? (
                                             stockProduct
-                                                .filter((row) => row.BODEGA === '019')
+                                                .filter((row) => row.BODEGA === '030')
                                                 .map((filteredRow) => (
                                                     <TableRow key={filteredRow.BODEGA}>
                                                         <TableCell>{getTextFromCodigo(filteredRow.BODEGA)}</TableCell>
@@ -240,7 +240,7 @@ export default function BasicTable({ code, validateStock }) {
 
                                         user.COMPANY === 'TOMEBAMBA' ? (
                                             stockProduct
-                                                .filter((row) => row.BODEGA === 'DISTLF')
+                                                .filter((row) => row.BODEGA === '030')
                                                 .map((filteredRow) => (
                                                     <TableRow key={filteredRow.BODEGA}>
                                                         <TableCell>{getTextFromCodigoMovilCelistic(filteredRow.BODEGA)}</TableCell>
