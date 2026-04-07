@@ -158,6 +158,10 @@ export default function InvoiceDetails({ invoice }) {
 
     const [errorMessage, setErrorMessage] = useState('');
 
+    const [pedidosCliente, setPedidosCliente] = useState([]);
+    const [loadingPedidosCliente, setLoadingPedidosCliente] = useState(false);
+    const [openPedidosCliente, setOpenPedidosCliente] = useState(false);
+
 
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
@@ -387,6 +391,25 @@ export default function InvoiceDetails({ invoice }) {
 
     }, [OBSERVACIONES]); // Este efecto se ejecutará cada vez que invoice.OBSERVACIONES cambie
 
+    // Fetch pedidos del cliente por CLIENTEID - solo para rol crédito
+    useEffect(() => {
+        if ((user?.ROLE === '9') && CLIENTEID) {
+            const fetchPedidosCliente = async () => {
+                setLoadingPedidosCliente(true);
+                try {
+                    const response = await axios.get(`/hanadb/api/orders/pedidos_por_cliente?cliente_id=${CLIENTEID}&empresa=${user.EMPRESA}`);
+                    if (response.status === 200 && response.data?.data) {
+                        setPedidosCliente(response.data.data.filter(p => p.ID !== ID));
+                    }
+                } catch (error) {
+                    console.error('Error al obtener pedidos del cliente:', error);
+                } finally {
+                    setLoadingPedidosCliente(false);
+                }
+            };
+            fetchPedidosCliente();
+        }
+    }, [CLIENTEID, user?.ROLE, user?.EMPRESA, ID]);
 
     const handleChange = (event) => {
         setValueNew(event.target.value);
@@ -2084,6 +2107,187 @@ export default function InvoiceDetails({ invoice }) {
                     <Grid item xs={12} sm={6} sx={{ mb: 5 }}>
 
                     </Grid>
+
+                    {/* PEDIDOS DEL CLIENTE - Solo visible para rol Crédito */}
+                    {(user?.ROLE === '9') && CLIENTEID && (
+                        <Grid item xs={12} sx={{ mb: 3 }}>
+                            <Paper
+                                variant="outlined"
+                                sx={{
+                                    borderRadius: 2,
+                                    overflow: 'hidden',
+                                    border: '1px solid',
+                                    borderColor: 'divider',
+                                }}
+                            >
+                                <Box
+                                    onClick={() => setOpenPedidosCliente(!openPedidosCliente)}
+                                    sx={{
+                                        px: 2.5,
+                                        py: 1.5,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        cursor: 'pointer',
+                                        bgcolor: 'background.neutral',
+                                        '&:hover': { bgcolor: 'action.hover' },
+                                    }}
+                                >
+                                    <Stack direction="row" alignItems="center" spacing={1.5}>
+                                        <Iconify icon="solar:document-text-bold-duotone" width={22} sx={{ color: 'primary.main' }} />
+                                        <Typography variant="subtitle1">
+                                            Historial de Pedidos del Cliente
+                                        </Typography>
+                                        <Chip
+                                            label={`CI/RUC: ${CLIENTEID}`}
+                                            size="small"
+                                            variant="outlined"
+                                            color="info"
+                                        />
+                                        {pedidosCliente.length > 0 && (
+                                            <Chip
+                                                label={`${pedidosCliente.length} pedido(s)`}
+                                                size="small"
+                                                color="primary"
+                                            />
+                                        )}
+                                    </Stack>
+                                    <Iconify
+                                        icon={openPedidosCliente ? 'eva:chevron-up-fill' : 'eva:chevron-down-fill'}
+                                        width={20}
+                                    />
+                                </Box>
+
+                                {openPedidosCliente && (
+                                    <Box sx={{ p: 0 }}>
+                                        {loadingPedidosCliente ? (
+                                            <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>
+                                                <CircularProgress size={28} />
+                                            </Box>
+                                        ) : pedidosCliente.length === 0 ? (
+                                            <Box sx={{ py: 2, textAlign: 'center' }}>
+                                                <Typography variant="body2" color="text.secondary">
+                                                    No se encontraron otros pedidos para este cliente.
+                                                </Typography>
+                                            </Box>
+                                        ) : (
+                                            <TableContainer>
+                                                <Table size="small">
+                                                    <TableHead>
+                                                        <TableRow sx={{ '& th': { backgroundColor: 'background.neutral' } }}>
+                                                            <TableCell>Pedido</TableCell>
+                                                            <TableCell>Estado</TableCell>
+                                                            <TableCell>Fecha</TableCell>
+                                                            <TableCell align="right">Subtotal</TableCell>
+                                                            <TableCell>F. Pago</TableCell>
+                                                            <TableCell>Bodega</TableCell>
+                                                            <TableCell>Vendedor</TableCell>
+                                                            {/* <TableCell>OV SAP</TableCell> */}
+                                                            <TableCell>Factura</TableCell>
+                                                            <TableCell align="center">Acciones</TableCell>
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        {pedidosCliente.map((pedido) => (
+                                                            <TableRow
+                                                                key={pedido.ID}
+                                                                hover
+                                                                sx={{ cursor: 'pointer' }}
+                                                                onClick={() => router.push(`/dashboard/invoice/${pedido.ID}?empresa=${user.EMPRESA}`)}
+                                                            >
+                                                                <TableCell>
+                                                                    <Typography variant="body2" fontWeight="bold">
+                                                                        INV-{pedido.ID}
+                                                                    </Typography>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Label
+                                                                        variant="soft"
+                                                                        color={
+                                                                            (pedido.ESTADO === 1 && 'success') ||
+                                                                            (pedido.ESTADO === 6 && 'warning') ||
+                                                                            (pedido.ESTADO === 7 && 'info') ||
+                                                                            (pedido.ESTADO === 8 && 'info') ||
+                                                                            (pedido.ESTADO === 0 && 'success') ||
+                                                                            (pedido.ESTADO === 5 && 'error') ||
+                                                                            (pedido.ESTADO === 3 && 'success') ||
+                                                                            (pedido.ESTADO === 22 && 'info') ||
+                                                                            (pedido.ESTADO === 23 && 'info') ||
+                                                                            'default'
+                                                                        }
+                                                                    >
+                                                                        {pedido.ESTADO === 6 ? 'Pendiente Aprobación' :
+                                                                            pedido.ESTADO === 7 ? 'Aprobado' :
+                                                                                pedido.ESTADO === 1 ? 'Facturado' :
+                                                                                    pedido.ESTADO === 0 ? 'Despachado' :
+                                                                                        pedido.ESTADO === 8 ? 'Carga Series' :
+                                                                                            pedido.ESTADO === 5 ? 'Anulado' :
+                                                                                                pedido.ESTADO === 3 ? 'Entregado' :
+                                                                                                    pedido.ESTADO === 22 ? 'Pend. Evidencia' :
+                                                                                                        pedido.ESTADO === 23 ? 'Evidencia Subida' :
+                                                                                                            `E-${pedido.ESTADO}`}
+                                                                    </Label>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Typography variant="caption">
+                                                                        {pedido.FECHACREACION}
+                                                                    </Typography>
+                                                                </TableCell>
+                                                                <TableCell align="right">
+                                                                    <Typography variant="body2">
+                                                                        {pedido.SUBTOTAL ? fCurrency(pedido.SUBTOTAL) : '-'}
+                                                                    </Typography>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Typography variant="caption">
+                                                                        {nameFormaPago(pedido.FORMADEPAGO)}
+                                                                    </Typography>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Typography variant="caption">
+                                                                        {pedido.BODEGA || '-'}
+                                                                    </Typography>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Typography variant="caption">
+                                                                        {pedido.VENDEDOR || '-'}
+                                                                    </Typography>
+                                                                </TableCell>
+                                                                {/* <TableCell>
+                                                                    <Typography variant="caption">
+                                                                        {pedido.DOCNUM || '-'}
+                                                                    </Typography>
+                                                                </TableCell> */}
+                                                                <TableCell>
+                                                                    <Typography variant="caption">
+                                                                        {pedido.NUMEROFACTURALIDENAR || '-'}
+                                                                    </Typography>
+                                                                </TableCell>
+                                                                <TableCell align="center">
+                                                                    <Tooltip title="Ver detalle en nueva pestaña">
+                                                                        <IconButton
+                                                                            size="small"
+                                                                            color="primary"
+                                                                            onClick={(e) => {
+                                                                                e.stopPropagation();
+                                                                                window.open(`/dashboard/invoice/${pedido.ID}?empresa=${user.EMPRESA}`, '_blank');
+                                                                            }}
+                                                                        >
+                                                                            <Iconify icon="eva:external-link-fill" width={18} />
+                                                                        </IconButton>
+                                                                    </Tooltip>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        ))}
+                                                    </TableBody>
+                                                </Table>
+                                            </TableContainer>
+                                        )}
+                                    </Box>
+                                )}
+                            </Paper>
+                        </Grid>
+                    )}
 
 
                     <Typography
