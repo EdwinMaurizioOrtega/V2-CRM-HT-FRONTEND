@@ -43,6 +43,36 @@ import {useRouter} from "next/router";
 
 // ----------------------------------------------------------------------
 
+function CommentCell({ row, onNotValid }) {
+    const [comment, setComment] = useState('');
+
+    return (
+        <TextField
+            name="inconsistenciaEvidencia"
+            label="Comentario"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            onKeyDown={(e) => e.stopPropagation()}
+            InputProps={{
+                endAdornment: (
+                    <InputAdornment position="end">
+                        <Stack direction="row" spacing={1} alignItems="center">
+                            <Button variant="outlined" size="small"
+                                    onClick={() => onNotValid(row, comment)}
+                            >
+                                No Válido
+                            </Button>
+                        </Stack>
+                    </InputAdornment>
+                ),
+            }}
+            sx={{width: 525}}
+        />
+    );
+}
+
+// ----------------------------------------------------------------------
+
 ValidarEvidenciaPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
@@ -113,16 +143,13 @@ export default function ValidarEvidenciaPage() {
 
     };
 
-    const handleNotValidFileChange = async (row) => {
-
-        const { id } = row;
-        const commentInconsistenciaEvidencia = textFieldValues[id] || '';
+    const handleNotValidFileChange = async (row, comment) => {
 
         // Actualizar una orden.
         const response = await axios.put('/hanadb/api/orders/save_status_valid_or_not_evidence', {
             ID_ORDER: Number(row.ID),
             STATUS: Number(22),
-            COMMENT: commentInconsistenciaEvidencia,
+            COMMENT: comment || '',
             empresa: user.EMPRESA,
         });
 
@@ -136,16 +163,6 @@ export default function ValidarEvidenciaPage() {
 
 
     };
-
-    // Manejador del cambio del TextField
-    const handleTextFieldChange = (id) => (event) => {
-        setTextFieldValues((prevValues) => ({
-            ...prevValues,
-            [id]: event.target.value
-        }));
-    };
-
-    const [textFieldValues, setTextFieldValues] = useState({});
 
 
     const baseColumns = [
@@ -289,35 +306,9 @@ export default function ValidarEvidenciaPage() {
             headerName: 'NO_VÁLIDO',
             flex: 1,
             minWidth: 360,
-            renderCell: (params) => {
-
-                const { id } = params.row; // Obtén el ID de la fila
-
-                return (
-                    <TextField
-                        name="inconsistenciaEvidencia"
-                        label="Comentario"
-                        value={textFieldValues[id] || ''} // Valor del TextField desde el estado
-                        onChange={handleTextFieldChange(id)} // Actualiza el estado cuando cambia el valor
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <Stack direction="row" spacing={1} alignItems="center">
-                                        <Button variant="outlined" size="small"
-                                                onClick={() => handleNotValidFileChange(params.row)}
-                                        >
-                                            No Válido
-                                        </Button>
-                                    </Stack>
-                                </InputAdornment>
-                            ),
-                        }}
-                        sx={{width: 525}} // Establece el ancho del TextField
-                    />
-
-
-                );
-            },
+            renderCell: (params) => (
+                <CommentCell row={params.row} onNotValid={handleNotValidFileChange} />
+            ),
         },
 
     ]
