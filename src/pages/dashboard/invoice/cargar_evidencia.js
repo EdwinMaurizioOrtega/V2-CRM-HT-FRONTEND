@@ -257,7 +257,7 @@ export default function EvidenciaPage() {
                 const renderEstado = () => {
                     switch (value) {
                         case 22:
-                            return <Typography color="success.main">Pend. Cargar Evidencia</Typography>;
+                            return <Typography color="success.main">Pendiente Cargar Evidencia</Typography>;
                         default:
                             return <Typography color="textSecondary">Desconocido</Typography>;
                     }

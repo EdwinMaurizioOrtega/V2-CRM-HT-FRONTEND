@@ -220,7 +220,7 @@ export default function ValidarEvidenciaPage() {
                 const renderEstado = () => {
                     switch (value) {
                         case 23:
-                            return <Typography color="success.main">Pend. Validar Crédito</Typography>;
+                            return <Typography color="success.main">Pendiente Validar Cartera</Typography>;
                         default:
                             return <Typography color="textSecondary">Desconocido</Typography>;
                     }

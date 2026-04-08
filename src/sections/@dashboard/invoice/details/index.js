@@ -2135,7 +2135,7 @@ export default function InvoiceDetails({ invoice }) {
                                 >
                                     <Stack direction="row" alignItems="center" spacing={1.5} flexWrap="wrap">
                                         <Iconify icon="solar:document-text-bold-duotone" width={22} sx={{ color: 'primary.main' }} />
-                                        <Tooltip title="0: Por Facturar | 3: Por Empacar | 5: Retenido | 6: Por Aprobar Crédito | 7: Pend. Cargar Series" arrow>
+                                        <Tooltip title="0: Pendiente Facturar | 3: Pendiente Despachar | 5: Retenidos | 6: Pendiente Aprobar Crédito | 7: Pendiente Cargar Series" arrow>
                                             <Typography variant="subtitle1" sx={{ cursor: 'help' }}>
                                                 Pedidos del Cliente
                                             </Typography>
@@ -2247,15 +2247,15 @@ export default function InvoiceDetails({ invoice }) {
                                                                             'default'
                                                                         }
                                                                     >
-                                                                        {pedido.ESTADO === 6 ? 'Pendiente Aprobación' :
-                                                                            pedido.ESTADO === 7 ? 'Aprobado' :
-                                                                                pedido.ESTADO === 1 ? 'Facturado' :
-                                                                                    pedido.ESTADO === 0 ? 'Despachado' :
-                                                                                        pedido.ESTADO === 8 ? 'Carga Series' :
-                                                                                            pedido.ESTADO === 5 ? 'Anulado' :
-                                                                                                pedido.ESTADO === 3 ? 'Entregado' :
-                                                                                                    pedido.ESTADO === 22 ? 'Pend. Evidencia' :
-                                                                                                        pedido.ESTADO === 23 ? 'Evidencia Subida' :
+                                                                        {pedido.ESTADO === 6 ? 'Pendiente Aprobar Crédito' :
+                                                                            pedido.ESTADO === 7 ? 'Pendiente Cargar Series' :
+                                                                                pedido.ESTADO === 1 ? 'Entregado(Courier, Vendedor o Cliente)' :
+                                                                                    pedido.ESTADO === 0 ? 'Pendiente Facturar' :
+                                                                                        pedido.ESTADO === 8 ? 'Anulado' :
+                                                                                            pedido.ESTADO === 5 ? 'Retenidos' :
+                                                                                                pedido.ESTADO === 3 ? 'Pendiente Despachar' :
+                                                                                                    pedido.ESTADO === 22 ? 'Pendiente Cargar Evidencia' :
+                                                                                                        pedido.ESTADO === 23 ? 'Pendiente Validar Cartera' :
                                                                                                             `E-${pedido.ESTADO}`}
                                                                     </Label>
                                                                 </TableCell>

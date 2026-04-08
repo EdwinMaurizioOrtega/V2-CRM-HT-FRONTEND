@@ -670,16 +670,16 @@ export default function InvoiceTableRow({
                         }
                     >
                         {
-                            (ESTADO === 15 ? 'LD: Por Aprobar Vendedor' : '') ||
-                            (ESTADO === 8 ? 'LD: Anulado' : '') ||
-                            (ESTADO === 6 ? 'LD: Por Aprobar Crédito' : '') ||
-                            (ESTADO === 7 ? 'Pend. Cargar Series' : '') ||
-                            (ESTADO === 0 ? 'LD: Por Facturar' : '') ||
-                            (ESTADO === 3 ? 'LD: Por Empacar' : '') ||
-                            (ESTADO === 5 ? 'LD: Retenido' : '') ||
-                            (ESTADO === 22 ? 'LD: F/Pend. Cargar Evidencia' : '') ||
-                            (ESTADO === 23 ? 'LD: F/Pend. Validar Cartera' : '') ||
-                            (ESTADO === 1 ? 'LD: Facturado' : '') ||
+                            (ESTADO === 15 ? 'Pendiente Aprobar Vendedor' : '') ||
+                            (ESTADO === 8 ? 'Anulado' : '') ||
+                            (ESTADO === 6 ? 'Pendiente Aprobar Crédito' : '') ||
+                            (ESTADO === 7 ? 'Pendiente Cargar Series' : '') ||
+                            (ESTADO === 0 ? 'Pendiente Facturar' : '') ||
+                            (ESTADO === 3 ? 'Pendiente Despachar' : '') ||
+                            (ESTADO === 5 ? 'Retenidos' : '') ||
+                            (ESTADO === 22 ? 'Pendiente Cargar Evidencia' : '') ||
+                            (ESTADO === 23 ? 'Pendiente Validar Cartera' : '') ||
+                            (ESTADO === 1 ? 'Entregado(Courier, Vendedor o Cliente)' : '') ||
                             (ESTADO === 10 ? 'TM: Por Aprobar Ejecutivo Soporte' : '') ||
                             (ESTADO === 13 ? 'TM: Por Aprobar Carlos Méndez' : '') ||
                             'default'

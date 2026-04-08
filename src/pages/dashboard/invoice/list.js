@@ -1161,7 +1161,7 @@ export default function InvoiceListPage() {
                             />
 
                             <InvoiceAnalytic
-                                title="Por Aprobar Vendedor"
+                                title="Pendiente Aprobar Vendedor"
                                 total={getLengthByStatus(15)}
                                 percent={getPercentByStatus(15)}
                                 price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(15)}
@@ -1170,7 +1170,7 @@ export default function InvoiceListPage() {
                             />
 
                             <InvoiceAnalytic
-                                title="Por Aprobar Crédito"
+                                title="Pendiente Aprobar Crédito"
                                 total={getLengthByStatus(6)}
                                 percent={getPercentByStatus(6)}
                                 price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(6)}
@@ -1179,7 +1179,7 @@ export default function InvoiceListPage() {
                             />
 
                             <InvoiceAnalytic
-                                title="Por Cargar Series"
+                                title="Pendiente Cargar Series"
                                 total={getLengthByStatus(7)}
                                 percent={getPercentByStatus(7)}
                                 price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(7)}
@@ -1188,7 +1188,7 @@ export default function InvoiceListPage() {
                             />
 
                             <InvoiceAnalytic
-                                title="Por Facturar"
+                                title="Pendiente Facturar"
                                 total={getLengthByStatus(0)}
                                 percent={getPercentByStatus(0)}
                                 price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(0)}
@@ -1206,7 +1206,7 @@ export default function InvoiceListPage() {
                             />
 
                             <InvoiceAnalytic
-                                title="Por Empacar"
+                                title="Pendiente Despachar"
                                 total={getLengthByStatus(3)}
                                 percent={getPercentByStatus(3)}
                                 price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(3)}
@@ -1215,7 +1215,7 @@ export default function InvoiceListPage() {
                             />
 
                             {user.COMPANY === 'HT' && user.ROLE !== '31' && <InvoiceAnalytic
-                                title="F/Pend.Cargar Evidencia."
+                                title="Pendiente Cargar Evidencia"
                                 total={getLengthByStatus(22)}
                                 percent={getPercentByStatus(22)}
                                 price={getTotalPriceByStatus(22)}
@@ -1225,7 +1225,7 @@ export default function InvoiceListPage() {
                             }
 
                             <InvoiceAnalytic
-                                title="Fact/Entreg."
+                                title="Entregado(Courier, Vendedor o Cliente)"
                                 total={getLengthByStatus(1)}
                                 percent={getPercentByStatus(1)}
                                 price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(1)}
@@ -1604,7 +1604,7 @@ const getTabs = (user, tableData, getLengthByStatus,
                 { value: 15, label: 'Pendiente Aprobar Vendedor', color: 'success', count: getLengthByStatus(15) },
                 { value: 6, label: 'Pendiente Aprobar Crédito', color: 'success', count: getLengthByStatus(6) },
                 { value: 0, label: 'Pendiente Facturar', color: 'warning', count: getLengthByStatus(0) },
-                { value: 1, label: 'Fact./Entregado', color: 'error', count: getLengthByStatus(1) },
+                { value: 1, label: 'Entregado(Facturado)', color: 'error', count: getLengthByStatus(1) },
                 { value: 8, label: 'Anulado', color: 'default', count: getLengthByStatus(8) },
             ];
         } else {
@@ -1616,10 +1616,10 @@ const getTabs = (user, tableData, getLengthByStatus,
                 { value: 7, label: 'Pendiente Cargar Series', color: 'primary', count: getLengthByStatus(7) },
                 { value: 0, label: 'Pendiente Facturar', color: 'warning', count: getLengthByStatus(0) },
                 { value: 5, label: 'Retenidos', color: 'error', count: getLengthByStatus(5) },
-                { value: 3, label: 'Por Empacar', color: 'secondary', count: getLengthByStatus(3) },
-                { value: 22, label: 'F/Pend. Cargar Evidencia', color: 'info', count: getLengthByStatus(22) },
-                { value: 23, label: 'F/Pend. Validar Cartera', color: 'primary', count: getLengthByStatus(23) },
-                { value: 1, label: 'Fact./Entregado', color: 'success', count: getLengthByStatus(1) },
+                { value: 3, label: 'Pendiente Despachar', color: 'secondary', count: getLengthByStatus(3) },
+                { value: 22, label: 'Pendiente Cargar Evidencia', color: 'info', count: getLengthByStatus(22) },
+                { value: 23, label: 'Pendiente Validar Cartera', color: 'primary', count: getLengthByStatus(23) },
+                { value: 1, label: 'Entregado(Courier, Vendedor o Cliente)', color: 'success', count: getLengthByStatus(1) },
                 { value: 8, label: 'Anulado', color: 'default', count: getLengthByStatus(8) },
 
                 //{value: 'con', label: 'CON GUIA', color: 'default', count: getLengthByNumeroConGuia('000000000')},
@@ -1631,9 +1631,9 @@ const getTabs = (user, tableData, getLengthByStatus,
     } else {
         return [
             { value: 'all', label: 'Total', color: 'info', count: tableData.length },
-            { value: 6, label: 'Pendiente de aprobar', color: 'success', count: getLengthByStatus(6) },
-            { value: 0, label: 'Pendiente de Facturar', color: 'warning', count: getLengthByStatus(0) },
-            { value: 1, label: 'Facturado', color: 'error', count: getLengthByStatus(1) },
+            { value: 6, label: 'Pendiente Aprobar Crédito', color: 'success', count: getLengthByStatus(6) },
+            { value: 0, label: 'Pendiente Facturar', color: 'warning', count: getLengthByStatus(0) },
+            { value: 1, label: 'Entregado(Facturado)', color: 'error', count: getLengthByStatus(1) },
             { value: 8, label: 'Anulado', color: 'default', count: getLengthByStatus(8) },
         ];
     }
