@@ -19,6 +19,7 @@ import {
   Paper,
   Divider,
   MenuItem,
+  Checkbox,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -134,6 +135,7 @@ export default function ManifestPage() {
   const [selectedWarehouse, setSelectedWarehouse] = useState('all');
   const [manifestData, setManifestData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
   
   const printRef = useRef(null);
 
@@ -198,6 +200,7 @@ export default function ManifestPage() {
       if (response.status === 200 && response.data.status === 'success') {
         if (response.data.data && response.data.data.length > 0) {
           setManifestData(response.data.data);
+          setSelectedRows([]);
         } else {
           setManifestData([]);
           alert('No se encontraron datos para el rango de fechas seleccionado');
@@ -219,8 +222,27 @@ export default function ManifestPage() {
     documentTitle: `Manifiesto_${startDate?.toLocaleDateString()}_${endDate?.toLocaleDateString()}`,
   });
 
+  // Selección de filas
+  const handleSelectAll = (event) => {
+    if (event.target.checked) {
+      setSelectedRows(manifestData.map((_, index) => index));
+    } else {
+      setSelectedRows([]);
+    }
+  };
+
+  const handleSelectRow = (index) => {
+    setSelectedRows((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+    );
+  };
+
+  const selectedData = selectedRows.length > 0
+    ? selectedRows.sort((a, b) => a - b).map((i) => manifestData[i])
+    : manifestData;
+
   // Calcular totales
-  const totalGeneral = manifestData.reduce((sum, item) => sum + (item.SUBTOTAL || 0), 0);
+  const totalGeneral = selectedData.reduce((sum, item) => sum + (item.SUBTOTAL || 0), 0);
 
   return (
     <>
@@ -294,7 +316,7 @@ export default function ManifestPage() {
                     startIcon={<Iconify icon="eva:printer-fill" />}
                     sx={{ minWidth: 150 }}
                   >
-                    Imprimir
+                    Imprimir {selectedRows.length > 0 ? `(${selectedRows.length})` : '(Todo)'}
                   </Button>
                 )}
               </Stack>
@@ -368,6 +390,13 @@ export default function ManifestPage() {
                   <Table size="small" sx={{ '& .MuiTableCell-root': { py: 0.5 } }}>
                     <TableHead>
                       <TableRow>
+                        <TableCell sx={{ '@media print': { display: 'none' } }} padding="checkbox">
+                          <Checkbox
+                            indeterminate={selectedRows.length > 0 && selectedRows.length < manifestData.length}
+                            checked={manifestData.length > 0 && selectedRows.length === manifestData.length}
+                            onChange={handleSelectAll}
+                          />
+                        </TableCell>
                         <TableCell><strong>#</strong></TableCell>
                         <TableCell><strong>Orden</strong></TableCell>
                         <TableCell><strong>Guía</strong></TableCell>
@@ -379,8 +408,22 @@ export default function ManifestPage() {
                     </TableHead>
                     <TableBody>
                       {manifestData.map((row, index) => (
-                        <TableRow key={`${row.ID}-${index}`}>
-                          <TableCell>{index + 1}</TableCell>
+                        <TableRow
+                          key={`${row.ID}-${index}`}
+                          selected={selectedRows.includes(index)}
+                          sx={{
+                            ...(selectedRows.length > 0 && !selectedRows.includes(index) && {
+                              '@media print': { display: 'none' },
+                            }),
+                          }}
+                        >
+                          <TableCell sx={{ '@media print': { display: 'none' } }} padding="checkbox">
+                            <Checkbox
+                              checked={selectedRows.includes(index)}
+                              onChange={() => handleSelectRow(index)}
+                            />
+                          </TableCell>
+                          <TableCell>{selectedRows.length > 0 ? selectedRows.sort((a, b) => a - b).indexOf(index) + 1 : index + 1}</TableCell>
                           <TableCell>{row.ID}</TableCell>
                           <TableCell>{row.NUMEROGUIA || '-'}</TableCell>
                           <TableCell>{row.FECHA}</TableCell>
@@ -399,8 +442,9 @@ export default function ManifestPage() {
                         </TableRow>
                       ))}
                       <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+                        <TableCell sx={{ '@media print': { display: 'none' } }} />
                         <TableCell colSpan={6} align="right">
-                          <strong>TOTAL GENERAL:</strong>
+                          <strong>TOTAL {selectedRows.length > 0 ? `(${selectedRows.length} seleccionados)` : 'GENERAL'}:</strong>
                         </TableCell>
                         <TableCell align="right">
                           <strong>${totalGeneral.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>

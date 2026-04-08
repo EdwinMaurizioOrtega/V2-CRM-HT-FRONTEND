@@ -391,15 +391,15 @@ export default function InvoiceDetails({ invoice }) {
 
     }, [OBSERVACIONES]); // Este efecto se ejecutará cada vez que invoice.OBSERVACIONES cambie
 
-    // Fetch pedidos del cliente por CLIENTEID - solo para rol crédito
+    // Fetch pedidos del cliente por CLIENTEID - para rol crédito y bodega
     useEffect(() => {
-        if ((user?.ROLE === '9') && CLIENTEID) {
+        if ((user?.ROLE === '9' || user?.ROLE === '8') && CLIENTEID) {
             const fetchPedidosCliente = async () => {
                 setLoadingPedidosCliente(true);
                 try {
                     const response = await axios.get(`/hanadb/api/orders/pedidos_por_cliente?cliente_id=${CLIENTEID}&empresa=${user.EMPRESA}`);
                     if (response.status === 200 && response.data?.data) {
-                        setPedidosCliente(response.data.data.filter(p => p.ID !== ID));
+                        setPedidosCliente(response.data.data);
                     }
                 } catch (error) {
                     console.error('Error al obtener pedidos del cliente:', error);
@@ -2109,7 +2109,7 @@ export default function InvoiceDetails({ invoice }) {
                     </Grid>
 
                     {/* PEDIDOS DEL CLIENTE - Solo visible para rol Crédito */}
-                    {(user?.ROLE === '9') && CLIENTEID && (
+                    {(user?.ROLE === '9' || user?.ROLE === '8') && CLIENTEID && (
                         <Grid item xs={12} sx={{ mb: 3 }}>
                             <Paper
                                 variant="outlined"
@@ -2133,11 +2133,13 @@ export default function InvoiceDetails({ invoice }) {
                                         '&:hover': { bgcolor: 'action.hover' },
                                     }}
                                 >
-                                    <Stack direction="row" alignItems="center" spacing={1.5}>
+                                    <Stack direction="row" alignItems="center" spacing={1.5} flexWrap="wrap">
                                         <Iconify icon="solar:document-text-bold-duotone" width={22} sx={{ color: 'primary.main' }} />
-                                        <Typography variant="subtitle1">
-                                            Pedidos del Cliente (Última Semana)
-                                        </Typography>
+                                        <Tooltip title="0: Por Facturar | 3: Por Empacar | 5: Retenido | 6: Por Aprobar Crédito | 7: Pend. Cargar Series" arrow>
+                                            <Typography variant="subtitle1" sx={{ cursor: 'help' }}>
+                                                Pedidos del Cliente
+                                            </Typography>
+                                        </Tooltip>
                                         <Chip
                                             label={`CI/RUC: ${CLIENTEID}`}
                                             size="small"
@@ -2185,6 +2187,7 @@ export default function InvoiceDetails({ invoice }) {
                                                             <TableCell>Vendedor</TableCell>
                                                             {/* <TableCell>OV SAP</TableCell> */}
                                                             <TableCell>Factura</TableCell>
+                                                            <TableCell>Guía</TableCell>
                                                             <TableCell align="center">Acciones</TableCell>
                                                         </TableRow>
                                                     </TableHead>
@@ -2193,7 +2196,13 @@ export default function InvoiceDetails({ invoice }) {
                                                             <TableRow
                                                                 key={pedido.ID}
                                                                 hover
-                                                                sx={{ cursor: 'pointer' }}
+                                                                sx={{
+                                                                    cursor: 'pointer',
+                                                                    ...(pedido.ID === ID && {
+                                                                        backgroundColor: 'rgba(54, 179, 126, 0.16)',
+                                                                        borderLeft: '4px solid #36B37E',
+                                                                    }),
+                                                                }}
                                                                 onClick={() => {
                                                                     const emp = pedido.EMPRESA === 'LIDENAR' ? '0992537442001' : '1792161037001';
                                                                     router.push(`/dashboard/invoice/${pedido.ID}?empresa=${emp}`);
@@ -2208,9 +2217,19 @@ export default function InvoiceDetails({ invoice }) {
                                                                     />
                                                                 </TableCell>
                                                                 <TableCell>
-                                                                    <Typography variant="body2" fontWeight="bold">
-                                                                        INV-{pedido.ID}
-                                                                    </Typography>
+                                                                    <Stack direction="row" alignItems="center" spacing={1}>
+                                                                        <Typography variant="body2" fontWeight="bold">
+                                                                            INV-{pedido.ID}
+                                                                        </Typography>
+                                                                        {pedido.ID === ID && (
+                                                                            <Chip
+                                                                                label="Actual"
+                                                                                size="small"
+                                                                                color="success"
+                                                                                sx={{ height: 20, fontSize: '0.7rem' }}
+                                                                            />
+                                                                        )}
+                                                                    </Stack>
                                                                 </TableCell>
                                                                 <TableCell>
                                                                     <Label
@@ -2273,6 +2292,11 @@ export default function InvoiceDetails({ invoice }) {
                                                                 <TableCell>
                                                                     <Typography variant="caption">
                                                                         {pedido.NUMEROFACTURALIDENAR || '-'}
+                                                                    </Typography>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Typography variant="caption">
+                                                                        {pedido.NUMEROGUIA || '-'}
                                                                     </Typography>
                                                                 </TableCell>
                                                                 <TableCell align="center">
