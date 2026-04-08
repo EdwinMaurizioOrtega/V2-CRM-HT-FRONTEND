@@ -2136,7 +2136,7 @@ export default function InvoiceDetails({ invoice }) {
                                     <Stack direction="row" alignItems="center" spacing={1.5}>
                                         <Iconify icon="solar:document-text-bold-duotone" width={22} sx={{ color: 'primary.main' }} />
                                         <Typography variant="subtitle1">
-                                            Historial de Pedidos del Cliente
+                                            Pedidos del Cliente (Última Semana)
                                         </Typography>
                                         <Chip
                                             label={`CI/RUC: ${CLIENTEID}`}
@@ -2175,6 +2175,7 @@ export default function InvoiceDetails({ invoice }) {
                                                 <Table size="small">
                                                     <TableHead>
                                                         <TableRow sx={{ '& th': { backgroundColor: 'background.neutral' } }}>
+                                                            <TableCell>Empresa</TableCell>
                                                             <TableCell>Pedido</TableCell>
                                                             <TableCell>Estado</TableCell>
                                                             <TableCell>Fecha</TableCell>
@@ -2193,8 +2194,19 @@ export default function InvoiceDetails({ invoice }) {
                                                                 key={pedido.ID}
                                                                 hover
                                                                 sx={{ cursor: 'pointer' }}
-                                                                onClick={() => router.push(`/dashboard/invoice/${pedido.ID}?empresa=${user.EMPRESA}`)}
+                                                                onClick={() => {
+                                                                    const emp = pedido.EMPRESA === 'LIDENAR' ? '0992537442001' : '1792161037001';
+                                                                    router.push(`/dashboard/invoice/${pedido.ID}?empresa=${emp}`);
+                                                                }}
                                                             >
+                                                                <TableCell>
+                                                                    <Chip
+                                                                        label={pedido.EMPRESA || '-'}
+                                                                        size="small"
+                                                                        color={pedido.EMPRESA === 'LIDENAR' ? 'primary' : 'secondary'}
+                                                                        variant="outlined"
+                                                                    />
+                                                                </TableCell>
                                                                 <TableCell>
                                                                     <Typography variant="body2" fontWeight="bold">
                                                                         INV-{pedido.ID}
@@ -2270,7 +2282,8 @@ export default function InvoiceDetails({ invoice }) {
                                                                             color="primary"
                                                                             onClick={(e) => {
                                                                                 e.stopPropagation();
-                                                                                window.open(`/dashboard/invoice/${pedido.ID}?empresa=${user.EMPRESA}`, '_blank');
+                                                                                const emp = pedido.EMPRESA === 'LIDENAR' ? '0992537442001' : '1792161037001';
+                                                                                window.open(`/dashboard/invoice/${pedido.ID}?empresa=${emp}`, '_blank');
                                                                             }}
                                                                         >
                                                                             <Iconify icon="eva:external-link-fill" width={18} />
