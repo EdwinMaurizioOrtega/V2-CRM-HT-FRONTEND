@@ -183,6 +183,8 @@ const BODEGAS_MOVILCELISTIC = [
   { value: '005', label: '005 - OPERADORAS CARRIER' },
   { value: 'EA', label: 'EA - CONSIGNACION' },
   { value: '043', label: '043 - PARQUE COLON' },
+
+  { value: 'CARRIERS', label: 'OPERADORAS CARRIERS' },
 ];
 
 // ----------------------------------------------------------------------
