@@ -180,11 +180,11 @@ const BODEGAS_MOVILCELISTIC = [
   { value: '024', label: '024 - MAYORISTAS MOVILCELISTIC MANTA' },
   { value: '020', label: '020 - MALL GUAYAQUIL' },
   { value: '021', label: '021 - MALL CUENCA' },
-  { value: '005', label: '005 - OPERADORAS CARRIER' },
+  { value: '005', label: '005 - PENDIENTE OPERADORAS CARRIER' },
   { value: 'EA', label: 'EA - CONSIGNACION' },
   { value: '043', label: '043 - PARQUE COLON' },
 
-  { value: 'CARRIERS', label: 'OPERADORAS CARRIERS' },
+  { value: 'CARRIERS', label: 'CARRIERS - OPERADORAS CARRIERS' },
 ];
 
 // ----------------------------------------------------------------------
