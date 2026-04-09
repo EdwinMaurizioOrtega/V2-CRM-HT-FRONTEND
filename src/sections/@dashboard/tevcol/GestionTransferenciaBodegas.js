@@ -185,6 +185,7 @@ const BODEGAS_MOVILCELISTIC = [
   { value: '043', label: '043 - PARQUE COLON' },
 
   { value: 'CARRIERS', label: 'CARRIERS - OPERADORAS CARRIERS' },
+  { value: '100', label: '100 - CUARENTENA' },
 ];
 
 // ----------------------------------------------------------------------
