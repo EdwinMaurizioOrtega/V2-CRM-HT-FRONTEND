@@ -33,6 +33,16 @@ const TABLE_HEAD = [
     { id: 'calories', label: 'CODIGO', align: 'right' },
 ];
 
+const TABLE_HEAD_IMEI = [
+    { id: 'bodega', label: 'BODEGA' },
+    // { id: 'total', label: 'TOTAL IMEIS', align: 'right' },
+    // { id: 'no_disp', label: 'NO DISPONIBLES', align: 'right' },
+    // { id: 'disp', label: 'DISPONIBLES', align: 'right' },
+    // { id: 'transito', label: 'STOCK POR LLEGAR', align: 'right' },
+    // { id: 'reservados', label: 'CRM RESERVADOS', align: 'right' },
+    { id: 'real', label: 'STOCK REAL', align: 'right' },
+];
+
 // ----------------------------------------------------------------------
 
 BasicTable.propTypes = {
@@ -49,6 +59,8 @@ export default function BasicTable({ code, validateStock }) {
 
     const [stockProduct, setStockProduct] = useState([]);
 
+    const [stockImei, setStockImei] = useState([]);
+
     const filteredTableHead = user.ROLE === 'tienda' ? TABLE_HEAD.filter(column => column.id === 'dessert' || column.id === 'protein' || column.id === 'calories') : TABLE_HEAD;
 
     //Lista de precios por producto
@@ -64,33 +76,26 @@ export default function BasicTable({ code, validateStock }) {
         //V2
         async function fetchData() {
             if (code) {
+                // Fetch IMEI-level stock
                 try {
-                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/products/stock/product?code=${code}&empresa=${user.EMPRESA}`);
-                    if (response.status === 200) {
+                    const responseImei = await fetch(`${HOST_API_KEY}/hanadb/api/products/stock/product_imei?code=${code}&empresa=${user.EMPRESA}`);
+                    if (responseImei.status === 200) {
                         // Eliminar el estado de carga aquí, ya que la respuesta es exitosa (código 200).
                         setLoading(false);
                     } else {
                         // Mantener el estado de carga aquí, ya que la respuesta no fue exitosa (código diferente de 200).
                         setLoading(true);
                     }
-                    const data = await response.json();
-                    setStockProduct(data.product_stock);
-                    //console.log("Stock: " + JSON.stringify(data.product_stock));
-                    ////console.log("Stock: " + JSON.stringify(stockProduct));
+                    const dataImei = await responseImei.json();
+                    setStockImei(dataImei.product_stock_imei || []);
 
 
-                    if (data.product_stock && data.product_stock.length > 0) {
-
-                        // Usamos reduce para sumar todos los valores del campo DISPONIBLE
-                        //const sumaDisponible = data.product_stock.reduce((total, producto) => total + Number(producto.DISPONIBLE), 0);
-
-                        // //console.log(`La suma total del campo DISPONIBLE es: ${sumaDisponible}`);
-                        // validateStock(sumaDisponible);
+                    if (dataImei.product_stock_imei && dataImei.product_stock_imei.length > 0) {
 
                         //Cuatro B. Mayoristas: 019 CDH - 002 Cuenca - 024 Manta - 030 Colon
 
-                        const bodegasM = data.product_stock.reduce((acumulador, producto) => {
-                            if (producto.BODEGA === '019' || producto.BODEGA === '002' || producto.BODEGA === '024' || producto.BODEGA === '030') {
+                        const bodegasM = dataImei.product_stock_imei.reduce((acumulador, producto) => {
+                            if (producto.NRO_BODEGA === '019' || producto.NRO_BODEGA === '002' || producto.NRO_BODEGA === '024' || producto.NRO_BODEGA === '030') {
                                 acumulador.push(producto);
                             }
                             return acumulador;
@@ -103,8 +108,8 @@ export default function BasicTable({ code, validateStock }) {
                     }
 
                 } catch (error) {
-                    console.error('Error:', error);
-                    setStockProduct([]);
+                    console.error('Error IMEI:', error);
+                    setStockImei([]);
                     // Eliminar el estado de carga en caso de error también.
                     setLoading(false);
                 }
@@ -122,160 +127,116 @@ export default function BasicTable({ code, validateStock }) {
             {loading ? (
                 <LoadingComponent />
             ) : (
-                <TableContainer sx={{ mt: 3, overflow: 'unset' }}>
-                    <Scrollbar>
-                        <Table sx={{ minWidth: 800 }}>
-                            <TableHeadCustom headLabel={filteredTableHead} />
+                <>
+                {/* Tabla Stock IMEI */}
+                {stockImei && stockImei.length > 0 && (
+                    <TableContainer sx={{ mt: 3, overflow: 'unset' }}>
+                        <Scrollbar>
+                            <Table sx={{ minWidth: 800 }}>
+                                <TableHeadCustom headLabel={TABLE_HEAD_IMEI} />
+                                <TableBody>
 
-                            <TableBody>
+                                    {
+                                        // Hipertronics
+                                        user.EMPRESA == '0992537442001' && (
 
-                                {
-                                    // Hipertronics
-                                    user.EMPRESA == '0992537442001' && (
+                                            user.COMPANY === 'TOMEBAMBA' ? (
+                                                stockImei
+                                                    .filter((row) => row.NRO_BODEGA === '030')
+                                                    .map((row) => (
+                                                        <TableRow key={row.NRO_BODEGA}>
+                                                            <TableCell>{getTextFromCodigo(row.NRO_BODEGA)}</TableCell>
+                                                            {/* <TableCell align="right">{fNumber(row.SAP_TOTAL_IMEIS)}</TableCell>
+                                                            <TableCell align="right">{fNumber(row.SAP_NO_DISPONIBLES)}</TableCell>
+                                                            <TableCell align="right">{fNumber(row.SAP_DISPONIBLES)}</TableCell>
+                                                            <TableCell align="right">{fNumber(row.SAP_STOCK_POR_LLEGAR)}</TableCell>
+                                                            <TableCell align="right">{fNumber(row.CRM_RESERVADOS)}</TableCell> */}
+                                                            <TableCell align="right">{fNumber(row.STOCK_REAL)}</TableCell>
+                                                        </TableRow>
+                                                    ))
 
-                                        user.COMPANY === 'TOMEBAMBA' ? (
-                                            stockProduct
-                                                .filter((row) => row.BODEGA === '030')
-                                                .map((filteredRow) => (
-                                                    <TableRow key={filteredRow.BODEGA}>
-                                                        <TableCell>{getTextFromCodigo(filteredRow.BODEGA)}</TableCell>
-                                                        <TableCell
-                                                            align="right">{fNumber(filteredRow.CANTIDAD)}</TableCell>
-                                                        <TableCell
-                                                            align="right">{fNumber(filteredRow.RESERVADO)}</TableCell>
-                                                        <TableCell
-                                                            align="right">{fNumber(filteredRow.DISPONIBLE)}</TableCell>
-                                                        <TableCell align="right">{filteredRow.CODIGO}</TableCell>
-                                                    </TableRow>
-                                                )
-                                                )
+                                            ) : (
 
-                                        ) : (
+                                                user.ROLE != 'infinix' ? (
 
-                                            user.ROLE != 'infinix' ? (
-
-                                                user.ROLE != 'tienda' ? (
-
-                                                    stockProduct.map((row) => (
-                                                        <TableRow key={row.BODEGA}>
-                                                            <TableCell>{getTextFromCodigo(row.BODEGA)}</TableCell>
-                                                            <TableCell align="right">{fNumber(row.CANTIDAD)}</TableCell>
-                                                            <TableCell
-                                                                align="right">{fNumber(row.RESERVADO)}</TableCell>
-                                                            <TableCell
-                                                                align="right">{fNumber(row.DISPONIBLE)}</TableCell>
-                                                            <TableCell align="right">{row.CODIGO}</TableCell>
+                                                    stockImei.map((row) => (
+                                                        <TableRow key={row.NRO_BODEGA}>
+                                                            <TableCell>{getTextFromCodigo(row.NRO_BODEGA)}</TableCell>
+                                                            {/* <TableCell align="right">{fNumber(row.SAP_TOTAL_IMEIS)}</TableCell>
+                                                            <TableCell align="right">{fNumber(row.SAP_NO_DISPONIBLES)}</TableCell>
+                                                            <TableCell align="right">{fNumber(row.SAP_DISPONIBLES)}</TableCell>
+                                                            <TableCell align="right">{fNumber(row.SAP_STOCK_POR_LLEGAR)}</TableCell>
+                                                            <TableCell align="right">{fNumber(row.CRM_RESERVADOS)}</TableCell> */}
+                                                            <TableCell align="right">{fNumber(row.STOCK_REAL)}</TableCell>
                                                         </TableRow>
                                                     ))
 
                                                 ) : (
-
-                                                    stockProduct.map((row) => (
-                                                        <TableRow key={row.BODEGA}>
-                                                            <TableCell>{getTextFromCodigo(row.BODEGA)}</TableCell>
-                                                            <TableCell align="right">{
-
-                                                                fNumber(row.DISPONIBLE) >= 1 && fNumber(row.DISPONIBLE) < 5 ? (
-                                                                    "+1"
-                                                                ) : fNumber(row.DISPONIBLE) >= 5 && fNumber(row.DISPONIBLE) < 10 ? (
-                                                                    "+5"
-                                                                ) : fNumber(row.DISPONIBLE) >= 10 && fNumber(row.DISPONIBLE) < 20 ? (
-                                                                    "+10"
-                                                                ) : fNumber(row.DISPONIBLE) >= 20 ? (
-                                                                    "+20"
-                                                                ) : (
-                                                                    "0"
-                                                                )
-
-                                                            }</TableCell>
-
-                                                            <TableCell align="right">{row.CODIGO}</TableCell>
-                                                        </TableRow>
-                                                    ))
-
+                                                    // Mostrar solo las filas con BODEGA 019, 002 y 030
+                                                    stockImei
+                                                        .filter((row) => row.NRO_BODEGA === '019' || row.NRO_BODEGA === '002' || row.NRO_BODEGA === '030')
+                                                        .map((row) => (
+                                                            <TableRow key={row.NRO_BODEGA}>
+                                                                <TableCell>{getTextFromCodigo(row.NRO_BODEGA)}</TableCell>
+                                                                {/* <TableCell align="right">{fNumber(row.SAP_TOTAL_IMEIS)}</TableCell>
+                                                                <TableCell align="right">{fNumber(row.SAP_NO_DISPONIBLES)}</TableCell>
+                                                                <TableCell align="right">{fNumber(row.SAP_DISPONIBLES)}</TableCell>
+                                                                <TableCell align="right">{fNumber(row.SAP_STOCK_POR_LLEGAR)}</TableCell>
+                                                                <TableCell align="right">{fNumber(row.CRM_RESERVADOS)}</TableCell> */}
+                                                                <TableCell align="right">{fNumber(row.STOCK_REAL)}</TableCell>
+                                                            </TableRow>
+                                                        ))
                                                 )
 
-                                            ) : (
-                                                // Mostrar solo las filas con BODEGA 019, 002 y 030
-                                                stockProduct
-                                                    .filter((row) => row.BODEGA === '019' || row.BODEGA === '002' || row.BODEGA === '030')
-                                                    .map((filteredRow) => (
-                                                        <TableRow key={filteredRow.BODEGA}>
-                                                            <TableCell>{getTextFromCodigo(filteredRow.BODEGA)}</TableCell>
-                                                            <TableCell
-                                                                align="right">{fNumber(filteredRow.CANTIDAD)}</TableCell>
-                                                            <TableCell
-                                                                align="right">{fNumber(filteredRow.RESERVADO)}</TableCell>
-                                                            <TableCell
-                                                                align="right">{fNumber(filteredRow.DISPONIBLE)}</TableCell>
-                                                            <TableCell align="right">{filteredRow.CODIGO}</TableCell>
-                                                        </TableRow>
-                                                    )
-                                                    )
                                             )
 
                                         )
 
-                                    )
+                                    }
 
-                                }
+                                    {
+                                        user.EMPRESA === '1792161037001' && (
+                                            //MovilCelistic
 
-                                {/* {user.EMPRESA === '0992264373001' && ( */}
-                                {/*     //Alphacell */}
-                                {/*     stockProduct.map((row) => ( */}
-                                {/*         <TableRow key={row.BODEGA}> */}
-                                {/*             <TableCell>{getTextFromCodigoAlphacell(row.BODEGA)}</TableCell> */}
-                                {/*             <TableCell align="right">{fNumber(row.CANTIDAD)}</TableCell> */}
-                                {/*             <TableCell align="right">{fNumber(row.RESERVADO)}</TableCell> */}
-                                {/*             <TableCell align="right">{fNumber(row.DISPONIBLE)}</TableCell> */}
-                                {/*             <TableCell align="right">{row.CODIGO}</TableCell> */}
-                                {/*         </TableRow> */}
-                                {/*     )) */}
-                                {/*     ) */}
-                                {/* } */}
+                                            user.COMPANY === 'TOMEBAMBA' ? (
+                                                stockImei
+                                                    .filter((row) => row.NRO_BODEGA === '030')
+                                                    .map((row) => (
+                                                        <TableRow key={row.NRO_BODEGA}>
+                                                            <TableCell>{getTextFromCodigoMovilCelistic(row.NRO_BODEGA)}</TableCell>
+                                                            <TableCell align="right">{fNumber(row.SAP_TOTAL_IMEIS)}</TableCell>
+                                                            <TableCell align="right">{fNumber(row.SAP_NO_DISPONIBLES)}</TableCell>
+                                                            <TableCell align="right">{fNumber(row.SAP_DISPONIBLES)}</TableCell>
+                                                            <TableCell align="right">{fNumber(row.SAP_STOCK_POR_LLEGAR)}</TableCell>
+                                                            <TableCell align="right">{fNumber(row.CRM_RESERVADOS)}</TableCell>
+                                                            <TableCell align="right">{fNumber(row.STOCK_REAL)}</TableCell>
+                                                        </TableRow>
+                                                    ))
 
-                                {
-                                    user.EMPRESA === '1792161037001' && (
-                                        //MovilCelistic
+                                            ) : (
 
-                                        user.COMPANY === 'TOMEBAMBA' ? (
-                                            stockProduct
-                                                .filter((row) => row.BODEGA === '030')
-                                                .map((filteredRow) => (
-                                                    <TableRow key={filteredRow.BODEGA}>
-                                                        <TableCell>{getTextFromCodigoMovilCelistic(filteredRow.BODEGA)}</TableCell>
-                                                        <TableCell
-                                                            align="right">{fNumber(filteredRow.CANTIDAD)}</TableCell>
-                                                        <TableCell
-                                                            align="right">{fNumber(filteredRow.RESERVADO)}</TableCell>
-                                                        <TableCell
-                                                            align="right">{fNumber(filteredRow.DISPONIBLE)}</TableCell>
-                                                        <TableCell align="right">{filteredRow.CODIGO}</TableCell>
+                                                stockImei.map((row) => (
+                                                    <TableRow key={row.NRO_BODEGA}>
+                                                        <TableCell>{getTextFromCodigoMovilCelistic(row.NRO_BODEGA)}</TableCell>
+                                                        <TableCell align="right">{fNumber(row.SAP_TOTAL_IMEIS)}</TableCell>
+                                                        <TableCell align="right">{fNumber(row.SAP_NO_DISPONIBLES)}</TableCell>
+                                                        <TableCell align="right">{fNumber(row.SAP_DISPONIBLES)}</TableCell>
+                                                        <TableCell align="right">{fNumber(row.SAP_STOCK_POR_LLEGAR)}</TableCell>
+                                                        <TableCell align="right">{fNumber(row.CRM_RESERVADOS)}</TableCell>
+                                                        <TableCell align="right">{fNumber(row.STOCK_REAL)}</TableCell>
                                                     </TableRow>
-                                                )
-                                                )
+                                                ))
+                                            )
 
-                                        ) : (
-
-                                            stockProduct.map((row) => (
-                                                <TableRow key={row.BODEGA}>
-                                                    <TableCell>{getTextFromCodigoMovilCelistic(row.BODEGA)}</TableCell>
-                                                    <TableCell align="right">{fNumber(row.CANTIDAD)}</TableCell>
-                                                    <TableCell align="right">{fNumber(row.RESERVADO)}</TableCell>
-                                                    <TableCell align="right">{fNumber(row.DISPONIBLE)}</TableCell>
-                                                    <TableCell align="right">{row.CODIGO}</TableCell>
-                                                </TableRow>
-                                            ))
                                         )
+                                    }
 
-                                    )
-                                }
-
-
-                            </TableBody>
-                        </Table>
-                    </Scrollbar>
-                </TableContainer>
+                                </TableBody>
+                            </Table>
+                        </Scrollbar>
+                    </TableContainer>
+                )}
+                </>
             )}
         </>
     );
@@ -329,6 +290,8 @@ function getTextFromCodigo(rowCodigo) {
             return "PADRE_AGUIRRE";
         case '010':
             return "MAYORISTAS_CUENCA_CENTRO";
+            case '008':
+            return "CONSIGNACIÓN";
         default:
             return "...";
     }

@@ -2356,7 +2356,7 @@ export default function InvoiceDetails({ invoice }) {
 
                 <TableContainer sx={{ overflow: 'unset' }}>
                     <Scrollbar>
-                        <Table sx={{ minWidth: 960 }}>
+                        <Table sx={{ minWidth: 960, '& td': { px: 0.5, py: 0.5, fontSize: '0.75rem', whiteSpace: 'nowrap' } }}>
                             <TableHead
                                 sx={{
                                     borderBottom: (theme) => `solid 1px ${theme.palette.divider}`,
@@ -2389,32 +2389,40 @@ export default function InvoiceDetails({ invoice }) {
                                     {
                                         (user.ROLE === "9" || user.ROLE === "10") ? (
                                             <>
-                                                {/* <TableCell align="left">Stock SAP</TableCell>
-                                            <TableCell align="left">R/PorCargarSeries</TableCell>
-                                            <TableCell align="left">R/PorFacturar</TableCell> */}
-                                                <TableCell align="left">
-                                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                                                        Disponible
-                                                        <Tooltip
-                                                            title="Cantidad disponible en inventario para esta bodega (Stock SAP - Reservado Por Facturar - Reservado Por Cargar Series).">
-                                                            <IconButton
-                                                                size="small"
-                                                                sx={{
-                                                                    width: 20,
-                                                                    height: 20,
-                                                                    color: 'text.secondary',
-                                                                    '&:hover': {
-                                                                        color: 'primary.main'
-                                                                    }
-                                                                }}
-                                                            >
-                                                                <Iconify icon="eva:question-mark-circle-outline"
-                                                                    width={16} height={16} />
-                                                            </IconButton>
-                                                        </Tooltip>
+                                                <TableCell align="center" sx={{ px: 0.5 }}>
+                                                    <Box sx={{ writingMode: 'vertical-lr', textOrientation: 'upright', fontSize: '0.6rem', fontWeight: 'bold', letterSpacing: '-2px', lineHeight: 1 }}>
+                                                        SAP TOTAL IMEIS
                                                     </Box>
                                                 </TableCell>
-
+                                                <TableCell align="center" sx={{ px: 0.5 }}>
+                                                    <Box sx={{ writingMode: 'vertical-lr', textOrientation: 'upright', fontSize: '0.6rem', fontWeight: 'bold', letterSpacing: '-2px', lineHeight: 1 }}>
+                                                        SAP NO DISPONIBLES
+                                                    </Box>
+                                                </TableCell>
+                                                <TableCell align="center" sx={{ px: 0.5 }}>
+                                                    <Tooltip title="IMEIS disponibles en SAP para esta bodega.">
+                                                        <Box sx={{ writingMode: 'vertical-lr', textOrientation: 'upright', fontSize: '0.6rem', fontWeight: 'bold', letterSpacing: '-2px', lineHeight: 1, cursor: 'help' }}>
+                                                            SAP DISPONIBLES
+                                                        </Box>
+                                                    </Tooltip>
+                                                </TableCell>
+                                                <TableCell align="center" sx={{ px: 0.5 }}>
+                                                    <Box sx={{ writingMode: 'vertical-lr', textOrientation: 'upright', fontSize: '0.6rem', fontWeight: 'bold', letterSpacing: '-2px', lineHeight: 1 }}>
+                                                        SAP STOCK POR LLEGAR
+                                                    </Box>
+                                                </TableCell>
+                                                <TableCell align="center" sx={{ px: 0.5 }}>
+                                                    <Box sx={{ writingMode: 'vertical-lr', textOrientation: 'upright', fontSize: '0.6rem', fontWeight: 'bold', letterSpacing: '-2px', lineHeight: 1 }}>
+                                                        CRM RESERVADOS
+                                                    </Box>
+                                                </TableCell>
+                                                <TableCell align="center" sx={{ px: 0.5 }}>
+                                                    <Tooltip title="SAP Disponibles - CRM Reservados">
+                                                        <Box sx={{ writingMode: 'vertical-lr', textOrientation: 'upright', fontSize: '0.6rem', fontWeight: 'bold', letterSpacing: '-2px', lineHeight: 1, cursor: 'help' }}>
+                                                            STOCK REAL
+                                                        </Box>
+                                                    </Tooltip>
+                                                </TableCell>
                                             </>
                                         ) : null
                                     }
@@ -2471,7 +2479,7 @@ export default function InvoiceDetails({ invoice }) {
                                         <TableCell>{index + 1}</TableCell>
 
                                         <TableCell align="left">
-                                            <Box sx={{ maxWidth: 560 }}>
+                                            <Box sx={{ maxWidth: 200, whiteSpace: 'normal' }}>
                                                 <Typography
                                                     variant="subtitle2"
                                                     // sx={{
@@ -2527,16 +2535,21 @@ export default function InvoiceDetails({ invoice }) {
                                             (user.ROLE === "9" || user.ROLE === "10") ? (
 
                                                 <>
-                                                    {/* <TableCell align="left" >{Number(row.STOCK_POR_BODEGA)}</TableCell> */}
+                                                    <TableCell align="left">{Number(row.SAP_TOTAL_IMEIS)}</TableCell>
 
-                                                    {/* <TableCell align="left" >{Number(row.RESERVADO_CARGAR_SERIES)}</TableCell> */}
-
-                                                    {/* <TableCell align="left" >{Number(row.RESERVADO_POR_BODEGA)}</TableCell> */}
+                                                    <TableCell align="left">{Number(row.SAP_NO_DISPONIBLES)}</TableCell>
 
                                                     <TableCell align="left"
-                                                        style={{ backgroundColor: Number(row.DISPONIBLE_POR_BODEGA) <= 0 ? 'rgba(255, 0, 0, 0.08)' : 'rgba(0, 171, 85, 0.08)' }}>
+                                                        style={{ backgroundColor: Number(row.SAP_DISPONIBLES) <= 0 ? 'rgba(255, 0, 0, 0.08)' : 'rgba(0, 171, 85, 0.08)' }}>
+                                                        {Number(row.SAP_DISPONIBLES)}</TableCell>
 
-                                                        {Number(row.DISPONIBLE_POR_BODEGA)}</TableCell>
+                                                    <TableCell align="left">{Number(row.SAP_STOCK_POR_LLEGAR)}</TableCell>
+
+                                                    <TableCell align="left">{Number(row.CRM_RESERVADOS)}</TableCell>
+
+                                                    <TableCell align="left"
+                                                        style={{ backgroundColor: Number(row.STOCK_REAL) <= 0 ? 'rgba(255, 0, 0, 0.08)' : 'rgba(0, 171, 85, 0.08)' }}>
+                                                        {Number(row.STOCK_REAL)}</TableCell>
                                                 </>
 
                                             ) : null
@@ -3865,6 +3878,9 @@ export default function InvoiceDetails({ invoice }) {
                                         <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
                                             Serie (IMEI)
                                         </TableCell>
+                                        <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
+                                            Nota de Crédito
+                                        </TableCell>
                                         <TableCell
                                             sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5', textAlign: 'center' }}>
                                             Acciones
@@ -3890,8 +3906,12 @@ export default function InvoiceDetails({ invoice }) {
                                             <TableCell sx={{ fontFamily: 'monospace', fontWeight: 'bold' }}>
                                                 {serie.INTERNAL_SERIAL || 'N/A'}
                                             </TableCell>
-                                            <TableCell sx={{ textAlign: 'center' }}>
 
+                                            <TableCell sx={{ fontFamily: 'monospace', fontWeight: 'bold' }}>
+                                                 {serie.NOTA_DE_CREDITO ? 'Sí' : 'No'}
+                                            </TableCell>
+                                            <TableCell sx={{ textAlign: 'center' }}>
+                                               
                                                 {(ESTADO === 22 || ESTADO === 23 || ESTADO === 1) && (
                                                     <Tooltip title="Marcar como nota de crédito">
                                                         <IconButton
