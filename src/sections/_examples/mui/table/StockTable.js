@@ -45,11 +45,11 @@ const TABLE_HEAD_IMEI = [
 
 // ----------------------------------------------------------------------
 
-BasicTable.propTypes = {
+StockTable.propTypes = {
     validateStock: PropTypes.func,
 };
 
-export default function BasicTable({ code, validateStock }) {
+export default function StockTable({ code, validateStock }) {
 
     const dispatch = useDispatch();
 

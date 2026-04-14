@@ -9,7 +9,7 @@ import MainLayout from '../../../layouts/main';
 // components
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 // sections
-import BasicTable from '../../../sections/_examples/mui/table/BasicTable';
+import BasicTable from '../../../sections/_examples/mui/table/StockTable';
 import CollapsibleTable from '../../../sections/_examples/mui/table/collapsible-table';
 import SortingSelecting from '../../../sections/_examples/mui/table/sorting-selecting';
 import GroupingFixedHeader from '../../../sections/_examples/mui/table/GroupingFixedHeader';

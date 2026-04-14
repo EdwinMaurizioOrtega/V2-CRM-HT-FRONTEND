@@ -2389,7 +2389,7 @@ export default function InvoiceDetails({ invoice }) {
                                     {
                                         (user.ROLE === "9" || user.ROLE === "10") ? (
                                             <>
-                                                <TableCell align="center" sx={{ px: 0.5 }}>
+                                                {/* <TableCell align="center" sx={{ px: 0.5 }}>
                                                     <Box sx={{ writingMode: 'vertical-lr', textOrientation: 'upright', fontSize: '0.6rem', fontWeight: 'bold', letterSpacing: '-2px', lineHeight: 1 }}>
                                                         SAP TOTAL IMEIS
                                                     </Box>
@@ -2415,7 +2415,7 @@ export default function InvoiceDetails({ invoice }) {
                                                     <Box sx={{ writingMode: 'vertical-lr', textOrientation: 'upright', fontSize: '0.6rem', fontWeight: 'bold', letterSpacing: '-2px', lineHeight: 1 }}>
                                                         CRM RESERVADOS
                                                     </Box>
-                                                </TableCell>
+                                                </TableCell> */}
                                                 <TableCell align="center" sx={{ px: 0.5 }}>
                                                     <Tooltip title="SAP Disponibles - CRM Reservados">
                                                         <Box sx={{ writingMode: 'vertical-lr', textOrientation: 'upright', fontSize: '0.6rem', fontWeight: 'bold', letterSpacing: '-2px', lineHeight: 1, cursor: 'help' }}>
@@ -2535,7 +2535,7 @@ export default function InvoiceDetails({ invoice }) {
                                             (user.ROLE === "9" || user.ROLE === "10") ? (
 
                                                 <>
-                                                    <TableCell align="left">{Number(row.SAP_TOTAL_IMEIS)}</TableCell>
+                                                    {/* <TableCell align="left">{Number(row.SAP_TOTAL_IMEIS)}</TableCell>
 
                                                     <TableCell align="left">{Number(row.SAP_NO_DISPONIBLES)}</TableCell>
 
@@ -2545,7 +2545,7 @@ export default function InvoiceDetails({ invoice }) {
 
                                                     <TableCell align="left">{Number(row.SAP_STOCK_POR_LLEGAR)}</TableCell>
 
-                                                    <TableCell align="left">{Number(row.CRM_RESERVADOS)}</TableCell>
+                                                    <TableCell align="left">{Number(row.CRM_RESERVADOS)}</TableCell> */}
 
                                                     <TableCell align="left"
                                                         style={{ backgroundColor: Number(row.STOCK_REAL) <= 0 ? 'rgba(255, 0, 0, 0.08)' : 'rgba(0, 171, 85, 0.08)' }}>

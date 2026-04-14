@@ -22,7 +22,7 @@ import {
 } from '../../../../sections/@dashboard/e-commerce/details';
 import CartWidget from '../../../../sections/@dashboard/e-commerce/CartWidget';
 import {useAuthContext} from "../../../../auth/useAuthContext";
-import BasicTable from "../../../../sections/_examples/mui/table/BasicTable";
+import StockTable from "../../../../sections/_examples/mui/table/StockTable";
 import {HOST_API_KEY} from "../../../../config-global";
 
 // ----------------------------------------------------------------------
@@ -244,7 +244,7 @@ export default function EcommerceProductDetailsPage() {
 
                             <Card>
                                 <CardHeader title="Stock Detalle"/>
-                                <BasicTable code={name}
+                                <StockTable code={name}
                                             validateStock={functionStock}
                                 />
                             </Card>
