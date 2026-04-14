@@ -383,6 +383,29 @@ export default function InvoiceDetails({ invoice }) {
 
     const [showAutocomplete, setShowAutocomplete] = useState(false);
 
+    // Lazy stock loading per item
+    const [stockByProduct, setStockByProduct] = useState({});
+
+    useEffect(() => {
+        if (!items || items.length === 0 || !BODEGA) return;
+
+        const uniqueProducts = [...new Set(items.map(item => item.PRODUCTO_ID).filter(Boolean))];
+
+        uniqueProducts.forEach(async (productoId) => {
+            try {
+                const res = await fetch(
+                    `${HOST_API_KEY}/hanadb/api/orders/order/detail_stock_item?code=${encodeURIComponent(productoId)}&bodega=${encodeURIComponent(BODEGA)}&empresa=${encodeURIComponent(user.EMPRESA)}`
+                );
+                const json = await res.json();
+                if (json.status === 'success' && json.data) {
+                    setStockByProduct(prev => ({ ...prev, [productoId]: json.data }));
+                }
+            } catch (err) {
+                console.error(`Error fetching stock for ${productoId}:`, err);
+            }
+        });
+    }, [items, BODEGA]);
+
     useEffect(() => {
         // Aquí se ejecuta después del montaje del componente
         setObservacionA(OBSERVACIONES && OBSERVACIONES !== '' ? OBSERVACIONES : 'Ninguno...');
@@ -2548,8 +2571,9 @@ export default function InvoiceDetails({ invoice }) {
                                                     <TableCell align="left">{Number(row.CRM_RESERVADOS)}</TableCell> */}
 
                                                     <TableCell align="left"
-                                                        style={{ backgroundColor: Number(row.STOCK_REAL) <= 0 ? 'rgba(255, 0, 0, 0.08)' : 'rgba(0, 171, 85, 0.08)' }}>
-                                                        {Number(row.STOCK_REAL)}</TableCell>
+                                                        style={{ backgroundColor: stockByProduct[row.PRODUCTO_ID] ? (Number(stockByProduct[row.PRODUCTO_ID].STOCK_REAL) <= 0 ? 'rgba(255, 0, 0, 0.08)' : 'rgba(0, 171, 85, 0.08)') : 'transparent' }}>
+                                                        {stockByProduct[row.PRODUCTO_ID] ? Number(stockByProduct[row.PRODUCTO_ID].STOCK_REAL) : <CircularProgress size={16} />}
+                                                    </TableCell>
                                                 </>
 
                                             ) : null
