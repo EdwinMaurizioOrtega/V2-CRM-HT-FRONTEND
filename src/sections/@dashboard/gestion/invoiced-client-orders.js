@@ -23,6 +23,7 @@ import { Grid, Link, TextField } from "@mui/material";
 import Label from "../../../components/label";
 import Iconify from "../../../components/iconify";
 import { useAuthContext } from "../../../auth/useAuthContext";
+import { useWarehouseContext } from "../../../auth/useWarehouseContext";
 import axios from "../../../utils/axios";
 import {
     DataGrid,
@@ -70,6 +71,8 @@ export default function InvoicedClientOrders({ userID, currentPartner, open, onC
     const { push } = useRouter();
 
     const theme = useTheme();
+
+    const { getWarehouseName } = useWarehouseContext();
 
     const handleViewRow = (id) => {
         // //console.log("id_id"+ id);
@@ -132,11 +135,7 @@ export default function InvoicedClientOrders({ userID, currentPartner, open, onC
             headerName: 'BODEGA',
             flex: 1,
             minWidth: 160,
-            renderCell: (params) => params.row.BODEGA == "002" && "MAYORISTA CUENCA"
-                || params.row.BODEGA == "019" && "C. DISTRIBUCIÓN HT"
-                || params.row.BODEGA == "006" && "MAYORISTA QUITO"
-                || params.row.BODEGA == "030" && "MAYORISTA COLÓN"
-                || params.row.BODEGA == "024" && "MAYORISTA MANTA"
+            renderCell: (params) => getWarehouseName(params.row.BODEGA)
         },
         {
             field: 'VENDEDOR',

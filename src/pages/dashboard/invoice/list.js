@@ -43,6 +43,7 @@ import {
 // sections
 import InvoiceAnalytic from '../../../sections/@dashboard/invoice/InvoiceAnalytic';
 import { InvoiceTableRow, InvoiceTableToolbar } from '../../../sections/@dashboard/invoice/list';
+import ManifestDespachoView from '../../../sections/@dashboard/invoice/ManifestDespachoView';
 import { useDispatch } from "../../../redux/store";
 import { useAuthContext } from "../../../auth/useAuthContext";
 import { HOST_API_KEY } from "../../../config-global";
@@ -435,6 +436,45 @@ export default function InvoiceListPage() {
         // setFilterEndDate(null);
         // setFilterStartDate(null);
     };
+
+    // Callback para refrescar órdenes después de despachar
+    const handleOrdersDispatched = () => {
+        // Re-ejecutar el fetch de órdenes
+        async function refetchData() {
+            try {
+                let data = [];
+                if (user.ROLE === "10") {
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/admin?empresa=${user.EMPRESA}&fecha_inicio=${fDateCustom(rangeInputPicker.startDate)}&fecha_fin=${fDateCustom(rangeInputPicker.endDate)}&switch_dates=${isChecked}`);
+                    data = await response.json();
+                } else if (user.ROLE === "7" || user.ROLE === "5") {
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/vendedor?ven=${user.ID}&empresa=${user.EMPRESA}`);
+                    data = await response.json();
+                } else if (user.ROLE === "9") {
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/credit?empresa=${user.EMPRESA}`);
+                    data = await response.json();
+                } else if (user.ROLE === "8") {
+                    const bodegaSAP = user.WAREHOUSE;
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/bodega?bod=${bodegaSAP}&empresa=${user.EMPRESA}`);
+                    data = await response.json();
+                } else if (user.ROLE === "0") {
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/vendedor?ven=${user.ID}&empresa=${user.EMPRESA}`);
+                    data = await response.json();
+                } else if (user.ROLE === "2" || user.ROLE === "1") {
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/tomebamba_credit?empresa=${user.EMPRESA}&status=10, 13, 6, 0, 1, 8`);
+                    data = await response.json();
+                } else if (user.ROLE === "31") {
+                    const response = await fetch(`${HOST_API_KEY}/hanadb/api/orders/cliente?cli_id=${user.CARD_CODE}`);
+                    data = await response.json();
+                }
+                setOrders(data.orders || []);
+            } catch (error) {
+                console.error('Error refetching data:', error);
+            }
+        }
+        refetchData();
+    };
+
+    const ordersEstado3 = tableData.filter((item) => item.ESTADO === 3);
 
     const downloadFile = ({ data, fileName, fileType }) => {
         // Create a blob with the data we want to download as a file
@@ -1288,6 +1328,14 @@ export default function InvoiceListPage() {
 
                     <Divider />
 
+                    {filterStatus === 3 ? (
+                        <ManifestDespachoView
+                            orders={ordersEstado3}
+                            user={user}
+                            onOrdersDispatched={handleOrdersDispatched}
+                        />
+                    ) : (
+                        <>
                     <InvoiceTableToolbar
                         isFiltered={isFiltered}
                         filterName={filterName}
@@ -1409,6 +1457,8 @@ export default function InvoiceListPage() {
                             <Iconify icon="eva:download-fill" />
                         </IconButton>
                     </Tooltip>
+                        </>
+                    )}
                 </Card>
             </Container>
 

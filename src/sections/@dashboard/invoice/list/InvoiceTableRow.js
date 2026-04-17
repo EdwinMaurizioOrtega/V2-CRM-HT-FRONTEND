@@ -18,12 +18,12 @@ import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import { useAuthContext } from "../../../../auth/useAuthContext";
+import { useWarehouseContext } from "../../../../auth/useWarehouseContext";
 import { HOST_API_KEY } from "../../../../config-global";
 import axios from "../../../../utils/axios";
 import { useRouter } from "next/router";
 import { PAYMENT_OPTIONS_V2, TABULAR_ANULAR_PEDIDOS } from "../../../../utils/constants";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { top100FilmsMovilCelistic } from "../details";
 import { PATH_DASHBOARD } from "../../../../routes/paths";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
@@ -50,6 +50,7 @@ export default function InvoiceTableRow({
     //console.log("row: " + JSON.stringify(row));
 
     const { user } = useAuthContext();
+    const { getWarehouseName } = useWarehouseContext();
 
     const isVisible = (cellId) => {
         const hiddenCells = { '31': ['BODEGA', 'FORMADEPAGO', 'Tipo', 'NOMBREUSUARIOENTREGARA', 'USUARIOAPROBO', 'DOCNUM'] };
@@ -687,17 +688,7 @@ export default function InvoiceTableRow({
                     </Label>
                 </TableCell>
                 {isVisible('BODEGA') && (
-                    <TableCell align="left">{
-                        user.EMPRESA === '0992537442001' ? (
-                            nameWarehouse(BODEGA) // Hipertronics
-                        ) : user.EMPRESA === '0992264373001' ? (
-                            nameWarehouseAlphacell(BODEGA) // Alphacell
-                        ) : user.EMPRESA === '1792161037001' ? (
-                            nameWarehouseMovilCelistic(BODEGA) // MovilCelistic
-                        ) : (
-                            'No disponible' // Caso por defecto
-                        )
-                    }</TableCell>
+                    <TableCell align="left">{getWarehouseName(BODEGA)}</TableCell>
                 )}
 
 
@@ -1083,60 +1074,4 @@ export default function InvoiceTableRow({
 function nameFormaPago(pay) {
     const payActual = PAYMENT_OPTIONS_V2.find(option => option.id == pay);
     return payActual ? payActual.title : "Pago no definido.";
-}
-
-function nameWarehouse(ware) {
-    //console.log(`Bodega: ${ware}`);
-    const strings = {
-        "043": "Parque Colón",
-        "019": "Centro Distribución Quito",
-        "002": "Cuenca",
-        "006": "Quito",
-        // "015": "Guayaquil",
-        "024": "Manta",
-        "030": "Mayoristas Colón",
-        "010": "Cuenca Centro"
-    };
-
-    const bodegaActual = strings[ware];
-    return bodegaActual || "Bodega no definida.";
-
-}
-
-function nameWarehouseAlphacell(ware) {
-    //console.log(`Bodega: ${ware}`);
-    const strings = {
-        "001": "BODEGA",
-        "002": "MOVISTAR RESERVA",
-        "003": "MOVISTAR ENTREGADO",
-        "004": "DEPRATI",
-        "005": "CRESA CONSIGNACIÓN",
-        "006": "COMPUTRONSA CONSIGNACIÓN",
-        "007": "BODEGA CDHT QUITO",
-        "009": "GUAYAQUIL SERVIENTREGA",
-        "099": "INVENTARIO TRANSITO IMPORTACIONES"
-    };
-
-    const bodegaActual = strings[ware];
-    return bodegaActual || "Bodega no definida.";
-
-}
-
-function nameWarehouseMovilCelistic(ware) {
-    //console.log(`Bodega: ${ware}`);
-    const strings = {
-        "DISTLF": "CARAPUNGO - CENTRO DISTRIBUCION MOVILCELISTIC",
-        "003": "MACHALA - MAYORISTAS MOVILCELISTIC MACHALA",
-        "004": "CUENCA - MAYORISTAS MOVILCELISTIC CUENCA TURI",
-        "030": "COLON - MAYORISTAS MOVILCELISTIC COLON",
-        "024": "MANTA - MAYORISTAS MOVILCELISTIC MANTA",
-        "005": "CARAPUNGO - ⚠️OPERADORAS CARRIER",
-        "010": "CUENCA - MAYORISTAS MOVILCELISTIC CUENCA CENTRO",
-        "043": "Parque Colón",
-        // "T1CARACO": "QUITO - XIAOMI TERMINALES"
-    };
-
-    const bodegaActual = strings[ware];
-    return bodegaActual || "Bodega no definida.";
-
 }

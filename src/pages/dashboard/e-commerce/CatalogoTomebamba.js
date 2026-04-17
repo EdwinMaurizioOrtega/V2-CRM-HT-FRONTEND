@@ -60,19 +60,6 @@ const OPTIONS = [
     {value: '8', label: 'Precio Militares'},
 ];
 
-const BODEGAS = [
-    {value: '019', label: 'CENTRO DE DISTRIBUCIÓN HT'},
-    {value: '002', label: 'MAYORISTA CUENCA'},
-    {value: '006', label: 'MAYORISTA QUITO'},
-    {value: '030', label: 'MAYORISTA COLÓN'},
-    {value: '024', label: 'MAYORISTA MANTA'},
-];
-
-const BODEGAS_ALPHACELL = [
-    {value: '001', label: 'BODEGA'},
-];
-
-
 const CATEGORIAS = [
     {label: 'CELULARES', value: '108'},
     {label: 'ELECTRODOMÉSTICOS', value: '111'},

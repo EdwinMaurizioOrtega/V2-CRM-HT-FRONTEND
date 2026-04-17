@@ -98,7 +98,7 @@ function WarehouseOption({ option, isSelected }) {
             <Typography variant="subtitle2">{title}</Typography>
 
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {description}
+              {value}
             </Typography>
           </Box>
         }

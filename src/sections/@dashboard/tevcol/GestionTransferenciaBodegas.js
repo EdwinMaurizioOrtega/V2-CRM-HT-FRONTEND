@@ -62,6 +62,7 @@ import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { useAuthContext } from '../../../auth/useAuthContext';
+import { useWarehouseContext } from '../../../auth/useWarehouseContext';
 import { HOST_API_KEY } from '../../../config-global';
 import TransferenciaPDF from './TransferenciaPDF';
 
@@ -139,60 +140,12 @@ const ACTION_MODULES = [
   },
 ];
 
-const BODEGAS_LIDENAR = [
-  // { value: '043', label: '043 - CENTRO DE DISTRIBUCIÓN GUAYAQUIL' },
-  { value: '019', label: '019 - CENTRO DE DISTRIBUCIÓN HT' },
-  { value: '002', label: '002 - MAYORISTA CUENCA' },
-  { value: '006', label: '006 - MAYORISTA QUITO' },
-  { value: '030', label: '030 - MAYORISTA GUAYAQUIL' },
-  { value: '024', label: '024 - MAYORISTA MANTA' },
-  { value: '001', label: '001 - SAMSUNG CARACOL QUITO' },
-  { value: '015', label: '015 - INACTIVA' },
-  { value: '009', label: '009 - SAMSUNG BAHIA' },
-  { value: '014', label: '014 - BODEGA COMBO' },
-  { value: '011', label: '011 - SAMSUNG CUENCA' },
-  { value: '016', label: '016 - SAMSUNG MALL GUAYAQUIL' },
-  { value: '017', label: '017 - SAMSUNG MALL CUENCA' },
-  { value: '020', label: '020 - SAMSUNG MANTA' },
-  { value: '022', label: '022 - SAMSUNG PORTOVIEJO' },
-  { value: '003', label: '003 - PADRE AGUIRRE' },
-  { value: '008', label: '008 - CONSIGNACION' },
-  { value: '039', label: '039 - BODEGA CLARO' },
-  { value: '043', label: '043 - PARQUE COLON' },
-
-];
-
-const BODEGAS_MOVILCELISTIC = [
-  // { value: '043', label: '043 - CENTRO DE DISTRIBUCIÓN GUAYAQUIL' },
-  { value: 'DISTLF', label: 'DISTLF - CENTRO DISTRIBUCIÓN MOVILCELISTIC' },
-  { value: '003', label: '003 - MAYORISTAS MOVILCELISTIC MACHALA' },
-  { value: '004', label: '004 - MAYORISTAS MOVILCELISTIC CUENCA' },
-  { value: 'T1CARACO', label: 'T1CARACO - CARACOL XIAOMI TERMINALES' },
-  { value: 'T1CUENCA', label: 'T1CUENCA - CUENCA XIAOMI TERMINALES' },
-  { value: 'T1MACHAL', label: 'T1MACHAL - MACHALA XIAOMI TERMINALES' },
-  { value: 'T3CARACO', label: 'T3CARACO - CARACOL XIAOMI ACCESORIOS' },
-  { value: 'T3CUENCA', label: 'T3CUENCA - CUENCA XIAOMI ACCESORIOS' },
-  { value: 'T3MACHAL', label: 'T3MACHAL - MACHALA XIAOMI ACCESORIOS' },
-  { value: 'T2CARACO', label: 'T2CARACO - CARACOL XIAOMI ELECTRODOMESTICOS' },
-  { value: 'T2CUENCA', label: 'T2CUENCA - CUENCA XIAOMI ELECTRODOMESTICOS' },
-  { value: 'T2MACHAL', label: 'T2MACHAL - MACHALA XIAOMI ELECTRODOMESTICOS' },
-  { value: '030', label: '030 - MAYORISTAS MOVILCELISTIC GUAYAQUIL' },
-  { value: '024', label: '024 - MAYORISTAS MOVILCELISTIC MANTA' },
-  { value: '020', label: '020 - MALL GUAYAQUIL' },
-  { value: '021', label: '021 - MALL CUENCA' },
-  { value: '005', label: '005 - PENDIENTE OPERADORAS CARRIER' },
-  { value: 'EA', label: 'EA - CONSIGNACION' },
-  { value: '043', label: '043 - PARQUE COLON' },
-
-  { value: 'CARRIERS', label: 'CARRIERS - OPERADORAS CARRIERS' },
-  { value: '100', label: '100 - CUARENTENA' },
-];
-
 // ----------------------------------------------------------------------
 
 export default function GestionTransferenciaBodegasView() {
   const { themeStretch } = useSettingsContext();
   const { user } = useAuthContext();
+  const { getWarehouseList } = useWarehouseContext();
   const theme = useTheme();
 
   const [selectedModule, setSelectedModule] = useState('dashboard');
@@ -285,7 +238,7 @@ export default function GestionTransferenciaBodegasView() {
     productosEliminados: [], // IDs de productos a eliminar
   });
 
-  const bodegas = user?.EMPRESA === '0992537442001' ? BODEGAS_LIDENAR : BODEGAS_MOVILCELISTIC;
+  const bodegas = getWarehouseList().map(w => ({ value: w.WhsCode, label: `${w.WhsCode} - ${w.WhsName}` }));
 
   // Filtrar módulos según el rol del usuario
   const getVisibleModules = () => {

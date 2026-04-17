@@ -56,6 +56,7 @@ import {ThemeSettings, SettingsProvider} from '../components/settings';
 // https://docs.minimals.cc/authentication/js-version
 
 import {AuthProvider} from '../auth/JwtContext';
+import {WarehouseProvider} from '../auth/WarehouseContext';
 import {useEffect} from "react";
 import {Analytics} from "@vercel/analytics/next";
 import {SpeedInsights} from '@vercel/speed-insights/next';
@@ -104,6 +105,7 @@ export default function MyApp(props) {
             </Head>
 
             <AuthProvider>
+                <WarehouseProvider>
                 <ReduxProvider store={store}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <SettingsProvider>
@@ -127,6 +129,7 @@ export default function MyApp(props) {
                         </SettingsProvider>
                     </LocalizationProvider>
                 </ReduxProvider>
+                </WarehouseProvider>
             </AuthProvider>
         </CacheProvider>
     );

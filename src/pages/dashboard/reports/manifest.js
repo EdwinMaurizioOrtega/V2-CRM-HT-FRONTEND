@@ -33,64 +33,7 @@ import DashboardLayout from '../../../layouts/dashboard/DashboardLayout';
 import axios from '../../../utils/axios';
 // auth
 import { useAuthContext } from '../../../auth/useAuthContext';
-
-// Mapeo de códigos de bodega a nombres
-const WAREHOUSE_NAMES = {
-  '019': 'CENTRO DE DISTRIBUCIÓN HT',
-  '002': 'MAYORISTA CUENCA',
-  '006': 'MAYORISTA QUITO',
-  '030': 'MAYORISTA GUAYAQUIL',
-  '024': 'MAYORISTA MANTA',
-  '001': 'BODEGA ALPHACELL',
-  'DISTLF': 'CENTRO DISTRIBUCIÓN MOVILCELISTIC',
-  '003': 'MAYORISTAS MOVILCELISTIC MACHALA',
-  '004': 'MAYORISTAS MOVILCELISTIC CUENCA',
-  '005': 'OPERADORAS CARRIER',
-  '008': 'BODEGA 008',
-  'CARRIERS': 'CARRIERS',
-  'EA': 'BODEGA EA',
-  '043': 'PARQUE COLON',
-};
-
-const LIDENAR_WAREHOUSES = [
-  { code: '019', name: 'CENTRO DE DISTRIBUCIÓN HT' },
-  { code: '002', name: 'MAYORISTA CUENCA' },
-  { code: '006', name: 'MAYORISTA QUITO' },
-  { code: '030', name: 'MAYORISTA GUAYAQUIL' },
-  { code: '024', name: 'MAYORISTA MANTA' },
-  { code: '001', name: 'SAMSUNG CARACOL QUITO' },
-  { code: '015', name: 'INACTIVA' },
-  { code: '009', name: 'SAMSUNG BAHIA' },
-  { code: '014', name: 'BODEGA COMBO' },
-  { code: '011', name: 'SAMSUNG CUENCA' },
-  { code: '016', name: 'SAMSUNG MALL GUAYAQUIL' },
-  { code: '017', name: 'SAMSUNG MALL CUENCA' },
-  { code: '020', name: 'SAMSUNG MANTA' },
-  { code: '022', name: 'SAMSUNG PORTOVIEJO' },
-  { code: '003', name: 'PADRE AGUIRRE' },
-  { code: '043', name: 'PARQUE COLON' },
-];
-
-const MOVILCELISTIC_WAREHOUSES = [
-  { code: 'DISTLF', name: 'CENTRO DISTRIBUCIÓN MOVILCELISTIC' },
-  { code: '003', name: 'MAYORISTAS MOVILCELISTIC MACHALA' },
-  { code: '004', name: 'MAYORISTAS MOVILCELISTIC CUENCA' },
-  { code: 'T1CARACO', name: 'CARACO XIAOMI TERMINALES' },
-  { code: 'T1CUENCA', name: 'CUENCA XIAOMI TERMINALES' },
-  { code: 'T1MACHAL', name: 'MACHALA XIAOMI TERMINALES' },
-  { code: 'T3CARACO', name: 'CARACO XIAOMI ACCESORIOS' },
-  { code: 'T3CUENCA', name: 'CUENCA XIAOMI ACCESORIOS' },
-  { code: 'T3MACHAL', name: 'MACHALA XIAOMI ACCESORIOS' },
-  { code: 'T2CARACO', name: 'CARACO XIAOMI ELECTRODOMESTICOS' },
-  { code: 'T2CUENCA', name: 'CUENCA XIAOMI ELECTRODOMESTICOS' },
-  { code: 'T2MACHAL', name: 'MACHALA XIAOMI ELECTRODOMESTICOS' },
-  { code: '030', name: 'MAYORISTAS MOVILCELISTIC GUAYAQUIL' },
-  { code: '024', name: 'MAYORISTAS MOVILCELISTIC MANTA' },
-  { code: '020', name: 'MALL GUAYAQUIL' },
-  { code: '021', name: 'MALL CUENCA' },
-  { code: '005', name: 'OPERADORAS CARRIER' },
-  { code: '043', name: 'PARQUE COLON' },
-];
+import { useWarehouseContext } from '../../../auth/useWarehouseContext';
 
 // Mapeo de RUC a nombres de empresa
 const COMPANY_NAMES = {
@@ -128,6 +71,7 @@ ManifestPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function ManifestPage() {
   const { user } = useAuthContext();
+  const { getWarehouseName, getWarehouseList } = useWarehouseContext();
   
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -139,17 +83,17 @@ export default function ManifestPage() {
   
   const printRef = useRef(null);
 
-  const availableWarehouses = user.EMPRESA === '0992537442001' ? LIDENAR_WAREHOUSES : MOVILCELISTIC_WAREHOUSES;
+  const availableWarehouses = getWarehouseList().map(w => ({ code: w.WhsCode, name: w.WhsName }));
 
   // Función para obtener los nombres de las bodegas
-  const getWarehouseNames = () => {
+  const getWarehouseDisplayNames = () => {
     try {
       const warehouses = Array.isArray(user.WAREHOUSE) 
         ? user.WAREHOUSE 
         : JSON.parse(user.WAREHOUSE);
       
       return warehouses
-        .map(code => WAREHOUSE_NAMES[code] || code)
+        .map(code => getWarehouseName(code))
         .join(', ');
     } catch (error) {
       return user.WAREHOUSE;
@@ -358,7 +302,7 @@ export default function ManifestPage() {
                       <Typography variant="body2" fontWeight="bold">
                         {user.ROLE === '10' 
                           ? (selectedWarehouse === 'all' ? 'TODAS' : availableWarehouses.find(w => w.code === selectedWarehouse)?.name || selectedWarehouse)
-                          : getWarehouseNames()}
+                          : getWarehouseDisplayNames()}
                       </Typography>
                     </Box>
                     <Box>

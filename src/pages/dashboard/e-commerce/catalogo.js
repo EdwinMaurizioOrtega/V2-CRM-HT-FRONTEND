@@ -46,6 +46,7 @@ import Iconify from "../../../components/iconify";
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
 import {useAuthContext} from "../../../auth/useAuthContext";
+import {useWarehouseContext} from "../../../auth/useWarehouseContext";
 
 // ----------------------------------------------------------------------
 
@@ -58,30 +59,6 @@ const OPTIONS = [
     {value: '6', label: 'Precio al Público'},
     {value: '7', label: 'Precio T/C'},
     {value: '8', label: 'Precio Militares'},
-];
-
-const BODEGAS = [
-    {value: '019', label: 'CENTRO DE DISTRIBUCIÓN HT'},
-    {value: '002', label: 'MAYORISTA CUENCA'},
-    {value: '006', label: 'MAYORISTA QUITO'},
-    {value: '030', label: 'MAYORISTA GUAYAQUIL'},
-    {value: '024', label: 'MAYORISTA MANTA'},
-    {value: '043', label: 'PARQUE COLON'},
-];
-
-const BODEGAS_ALPHACELL = [
-    {value: '001', label: 'BODEGA'},
-];
-
-const BODEGAS_MOVILCELISTIC = [
-    {value: 'DISTLF', label: 'CENTRO DISTRIBUCION MOVILCELISTIC'},
-    {value: '003', label: 'MAYORISTAS MOVILCELISTIC MACHALA'},
-    {value: '004', label: 'MAYORISTAS MOVILCELISTIC CUENCA'},
-
-    {value: '030', label: 'MAYORISTAS MOVILCELISTIC GUAYAQUIL'},
-    {value: '024', label: 'MAYORISTAS MOVILCELISTIC MANTA'},
-    {value: '005', label: '⚠️OPERADORAS CARRIER'},
-    {value: '043', label: 'PARQUE COLON'},
 ];
 
 const CATEGORIAS_HT = [
@@ -182,6 +159,7 @@ const FormSchemaAAAAAA = Yup.object().shape({
 export default function CatalogoForm() {
 
     const {user} = useAuthContext();
+    const {getWarehouseList} = useWarehouseContext();
 
     const methods = useForm({
         resolver: yupResolver(FormSchemaAAAAAA),
@@ -391,7 +369,7 @@ export default function CatalogoForm() {
                                         label="Selección multiple"
                                         options={
 
-                                            user.EMPRESA === '1792161037001' ? BODEGAS_MOVILCELISTIC : BODEGAS
+                                            getWarehouseList().map(w => ({value: w.WhsCode, label: w.WhsName}))
 
                                         }
                                     />

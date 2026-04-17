@@ -90,6 +90,7 @@ CheckoutBillingAddress.propTypes = {
     onBackStep: PropTypes.func,
     onCreateBilling: PropTypes.func,
     onNextStep: PropTypes.func,
+    onTomebambaFinalize: PropTypes.func,
     deliveryOptions: PropTypes.array,
     onApplyShipping: PropTypes.func,
     onApplyComment: PropTypes.func,
@@ -101,6 +102,7 @@ export default function CheckoutBillingAddress({
     onBackStep,
     onCreateBilling,
     onNextStep,
+    onTomebambaFinalize,
     deliveryOptions,
     onApplyShipping,
     onApplyServientrega,
@@ -108,6 +110,132 @@ export default function CheckoutBillingAddress({
 }) {
 
     const { user } = useAuthContext();
+
+    // --- Tomebamba (ROLE '0'): fetch direcciones dinámicamente ---
+    const isTomebamba = user?.ROLE === '0';
+    const [tomebambaAddresses, setTomebambaAddresses] = useState([]);
+    const [selectedTomebambaAddress, setSelectedTomebambaAddress] = useState(null);
+    const [loadingTomebamba, setLoadingTomebamba] = useState(false);
+
+    useEffect(() => {
+        if (!isTomebamba) return;
+        const fetchTomebambaAddresses = async () => {
+            setLoadingTomebamba(true);
+            try {
+                const response = await axios.post('/hanadb/api/customers/BusinessPartners/ByRucCI', {
+                    CI_RUC: '0190003701001',
+                    USUARIO_ID: user.ID,
+                });
+                if (response.data?.data?.length > 0) {
+                    const customer = response.data.data[0];
+                    // Guardar billing del cliente Tomebamba
+                    onCreateBilling(customer);
+                    // Parsear direcciones
+                    let addresses = [];
+                    try {
+                        addresses = JSON.parse(customer.ENVIO || '[]');
+                    } catch (e) {
+                        console.error('Error parsing ENVIO:', e);
+                    }
+                    setTomebambaAddresses(addresses);
+                }
+            } catch (error) {
+                console.error('Error fetching Tomebamba addresses:', error);
+            } finally {
+                setLoadingTomebamba(false);
+            }
+        };
+        fetchTomebambaAddresses();
+    }, [isTomebamba]);
+
+    if (isTomebamba) {
+        return (
+            <Grid container spacing={3}>
+                <Grid item xs={12} md={8}>
+                    <CardHeader
+                        title={
+                            <Typography variant="h6">
+                                Seleccionar dirección de entrega - Tomebamba
+                            </Typography>
+                        }
+                        sx={{ mb: 3 }}
+                    />
+
+                    {loadingTomebamba ? (
+                        <Typography sx={{ p: 2 }}>Cargando direcciones...</Typography>
+                    ) : (
+                        <RadioGroup
+                            value={selectedTomebambaAddress ? JSON.stringify(selectedTomebambaAddress) : ''}
+                            onChange={(e) => {
+                                try {
+                                    setSelectedTomebambaAddress(JSON.parse(e.target.value));
+                                } catch (err) {
+                                    console.error(err);
+                                }
+                            }}
+                        >
+                            <Stack spacing={2}>
+                                {tomebambaAddresses.map((addr, index) => (
+                                    <Paper
+                                        key={index}
+                                        variant="outlined"
+                                        sx={{
+                                            p: 2,
+                                            cursor: 'pointer',
+                                            ...(selectedTomebambaAddress && selectedTomebambaAddress.DIRECCION === addr.DIRECCION && selectedTomebambaAddress.TIPO === addr.TIPO && {
+                                                boxShadow: (theme) => `0 0 0 2px ${theme.palette.primary.main}`,
+                                            }),
+                                        }}
+                                        onClick={() => setSelectedTomebambaAddress(addr)}
+                                    >
+                                        <FormControlLabel
+                                            value={JSON.stringify(addr)}
+                                            control={<Radio checkedIcon={<Iconify icon="eva:checkmark-circle-2-fill" />} />}
+                                            label={
+                                                <Stack spacing={0.5} sx={{ ml: 1 }}>
+                                                    <Typography variant="subtitle2">
+                                                        {addr.TIPO || 'Dirección'} — {addr.CANTON}
+                                                    </Typography>
+                                                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                                        {addr.DIRECCION}
+                                                    </Typography>
+                                                    <Typography variant="caption" sx={{ color: 'text.disabled' }}>
+                                                        {addr.PROVINCIA} — {addr.CANTON} — {addr.PARROQUIA || ''}
+                                                    </Typography>
+                                                </Stack>
+                                            }
+                                            sx={{ flexGrow: 1, py: 1 }}
+                                        />
+                                    </Paper>
+                                ))}
+                            </Stack>
+                        </RadioGroup>
+                    )}
+
+                    <Stack direction="row" justifyContent="space-between" sx={{ mt: 3 }}>
+                        <Button
+                            size="small"
+                            color="inherit"
+                            onClick={onBackStep}
+                            startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
+                        >
+                            Atrás
+                        </Button>
+
+                        <Button
+                            size="large"
+                            variant="contained"
+                            disabled={!selectedTomebambaAddress}
+                            onClick={() => onTomebambaFinalize(selectedTomebambaAddress)}
+                            endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}
+                        >
+                            Tomebamba
+                        </Button>
+                    </Stack>
+                </Grid>
+            </Grid>
+        );
+    }
 
     const { total, discount, subtotal, iva, billing } = checkout;
 

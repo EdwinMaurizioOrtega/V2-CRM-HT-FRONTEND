@@ -18,6 +18,7 @@ import CheckoutWarehouse from './CheckoutWarehouse';
 import { useState } from "react";
 import { useSnackbar } from "../../../../../components/snackbar";
 import { useAuthContext } from "../../../../../auth/useAuthContext";
+import { useWarehouseContext } from "../../../../../auth/useWarehouseContext";
 
 // ----------------------------------------------------------------------
 
@@ -58,147 +59,6 @@ const DELIVERY_OPTIONS = [
         description: 'ENVIO ($13,00)',
     },
 ];
-
-const WAREHOUSE_OPTIONS = [
-
-    // {
-    //     id: '043',
-    //     value: '043',
-    //     title: 'CENTRO DE DISTRIBUCIÓN GUAYAQUIL',
-    //     description: 'Matriz en la ciudad de Guayaquil.',
-    // },
-
-    {
-        id: '019',
-        value: '019',
-        title: 'CENTRO DE DISTRIBUCIÓN HT',
-        description: 'Matriz en la ciudad de Quito.',
-    },
-
-    {
-        id: '002',
-        value: '002',
-        title: 'MAYORISTA CUENCA TURI',
-        description: 'Matriz en la ciudad de Cuenca.',
-    },
-    {
-        id: '006',
-        value: '006',
-        title: 'MAYORISTA QUITO',
-        description: 'Sucursal en la ciudad de Quito.',
-    },
-    // {
-    //     id: '015',
-    //     value: '015',
-    //     title: 'MAYORISTA GUAYAQUIL',
-    //     description: 'SUCURSAL en la ciudad de Guayaquil.',
-    // },
-    {
-        id: '024',
-        value: '024',
-        title: 'MAYORISTA MANTA',
-        description: 'SUCURSAL en la ciudad de Manta.',
-    },
-    {
-        id: '030',
-        value: '030',
-        title: 'MAYORISTA GUAYAQUIL',
-        description: 'SUCURSAL en la ciudad de GUAYAQUIL.',
-    },
-    {
-        id: '010',
-        value: '010',
-        title: 'MAYORISTA CUENCA CENTRO',
-        description: 'SUCURSAL en la ciudad de CUENCA.',
-    },
-    {
-        id: '043',
-        value: '043',
-        title: 'PARQUE COLON',
-        description: 'SUCURSAL en la ciudad de GUAYAQUIL.',
-    },
-];
-
-const WAREHOUSE_OPTIONS_ALPACELL = [
-
-    {
-        id: '001',
-        value: '001',
-        title: 'BODEGA MATRIZ',
-        description: 'GUAYAQUIL ALPHACELL',
-    },
-    {
-        id: '007',
-        value: '007',
-        title: 'BODEGA CDHT',
-        description: 'QUITO ALPHACELL',
-    },
-    {
-        id: '009',
-        value: '009',
-        title: 'GUAYAQUIL SERVIENTREGA',
-        description: 'GUAYAQUIL SERVIENTREGA',
-    },
-]
-
-const WAREHOUSE_OPTIONS_MOVILCELISTIC = [
-    // {
-    //     id: '043',
-    //     value: '043',
-    //     title: 'CENTRO DE DISTRIBUCIÓN GUAYAQUIL',
-    //     description: 'Matriz en la ciudad de Guayaquil.',
-    // },
-    {
-        id: 'DISTLF',
-        value: 'DISTLF',
-        title: 'CENTRO DISTRIBUCION MOVILCELISTIC',
-        description: 'CARAPUNGO',
-    },
-    {
-        id: '003',
-        value: '003',
-        title: 'MAYORISTAS MOVILCELISTIC MACHALA',
-        description: 'MACHALA',
-    },
-    {
-        id: '004',
-        value: '004',
-        title: 'MAYORISTAS MOVILCELISTIC CUENCA TURI',
-        description: 'CUENCA TURI',
-    },
-    {
-        id: '030',
-        value: '030',
-        title: 'MAYORISTAS MOVILCELISTIC COLON',
-        description: 'COLON',
-    },
-    {
-        id: '024',
-        value: '024',
-        title: 'MAYORISTAS MOVILCELISTIC MANTA',
-        description: 'MANTA',
-    },
-    {
-        id: '005',
-        value: '005',
-        title: '⚠️OPERADORAS CARRIER',
-        description: 'CARAPUNGO',
-    },
-    {
-        id: '010',
-        value: '010',
-        title: 'MAYORISTA CUENCA CENTRO',
-        description: 'SUCURSAL en la ciudad de CUENCA.',
-    },
-
-    {
-        id: '043',
-        value: '043',
-        title: 'PARQUE COLON',
-        description: 'SUCURSAL en la ciudad de GUAYAQUIL.',
-    },
-
-]
 
 
 const PAYMENT_OPTIONS = [
@@ -346,6 +206,7 @@ export default function CheckoutPayment({
 }) {
 
     const { user } = useAuthContext();
+    const { getWarehouseName } = useWarehouseContext();
 
     const { total, discount, subtotal, iva, comment, shipping, servientrega, warehouse, method, billing } = checkout;
 
@@ -428,16 +289,26 @@ export default function CheckoutPayment({
     };
 
     const warehouseOptions = (() => {
+        // Códigos de bodegas permitidas por empresa
+        const WAREHOUSE_CODES_HT = ['019', '002', '006', '024', '030', '043'];
+        const WAREHOUSE_CODES_ALPHACELL = ['001', '007', '009'];
+        const WAREHOUSE_CODES_MOVILCELISTIC = ['DISTLF', '003', '004', '030', '024', '005', '043'];
+
+        let codes = [];
         if (user.EMPRESA === '0992537442001') {
-            return WAREHOUSE_OPTIONS; // Hipertronics
+            codes = WAREHOUSE_CODES_HT;
+        } else if (user.EMPRESA === '0992264373001') {
+            codes = WAREHOUSE_CODES_ALPHACELL;
+        } else if (user.EMPRESA === '1792161037001') {
+            codes = WAREHOUSE_CODES_MOVILCELISTIC;
         }
-        if (user.EMPRESA === '0992264373001') {
-            return WAREHOUSE_OPTIONS_ALPACELL; // Alphacell
-        }
-        if (user.EMPRESA === '1792161037001') {
-            return WAREHOUSE_OPTIONS_MOVILCELISTIC; // MovilCelistic
-        }
-        return []; // Opciones por defecto si no coincide con ninguna empresa
+
+        return codes.map(code => ({
+            id: code,
+            value: code,
+            title: getWarehouseName(code),
+            description: getWarehouseName(code),
+        }));
     })();
 
     return (
