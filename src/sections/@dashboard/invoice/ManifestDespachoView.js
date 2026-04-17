@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useReactToPrint } from 'react-to-print';
 import {
@@ -22,6 +22,8 @@ import {
     CircularProgress,
     Alert,
     Link,
+    TextField,
+    Chip,
 } from '@mui/material';
 import Iconify from '../../../components/iconify';
 import axios from '../../../utils/axios';
@@ -61,6 +63,35 @@ export default function ManifestDespachoView({ orders, user, onOrdersDispatched 
     const [openConfirm, setOpenConfirm] = useState(false);
     const [dispatching, setDispatching] = useState(false);
     const [dispatchResult, setDispatchResult] = useState(null);
+    const [bultos, setBultos] = useState({});
+
+    useEffect(() => {
+        const initial = {};
+        orders.forEach((order) => {
+            if (order.BULTOS) {
+                initial[order.ID] = String(order.BULTOS);
+            }
+        });
+        setBultos(initial);
+    }, [orders]);
+
+    const handleBultosChange = (orderId, value) => {
+        const num = value.replace(/[^0-9]/g, '');
+        setBultos((prev) => ({ ...prev, [orderId]: num }));
+    };
+
+    const handleBultosBlur = async (orderId) => {
+        const value = parseInt(bultos[orderId] || '0', 10);
+        try {
+            await axios.put('/hanadb/api/orders/order/change_bultos', {
+                ID_ORDER: orderId,
+                BULTOS: value,
+                empresa: user.EMPRESA,
+            });
+        } catch (error) {
+            console.error(`Error guardando bultos para orden ${orderId}:`, error);
+        }
+    };
 
     const printRef = useRef(null);
 
@@ -231,6 +262,7 @@ export default function ManifestDespachoView({ orders, user, onOrdersDispatched 
                                 </TableCell>
                                 <TableCell><strong>#</strong></TableCell>
                                 <TableCell><strong>Orden</strong></TableCell>
+                                <TableCell><strong>Bultos</strong></TableCell>
                                 <TableCell><strong>Bodega</strong></TableCell>
                                 <TableCell><strong>Guía</strong></TableCell>
                                 <TableCell><strong>Fecha</strong></TableCell>
@@ -258,14 +290,30 @@ export default function ManifestDespachoView({ orders, user, onOrdersDispatched 
                                     </TableCell>
                                     <TableCell>{selectedRows.length > 0 ? selectedRows.sort((a, b) => a - b).indexOf(index) + 1 : index + 1}</TableCell>
                                     <TableCell>
-                                        <Link
-                                            component="button"
-                                            variant="body2"
-                                            sx={{ cursor: 'pointer', fontWeight: 600 }}
-                                            onClick={() => push(PATH_DASHBOARD.invoice.view(row.ID))}
-                                        >
-                                            {row.ID}
-                                        </Link>
+                                        <Stack direction="row" alignItems="center" spacing={0.5}>
+                                            <Link
+                                                component="button"
+                                                variant="body2"
+                                                sx={{ cursor: 'pointer', fontWeight: 600 }}
+                                                onClick={() => push(PATH_DASHBOARD.invoice.view(row.ID))}
+                                            >
+                                                {row.ID}
+                                            </Link>
+                                            {bultos[row.ID] && (
+                                                <Chip label={`${bultos[row.ID]} bto(s)`} size="small" color="info" variant="outlined" />
+                                            )}
+                                        </Stack>
+                                    </TableCell>
+                                    <TableCell sx={{ minWidth: 70 }}>
+                                        <TextField
+                                            size="small"
+                                            value={bultos[row.ID] || ''}
+                                            onChange={(e) => handleBultosChange(row.ID, e.target.value)}
+                                            onBlur={() => handleBultosBlur(row.ID)}
+                                            placeholder="0"
+                                            inputProps={{ style: { textAlign: 'center', padding: '4px 8px' } }}
+                                            sx={{ width: 60 }}
+                                        />
                                     </TableCell>
                                     <TableCell>{getWarehouseName(row.BODEGA)}</TableCell>
                                     <TableCell>{row.NUMEROGUIA && row.NUMEROGUIA !== '000000000' ? row.NUMEROGUIA : '-'}</TableCell>
@@ -288,7 +336,7 @@ export default function ManifestDespachoView({ orders, user, onOrdersDispatched 
                             ))}
                             <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
                                 <TableCell sx={{ '@media print': { display: 'none' } }} />
-                                <TableCell colSpan={7} align="right">
+                                <TableCell colSpan={8} align="right">
                                     <strong>TOTAL {selectedRows.length > 0 ? `(${selectedRows.length} seleccionados)` : 'GENERAL'}:</strong>
                                 </TableCell>
                                 <TableCell align="right">

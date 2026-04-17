@@ -385,6 +385,16 @@ export default function InvoiceDetails({ invoice }) {
 
     const [showAutocomplete, setShowAutocomplete] = useState(false);
 
+    const [selectedTransportista, setSelectedTransportista] = useState(null);
+
+    const TRANSPORTISTA_OPTIONS = [
+        { label: 'TRAMACO EXPRESS CIA. LTDA.', value: 'TRAMACO' },
+        { label: 'Servientrega Ecuador S.A.', value: 'SERVIENTREGA' },
+        { label: 'TEVCOL CIA LTDA', value: 'TEVCOL' },
+        { label: 'Vendedor - Transporte interno', value: 'VENDEDOR' },
+        { label: 'Cliente retira en bodega', value: 'CLIENTE_RETIRA' },
+    ];
+
     // Lazy stock loading per item
     const [stockByProduct, setStockByProduct] = useState({});
 
@@ -3125,35 +3135,48 @@ export default function InvoiceDetails({ invoice }) {
                     <Grid container>
                         <Grid item xs={12} md={12} sx={{ py: 6 }}>
 
-                            <TextField
-                                required
-                                label="Número de guia."
-                                value={valueGuia}
-                                // onChange={handleChangeGuia}
-                                onChange={(e) => {
-                                    const inputValue = e.target.value;
-                                    if (/^[0-9]{0,9}$/.test(inputValue)) {
-                                        handleChangeGuia(e);
+                            <Autocomplete
+                                fullWidth
+                                options={TRANSPORTISTA_OPTIONS}
+                                getOptionLabel={(option) => option.label}
+                                value={selectedTransportista}
+                                onChange={(event, value) => {
+                                    setSelectedTransportista(value);
+                                    if (value?.value === 'VENDEDOR' || value?.value === 'CLIENTE_RETIRA') {
+                                        setValueGuia(value?.value === 'CLIENTE_RETIRA' ? '111111111' : '000000000');
+                                        if (value?.value === 'VENDEDOR') {
+                                            setShowAutocomplete(true);
+                                        } else {
+                                            setShowAutocomplete(false);
+                                        }
+                                    } else {
+                                        setValueGuia('');
+                                        setShowAutocomplete(false);
                                     }
                                 }}
-                                inputProps={{ maxLength: 9 }}
-                                error={valueGuia.length !== 9}
-                                helperText={valueGuia.length !== 9 ? 'El número de guía debe tener 9 caracteres' : ''}
+                                renderInput={(params) => <TextField {...params} label="Transportista" margin="none" />}
+                                sx={{ mb: 2 }}
                             />
-                            {/* <TextField */}
-                            {/*     required */}
-                            {/*     label="Número de factura." */}
-                            {/*     value={valueFactura} */}
-                            {/*     onChange={handleChangeFactura} */}
-                            {/* /> */}
-                            {/* <TextField */}
-                            {/*     required */}
-                            {/*     label="Valor total." */}
-                            {/*     value={valueValorFactura} */}
-                            {/*     onChange={handleChangeValorFactura} */}
-                            {/* /> */}
 
-                            {showAutocomplete && user.COMPANY === 'HT' && (
+                            {selectedTransportista && ['TRAMACO', 'SERVIENTREGA', 'TEVCOL'].includes(selectedTransportista.value) && (
+                                <TextField
+                                    required
+                                    label="Número de guia."
+                                    value={valueGuia}
+                                    onChange={(e) => {
+                                        const inputValue = e.target.value;
+                                        if (/^[0-9]{0,9}$/.test(inputValue)) {
+                                            handleChangeGuia(e);
+                                        }
+                                    }}
+                                    inputProps={{ maxLength: 9 }}
+                                    error={valueGuia.length !== 9}
+                                    helperText={valueGuia.length !== 9 ? 'El número de guía debe tener 9 caracteres' : ''}
+                                    sx={{ mb: 2 }}
+                                />
+                            )}
+
+                            {selectedTransportista?.value === 'VENDEDOR' && user.COMPANY === 'HT' && (
                                 <Autocomplete
                                     name="vendedor"
                                     label="Vendedor"
@@ -3164,9 +3187,8 @@ export default function InvoiceDetails({ invoice }) {
                                     renderInput={(params) => <TextField {...params} label="Entregar a: "
                                         margin="none" />}
                                     onChange={(event, newValue) => handleChangeEmpleadoEntregar(event, newValue)}
-
+                                    sx={{ mb: 2 }}
                                 />
-
                             )}
 
                             {!loading ? (
