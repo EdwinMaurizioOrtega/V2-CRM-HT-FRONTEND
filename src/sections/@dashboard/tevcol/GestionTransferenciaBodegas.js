@@ -331,7 +331,7 @@ export default function GestionTransferenciaBodegasView() {
     setLoadingProductos(true);
     try {
       const response = await fetch(
-        `${HOST_API_KEY}/warehouse/products?empresa=${user.EMPRESA}&bodega_origen=${bodegaOrigen}&bodega_destino=${bodegaDestino}`
+        `${HOST_API_KEY}/hanadb/api/warehouse/products?empresa=${user.EMPRESA}&bodega_origen=${bodegaOrigen}&bodega_destino=${bodegaDestino}`
       );
       
       if (response.ok) {
@@ -471,7 +471,7 @@ export default function GestionTransferenciaBodegasView() {
         if (transferencia.ESTADO === 0 && transferencia.BODEGA_ORIGEN && transferencia.BODEGA_DESTINO && user?.EMPRESA) {
           try {
             const stockResponse = await fetch(
-              `${HOST_API_KEY}/warehouse/products?empresa=${user.EMPRESA}&bodega_origen=${transferencia.BODEGA_ORIGEN}&bodega_destino=${transferencia.BODEGA_DESTINO}`
+              `${HOST_API_KEY}/hanadb/api/warehouse/products?empresa=${user.EMPRESA}&bodega_origen=${transferencia.BODEGA_ORIGEN}&bodega_destino=${transferencia.BODEGA_DESTINO}`
             );
             if (stockResponse.ok) {
               const stockData = await stockResponse.json();
@@ -582,7 +582,7 @@ export default function GestionTransferenciaBodegasView() {
     if (modalDetalle.transferencia?.BODEGA_ORIGEN && modalDetalle.transferencia?.BODEGA_DESTINO && user?.EMPRESA) {
       try {
         const response = await fetch(
-          `${HOST_API_KEY}/warehouse/products?empresa=${user.EMPRESA}&bodega_origen=${modalDetalle.transferencia.BODEGA_ORIGEN}&bodega_destino=${modalDetalle.transferencia.BODEGA_DESTINO}`
+          `${HOST_API_KEY}/hanadb/api/warehouse/products?empresa=${user.EMPRESA}&bodega_origen=${modalDetalle.transferencia.BODEGA_ORIGEN}&bodega_destino=${modalDetalle.transferencia.BODEGA_DESTINO}`
         );
         
         if (response.ok) {

@@ -1133,6 +1133,7 @@ export default function InvoiceDetails({ invoice }) {
                     IDUSUARIOENTREGARA: Number(idEmpleadoEntregar),
                     NOMBREUSUARIOENTREGARA: nombreUsuarioEntregara,
                     ESTADO: Number(estadoInvoice),
+                    TRANSPORTISTA: selectedTransportista?.value || '',
                 });
 
                 // Se completó con éxito (código de estado 200)
