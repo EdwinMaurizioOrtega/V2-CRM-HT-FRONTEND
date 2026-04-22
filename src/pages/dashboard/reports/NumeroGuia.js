@@ -19,6 +19,7 @@ import Iconify from '../../../components/iconify';
 import DashboardLayout from '../../../layouts/dashboard/DashboardLayout';
 // axios
 import axios from '../../../utils/axios';
+import axiosRaw from 'axios';
 // auth
 import { useAuthContext } from '../../../auth/useAuthContext';
 // utils
@@ -129,7 +130,7 @@ export default function NumeroGuiaPage() {
 
             console.log('Fechas formateadas:', formattedStartDate, formattedEndDate);
 
-            const response = await axios.get(`${process.env.DATA_ANALITICS}/b1t/api/power_bi/ordenes_con_guias`, {
+            const response = await axiosRaw.get('/api/bi/ordenes_con_guias', {
                 params: {
                     fecha_inicio: formattedStartDate,
                     fecha_fin: formattedEndDate
