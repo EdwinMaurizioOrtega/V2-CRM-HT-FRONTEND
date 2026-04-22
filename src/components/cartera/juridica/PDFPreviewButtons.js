@@ -10,6 +10,12 @@ import axios from "../../../utils/axios";
 // import OtroPDF from './pdfs/OtroPDF';
 // import TercerPDF from './pdfs/TercerPDF';
 import n2words from 'n2words';
+import {
+    createFlow as uanatacaCreateFlow,
+    buildCarteraFlowBody,
+    buildPagareFlowBody,
+    buildFlowStatusUrl,
+} from "../../../api/uanataca";
 
 export default function PDFPreviewButtons(data) {
 
@@ -45,122 +51,38 @@ export default function PDFPreviewButtons(data) {
     };
 
     const enviarUANATACA = async () => {
-
-        //console.log("dataE: " + JSON.stringify(data.data.empresa.CEDULA_REPRESENTANTE));
-
-        const solicitudBase64 = await getPdfBase64(<SolicitudPDF data={data} user={user} />);
-        const autorizacionBase64 = await getPdfBase64(<AutorizacionPDF data={data} />);
-
-
-        const nombre = data.data.empresa.NOMBRE_REPRESENTANTE || "";
-        const partes = nombre.trim().split(" ");
-
-        const jsonParaUanataca = {
-            flowType: "-NXk9JhsCP7KvP9eQa_11_hpp",
-            userData: {
-                cedula: data.data.empresa.CEDULA_REPRESENTANTE,
-                email: data.data.empresa.EMAIL,
-                nombres: partes.slice(0, 2).join(" "),
-                apellido: partes[2] || "",
-                apellido2: partes[3] || "",
-                telef: data.data.empresa.NUM_TELEFONO,
-                dirDom: data.data.empresa.DIRECCION_DOMICILIO,
-                ciudad: data.data.empresa.CIUDAD,
-                prov: data.data.empresa.PROVINCIA,
-                pais: "EC"
-            },
-            customData: {
-                subject: "Prueba firmar PDF con Oneshot",
-                msg: "Hola " + data.data.empresa.NOMBRE_REPRESENTANTE || "" + "por favor utiliza el siguiente enlace para acceder al proceso de firma electrónica: <%=link_sso%>",
-                channel: "ninguno",
-                channelNotify: "no",
-                endpointNotify: "no",
-                enforceDNI: "si",
-                qrString: "Puedes validar las firmas de este documento en https://vol.uanataca.com/es",
-                transactionId: "test_hps_2",
-                files: [
-                    {
-                        base64: solicitudBase64,
-                        filename: "solicitud.pdf",
-                        markQR: false,
-                        page: 0,
-                        posX: 50,
-                        posY: 50
-                    },
-                    {
-                        base64: autorizacionBase64,
-                        filename: "autorizacion.pdf",
-                        markQR: false,
-                        page: 0,
-                        posX: 50,
-                        posY: 50
-                    }
-                ]
-            }
-        };
-
-        //console.log("JSON para UANATACA:", JSON.stringify(jsonParaUanataca, null, 2));
-        // Puedes ahora enviar 'documentos' a tu backend si lo necesitas
-
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("x-nexxit-key", "7e8eb93efa0cc0fcf5f82d72d620613abfb74b99f00c64b218ec2b17eabd8d1c"); // <-- reemplaza con tu clave real
-
-        const requestOptions = {
-            method: "POST",
-            headers: myHeaders,
-            body: JSON.stringify(jsonParaUanataca),
-            redirect: "follow"
-        };
-
         try {
-            const response = await fetch("https://wfapi.nexxit.dev/wf/flow", requestOptions);
-            const result = await response.json(); // usar .json() para obtener objeto
+            const cliente = data.data.empresa;
+            const rucEmpresa = user?.EMPRESA;
 
-            if (result.status === 201) {
-                const sessionId = result.details?.sessionId;
-                const sso = result.details?.sso;
+            const solicitudBase64 = await getPdfBase64(<SolicitudPDF data={data} user={user} />);
+            const autorizacionBase64 = await getPdfBase64(<AutorizacionPDF data={data} />);
 
-                //Guardamos en la base de datos.
-                try {
-                    const response = await axios.post(`/hanadb/api/customers/guardar_session_id_uanataca`, {
-                        session_id: sessionId,
-                        sso: sso,
-                        empresa_id: data.data.empresa.ID_EMPRESA
-                    });
+            const body = buildCarteraFlowBody({
+                rucEmpresa,
+                cliente,
+                solicitudBase64,
+                autorizacionBase64,
+                transactionId: `cartera-${cliente.ID_EMPRESA}`,
+            });
 
-                    if (response.status === 200) {
-                        //console.log(response);
-
-                        //Creamos el enlace y lo abrimos en una nueva pestaña.
-                        const link_sso = `https://hypertronics.nexxit.dev/#sso/${sso}`;
-                        //console.log("Link para firma:", link_sso);
-
-                        // Si quieres mostrarlo en la UI o hacer algo con él:
-                        //alert(`Link de firma: ${link_sso}`);
-                        // Abrir en nueva pestaña
-                        window.open(link_sso, "_blank");
-
-                    } else {
-                        // La solicitud POST no se realizó correctamente
-                        console.error('Error en la solicitud POST:', response.status);
-                    }
-
-
-                } catch (error) {
-                    console.error('Error fetching data:', error);
-                }
-
-
-            } else {
-                console.error("Error en la respuesta:", result);
+            const result = await uanatacaCreateFlow(rucEmpresa, body);
+            const flowId = result?.id;
+            if (!flowId) {
+                throw new Error('Uanataca no devolvió un flowId válido.');
             }
 
+            await axios.post(`/hanadb/api/customers/guardar_session_id_uanataca`, {
+                session_id: flowId,
+                sso: buildFlowStatusUrl(flowId),
+                empresa_id: cliente.ID_EMPRESA,
+            });
 
+            alert(`Flujo de firma creado correctamente. Se envió el correo/WhatsApp al cliente (${cliente.EMAIL || 'sin email'}) para firmar los documentos.\nFlow ID: ${flowId}`);
         } catch (error) {
-            console.error("Error al enviar a UANATACA:", error);
+            console.error("Error al enviar a UANATACA (cartera):", error);
+            alert(`Error al iniciar firma: ${error.message || error}`);
         }
-
     };
 
     const [valor, setValor] = useState('');
@@ -199,113 +121,36 @@ export default function PDFPreviewButtons(data) {
     };
 
     const enviarPagareUANATACA = async () => {
-
-        //console.log("dataE: " + JSON.stringify(data.data.empresa.CEDULA_REPRESENTANTE));
-
-        const pagareBase64 = await getPdfBase64(<PagarePDF valor={valor} texto={texto} data={data} user={user} />);
-
-
-        const nombre = data.data.empresa.NOMBRE_REPRESENTANTE || "";
-        const partes = nombre.trim().split(" ");
-
-        const jsonParaUanataca = {
-            flowType: "-NXk9JhsCP7KvP9eQa_11_hpp",
-            userData: {
-                cedula: data.data.empresa.CEDULA_REPRESENTANTE,
-                email: data.data.empresa.EMAIL,
-                nombres: partes.slice(0, 2).join(" "),
-                apellido: partes[2] || "",
-                apellido2: partes[3] || "",
-                telef: data.data.empresa.NUM_TELEFONO,
-                dirDom: data.data.empresa.DIRECCION_DOMICILIO,
-                ciudad: data.data.empresa.CIUDAD,
-                prov: data.data.empresa.PROVINCIA,
-                pais: "EC"
-            },
-            customData: {
-                subject: "Prueba firmar PDF con Oneshot",
-                msg: "Hola " + data.data.empresa.NOMBRE_REPRESENTANTE || "" + "por favor utiliza el siguiente enlace para acceder al proceso de firma electrónica: <%=link_sso%>",
-                channel: "ninguno",
-                channelNotify: "no",
-                endpointNotify: "no",
-                enforceDNI: "si",
-                qrString: "Puedes validar las firmas de este documento en https://vol.uanataca.com/es",
-                transactionId: "test_hps_2",
-                files: [
-                    {
-                        base64: pagareBase64,
-                        filename: "pagare.pdf",
-                        markQR: false,
-                        page: 0,
-                        posX: 50,
-                        posY: 150
-                    },
-                ]
-            }
-        };
-
-        //console.log("JSON para UANATACA:", JSON.stringify(jsonParaUanataca, null, 2));
-        // Puedes ahora enviar 'documentos' a tu backend si lo necesitas
-
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("x-nexxit-key", "7e8eb93efa0cc0fcf5f82d72d620613abfb74b99f00c64b218ec2b17eabd8d1c"); // <-- reemplaza con tu clave real
-
-        const requestOptions = {
-            method: "POST",
-            headers: myHeaders,
-            body: JSON.stringify(jsonParaUanataca),
-            redirect: "follow"
-        };
-
         try {
-            const response = await fetch("https://wfapi.nexxit.dev/wf/flow", requestOptions);
-            const result = await response.json(); // usar .json() para obtener objeto
+            const cliente = data.data.empresa;
+            const rucEmpresa = user?.EMPRESA;
 
-            if (result.status === 201) {
-                const sessionId = result.details?.sessionId;
-                const sso = result.details?.sso;
+            const pagareBase64 = await getPdfBase64(<PagarePDF valor={valor} texto={texto} data={data} user={user} />);
 
-                //Guardamos en la base de datos.
-                try {
-                    const response = await axios.post(`/hanadb/api/customers/guardar_session_id_uanataca_pagare`, {
-                        session_id: sessionId,
-                        sso: sso,
-                        empresa_id: data.data.empresa.ID_EMPRESA
-                    });
+            const body = buildPagareFlowBody({
+                rucEmpresa,
+                cliente,
+                pagareBase64,
+                transactionId: `pagare-${cliente.ID_EMPRESA}`,
+            });
 
-                    if (response.status === 200) {
-                        //console.log(response);
-
-                        //Creamos el enlace y lo abrimos en una nueva pestaña.
-                        const link_sso = `https://hypertronics.nexxit.dev/#sso/${sso}`;
-                        //console.log("Link para firma:", link_sso);
-
-                        // Si quieres mostrarlo en la UI o hacer algo con él:
-                        //alert(`Link de firma: ${link_sso}`);
-                        // Abrir en nueva pestaña
-                        window.open(link_sso, "_blank");
-
-                    } else {
-                        // La solicitud POST no se realizó correctamente
-                        console.error('Error en la solicitud POST:', response.status);
-                    }
-
-
-                } catch (error) {
-                    console.error('Error fetching data:', error);
-                }
-
-
-            } else {
-                console.error("Error en la respuesta:", result);
+            const result = await uanatacaCreateFlow(rucEmpresa, body);
+            const flowId = result?.id;
+            if (!flowId) {
+                throw new Error('Uanataca no devolvió un flowId válido.');
             }
 
+            await axios.post(`/hanadb/api/customers/guardar_session_id_uanataca_pagare`, {
+                session_id: flowId,
+                sso: buildFlowStatusUrl(flowId),
+                empresa_id: cliente.ID_EMPRESA,
+            });
 
+            alert(`Pagaré enviado a firma. Se notificó al cliente (${cliente.EMAIL || 'sin email'}).\nFlow ID: ${flowId}`);
         } catch (error) {
-            console.error("Error al enviar a UANATACA:", error);
+            console.error("Error al enviar a UANATACA (pagaré):", error);
+            alert(`Error al iniciar firma del pagaré: ${error.message || error}`);
         }
-
     };
 
     return (

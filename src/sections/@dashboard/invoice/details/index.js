@@ -1119,7 +1119,7 @@ export default function InvoiceDetails({ invoice }) {
 
 
         //Enviamos los datos al servidor,
-        if (valueGuia.length === 9) {
+        if (valueGuia.length > 0) {
 
             setLoading(true); // Establecer loading a true antes de hacer la llamada a la API
 
@@ -1166,7 +1166,7 @@ export default function InvoiceDetails({ invoice }) {
             }
 
         } else {
-            enqueueSnackbar('El número de guía debe tener 9 caracteres.', { variant: 'error' })
+            enqueueSnackbar('El número de guía no puede estar vacío.', { variant: 'error' })
         }
 
     }
@@ -3165,14 +3165,10 @@ export default function InvoiceDetails({ invoice }) {
                                     label="Número de guia."
                                     value={valueGuia}
                                     onChange={(e) => {
-                                        const inputValue = e.target.value;
-                                        if (/^[0-9]{0,9}$/.test(inputValue)) {
-                                            handleChangeGuia(e);
-                                        }
+                                        handleChangeGuia(e);
                                     }}
-                                    inputProps={{ maxLength: 9 }}
-                                    error={valueGuia.length !== 9}
-                                    helperText={valueGuia.length !== 9 ? 'El número de guía debe tener 9 caracteres' : ''}
+                                    error={valueGuia.length === 0}
+                                    helperText={valueGuia.length === 0 ? 'El número de guía no puede estar vacío' : ''}
                                     sx={{ mb: 2 }}
                                 />
                             )}

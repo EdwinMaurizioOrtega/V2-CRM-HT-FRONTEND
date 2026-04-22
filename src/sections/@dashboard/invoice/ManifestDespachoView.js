@@ -37,6 +37,7 @@ const COMPANY_NAMES = {
 
 const printStyles = `
   @media print {
+    /* Ocultar todo y mostrar solo el área imprimible */
     body * {
       visibility: hidden;
     }
@@ -48,10 +49,78 @@ const printStyles = `
       left: 0;
       top: 0;
       width: 100%;
+      padding: 0 !important;
+      margin: 0 !important;
     }
+
+    /* Configuración de página para tablets e impresoras */
     @page {
-      size: letter landscape;
-      margin: 1cm;
+      size: A4 landscape;
+      margin: 0.8cm;
+    }
+
+    /* Forzar colores exactos en impresión */
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+
+    /* Tabla compacta y legible */
+    #manifest-despacho-print .MuiTable-root {
+      width: 100% !important;
+      table-layout: auto !important;
+      border-collapse: collapse !important;
+      font-size: 9pt !important;
+    }
+    #manifest-despacho-print .MuiTableCell-root {
+      padding: 3px 4px !important;
+      border: 1px solid #bdbdbd !important;
+      font-size: 9pt !important;
+      line-height: 1.2 !important;
+      word-break: break-word !important;
+      white-space: normal !important;
+    }
+    #manifest-despacho-print .MuiTableHead-root .MuiTableCell-root {
+      background-color: #f0f0f0 !important;
+      font-weight: bold !important;
+      font-size: 9pt !important;
+    }
+
+    /* Ocultar inputs (campo bultos) pero mostrar su valor via Chip */
+    #manifest-despacho-print .MuiTextField-root,
+    #manifest-despacho-print .MuiInputBase-root,
+    #manifest-despacho-print input {
+      display: none !important;
+    }
+
+    /* Asegurar que los Chip de bultos se vean */
+    #manifest-despacho-print .MuiChip-root {
+      border: 1px solid #1976d2 !important;
+      background: transparent !important;
+      color: #1976d2 !important;
+      font-size: 8pt !important;
+      height: auto !important;
+      padding: 1px 4px !important;
+    }
+
+    /* Links como texto negro normal en impresión */
+    #manifest-despacho-print a,
+    #manifest-despacho-print button {
+      color: #000 !important;
+      text-decoration: none !important;
+      font-weight: 600 !important;
+    }
+
+    /* Evitar que filas se corten entre páginas */
+    #manifest-despacho-print tr {
+      page-break-inside: avoid !important;
+    }
+    #manifest-despacho-print thead {
+      display: table-header-group !important;
+    }
+    #manifest-despacho-print tfoot {
+      display: table-footer-group !important;
     }
   }
 `;
@@ -264,6 +333,7 @@ export default function ManifestDespachoView({ orders, user, onOrdersDispatched 
                                 <TableCell><strong>Orden</strong></TableCell>
                                 <TableCell><strong>Bultos</strong></TableCell>
                                 <TableCell><strong>Bodega</strong></TableCell>
+                                <TableCell><strong>Transportista</strong></TableCell>
                                 <TableCell><strong>Guía</strong></TableCell>
                                 <TableCell><strong>Fecha</strong></TableCell>
                                 <TableCell><strong>Cliente</strong></TableCell>
@@ -314,8 +384,23 @@ export default function ManifestDespachoView({ orders, user, onOrdersDispatched 
                                             inputProps={{ style: { textAlign: 'center', padding: '4px 8px' } }}
                                             sx={{ width: 60 }}
                                         />
+                                        <Box
+                                            component="span"
+                                            sx={{
+                                                display: 'none',
+                                                '@media print': {
+                                                    display: 'inline',
+                                                    fontWeight: 600,
+                                                    textAlign: 'center',
+                                                    width: '100%',
+                                                },
+                                            }}
+                                        >
+                                            {bultos[row.ID] || '-'}
+                                        </Box>
                                     </TableCell>
                                     <TableCell>{getWarehouseName(row.BODEGA)}</TableCell>
+                                    <TableCell>{row.TRANSPORTISTA || '-'}</TableCell>
                                     <TableCell>{row.NUMEROGUIA && row.NUMEROGUIA !== '000000000' ? row.NUMEROGUIA : '-'}</TableCell>
                                     <TableCell>{row.FECHACREACION}</TableCell>
                                     <TableCell>{row.Cliente}</TableCell>
@@ -336,7 +421,7 @@ export default function ManifestDespachoView({ orders, user, onOrdersDispatched 
                             ))}
                             <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
                                 <TableCell sx={{ '@media print': { display: 'none' } }} />
-                                <TableCell colSpan={8} align="right">
+                                <TableCell colSpan={9} align="right">
                                     <strong>TOTAL {selectedRows.length > 0 ? `(${selectedRows.length} seleccionados)` : 'GENERAL'}:</strong>
                                 </TableCell>
                                 <TableCell align="right">
