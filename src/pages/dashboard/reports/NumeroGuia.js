@@ -129,7 +129,7 @@ export default function NumeroGuiaPage() {
 
             console.log('Fechas formateadas:', formattedStartDate, formattedEndDate);
 
-            const response = await axios.get('/hanadb/api/power_bi/ordenes_con_guias', {
+            const response = await axios.get(`${process.env.DATA_ANALITICS}/b1t/api/power_bi/ordenes_con_guias`, {
                 params: {
                     fecha_inicio: formattedStartDate,
                     fecha_fin: formattedEndDate
