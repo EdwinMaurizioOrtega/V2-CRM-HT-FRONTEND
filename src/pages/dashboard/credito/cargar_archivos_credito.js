@@ -19,7 +19,13 @@ import {
     Typography,
     Chip,
     alpha,
-    CircularProgress
+    CircularProgress,
+    Drawer,
+    List,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+    Divider
 } from "@mui/material";
 import { useSettingsContext } from "../../../components/settings";
 import { useRouter } from "next/router";
@@ -27,10 +33,15 @@ import EmptyContent from "../../../components/empty-content";
 import axios from "../../../utils/axios";
 import { useAuthContext } from "../../../auth/useAuthContext";
 import Iconify from "../../../components/iconify";
-import MenuPopover from "../../../components/menu-popover";
 import ConfirmDialog from "../../../components/confirm-dialog";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import * as XLSX from 'xlsx';
+import {
+    getFlow as uanatacaGetFlow,
+    getFlowDocuments as uanatacaGetFlowDocuments,
+    openFlowDocumentPdf as uanatacaOpenFlowDocumentPdf,
+    extractFlowId,
+} from "../../../api/uanataca";
 
 
 CargarArchivosCreditoPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -162,9 +173,31 @@ export default function CargarArchivosCreditoPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [filterType, setFilterType] = useState('all'); // 'all', 'N', 'J'
     const [filterVendedor, setFilterVendedor] = useState('all');
+
+    // Estado Uanataca - diálogo para ver estado del flujo y documentos
+    const [openEstadoFirma, setOpenEstadoFirma] = useState(false);
+    const [loadingEstadoFirma, setLoadingEstadoFirma] = useState(false);
+    const [estadoFirmaData, setEstadoFirmaData] = useState(null);
+    const [estadoFirmaError, setEstadoFirmaError] = useState('');
+    const [estadoFirmaTitulo, setEstadoFirmaTitulo] = useState('');
     const handleChangeOBS = (event) => {
         setValueNewOBS(event.target.value);
         // //console.log(`Nuevo precio unitario ${valueNew}`);
+    };
+
+    // Helpers multi-empresa: MovilCelistic (RUC 1792161037001) usa columnas _MC.
+    // Cualquier otra empresa (Lidenar por defecto) usa las columnas originales.
+    const isMovilCelistic = user?.EMPRESA === '1792161037001';
+    const pickSoo = (partner) => (isMovilCelistic ? partner?.SOO_MC : partner?.SOO);
+    const pickSooPagare = (partner) =>
+        isMovilCelistic ? partner?.SOO_PAGARE_MC : partner?.SOO_PAGARE;
+    const hasSoo = (partner) => {
+        const v = pickSoo(partner);
+        return v && v !== '<NULL>';
+    };
+    const hasSooPagare = (partner) => {
+        const v = pickSooPagare(partner);
+        return v && v !== '<NULL>';
     };
 
     const handleCloseOBS = () => {
@@ -235,8 +268,8 @@ export default function CargarArchivosCreditoPage() {
                     'Observaciones': partner.OBSERVACIONES_CREDITO && partner.OBSERVACIONES_CREDITO !== '<NULL>' 
                         ? partner.OBSERVACIONES_CREDITO 
                         : '',
-                    'Estado Documentación': partner.SOO && partner.SOO !== '<NULL>' ? 'Documentos Cargados' : 'Pendiente',
-                    'Estado Pagaré': partner.SOO_PAGARE && partner.SOO_PAGARE !== '<NULL>' ? 'Pagaré Firmado' : 'Pendiente',
+                    'Estado Documentación': hasSoo(partner) ? 'Documentos Cargados' : 'Pendiente',
+                    'Estado Pagaré': hasSooPagare(partner) ? 'Pagaré Firmado' : 'Pendiente',
                     'Fecha Creación': partner.CREATED_AT || '',
                     'Última Actualización': partner.UPDATED_AT || '',
                     'Usuario Creación': partner.CREATED_BY_USER || '',
@@ -462,6 +495,57 @@ export default function CargarArchivosCreditoPage() {
 
     }
 
+    // Abre el diálogo con el estado del flujo + lista de documentos Uanataca.
+    // `dato` puede ser el flowId o la URL legacy guardada en SOO/SOO_PAGARE.
+    const VerEstadoFirmaUanataca = async (dato, titulo) => {
+        const flowId = extractFlowId(dato);
+        setEstadoFirmaTitulo(titulo || 'Estado del Flujo Uanataca');
+        setEstadoFirmaData(null);
+        setEstadoFirmaError('');
+        setOpenEstadoFirma(true);
+        if (!flowId) {
+            setEstadoFirmaError('No se pudo determinar el flowId del registro.');
+            return;
+        }
+        setLoadingEstadoFirma(true);
+        try {
+            const rucEmpresa = user?.EMPRESA;
+            const [flow, documents] = await Promise.all([
+                uanatacaGetFlow(rucEmpresa, flowId),
+                uanatacaGetFlowDocuments(rucEmpresa, flowId),
+            ]);
+            setEstadoFirmaData({ flowId, flow, documents: Array.isArray(documents) ? documents : [] });
+        } catch (err) {
+            console.error('[Uanataca] Error consultando flujo:', err);
+            setEstadoFirmaError(err?.message || 'Error consultando el flujo.');
+        } finally {
+            setLoadingEstadoFirma(false);
+        }
+    };
+
+    const handleCloseEstadoFirma = () => {
+        setOpenEstadoFirma(false);
+        setEstadoFirmaData(null);
+        setEstadoFirmaError('');
+    };
+
+    // Descarga desde Uanataca el PDF específico de un documento y lo abre en otra pestaña.
+    const handleVerPdfDocumento = async (doc) => {
+        try {
+            const flowId = estadoFirmaData?.flowId;
+            if (!flowId || !doc?.id) return;
+            await uanatacaOpenFlowDocumentPdf(
+                user?.EMPRESA,
+                flowId,
+                doc.id,
+                doc.name || doc.filename || `${doc.id}.pdf`
+            );
+        } catch (err) {
+            console.error('[Uanataca] Error abriendo PDF:', err);
+            alert(`No se pudo abrir el PDF: ${err?.message || err}`);
+        }
+    };
+
     const VerFotoRegistroCivil = (row) => {
         //console.log(row);
         // const SESSION_ID = row.row.SESSION_ID;
@@ -525,7 +609,7 @@ export default function CargarArchivosCreditoPage() {
                                     '&:hover': { bgcolor: alpha(state?.color || '#ccc', 0.2) }
                                 }}
                             >
-                                <Iconify icon="eva:more-vertical-fill" width={18} />
+                                <Iconify icon="eva:menu-2-fill" width={18} />
                             </IconButton>
                         </Stack>
                     </Stack>
@@ -605,38 +689,44 @@ export default function CargarArchivosCreditoPage() {
                             Ver Información
                         </Button>
 
-                        {partner.SOO && partner.SOO !== "<NULL>" && (
-                            <Button
-                                fullWidth
-                                variant="outlined"
-                                size="small"
-                                startIcon={<Iconify icon="mdi:file-document-outline" />}
-                                onClick={() => VerFirmaUanataca(partner.SOO)}
-                                sx={{
-                                    borderColor: alpha(state?.color || '#ccc', 0.5),
-                                    color: 'text.secondary',
-                                    fontSize: '0.75rem',
-                                }}
-                            >
-                                Copiar Firma Doc
-                            </Button>
+                        {hasSoo(partner) && (
+                            <Stack direction="row" spacing={1}>
+                
+                                <Button
+                                    fullWidth
+                                    variant="outlined"
+                                    size="small"
+                                    startIcon={<Iconify icon="mdi:eye-outline" />}
+                                    onClick={() => VerEstadoFirmaUanataca(pickSoo(partner), `Estado Firma Doc - ${partner.NOMBRE}`)}
+                                    sx={{
+                                        borderColor: alpha(state?.color || '#ccc', 0.5),
+                                        color: state?.color,
+                                        fontSize: '0.7rem',
+                                    }}
+                                >
+                                    Ver Estado Solicitud + Autorización
+                                </Button>
+                            </Stack>
                         )}
 
-                        {partner.SOO_PAGARE && partner.SOO_PAGARE !== "<NULL>" && (
-                            <Button
-                                fullWidth
-                                variant="outlined"
-                                size="small"
-                                startIcon={<Iconify icon="mdi:file-sign" />}
-                                onClick={() => VerFirmaUanataca(partner.SOO_PAGARE)}
-                                sx={{
-                                    borderColor: alpha(state?.color || '#ccc', 0.5),
-                                    color: 'text.secondary',
-                                    fontSize: '0.75rem',
-                                }}
-                            >
-                                Copiar Firma Pagaré
-                            </Button>
+                        {hasSooPagare(partner) && (
+                            <Stack direction="row" spacing={1}>
+                                
+                                <Button
+                                    fullWidth
+                                    variant="outlined"
+                                    size="small"
+                                    startIcon={<Iconify icon="mdi:eye-outline" />}
+                                    onClick={() => VerEstadoFirmaUanataca(pickSooPagare(partner), `Estado Firma Pagaré - ${partner.NOMBRE}`)}
+                                    sx={{
+                                        borderColor: alpha(state?.color || '#ccc', 0.5),
+                                        color: state?.color,
+                                        fontSize: '0.7rem',
+                                    }}
+                                >
+                                    Ver Estado Pagaré
+                                </Button>
+                            </Stack>
                         )}
                     </Stack>
                 </CardContent>
@@ -1143,56 +1233,126 @@ export default function CargarArchivosCreditoPage() {
                     </Box>
                 )}
 
-                <MenuPopover
-                    open={openPopover}
+                <Drawer
+                    anchor="right"
+                    open={Boolean(openPopover)}
                     onClose={handleClosePopover}
-                    arrow="right-top"
-                    sx={{ width: 200 }}
+                    PaperProps={{
+                        sx: {
+                            width: { xs: '80vw', sm: 340 },
+                            p: 0,
+                        },
+                    }}
                 >
-                    <MenuItem
-                        onClick={() => {
-                            handleOpenChangeState();
-                            handleClosePopover();
+                    {/* Header del drawer */}
+                    <Box
+                        sx={{
+                            p: 2.5,
+                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            color: 'white',
                         }}
-                        sx={{ py: 1.5 }}
                     >
-                        <Iconify icon="eva:swap-outline" sx={{ mr: 1 }} />
-                        Cambiar Estado
-                    </MenuItem>
+                        <Stack direction="row" alignItems="center" justifyContent="space-between">
+                            <Stack>
+                                <Typography variant="subtitle2" sx={{ opacity: 0.85 }}>
+                                    Acciones
+                                </Typography>
+                                <Typography variant="h6" sx={{ fontWeight: 700, lineHeight: 1.2 }} noWrap>
+                                    {selectedPartner?.NOMBRE || 'Registro'}
+                                </Typography>
+                                {selectedPartner?.RUC && (
+                                    <Typography variant="caption" sx={{ opacity: 0.85 }}>
+                                        RUC: {selectedPartner.RUC}
+                                    </Typography>
+                                )}
+                            </Stack>
+                            <IconButton
+                                onClick={handleClosePopover}
+                                sx={{ color: 'white', '&:hover': { bgcolor: alpha('#fff', 0.15) } }}
+                            >
+                                <Iconify icon="eva:close-fill" />
+                            </IconButton>
+                        </Stack>
+                    </Box>
 
-                    <MenuItem
-                        onClick={() => {
-                            handleOpenChangeTipoCliente();
-                            handleClosePopover();
-                        }}
-                        sx={{ py: 1.5 }}
-                    >
-                        <Iconify icon="mdi:account-group" sx={{ mr: 1 }} />
-                        Tipo de Cliente
-                    </MenuItem>
+                    <Divider />
 
-                    <MenuItem
-                        onClick={() => {
-                            handleOpenOBS();
-                            handleClosePopover();
-                        }}
-                        sx={{ py: 1.5 }}
-                    >
-                        <Iconify icon="eva:message-circle-outline" sx={{ mr: 1 }} />
-                        Observación
-                    </MenuItem>
+                    <List sx={{ p: 1 }}>
+                        <ListItemButton
+                            onClick={() => {
+                                handleOpenChangeState();
+                                handleClosePopover();
+                            }}
+                            sx={{ borderRadius: 1, py: 1.25 }}
+                        >
+                            <ListItemIcon sx={{ minWidth: 40 }}>
+                                <Iconify icon="eva:swap-outline" width={22} />
+                            </ListItemIcon>
+                            <ListItemText
+                                primary="Cambiar Estado"
+                                secondary="Mover la tarjeta a otra fase"
+                                primaryTypographyProps={{ fontWeight: 600 }}
+                                secondaryTypographyProps={{ variant: 'caption' }}
+                            />
+                        </ListItemButton>
 
-                    <MenuItem
-                        onClick={() => {
-                            VerInformacionUanataca();
-                            handleClosePopover();
-                        }}
-                        sx={{ py: 1.5 }}
-                    >
-                        <Iconify icon="mdi:web" sx={{ mr: 1 }} />
-                        Ver en Uanataca
-                    </MenuItem>
-                </MenuPopover>
+                        <ListItemButton
+                            onClick={() => {
+                                handleOpenChangeTipoCliente();
+                                handleClosePopover();
+                            }}
+                            sx={{ borderRadius: 1, py: 1.25 }}
+                        >
+                            <ListItemIcon sx={{ minWidth: 40 }}>
+                                <Iconify icon="mdi:account-group" width={22} />
+                            </ListItemIcon>
+                            <ListItemText
+                                primary="Tipo de Cliente"
+                                secondary="Clasificar al cliente"
+                                primaryTypographyProps={{ fontWeight: 600 }}
+                                secondaryTypographyProps={{ variant: 'caption' }}
+                            />
+                        </ListItemButton>
+
+                        <ListItemButton
+                            onClick={() => {
+                                handleOpenOBS();
+                                handleClosePopover();
+                            }}
+                            sx={{ borderRadius: 1, py: 1.25 }}
+                        >
+                            <ListItemIcon sx={{ minWidth: 40 }}>
+                                <Iconify icon="eva:message-circle-outline" width={22} />
+                            </ListItemIcon>
+                            <ListItemText
+                                primary="Observación"
+                                secondary="Agregar nota interna"
+                                primaryTypographyProps={{ fontWeight: 600 }}
+                                secondaryTypographyProps={{ variant: 'caption' }}
+                            />
+                        </ListItemButton>
+
+                        <Divider sx={{ my: 1 }} />
+
+                        <ListItemButton
+                            onClick={() => {
+                                VerInformacionUanataca();
+                                handleClosePopover();
+                            }}
+                            sx={{ borderRadius: 1, py: 1.25 }}
+                        >
+                            <ListItemIcon sx={{ minWidth: 40 }}>
+                                <Iconify icon="mdi:web" width={22} />
+                            </ListItemIcon>
+                            <ListItemText
+                                primary="Ver en Uanataca"
+                                secondary="Abrir consola externa"
+                                primaryTypographyProps={{ fontWeight: 600 }}
+                                secondaryTypographyProps={{ variant: 'caption' }}
+                            />
+                        </ListItemButton>
+                    </List>
+                </Drawer>
 
                 <ConfirmDialog
                     open={openChangeState}
@@ -1331,6 +1491,106 @@ export default function CargarArchivosCreditoPage() {
                             }}
                         >
                             💾 Guardar Tipo
+                        </Button>
+                    }
+                />
+
+                <ConfirmDialog
+                    open={openEstadoFirma}
+                    onClose={handleCloseEstadoFirma}
+                    maxWidth="md"
+                    title={estadoFirmaTitulo}
+                    content={
+                        <Box sx={{ pt: 2, minWidth: { xs: '100%', sm: 640 } }}>
+                            {loadingEstadoFirma && (
+                                <Stack alignItems="center" py={3}>
+                                    <CircularProgress />
+                                    <Typography variant="body2" sx={{ mt: 1 }}>
+                                        Consultando Uanataca...
+                                    </Typography>
+                                </Stack>
+                            )}
+                            {!loadingEstadoFirma && estadoFirmaError && (
+                                <Typography color="error" variant="body2">
+                                    ❌ {estadoFirmaError}
+                                </Typography>
+                            )}
+                            {!loadingEstadoFirma && !estadoFirmaError && estadoFirmaData && (
+                                <Stack spacing={2}>
+                                    <Box>
+                                        <Typography variant="caption" color="text.secondary">Flow ID</Typography>
+                                        <Typography variant="body2" sx={{ fontFamily: 'monospace', wordBreak: 'break-all' }}>
+                                            {estadoFirmaData.flowId}
+                                        </Typography>
+                                    </Box>
+                                    <Stack direction="row" spacing={2} flexWrap="wrap">
+                                        <Chip
+                                            label={`Estado: ${estadoFirmaData.flow?.status || '—'}`}
+                                            color={estadoFirmaData.flow?.status === 'COMPLETED' ? 'success' : 'primary'}
+                                            sx={{ fontWeight: 600 }}
+                                        />
+                                        <Chip
+                                            label={`Activo: ${estadoFirmaData.flow?.active ? 'Sí' : 'No'}`}
+                                            variant="outlined"
+                                        />
+                                        <Chip
+                                            label={`Tipo: ${estadoFirmaData.flow?.flowType || '—'}`}
+                                            variant="outlined"
+                                        />
+                                    </Stack>
+
+                                    <Box>
+                                        <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                                            📄 Documentos ({estadoFirmaData.documents.length})
+                                        </Typography>
+                                        {estadoFirmaData.documents.length === 0 ? (
+                                            <Typography variant="body2" color="text.disabled">
+                                                Sin documentos asociados.
+                                            </Typography>
+                                        ) : (
+                                            <Stack spacing={1}>
+                                                {estadoFirmaData.documents.map((doc) => (
+                                                    <Card key={doc.id} variant="outlined" sx={{ p: 1.5 }}>
+                                                        <Stack direction="row" alignItems="center" spacing={1} mb={0.5}>
+                                                            <Iconify icon="mdi:file-pdf-box" width={20} color="#e53935" />
+                                                            <Typography variant="body2" sx={{ fontWeight: 600, flex: 1 }} noWrap>
+                                                                {doc.name || doc.filename || doc.id}
+                                                            </Typography>
+                                                            <Chip
+                                                                label={doc.signingStatus || '—'}
+                                                                size="small"
+                                                                color={doc.signingStatus === 'COMPLETED' ? 'success' : 'default'}
+                                                            />
+                                                        </Stack>
+                                                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
+                                                            Firmas: {doc.completedSigners ?? 0} / {doc.totalSigners ?? 0}
+                                                            {typeof doc.size === 'number' && ` · ${(doc.size / 1024).toFixed(1)} KB`}
+                                                        </Typography>
+                                                        <Typography variant="caption" sx={{ fontFamily: 'monospace', color: 'text.disabled', wordBreak: 'break-all' }}>
+                                                            {doc.id}
+                                                        </Typography>
+                                                        <Stack direction="row" justifyContent="flex-end" mt={1}>
+                                                            <Button
+                                                                size="small"
+                                                                variant="outlined"
+                                                                startIcon={<Iconify icon="mdi:eye-outline" />}
+                                                                onClick={() => handleVerPdfDocumento(doc)}
+                                                            >
+                                                                Ver PDF
+                                                            </Button>
+                                                        </Stack>
+                                                    </Card>
+                                                ))}
+                                            </Stack>
+                                        )}
+                                    </Box>
+                                </Stack>
+                            )}
+                        </Box>
+                    }
+                    action={
+                        <Button variant="contained" onClick={handleCloseEstadoFirma}>
+                            Cerrar
                         </Button>
                     }
                 />

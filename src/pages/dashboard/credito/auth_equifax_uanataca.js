@@ -16,6 +16,7 @@ import {
     buildCarteraFlowBody,
     buildPagareFlowBody,
     buildFlowStatusUrl,
+    extractSignerLink,
 } from "../../../api/uanataca";
 
 Autorizacion_Equifax_UANATACA.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -59,7 +60,7 @@ export default function Autorizacion_Equifax_UANATACA(data) {
             const rucEmpresa = user?.EMPRESA;
 
             const solicitudBase64 = await getPdfBase64(<SolicitudPDF data={data} user={user}/>);
-            const autorizacionBase64 = await getPdfBase64(<AutorizacionPDF data={data}/>);
+            const autorizacionBase64 = await getPdfBase64(<AutorizacionPDF data={data} user={user}/>);
 
             const body = buildCarteraFlowBody({
                 rucEmpresa,
@@ -74,14 +75,16 @@ export default function Autorizacion_Equifax_UANATACA(data) {
             if (!flowId) {
                 throw new Error('Uanataca no devolvió un flowId válido.');
             }
+            const linkFirma = extractSignerLink(result) || buildFlowStatusUrl(flowId);
 
             await axios.post(`/hanadb/api/customers/guardar_session_id_uanataca`, {
                 session_id: flowId,
                 sso: buildFlowStatusUrl(flowId),
                 empresa_id: cliente.ID_EMPRESA,
+                ruc_empresa: rucEmpresa,
             });
 
-            alert(`Flujo de firma creado correctamente. Se envió el correo/WhatsApp al cliente (${cliente.EMAIL || 'sin email'}) para firmar los documentos.\nFlow ID: ${flowId}`);
+            alert(`Flujo de firma creado correctamente. Se envió el correo/WhatsApp al cliente (${cliente.EMAIL || 'sin email'}) para firmar los documentos.\nFlow ID: ${flowId}\nLink firma: ${linkFirma}`);
         } catch (error) {
             console.error("Error al enviar a UANATACA (cartera):", error);
             alert(`Error al iniciar firma: ${error.message || error}`);
@@ -142,14 +145,16 @@ export default function Autorizacion_Equifax_UANATACA(data) {
             if (!flowId) {
                 throw new Error('Uanataca no devolvió un flowId válido.');
             }
+            const linkFirma = extractSignerLink(result) || buildFlowStatusUrl(flowId);
 
             await axios.post(`/hanadb/api/customers/guardar_session_id_uanataca_pagare`, {
                 session_id: flowId,
                 sso: buildFlowStatusUrl(flowId),
                 empresa_id: cliente.ID_EMPRESA,
+                ruc_empresa: rucEmpresa,
             });
 
-            alert(`Pagaré enviado a firma. Se notificó al cliente (${cliente.EMAIL || 'sin email'}).\nFlow ID: ${flowId}`);
+            alert(`Pagaré enviado a firma. Se notificó al cliente (${cliente.EMAIL || 'sin email'}).\nFlow ID: ${flowId}\nLink firma: ${linkFirma}`);
         } catch (error) {
             console.error("Error al enviar a UANATACA (pagaré):", error);
             alert(`Error al iniciar firma del pagaré: ${error.message || error}`);
@@ -203,7 +208,7 @@ export default function Autorizacion_Equifax_UANATACA(data) {
 
 
                     <Button variant="contained" color="secondary"
-                            onClick={() => abrirBlob(<AutorizacionPDF data={data}/>)}>
+                            onClick={() => abrirBlob(<AutorizacionPDF data={data} user={user}/>)}>
                         Autorización
                     </Button>
 

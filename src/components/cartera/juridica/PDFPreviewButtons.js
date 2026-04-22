@@ -14,7 +14,6 @@ import {
     createFlow as uanatacaCreateFlow,
     buildCarteraFlowBody,
     buildPagareFlowBody,
-    buildFlowStatusUrl,
 } from "../../../api/uanataca";
 
 export default function PDFPreviewButtons(data) {
@@ -56,7 +55,7 @@ export default function PDFPreviewButtons(data) {
             const rucEmpresa = user?.EMPRESA;
 
             const solicitudBase64 = await getPdfBase64(<SolicitudPDF data={data} user={user} />);
-            const autorizacionBase64 = await getPdfBase64(<AutorizacionPDF data={data} />);
+            const autorizacionBase64 = await getPdfBase64(<AutorizacionPDF data={data} user={user} />);
 
             const body = buildCarteraFlowBody({
                 rucEmpresa,
@@ -74,11 +73,12 @@ export default function PDFPreviewButtons(data) {
 
             await axios.post(`/hanadb/api/customers/guardar_session_id_uanataca`, {
                 session_id: flowId,
-                sso: buildFlowStatusUrl(flowId),
+                sso: flowId,
                 empresa_id: cliente.ID_EMPRESA,
+                ruc_empresa: rucEmpresa,
             });
 
-            alert(`Flujo de firma creado correctamente. Se envió el correo/WhatsApp al cliente (${cliente.EMAIL || 'sin email'}) para firmar los documentos.\nFlow ID: ${flowId}`);
+            alert(`Flujo de firma creado correctamente. Se envió el correo/WhatsApp al cliente (${cliente.EMAIL || 'sin email'}) para firmar los documentos.\nFlow ID: ${flowId}\nLink firma: ${linkFirma}`);
         } catch (error) {
             console.error("Error al enviar a UANATACA (cartera):", error);
             alert(`Error al iniciar firma: ${error.message || error}`);
@@ -142,11 +142,12 @@ export default function PDFPreviewButtons(data) {
 
             await axios.post(`/hanadb/api/customers/guardar_session_id_uanataca_pagare`, {
                 session_id: flowId,
-                sso: buildFlowStatusUrl(flowId),
+                sso: flowId,
                 empresa_id: cliente.ID_EMPRESA,
+                ruc_empresa: rucEmpresa,
             });
 
-            alert(`Pagaré enviado a firma. Se notificó al cliente (${cliente.EMAIL || 'sin email'}).\nFlow ID: ${flowId}`);
+            alert(`Pagaré enviado a firma. Se notificó al cliente (${cliente.EMAIL || 'sin email'}).\nFlow ID: ${flowId}\nLink firma: ${linkFirma}`);
         } catch (error) {
             console.error("Error al enviar a UANATACA (pagaré):", error);
             alert(`Error al iniciar firma del pagaré: ${error.message || error}`);
