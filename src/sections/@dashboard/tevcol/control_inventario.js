@@ -3,7 +3,9 @@ import {
     Box, Button, Card, Container, Stack, Typography, alpha, useTheme, TextField, MenuItem
 } from '@mui/material';
 import * as XLSX from "xlsx";
+// axios
 import axios from '../../../utils/axios';
+import axiosRaw from 'axios';
 import Iconify from '../../../components/iconify';
 import { useAuthContext } from '../../../auth/useAuthContext';
 import { useWarehouseContext } from '../../../auth/useWarehouseContext';
@@ -76,7 +78,7 @@ export default function ControlInventarioView() {
     const theme = useTheme();
     const { user } = useAuthContext();
     const { getWarehouseList } = useWarehouseContext();
-    const [bodega, setBodega] = useState('019');
+    const [bodega, setBodega] = useState('030');
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -88,7 +90,7 @@ export default function ControlInventarioView() {
 
         setLoading(true);
         try {
-            const response = await axios.get('/hanadb/api/power_bi/control_inventario_series', {
+            const response = await axiosRaw.get('/api/bi/control_inventario_series', {
                 params: {
                     bodega: bodega,
                     empresa: user.EMPRESA
