@@ -675,7 +675,7 @@ export default function InvoiceTableRow({
                             (ESTADO === 8 ? 'Anulado' : '') ||
                             (ESTADO === 6 ? 'Pendiente Aprobar Crédito' : '') ||
                             (ESTADO === 7 ? 'Pendiente Cargar Series' : '') ||
-                            (ESTADO === 0 ? 'Pendiente Facturar' : '') ||
+                            (ESTADO === 0 ? 'Pendiente Validar Por Supervisor' : '') ||
                             (ESTADO === 3 ? 'Pendiente Despachar' : '') ||
                             (ESTADO === 5 ? 'Retenidos' : '') ||
                             (ESTADO === 22 ? 'Pendiente Cargar Evidencia' : '') ||

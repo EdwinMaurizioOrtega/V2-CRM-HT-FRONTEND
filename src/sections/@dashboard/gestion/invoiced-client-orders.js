@@ -113,7 +113,7 @@ export default function InvoicedClientOrders({ userID, currentPartner, open, onC
             minWidth: 160,
             renderCell: (params) => params.row.ESTADO == "8" && "Anulado"
                 || params.row.ESTADO == "6" && "Pendiente Aprobar Crédito"
-                || params.row.ESTADO == "0" && "Pendiente Facturar"
+                || params.row.ESTADO == "0" && "Pendiente Validar Por Supervisor"
                 || params.row.ESTADO == "1" && "Entregado(Courier, Vendedor o Cliente)"
 
         },
