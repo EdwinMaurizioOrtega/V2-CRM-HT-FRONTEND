@@ -1084,7 +1084,7 @@ export default function InvoiceDetails({ invoice }) {
         //=========For All Companys=========
         let idEmpleadoEntregar = 0;
         let nombreUsuarioEntregara = '';
-        // let estadoInvoice = 0
+        let estadoInvoice = 0
 
         if (user.COMPANY === 'HT') {
 
@@ -1132,7 +1132,7 @@ export default function InvoiceDetails({ invoice }) {
                     ID_USER: user.ID,
                     IDUSUARIOENTREGARA: Number(idEmpleadoEntregar),
                     NOMBREUSUARIOENTREGARA: nombreUsuarioEntregara,
-                    // ESTADO: Number(estadoInvoice),
+                    ESTADO: Number(estadoInvoice),
                     TRANSPORTISTA: selectedTransportista?.value || '',
                 });
 
