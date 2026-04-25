@@ -1217,6 +1217,14 @@ export default function InvoiceListPage() {
                                 icon="solar:file-check-bold-duotone"
                                 color={theme.palette.success.main}
                             />
+                            <InvoiceAnalytic
+                                title="Pendiente Validar Por Supervisor"
+                                total={getLengthByStatus(0)}
+                                percent={getPercentByStatus(0)}
+                                price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(0)}
+                                icon="solar:sort-by-time-bold-duotone"
+                                color={theme.palette.warning.main}
+                            />
 
                             <InvoiceAnalytic
                                 title="Pendiente Cargar Series"
@@ -1227,14 +1235,7 @@ export default function InvoiceListPage() {
                                 color={theme.palette.success.main}
                             />
 
-                            <InvoiceAnalytic
-                                title="Pendiente Facturar"
-                                total={getLengthByStatus(0)}
-                                percent={getPercentByStatus(0)}
-                                price={user.COMPANY !== 'TOMEBAMBA' && getTotalPriceByStatus(0)}
-                                icon="solar:sort-by-time-bold-duotone"
-                                color={theme.palette.warning.main}
-                            />
+                            
 
                             <InvoiceAnalytic
                                 title="Retenidos"
@@ -1653,7 +1654,7 @@ const getTabs = (user, tableData, getLengthByStatus,
                 { value: 'all', label: 'Total', color: 'info', count: tableData.length },
                 { value: 15, label: 'Pendiente Aprobar Vendedor', color: 'success', count: getLengthByStatus(15) },
                 { value: 6, label: 'Pendiente Aprobar Crédito', color: 'success', count: getLengthByStatus(6) },
-                { value: 0, label: 'Pendiente Facturar', color: 'warning', count: getLengthByStatus(0) },
+                { value: 0, label: 'Pendiente Validar Por Supervisor', color: 'warning', count: getLengthByStatus(0) },
                 { value: 1, label: 'Entregado(Facturado)', color: 'error', count: getLengthByStatus(1) },
                 { value: 8, label: 'Anulado', color: 'default', count: getLengthByStatus(8) },
             ];
@@ -1663,8 +1664,8 @@ const getTabs = (user, tableData, getLengthByStatus,
                 { value: 'all', label: 'Total', color: 'info', count: tableData.length },
                 { value: 15, label: 'Pendiente Aprobar Vendedor', color: 'secondary', count: getLengthByStatus(15) },
                 { value: 6, label: 'Pendiente Aprobar Crédito', color: 'success', count: getLengthByStatus(6) },
+                { value: 0, label: 'Pendiente Validar Por Supervisor', color: 'warning', count: getLengthByStatus(0) },
                 { value: 7, label: 'Pendiente Cargar Series', color: 'primary', count: getLengthByStatus(7) },
-                { value: 0, label: 'Pendiente Facturar', color: 'warning', count: getLengthByStatus(0) },
                 { value: 5, label: 'Retenidos', color: 'error', count: getLengthByStatus(5) },
                 { value: 3, label: 'Pendiente Despachar', color: 'secondary', count: getLengthByStatus(3) },
                 { value: 22, label: 'Pendiente Cargar Evidencia', color: 'info', count: getLengthByStatus(22) },
@@ -1682,7 +1683,7 @@ const getTabs = (user, tableData, getLengthByStatus,
         return [
             { value: 'all', label: 'Total', color: 'info', count: tableData.length },
             { value: 6, label: 'Pendiente Aprobar Crédito', color: 'success', count: getLengthByStatus(6) },
-            { value: 0, label: 'Pendiente Facturar', color: 'warning', count: getLengthByStatus(0) },
+            { value: 0, label: 'Pendiente Validar Por Supervisor', color: 'warning', count: getLengthByStatus(0) },
             { value: 1, label: 'Entregado(Facturado)', color: 'error', count: getLengthByStatus(1) },
             { value: 8, label: 'Anulado', color: 'default', count: getLengthByStatus(8) },
         ];

@@ -846,7 +846,7 @@ export default function InvoiceDetails({ invoice }) {
         // }
     };
 
-    const enviarOrdenPendienteCargaSeries = async () => {
+    const enviarOrdenAlSupervisor = async () => {
 
         if (FORMADEPAGO === '-1') {
 
@@ -909,7 +909,7 @@ export default function InvoiceDetails({ invoice }) {
 
 
             // Actualizar una orden.
-            const response = await axios.post('/hanadb/api/orders/enviar_cargar_series', requestData);
+            const response = await axios.post('/hanadb/api/orders/enviar_al_supervisor', requestData);
 
             //console.log("Orden Creada en el SAP.");
             //console.log("Código de estado:", response.status);
@@ -932,7 +932,7 @@ export default function InvoiceDetails({ invoice }) {
     };
 
 
-    const crearFacturaSAP = async () => {
+    const crearValidadoPorSupervisor = async () => {
 
         try {
             setLoading(true);
@@ -948,7 +948,7 @@ export default function InvoiceDetails({ invoice }) {
             };
 
             // Actualizar una orden.
-            const response = await axios.post('/hanadb/api/orders/factura_sap', requestData);
+            const response = await axios.put('/hanadb/api/orders/validado_por_supervisor', requestData);
 
             //console.log("Factura creada en el SAP.");
             //console.log("Código de estado:", response.status);
@@ -1076,7 +1076,7 @@ export default function InvoiceDetails({ invoice }) {
     };
 
 
-    const handleChangePedidoPendienteFacturar = async () => {
+    const handleChangePedidoValidarSeriesTransportistaFacturar = async () => {
 
         // //console.log(ID);
         //console.log(JSON.stringify(user));
@@ -1084,7 +1084,7 @@ export default function InvoiceDetails({ invoice }) {
         //=========For All Companys=========
         let idEmpleadoEntregar = 0;
         let nombreUsuarioEntregara = '';
-        let estadoInvoice = 0
+        // let estadoInvoice = 0
 
         if (user.COMPANY === 'HT') {
 
@@ -1125,14 +1125,14 @@ export default function InvoiceDetails({ invoice }) {
 
             try {
                 // Actualizar una orden.
-                const response = await axios.put('/hanadb/api/orders/order/pendiente_facturar', {
+                const response = await axios.put('/hanadb/api/orders/order/validar_cargar_series_facturar', {
                     ID_ORDER: ID,
                     NUMERO_GUIA: `${valueGuia}`,
                     empresa: user.EMPRESA,
                     ID_USER: user.ID,
                     IDUSUARIOENTREGARA: Number(idEmpleadoEntregar),
                     NOMBREUSUARIOENTREGARA: nombreUsuarioEntregara,
-                    ESTADO: Number(estadoInvoice),
+                    // ESTADO: Number(estadoInvoice),
                     TRANSPORTISTA: selectedTransportista?.value || '',
                 });
 
@@ -3093,9 +3093,9 @@ export default function InvoiceDetails({ invoice }) {
 
                             {/* Enviar a pendiente cargar series */}
                             {(ESTADO === 6) &&
-                                <Button onClick={() => !loading && enviarOrdenPendienteCargaSeries()}
+                                <Button onClick={() => !loading && enviarOrdenAlSupervisor()}
                                     disabled={loading}>
-                                    {loading ? 'CREANDO...' : 'ENVIAR A PENDIENTE CARGAR SERIES'}
+                                    {loading ? 'CREANDO...' : 'ENVIAR AL SUPERVISOR'}
                                 </Button>
                             }
 
@@ -3115,8 +3115,8 @@ export default function InvoiceDetails({ invoice }) {
 
                             {/* Pendiente factuaración / Solo le va a aparecer el ROL de crédito */}
                             {(ESTADO === 0 && user.ROLE === "9") &&
-                                <Button onClick={() => !loading && crearFacturaSAP()} disabled={loading}>
-                                    {loading ? 'CREANDO FACTURA...' : ' FACTURA CREAR EN SAP'}
+                                <Button onClick={() => !loading && crearValidadoPorSupervisor()} disabled={loading}>
+                                    {loading ? 'CREANDO FACTURA...' : ' ENVIAR A CARGAR SERIES'}
                                 </Button>
                             }
 
@@ -3190,8 +3190,8 @@ export default function InvoiceDetails({ invoice }) {
 
                             {!loading ? (
                                 <Button variant="contained" color="success"
-                                    onClick={() => handleChangePedidoPendienteFacturar()}>
-                                    Enviar al área de facturación.
+                                    onClick={() => handleChangePedidoValidarSeriesTransportistaFacturar()}>
+                                    Validar Series / Transportista / Facturar
                                 </Button>
                             ) : (
                                 <Box sx={{ width: '100%' }}>
