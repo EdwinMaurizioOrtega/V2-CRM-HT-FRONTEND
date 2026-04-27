@@ -291,14 +291,11 @@ export default function CheckoutPayment({
     const warehouseOptions = (() => {
         // Códigos de bodegas permitidas por empresa
         const WAREHOUSE_CODES_HT = ['019', '002', '006', '024', '030', '043'];
-        const WAREHOUSE_CODES_ALPHACELL = ['001', '007', '009'];
-        const WAREHOUSE_CODES_MOVILCELISTIC = ['DISTLF', '003', '004', '030', '024', '005', '043'];
+        const WAREHOUSE_CODES_MOVILCELISTIC = ['DISTLF', '003', '004', '030', '024', '046', '043'];
 
         let codes = [];
         if (user.EMPRESA === '0992537442001') {
             codes = WAREHOUSE_CODES_HT;
-        } else if (user.EMPRESA === '0992264373001') {
-            codes = WAREHOUSE_CODES_ALPHACELL;
         } else if (user.EMPRESA === '1792161037001') {
             codes = WAREHOUSE_CODES_MOVILCELISTIC;
         }
