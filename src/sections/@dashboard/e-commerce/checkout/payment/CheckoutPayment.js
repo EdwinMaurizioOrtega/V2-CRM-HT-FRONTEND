@@ -291,7 +291,7 @@ export default function CheckoutPayment({
     const warehouseOptions = (() => {
         // Códigos de bodegas permitidas por empresa
         const WAREHOUSE_CODES_HT = ['019', '002', '006', '024', '030', '043', '046'];
-        const WAREHOUSE_CODES_MOVILCELISTIC = ['DISTLF', '003', '004', '030', '024', '046', '043'];
+        const WAREHOUSE_CODES_MOVILCELISTIC = ['DISTLF', '003', '004', '030', '024', '046', '043', '006'];
 
         let codes = [];
         if (user.EMPRESA === '0992537442001') {
