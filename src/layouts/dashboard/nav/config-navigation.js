@@ -217,6 +217,7 @@ const navConfig = [
         items: [
             { title: 'Marcar', path: PATH_DASHBOARD.rrhh.marcar, icon: ICONS.booking },
             { title: 'Reporte', path: PATH_DASHBOARD.rrhh.reporte_rrhh, icon: ICONS.analytics },
+            { title: 'Nómina', path: PATH_DASHBOARD.rrhh.gestion_empleados, icon: ICONS.calendar },
         ],
     },
 

@@ -135,6 +135,7 @@ export const PATH_DASHBOARD = {
         root: path(ROOTS_DASHBOARD, '/rrhh'),
         marcar: path(ROOTS_DASHBOARD, '/rrhh/Marcar'),
         reporte_rrhh: path(ROOTS_DASHBOARD, '/rrhh/ReporteRRHH'),
+        gestion_empleados: path(ROOTS_DASHBOARD, '/rrhh/Nomina'),
     },
     credito: {
         root: path(ROOTS_DASHBOARD, '/credito'),

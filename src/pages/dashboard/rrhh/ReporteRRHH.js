@@ -62,7 +62,8 @@ export default function ReporteRRhhPage() {
         quicentroSur: false,      // ID: 7
         recreo: false,            // ID: 8
         sanLuis: false,           // ID: 9
-        administrador: false      // ID: 10
+        administrador: false,      // ID: 10
+        matriz: false             // ID: 11
     });
 
     // Mapeo de ubicaciones con sus IDs y nombres
@@ -76,7 +77,8 @@ export default function ReporteRRhhPage() {
         quicentroSur: { id: 7, nombre: 'QUICENTRO SUR' },
         recreo: { id: 8, nombre: 'RECREO' },
         sanLuis: { id: 9, nombre: 'SAN LUIS' },
-        administrador: { id: 10, nombre: 'ADMINISTRADOR' }
+        administrador: { id: 10, nombre: 'ADMINISTRADOR' },
+        matriz: { id: 11, nombre: 'MATRIZ' },
     };
 
     // Función para manejar el cambio de checkboxes
@@ -291,7 +293,8 @@ export default function ReporteRRhhPage() {
             quicentroSur: false,
             recreo: false,
             sanLuis: false,
-            administrador: false
+            administrador: false,
+            matriz: false
         });
     };
 
@@ -402,7 +405,7 @@ export default function ReporteRRhhPage() {
 
                                     <FormGroup sx={{ mb: 3, display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: 2 }}>
 
-                                        {(user.SUCURSAL === 1 || user.SUCURSAL === 10) && (
+                                        {(user.SUCURSAL === 1 || user.ROLE === '10') && (
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
@@ -414,7 +417,7 @@ export default function ReporteRRhhPage() {
                                                 label="[1] KLEBER GRANDA"
                                             />
                                         )}
-                                        {(user.SUCURSAL === 2 || user.SUCURSAL === 10) && (
+                                        {(user.SUCURSAL === 2 || user.ROLE === '10') && (
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
@@ -427,7 +430,7 @@ export default function ReporteRRhhPage() {
                                             />
                                         )}
 
-                                        {(user.SUCURSAL === 3 || user.SUCURSAL === 10) && (
+                                        {(user.SUCURSAL === 3 || user.ROLE === '10') && (
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
@@ -439,7 +442,7 @@ export default function ReporteRRhhPage() {
                                                 label="[3] CCI"
                                             />
                                         )}
-                                        {(user.SUCURSAL === 4 || user.SUCURSAL === 10) && (
+                                        {(user.SUCURSAL === 4 || user.ROLE === '10') && (
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
@@ -451,7 +454,7 @@ export default function ReporteRRhhPage() {
                                                 label="[4] MALL DE LOS ANDES"
                                             />
                                         )}
-                                        {(user.SUCURSAL === 5 || user.SUCURSAL === 10) && (
+                                        {(user.SUCURSAL === 5 || user.ROLE === '10') && (
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
@@ -463,7 +466,7 @@ export default function ReporteRRhhPage() {
                                                 label="[5] MALTERIA"
                                             />
                                         )}
-                                        {(user.SUCURSAL === 6 || user.SUCURSAL === 10) && (
+                                        {(user.SUCURSAL === 6 || user.ROLE === '10') && (
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
@@ -475,7 +478,7 @@ export default function ReporteRRhhPage() {
                                                 label="[6] PASEO SHOPPING"
                                             />
                                         )}
-                                        {(user.SUCURSAL === 7 || user.SUCURSAL === 10) && (
+                                        {(user.SUCURSAL === 7 || user.ROLE === '10') && (
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
@@ -487,7 +490,7 @@ export default function ReporteRRhhPage() {
                                                 label="[7] QUICENTRO SUR"
                                             />
                                         )}
-                                        {(user.SUCURSAL === 8 || user.SUCURSAL === 10) && (
+                                        {(user.SUCURSAL === 8 || user.ROLE === '10') && (
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
@@ -499,7 +502,7 @@ export default function ReporteRRhhPage() {
                                                 label="[8] RECREO"
                                             />
                                         )}
-                                        {(user.SUCURSAL === 9 || user.SUCURSAL === 10) && (
+                                        {(user.SUCURSAL === 9 || user.ROLE === '10') && (
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
@@ -511,16 +514,17 @@ export default function ReporteRRhhPage() {
                                                 label="[9] SAN LUIS"
                                             />
                                         )}
-                                        {(user.SUCURSAL === 10) && (
+                                        
+                                        {(user.SUCURSAL === 11 || user.ROLE === '10') && (
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
-                                                        checked={ubicaciones.administrador}
+                                                        checked={ubicaciones.matriz}
                                                         onChange={handleUbicacionChange}
-                                                        name="administrador"
+                                                        name="matriz"
                                                     />
                                                 }
-                                                label="[10] ADMINISTRADOR"
+                                                label="[11] MATRIZ"
                                             />
                                         )}
                                     </FormGroup>
@@ -584,7 +588,8 @@ function ExcelDownload({ data }) {
         quicentroSur: { id: 7, nombre: 'QUICENTRO SUR' },
         recreo: { id: 8, nombre: 'RECREO' },
         sanLuis: { id: 9, nombre: 'SAN LUIS' },
-        administrador: { id: 10, nombre: 'ADMINISTRADOR' }
+        administrador: { id: 10, nombre: 'ADMINISTRADOR' },
+        matriz: { id: 11, nombre: 'MATRIZ' },
     };
 
     // Función para obtener el nombre de la sucursal

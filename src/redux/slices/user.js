@@ -38,7 +38,7 @@ export function getUsers() {
     return async (dispatch) => {
         dispatch(slice.actions.startLoading());
         try {
-            const response = await axios.get('/hanadb/api/users');
+            const response = await axios.get('/hanadb/api/account/users');
             dispatch(slice.actions.getUsersSuccess(response.data.users));
         } catch (error) {
             dispatch(slice.actions.hasError(error));

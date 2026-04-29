@@ -175,9 +175,7 @@ export default function UserListPage() {
     setTableData(deleteRow);
 
     // Eliminar un usuario.
-    axios.delete('/hanadb/api/users/user', {
-       params: { id }
-    });
+     axios.delete(`/hanadb/api/account/users/${id}`);
 
 
     if (page > 0) {
