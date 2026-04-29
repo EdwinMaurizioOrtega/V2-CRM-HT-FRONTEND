@@ -373,6 +373,8 @@ export default function InvoiceDetails({ invoice }) {
         PEDIDO_RETENIDO
     } = invoice;
 
+    const normalizePedidoRetenido = (value) => value === true || value === 1 || value === '1' || value === 'true';
+
     //console.log("Pedido retenido: " + PEDIDO_RETENIDO)
 
     //console.log("OBSERVACIONES: " + OBSERVACIONES)
@@ -417,6 +419,10 @@ export default function InvoiceDetails({ invoice }) {
             }
         });
     }, [items, BODEGA]);
+
+    useEffect(() => {
+        setPedidoRetenido(normalizePedidoRetenido(PEDIDO_RETENIDO));
+    }, [PEDIDO_RETENIDO]);
 
     useEffect(() => {
         // Aquí se ejecuta después del montaje del componente
@@ -2284,7 +2290,7 @@ export default function InvoiceDetails({ invoice }) {
                         variant="h6"
                         sx={{
                             mb: 3,
-                            color: PEDIDO_RETENIDO ? 'error.main' : 'success.main',
+                            color: pedidoRetenido ? 'error.main' : 'success.main',
                             fontWeight: 'bold',
                             display: 'flex',
                             alignItems: 'center',
@@ -2293,7 +2299,7 @@ export default function InvoiceDetails({ invoice }) {
                     >
                         <Box
                             sx={{
-                                bgcolor: PEDIDO_RETENIDO ? 'error.lighter' : 'success.lighter',
+                                bgcolor: pedidoRetenido ? 'error.lighter' : 'success.lighter',
                                 p: 1,
                                 borderRadius: 1.5,
                                 display: 'flex',
@@ -2301,9 +2307,23 @@ export default function InvoiceDetails({ invoice }) {
                                 justifyContent: 'center'
                             }}
                         >
-                            {PEDIDO_RETENIDO ? '🚫' : '✅'}
+                            {pedidoRetenido ? '🚫' : '✅'}
                         </Box>
-                        {PEDIDO_RETENIDO ? 'ORDEN RETENIDA' : 'ORDEN NO RETENIDA'}
+                        {pedidoRetenido ? 'ORDEN RETENIDA' : 'ORDEN NO RETENIDA'}
+
+                         {/* Retenido */}
+                            {(ESTADO === 6 && user.ROLE === "9") &&
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={pedidoRetenido}
+                                            onChange={(e) => setPedidoRetenido(e.target.checked)}
+                                            color="warning"
+                                        />
+                                    }
+                                    label="Pedido Retenido"
+                                />
+                            }
                     </Typography>
                 </Grid>
 
@@ -3097,20 +3117,6 @@ export default function InvoiceDetails({ invoice }) {
                                     disabled={loading}>
                                     {loading ? 'CREANDO...' : 'ENVIAR AL SUPERVISOR'}
                                 </Button>
-                            }
-
-                            {/* Retenido */}
-                            {(ESTADO === 6 && user.ROLE === "9") &&
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            checked={pedidoRetenido}
-                                            onChange={(e) => setPedidoRetenido(e.target.checked)}
-                                            color="warning"
-                                        />
-                                    }
-                                    label="Pedido Retenido"
-                                />
                             }
 
                             {/* Pendiente factuaración / Solo le va a aparecer el ROL de crédito */}
